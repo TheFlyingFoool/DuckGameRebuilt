@@ -1,0 +1,30 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: DuckGame.DataLayer
+// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
+// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
+// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
+
+namespace DuckGame
+{
+    public class DataLayer
+    {
+        protected NCNetworkImplementation _impl;
+
+        public DataLayer(NCNetworkImplementation pImpl) => this._impl = pImpl;
+
+        public virtual NCError SendPacket(BitBuffer sendData, NetworkConnection connection) => this._impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
+
+        public virtual void Update()
+        {
+        }
+
+        public virtual void EndSession()
+        {
+        }
+
+        public virtual void Reset()
+        {
+        }
+    }
+}

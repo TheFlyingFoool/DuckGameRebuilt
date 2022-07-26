@@ -1,0 +1,34 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: DuckGame.CameraMover
+// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
+// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
+// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
+
+namespace DuckGame
+{
+    [EditorGroup("Arcade|Cameras", EditorItemType.ArcadeNew)]
+    [BaggedProperty("previewPriority", true)]
+    internal class CameraMover : Thing
+    {
+        public EditorProperty<float> SpeedX = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> SpeedY = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> MoveDelay = new EditorProperty<float>(0.0f, max: 120f, increment: 0.25f);
+
+        public CameraMover(float xPos, float yPos)
+          : base(xPos, yPos)
+        {
+            this.graphic = new Sprite("cameraMover");
+            this.center = new Vec2(8f, 8f);
+            this.collisionSize = new Vec2(8f, 8f);
+            this.collisionOffset = new Vec2(-4f, -4f);
+        }
+
+        public override void Initialize()
+        {
+            if (!(Level.current is Editor))
+                this.alpha = 0.0f;
+            base.Initialize();
+        }
+    }
+}
