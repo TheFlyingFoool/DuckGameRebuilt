@@ -252,6 +252,8 @@ namespace DuckGame
             this.AddCreditLine("DEVELOPMENT TEAM");
             this.AddCreditLine("");
             this.AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ART, PROGRAMMING, MUSIC@RWINGGRAY@");
+            this.AddCreditLine("NiK0");
+            this.AddCreditLine("Dan");
             this.AddCreditLine("Landon Podbielski");
             this.AddCreditLine("");
             this.AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
