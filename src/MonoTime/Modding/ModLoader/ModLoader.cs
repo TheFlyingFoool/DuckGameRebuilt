@@ -901,13 +901,20 @@ namespace DuckGame
         internal static System.Type GetType(string typeName)
         {
             if (typeName == null)
-                return (System.Type)null;
+                return null;
             if (typeName.LastIndexOf(',') != typeName.IndexOf(','))
                 typeName = ModLoader.SmallTypeName(typeName);
             if (typeName == null)
-                return (System.Type)null;
-            System.Type type;
-            return ModLoader._typesByName.TryGetValue(typeName, out type) || ModLoader._typesByNameUnprocessed.TryGetValue(typeName, out type) ? type : System.Type.GetType(typeName);
+                return null;
+            int stringlength = typeName.Length;
+            if (Program.gameAssemblyName != "DuckGame" && stringlength > 9 && typeName.Substring(stringlength - 10, 10) == ", DuckGame") // added so the game can handle it when the assembly has a different name 
+                typeName = typeName.Substring(0, stringlength - 10) + ", " + Program.gameAssemblyName; // replaces it with current assembly name   
+            Type type;
+            if (!ModLoader._typesByName.TryGetValue(typeName, out type) && !ModLoader._typesByNameUnprocessed.TryGetValue(typeName, out type))
+            {
+                return Type.GetType(typeName);
+            }
+            return type;
         }
 
         /// <summary>Gets a mod from a type.</summary>

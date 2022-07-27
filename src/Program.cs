@@ -49,9 +49,13 @@ namespace DuckGame
         public static Assembly crashAssembly;
         public static bool gameLoadedSuccessfully = false;
 
+        public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
+        public static string gameAssemblyName = ""; // added dan
         /// <summary>The main entry point for the application.</summary>
         public static void Main(string[] args)
         {
+            gameAssembly = Assembly.GetExecutingAssembly();
+            gameAssemblyName = Program.gameAssembly.GetName().Name;
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
             if (((IEnumerable<string>)args).Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !((IEnumerable<string>)args).Contains<string>("-nolinux"))
             {
