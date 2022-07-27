@@ -4,6 +4,7 @@
    <PropertyGroup>
      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	 <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	 <AssemblyName>DuckGame</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,7 +18,8 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<AssemblyName>DuckGameDebug</AssemblyName>
+	<AssemblyName>DuckGame</AssemblyName>
+	<TargetName>DuckGameDebug</TargetName>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -40,7 +42,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|AnyCPU'">
-	<AssemblyName>DuckGameTurbo</AssemblyName>
+	<AssemblyName>DuckGame</AssemblyName>
+	<TargetName>DuckGameTurbo</TargetName>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;DuckGameTurbo</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -52,7 +55,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|x86'">
-	<AssemblyName>DuckGameTurbo</AssemblyName>
+	<AssemblyName>DuckGame</AssemblyName>
+	<TargetName>DuckGameTurbo</TargetName>
 	<OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -64,7 +68,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
-	<AssemblyName>DuckGameRebuilt</AssemblyName>
+	<TargetName>DuckGameRebuilt</TargetName>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -78,7 +82,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x86'">
-	<AssemblyName>DuckGameRebuilt</AssemblyName>
+	<TargetName>DuckGameRebuilt</TargetName>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
