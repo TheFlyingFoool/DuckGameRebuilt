@@ -39,12 +39,14 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("arcade/prizeCounter", 69, 30);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.depth = - 0.5f;
-            this._outline = new Sprite("arcade/prizeCounterOutline");
-            this._outline.depth = this.depth + 1;
+            this._outline = new Sprite("arcade/prizeCounterOutline")
+            {
+                depth = this.depth + 1
+            };
             this._outline.CenterOrigin();
-            this.center = new Vec2((float)(this._sprite.width / 2), (float)(this._sprite.h / 2));
+            this.center = new Vec2(this._sprite.width / 2, this._sprite.h / 2);
             this._collisionSize = new Vec2(16f, 15f);
             this._collisionOffset = new Vec2(-8f, 0.0f);
             this._light = new SpriteMap("arcade/prizeLights", 107, 55);
@@ -59,10 +61,10 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             this._dust = new DustSparkleEffect(this.x - 54f, this.y - 40f, true, true);
-            Level.Add((Thing)this._dust);
+            Level.Add(_dust);
             this._dust.depth = this.depth - 2;
             this._lighting = new ArcadeTableLight(this.x, this.y - 43f);
-            Level.Add((Thing)this._lighting);
+            Level.Add(_lighting);
         }
 
         public override void Update()
@@ -104,7 +106,7 @@ namespace DuckGame
                 this.graphic.color = Color.White;
             else
                 this.graphic.color = Color.Black;
-            Graphics.Draw((Sprite)this._light, this.x - 53f, this.y - 40f);
+            Graphics.Draw(_light, this.x - 53f, this.y - 40f);
             if (Chancy.atCounter && !(Level.current is Editor))
             {
                 Vec2 vec2 = new Vec2(32f, -15f);
@@ -125,13 +127,13 @@ namespace DuckGame
                     this._hoverSprite.depth = (Depth)0.0f;
                     this._hoverSprite.flipH = Chancy.body.flipH;
                     if (this._hoverSprite.flipH)
-                        Graphics.Draw(this._hoverSprite, (float)((double)this.x + (double)vec2.x + 1.0), (float)((double)this.y + (double)vec2.y - 1.0));
+                        Graphics.Draw(this._hoverSprite, (float)((double)this.x + vec2.x + 1.0), (float)((double)this.y + vec2.y - 1.0));
                     else
-                        Graphics.Draw(this._hoverSprite, (float)((double)this.x + (double)vec2.x - 1.0), (float)((double)this.y + (double)vec2.y - 1.0));
+                        Graphics.Draw(this._hoverSprite, (float)((double)this.x + vec2.x - 1.0), (float)((double)this.y + vec2.y - 1.0));
                 }
             }
             base.Draw();
-            if ((double)this._hoverFade <= 0.0)
+            if (_hoverFade <= 0.0)
                 return;
             this._outline.alpha = this._hoverFade;
             Graphics.Draw(this._outline, this.x + 1f, this.y);

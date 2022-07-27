@@ -25,8 +25,10 @@ namespace DuckGame
             this.weight = 0.1f;
             this.bouncy = 0.5f;
             this.airFrictionMult = 0.0f;
-            this._ropeSprite = new Sprite("grappleWire");
-            this._ropeSprite.center = new Vec2(8f, 0.0f);
+            this._ropeSprite = new Sprite("grappleWire")
+            {
+                center = new Vec2(8f, 0.0f)
+            };
         }
 
         public Rope GetRopeParent(Thing child)
@@ -36,18 +38,18 @@ namespace DuckGame
                 if (ropeParent.attach2 == child)
                     return ropeParent;
             }
-            return (Rope)null;
+            return null;
         }
 
         public override void Initialize()
         {
             if (this._gun != null)
             {
-                this._sticker = new Harpoon((Thing)this);
-                this.level.AddThing((Thing)this._sticker);
+                this._sticker = new Harpoon(this);
+                this.level.AddThing(_sticker);
                 this._sticker.SetStuckPoint(this._gun.position);
-                this._rope = new Rope(this.x, this.y, (Thing)null, (Thing)this._sticker, (Thing)this, tex: this._ropeSprite, belongsTo: ((Thing)this));
-                Level.Add((Thing)this._rope);
+                this._rope = new Rope(this.x, this.y, null, _sticker, this, tex: this._ropeSprite, belongsTo: this);
+                Level.Add(_rope);
             }
             base.Initialize();
         }
@@ -55,7 +57,7 @@ namespace DuckGame
         public override void Terminate()
         {
             if (this._sticker != null)
-                Level.Remove((Thing)this._sticker);
+                Level.Remove(_sticker);
             if (this._rope != null)
                 this._rope.RemoveRope();
             base.Terminate();
@@ -63,7 +65,7 @@ namespace DuckGame
 
         public float WindUp(float pAmount)
         {
-            if ((double)pAmount <= 0.0 || (double)this._rope.startLength <= 0.0)
+            if ((double)pAmount <= 0.0 || _rope.startLength <= 0.0)
                 return 100f;
             this._rope.Pull(-pAmount);
             this._rope.startLength -= pAmount;
@@ -90,12 +92,11 @@ namespace DuckGame
                 if ((double)vec2_1.length > (double)this._rope.properLength)
                 {
                     vec2_1 = vec2_1.normalized;
-                    Vec2 position1 = this.position;
                     Vec2 position2 = this.position;
                     Vec2 vec2_2 = this._rope.attach2.position + vec2_1 * this._rope.properLength;
                     Vec2 end = vec2_2;
                     Vec2 vec2_3;
-                   // ref Vec2 local = ref vec2_3;
+                    // ref Vec2 local = ref vec2_3;
                     Level.CheckRay<Block>(position2, end, out vec2_3);
                     if (flag)
                     {

@@ -29,11 +29,11 @@ namespace DuckGame
             }
             else
                 feather = Feather._objects[Feather._lastActiveObject];
-            Level.Remove((Thing)feather);
+            Level.Remove(feather);
             Feather._lastActiveObject = (Feather._lastActiveObject + 1) % Feather.kMaxObjects;
             feather.Init(xpos, ypos, who);
             feather.ResetProperties();
-            feather._sprite.globalIndex = (int)Thing.GetGlobalIndex();
+            feather._sprite.globalIndex = Thing.GetGlobalIndex();
             feather.globalIndex = Thing.GetGlobalIndex();
             return feather;
         }
@@ -41,10 +41,12 @@ namespace DuckGame
         private Feather()
           : base()
         {
-            this._sprite = new SpriteMap("feather", 12, 4);
-            this._sprite.speed = 0.3f;
+            this._sprite = new SpriteMap("feather", 12, 4)
+            {
+                speed = 0.3f
+            };
             this._sprite.AddAnimation("feather", 1f, true, 0, 1, 2, 3);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(6f, 1f);
         }
 
@@ -62,7 +64,7 @@ namespace DuckGame
                 this._sprite.flipH = true;
             else
                 this._sprite.flipH = false;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._rested = false;
         }
 

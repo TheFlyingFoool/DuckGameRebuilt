@@ -23,8 +23,8 @@ namespace DuckGame
             get
             {
                 if (this.furnitureData != null)
-                    return (Sprite)this.furnitureData.sprite;
-                return this.teamData != null ? (Sprite)this.teamData.hat : (Sprite)null;
+                    return furnitureData.sprite;
+                return this.teamData != null ? teamData.hat : (Sprite)null;
             }
         }
 
@@ -67,7 +67,7 @@ namespace DuckGame
                 g.depth = (Depth)deep;
                 g.frame = 0;
                 g.alpha = alpha;
-                Graphics.Draw((Sprite)g, pos.x, pos.y);
+                Graphics.Draw(g, pos.x, pos.y);
                 g.alpha = 1f;
             }
             if (this.teamData == null)
@@ -77,7 +77,7 @@ namespace DuckGame
             hat.frame = 0;
             hat.alpha = alpha;
             hat.center = new Vec2(16f, 16f) + this.teamData.hatOffset;
-            Graphics.Draw((Sprite)hat, pos.x, pos.y);
+            Graphics.Draw(hat, pos.x, pos.y);
             hat.alpha = 1f;
         }
     }

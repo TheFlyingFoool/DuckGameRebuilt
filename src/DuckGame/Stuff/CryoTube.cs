@@ -27,10 +27,10 @@ namespace DuckGame
         public override void Initialize()
         {
             this._plug = new CryoPlug(this.x - 20f, this.y);
-            Level.Add((Thing)this._plug);
-            this._plug.AttachTo((Thing)this);
+            Level.Add(_plug);
+            this._plug.AttachTo(this);
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._plug);
+        public override void Terminate() => Level.Remove(_plug);
     }
 }

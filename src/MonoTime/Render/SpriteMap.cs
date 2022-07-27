@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class SpriteMap : Sprite, ICloneable<SpriteMap>, ICloneable
     {
-        private int _globalIndex = (int)Thing.GetGlobalIndex();
+        private int _globalIndex = Thing.GetGlobalIndex();
         private int _width;
         private int _height;
         public float _speed = 1f;
@@ -111,8 +111,8 @@ namespace DuckGame
             this._texture = tex;
             frameWidth = Math.Min(this._texture.width, frameWidth);
             frameHeight = Math.Min(this._texture.height, frameHeight);
-            tex.frameWidth = (float)frameWidth;
-            tex.frameHeight = (float)frameHeight;
+            tex.frameWidth = frameWidth;
+            tex.frameHeight = frameHeight;
             this.position = new Vec2(this.x, this.y);
             this._width = frameWidth;
             this._height = frameHeight;
@@ -130,8 +130,8 @@ namespace DuckGame
             this._texture = Content.Load<Tex2D>(tex);
             frameWidth = Math.Min(this._texture.width, frameWidth);
             frameHeight = Math.Min(this._texture.height, frameHeight);
-            this._texture.frameWidth = (float)frameWidth;
-            this._texture.frameHeight = (float)frameHeight;
+            this._texture.frameWidth = frameWidth;
+            this._texture.frameHeight = frameHeight;
             this.position = new Vec2(this.x, this.y);
             this._width = frameWidth;
             this._height = frameHeight;
@@ -189,7 +189,7 @@ namespace DuckGame
             this._currentAnimation = new Animation?();
         }
 
-        public void CloneAnimations(SpriteMap into) => into._animations = new List<Animation>((IEnumerable<Animation>)this._animations);
+        public void CloneAnimations(SpriteMap into) => into._animations = new List<Animation>(_animations);
 
         public void UpdateSpriteBox()
         {
@@ -197,7 +197,7 @@ namespace DuckGame
                 return;
             int num1 = this._texture.width / this.w;
             int num2 = this._imageIndex / num1;
-            this._spriteBox = new Rectangle((float)((this._imageIndex - num2 * num1) * this.w), (float)(num2 * this.h), (float)(this.w - this.cutWidth), (float)this.h);
+            this._spriteBox = new Rectangle((this._imageIndex - num2 * num1) * this.w, num2 * this.h, this.w - this.cutWidth, h);
             this._lastImageIndex = this._imageIndex;
         }
 
@@ -208,7 +208,7 @@ namespace DuckGame
             if (this._currentAnimation.HasValue && (ignoreFlipFlop || this._flipFlop != DuckGame.Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
                 this._frameInc += this._currentAnimation.Value.speed * this._speed;
-                if ((double)this._frameInc >= 1.0)
+                if (_frameInc >= 1.0)
                 {
                     this._frameInc = 0.0f;
                     ++this._frame;
@@ -244,7 +244,7 @@ namespace DuckGame
             if (this._currentAnimation.HasValue && !VirtualTransition.doingVirtualTransition)
             {
                 this._frameInc += this._currentAnimation.Value.speed * this._speed;
-                if ((double)this._frameInc >= 1.0)
+                if (_frameInc >= 1.0)
                 {
                     this._frameInc = 0.0f;
                     ++this._frame;
@@ -314,7 +314,7 @@ namespace DuckGame
             DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(this._spriteBox), this._color, this.angle, this.center, this.scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
         }
 
-        public void ClearCache() => this._batchItem = (MTSpriteBatchItem)null;
+        public void ClearCache() => this._batchItem = null;
 
         public override void UltraCheapStaticDraw(bool flipH = false)
         {
@@ -330,7 +330,7 @@ namespace DuckGame
                 {
                     this._batchItem = DuckGame.Graphics.screen.StealLastSpriteBatchItem();
                     if (this._batchItem.MetaData == null)
-                        this._batchItem = (MTSpriteBatchItem)null;
+                        this._batchItem = null;
                 }
                 ++this._waitFrames;
                 DuckGame.Graphics.recordMetadata = false;
@@ -350,13 +350,13 @@ namespace DuckGame
             into.imageIndex = this.imageIndex;
             into.frame = this.frame;
             into._globalIndex = this._globalIndex;
-            return (Sprite)into;
+            return into;
         }
 
         public SpriteMap CloneMap() => (SpriteMap)this.Clone();
 
         SpriteMap ICloneable<SpriteMap>.Clone() => (SpriteMap)this.Clone();
 
-        object ICloneable.Clone() => (object)this.Clone();
+        object ICloneable.Clone() => this.Clone();
     }
 }

@@ -48,9 +48,9 @@ namespace DuckGame
         {
             if (Level.current.simulatePhysics)
                 this._spawnWait += 0.0166666f;
-            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && (double)this._spawnWait >= (double)this.spawnTime)
+            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && _spawnWait >= (double)this.spawnTime)
             {
-                if ((double)this.initialDelay > 0.0)
+                if (initialDelay > 0.0)
                 {
                     this.initialDelay -= 0.0166666f;
                 }
@@ -58,7 +58,7 @@ namespace DuckGame
                 {
                     Vec2 travel = Maths.AngleToVec(Maths.DegToRad(this.direction)) * this.firePower;
                     Vec2 vec2 = this.position - travel.normalized * 16f;
-                    Level.Add((Thing)new QuadLaserBullet(vec2.x, vec2.y, travel));
+                    Level.Add(new QuadLaserBullet(vec2.x, vec2.y, travel));
                     this._spawnWait = 0.0f;
                     ++this._numSpawned;
                 }
@@ -73,12 +73,12 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("spawnTime", (object)this.spawnTime);
-            binaryClassChunk.AddProperty("initialDelay", (object)this.initialDelay);
-            binaryClassChunk.AddProperty("spawnOnStart", (object)this.spawnOnStart);
-            binaryClassChunk.AddProperty("spawnNum", (object)this.spawnNum);
-            binaryClassChunk.AddProperty("fireDirection", (object)this.fireDirection);
-            binaryClassChunk.AddProperty("firePower", (object)this.firePower);
+            binaryClassChunk.AddProperty("spawnTime", spawnTime);
+            binaryClassChunk.AddProperty("initialDelay", initialDelay);
+            binaryClassChunk.AddProperty("spawnOnStart", spawnOnStart);
+            binaryClassChunk.AddProperty("spawnNum", spawnNum);
+            binaryClassChunk.AddProperty("fireDirection", fireDirection);
+            binaryClassChunk.AddProperty("firePower", firePower);
             return binaryClassChunk;
         }
 
@@ -97,12 +97,12 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("spawnTime", (object)Change.ToString((object)this.spawnTime)));
-            dxmlNode.Add(new DXMLNode("initialDelay", (object)Change.ToString((object)this.initialDelay)));
-            dxmlNode.Add(new DXMLNode("spawnOnStart", (object)Change.ToString((object)this.spawnOnStart)));
-            dxmlNode.Add(new DXMLNode("spawnNum", (object)Change.ToString((object)this.spawnNum)));
-            dxmlNode.Add(new DXMLNode("fireDirection", (object)Change.ToString((object)this.fireDirection)));
-            dxmlNode.Add(new DXMLNode("firePower", (object)Change.ToString((object)this.firePower)));
+            dxmlNode.Add(new DXMLNode("spawnTime", Change.ToString(spawnTime)));
+            dxmlNode.Add(new DXMLNode("initialDelay", Change.ToString(initialDelay)));
+            dxmlNode.Add(new DXMLNode("spawnOnStart", Change.ToString(spawnOnStart)));
+            dxmlNode.Add(new DXMLNode("spawnNum", Change.ToString(spawnNum)));
+            dxmlNode.Add(new DXMLNode("fireDirection", Change.ToString(fireDirection)));
+            dxmlNode.Add(new DXMLNode("firePower", Change.ToString(firePower)));
             return dxmlNode;
         }
 
@@ -111,10 +111,10 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode1 = node.Element("spawnTime");
             if (dxmlNode1 != null)
-                this.spawnTime = Change.ToSingle((object)dxmlNode1.Value);
+                this.spawnTime = Change.ToSingle(dxmlNode1.Value);
             DXMLNode dxmlNode2 = node.Element("initialDelay");
             if (dxmlNode2 != null)
-                this.initialDelay = Change.ToSingle((object)dxmlNode2.Value);
+                this.initialDelay = Change.ToSingle(dxmlNode2.Value);
             DXMLNode dxmlNode3 = node.Element("spawnOnStart");
             if (dxmlNode3 != null)
                 this.spawnOnStart = Convert.ToBoolean(dxmlNode3.Value);
@@ -133,13 +133,13 @@ namespace DuckGame
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Delay", (IContextListener)null, new FieldBinding((object)this, "spawnTime", 1f, 100f)));
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Initial Delay", (IContextListener)null, new FieldBinding((object)this, "initialDelay", max: 100f)));
-            contextMenu.AddItem((ContextMenu)new ContextCheckBox("Start Spawned", (IContextListener)null, new FieldBinding((object)this, "spawnOnStart")));
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Number", (IContextListener)null, new FieldBinding((object)this, "spawnNum", -1f, 100f), 1f, "INF"));
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Angle", (IContextListener)null, new FieldBinding((object)this, "fireDirection", max: 360f), 1f));
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Power", (IContextListener)null, new FieldBinding((object)this, "firePower", 1f, 20f)));
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(new ContextSlider("Delay", null, new FieldBinding(this, "spawnTime", 1f, 100f)));
+            contextMenu.AddItem(new ContextSlider("Initial Delay", null, new FieldBinding(this, "initialDelay", max: 100f)));
+            contextMenu.AddItem(new ContextCheckBox("Start Spawned", null, new FieldBinding(this, "spawnOnStart")));
+            contextMenu.AddItem(new ContextSlider("Number", null, new FieldBinding(this, "spawnNum", -1f, 100f), 1f, "INF"));
+            contextMenu.AddItem(new ContextSlider("Angle", null, new FieldBinding(this, "fireDirection", max: 360f), 1f));
+            contextMenu.AddItem(new ContextSlider("Power", null, new FieldBinding(this, "firePower", 1f, 20f)));
+            return contextMenu;
         }
 
         public override void DrawHoverInfo() => Graphics.DrawLine(this.position, this.position + Maths.AngleToVec(Maths.DegToRad(this.direction)) * (this.firePower * 5f), Color.Red, 2f, (Depth)1f);

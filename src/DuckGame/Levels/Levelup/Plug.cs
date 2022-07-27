@@ -70,19 +70,19 @@ namespace DuckGame
             bool flag2 = !Plug._allowMovement && Input.Down("SELECT");
             if (Plug._lines.Count > 0 && Plug._currentLine == "")
             {
-                int num = (double)Plug._waitAfterLine <= 0.0 ? 1 : 0;
+                int num = _waitAfterLine <= 0.0 ? 1 : 0;
                 Plug._waitAfterLine -= 0.045f;
                 if (flag2)
                     Plug._waitAfterLine -= 0.045f;
                 if (Plug.killSkip)
                     Plug._waitAfterLine -= 0.1f;
                 Plug._talkMove += 0.75f;
-                if ((double)Plug._talkMove > 1.0)
+                if (_talkMove > 1.0)
                 {
                     Plug.frame = 0;
                     Plug._talkMove = 0.0f;
                 }
-                if (num == 0 && (double)Plug._waitAfterLine <= 0.0)
+                if (num == 0 && _waitAfterLine <= 0.0)
                     HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                 if (Plug._lineProgress.Count == 0 || Input.Pressed("SELECT"))
                 {
@@ -99,12 +99,12 @@ namespace DuckGame
                 Plug._waitLetter -= 0.8f;
                 if (flag2)
                     Plug._waitLetter -= 0.8f;
-                if ((double)Plug._waitLetter >= 0.0)
+                if (_waitLetter >= 0.0)
                     return;
                 Plug._talkMove += 0.75f;
-                if ((double)Plug._talkMove > 1.0)
+                if (_talkMove > 1.0)
                 {
-                    Plug.frame = Plug._currentLine[0] == ' ' || Plug.frame != 1 || (double)Plug._extraWait > 0.0 ? 1 : 2;
+                    Plug.frame = Plug._currentLine[0] == ' ' || Plug.frame != 1 || _extraWait > 0.0 ? 1 : 2;
                     Plug._talkMove = 0.0f;
                 }
                 Plug._waitLetter = 1f;
@@ -143,7 +143,6 @@ namespace DuckGame
                     }
                     else
                         Plug._currentLine = Plug._currentLine.Remove(0, 1);
-                    Color white = Color.White;
                     bool flag4 = true;
                     if (str == "0")
                     {
@@ -251,7 +250,7 @@ namespace DuckGame
             else
             {
                 Plug._talkMove += 0.75f;
-                if ((double)Plug._talkMove <= 1.0)
+                if (_talkMove <= 1.0)
                     return;
                 Plug.frame = 0;
                 Plug._talkMove = 0.0f;
@@ -261,25 +260,25 @@ namespace DuckGame
         public static void Draw()
         {
             Plug.Initialize();
-            Vec2 vec2_1 = new Vec2((float)(100.0 * (1.0 - (double)Plug._chancyLerp)), (float)(100.0 * (1.0 - (double)Plug._chancyLerp) - 4.0));
+            Vec2 vec2_1 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
             Vec2 vec2_2 = new Vec2(280f, 30f);
             Vec2 vec2_3 = new Vec2(20f, 132f) + vec2_1;
             int num = 0;
             for (int index1 = Plug._lineProgress.Count - 1; index1 >= 0; --index1)
             {
                 float width = Plug._font.GetWidth(Plug._lineProgress[index1].text);
-                float y = vec2_3.y + 2f + (float)(num * 9);
-                float x = (float)((double)vec2_3.x + (double)vec2_2.x / 2.0 - (double)width / 2.0);
+                float y = vec2_3.y + 2f + num * 9;
+                float x = (float)(vec2_3.x + vec2_2.x / 2.0 - (double)width / 2.0);
                 for (int index2 = Plug._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     Plug._font.Draw(Plug._lineProgress[index1].segments[index2].text, new Vec2(x, y), Plug._lineProgress[index1].segments[index2].color, (Depth)0.98f);
-                    x += (float)(Plug._lineProgress[index1].segments[index2].text.Length * 8);
+                    x += Plug._lineProgress[index1].segments[index2].text.Length * 8;
                 }
                 ++num;
             }
             Plug._dealer.depth = (Depth)0.96f;
             Plug._dealer.alpha = 1f;
-            Graphics.Draw((Sprite)Plug._dealer, 214f + vec2_1.x, 6f + vec2_1.y);
+            Graphics.Draw(_dealer, 214f + vec2_1.x, 6f + vec2_1.y);
             Graphics.DrawRect(vec2_3 + new Vec2(-2f, 0.0f), vec2_3 + vec2_2 + new Vec2(2f, 0.0f), Color.Black, (Depth)0.97f);
         }
     }

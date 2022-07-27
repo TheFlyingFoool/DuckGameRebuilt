@@ -17,7 +17,7 @@ namespace DuckGame
             this._sprite = new SpriteMap("plasmaFlare", 16, 16);
             this._sprite.AddAnimation("idle", 0.7f, false, 0, 1, 2);
             this._sprite.SetAnimation("idle");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(0.0f, 16f);
         }
 
@@ -25,7 +25,7 @@ namespace DuckGame
         {
             if (!this._sprite.finished)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

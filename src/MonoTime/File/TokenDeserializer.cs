@@ -49,7 +49,7 @@ namespace DuckGame
                 pBuffer.position = 0;
                 return pBuffer;
             }
-            TokenDeserializer.instance = (TokenDeserializer)null;
+            TokenDeserializer.instance = null;
             int num = pBuffer.ReadInt();
             for (int index = 0; index < num; ++index)
                 this._tokens.Add(pBuffer.ReadString());

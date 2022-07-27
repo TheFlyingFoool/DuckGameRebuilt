@@ -18,19 +18,21 @@ namespace DuckGame
             this._sprite.AddAnimation("splash", 0.45f, false, 0, 1);
             this._sprite.SetAnimation("splash");
             this.center = new Vec2(0.0f, 7f);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.depth = (Depth)0.7f;
             this.alpha = 0.6f;
             this.angle = Maths.DegToRad(-Maths.PointDirection(Vec2.Zero, dir));
-            this.anchor = new Anchor(attach);
-            this.anchor.offset = new Vec2(xpos, ypos) - attach.position;
+            this.anchor = new Anchor(attach)
+            {
+                offset = new Vec2(xpos, ypos) - attach.position
+            };
         }
 
         public override void Update()
         {
             if (!this._sprite.finished)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw() => base.Draw();

@@ -59,12 +59,12 @@ namespace DuckGame
 
         public override void Begin(bool transparent, bool isTargetDraw = false)
         {
-            Vec3 vec3_1 = new Vec3((float)((double)DuckGame.Graphics.fade * (double)this._fade * (1.0 - (double)this._darken))) * this.colorMul;
+            Vec3 vec3_1 = new Vec3((float)((double)DuckGame.Graphics.fade * _fade * (1.0 - _darken))) * this.colorMul;
             Vec3 vec3_2 = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(DuckGame.Graphics.flashAddRenderValue) + new Vec3(DuckGame.Graphics.fadeAddRenderValue) - new Vec3(this.darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             if (!Options.Data.flashing)
                 vec3_2 = new Vec3(0.0f, 0.0f, 0.0f);
-            if ((double)this._darken > 0.0)
+            if (_darken > 0.0)
                 this._darken -= 0.15f;
             else
                 this._darken = 0.0f;
@@ -81,14 +81,14 @@ namespace DuckGame
 
         public override void Draw(bool transparent, bool isTargetDraw = false)
         {
-            DuckGame.Graphics.currentLayer = (Layer)this;
+            DuckGame.Graphics.currentLayer = this;
             this._fx.Parameters["WVP"].SetValue((Microsoft.Xna.Framework.Matrix)(this._view * this._proj));
             this.Begin(transparent, false);
             foreach (Sprite sprite in this._sprites)
                 DuckGame.Graphics.Draw(sprite, sprite.x, sprite.y);
             this._batch.End();
-            DuckGame.Graphics.screen = (MTSpriteBatch)null;
-            DuckGame.Graphics.currentLayer = (Layer)null;
+            DuckGame.Graphics.screen = null;
+            DuckGame.Graphics.currentLayer = null;
         }
     }
 }

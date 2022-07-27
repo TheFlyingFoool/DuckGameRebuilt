@@ -60,9 +60,9 @@ namespace DuckGame
                 if (b != null)
                 {
                     FluidPuddle fluidPuddle = new FluidPuddle(this.x, b.top, b);
-                    Level.Add((Thing)fluidPuddle);
+                    Level.Add(fluidPuddle);
                     float num = 0.0f;
-                    while ((double)fluidPuddle.CalculateDepth() < (double)((int)this.deep * 8))
+                    while ((double)fluidPuddle.CalculateDepth() < (int)this.deep * 8)
                     {
                         FluidData fluidType = this.GetFluidType();
                         fluidType.amount = 0.5f;
@@ -70,7 +70,7 @@ namespace DuckGame
                         float depth = fluidPuddle.CalculateDepth();
                         if ((double)Math.Abs(num - depth) < 1.0 / 1000.0)
                         {
-                            Level.Remove((Thing)this);
+                            Level.Remove(this);
                             break;
                         }
                         num = depth;
@@ -103,7 +103,7 @@ namespace DuckGame
                     }
                 }
                 if (this._isValid)
-                    Graphics.DrawRect(new Vec2(this._leftSide.x, this._floor - (float)((int)this.deep * 8)), new Vec2(this._rightSide.x, this._floor), new Color(this.GetFluidType().color) * 0.5f, (Depth)0.9f);
+                    Graphics.DrawRect(new Vec2(this._leftSide.x, this._floor - (int)this.deep * 8), new Vec2(this._rightSide.x, this._floor), new Color(this.GetFluidType().color) * 0.5f, (Depth)0.9f);
             }
             base.Draw();
         }

@@ -26,8 +26,8 @@ namespace DuckGame
         public static ChallengeData LoadChallengeData(string pLevel)
         {
             if (pLevel == null)
-                return (ChallengeData)null;
-            ChallengeData challengeData = (ChallengeData)null;
+                return null;
+            ChallengeData challengeData;
             if (Challenges._challenges.TryGetValue(pLevel, out challengeData))
                 return challengeData;
             LevelData levelData = Content.GetLevel(pLevel) ?? DuckFile.LoadLevel(pLevel);
@@ -37,13 +37,13 @@ namespace DuckGame
                 foreach (BinaryClassChunk node in levelData.objects.objects)
                 {
                     string property = node.GetProperty<string>("type");
-                    ChallengeMode challengeMode = (ChallengeMode)null;
+                    ChallengeMode challengeMode = null;
                     try
                     {
                         if (property != null && property.Contains("DuckGame.ChallengeMode,"))
                             challengeMode = Thing.LoadThing(node, false) as ChallengeMode;
                         else if (property != null && property.Contains("DuckGame.ChallengeModeNew,"))
-                            challengeMode = (ChallengeMode)(Thing.LoadThing(node, false) as ChallengeModeNew);
+                            challengeMode = Thing.LoadThing(node, false) as ChallengeModeNew;
                         if (challengeMode != null)
                         {
                             challengeMode.challenge.fileName = pLevel;
@@ -58,7 +58,7 @@ namespace DuckGame
                     }
                 }
             }
-            return (ChallengeData)null;
+            return null;
         }
 
         public static void Initialize()
@@ -66,7 +66,7 @@ namespace DuckGame
             foreach (string level in Content.GetLevels("challenge", LevelLocation.Content, true, false, false))
             {
                 string challenge = level;
-                MonoMain.currentActionQueue.Enqueue(new LoadingAction((Action)(() => Challenges.LoadChallengeData(challenge))));
+                MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => Challenges.LoadChallengeData(challenge)));
             }
         }
 
@@ -144,7 +144,7 @@ namespace DuckGame
 
         public static ChallengeData GetChallenge(string name)
         {
-            ChallengeData challengeData = (ChallengeData)null;
+            ChallengeData challengeData;
             return !Challenges._challenges.TryGetValue(name, out challengeData) ? Challenges.LoadChallengeData(name) : challengeData;
         }
 
@@ -176,7 +176,7 @@ namespace DuckGame
             foreach (KeyValuePair<string, ChallengeData> challenge in Challenges.challenges)
             {
                 KeyValuePair<string, ChallengeData> d = challenge;
-                if (d.Value.requirement != "" && (d.Value.prevchal == null || d.Value.prevchal == "" || available == null || available.FirstOrDefault<ChallengeData>((Func<ChallengeData, bool>)(x => x != null && x.fileName == d.Value.prevchal)) != null))
+                if (d.Value.requirement != "" && (d.Value.prevchal == null || d.Value.prevchal == "" || available == null || available.FirstOrDefault<ChallengeData>(x => x != null && x.fileName == d.Value.prevchal) != null))
                     chancyChallenges.Add(d.Value);
             }
             return chancyChallenges;
@@ -222,7 +222,7 @@ namespace DuckGame
                         num1 += (int)saveData.trophy;
                 }
             }
-            return (float)num1 / (float)num2;
+            return num1 / (float)num2;
         }
 
         public static List<ChallengeData> challengesInArcade
@@ -232,8 +232,10 @@ namespace DuckGame
                 if (Challenges._challengesInArcade == null)
                 {
                     Challenges._challengesInArcade = new List<ChallengeData>();
-                    ArcadeLevel arcadeLevel = new ArcadeLevel(Content.GetLevelID("arcade"));
-                    arcadeLevel.bareInitialize = true;
+                    ArcadeLevel arcadeLevel = new ArcadeLevel(Content.GetLevelID("arcade"))
+                    {
+                        bareInitialize = true
+                    };
                     arcadeLevel.InitializeMachines();
                     if (arcadeLevel != null)
                     {

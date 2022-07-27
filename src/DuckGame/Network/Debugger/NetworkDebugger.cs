@@ -34,11 +34,11 @@ namespace DuckGame
         public static List<NetworkInstance> _instances = new List<NetworkInstance>();
         private Level _startLevel;
         private LayerCore _startLayer;
-        private bool _ghostDebugger;
+        //private bool _ghostDebugger;
         private MultiMap<string, int> _controlsMapGamepad;
         private MultiMap<string, int> _controlsMapKeyboard;
         private MultiMap<string, int> _controlsMapKeyboard2;
-        private InputProfile _defaultInput;
+        //private InputProfile _defaultInput;
         public static NetworkDebugger instance;
         private static int _lastRect = 0;
         public static bool letJoin = false;
@@ -136,11 +136,11 @@ namespace DuckGame
             if (level == null)
             {
                 foreach (Profile profile in Profiles.all)
-                    profile.team = (Team)null;
+                    profile.team = null;
             }
             for (int index = 0; index < 8; ++index)
                 NetworkDebugger.inputProfiles.Add(new InputProfile());
-            this._ghostDebugger = pGhostDebugger;
+            //this._ghostDebugger = pGhostDebugger;
         }
 
         public static int CurrentServerIndex()
@@ -166,16 +166,16 @@ namespace DuckGame
             switch (index)
             {
                 case 0:
-                    host.rect = new Rectangle(0.0f, 0.0f, (float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2));
+                    host.rect = new Rectangle(0.0f, 0.0f, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
                 case 1:
-                    host.rect = new Rectangle((float)(Resolution.current.x / 2), 0.0f, (float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2));
+                    host.rect = new Rectangle(Resolution.current.x / 2, 0.0f, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
                 case 2:
-                    host.rect = new Rectangle(0.0f, (float)(Resolution.current.y / 2), (float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2));
+                    host.rect = new Rectangle(0.0f, Resolution.current.y / 2, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
                 case 3:
-                    host.rect = new Rectangle((float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2), (float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2));
+                    host.rect = new Rectangle(Resolution.current.x / 2, Resolution.current.y / 2, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
             }
         }
@@ -204,7 +204,7 @@ namespace DuckGame
             if (this._startLayer != null)
             {
                 networkInstance.layerCore = this._startLayer;
-                this._startLayer = (LayerCore)null;
+                this._startLayer = null;
             }
             else
             {
@@ -239,7 +239,7 @@ namespace DuckGame
             DuckNetwork.Initialize();
             foreach (Team team in Teams.all)
                 team.ClearProfiles();
-            Level.current = (Level)new TeamSelect2();
+            Level.current = new TeamSelect2();
             networkInstance.joined = true;
             if (init >= NetworkDebugger._instances.Count)
                 NetworkDebugger._instances.Add(networkInstance);
@@ -260,7 +260,7 @@ namespace DuckGame
                             {
                                 member = current.member,
                                 originalInstance = current.originalInstance,
-                                instance = Activator.CreateInstance(current.member.FieldType, (object[])null),
+                                instance = Activator.CreateInstance(current.member.FieldType, null),
                                 firstLockAction = current.firstLockAction
                             });
                         }
@@ -304,7 +304,7 @@ namespace DuckGame
             this._controlsMapKeyboard2 = InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex].GetControllerMap<Keyboard>();
             for (int init = 0; init < 4; ++init)
                 this.CreateInstance(init, true);
-            Level.activeLevel = (Level)this;
+            Level.activeLevel = this;
             base.Initialize();
         }
 
@@ -325,13 +325,13 @@ namespace DuckGame
                 NetworkDebugger.showLogs = !NetworkDebugger.showLogs;
             MonoMain.instance.IsMouseVisible = true;
             this.lefpres = Mouse.left == InputState.Pressed;
-            List<DCLine> dcLineList = (List<DCLine>)null;
+            List<DCLine> dcLineList = null;
             lock (DevConsole.debuggerLines)
             {
                 dcLineList = DevConsole.debuggerLines;
                 DevConsole.debuggerLines = new List<DCLine>();
             }
-            this._defaultInput = InputProfile.DefaultPlayer1;
+            //this._defaultInput = InputProfile.DefaultPlayer1;
             for (int index1 = 0; index1 < 4; ++index1)
             {
                 foreach (NetworkInstance instance in NetworkDebugger._instances)
@@ -343,7 +343,7 @@ namespace DuckGame
                 NetworkDebugger._currentIndex = index1;
                 NetworkDebugger.LockInstance(instance1);
                 bool flag1 = false;
-                if (NetworkDebugger._lastRect == NetworkDebugger._currentIndex || instance1.rect.Contains(Mouse.mousePos) || (double)Math.Abs((float)(DuckGame.Graphics.width / 2) - Mouse.mousePos.x) < 32.0 && (double)Math.Abs((float)(DuckGame.Graphics.height / 2) - Mouse.mousePos.y) < 32.0)
+                if (NetworkDebugger._lastRect == NetworkDebugger._currentIndex || instance1.rect.Contains(Mouse.mousePos) || (double)Math.Abs(DuckGame.Graphics.width / 2 - Mouse.mousePos.x) < 32.0 && (double)Math.Abs(DuckGame.Graphics.height / 2 - Mouse.mousePos.y) < 32.0)
                 {
                     NetworkDebugger._lastRect = NetworkDebugger._currentIndex;
                     InputProfile.active = InputProfile.DefaultPlayer1;
@@ -355,14 +355,14 @@ namespace DuckGame
                     InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<GenericController>(1, this._controlsMapGamepad);
                     InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<GenericController>(2, this._controlsMapGamepad);
                     InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<GenericController>(3, this._controlsMapGamepad);
-                    InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<Keyboard>(0, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<Keyboard>(1, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer3.SetGenericControllerMapIndex<Keyboard>(2, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer4.SetGenericControllerMapIndex<Keyboard>(3, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer1).SetGenericControllerMapIndex<Keyboard>(0, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<Keyboard>(1, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<Keyboard>(2, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<Keyboard>(3, (MultiMap<string, int>)null);
+                    InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<Keyboard>(0, null);
+                    InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<Keyboard>(1, null);
+                    InputProfile.DefaultPlayer3.SetGenericControllerMapIndex<Keyboard>(2, null);
+                    InputProfile.DefaultPlayer4.SetGenericControllerMapIndex<Keyboard>(3, null);
+                    InputProfile.Get(InputProfile.MPPlayer1).SetGenericControllerMapIndex<Keyboard>(0, null);
+                    InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<Keyboard>(1, null);
+                    InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<Keyboard>(2, null);
+                    InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<Keyboard>(3, null);
                     InputProfile.defaultProfiles[Options.Data.keyboard1PlayerIndex].SetGenericControllerMapIndex<Keyboard>(0, this._controlsMapKeyboard);
                     InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard1PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(0, this._controlsMapKeyboard);
                     InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex].SetGenericControllerMapIndex<Keyboard>(1, this._controlsMapKeyboard2);
@@ -373,22 +373,22 @@ namespace DuckGame
                 else
                 {
                     InputProfile.active = InputProfile.DefaultPlayer4;
-                    InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<GenericController>(0, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<GenericController>(1, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer3.SetGenericControllerMapIndex<GenericController>(2, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer4.SetGenericControllerMapIndex<GenericController>(3, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer1).SetGenericControllerMapIndex<GenericController>(0, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<GenericController>(1, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<GenericController>(2, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<GenericController>(3, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<Keyboard>(0, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<Keyboard>(1, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer3.SetGenericControllerMapIndex<Keyboard>(2, (MultiMap<string, int>)null);
-                    InputProfile.DefaultPlayer4.SetGenericControllerMapIndex<Keyboard>(3, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer1).SetGenericControllerMapIndex<Keyboard>(0, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<Keyboard>(1, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<Keyboard>(2, (MultiMap<string, int>)null);
-                    InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<Keyboard>(3, (MultiMap<string, int>)null);
+                    InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<GenericController>(0, null);
+                    InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<GenericController>(1, null);
+                    InputProfile.DefaultPlayer3.SetGenericControllerMapIndex<GenericController>(2, null);
+                    InputProfile.DefaultPlayer4.SetGenericControllerMapIndex<GenericController>(3, null);
+                    InputProfile.Get(InputProfile.MPPlayer1).SetGenericControllerMapIndex<GenericController>(0, null);
+                    InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<GenericController>(1, null);
+                    InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<GenericController>(2, null);
+                    InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<GenericController>(3, null);
+                    InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<Keyboard>(0, null);
+                    InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<Keyboard>(1, null);
+                    InputProfile.DefaultPlayer3.SetGenericControllerMapIndex<Keyboard>(2, null);
+                    InputProfile.DefaultPlayer4.SetGenericControllerMapIndex<Keyboard>(3, null);
+                    InputProfile.Get(InputProfile.MPPlayer1).SetGenericControllerMapIndex<Keyboard>(0, null);
+                    InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<Keyboard>(1, null);
+                    InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<Keyboard>(2, null);
+                    InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<Keyboard>(3, null);
                     NetworkDebugger.hoveringInstance = false;
                 }
                 InputProfile.Update();
@@ -398,9 +398,9 @@ namespace DuckGame
                     {
                         if (InputProfile.DefaultPlayer1.virtualDevice != null)
                         {
-                            InputProfile.DefaultPlayer1.virtualDevice.SetState((ushort)0);
-                            InputProfile.DefaultPlayer1.virtualDevice.SetState((ushort)0);
-                            InputProfile.DefaultPlayer1.virtualDevice = (VirtualInput)null;
+                            InputProfile.DefaultPlayer1.virtualDevice.SetState(0);
+                            InputProfile.DefaultPlayer1.virtualDevice.SetState(0);
+                            InputProfile.DefaultPlayer1.virtualDevice = null;
                         }
                         NetworkDebugger.Recorder.active.Log(InputProfile.DefaultPlayer1.state);
                     }
@@ -410,7 +410,7 @@ namespace DuckGame
                         {
                             InputProfile.DefaultPlayer1.virtualDevice = VirtualInput.debuggerInputs[NetworkDebugger.currentIndex];
                             for (int index2 = 0; index2 < Network.synchronizedTriggers.Count; ++index2)
-                                InputProfile.DefaultPlayer1.Map((InputDevice)VirtualInput.debuggerInputs[NetworkDebugger.currentIndex], Network.synchronizedTriggers[index2], index2);
+                                InputProfile.DefaultPlayer1.Map(VirtualInput.debuggerInputs[NetworkDebugger.currentIndex], Network.synchronizedTriggers[index2], index2);
                             VirtualInput.debuggerInputs[NetworkDebugger.currentIndex].availableTriggers = Network.synchronizedTriggers;
                         }
                         InputProfile.DefaultPlayer1.virtualDevice.SetState(NetworkDebugger.Recorder.active.Get());
@@ -547,7 +547,7 @@ namespace DuckGame
                 Network.activeNetwork.core.ForcefulTermination();
                 NetworkDebugger._instances.Clear();
                 NetworkDebugger.inputProfiles.Clear();
-                Level.current = (Level)new NetworkDebugger();
+                Level.current = new NetworkDebugger();
             }
             if (Keyboard.shift)
             {
@@ -615,7 +615,7 @@ namespace DuckGame
 
         public static NetworkDebugger.GhostDebugData GetGhost(GhostObject pGhost)
         {
-            NetworkDebugger.GhostDebugData ghost = (NetworkDebugger.GhostDebugData)null;
+            GhostDebugData ghost;
             if (!NetworkDebugger._ghostDebug.TryGetValue(pGhost, out ghost))
                 ghost = NetworkDebugger._ghostDebug[pGhost] = new NetworkDebugger.GhostDebugData();
             return ghost;
@@ -654,8 +654,10 @@ namespace DuckGame
 
         public static void StartRecording(string pLevel)
         {
-            NetworkDebugger.Recorder.active = new NetworkDebugger.Recorder();
-            NetworkDebugger.Recorder.active.level = pLevel;
+            NetworkDebugger.Recorder.active = new NetworkDebugger.Recorder
+            {
+                level = pLevel
+            };
             NetworkDebugger.StartRecording(0);
         }
 
@@ -732,7 +734,7 @@ namespace DuckGame
             if (NetworkDebugger._instances.Count <= page)
                 return;
             int num1 = 97;
-            if ((double)size.y < 300.0)
+            if (size.y < 300.0)
                 num1 = num1 / 2 - 2;
             Queue<DCLine> lines = NetworkDebugger._instances[page].consoleCore.lines;
             Vec2 p1_1 = pos;
@@ -762,14 +764,14 @@ namespace DuckGame
                     ++num2;
             }
             DuckGame.Graphics.DrawRect(new Vec2(p1_1.x + (size.x - 12f), p1_1.y), p2_1, Color.Gray * 0.5f, (Depth)0.81f);
-            float num3 = (float)NetworkDebugger.logsScroll[index] / (float)num2;
+            float num3 = NetworkDebugger.logsScroll[index] / (float)num2;
             float num4 = 300f;
-            float num5 = Math.Max(num4 - (float)num2, 20f) / num4;
+            float num5 = Math.Max(num4 - num2, 20f) / num4;
             float num6 = size.y * num5;
             Vec2 p1_2 = new Vec2(p1_1.x + (size.x - 12f), p1_1.y + num3 * (size.y - num6));
             Vec2 p2_2 = new Vec2(p1_1.x + size.x, p1_1.y + num3 * (size.y - num6) + num6);
             bool flag = false;
-            if ((double)Mouse.xConsole > (double)p1_2.x && (double)Mouse.xConsole < (double)p2_2.x && (double)Mouse.yConsole > (double)p1_2.y && (double)Mouse.yConsole < (double)p2_2.y)
+            if ((double)Mouse.xConsole > p1_2.x && (double)Mouse.xConsole < p2_2.x && (double)Mouse.yConsole > p1_2.y && (double)Mouse.yConsole < p2_2.y)
             {
                 if (Mouse.left == InputState.Pressed)
                 {
@@ -783,16 +785,16 @@ namespace DuckGame
             {
                 Vec2 vec2_1 = this.mouseClickPos[index] - Mouse.positionConsole;
                 Vec2 vec2_2 = this.mouseClickTop[index] - vec2_1;
-                if ((double)vec2_2.y < (double)p1_1.y)
+                if (vec2_2.y < (double)p1_1.y)
                     vec2_2.y = p1_1.y;
-                if ((double)vec2_2.y > (double)p2_1.y - (double)num6)
+                if (vec2_2.y > p2_1.y - (double)num6)
                     vec2_2.y = p2_1.y - num6;
-                NetworkDebugger.logsScroll[index] = (int)Math.Round(((double)vec2_2.y - (double)p1_1.y) / ((double)size.y - (double)num6) * (double)num2);
+                NetworkDebugger.logsScroll[index] = (int)Math.Round((vec2_2.y - (double)p1_1.y) / (size.y - (double)num6) * num2);
             }
             if (Mouse.left == InputState.Released)
                 this.scrollerDrag[index] = false;
             DuckGame.Graphics.DrawRect(p1_2, p2_2, Color.White * (flag || this.scrollerDrag[index] ? 0.8f : 0.5f), (Depth)0.82f);
-            if ((double)Mouse.xConsole > (double)p1_1.x && (double)Mouse.xConsole < (double)p2_1.x && (double)Mouse.yConsole > (double)p1_1.y && (double)Mouse.yConsole < (double)p2_1.y)
+            if ((double)Mouse.xConsole > p1_1.x && (double)Mouse.xConsole < p2_1.x && (double)Mouse.yConsole > p1_1.y && (double)Mouse.yConsole < p2_1.y)
             {
                 if ((double)Mouse.scroll > 0.0)
                     NetworkDebugger.logsScroll[index] += 5;
@@ -820,15 +822,15 @@ namespace DuckGame
                         DCLine line = lines.ElementAt<DCLine>(num8 + num7);
                         DevConsole.DrawLine(pos1, line, this.logTimes, this.logSections);
                         Color col = DCLine.ColorForSection(line.section);
-                        col.r = (byte)((double)col.r * 0.100000001490116);
-                        col.g = (byte)((double)col.g * 0.100000001490116);
-                        col.b = (byte)((double)col.b * 0.100000001490116);
+                        col.r = (byte)(col.r * 0.100000001490116);
+                        col.g = (byte)(col.g * 0.100000001490116);
+                        col.b = (byte)(col.b * 0.100000001490116);
                         if (line.line.Contains("@error"))
                         {
                             col = Color.Red;
-                            col.r = (byte)((double)col.r * 0.300000011920929);
-                            col.g = (byte)((double)col.g * 0.300000011920929);
-                            col.b = (byte)((double)col.b * 0.300000011920929);
+                            col.r = (byte)(col.r * 0.300000011920929);
+                            col.g = (byte)(col.g * 0.300000011920929);
+                            col.b = (byte)(col.b * 0.300000011920929);
                         }
                         DuckGame.Graphics.DrawRect(pos1 + new Vec2(-4f, -1f), new Vec2(p2_1.x - 14f, pos1.y + 9f), col, (Depth)0.85f);
                         if (line.frames + num9 > 0)
@@ -873,7 +875,7 @@ namespace DuckGame
                         {
                             if (index == 8)
                             {
-                                DuckGame.Graphics.DrawString("ALL (9)", vec2 + new Vec2((float)(index * 110), -40f), Color.White, (Depth)0.82f);
+                                DuckGame.Graphics.DrawString("ALL (9)", vec2 + new Vec2(index * 110, -40f), Color.White, (Depth)0.82f);
                             }
                             else
                             {
@@ -881,7 +883,7 @@ namespace DuckGame
                                 string str = DCLine.StringForSection(dcSection, true, false, false);
                                 if (dcSection == DCSection.General)
                                     str = "GENERAL";
-                                DuckGame.Graphics.DrawString(str + " (" + (index + 1).ToString() + ")", vec2 + new Vec2((float)(index * 110), -40f), Color.White * (this.logFilters[dcSection] ? 1f : 0.5f), (Depth)0.82f);
+                                DuckGame.Graphics.DrawString(str + " (" + (index + 1).ToString() + ")", vec2 + new Vec2(index * 110, -40f), Color.White * (this.logFilters[dcSection] ? 1f : 0.5f), (Depth)0.82f);
                             }
                         }
                     }
@@ -889,12 +891,12 @@ namespace DuckGame
                     Vec2 size = new Vec2(Layer.Console.width - 40f, Layer.Console.height - 100f);
                     if (num > 1)
                     {
-                        size = new Vec2((float)((double)size.x / 2.0 - 4.0), Layer.Console.height - 100f);
+                        size = new Vec2((float)(size.x / 2.0 - 4.0), Layer.Console.height - 100f);
                         vec2Array[1] = vec2 + new Vec2(size.x + 4f, 0.0f);
                     }
                     if (num > 2)
                     {
-                        size = new Vec2(size.x, (float)((double)size.y / 2.0 - 16.0));
+                        size = new Vec2(size.x, (float)(size.y / 2.0 - 16.0));
                         vec2Array[2] = vec2 + new Vec2(0.0f, size.y + 16f);
                         vec2Array[3] = vec2 + new Vec2(size.x + 4f, size.y + 16f);
                     }
@@ -993,12 +995,12 @@ namespace DuckGame
         public static void RegisterCore<T>(string pCoreMemberName, Action pRunOnFirstLock)
         {
             FieldInfo field = typeof(T).GetField(pCoreMemberName, BindingFlags.Static | BindingFlags.Public);
-            if (!(field != (FieldInfo)null))
+            if (!(field != null))
                 return;
             NetworkDebugger._registeredCores.Add(new NetworkInstance.Core()
             {
                 member = field,
-                originalInstance = field.GetValue((object)null),
+                originalInstance = field.GetValue(null),
                 firstLockAction = pRunOnFirstLock
             });
         }
@@ -1020,7 +1022,7 @@ namespace DuckGame
 
             public void Log(ushort pInputState)
             {
-                List<ushort> ushortList = (List<ushort>)null;
+                List<ushort> ushortList;
                 if (!this.inputs.TryGetValue(NetworkDebugger.currentIndex, out ushortList))
                     this.inputs[NetworkDebugger.currentIndex] = ushortList = new List<ushort>();
                 ushortList.Add(pInputState);
@@ -1028,7 +1030,7 @@ namespace DuckGame
 
             public ushort Get()
             {
-                List<ushort> ushortList = (List<ushort>)null;
+                List<ushort> ushortList;
                 return this.inputs.TryGetValue(NetworkDebugger.currentIndex, out ushortList) && this.frame < ushortList.Count ? ushortList[this.frame] : (ushort)0;
             }
         }

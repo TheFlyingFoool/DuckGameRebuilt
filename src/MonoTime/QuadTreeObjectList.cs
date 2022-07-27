@@ -29,7 +29,7 @@ namespace DuckGame
 
         public HashSet<Thing> updateList => this._bigList;
 
-        public void RandomizeObjectOrder() => this._bigList = new HashSet<Thing>((IEnumerable<Thing>)this._bigList.OrderBy<Thing, int>((Func<Thing, int>)(x => Rando.Int(999999))).ToList<Thing>());
+        public void RandomizeObjectOrder() => this._bigList = new HashSet<Thing>(this._bigList.OrderBy<Thing, int>(x => Rando.Int(999999)).ToList<Thing>());
 
         public QuadTree quadTree => this._quadTree;
 
@@ -38,7 +38,7 @@ namespace DuckGame
             List<CollisionIsland> islands = new List<CollisionIsland>();
             foreach (CollisionIsland island in this._islands)
             {
-                if (!island.willDie && (double)(point - island.owner.position).lengthSq < (double)island.radiusSquared)
+                if (!island.willDie && (double)(point - island.owner.position).lengthSq < island.radiusSquared)
                     islands.Add(island);
             }
             return islands;
@@ -49,7 +49,7 @@ namespace DuckGame
             List<CollisionIsland> forCollisionCheck = new List<CollisionIsland>();
             foreach (CollisionIsland island in this._islands)
             {
-                if (!island.willDie && (double)(point - island.owner.position).lengthSq < (double)island.radiusCheckSquared)
+                if (!island.willDie && (double)(point - island.owner.position).lengthSq < island.radiusCheckSquared)
                     forCollisionCheck.Add(island);
             }
             return forCollisionCheck;
@@ -59,10 +59,10 @@ namespace DuckGame
         {
             foreach (CollisionIsland island in this._islands)
             {
-                if (!island.willDie && island != ignore && (double)(point - island.owner.position).lengthSq < (double)island.radiusSquared)
+                if (!island.willDie && island != ignore && (double)(point - island.owner.position).lengthSq < island.radiusSquared)
                     return island;
             }
-            return (CollisionIsland)null;
+            return null;
         }
 
         public void AddIsland(MaterialThing t) => this._islands.Add(new CollisionIsland(t, this));
@@ -107,7 +107,7 @@ namespace DuckGame
         public List<Thing> ToList()
         {
             List<Thing> list = new List<Thing>();
-            list.AddRange((IEnumerable<Thing>)this._bigList);
+            list.AddRange(_bigList);
             return list;
         }
 
@@ -116,15 +116,15 @@ namespace DuckGame
             get
             {
                 if (key == typeof(Thing))
-                    return (IEnumerable<Thing>)this._bigList;
-                HashSet<Thing> list = (HashSet<Thing>)null;
-                return this._allObjectsByType.TryGetValue(key, out list) ? (IEnumerable<Thing>)list : (IEnumerable<Thing>)this._emptyList;
+                    return _bigList;
+                HashSet<Thing> list;
+                return this._allObjectsByType.TryGetValue(key, out list) ? list : (IEnumerable<Thing>)this._emptyList;
             }
         }
 
         public int CountType<T>()
         {
-            HashSet<Thing> list = (HashSet<Thing>)null;
+            HashSet<Thing> list;
             return this._allObjectsByType.TryGetValue(typeof(T), out list) ? list.Count : 0;
         }
 
@@ -132,7 +132,7 @@ namespace DuckGame
         {
             if (key == typeof(Thing))
                 return this._bigList;
-            HashSet<Thing> list = (HashSet<Thing>)null;
+            HashSet<Thing> list;
             return this._objectsByType.TryGetValue(key, out list) ? list : this._emptyList;
         }
 
@@ -140,17 +140,17 @@ namespace DuckGame
         {
             if (key == typeof(Thing))
                 return this._bigList;
-            HashSet<Thing> list = (HashSet<Thing>)null;
+            HashSet<Thing> list;
             return this._staticObjectsByType.TryGetValue(key, out list) ? list : this._emptyList;
         }
 
         private IEnumerable<Thing> GetIslandObjects(System.Type t, Vec2 pos, float radiusSq)
         {
-            IEnumerable<Thing> first = (IEnumerable<Thing>)new List<Thing>();
+            IEnumerable<Thing> first = new List<Thing>();
             foreach (CollisionIsland island in this._islands)
             {
-                if ((double)(island.owner.position - pos).lengthSq - (double)radiusSq < (double)island.radiusCheckSquared)
-                    first = first.Concat<Thing>((IEnumerable<Thing>)island.things);
+                if ((double)(island.owner.position - pos).lengthSq - (double)radiusSq < island.radiusCheckSquared)
+                    first = first.Concat<Thing>(island.things);
             }
             return first;
         }
@@ -203,7 +203,7 @@ namespace DuckGame
         {
             foreach (Thing removeThing in this._removeThings)
             {
-                removeThing.level = (Level)null;
+                removeThing.level = null;
                 if (removeThing is IDontMove && this._useTree)
                 {
                     this.removeItem(this._staticObjectsByType, removeThing);
@@ -249,9 +249,9 @@ namespace DuckGame
             }
         }
 
-        public IEnumerator<Thing> GetEnumerator() => (IEnumerator<Thing>)this._bigList.GetEnumerator();
+        public IEnumerator<Thing> GetEnumerator() => this._bigList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)this._bigList.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this._bigList.GetEnumerator();
 
         public void Draw()
         {

@@ -43,7 +43,7 @@ namespace DuckGame
                 if (this.outFormat != null && this.outFormat.SampleRate == value)
                     return;
                 this.outFormat = WaveFormat.CreateIeeeFloatWaveFormat(value, this.channels);
-                this.resampler.SetRates((double)this.source.WaveFormat.SampleRate, (double)this.outFormat.SampleRate);
+                this.resampler.SetRates(source.WaveFormat.SampleRate, outFormat.SampleRate);
             }
         }
 

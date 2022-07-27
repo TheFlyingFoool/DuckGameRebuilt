@@ -15,31 +15,31 @@ namespace DuckGame
         {
             float x = c.x;
             float ypos = c.y - 2f;
-            Level.Add((Thing)new ExplosionPart(x, ypos));
+            Level.Add(new ExplosionPart(x, ypos));
             int num1 = 6;
             if (Graphics.effectsLevel < 2)
                 num1 = 3;
             for (int index = 0; index < num1; ++index)
             {
-                float deg = (float)index * 60f + Rando.Float(-10f, 10f);
+                float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add((Thing)new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
             }
             if (server)
             {
                 EnergyScimitar energyScimitar1 = new EnergyScimitar(c.x, c.y - 8f);
-                Level.Add((Thing)energyScimitar1);
+                Level.Add(energyScimitar1);
                 energyScimitar1.StartFlying(TileConnection.Left);
                 EnergyScimitar energyScimitar2 = new EnergyScimitar(c.x, c.y - 8f);
-                Level.Add((Thing)energyScimitar2);
+                Level.Add(energyScimitar2);
                 energyScimitar2.StartFlying(TileConnection.Right);
                 EnergyScimitar energyScimitar3 = new EnergyScimitar(c.x, c.y - 8f);
-                Level.Add((Thing)energyScimitar3);
+                Level.Add(energyScimitar3);
                 energyScimitar3.StartFlying(TileConnection.Up);
                 EnergyScimitar energyScimitar4 = new EnergyScimitar(c.x, c.y - 8f);
-                Level.Add((Thing)energyScimitar4);
+                Level.Add(energyScimitar4);
                 energyScimitar4.StartFlying(TileConnection.Down);
-                Level.Remove((Thing)c);
+                Level.Remove(c);
             }
             Graphics.FlashScreen();
             SFX.Play("explode");

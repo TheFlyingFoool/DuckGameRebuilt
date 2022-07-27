@@ -114,7 +114,7 @@ namespace DuckGame
           Assembly pAssembly,
           string pLogMessage)
         {
-            return DG.GetCrashWindowString(pException, pAssembly != (Assembly)null ? pAssembly.GetName().Name : (string)null, pLogMessage);
+            return DG.GetCrashWindowString(pException, pAssembly != null ? pAssembly.GetName().Name : null, pLogMessage);
         }
 
         public static string GetCrashWindowString(
@@ -162,7 +162,7 @@ namespace DuckGame
             List<T> objList = new List<T>();
             for (int index = pArray.Length - 1; index >= 0; --index)
                 objList.Add(pArray[index]);
-            return (IEnumerable<T>)objList;
+            return objList;
         }
     }
 }

@@ -87,7 +87,7 @@ namespace DuckGame
             if (tileset != "")
                 this._sprite = new SpriteMap(tileset, 16, 16);
             this._tileset = tileset;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.collisionSize = new Vec2(16f, 16f);
             this.thickness = 0.2f;
             this.centerx = 8f;
@@ -103,10 +103,10 @@ namespace DuckGame
         {
             if (this._neighborsInitialized)
                 return;
-            this._leftBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.left - 2f, this.position.y, (Thing)this, this.placementLayer);
-            this._rightBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.right + 2f, this.position.y, (Thing)this, this.placementLayer);
-            this._upBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.position.x, this.top - 2f, (Thing)this, this.placementLayer);
-            this._downBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.position.x, this.bottom + 2f, (Thing)this, this.placementLayer);
+            this._leftBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.left - 2f, this.position.y, this, this.placementLayer);
+            this._rightBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.right + 2f, this.position.y, this, this.placementLayer);
+            this._upBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.position.x, this.top - 2f, this, this.placementLayer);
+            this._downBlock = Level.CheckPointPlacementLayer<AutoPlatform>(this.position.x, this.bottom + 2f, this, this.placementLayer);
             this._neighborsInitialized = true;
         }
 
@@ -177,13 +177,13 @@ namespace DuckGame
         {
             if (this._leftNub != null)
             {
-                Level.Remove((Thing)this._leftNub);
-                this._leftNub = (Nubber)null;
+                Level.Remove(_leftNub);
+                this._leftNub = null;
             }
             if (this._rightNub == null)
                 return;
-            Level.Remove((Thing)this._rightNub);
-            this._rightNub = (Nubber)null;
+            Level.Remove(_rightNub);
+            this._rightNub = null;
         }
 
         public void PlaceBlock()
@@ -204,7 +204,7 @@ namespace DuckGame
                 case 51:
                 case 53:
                 case 58:
-                    this.collisionSize = new Vec2((float)(8.0 + (double)this.verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
                     this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
                     break;
                 case 37:
@@ -212,7 +212,7 @@ namespace DuckGame
                 case 45:
                 case 52:
                 case 60:
-                    this.collisionSize = new Vec2((float)(8.0 + (double)this.verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
                     this.collisionOffset = new Vec2(-8f, -8f);
                     break;
                 case 40:
@@ -235,7 +235,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     this._collisionSize.x = this.verticalWidthThick;
-                    this._collisionOffset.x = (float)(16.0 - (double)this.verticalWidthThick - 8.0);
+                    this._collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
                     break;
                 case 4:
                 case 5:
@@ -252,7 +252,7 @@ namespace DuckGame
                     if (!this.treeLike)
                     {
                         this._collisionSize.x = this.verticalWidthThick;
-                        this._collisionOffset.x = (float)(16.0 - (double)this.verticalWidthThick - 8.0);
+                        this._collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
                         break;
                     }
                     break;
@@ -296,7 +296,7 @@ namespace DuckGame
                     if (this._hasLeftNub)
                     {
                         this._leftNub = new Nubber(this.x - 24f, this.y - 8f, true, this._tileset);
-                        Level.Add((Thing)this._leftNub);
+                        Level.Add(_leftNub);
                         break;
                     }
                     break;
@@ -304,7 +304,7 @@ namespace DuckGame
                     if (this._hasRightNub)
                     {
                         this._rightNub = new Nubber(this.x + 8f, this.y - 8f, false, this._tileset);
-                        Level.Add((Thing)this._rightNub);
+                        Level.Add(_rightNub);
                         break;
                     }
                     break;
@@ -312,7 +312,7 @@ namespace DuckGame
                     if (this._hasLeftNub)
                     {
                         this._leftNub = new Nubber(this.x - 24f, this.y - 8f, true, this._tileset);
-                        Level.Add((Thing)this._leftNub);
+                        Level.Add(_leftNub);
                         break;
                     }
                     break;
@@ -320,7 +320,7 @@ namespace DuckGame
                     if (this._hasRightNub)
                     {
                         this._rightNub = new Nubber(this.x + 8f, this.y - 8f, false, this._tileset);
-                        Level.Add((Thing)this._rightNub);
+                        Level.Add(_rightNub);
                         break;
                     }
                     break;
@@ -328,12 +328,12 @@ namespace DuckGame
                     if (this._hasRightNub)
                     {
                         this._rightNub = new Nubber(this.x + 8f, this.y - 8f, false, this._tileset);
-                        Level.Add((Thing)this._rightNub);
+                        Level.Add(_rightNub);
                     }
                     if (this._hasLeftNub)
                     {
                         this._leftNub = new Nubber(this.x - 24f, this.y - 8f, true, this._tileset);
-                        Level.Add((Thing)this._leftNub);
+                        Level.Add(_leftNub);
                         break;
                     }
                     break;
@@ -341,7 +341,7 @@ namespace DuckGame
                     if (this._hasLeftNub)
                     {
                         this._leftNub = new Nubber(this.x - 24f, this.y - 8f, true, this._tileset);
-                        Level.Add((Thing)this._leftNub);
+                        Level.Add(_leftNub);
                         break;
                     }
                     break;
@@ -349,7 +349,7 @@ namespace DuckGame
                     if (this._hasRightNub)
                     {
                         this._rightNub = new Nubber(this.x + 8f, this.y - 8f, false, this._tileset);
-                        Level.Add((Thing)this._rightNub);
+                        Level.Add(_rightNub);
                         break;
                     }
                     break;
@@ -357,12 +357,12 @@ namespace DuckGame
                     if (this._hasRightNub)
                     {
                         this._rightNub = new Nubber(this.x + 8f, this.y - 8f, false, this._tileset);
-                        Level.Add((Thing)this._rightNub);
+                        Level.Add(_rightNub);
                     }
                     if (this._hasLeftNub)
                     {
                         this._leftNub = new Nubber(this.x - 24f, this.y - 8f, true, this._tileset);
-                        Level.Add((Thing)this._leftNub);
+                        Level.Add(_leftNub);
                         break;
                     }
                     break;
@@ -370,7 +370,7 @@ namespace DuckGame
                     if (this._hasLeftNub)
                     {
                         this._leftNub = new Nubber(this.x - 24f, this.y - 8f, true, this._tileset);
-                        Level.Add((Thing)this._leftNub);
+                        Level.Add(_leftNub);
                         break;
                     }
                     break;
@@ -378,7 +378,7 @@ namespace DuckGame
                     if (this._hasRightNub)
                     {
                         this._rightNub = new Nubber(this.x + 8f, this.y - 8f, false, this._tileset);
-                        Level.Add((Thing)this._rightNub);
+                        Level.Add(_rightNub);
                         break;
                     }
                     break;
@@ -399,30 +399,30 @@ namespace DuckGame
             float num = 16f;
             if (!this.treeLike)
                 num = 10f;
-            AutoPlatform autoPlatform1 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x, this.y - 17f, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform2 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x, this.y + num, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform3 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x - 16f, this.y, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform4 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x + 16f, this.y, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform5 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x - 16f, this.y - 17f, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform6 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x + 16f, this.y - 17f, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform7 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x - 16f, this.y + num, (Thing)this, this.placementLayer);
-            AutoPlatform autoPlatform8 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x + 16f, this.y + num, (Thing)this, this.placementLayer);
+            AutoPlatform autoPlatform1 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x, this.y - 17f, this, this.placementLayer);
+            AutoPlatform autoPlatform2 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x, this.y + num, this, this.placementLayer);
+            AutoPlatform autoPlatform3 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x - 16f, this.y, this, this.placementLayer);
+            AutoPlatform autoPlatform4 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x + 16f, this.y, this, this.placementLayer);
+            AutoPlatform autoPlatform5 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x - 16f, this.y - 17f, this, this.placementLayer);
+            AutoPlatform autoPlatform6 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x + 16f, this.y - 17f, this, this.placementLayer);
+            AutoPlatform autoPlatform7 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x - 16f, this.y + num, this, this.placementLayer);
+            AutoPlatform autoPlatform8 = Level.CheckPointPlacementLayer<AutoPlatform>(this.x + 16f, this.y + num, this, this.placementLayer);
             if (autoPlatform1 != null && autoPlatform1._tileset != this._tileset)
-                autoPlatform1 = (AutoPlatform)null;
+                autoPlatform1 = null;
             if (autoPlatform2 != null && autoPlatform2._tileset != this._tileset)
-                autoPlatform2 = (AutoPlatform)null;
+                autoPlatform2 = null;
             if (autoPlatform3 != null && autoPlatform3._tileset != this._tileset)
-                autoPlatform3 = (AutoPlatform)null;
+                autoPlatform3 = null;
             if (autoPlatform4 != null && autoPlatform4._tileset != this._tileset)
-                autoPlatform4 = (AutoPlatform)null;
+                autoPlatform4 = null;
             if (autoPlatform5 != null && autoPlatform5._tileset != this._tileset)
-                autoPlatform5 = (AutoPlatform)null;
+                autoPlatform5 = null;
             if (autoPlatform6 != null && autoPlatform6._tileset != this._tileset)
-                autoPlatform6 = (AutoPlatform)null;
+                autoPlatform6 = null;
             if (autoPlatform7 != null && autoPlatform7._tileset != this._tileset)
-                autoPlatform7 = (AutoPlatform)null;
+                autoPlatform7 = null;
             if (autoPlatform8 != null && autoPlatform8._tileset != this._tileset)
-                autoPlatform8 = (AutoPlatform)null;
+                autoPlatform8 = null;
             if (autoPlatform1 != null)
             {
                 if (autoPlatform4 != null)
@@ -702,6 +702,6 @@ namespace DuckGame
                 this._sprite.frame = 40;
         }
 
-        public override ContextMenu GetContextMenu() => (ContextMenu)null;
+        public override ContextMenu GetContextMenu() => null;
     }
 }

@@ -16,7 +16,7 @@ namespace DuckGame
         {
             this.graphic = new Sprite("colorStar");
             this.graphic.CenterOrigin();
-            this.center = new Vec2((float)(this.graphic.width / 2), (float)(this.graphic.height / 2));
+            this.center = new Vec2(this.graphic.width / 2, this.graphic.height / 2);
             this.xscale = this.yscale = 0.9f;
             this.hSpeed = dir.x;
             this.vSpeed = dir.y;
@@ -29,8 +29,8 @@ namespace DuckGame
         {
             this.xscale = Lerp.Float(this.xscale, this.maxSize, 0.04f);
             this.yscale = this.xscale;
-            if ((double)this.xscale <= (double)this.maxSize)
-                Level.Remove((Thing)this);
+            if ((double)this.xscale <= maxSize)
+                Level.Remove(this);
             base.Update();
         }
     }

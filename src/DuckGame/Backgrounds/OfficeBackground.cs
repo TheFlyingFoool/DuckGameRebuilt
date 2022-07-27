@@ -13,7 +13,7 @@ namespace DuckGame
         public OfficeBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 1
             };
@@ -46,17 +46,23 @@ namespace DuckGame
                 this._parallax.AddZone(7, 0.8f, speed);
                 this._parallax.AddZone(8, 0.8f, speed);
                 this._parallax.AddZone(9, 0.8f, speed);
-                Sprite s1 = new Sprite("background/officeBuilding01");
-                s1.depth = - 0.9f;
-                s1.position = new Vec2(100f, 100f);
+                Sprite s1 = new Sprite("background/officeBuilding01")
+                {
+                    depth = -0.9f,
+                    position = new Vec2(100f, 100f)
+                };
                 this._parallax.AddZoneSprite(s1, 15, 0.6f, speed);
-                Sprite s2 = new Sprite("background/officeBuilding01Porch");
-                s2.depth = - 0.9f;
-                s2.position = new Vec2(84f, 160f);
+                Sprite s2 = new Sprite("background/officeBuilding01Porch")
+                {
+                    depth = -0.9f,
+                    position = new Vec2(84f, 160f)
+                };
                 this._parallax.AddZoneSprite(s2, 16, 0.6f, speed);
-                Sprite s3 = new Sprite("background/officeBuilding02");
-                s3.depth = - 0.9f;
-                s3.position = new Vec2(300f, 120f);
+                Sprite s3 = new Sprite("background/officeBuilding02")
+                {
+                    depth = -0.9f,
+                    position = new Vec2(300f, 120f)
+                };
                 this._parallax.AddZoneSprite(s3, 17, 0.6f, speed);
                 this._parallax.AddZone(19, 0.6f, speed);
                 this._parallax.AddZone(20, 0.6f, speed);
@@ -70,11 +76,11 @@ namespace DuckGame
                 this._parallax.AddZone(28, 0.1f, speed);
                 this._parallax.AddZone(29, 0.0f, speed);
             }
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

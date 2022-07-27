@@ -68,12 +68,12 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)this._slideWait < 0.0)
+            if (_slideWait < 0.0)
                 this.position = Vec2.Lerp(this.position, this._end, 0.15f);
             this._slideWait -= 0.4f;
             DuckGame.Graphics.SetRenderTarget(this._faceTarget);
             DuckGame.Graphics.Clear(Color.Transparent);
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
+            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
             this._gradient.depth = - 0.6f;
             this._gradient.alpha = 0.5f;
             if (this._team.activeProfiles.Count == 1)
@@ -104,7 +104,7 @@ namespace DuckGame
             int num = 0;
             foreach (Profile activeProfile in this._team.activeProfiles)
             {
-                float x = (float)((num * 8 + 8) * 2);
+                float x = (num * 8 + 8) * 2;
                 float y = 16f;
                 activeProfile.persona.quackSprite.depth = (Depth)0.7f;
                 activeProfile.persona.quackSprite.scale = new Vec2(2f, 2f);
@@ -119,10 +119,10 @@ namespace DuckGame
                 hat.depth = (Depth)0.8f;
                 hat.center = new Vec2(16f, 16f) + activeProfile.team.hatOffset;
                 hat.scale = new Vec2(2f, 2f);
-                if ((double)hat.texture.width > 16.0)
+                if (hat.texture.width > 16.0)
                     hat.frame = 1;
                 if (this._smallMode)
-                    DuckGame.Graphics.Draw(hat, hat.frame, (float)((double)x + (double)hatPoint.x - 8.0), (float)((double)y + (double)hatPoint.y - 8.0));
+                    DuckGame.Graphics.Draw(hat, hat.frame, (float)((double)x + hatPoint.x - 8.0), (float)((double)y + hatPoint.y - 8.0));
                 else
                     DuckGame.Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
                 hat.color = Color.White;
@@ -131,7 +131,7 @@ namespace DuckGame
                 ++num;
             }
             DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
             base.Update();
         }
 
@@ -155,7 +155,7 @@ namespace DuckGame
             DuckGame.Graphics.Draw(this._targetSprite, this.x, this.y);
             if (this._mode == BoardMode.Points)
             {
-                string text2 = Change.ToString((object)this._team.score);
+                string text2 = Change.ToString(_team.score);
                 if (this._smallMode)
                 {
                     this._smallFont.scale = new Vec2(1f, 1f);
@@ -176,13 +176,13 @@ namespace DuckGame
                 {
                     if (this._smallMode)
                     {
-                        this._trophy.depth = (Depth)(float)(0.800000011920929 + (double)index * 0.00999999977648258);
-                        DuckGame.Graphics.Draw(this._trophy, this.x + 24f + (float)(index * 6), this.y + 6f);
+                        this._trophy.depth = (Depth)(float)(0.800000011920929 + index * 0.00999999977648258);
+                        DuckGame.Graphics.Draw(this._trophy, this.x + 24f + index * 6, this.y + 6f);
                     }
                     else
                     {
-                        this._trophy.depth = (Depth)(float)(0.800000011920929 - (double)index * 0.00999999977648258);
-                        DuckGame.Graphics.Draw(this._trophy, this.x + 175f - (float)(index * 8), this.y + 18f);
+                        this._trophy.depth = (Depth)(float)(0.800000011920929 - index * 0.00999999977648258);
+                        DuckGame.Graphics.Draw(this._trophy, this.x + 175f - index * 8, this.y + 18f);
                     }
                 }
             }

@@ -23,13 +23,13 @@ namespace DuckGame
         {
             NetDebugInterface netDebugInterface = this;
             this._instance = pInstance;
-            NetDebugDropdown netDebugDropdown = new NetDebugDropdown(this, "Connection: ", (Func<List<NetDebugDropdown.Element>>)(() =>
+            NetDebugDropdown netDebugDropdown = new NetDebugDropdown(this, "Connection: ", () =>
            {
                List<NetDebugDropdown.Element> elementList = new List<NetDebugDropdown.Element>();
                elementList.Add(new NetDebugDropdown.Element()
                {
                    name = "ALL",
-                   value = (object)null
+                   value = null
                });
                foreach (NetworkConnection allConnection in netDebugInterface._instance.network.core.allConnections)
                {
@@ -53,127 +53,137 @@ namespace DuckGame
                    elementList.Add(new NetDebugDropdown.Element()
                    {
                        name = str,
-                       value = (object)allConnection
+                       value = allConnection
                    });
                }
                return elementList;
-           }));
-            netDebugDropdown.leading = 4f;
+           })
+            {
+                leading = 4f
+            };
             NetDebugDropdown connectionDropdown = netDebugDropdown;
-            this._elements.Add((NetDebugElement)connectionDropdown);
-            connectionDropdown.right = (NetDebugElement)new NetDebugButton(this, "Lag Out", (Action)null, (Action)(() =>
+            this._elements.Add(connectionDropdown);
+            connectionDropdown.right = new NetDebugButton(this, "Lag Out", null, () =>
          {
              if (!(connectionDropdown.selected.value is NetworkConnection networkConnection2))
                  return;
              networkConnection2.debuggerContext.lagSpike = 10;
-         }));
-            connectionDropdown.right.right = (NetDebugElement)new NetDebugButton(this, "Close", (Action)null, (Action)(() =>
+         });
+            connectionDropdown.right.right = new NetDebugButton(this, "Close", null, () =>
          {
              for (int index = 0; index < 5; ++index)
-                 Send.ImmediateUnreliableBroadcast((NetMessage)new NMClientClosedGame());
+                 Send.ImmediateUnreliableBroadcast(new NMClientClosedGame());
              netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance);
-         }));
-            connectionDropdown.right.right.right = (NetDebugElement)new NetDebugButton(this, "Reboot", (Action)null, (Action)(() => netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance)));
+         });
+            connectionDropdown.right.right.right = new NetDebugButton(this, "Reboot", null, () => netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance));
             List<NetDebugElement> elements1 = this._elements;
-            NetDebugSlider netDebugSlider1 = new NetDebugSlider(this, "Latency: ", (Func<float>)(() =>
+            NetDebugSlider netDebugSlider1 = new NetDebugSlider(this, "Latency: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
                return (selected.value != null ? selected.value as NetworkConnection : pInstance.duckNetworkCore.localConnection).debuggerContext.latency;
-           }), (Action<float>)(f =>
+           }, f =>
      {
          NetDebugDropdown.Element selected = connectionDropdown.selected;
          if (selected.value == null)
              pInstance.duckNetworkCore.localConnection.debuggerContext.latency = f;
          else
              (selected.value as NetworkConnection).debuggerContext.latency = f;
-     }), (Func<float, string>)(f =>
+     }, f =>
 {
-   string str1 = (f * 1000f).ToString() + "ms";
-   NetDebugDropdown.Element selected = connectionDropdown.selected;
-   string str2;
-   if (selected.value == null)
-   {
-       string str3 = str1;
-       int num = (int)((double)pInstance.network.core.averagePing * 1000.0);
-       string str4 = num.ToString();
-       string str5 = str3 + " |GREEN|(" + str4 + "ms actual)";
-       num = (int)((double)pInstance.network.core.averagePingPeak * 1000.0);
-       string str6 = num.ToString();
-       str2 = str5 + " |YELLOW|(" + str6 + "ms peak)";
-   }
-   else
-   {
-       NetworkConnection networkConnection3 = selected.value as NetworkConnection;
-       str2 = str1 + " |GREEN|(" + ((int)((double)networkConnection3.manager.ping * 1000.0)).ToString() + "ms actual)" + " |YELLOW|(" + ((int)((double)networkConnection3.manager.pingPeak * 1000.0)).ToString() + "ms peak)";
-   }
-   return str2;
-}));
-            netDebugSlider1.indent = 16f;
-            elements1.Add((NetDebugElement)netDebugSlider1);
+    string str1 = (f * 1000f).ToString() + "ms";
+    NetDebugDropdown.Element selected = connectionDropdown.selected;
+    string str2;
+    if (selected.value == null)
+    {
+        string str3 = str1;
+        int num = (int)((double)pInstance.network.core.averagePing * 1000.0);
+        string str4 = num.ToString();
+        string str5 = str3 + " |GREEN|(" + str4 + "ms actual)";
+        num = (int)((double)pInstance.network.core.averagePingPeak * 1000.0);
+        string str6 = num.ToString();
+        str2 = str5 + " |YELLOW|(" + str6 + "ms peak)";
+    }
+    else
+    {
+        NetworkConnection networkConnection3 = selected.value as NetworkConnection;
+        str2 = str1 + " |GREEN|(" + ((int)((double)networkConnection3.manager.ping * 1000.0)).ToString() + "ms actual)" + " |YELLOW|(" + ((int)((double)networkConnection3.manager.pingPeak * 1000.0)).ToString() + "ms peak)";
+    }
+    return str2;
+})
+            {
+                indent = 16f
+            };
+            elements1.Add(netDebugSlider1);
             List<NetDebugElement> elements2 = this._elements;
-            NetDebugSlider netDebugSlider2 = new NetDebugSlider(this, "Jitter: ", (Func<float>)(() =>
+            NetDebugSlider netDebugSlider2 = new NetDebugSlider(this, "Jitter: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
                return (selected.value != null ? selected.value as NetworkConnection : pInstance.duckNetworkCore.localConnection).debuggerContext.jitter;
-           }), (Action<float>)(f =>
+           }, f =>
      {
          NetDebugDropdown.Element selected = connectionDropdown.selected;
          if (selected.value == null)
              pInstance.duckNetworkCore.localConnection.debuggerContext.jitter = f;
          else
              (selected.value as NetworkConnection).debuggerContext.jitter = f;
-     }), (Func<float, string>)(f => (f * 1000f).ToString() + "ms"));
-            netDebugSlider2.indent = 16f;
-            elements2.Add((NetDebugElement)netDebugSlider2);
+     }, f => (f * 1000f).ToString() + "ms")
+            {
+                indent = 16f
+            };
+            elements2.Add(netDebugSlider2);
             List<NetDebugElement> elements3 = this._elements;
-            NetDebugSlider netDebugSlider3 = new NetDebugSlider(this, "Loss: ", (Func<float>)(() =>
+            NetDebugSlider netDebugSlider3 = new NetDebugSlider(this, "Loss: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
                return (selected.value != null ? selected.value as NetworkConnection : pInstance.duckNetworkCore.localConnection).debuggerContext.loss;
-           }), (Action<float>)(f =>
+           }, f =>
      {
          NetDebugDropdown.Element selected = connectionDropdown.selected;
          if (selected.value == null)
              pInstance.duckNetworkCore.localConnection.debuggerContext.loss = f;
          else
              (selected.value as NetworkConnection).debuggerContext.loss = f;
-     }), (Func<float, string>)(f =>
+     }, f =>
 {
-   string str7 = (f * 100f).ToString() + "%";
-   NetDebugDropdown.Element selected = connectionDropdown.selected;
-   string str8;
-   if (selected.value == null)
-   {
-       str8 = str7 + " |RED|(" + pInstance.network.core.averagePacketLoss.ToString() + " lost)" + " |RED|(" + pInstance.network.core.averagePacketLossPercent.ToString() + "% avg)";
-   }
-   else
-   {
-       NetworkConnection networkConnection4 = selected.value as NetworkConnection;
-       string str9 = str7 + " |RED|(" + networkConnection4.manager.losses.ToString() + " lost)";
-       int num = 0;
-       if (networkConnection4.manager.losses != 0)
-           num = (int)((double)networkConnection4.manager.sent / (double)networkConnection4.manager.losses * 100.0);
-       str8 = str9 + " |RED|(" + num.ToString() + "% avg)";
-   }
-   return str8;
-}));
-            netDebugSlider3.indent = 16f;
-            elements3.Add((NetDebugElement)netDebugSlider3);
+    string str7 = (f * 100f).ToString() + "%";
+    NetDebugDropdown.Element selected = connectionDropdown.selected;
+    string str8;
+    if (selected.value == null)
+    {
+        str8 = str7 + " |RED|(" + pInstance.network.core.averagePacketLoss.ToString() + " lost)" + " |RED|(" + pInstance.network.core.averagePacketLossPercent.ToString() + "% avg)";
+    }
+    else
+    {
+        NetworkConnection networkConnection4 = selected.value as NetworkConnection;
+        string str9 = str7 + " |RED|(" + networkConnection4.manager.losses.ToString() + " lost)";
+        int num = 0;
+        if (networkConnection4.manager.losses != 0)
+            num = (int)(networkConnection4.manager.sent / (double)networkConnection4.manager.losses * 100.0);
+        str8 = str9 + " |RED|(" + num.ToString() + "% avg)";
+    }
+    return str8;
+})
+            {
+                indent = 16f
+            };
+            elements3.Add(netDebugSlider3);
             List<NetDebugElement> elements4 = this._elements;
-            NetDebugSlider netDebugSlider4 = new NetDebugSlider(this, "Duplicate: ", (Func<float>)(() =>
+            NetDebugSlider netDebugSlider4 = new NetDebugSlider(this, "Duplicate: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
                return (selected.value != null ? selected.value as NetworkConnection : pInstance.duckNetworkCore.localConnection).debuggerContext.duplicate;
-           }), (Action<float>)(f =>
+           }, f =>
      {
          NetDebugDropdown.Element selected = connectionDropdown.selected;
          if (selected.value == null)
              pInstance.duckNetworkCore.localConnection.debuggerContext.duplicate = f;
          else
              (selected.value as NetworkConnection).debuggerContext.duplicate = f;
-     }), (Func<float, string>)(f => (f * 100f).ToString() + "%"));
-            netDebugSlider4.indent = 16f;
-            elements4.Add((NetDebugElement)netDebugSlider4);
+     }, f => (f * 100f).ToString() + "%")
+            {
+                indent = 16f
+            };
+            elements4.Add(netDebugSlider4);
         }
 
         public void Update()

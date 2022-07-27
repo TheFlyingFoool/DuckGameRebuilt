@@ -44,12 +44,12 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if ((int)this._levelIndex != (int)DuckNetwork.levelIndex)
+            if (_levelIndex != DuckNetwork.levelIndex)
                 return;
             if (this._fireEvents.Count > 0 && this._fireEvents[0].typeInstance != null)
                 this._fireEvents[0].typeInstance.MakeNetEffect(this.position, true);
             foreach (NMFireBullet fireEvent in this._fireEvents)
-                fireEvent.DoActivate(this.position, (Profile)null);
+                fireEvent.DoActivate(this.position, null);
         }
 
         protected override void OnSerialize()
@@ -71,7 +71,7 @@ namespace DuckGame
             base.OnDeserialize(d);
             this._levelIndex = d.ReadByte();
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
             {
                 NMFireBullet nmFireBullet = new NMFireBullet();
                 BitBuffer msg = d.ReadBitBuffer();

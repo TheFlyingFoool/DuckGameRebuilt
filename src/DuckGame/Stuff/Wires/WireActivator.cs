@@ -13,7 +13,7 @@ namespace DuckGame
     [BaggedProperty("isOnlineCapable", true)]
     public class WireActivator : Thing, IWirePeripheral
     {
-        public StateBinding _actionBinding = (StateBinding)new WireActivatorFlagBinding();
+        public StateBinding _actionBinding = new WireActivatorFlagBinding();
         private SpriteMap _sprite;
         public bool action;
         private List<Thing> _controlledObjects = new List<Thing>();
@@ -24,7 +24,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("activatorBlock", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -48,7 +48,7 @@ namespace DuckGame
                             (materialThing as VerticalDoor).slideLocked = true;
                         if (materialThing is FunBeam)
                             (materialThing as FunBeam).enabled = false;
-                        this._controlledObjects.Add((Thing)materialThing);
+                        this._controlledObjects.Add(materialThing);
                     }
                 }
                 this._preparedObjects = true;
@@ -90,7 +90,7 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+            Thing.Fondle(this, DuckNetwork.localConnection);
             switch (type)
             {
                 case 0:

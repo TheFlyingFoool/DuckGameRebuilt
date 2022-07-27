@@ -25,7 +25,7 @@ namespace DuckGame
             this.physicsMaterial = PhysicsMaterial.Metal;
             this._visibleInGame = true;
             this._wall = new Sprite("rockWall");
-            this._wall.center = new Vec2((float)(this._wall.w - 4), (float)(this._wall.h / 2));
+            this._wall.center = new Vec2(this._wall.w - 4, this._wall.h / 2);
             this.editorTooltip = "Adds an infinite vertical rock wall.";
         }
 
@@ -45,11 +45,11 @@ namespace DuckGame
             if (!(Level.current is Editor))
             {
                 Graphics.Draw(this._wall, this.x, this.y);
-                if ((double)Level.current.topLeft.y < (double)this.y - 500.0)
-                    Graphics.Draw(this._wall, this.x, this.y - (float)this._wall.h);
-                if ((double)Level.current.bottomRight.y <= (double)this.y + 500.0)
+                if (Level.current.topLeft.y < (double)this.y - 500.0)
+                    Graphics.Draw(this._wall, this.x, this.y - _wall.h);
+                if (Level.current.bottomRight.y <= (double)this.y + 500.0)
                     return;
-                Graphics.Draw(this._wall, this.x, this.y + (float)this._wall.h);
+                Graphics.Draw(this._wall, this.x, this.y + _wall.h);
             }
             else
             {

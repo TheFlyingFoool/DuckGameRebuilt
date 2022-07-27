@@ -146,19 +146,19 @@ namespace DGWindows
       "sapi.dll",
       "msdmo.dll"
     };
-        private static string kWineVersion = (string)null;
+        private static string kWineVersion = null;
         public static List<string> assemblyLoadStrings = new List<string>();
-        private const int ENUM_CURRENT_SETTINGS = -1;
-        private const int ENUM_REGISTRY_SETTINGS = -2;
+        //private const int ENUM_CURRENT_SETTINGS = -1;
+        //private const int ENUM_REGISTRY_SETTINGS = -2;
         public static int displayRefreshRate;
 
         public static WindowsPlatformStartup.MachineType GetDllMachineType(
           string dllPath)
         {
             FileStream input = new FileStream(dllPath, FileMode.Open, FileAccess.Read);
-            BinaryReader binaryReader = new BinaryReader((Stream)input);
+            BinaryReader binaryReader = new BinaryReader(input);
             input.Seek(60L, SeekOrigin.Begin);
-            input.Seek((long)binaryReader.ReadInt32(), SeekOrigin.Begin);
+            input.Seek(binaryReader.ReadInt32(), SeekOrigin.Begin);
             WindowsPlatformStartup.MachineType dllMachineType = binaryReader.ReadUInt32() == 17744U ? (WindowsPlatformStartup.MachineType)binaryReader.ReadUInt16() : throw new Exception("Can't find PE header");
             binaryReader.Close();
             input.Close();
@@ -196,13 +196,13 @@ namespace DGWindows
                     case 0:
                         break;
                     case 126:
-                        return (string)null;
+                        return null;
                     default:
                         try
                         {
-                            StringBuilder lpBuffer = new StringBuilder((int)byte.MaxValue);
+                            StringBuilder lpBuffer = new StringBuilder(byte.MaxValue);
                             IntPtr lpFilePart = new IntPtr();
-                            int num = (int)WindowsPlatformStartup.SearchPath((string)null, pLibrary, (string)null, (int)byte.MaxValue, lpBuffer, out lpFilePart);
+                            int num = (int)WindowsPlatformStartup.SearchPath(null, pLibrary, null, byte.MaxValue, lpBuffer, out lpFilePart);
                             return lpBuffer.ToString();
                         }
                         catch (Exception ex)
@@ -211,7 +211,7 @@ namespace DGWindows
                         return pLibrary;
                 }
             }
-            return (string)null;
+            return null;
         }
 
         [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true)]
@@ -221,7 +221,9 @@ namespace DGWindows
 
         public static string wineVersion => WindowsPlatformStartup.kWineVersion;
 
+#pragma warning disable IDE0051 // Remove unused private members
         private static void Main4(string[] args)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             try
             {
@@ -238,7 +240,7 @@ namespace DGWindows
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
@@ -259,7 +261,7 @@ namespace DGWindows
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.ExceptionObject as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, (string)null, pLogMessage));
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.ExceptionObject as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
             }
         }
 
@@ -329,7 +331,7 @@ namespace DGWindows
                     if (str != null)
                         stringList.Add(str);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return stringList;
                 }
@@ -344,7 +346,7 @@ namespace DGWindows
         {
             List<WindowsPlatformStartup.Module> moduleList = new List<WindowsPlatformStartup.Module>();
             IntPtr[] lphModule1 = new IntPtr[0];
-            int lpcbNeeded = 0;
+            int lpcbNeeded;
             if (!WindowsPlatformStartup.Native.EnumProcessModulesEx(process.Handle, lphModule1, 0, out lpcbNeeded, 3U))
                 return moduleList;
             int length = lpcbNeeded / IntPtr.Size;
@@ -462,8 +464,8 @@ namespace DGWindows
 
         public struct DEVMODE
         {
-            private const int CCHDEVICENAME = 32;
-            private const int CCHFORMNAME = 32;
+            //private const int CCHDEVICENAME = 32;
+            //private const int CCHFORMNAME = 32;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string dmDeviceName;
             public short dmSpecVersion;

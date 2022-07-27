@@ -26,16 +26,16 @@ namespace DuckGame
         protected override Dictionary<PipeTileset.Direction, PipeTileset> GetNeighbors()
         {
             Dictionary<PipeTileset.Direction, PipeTileset> neighbors = new Dictionary<PipeTileset.Direction, PipeTileset>();
-            PipeTileset pipeTileset1 = (PipeTileset)Level.CheckPointAll<PipeBlue>(this.x, this.y - 16f).Where<PipeBlue>((Func<PipeBlue, bool>)(x => x.group == this.group)).FirstOrDefault<PipeBlue>();
+            PipeTileset pipeTileset1 = Level.CheckPointAll<PipeBlue>(this.x, this.y - 16f).Where<PipeBlue>(x => x.group == this.group).FirstOrDefault<PipeBlue>();
             if (pipeTileset1 != null)
                 neighbors[PipeTileset.Direction.Up] = pipeTileset1;
-            PipeTileset pipeTileset2 = (PipeTileset)Level.CheckPointAll<PipeBlue>(this.x, this.y + 16f).Where<PipeBlue>((Func<PipeBlue, bool>)(x => x.group == this.group)).FirstOrDefault<PipeBlue>();
+            PipeTileset pipeTileset2 = Level.CheckPointAll<PipeBlue>(this.x, this.y + 16f).Where<PipeBlue>(x => x.group == this.group).FirstOrDefault<PipeBlue>();
             if (pipeTileset2 != null)
                 neighbors[PipeTileset.Direction.Down] = pipeTileset2;
-            PipeTileset pipeTileset3 = (PipeTileset)Level.CheckPointAll<PipeBlue>(this.x - 16f, this.y).Where<PipeBlue>((Func<PipeBlue, bool>)(x => x.group == this.group)).FirstOrDefault<PipeBlue>();
+            PipeTileset pipeTileset3 = Level.CheckPointAll<PipeBlue>(this.x - 16f, this.y).Where<PipeBlue>(x => x.group == this.group).FirstOrDefault<PipeBlue>();
             if (pipeTileset3 != null)
                 neighbors[PipeTileset.Direction.Left] = pipeTileset3;
-            PipeTileset pipeTileset4 = (PipeTileset)Level.CheckPointAll<PipeBlue>(this.x + 16f, this.y).Where<PipeBlue>((Func<PipeBlue, bool>)(x => x.group == this.group)).FirstOrDefault<PipeBlue>();
+            PipeTileset pipeTileset4 = Level.CheckPointAll<PipeBlue>(this.x + 16f, this.y).Where<PipeBlue>(x => x.group == this.group).FirstOrDefault<PipeBlue>();
             if (pipeTileset4 != null)
                 neighbors[PipeTileset.Direction.Right] = pipeTileset4;
             return neighbors;

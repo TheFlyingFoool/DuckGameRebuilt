@@ -25,11 +25,13 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATCampingBall();
+            this._ammoType = new ATCampingBall();
             this._type = "gun";
-            this._sprite = new SpriteMap("camping", 23, 15);
-            this._sprite.speed = 0.0f;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("camping", 23, 15)
+            {
+                speed = 0.0f
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(11f, 7f);
             this.collisionOffset = new Vec2(-10f, -5f);
             this.collisionSize = new Vec2(20f, 12f);
@@ -40,13 +42,15 @@ namespace DuckGame
             this._numBulletsPerFire = 6;
             this._manualLoad = true;
             this.flammable = 1f;
-            this._loaderSprite = new SpriteMap("camping_loader", 6, 4);
-            this._loaderSprite.center = new Vec2(3f, 2f);
+            this._loaderSprite = new SpriteMap("camping_loader", 6, 4)
+            {
+                center = new Vec2(3f, 2f)
+            };
             this._holdOffset = new Vec2(0.0f, -2f);
             this._editorName = "Camping Gun";
             this.editorTooltip = "Designed to get campers into bed quickly.";
             this.loaded = false;
-            this._loadProgress = (sbyte)-1;
+            this._loadProgress = -1;
             this._loadAnimation = 0.0f;
             this.isFatal = false;
             this._clickSound = "campingEmpty";
@@ -55,48 +59,48 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.burntOut && (double)this.burnt >= 1.0)
+            if (!this.burntOut && burnt >= 1.0)
             {
                 this._sprite = new SpriteMap("campingMelted", 23, 15);
                 for (int index = 0; index < 4; ++index)
-                    Level.Add((Thing)SmallSmoke.New(Rando.Float(-4f, 4f), Rando.Float(-4f, 4f)));
+                    Level.Add(SmallSmoke.New(Rando.Float(-4f, 4f), Rando.Float(-4f, 4f)));
                 this._onFire = false;
                 this.flammable = 0.0f;
                 this.ammo = 0;
-                this.graphic = (Sprite)this._sprite;
+                this.graphic = _sprite;
                 this.burntOut = true;
             }
             base.Update();
-            if ((double)this._loadAnimation == -1.0)
+            if (_loadAnimation == -1.0)
             {
                 SFX.Play("click");
                 this._loadAnimation = 0.0f;
             }
-            if ((double)this._loadAnimation >= 0.0)
+            if (_loadAnimation >= 0.0)
             {
-                if (this._loadProgress < (sbyte)0)
+                if (this._loadProgress < 0)
                 {
-                    if ((double)this._loadAnimation < 1.0)
+                    if (_loadAnimation < 1.0)
                         this._loadAnimation += 0.1f;
                     else
                         this._loadAnimation = 1f;
                 }
-                else if ((double)this._loadAnimation < 0.5)
+                else if (_loadAnimation < 0.5)
                     this._loadAnimation += 0.2f;
                 else
                     this._loadAnimation = 0.5f;
             }
-            if (this._loadProgress >= (sbyte)0)
+            if (this._loadProgress >= 0)
             {
-                if (this._loadProgress == (sbyte)50 && this.isServerForObject)
+                if (this._loadProgress == 50 && this.isServerForObject)
                 {
                     this.Reload(false);
                     this.readyToFire = true;
                 }
-                if (this._loadProgress < (sbyte)100)
-                    this._loadProgress += (sbyte)10;
+                if (this._loadProgress < 100)
+                    this._loadProgress += 10;
                 else
-                    this._loadProgress = (sbyte)100;
+                    this._loadProgress = 100;
             }
             if (this.burntOut)
                 return;
@@ -127,29 +131,31 @@ namespace DuckGame
                     Vec2 vec2 = this.Offset(this.barrelOffset);
                     for (int index = 0; index < 6; ++index)
                     {
-                        CampingSmoke campingSmoke = new CampingSmoke((float)((double)this.barrelPosition.x - 8.0 + (double)Rando.Float(8f) + (double)this.offDir * 8.0), this.barrelPosition.y - 8f + Rando.Float(8f));
-                        campingSmoke.depth = (Depth)(float)(0.899999976158142 + (double)index * (1.0 / 1000.0));
+                        CampingSmoke campingSmoke = new CampingSmoke((float)(barrelPosition.x - 8.0 + (double)Rando.Float(8f) + offDir * 8.0), this.barrelPosition.y - 8f + Rando.Float(8f))
+                        {
+                            depth = (Depth)(float)(0.899999976158142 + index * (1.0 / 1000.0))
+                        };
                         if (index < 3)
                             campingSmoke.move -= this.barrelVector * Rando.Float(0.05f);
                         else
                             campingSmoke.fly += this.barrelVector * (1f + Rando.Float(2.8f));
-                        Level.Add((Thing)campingSmoke);
+                        Level.Add(campingSmoke);
                     }
                     if (!this.receivingPress)
                     {
                         CampingBall t = new CampingBall(vec2.x, vec2.y - 2f, this.duck);
-                        Level.Add((Thing)t);
-                        this.Fondle((Thing)t);
+                        Level.Add(t);
+                        this.Fondle(t);
                         if (this.onFire)
                             t.LightOnFire();
                         if (this.owner != null)
                             t.responsibleProfile = this.owner.responsibleProfile;
                         t.clip.Add(this.owner as MaterialThing);
                         t.hSpeed = this.barrelVector.x * 10f;
-                        t.vSpeed = (float)((double)this.barrelVector.y * 7.0 - 0.75);
+                        t.vSpeed = (float)(barrelVector.y * 7.0 - 0.75);
                     }
                 }
-                this._loadProgress = (sbyte)-1;
+                this._loadProgress = -1;
                 this.readyToFire = false;
                 if (this.ammo != 1)
                     return;
@@ -157,9 +163,9 @@ namespace DuckGame
             }
             else
             {
-                if (this._loadProgress != (sbyte)-1)
+                if (this._loadProgress != -1)
                     return;
-                this._loadProgress = (sbyte)0;
+                this._loadProgress = 0;
                 this._loadAnimation = -1f;
             }
         }
@@ -168,8 +174,8 @@ namespace DuckGame
         {
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -2f);
-            float num = (float)Math.Sin((double)this._loadAnimation * 3.14000010490417) * 3f;
-            this.Draw((Sprite)this._loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
+            float num = (float)Math.Sin(_loadAnimation * 3.14000010490417) * 3f;
+            this.Draw(_loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace DuckGame
         public PyramidBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 2
             };
@@ -59,11 +59,11 @@ namespace DuckGame
             this._parallax.AddZone(22, 0.6f, speed, true);
             this._parallax.AddZone(23, 0.5f, speed, true);
             this._parallax.AddZone(24, 0.5f, speed, true);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

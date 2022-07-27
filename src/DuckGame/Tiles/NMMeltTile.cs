@@ -24,7 +24,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            Level.CheckPoint<SnowTileset>(new Vec2((float)this.x, (float)this.y))?.Melt(false, true);
+            Level.CheckPoint<SnowTileset>(new Vec2(x, y))?.Melt(false, true);
             base.Activate();
         }
     }

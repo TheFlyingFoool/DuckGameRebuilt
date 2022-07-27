@@ -26,7 +26,7 @@ namespace DuckGame
         public WaterFlow(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("waterFlow", 16, 16);
+            this.graphic = new SpriteMap("waterFlow", 16, 16);
             this.center = new Vec2(8f, 14f);
             this._collisionSize = new Vec2(16f, 4f);
             this._collisionOffset = new Vec2(-8f, -2f);
@@ -40,13 +40,13 @@ namespace DuckGame
         {
             if (this.processed)
                 return rect;
-            if ((double)this.left < (double)rect.x)
+            if ((double)this.left < rect.x)
             {
-                rect.width += (float)(int)((double)rect.x - (double)this.left);
-                rect.x = (float)(int)this.left;
+                rect.width += (int)(rect.x - (double)this.left);
+                rect.x = (int)this.left;
             }
-            if ((double)this.right > (double)rect.x + (double)rect.width)
-                rect.width += (float)(int)((double)this.right - ((double)rect.x + (double)rect.width));
+            if ((double)this.right > rect.x + (double)rect.width)
+                rect.width += (int)((double)this.right - (rect.x + (double)rect.width));
             this.processed = true;
             if (!this._wallLeft)
             {
@@ -90,7 +90,7 @@ namespace DuckGame
                         this._extraWater.Remove(this);
                         foreach (WaterFlow waterFlow in this._extraWater)
                         {
-                            Level.Remove((Thing)waterFlow);
+                            Level.Remove(waterFlow);
                             waterFlow._extraWater.Clear();
                         }
                         this._collisionSize = new Vec2(rectangle.width, rectangle.height);
@@ -128,24 +128,24 @@ namespace DuckGame
 
         public override void Draw()
         {
-            (this.graphic as SpriteMap).frame = (int)((double)Graphics.frame / 3.0 % 4.0);
+            (this.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
             foreach (Thing thing in this._extraWater)
-                (thing.graphic as SpriteMap).frame = (int)((double)Graphics.frame / 3.0 % 4.0);
-            this.graphic.flipH = this.offDir <= (sbyte)0;
+                (thing.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            this.graphic.flipH = this.offDir <= 0;
             base.Draw();
             if (!this.flipHorizontal)
             {
                 if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle((float)(this.graphic.w - 4), 0.0f, 4f, (float)this.graphic.h));
+                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle(this.graphic.w - 4, 0.0f, 4f, graphic.h));
                 if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, (float)this.graphic.h));
+                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, graphic.h));
             }
             else
             {
                 if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle((float)(this.graphic.w - 4), 0.0f, 4f, (float)this.graphic.h));
+                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle(this.graphic.w - 4, 0.0f, 4f, graphic.h));
                 if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, (float)this.graphic.h));
+                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, graphic.h));
             }
             foreach (WaterFlow waterFlow in this._extraWater)
             {

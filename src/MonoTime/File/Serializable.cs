@@ -17,28 +17,28 @@ namespace DuckGame
             ClassMember member = Editor.GetMember(this.GetType(), name);
             if (member == null)
                 return;
-            element.AddProperty(name, member.GetValue((object)this));
+            element.AddProperty(name, member.GetValue(this));
         }
 
-        public void DeserializeField(BinaryClassChunk node, string name) => Editor.GetMember(this.GetType(), name)?.SetValue((object)this, node.GetProperty(name));
+        public void DeserializeField(BinaryClassChunk node, string name) => Editor.GetMember(this.GetType(), name)?.SetValue(this, node.GetProperty(name));
 
         public void LegacySerializeField(DXMLNode element, string name)
         {
             FieldInfo field = this.GetType().GetField(name);
             object name1;
-            if (field != (FieldInfo)null)
+            if (field != null)
             {
-                name1 = field.GetValue((object)this);
+                name1 = field.GetValue(this);
             }
             else
             {
                 PropertyInfo property = this.GetType().GetProperty(name);
-                if (!(property != (PropertyInfo)null))
+                if (!(property != null))
                     return;
-                name1 = property.GetValue((object)this, (object[])null);
+                name1 = property.GetValue(this, null);
             }
             if (name1.GetType().IsEnum)
-                name1 = (object)Enum.GetName(name1.GetType(), name1);
+                name1 = Enum.GetName(name1.GetType(), name1);
             element.Add(new DXMLNode(name, name1));
         }
 
@@ -50,22 +50,22 @@ namespace DuckGame
                 if (dxmlNode == null)
                     return;
                 FieldInfo field = this.GetType().GetField(name);
-                if (field != (FieldInfo)null)
+                if (field != null)
                 {
                     if (field.FieldType.IsEnum)
-                        field.SetValue((object)this, Enum.Parse(field.FieldType, dxmlNode.Value));
+                        field.SetValue(this, Enum.Parse(field.FieldType, dxmlNode.Value));
                     else
-                        field.SetValue((object)this, Convert.ChangeType((object)dxmlNode.Value, field.FieldType));
+                        field.SetValue(this, Convert.ChangeType(dxmlNode.Value, field.FieldType));
                 }
                 else
                 {
                     PropertyInfo property = this.GetType().GetProperty(name);
-                    if (!(property != (PropertyInfo)null))
+                    if (!(property != null))
                         return;
                     if (property.PropertyType.IsEnum)
-                        property.SetValue((object)this, Enum.Parse(property.PropertyType, dxmlNode.Value), (object[])null);
+                        property.SetValue(this, Enum.Parse(property.PropertyType, dxmlNode.Value), null);
                     else
-                        property.SetValue((object)this, Convert.ChangeType((object)dxmlNode.Value, property.PropertyType), (object[])null);
+                        property.SetValue(this, Convert.ChangeType(dxmlNode.Value, property.PropertyType), null);
                 }
             }
             catch

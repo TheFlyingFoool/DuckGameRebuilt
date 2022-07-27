@@ -18,15 +18,15 @@ namespace DuckGame
         public static bool showdown = false;
         private static int numMatches = 0;
         private static Queue<string> _recentLevels = new Queue<string>();
-        private static List<string> _demoLevels = new List<string>()
-    {
-      "deathmatch/forest02",
-      "deathmatch/office02",
-      "deathmatch/forest04",
-      "deathmatch/office07",
-      "deathmatch/office10",
-      "deathmatch/office05"
-    };
+    //    private static List<string> _demoLevels = new List<string>()
+    //{
+    //  "deathmatch/forest02",
+    //  "deathmatch/office02",
+    //  "deathmatch/forest04",
+    //  "deathmatch/office07",
+    //  "deathmatch/office10",
+    //  "deathmatch/office05"
+    //};
         private static int _winsPerSet = 5;
         private static int _roundsBetweenIntermission = 5;
         private static int _userMapsPercent = 0;
@@ -36,7 +36,7 @@ namespace DuckGame
         private static float _wait = 0.0f;
         private static bool _endedHighlights = false;
         private static string _currentSong = "";
-        private Sprite _bottomWedge;
+        //private Sprite _bottomWedge;
         private bool _addedPoints;
         private UIComponent _pauseGroup;
         private UIMenu _pauseMenu;
@@ -93,7 +93,7 @@ namespace DuckGame
         {
             this._level = l;
             this.layer = Layer.HUD;
-            this._bottomWedge = new Sprite("bottomWedge");
+            //this._bottomWedge = new Sprite("bottomWedge");
         }
 
         public override void Initialize()
@@ -102,28 +102,28 @@ namespace DuckGame
             this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             UIDivider component = new UIDivider(true, 0.8f);
-            component.leftSection.Add((UIComponent)new UIMenuItem("RESUME", (UIMenuAction)new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("OPTIONS", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)Options.optionsMenu), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIText(" ", Color.White, UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("|DGRED|QUIT", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)this._confirmMenu), UIAlign.Left), true);
-            component.rightSection.Add((UIComponent)new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add((UIComponent)component, true);
+            component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            component.leftSection.Add(new UIText(" ", Color.White, UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
+            component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            this._pauseMenu.Add(component, true);
             this._pauseMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._pauseMenu, false);
+            this._pauseGroup.Add(_pauseMenu, false);
             Options.AddMenus(this._pauseGroup);
             Options.openOnClose = this._pauseMenu;
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._confirmMenu, (UIComponent)this._pauseMenu), UIAlign.Left, backButton: true), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
+            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
             this._confirmMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._confirmMenu, false);
+            this._pauseGroup.Add(_confirmMenu, false);
             this._pauseGroup.Close();
             this._pauseGroup.Update();
             this._pauseGroup.Update();
-            Level.Add((Thing)this._pauseGroup);
+            Level.Add(_pauseGroup);
             Highlights.StartRound();
         }
 
-        public override void Terminate() => Options.openOnClose = (UIMenu)null;
+        public override void Terminate() => Options.openOnClose = null;
 
         public static string RandomLevelString(string ignore = "", string folder = "deathmatch") => Deathmatch.RandomLevelString(ignore, folder, false);
 
@@ -140,19 +140,19 @@ namespace DuckGame
                 Deathmatch._rareLevels = Content.GetLevels(folder + "/rare", LevelLocation.Content, false, Network.isActive, TeamSelect2.eightPlayersActive);
                 if (Network.isActive)
                 {
-                    Deathmatch._fourPlayerLevels.AddRange((IEnumerable<string>)Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false));
-                    Deathmatch._eightPlayerNonRestrictedLevels.AddRange((IEnumerable<string>)Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false, true));
-                    Deathmatch._eightPlayerAllLevels.AddRange((IEnumerable<string>)Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, true));
+                    Deathmatch._fourPlayerLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false));
+                    Deathmatch._eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false, true));
+                    Deathmatch._eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, true));
                 }
             }
             if (TeamSelect2.eightPlayersActive)
             {
-                stringList1.AddRange((IEnumerable<string>)Deathmatch._eightPlayerAllLevels);
+                stringList1.AddRange(_eightPlayerAllLevels);
             }
             else
             {
-                stringList1.AddRange((IEnumerable<string>)Deathmatch._fourPlayerLevels);
-                stringList1.AddRange((IEnumerable<string>)Deathmatch._eightPlayerNonRestrictedLevels);
+                stringList1.AddRange(_fourPlayerLevels);
+                stringList1.AddRange(_eightPlayerNonRestrictedLevels);
             }
             DateTime localTime = MonoMain.GetLocalTime();
             if (DateTime.Now.Month == 12)
@@ -167,11 +167,11 @@ namespace DuckGame
                 }
             }
             if (ignore != "")
-                stringList1.AddRange((IEnumerable<string>)Deathmatch._rareLevels);
+                stringList1.AddRange(_rareLevels);
             if (TeamSelect2.normalMapPercent != 100 | forceCustom)
             {
-                MapRollGroup mapRollGroup1 = (MapRollGroup)null;
-                MapRollGroup mapRollGroup2 = (MapRollGroup)null;
+                MapRollGroup mapRollGroup1 = null;
+                MapRollGroup mapRollGroup2 = null;
                 if (forceCustom)
                 {
                     mapRollGroup2 = new MapRollGroup()
@@ -183,7 +183,7 @@ namespace DuckGame
                 {
                     int num = TeamSelect2.randomMapPercent;
                     if (Deathmatch._lastLevelWasPyramid)
-                        num = (int)((double)num * 0.5);
+                        num = (int)(num * 0.5);
                     foreach (MapRollGroup mapRollGroup3 in (IEnumerable<MapRollGroup>)new List<MapRollGroup>()
           {
             new MapRollGroup()
@@ -206,7 +206,7 @@ namespace DuckGame
               type = MapRollType.Internet,
               chance = TeamSelect2.workshopMapPercent
             }
-          }.OrderBy<MapRollGroup, int>((Func<MapRollGroup, int>)(x => Rando.Int(2147483646))))
+          }.OrderBy<MapRollGroup, int>(x => Rando.Int(2147483646)))
                     {
                         if ((mapRollGroup3.type != MapRollType.Custom || Editor.customLevelCount != 0) && (mapRollGroup3.type != MapRollType.Internet || RandomLevelDownloader.PeekNextLevel() != null))
                         {
@@ -230,14 +230,14 @@ namespace DuckGame
                     stringList1.Clear();
                     if (Network.isActive && Network.isServer && (bool)TeamSelect2.GetMatchSetting("clientlevelsenabled").value)
                     {
-                        Profile profile1 = (Profile)null;
+                        Profile profile1 = null;
                         int num = 0;
                         do
                         {
                             ++Deathmatch.clientLevelRoundRobin;
                             foreach (Profile profile2 in DuckNetwork.profiles)
                             {
-                                if (profile2.connection != null && profile2.slotType != SlotType.Local && (int)profile2.networkIndex == Deathmatch.clientLevelRoundRobin % GameLevel.NumberOfDucks && (profile2.connection != DuckNetwork.localConnection || Editor.activatedLevels.Count != 0) && (profile2.connection == DuckNetwork.localConnection || profile2.numClientCustomLevels != 0))
+                                if (profile2.connection != null && profile2.slotType != SlotType.Local && profile2.networkIndex == Deathmatch.clientLevelRoundRobin % GameLevel.NumberOfDucks && (profile2.connection != DuckNetwork.localConnection || Editor.activatedLevels.Count != 0) && (profile2.connection == DuckNetwork.localConnection || profile2.numClientCustomLevels != 0))
                                 {
                                     profile1 = profile2;
                                     break;
@@ -257,10 +257,10 @@ namespace DuckGame
                         return "";
                 }
             }
-            if ((double)Deathmatch._recentLevels.Count > (double)stringList1.Count * 0.800000011920929)
+            if (_recentLevels.Count > stringList1.Count * 0.800000011920929)
                 Deathmatch._recentLevels.Clear();
             List<string> stringList2 = new List<string>();
-            stringList2.AddRange((IEnumerable<string>)stringList1);
+            stringList2.AddRange(stringList1);
             Deathmatch._lastLevelWasPyramid = false;
             string str = "";
             while (str == "")
@@ -359,7 +359,7 @@ namespace DuckGame
                     Graphics.fade -= 0.04f;
                     if ((double)Graphics.fade >= 0.00999999977648258)
                         return;
-                    Level.current = (Level)new TitleScreen();
+                    Level.current = new TitleScreen();
                 }
                 else
                 {
@@ -402,7 +402,7 @@ namespace DuckGame
                     }
                     if (this._matchOver)
                         this._deadTimer -= 0.005f;
-                    if ((double)this._deadTimer < 0.5 && !this._addedPoints)
+                    if (_deadTimer < 0.5 && !this._addedPoints)
                     {
                         List<Team> collection = new List<Team>();
                         List<Team> source = new List<Team>();
@@ -438,11 +438,11 @@ namespace DuckGame
                             Deathmatch.lastWinners.Clear();
                             if (source.Count > 0)
                             {
-                                Event.Log((Event)new RoundEndEvent());
+                                Event.Log(new RoundEndEvent());
                                 SFX.Play("scoreDing", 0.8f);
                                 if (!TeamSelect2.KillsForPoints)
                                 {
-                                    source.AddRange((IEnumerable<Team>)collection);
+                                    source.AddRange(collection);
                                     foreach (Team team in source)
                                     {
                                         foreach (Profile activeProfile in team.activeProfiles)
@@ -455,28 +455,30 @@ namespace DuckGame
                                                 Profile p = activeProfile;
                                                 if (activeProfile.duck.converted != null)
                                                     p = activeProfile.duck.converted.profile;
-                                                PlusOne plusOne = new PlusOne(0.0f, 0.0f, p);
-                                                plusOne._duck = activeProfile.duck;
-                                                plusOne.anchor = (Anchor)(Thing)activeProfile.duck;
+                                                PlusOne plusOne = new PlusOne(0.0f, 0.0f, p)
+                                                {
+                                                    _duck = activeProfile.duck,
+                                                    anchor = (Anchor)activeProfile.duck
+                                                };
                                                 plusOne.anchor.offset = new Vec2(0.0f, -16f);
-                                                Level.Add((Thing)plusOne);
+                                                Level.Add(plusOne);
                                             }
                                         }
                                     }
                                     if (Network.isActive && Network.isServer)
-                                        Send.Message((NetMessage)new NMAssignWin(Deathmatch.lastWinners, (Profile)null));
+                                        Send.Message(new NMAssignWin(Deathmatch.lastWinners, null));
                                     ++source.First<Team>().score;
                                 }
                             }
                         }
                         this._addedPoints = true;
                     }
-                    if ((double)this._deadTimer < 0.100000001490116 && !Deathmatch._endedHighlights)
+                    if (_deadTimer < 0.100000001490116 && !Deathmatch._endedHighlights)
                     {
                         Deathmatch._endedHighlights = true;
                         Highlights.FinishRound();
                     }
-                    if ((double)this._deadTimer >= 0.0 || this.switched || Network.isActive)
+                    if (_deadTimer >= 0.0 || this.switched || Network.isActive)
                         return;
                     foreach (Team team in Teams.all)
                     {
@@ -532,89 +534,89 @@ namespace DuckGame
             Deathmatch._wait = 1f;
         }
 
-        private SpawnPoint AttemptTeamSpawn(
-          Team team,
-          List<SpawnPoint> usedSpawns,
-          List<Duck> spawned)
-        {
-            Level level = this._level;
-            List<TeamSpawn> teamSpawnList = new List<TeamSpawn>();
-            foreach (TeamSpawn teamSpawn in this._level.things[typeof(TeamSpawn)])
-            {
-                if (!usedSpawns.Contains((SpawnPoint)teamSpawn))
-                    teamSpawnList.Add(teamSpawn);
-            }
-            if (teamSpawnList.Count <= 0)
-                return (SpawnPoint)null;
-            TeamSpawn teamSpawn1 = teamSpawnList[Rando.Int(teamSpawnList.Count - 1)];
-            usedSpawns.Add((SpawnPoint)teamSpawn1);
-            for (int index = 0; index < team.numMembers; ++index)
-            {
-                Vec2 position = teamSpawn1.position;
-                if (team.numMembers == 2)
-                {
-                    float num = 18.82353f;
-                    position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
-                }
-                else if (team.numMembers == 3)
-                {
-                    float num = 9.411764f;
-                    position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
-                }
-                Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index]);
-                duck.offDir = teamSpawn1.offDir;
-                spawned.Add(duck);
-            }
-            return (SpawnPoint)teamSpawn1;
-        }
+        //private SpawnPoint AttemptTeamSpawn(
+        //  Team team,
+        //  List<SpawnPoint> usedSpawns,
+        //  List<Duck> spawned)
+        //{
+        //    Level level = this._level;
+        //    List<TeamSpawn> teamSpawnList = new List<TeamSpawn>();
+        //    foreach (TeamSpawn teamSpawn in this._level.things[typeof(TeamSpawn)])
+        //    {
+        //        if (!usedSpawns.Contains((SpawnPoint)teamSpawn))
+        //            teamSpawnList.Add(teamSpawn);
+        //    }
+        //    if (teamSpawnList.Count <= 0)
+        //        return (SpawnPoint)null;
+        //    TeamSpawn teamSpawn1 = teamSpawnList[Rando.Int(teamSpawnList.Count - 1)];
+        //    usedSpawns.Add((SpawnPoint)teamSpawn1);
+        //    for (int index = 0; index < team.numMembers; ++index)
+        //    {
+        //        Vec2 position = teamSpawn1.position;
+        //        if (team.numMembers == 2)
+        //        {
+        //            float num = 18.82353f;
+        //            position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
+        //        }
+        //        else if (team.numMembers == 3)
+        //        {
+        //            float num = 9.411764f;
+        //            position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
+        //        }
+        //        Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index]);
+        //        duck.offDir = teamSpawn1.offDir;
+        //        spawned.Add(duck);
+        //    }
+        //    return (SpawnPoint)teamSpawn1;
+        //}
 
-        private SpawnPoint AttemptFreeSpawn(
-          Profile profile,
-          List<SpawnPoint> usedSpawns,
-          List<Duck> spawned)
-        {
-            Level level = this._level;
-            List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
-            foreach (FreeSpawn freeSpawn in this._level.things[typeof(FreeSpawn)])
-            {
-                if (!usedSpawns.Contains((SpawnPoint)freeSpawn))
-                    spawnPointList.Add((SpawnPoint)freeSpawn);
-            }
-            if (spawnPointList.Count == 0)
-                return (SpawnPoint)null;
-            SpawnPoint spawnPoint = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
-            usedSpawns.Add(spawnPoint);
-            Duck duck = new Duck(spawnPoint.x, spawnPoint.y - 7f, profile);
-            duck.offDir = spawnPoint.offDir;
-            spawned.Add(duck);
-            return spawnPoint;
-        }
+        //private SpawnPoint AttemptFreeSpawn(
+        //  Profile profile,
+        //  List<SpawnPoint> usedSpawns,
+        //  List<Duck> spawned)
+        //{
+        //    Level level = this._level;
+        //    List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
+        //    foreach (FreeSpawn freeSpawn in this._level.things[typeof(FreeSpawn)])
+        //    {
+        //        if (!usedSpawns.Contains((SpawnPoint)freeSpawn))
+        //            spawnPointList.Add((SpawnPoint)freeSpawn);
+        //    }
+        //    if (spawnPointList.Count == 0)
+        //        return (SpawnPoint)null;
+        //    SpawnPoint spawnPoint = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
+        //    usedSpawns.Add(spawnPoint);
+        //    Duck duck = new Duck(spawnPoint.x, spawnPoint.y - 7f, profile);
+        //    duck.offDir = spawnPoint.offDir;
+        //    spawned.Add(duck);
+        //    return spawnPoint;
+        //}
 
-        private SpawnPoint AttemptAnySpawn(
-          Profile profile,
-          List<SpawnPoint> usedSpawns,
-          List<Duck> spawned)
-        {
-            Level level = this._level;
-            List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
-            foreach (SpawnPoint spawnPoint in this._level.things[typeof(SpawnPoint)])
-            {
-                if (!usedSpawns.Contains(spawnPoint))
-                    spawnPointList.Add(spawnPoint);
-            }
-            if (spawnPointList.Count == 0)
-            {
-                if (usedSpawns.Count <= 0)
-                    return (SpawnPoint)null;
-                spawnPointList.AddRange((IEnumerable<SpawnPoint>)usedSpawns);
-            }
-            SpawnPoint spawnPoint1 = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
-            usedSpawns.Add(spawnPoint1);
-            Duck duck = new Duck(spawnPoint1.x, spawnPoint1.y - 7f, profile);
-            duck.offDir = spawnPoint1.offDir;
-            spawned.Add(duck);
-            return spawnPoint1;
-        }
+        //private SpawnPoint AttemptAnySpawn(
+        //  Profile profile,
+        //  List<SpawnPoint> usedSpawns,
+        //  List<Duck> spawned)
+        //{
+        //    Level level = this._level;
+        //    List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
+        //    foreach (SpawnPoint spawnPoint in this._level.things[typeof(SpawnPoint)])
+        //    {
+        //        if (!usedSpawns.Contains(spawnPoint))
+        //            spawnPointList.Add(spawnPoint);
+        //    }
+        //    if (spawnPointList.Count == 0)
+        //    {
+        //        if (usedSpawns.Count <= 0)
+        //            return (SpawnPoint)null;
+        //        spawnPointList.AddRange((IEnumerable<SpawnPoint>)usedSpawns);
+        //    }
+        //    SpawnPoint spawnPoint1 = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
+        //    usedSpawns.Add(spawnPoint1);
+        //    Duck duck = new Duck(spawnPoint1.x, spawnPoint1.y - 7f, profile);
+        //    duck.offDir = spawnPoint1.offDir;
+        //    spawned.Add(duck);
+        //    return spawnPoint1;
+        //}
 
         public List<Duck> SpawnPlayers(bool recordStats) => Spawn.SpawnPlayers(recordStats);
 

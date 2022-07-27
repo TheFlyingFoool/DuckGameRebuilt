@@ -19,9 +19,11 @@ namespace DuckGame
         public Spikes(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("spikes", 16, 19);
-            this._sprite.speed = 0.1f;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("spikes", 16, 19)
+            {
+                speed = 0.1f
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 14f);
             this.collisionOffset = new Vec2(-6f, -3f);
             this.collisionSize = new Vec2(13f, 5f);
@@ -48,9 +50,9 @@ namespace DuckGame
             if (from != this._killImpact)
                 return;
             if (from == ImpactedFrom.Left && (double)with.hSpeed > (double)num)
-                with.Destroy((DestroyType)new DTImpale((Thing)this));
+                with.Destroy(new DTImpale(this));
             if (from == ImpactedFrom.Right && (double)with.hSpeed < -(double)num)
-                with.Destroy((DestroyType)new DTImpale((Thing)this));
+                with.Destroy(new DTImpale(this));
             if (from == ImpactedFrom.Top && (double)with.vSpeed > (double)num && (duck == null || !duck.HasEquipment(typeof(Boots))))
             {
                 bool flag = true;
@@ -74,11 +76,11 @@ namespace DuckGame
                         flag = true;
                 }
                 if (flag)
-                    with.Destroy((DestroyType)new DTImpale((Thing)this));
+                    with.Destroy(new DTImpale(this));
             }
             if (from != ImpactedFrom.Bottom || (double)with.vSpeed >= -(double)num || duck != null && duck.HasEquipment(typeof(Helmet)))
                 return;
-            with.Destroy((DestroyType)new DTImpale((Thing)this));
+            with.Destroy(new DTImpale(this));
         }
 
         public override void Update() => base.Update();

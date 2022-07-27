@@ -76,7 +76,7 @@ namespace DuckGame
                         }
                         if (!flag1)
                         {
-                            NetMessage element = (NetMessage)null;
+                            NetMessage element = null;
                             BitBuffer bitBuffer = netMessagePriority == NetMessagePriority.ReliableOrdered || netMessagePriority == NetMessagePriority.MAX_VALUE_DONOT_USE ? this._data.ReadBitBuffer() : this._data;
                             uint positionInBits = this._data.positionInBits;
                             ushort key = bitBuffer.ReadUShort();
@@ -85,12 +85,12 @@ namespace DuckGame
                                 netMessagePriority = (NetMessagePriority)this._data.ReadByte();
                                 Mod modFromHash = ModLoader.GetModFromHash(this._data.ReadUInt());
                                 if (modFromHash != null)
-                                    element = modFromHash.constructorToMessageID[key].Invoke((object[])null) as NetMessage;
+                                    element = modFromHash.constructorToMessageID[key].Invoke(null) as NetMessage;
                                 else
                                     DevConsole.Log(DCSection.DuckNet, "|GRAY|Ignoring message from unknown client mod.");
                             }
                             else
-                                element = Network.constructorToMessageID[key].Invoke((object[])null) as NetMessage;
+                                element = Network.constructorToMessageID[key].Invoke(null) as NetMessage;
                             if (element != null)
                             {
                                 element.priority = netMessagePriority;
@@ -113,7 +113,7 @@ namespace DuckGame
                     while (this._data.ReadBool());
                 }
             }
-            if ((long)this._data.positionInBits >= (long)this._data.lengthInBits || !this._data.ReadBool())
+            if (_data.positionInBits >= _data.lengthInBits || !this._data.ReadBool())
                 return;
             this.synchronizedTime = this._data.ReadNetIndex16();
         }
@@ -123,9 +123,9 @@ namespace DuckGame
             List<NetMessage> allMessages = new List<NetMessage>();
             foreach (NetMessagePriority key in Enum.GetValues(typeof(NetMessagePriority)).Cast<NetMessagePriority>())
             {
-                List<NetMessage> list = (List<NetMessage>)null;
+                List<NetMessage> list;
                 if (this.unpackedMessages.TryGetValue(key, out list))
-                    allMessages.AddRange((IEnumerable<NetMessage>)list);
+                    allMessages.AddRange(list);
             }
             return allMessages;
         }

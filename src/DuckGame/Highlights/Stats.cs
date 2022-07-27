@@ -15,7 +15,7 @@ namespace DuckGame
         private static float _totalRoundTime;
         private static int _numberOfRounds;
 
-        public static float averageRoundTime => Stats._totalRoundTime / (float)Stats.numberOfRounds;
+        public static float averageRoundTime => Stats._totalRoundTime / numberOfRounds;
 
         public static float totalRoundTime => Stats._averageRoundTime;
 
@@ -53,7 +53,7 @@ namespace DuckGame
                     dateTime = @event.timestamp;
                 else if (@event is RoundEndEvent)
                 {
-                    Stats._totalRoundTime += (float)(int)(@event.timestamp - dateTime).TotalSeconds;
+                    Stats._totalRoundTime += (int)(@event.timestamp - dateTime).TotalSeconds;
                     ++Stats._numberOfRounds;
                 }
             }

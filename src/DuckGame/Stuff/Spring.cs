@@ -25,7 +25,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._setMult = mult;
-            this.purple = (bool)new EditorProperty<bool>(false, (Thing)this);
+            this.purple = (bool)new EditorProperty<bool>(false, this);
             this.UpdateSprite();
             this.UpdatePower();
             this.editorCycleType = typeof(SpringUpRight);
@@ -48,8 +48,8 @@ namespace DuckGame
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            contextMenu.AddItem((ContextMenu)new ContextCheckBox("Purple", (IContextListener)null, new FieldBinding((object)this, "purple")));
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(new ContextCheckBox("Purple", null, new FieldBinding(this, "purple")));
+            return contextMenu;
         }
 
         protected virtual void UpdateSprite()
@@ -62,7 +62,7 @@ namespace DuckGame
                 this._sprite.AddAnimation("spring", 4f, false, 1, 2, 1, 0);
                 this._sprite.SetAnimation("idle");
                 this._sprite.speed = 0.1f;
-                this.graphic = (Sprite)this._sprite;
+                this.graphic = _sprite;
             }
             else
             {
@@ -72,14 +72,14 @@ namespace DuckGame
                 this._sprite.AddAnimation("spring", 4f, false, 1, 2, 1, 0);
                 this._sprite.SetAnimation("idle");
                 this._sprite.speed = 0.1f;
-                this.graphic = (Sprite)this._sprite;
+                this.graphic = _sprite;
             }
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("purple", (object)this.purple);
+            binaryClassChunk.AddProperty("purple", purple);
             return binaryClassChunk;
         }
 
@@ -107,7 +107,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)this._soundWait > 0.0)
+            if (_soundWait > 0.0)
                 this._soundWait -= 0.1f;
             base.Update();
         }
@@ -127,7 +127,7 @@ namespace DuckGame
         {
             this._sprite.currentAnimation = "spring";
             this._sprite.frame = 0;
-            if ((double)this._soundWait > 0.0)
+            if (_soundWait > 0.0)
                 return;
             SFX.Play("spring", 0.2f, Rando.Float(0.2f) - 0.1f);
             this._soundWait = 1f;
@@ -137,9 +137,9 @@ namespace DuckGame
 
         public override void Touch(MaterialThing with)
         {
-            if (with.isServerForObject && with.Sprung((Thing)this))
+            if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed > -22.0 * (double)this._mult)
+                if ((double)with.vSpeed > -22.0 * _mult)
                     with.vSpeed = -22f * this._mult;
                 if (with is RagdollPart)
                 {

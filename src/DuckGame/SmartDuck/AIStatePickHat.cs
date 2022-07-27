@@ -29,15 +29,15 @@ namespace DuckGame
             {
                 List<Thing> list = Level.current.things[typeof(HatConsole)].ToList<Thing>();
                 if (!(AI.Nearest(duck.position, list) is HatConsole hatConsole))
-                    return (AIState)new AIStateWait(Rando.Float(0.8f, 1f));
-                this._target = (Thing)hatConsole;
+                    return new AIStateWait(Rando.Float(0.8f, 1f));
+                this._target = hatConsole;
                 ai.SetTarget(hatConsole.position);
-                return (AIState)this;
+                return this;
             }
             if ((double)(this._target.position - duck.position).length < 10.0 && duck.grounded)
             {
                 this._wait -= 0.016f;
-                if ((double)this._wait <= 0.0)
+                if (_wait <= 0.0)
                 {
                     if (!this._did1 || !(this._target as HatConsole).box._hatSelector.open)
                     {
@@ -45,7 +45,7 @@ namespace DuckGame
                         this._did1 = true;
                     }
                     this._wait2 -= 0.016f;
-                    if ((double)this._wait2 <= 0.0 && (this._target as HatConsole).box._hatSelector.open)
+                    if (_wait2 <= 0.0 && (this._target as HatConsole).box._hatSelector.open)
                     {
                         if (!this._did2)
                         {
@@ -53,7 +53,7 @@ namespace DuckGame
                             this._did2 = true;
                         }
                         this._wait3 -= 0.016f;
-                        if ((double)this._wait3 <= 0.0)
+                        if (_wait3 <= 0.0)
                         {
                             this._wait3 = Rando.Float(0.2f);
                             if ((double)Rando.Float(1f) > 0.5)
@@ -87,17 +87,17 @@ namespace DuckGame
                                     this._did3 = true;
                                 }
                                 this._wait4 -= 0.016f;
-                                if ((double)this._wait4 <= 0.0)
+                                if (_wait4 <= 0.0)
                                 {
                                     ai.Press("QUACK");
-                                    return (AIState)new AIStateWait(Rando.Float(0.8f, 1f));
+                                    return new AIStateWait(Rando.Float(0.8f, 1f));
                                 }
                             }
                         }
                     }
                 }
             }
-            return (AIState)this;
+            return this;
         }
     }
 }

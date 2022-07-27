@@ -22,23 +22,23 @@ namespace DuckGame
             {
                 if ((double)val < 0.0)
                 {
-                    double num2 = (double)this._range / 2.0;
+                    double num2 = _range / 2.0;
                     val = val % -this._range + this._range;
                 }
                 val = val % this._range / this._range;
             }
             else
                 val = Maths.Clamp(val, -this._range, this._range) / this._range;
-            return (int)Math.Round((double)val * (double)num1);
+            return (int)Math.Round((double)val * num1);
         }
 
-        public override object GetNetValue() => (object)this.GetCompressedFloat(this.getTyped<float>());
+        public override object GetNetValue() => this.GetCompressedFloat(this.getTyped<float>());
 
         public override int intValue => this.GetCompressedFloat(this.getTyped<float>());
 
-        public override object ReadNetValue(object val) => (object)(float)((double)(int)val / (double)(BitBuffer.GetMaxValue(this._bits) / 2L) * (double)this._range);
+        public override object ReadNetValue(object val) => (float)((int)val / (double)(BitBuffer.GetMaxValue(this._bits) / 2L) * _range);
 
-        public override object ReadNetValue(BitBuffer pData) => (object)(float)((double)(int)pData.ReadBits(this.type, this.bits) / (double)(BitBuffer.GetMaxValue(this._bits) / 2L) * (double)this._range);
+        public override object ReadNetValue(BitBuffer pData) => (float)((int)pData.ReadBits(this.type, this.bits) / (double)(BitBuffer.GetMaxValue(this._bits) / 2L) * _range);
 
         public CompressedFloatBinding(string field, float range = 1f, int bits = 16, bool isRot = false, bool doLerp = false)
           : base(field, bits, isRot)

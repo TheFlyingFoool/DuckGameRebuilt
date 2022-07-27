@@ -12,7 +12,7 @@ namespace DuckGame
         public SubBackgroundOffice(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("officeSubBackground", 32, 32, true);
+            this.graphic = new SpriteMap("officeSubBackground", 32, 32, true);
             this._opacityFromGraphic = true;
             this.center = new Vec2(24f, 16f);
             this.collisionSize = new Vec2(32f, 32f);

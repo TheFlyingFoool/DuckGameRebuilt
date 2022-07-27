@@ -40,7 +40,7 @@ namespace DuckGame
             }
         }
 
-        public DeathCrateSetting setting => (int)this.settingIndex < DeathCrate._settings.Count ? DeathCrate._settings[(int)this.settingIndex] : (DeathCrateSetting)new DCSwordAdventure();
+        public DeathCrateSetting setting => settingIndex < DeathCrate._settings.Count ? DeathCrate._settings[settingIndex] : new DCSwordAdventure();
 
         public DeathCrate(float xpos, float ypos)
           : base(xpos, ypos)
@@ -48,7 +48,7 @@ namespace DuckGame
             this._maxHealth = 15f;
             this._hitPoints = 15f;
             this._sprite = new SpriteMap("deathcrate", 16, 19);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 11f);
             this.collisionOffset = new Vec2(-8f, -11f);
             this.collisionSize = new Vec2(16f, 18f);
@@ -66,7 +66,7 @@ namespace DuckGame
             for (int index = 0; index < 100; ++index)
             {
                 this.settingIndex = (byte)Rando.Int(DeathCrate._settings.Count - 1);
-                if ((double)DeathCrate._settings[(int)this.settingIndex].likelyhood == 1.0 || (double)Rando.Float(1f) < (double)DeathCrate._settings[(int)this.settingIndex].likelyhood)
+                if (_settings[settingIndex].likelyhood == 1.0 || (double)Rando.Float(1f) < _settings[settingIndex].likelyhood)
                     break;
             }
         }
@@ -74,7 +74,7 @@ namespace DuckGame
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             if (with.isStateObject)
-                with.Fondle((Thing)this);
+                with.Fondle(this);
             if (from == ImpactedFrom.Top || (double)Math.Abs(this.angleDegrees) > 90.0 && (double)Math.Abs(this.angleDegrees) < 270.0 && from == ImpactedFrom.Bottom && (double)with.totalImpactPower + (double)this.totalImpactPower > 0.100000001490116 && this._sprite.currentAnimation == "idle")
             {
                 this.activated = true;
@@ -100,7 +100,7 @@ namespace DuckGame
             this._storedSetting.Activate(this, isServer);
             if (!isServer)
                 return;
-            Send.Message((NetMessage)new NMActivateDeathCrate(this.settingIndex, this));
+            Send.Message(new NMActivateDeathCrate(this.settingIndex, this));
         }
 
         public override void Update()
@@ -111,22 +111,22 @@ namespace DuckGame
                 this.collisionOffset = new Vec2(-8f, -8f);
                 this.collisionSize = new Vec2(16f, 15f);
             }
-            if (this._sprite.imageIndex == 6 && this._beeps == (byte)0)
+            if (this._sprite.imageIndex == 6 && this._beeps == 0)
             {
                 SFX.Play("singleBeep");
                 ++this._beeps;
             }
-            if (this._sprite.imageIndex == 7 && this._beeps == (byte)1)
+            if (this._sprite.imageIndex == 7 && this._beeps == 1)
             {
                 SFX.Play("singleBeep");
                 ++this._beeps;
             }
-            if (this._sprite.imageIndex == 8 && this._beeps == (byte)2)
+            if (this._sprite.imageIndex == 8 && this._beeps == 2)
             {
                 SFX.Play("singleBeep");
                 ++this._beeps;
             }
-            if (this._sprite.imageIndex == 5 && this._beeps == (byte)3)
+            if (this._sprite.imageIndex == 5 && this._beeps == 3)
             {
                 SFX.Play("doubleBeep", pitch: 0.2f);
                 ++this._beeps;
@@ -144,7 +144,7 @@ namespace DuckGame
         public override void Draw()
         {
             sbyte offDir = this.offDir;
-            this.offDir = (sbyte)1;
+            this.offDir = 1;
             base.Draw();
             this.offDir = offDir;
         }

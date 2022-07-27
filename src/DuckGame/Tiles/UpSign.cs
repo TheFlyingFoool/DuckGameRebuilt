@@ -16,7 +16,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("upSign", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 24f);
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -8f);
@@ -27,7 +27,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._sprite.frame = this.offDir > (sbyte)0 ? 0 : 1;
+            this._sprite.frame = this.offDir > 0 ? 0 : 1;
             base.Draw();
         }
     }

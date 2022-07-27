@@ -38,12 +38,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawRect(new Vec2((float)((double)Graphics.width / 2.0 - (double)this._menuWidth / 2.0), this.y), new Vec2((float)((double)Graphics.width / 2.0 + (double)this._menuWidth / 2.0), this.y + 250f), Color.Black, (Depth)0.9f);
+            Graphics.DrawRect(new Vec2((float)(Graphics.width / 2.0 - _menuWidth / 2.0), this.y), new Vec2((float)(Graphics.width / 2.0 + _menuWidth / 2.0), this.y + 250f), Color.Black, (Depth)0.9f);
             int num = 0;
             foreach (string option in this._options)
             {
                 float width = this._font.GetWidth(option);
-                this._font.Draw(option, (float)((double)Graphics.width / 2.0 - (double)width / 2.0), this.y + 30f + (float)(num * 60), Color.White);
+                this._font.Draw(option, (float)(Graphics.width / 2.0 - (double)width / 2.0), this.y + 30f + num * 60, Color.White);
                 ++num;
             }
         }

@@ -268,7 +268,7 @@ namespace DuckGame
 
         public static void ResetSpanAdjust() => Depth.ResetSpan();
 
-        public static float AdjustDepth(Depth depth) => 1f - ((float)(((double)depth.value + 1.0) / 2.0 * (1.0 - (double)Depth.kDepthSpanMax)) + depth.span);
+        public static float AdjustDepth(Depth depth) => 1f - ((float)((depth.value + 1.0) / 2.0 * (1.0 - Depth.kDepthSpanMax)) + depth.span);
 
         public static void ResetDepthBias()
         {
@@ -316,7 +316,7 @@ namespace DuckGame
                 DuckGame.Graphics._passwordFont.scale = new Vec2(scale);
                 DuckGame.Graphics._passwordFont.color = color;
                 DuckGame.Graphics._passwordFont.depth = depth;
-                DuckGame.Graphics.Draw((Sprite)DuckGame.Graphics._passwordFont, position.x, position.y);
+                DuckGame.Graphics.Draw(_passwordFont, position.x, position.y);
                 position.x += 8f * scale;
             }
         }
@@ -366,7 +366,7 @@ namespace DuckGame
             return (float)width;
         }
 
-        public static float GetStringHeight(string text) => (float)((IEnumerable<string>)text.Split('\n')).Count<string>() * DuckGame.Graphics._biosFont.height;
+        public static float GetStringHeight(string text) => text.Split('\n').Count<string>() * DuckGame.Graphics._biosFont.height;
 
         public static void DrawFancyString(
           string text,
@@ -421,7 +421,7 @@ namespace DuckGame
             DuckGame.Graphics.didCalc = true;
             Viewport viewport = new Viewport(0, 0, 32, 32);
             Matrix result;
-            Matrix.CreateOrthographicOffCenter(0.0f, (float)viewport.Width, (float)viewport.Height, 0.0f, 0.0f, -1f, out result);
+            Matrix.CreateOrthographicOffCenter(0.0f, viewport.Width, viewport.Height, 0.0f, 0.0f, -1f, out result);
             result.M41 += -0.5f * result.M11;
             result.M42 += -0.5f * result.M22;
             DuckGame.Graphics.bottomRight = new Vec2(32f, 32f);
@@ -465,16 +465,16 @@ namespace DuckGame
             {
                 if ((texture.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D).IsDisposed)
                     return;
-                if (texture.textureIndex == (short)0)
+                if (texture.textureIndex == 0)
                     Content.AssignTextureIndex(texture);
             }
             if (DuckGame.Graphics.doSnap)
             {
-                position.x = (float)Math.Round((double)position.x * (double)DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
-                position.y = (float)Math.Round((double)position.y * (double)DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
+                position.x = (float)Math.Round(position.x * (double)DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
+                position.y = (float)Math.Round(position.y * (double)DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
             }
             if (effects == SpriteEffects.FlipHorizontally)
-                origin.x = (sourceRectangle.HasValue ? sourceRectangle.Value.width : (float)texture.w) - origin.x;
+                origin.x = (sourceRectangle.HasValue ? sourceRectangle.Value.width : texture.w) - origin.x;
             float depth1 = DuckGame.Graphics.AdjustDepth(depth);
             if (DuckGame.Graphics.material != null)
                 DuckGame.Graphics._currentBatch.DrawWithMaterial(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth1, DuckGame.Graphics.material);
@@ -581,7 +581,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             p1 = new Vec2(p1.x, p1.y);
             p2 = new Vec2(p2.x, p2.y);
-            float rotation = (float)Math.Atan2((double)p2.y - (double)p1.y, (double)p2.x - (double)p1.x);
+            float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
             float length = (p1 - p2).length;
             DuckGame.Graphics.Draw(DuckGame.Graphics._blank, p1, new Rectangle?(), col, rotation, new Vec2(0.0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
         }
@@ -624,7 +624,7 @@ namespace DuckGame
             Vec2 vec2_1 = Vec2.Zero;
             for (int index = 0; index < iterations; ++index)
             {
-                float rad = Maths.DegToRad(360f / (float)(iterations - 1) * (float)index);
+                float rad = Maths.DegToRad(360f / (iterations - 1) * index);
                 Vec2 vec2_2 = new Vec2((float)Math.Cos((double)rad) * radius, (float)-Math.Sin((double)rad) * radius);
                 if (index > 0)
                     DuckGame.Graphics.DrawLine(pos + vec2_2, pos + vec2_1, col, width, depth);
@@ -645,17 +645,17 @@ namespace DuckGame
             {
                 p1 = new Vec2(p1.x, p1.y);
                 p2 = new Vec2(p2.x, p2.y);
-                float rotation = (float)Math.Atan2((double)p2.y - (double)p1.y, (double)p2.x - (double)p1.x);
-                float x = (p1 - p2).length / (float)texture.width;
-                DuckGame.Graphics.Draw(texture, p1, new Rectangle?(), col, rotation, new Vec2(0.0f, (float)(texture.height / 2)), new Vec2(x, width), SpriteEffects.None, depth);
+                float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
+                float x = (p1 - p2).length / texture.width;
+                DuckGame.Graphics.Draw(texture, p1, new Rectangle?(), col, rotation, new Vec2(0.0f, texture.height / 2), new Vec2(x, width), SpriteEffects.None, depth);
             }
             else
             {
                 p1 = new Vec2(p1.x, p1.y);
                 p2 = new Vec2(p2.x, p2.y);
-                float rotation = (float)Math.Atan2((double)p2.y - (double)p1.y, (double)p2.x - (double)p1.x);
+                float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
                 float length = (p1 - p2).length;
-                DuckGame.Graphics.Draw(texture, p1, new Rectangle?(), col, rotation, new Vec2(0.0f, (float)(texture.height / 2)), new Vec2(length, width), SpriteEffects.None, depth);
+                DuckGame.Graphics.Draw(texture, p1, new Rectangle?(), col, rotation, new Vec2(0.0f, texture.height / 2), new Vec2(length, width), SpriteEffects.None, depth);
             }
         }
 
@@ -670,7 +670,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             if (filled)
             {
-                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, p1, new Rectangle?(), col, 0.0f, Vec2.Zero, new Vec2((float)-((double)p1.x - (double)p2.x), (float)-((double)p1.y - (double)p2.y)), SpriteEffects.None, depth);
+                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, p1, new Rectangle?(), col, 0.0f, Vec2.Zero, new Vec2((float)-(p1.x - (double)p2.x), (float)-(p1.y - (double)p2.y)), SpriteEffects.None, depth);
             }
             else
             {
@@ -694,7 +694,7 @@ namespace DuckGame
             Vec2 vec2 = new Vec2(r.Right, r.Bottom);
             if (filled)
             {
-                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, position, new Rectangle?(), col, 0.0f, Vec2.Zero, new Vec2((float)-((double)position.x - (double)vec2.x), (float)-((double)position.y - (double)vec2.y)), SpriteEffects.None, depth);
+                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, position, new Rectangle?(), col, 0.0f, Vec2.Zero, new Vec2((float)-(position.x - (double)vec2.x), (float)-(position.y - (double)vec2.y)), SpriteEffects.None, depth);
             }
             else
             {
@@ -726,16 +726,16 @@ namespace DuckGame
 
         public static Tex2D Recolor(Tex2D sprite, Vec3 color)
         {
-            Dictionary<Vec3, Tex2D> dictionary = (Dictionary<Vec3, Tex2D>)null;
+            Dictionary<Vec3, Tex2D> dictionary;
             if (DuckGame.Graphics._recolorMap.TryGetValue(sprite, out dictionary))
             {
-                Tex2D tex2D = (Tex2D)null;
+                Tex2D tex2D;
                 if (dictionary.TryGetValue(color, out tex2D))
                     return tex2D;
             }
             else
                 DuckGame.Graphics._recolorMap[sprite] = new Dictionary<Vec3, Tex2D>();
-            Material material = (Material)new MaterialRecolor(new Vec3(color.x / (float)byte.MaxValue, color.y / (float)byte.MaxValue, color.z / (float)byte.MaxValue));
+            Material material = new MaterialRecolor(new Vec3(color.x / byte.MaxValue, color.y / byte.MaxValue, color.z / byte.MaxValue));
             RenderTarget2D t = new RenderTarget2D(sprite.w, sprite.h);
             DuckGame.Graphics.SetRenderTarget(t);
             DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
@@ -743,7 +743,7 @@ namespace DuckGame
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, material.effect, Matrix.Identity);
             DuckGame.Graphics.Draw(sprite, new Vec2(), new Rectangle?(), Color.White, 0.0f, new Vec2(), new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.5f);
             DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.device.SetRenderTarget((Microsoft.Xna.Framework.Graphics.RenderTarget2D)null);
+            DuckGame.Graphics.device.SetRenderTarget(null);
             Tex2D tex2D1 = new Tex2D(sprite.w, sprite.h);
             tex2D1.SetData(t.GetData());
             tex2D1.AssignTextureName("RESKIN");
@@ -754,7 +754,7 @@ namespace DuckGame
 
         public static Tex2D RecolorOld(Tex2D sprite, Vec3 color)
         {
-            Material material = (Material)new MaterialRecolor(new Vec3(color.x / (float)byte.MaxValue, color.y / (float)byte.MaxValue, color.z / (float)byte.MaxValue));
+            Material material = new MaterialRecolor(new Vec3(color.x / byte.MaxValue, color.y / byte.MaxValue, color.z / byte.MaxValue));
             RenderTarget2D t = new RenderTarget2D(sprite.w, sprite.h);
             DuckGame.Graphics.SetRenderTarget(t);
             DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
@@ -762,7 +762,7 @@ namespace DuckGame
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, material.effect, Matrix.Identity);
             DuckGame.Graphics.Draw(sprite, new Vec2(), new Rectangle?(), Color.White, 0.0f, new Vec2(), new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.5f);
             DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.device.SetRenderTarget((Microsoft.Xna.Framework.Graphics.RenderTarget2D)null);
+            DuckGame.Graphics.device.SetRenderTarget(null);
             Tex2D tex2D = new Tex2D(sprite.w, sprite.h);
             tex2D.SetData(t.GetData());
             t.Dispose();
@@ -857,15 +857,15 @@ namespace DuckGame
 
         public static bool sixteenTen => (double)DuckGame.Graphics.aspect > 0.569999992847443;
 
-        public static float barSize => (float)(((double)DuckGame.Graphics.width * (double)DuckGame.Graphics.aspect - (double)DuckGame.Graphics.width * (9.0 / 16.0)) / 2.0);
+        public static float barSize => (float)((width * (double)DuckGame.Graphics.aspect - width * (9.0 / 16.0)) / 2.0);
 
         public static void InitializeBase(GraphicsDeviceManager m, int widthVal, int heightVal)
         {
             DuckGame.Graphics._manager = m;
             DuckGame.Graphics._width = widthVal;
-            DuckGame.Graphics._baseDeviceWidth = (float)DuckGame.Graphics._width;
+            DuckGame.Graphics._baseDeviceWidth = _width;
             DuckGame.Graphics._height = heightVal;
-            DuckGame.Graphics._baseDeviceHeight = (float)DuckGame.Graphics._height;
+            DuckGame.Graphics._baseDeviceHeight = _height;
         }
 
         public static void Initialize(GraphicsDevice d)
@@ -888,9 +888,9 @@ namespace DuckGame
             DuckGame.Graphics._fancyBiosFont = new FancyBitmapFont("smallFont");
             DuckGame.Graphics._passwordFont = new SpriteMap("passwordFont", 8, 8);
             Viewport viewport = d.Viewport;
-            double width = (double)viewport.Width;
+            double width = viewport.Width;
             viewport = d.Viewport;
-            double height = (double)viewport.Height;
+            double height = viewport.Height;
             ref Matrix local = ref DuckGame.Graphics._projectionMatrix;
             Matrix.CreateOrthographicOffCenter(0.0f, (float)width, (float)height, 0.0f, 0.0f, 1f, out local);
             DuckGame.Graphics._projectionMatrix.M41 += -0.5f * DuckGame.Graphics._projectionMatrix.M11;
@@ -905,7 +905,7 @@ namespace DuckGame
             get
             {
                 if (DuckGame.Graphics._settingScreenTarget)
-                    return (RenderTarget2D)null;
+                    return null;
                 return DuckGame.Graphics._defaultRenderTarget == null ? DuckGame.Graphics._screenBufferTarget : DuckGame.Graphics._defaultRenderTarget;
             }
             set => DuckGame.Graphics._defaultRenderTarget = value;
@@ -914,7 +914,7 @@ namespace DuckGame
         public static void SetRenderTargetToScreen()
         {
             DuckGame.Graphics._settingScreenTarget = true;
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
             DuckGame.Graphics._settingScreenTarget = false;
         }
 
@@ -924,16 +924,16 @@ namespace DuckGame
                 return;
             if (t == null)
             {
-                Microsoft.Xna.Framework.Graphics.RenderTarget2D renderTarget = DuckGame.Graphics.defaultRenderTarget != null ? DuckGame.Graphics.defaultRenderTarget.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D : (Microsoft.Xna.Framework.Graphics.RenderTarget2D)null;
+                Microsoft.Xna.Framework.Graphics.RenderTarget2D renderTarget = DuckGame.Graphics.defaultRenderTarget != null ? DuckGame.Graphics.defaultRenderTarget.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D : null;
                 if (renderTarget == null)
                 {
-                    DuckGame.Graphics._currentTargetSize.width = (float)Resolution.current.x;
-                    DuckGame.Graphics._currentTargetSize.height = (float)Resolution.current.y;
+                    DuckGame.Graphics._currentTargetSize.width = Resolution.current.x;
+                    DuckGame.Graphics._currentTargetSize.height = Resolution.current.y;
                 }
                 else
                 {
-                    DuckGame.Graphics._currentTargetSize.width = (float)renderTarget.Width;
-                    DuckGame.Graphics._currentTargetSize.height = (float)renderTarget.Height;
+                    DuckGame.Graphics._currentTargetSize.width = renderTarget.Width;
+                    DuckGame.Graphics._currentTargetSize.height = renderTarget.Height;
                 }
                 DuckGame.Graphics.device.SetRenderTarget(renderTarget);
                 if (!DuckGame.Graphics._settingScreenTarget && DuckGame.Graphics._defaultRenderTarget == null)
@@ -942,8 +942,8 @@ namespace DuckGame
             else
             {
                 DuckGame.Graphics.device.SetRenderTarget(t.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D);
-                DuckGame.Graphics._currentTargetSize.width = (float)t.width;
-                DuckGame.Graphics._currentTargetSize.height = (float)t.height;
+                DuckGame.Graphics._currentTargetSize.width = t.width;
+                DuckGame.Graphics._currentTargetSize.height = t.height;
             }
             DuckGame.Graphics._lastViewport = DuckGame.Graphics.device.Viewport;
             DuckGame.Graphics._currentRenderTarget = t;
@@ -987,22 +987,22 @@ namespace DuckGame
                     if ((double)DuckGame.Graphics._currentTargetSize.aspect < 1.76999998092651)
                     {
                         viewport.Width = (int)DuckGame.Graphics._currentTargetSize.width;
-                        viewport.Height = Math.Min((int)Math.Round((double)DuckGame.Graphics._currentTargetSize.width / 1.77777004241943), (int)DuckGame.Graphics._currentTargetSize.height);
+                        viewport.Height = Math.Min((int)Math.Round(_currentTargetSize.width / 1.77777004241943), (int)DuckGame.Graphics._currentTargetSize.height);
                     }
                     else
                     {
                         viewport.Height = (int)DuckGame.Graphics._currentTargetSize.height;
-                        viewport.Width = Math.Min((int)Math.Round((double)DuckGame.Graphics._currentTargetSize.height * 1.77777004241943), (int)DuckGame.Graphics._currentTargetSize.width);
+                        viewport.Width = Math.Min((int)Math.Round(_currentTargetSize.height * 1.77777004241943), (int)DuckGame.Graphics._currentTargetSize.width);
                     }
-                    viewport.X = Math.Max((int)(((double)DuckGame.Graphics._currentTargetSize.width - (double)viewport.Width) / 2.0), 0);
-                    viewport.Y = Math.Max((int)(((double)DuckGame.Graphics._currentTargetSize.height - (double)viewport.Height) / 2.0), 0);
+                    viewport.X = Math.Max((int)((_currentTargetSize.width - (double)viewport.Width) / 2.0), 0);
+                    viewport.Y = Math.Max((int)((_currentTargetSize.height - (double)viewport.Height) / 2.0), 0);
                     viewport.MinDepth = 0.0f;
                     viewport.MaxDepth = 1f;
                     DuckGame.Graphics._screenViewport = new Viewport?(viewport);
                 }
                 DuckGame.Graphics.Internal_ViewportSet(DuckGame.Graphics._screenViewport.Value);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             DuckGame.Graphics._lastViewport = DuckGame.Graphics.device.Viewport;
@@ -1014,12 +1014,12 @@ namespace DuckGame
             if ((double)Resolution.adapterResolution.aspect < (double)Resolution.current.aspect)
             {
                 pViewport.Width = Resolution.adapterResolution.x;
-                pViewport.Height = Math.Min((int)Math.Round((double)Resolution.adapterResolution.x / (double)Resolution.current.aspect), Resolution.adapterResolution.y);
+                pViewport.Height = Math.Min((int)Math.Round(Resolution.adapterResolution.x / (double)Resolution.current.aspect), Resolution.adapterResolution.y);
             }
             else
             {
                 pViewport.Height = Resolution.adapterResolution.y;
-                pViewport.Width = Math.Min((int)Math.Round((double)Resolution.adapterResolution.y * (double)Resolution.current.aspect), Resolution.adapterResolution.x);
+                pViewport.Width = Math.Min((int)Math.Round(Resolution.adapterResolution.y * (double)Resolution.current.aspect), Resolution.adapterResolution.x);
             }
             pViewport.X = Math.Max((Resolution.adapterResolution.x - pViewport.Width) / 2, 0);
             pViewport.Y = Math.Max((Resolution.adapterResolution.y - pViewport.Height) / 2, 0);
@@ -1046,7 +1046,7 @@ namespace DuckGame
                     return;
                 Rectangle bounds = (Rectangle)value.Bounds;
                 if (DuckGame.Graphics._currentRenderTarget != null)
-                    DuckGame.Graphics.ClipRectangle(bounds, new Rectangle(0.0f, 0.0f, (float)DuckGame.Graphics._currentRenderTarget.width, (float)DuckGame.Graphics._currentRenderTarget.height));
+                    DuckGame.Graphics.ClipRectangle(bounds, new Rectangle(0.0f, 0.0f, _currentRenderTarget.width, _currentRenderTarget.height));
                 else
                     DuckGame.Graphics.ClipRectangle(bounds, (Rectangle)DuckGame.Graphics.device.PresentationParameters.Bounds);
                 value.X = (int)bounds.x;
@@ -1058,19 +1058,19 @@ namespace DuckGame
             }
         }
 
-        public static Rectangle GetScissorRectangle() => new Rectangle((float)DuckGame.Graphics.device.ScissorRectangle.X, (float)DuckGame.Graphics.device.ScissorRectangle.Y, (float)DuckGame.Graphics.device.ScissorRectangle.Width, (float)DuckGame.Graphics.device.ScissorRectangle.Height);
+        public static Rectangle GetScissorRectangle() => new Rectangle(device.ScissorRectangle.X, device.ScissorRectangle.Y, device.ScissorRectangle.Width, device.ScissorRectangle.Height);
 
         public static void SetScissorRectangle(Rectangle r)
         {
-            float num = (float)DuckGame.Graphics.device.Viewport.Bounds.Width / (float)DuckGame.Graphics.width;
-            if ((double)r.width < 0.0 || (double)r.height < 0.0)
+            float num = device.Viewport.Bounds.Width / (float)DuckGame.Graphics.width;
+            if (r.width < 0.0 || r.height < 0.0)
                 return;
             r.width *= num;
             r.height *= num;
             r.x *= num;
             r.y *= num;
-            r.x += (float)DuckGame.Graphics.viewport.X;
-            r.y += (float)DuckGame.Graphics.viewport.Y;
+            r.x += viewport.X;
+            r.y += viewport.Y;
             DuckGame.Graphics.device.ScissorRectangle = (Microsoft.Xna.Framework.Rectangle)DuckGame.Graphics.ClipRectangle(r, (Rectangle)DuckGame.Graphics.device.Viewport.Bounds);
         }
 
@@ -1079,8 +1079,8 @@ namespace DuckGame
             if (DuckGame.Graphics.screen != null)
                 DuckGame.Graphics.screen.FlushSettingScissor();
             DuckGame.Graphics._scissorStack.Push(pRect);
-            float num1 = (float)DuckGame.Graphics.width / DuckGame.Graphics.currentLayer.width;
-            float num2 = (float)DuckGame.Graphics.height / DuckGame.Graphics.currentLayer.height;
+            float num1 = width / DuckGame.Graphics.currentLayer.width;
+            float num2 = height / DuckGame.Graphics.currentLayer.height;
             pRect.x *= num1;
             pRect.y *= num2;
             pRect.width *= num1;
@@ -1094,32 +1094,32 @@ namespace DuckGame
                 DuckGame.Graphics.screen.FlushAndClearScissor();
             DuckGame.Graphics._scissorStack.Pop();
             if (DuckGame.Graphics._scissorStack.Count == 0)
-                DuckGame.Graphics.SetScissorRectangle(new Rectangle(0.0f, 0.0f, (float)DuckGame.Graphics.width, (float)DuckGame.Graphics.height));
+                DuckGame.Graphics.SetScissorRectangle(new Rectangle(0.0f, 0.0f, width, height));
             else
                 DuckGame.Graphics.SetScissorRectangle(DuckGame.Graphics._scissorStack.Peek());
         }
 
         public static Rectangle ClipRectangle(Rectangle r, Rectangle clipTo)
         {
-            if ((double)r.x > (double)clipTo.Right)
+            if (r.x > (double)clipTo.Right)
                 r.x = clipTo.Right - r.width;
-            if ((double)r.y > (double)clipTo.Bottom)
+            if (r.y > (double)clipTo.Bottom)
                 r.y = clipTo.Bottom - r.height;
-            if ((double)r.x < (double)clipTo.Left)
+            if (r.x < (double)clipTo.Left)
                 r.x = clipTo.Left;
-            if ((double)r.y < (double)clipTo.Top)
+            if (r.y < (double)clipTo.Top)
                 r.y = clipTo.Top;
-            if ((double)r.x < 0.0)
+            if (r.x < 0.0)
                 r.x = 0.0f;
-            if ((double)r.y < 0.0)
+            if (r.y < 0.0)
                 r.y = 0.0f;
-            if ((double)r.x + (double)r.width > (double)clipTo.x + (double)clipTo.width)
+            if (r.x + (double)r.width > clipTo.x + (double)clipTo.width)
                 r.width = clipTo.Right - r.x;
-            if ((double)r.y + (double)r.height > (double)clipTo.y + (double)clipTo.height)
+            if (r.y + (double)r.height > clipTo.y + (double)clipTo.height)
                 r.height = clipTo.Bottom - r.y;
-            if ((double)r.width < 0.0)
+            if (r.width < 0.0)
                 r.width = 0.0f;
-            if ((double)r.height < 0.0)
+            if (r.height < 0.0)
                 r.height = 0.0f;
             return r;
         }

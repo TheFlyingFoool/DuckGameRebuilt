@@ -32,11 +32,13 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            Level.Add((Thing)new PointLight(this.x, this.y, new Color(155, 125, 100), 80f, this._occluders));
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("bulb"));
-            this._shade.center = this.center;
-            this._shade.layer = Layer.Foreground;
-            Level.Add((Thing)this._shade);
+            Level.Add(new PointLight(this.x, this.y, new Color(155, 125, 100), 80f, this._occluders));
+            this._shade = new SpriteThing(this.x, this.y, new Sprite("bulb"))
+            {
+                center = this.center,
+                layer = Layer.Foreground
+            };
+            Level.Add(_shade);
         }
     }
 }

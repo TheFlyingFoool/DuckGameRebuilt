@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Input
 
         public int Param => this.lParam;
 
-        public int RepeatCount => this.lParam & (int)ushort.MaxValue;
+        public int RepeatCount => this.lParam & ushort.MaxValue;
 
         public bool ExtendedKey => (this.lParam & 16777216) > 0;
 

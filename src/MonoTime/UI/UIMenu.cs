@@ -63,17 +63,17 @@ namespace DuckGame
                 component1.SetFont(f);
             }
             component1.align |= UIAlign.Top;
-            this._splitter.topSection.Add((UIComponent)component1, true);
+            this._splitter.topSection.Add(component1, true);
             this._controlString = conString;
             if (this._controlString != "" && this._controlString != null)
             {
                 UIDivider component2 = new UIDivider(false, 0.0f, 4f);
                 this._controlText = new UIText(this._controlString, Color.White, heightAdd: 4f, controlProfile: this._controlProfile);
-                component2.bottomSection.Add((UIComponent)this._controlText, true);
-                this.Add((UIComponent)component2, true);
+                component2.bottomSection.Add(_controlText, true);
+                this.Add(component2, true);
                 this._section = component2.topSection;
             }
-            base.Add((UIComponent)this._splitter, true);
+            base.Add(_splitter, true);
         }
 
         public string title
@@ -114,41 +114,41 @@ namespace DuckGame
 
         public UIComponent AddMatchSetting(MatchSetting m, bool filterMenu, bool enabled = true)
         {
-            UIComponent component = (UIComponent)null;
+            UIComponent component = null;
             if (m.value is int)
             {
-                FieldBinding upperBoundField = (FieldBinding)null;
+                FieldBinding upperBoundField = null;
                 if (m.maxSyncID != null)
                 {
                     foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
                     {
                         if (matchSetting.id == m.maxSyncID)
-                            upperBoundField = new FieldBinding((object)matchSetting, "value");
+                            upperBoundField = new FieldBinding(matchSetting, "value");
                     }
                 }
-                FieldBinding lowerBoundField = (FieldBinding)null;
+                FieldBinding lowerBoundField = null;
                 if (m.minSyncID != null)
                 {
                     foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
                     {
                         if (matchSetting.id == m.minSyncID)
-                            lowerBoundField = new FieldBinding((object)matchSetting, "value");
+                            lowerBoundField = new FieldBinding(matchSetting, "value");
                     }
                 }
-                component = (UIComponent)new UIMenuItemNumber(m.name, field: new FieldBinding((object)m, "value", (float)m.min, (float)m.max), step: m.step, upperBoundField: upperBoundField, lowerBoundField: lowerBoundField, append: m.suffix, filterField: (filterMenu ? new FieldBinding((object)m, "filtered") : (FieldBinding)null), valStrings: m.valueStrings, setting: m);
+                component = new UIMenuItemNumber(m.name, field: new FieldBinding(m, "value", m.min, m.max), step: m.step, upperBoundField: upperBoundField, lowerBoundField: lowerBoundField, append: m.suffix, filterField: (filterMenu ? new FieldBinding(m, "filtered") : null), valStrings: m.valueStrings, setting: m);
                 if (m.percentageLinks != null)
                 {
                     foreach (string percentageLink in m.percentageLinks)
                     {
                         MatchSetting matchSetting = TeamSelect2.GetMatchSetting(percentageLink);
-                        (component as UIMenuItemNumber).percentageGroup.Add(new FieldBinding((object)matchSetting, "value", (float)matchSetting.min, (float)matchSetting.max, (float)matchSetting.step));
+                        (component as UIMenuItemNumber).percentageGroup.Add(new FieldBinding(matchSetting, "value", matchSetting.min, matchSetting.max, matchSetting.step));
                     }
                 }
             }
             else if (m.value is bool)
-                component = (UIComponent)new UIMenuItemToggle(m.name, field: new FieldBinding((object)m, "value"), filterBinding: (filterMenu ? new FieldBinding((object)m, "filtered") : (FieldBinding)null));
+                component = new UIMenuItemToggle(m.name, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
             else if (m.value is string)
-                component = (UIComponent)new UIMenuItemString(m.name, m.id, field: new FieldBinding((object)m, "value"), filterBinding: (filterMenu ? new FieldBinding((object)m, "filtered") : (FieldBinding)null));
+                component = new UIMenuItemString(m.name, m.id, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
             component.condition = m.condition;
             if (component != null)
             {

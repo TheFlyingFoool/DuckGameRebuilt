@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this.material = (Material)new MaterialDustSparkle(this.position, new Vec2((float)this._light.width, (float)this._light.height), this._wide, this._lit);
+            this.material = new MaterialDustSparkle(this.position, new Vec2(_light.width, _light.height), this._wide, this._lit);
             base.Initialize();
         }
 
@@ -44,12 +44,12 @@ namespace DuckGame
             {
                 DustSparkle sparkle = this._sparkles[index];
                 sparkle.position += sparkle.velocity;
-                sparkle.position.y += (float)Math.Sin((double)sparkle.sin) * 0.01f;
+                sparkle.position.y += (float)Math.Sin(sparkle.sin) * 0.01f;
                 sparkle.sin += 0.01f;
-                if ((double)sparkle.alpha < 1.0)
+                if (sparkle.alpha < 1.0)
                     sparkle.alpha += 0.01f;
                 bool flag = false;
-                if ((double)sparkle.position.x > (double)this.x + (double)this._light.width + 2.0 || (double)sparkle.position.x < (double)this.x - 2.0 || (double)sparkle.position.y < (double)this.y + 1.0 || (double)sparkle.position.y > (double)this.y + (double)this._light.height)
+                if (sparkle.position.x > (double)this.x + _light.width + 2.0 || sparkle.position.x < (double)this.x - 2.0 || sparkle.position.y < (double)this.y + 1.0 || sparkle.position.y > (double)this.y + _light.height)
                     flag = true;
                 if (flag)
                 {
@@ -64,7 +64,7 @@ namespace DuckGame
             int num = 1;
             if ((double)Rando.Float(1f) > 0.5)
                 num = -1;
-            this._sparkles.Add(new DustSparkle(new Vec2(this.x + Rando.Float((float)this._light.width), this.y + Rando.Float((float)this._light.height)), new Vec2(Rando.Float(0.15f, 0.25f) * (float)num, Rando.Float(-0.05f, 0.05f))));
+            this._sparkles.Add(new DustSparkle(new Vec2(this.x + Rando.Float(_light.width), this.y + Rando.Float(_light.height)), new Vec2(Rando.Float(0.15f, 0.25f) * num, Rando.Float(-0.05f, 0.05f))));
         }
 
         public override void Draw()
@@ -72,7 +72,7 @@ namespace DuckGame
             this._light.depth = this.depth - 2;
             this._light.frame = 1;
             this._light.alpha = 0.7f;
-            Graphics.Draw((Sprite)this._light, this.x, this.y);
+            Graphics.Draw(_light, this.x, this.y);
             foreach (DustSparkle sparkle in this._sparkles)
                 Graphics.DrawRect(sparkle.position + new Vec2(-0.5f, -0.5f), sparkle.position + new Vec2(0.5f, 0.5f), Color.White * sparkle.alpha, this.depth + 10);
         }

@@ -25,8 +25,8 @@ namespace DuckGame
         private static string _pendingSong = "";
         private static string[] _songList;
         private static Random _musicPickGen = new Random();
-        private static SoundEffect _currentMusic = (SoundEffect)null;
-        public static MusicInstance _musicPlayer = (MusicInstance)null;
+        private static SoundEffect _currentMusic = null;
+        public static MusicInstance _musicPlayer = null;
         private static bool _alternateLoop = false;
         private static string _alternateSong = "";
         private static HashSet<string> _processedSongs = new HashSet<string>();
@@ -73,13 +73,13 @@ namespace DuckGame
 
         public static string pendingSong => Music._pendingSong;
 
-        public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)((double)Music._musicPlayer.Platform_GetProgress() * (double)Music._musicPlayer.Platform_GetLengthInMilliseconds()));
+        public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)((double)Music._musicPlayer.Platform_GetProgress() * Music._musicPlayer.Platform_GetLengthInMilliseconds()));
 
         public static bool finished => Music._musicPlayer.State == SoundState.Stopped;
 
         public static void Initialize()
         {
-            Music._musicPlayer = new MusicInstance((SoundEffect)null);
+            Music._musicPlayer = new MusicInstance(null);
             Music._songList = Content.GetFiles("Content/Audio/Music/InGame");
         }
 
@@ -102,7 +102,7 @@ namespace DuckGame
             {
                 List<string> stringList = new List<string>();
                 foreach (ReskinPack reskinPack in ReskinPack.active)
-                    stringList.AddRange((IEnumerable<string>)DuckFile.GetFiles(reskinPack.contentPath + "/Audio/Music/InGame"));
+                    stringList.AddRange(DuckFile.GetFiles(reskinPack.contentPath + "/Audio/Music/InGame"));
                 if (stringList.Count > 0)
                     strArray = stringList.ToArray();
             }
@@ -119,7 +119,7 @@ namespace DuckGame
             }
             if (stringList1.Count == 0)
                 stringList1.Add(folder + "/" + Path.GetFileNameWithoutExtension(strArray[0]));
-            Queue<string> stringQueue = (Queue<string>)null;
+            Queue<string> stringQueue;
             if (!Music._recentSongs.TryGetValue(folder, out stringQueue))
             {
                 stringQueue = new Queue<string>();
@@ -128,7 +128,7 @@ namespace DuckGame
             if (stringQueue.Count > 0 && stringQueue.Count > stringList1.Count - 5)
                 stringQueue.Dequeue();
             List<string> stringList2 = new List<string>();
-            stringList2.AddRange((IEnumerable<string>)stringList1);
+            stringList2.AddRange(stringList1);
             string str1 = "";
             while (str1 == "")
             {
@@ -253,7 +253,7 @@ namespace DuckGame
             catch
             {
             }
-            Music._pendingSong = (string)null;
+            Music._pendingSong = null;
         }
 
         public static void Pause() => Music._musicPlayer.Pause();
@@ -302,7 +302,7 @@ namespace DuckGame
                 string key = path.Substring(path.IndexOf("/Music/") + 7);
                 Music._songs[key] = memoryStream;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "Failed to load song: " + path);
             }

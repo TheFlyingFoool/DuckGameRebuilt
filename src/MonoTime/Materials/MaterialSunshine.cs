@@ -21,7 +21,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)(Tex2D)this._colorMap;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_colorMap;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
             DuckGame.Graphics.device.SamplerStates[0] = SamplerState.PointClamp;
             foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)

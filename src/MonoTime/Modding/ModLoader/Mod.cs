@@ -90,7 +90,7 @@ namespace DuckGame
 
         public List<System.Type> GetTypeList(System.Type pType)
         {
-            List<System.Type> typeList = (List<System.Type>)null;
+            List<System.Type> typeList;
             if (!this._typeLists.TryGetValue(pType, out typeList))
                 typeList = this._typeLists[pType] = new List<System.Type>();
             return typeList;
@@ -112,7 +112,7 @@ namespace DuckGame
                 {
                     if (this.configuration.modType == ModConfiguration.Type.MapPack && this.configuration.mapPack != null)
                     {
-                        path = this.configuration.mapPack.RegeneratePreviewImage((string)null);
+                        path = this.configuration.mapPack.RegeneratePreviewImage(null);
                     }
                     else
                     {
@@ -127,7 +127,7 @@ namespace DuckGame
                 {
                     System.IO.File.Delete(path);
                     Tex2D screenshot = this.screenshot;
-                    Stream stream = (Stream)DuckFile.Create(path);
+                    Stream stream = DuckFile.Create(path);
                     ((Texture2D)screenshot.nativeObject).SaveAsPng(stream, screenshot.width, screenshot.height);
                     stream.Dispose();
                 }
@@ -148,7 +148,7 @@ namespace DuckGame
         /// <summary>
         /// The read-only property bag that this mod was initialized with.
         /// </summary>
-        public IReadOnlyPropertyBag properties => (IReadOnlyPropertyBag)this._properties;
+        public IReadOnlyPropertyBag properties => _properties;
 
         /// <summary>The configuration class for this mod</summary>
         public ModConfiguration configuration { get; internal set; }
@@ -169,13 +169,13 @@ namespace DuckGame
         /// For example, if your namespace is 'MyModDev', you could say namespaceFacade = 'MyModDev:MyMod' to drop the 'Dev' part during serialization.
         /// Therefore the format is 'MYNAMESPACENAME:FAKENAMESPACENAME'
         /// </summary>
-        public virtual string namespaceFacade => (string)null;
+        public virtual string namespaceFacade => null;
 
         /// <summary>
         ///  All objects serialized and deserialized from this mod will use the assemblyNameFacade instead of the actual name of this assembly.
         /// For example, if your Assembly is named 'MyModDEV', you could say assemblyNameFacade = 'MyMod' to drop the 'DEV' part during serialization.
         /// </summary>
-        public virtual string assemblyNameFacade => (string)null;
+        public virtual string assemblyNameFacade => null;
 
         /// <summary>Gets the preview texture for this mod.</summary>
         /// <value>The preview texture.</value>
@@ -220,7 +220,7 @@ namespace DuckGame
                             this._screenshot = Content.Load<Tex2D>("defaultMod");
                     }
                     else
-                        this._screenshot = (Tex2D)null;
+                        this._screenshot = null;
                 }
                 return this._screenshot;
             }

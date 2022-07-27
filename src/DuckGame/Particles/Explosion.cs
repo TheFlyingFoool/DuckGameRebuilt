@@ -32,7 +32,7 @@ namespace DuckGame
                     break;
             }
             this._sprite.SetAnimation("explode");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._sprite.speed = 0.4f + Rando.Float(0.2f);
             this.xscale = 0.5f + Rando.Float(0.5f);
             this.yscale = this.xscale;
@@ -65,20 +65,20 @@ namespace DuckGame
                     float num3 = (float)(num2 = (double)Rando.Float(0.2f, 0.7f));
                     smallSmoke.yscale = (float)num2;
                     smallSmoke.xscale = num3;
-                    Level.Add((Thing)smallSmoke);
+                    Level.Add(smallSmoke);
                 }
                 this._smoked = true;
             }
-            if ((double)this._wait <= 0.0)
+            if (_wait <= 0.0)
                 this.y += this.vSpeed;
             if (!this._sprite.finished)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw()
         {
-            if ((double)this._wait > 0.0)
+            if (_wait > 0.0)
                 this._wait -= 0.2f;
             else
                 base.Draw();

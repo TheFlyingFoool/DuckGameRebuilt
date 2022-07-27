@@ -37,14 +37,14 @@ namespace DuckGame
             byte val = (byte)Math.Min(32, this._manager._destroyedGhosts.Count + this._manager._destroyResends.Count);
             this._serializedData.Write(this.levelIndex);
             this._serializedData.Write(val);
-            for (int index = 0; index < this._manager._destroyResends.Count && val != (byte)0; index = index - 1 + 1)
+            for (int index = 0; index < this._manager._destroyResends.Count && val != 0; index = index - 1 + 1)
             {
                 this._serializedData.Write((ushort)(int)this._manager._destroyResends[index]);
                 this.remove.Add(this._manager._destroyResends[index]);
                 this._manager._destroyResends.RemoveAt(index);
                 --val;
             }
-            for (int index = 0; index < this._manager._destroyedGhosts.Count && val != (byte)0; index = index - 1 + 1)
+            for (int index = 0; index < this._manager._destroyedGhosts.Count && val != 0; index = index - 1 + 1)
             {
                 this._serializedData.Write((ushort)(int)this._manager._destroyedGhosts[index].ghostObjectIndex);
                 this.remove.Add(this._manager._destroyedGhosts[index].ghostObjectIndex);
@@ -56,9 +56,9 @@ namespace DuckGame
         public override void OnDeserialize(BitBuffer pData)
         {
             this.levelIndex = pData.ReadByte();
-            ushort num = (ushort)pData.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
-                this.remove.Add((NetIndex16)(int)pData.ReadUShort());
+            ushort num = pData.ReadByte();
+            for (int index = 0; index < num; ++index)
+                this.remove.Add((NetIndex16)pData.ReadUShort());
         }
     }
 }

@@ -50,6 +50,6 @@ namespace DuckGame
                 dictionary[pConnection] += pData;
             }
         }
-        public string GetReceivedLogData(NetworkConnection pConnection) => this.receivingLogs.ContainsKey(pConnection) ? this.receivingLogs[pConnection] : (string)null;
+        public string GetReceivedLogData(NetworkConnection pConnection) => this.receivingLogs.ContainsKey(pConnection) ? this.receivingLogs[pConnection] : null;
     }
 }

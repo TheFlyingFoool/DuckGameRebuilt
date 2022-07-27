@@ -31,8 +31,8 @@ namespace DuckGame
         {
             base.OnDeserialize(d);
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
-                this.scores.Add((int)d.ReadByte());
+            for (int index = 0; index < num; ++index)
+                this.scores.Add(d.ReadByte());
         }
 
         public override void Activate()
@@ -45,7 +45,7 @@ namespace DuckGame
                 ++index;
             }
             GameMode.RunPostRound(false);
-            Send.Message((NetMessage)new NMScoresReceived());
+            Send.Message(new NMScoresReceived());
         }
     }
 }

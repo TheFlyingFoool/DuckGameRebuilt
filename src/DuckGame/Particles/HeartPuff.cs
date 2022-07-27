@@ -20,15 +20,15 @@ namespace DuckGame
             this.center = new Vec2(5f, 16f);
             this.alpha = 0.6f;
             this.depth = (Depth)0.9f;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._sprite.color = Color.Green;
         }
 
         public override void Update()
         {
-            if (this.anchor != (Thing)null && this.anchor.thing != null)
+            if (this.anchor != null && this.anchor.thing != null)
             {
-                this.flipHorizontal = this.anchor.thing.offDir < (sbyte)0;
+                this.flipHorizontal = this.anchor.thing.offDir < 0;
                 if (this.flipHorizontal)
                     this.center = new Vec2(10f, 16f);
                 else
@@ -36,7 +36,7 @@ namespace DuckGame
                 this.angle = this.anchor.thing.angle;
             }
             if (this._sprite.finished)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
     }

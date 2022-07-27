@@ -33,11 +33,11 @@ namespace DuckGame
             this.itemSize.x = 180f;
             this.itemSize.y = 16f;
             this._text = thing.editorName;
-            this.itemSize.x = (float)(this._text.Length * 8 + 16);
+            this.itemSize.x = this._text.Length * 8 + 16;
             this._canExpand = true;
             this.depth = (Depth)0.8f;
             if (this._thing is CustomBackground)
-                this._file = new ContextFile("LOAD FILE...", (IContextListener)this, new FieldBinding((object)this._thing, "customBackground0" + ((thing as CustomBackground).customIndex + 1).ToString()), ContextFileType.Background);
+                this._file = new ContextFile("LOAD FILE...", this, new FieldBinding(_thing, "customBackground0" + ((thing as CustomBackground).customIndex + 1).ToString()), ContextFileType.Background);
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(thing.GetType());
             if (!Main.isDemo || bag.GetOrDefault("isInDemo", false))
                 return;
@@ -53,7 +53,7 @@ namespace DuckGame
             SFX.Play("highClick", 0.3f, 0.2f);
             if (this._owner == null)
                 return;
-            this._owner.Selected((ContextMenu)this);
+            this._owner.Selected(this);
         }
 
         public override void Closed() => base.Closed();
@@ -69,7 +69,7 @@ namespace DuckGame
                     DuckGame.Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
                 DuckGame.Graphics.DrawFancyString(this._text, this.position + new Vec2(2f, 4f), Color.White * num, (Depth)0.85f);
                 this._contextArrow.color = Color.White * num;
-                DuckGame.Graphics.Draw(this._contextArrow, (float)((double)this.x + (double)this.itemSize.x - 11.0), this.y + 3f, (Depth)0.85f);
+                DuckGame.Graphics.Draw(this._contextArrow, (float)((double)this.x + itemSize.x - 11.0), this.y + 3f, (Depth)0.85f);
             }
             if (this.opened)
             {
@@ -82,7 +82,7 @@ namespace DuckGame
                     int placementCost = Editor.CalculatePlacementCost(this._thing);
                     if (placementCost > 0)
                         this.tooltip = this.tooltip + ": (" + placementCost.ToString() + " @EDITORCURRENCY@)";
-                    this._hoverPos = new Vec2((float)(this._selectedIndex % num1 * graphic.w), (float)(this._selectedIndex / num1 * graphic.h));
+                    this._hoverPos = new Vec2(this._selectedIndex % num1 * graphic.w, this._selectedIndex / num1 * graphic.h);
                     if (Editor.inputMode == EditorInput.Mouse && this.positionCursor)
                     {
                         this._rememberedMousePosition = Mouse.position;
@@ -90,7 +90,7 @@ namespace DuckGame
                         this.positionCursor = false;
                     }
                 }
-                this.menuSize = new Vec2((float)(graphic.texture.width + 2), (float)(graphic.texture.height + 2));
+                this.menuSize = new Vec2(graphic.texture.width + 2, graphic.texture.height + 2);
                 float x = this.menuSize.x;
                 float y = this.menuSize.y;
                 Vec2 p1 = new Vec2(this.x, this.y);
@@ -102,8 +102,8 @@ namespace DuckGame
                     p1.y -= 2f;
                 }
                 Vec2 vec2_1 = new Vec2(graphic.position);
-                this._thing.x = (float)((double)p1.x + 1.0 + (double)graphic.w / 2.0);
-                this._thing.y = (float)((double)p1.y + 1.0 + (double)graphic.h / 2.0);
+                this._thing.x = (float)(p1.x + 1.0 + graphic.w / 2.0);
+                this._thing.y = (float)(p1.y + 1.0 + graphic.h / 2.0);
                 this._thing.depth = (Depth)0.7f;
                 DuckGame.Graphics.DrawRect(p1, p1 + new Vec2(x, y), new Color(70, 70, 70), (Depth)0.5f);
                 DuckGame.Graphics.DrawRect(p1 + new Vec2(1f, 1f), p1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30), (Depth)0.6f);
@@ -128,12 +128,12 @@ namespace DuckGame
                 }
                 else if (Editor.inputMode == EditorInput.Gamepad && (this._file == null || !this._file.hover) && !Editor.clickedMenu)
                 {
-                    this._hoverPos = new Vec2((float)(this._selectedIndex % num1 * graphic.w), (float)(this._selectedIndex / num1 * graphic.h));
+                    this._hoverPos = new Vec2(this._selectedIndex % num1 * graphic.w, this._selectedIndex / num1 * graphic.h);
                     if (Input.Pressed("MENULEFT"))
                     {
                         if (this._selectedIndex == 0 && this._owner != null)
                         {
-                            this.Selected((ContextMenu)null);
+                            this.Selected(null);
                             this.opened = false;
                         }
                         else
@@ -163,17 +163,17 @@ namespace DuckGame
                     this._selectedIndex = num1 - 1;
                 }
                 Editor current = Level.current as Editor;
-                this._hoverPos.x = (float)Math.Round((double)this._hoverPos.x / (double)graphic.w) * (float)graphic.w;
-                this._hoverPos.y = (float)Math.Round((double)this._hoverPos.y / (double)graphic.h) * (float)graphic.h;
-                if ((this._file == null || !this._file.hover) && (double)this._hoverPos.x >= 0.0 && (double)this._hoverPos.x < (double)graphic.texture.width && (double)this._hoverPos.y >= 0.0 && (double)this._hoverPos.y < (double)graphic.texture.height)
+                this._hoverPos.x = (float)Math.Round(_hoverPos.x / (double)graphic.w) * graphic.w;
+                this._hoverPos.y = (float)Math.Round(_hoverPos.y / (double)graphic.h) * graphic.h;
+                if ((this._file == null || !this._file.hover) && _hoverPos.x >= 0.0 && _hoverPos.x < (double)graphic.texture.width && _hoverPos.y >= 0.0 && _hoverPos.y < (double)graphic.texture.height)
                 {
-                    DuckGame.Graphics.DrawRect(this._hoverPos + p1, this._hoverPos + p1 + new Vec2((float)(graphic.w + 2), (float)(graphic.h + 2)), Color.Lime * 0.8f, (Depth)0.8f, false);
+                    DuckGame.Graphics.DrawRect(this._hoverPos + p1, this._hoverPos + p1 + new Vec2(graphic.w + 2, graphic.h + 2), Color.Lime * 0.8f, (Depth)0.8f, false);
                     if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed || Editor.inputMode == EditorInput.Gamepad && Input.Pressed("SELECT") && !this.justOpened || Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None)
                     {
                         if (this._thing is BackgroundTile)
-                            (this._thing as BackgroundTile).frame = (int)((double)this._hoverPos.x / (double)graphic.w + (double)this._hoverPos.y / (double)graphic.h * (double)(graphic.texture.width / graphic.w));
+                            (this._thing as BackgroundTile).frame = (int)(_hoverPos.x / (double)graphic.w + _hoverPos.y / (double)graphic.h * (graphic.texture.width / graphic.w));
                         else
-                            graphic.frame = (int)((double)this._hoverPos.x / (double)graphic.w + (double)this._hoverPos.y / (double)graphic.h * (double)(graphic.texture.width / graphic.w));
+                            graphic.frame = (int)(_hoverPos.x / (double)graphic.w + _hoverPos.y / (double)graphic.h * (graphic.texture.width / graphic.w));
                         current.placementType = this._thing;
                         current.placementType = this._thing;
                         if (!this.floatMode || Editor.inputMode == EditorInput.Gamepad)

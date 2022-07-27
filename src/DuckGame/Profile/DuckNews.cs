@@ -46,18 +46,18 @@ namespace DuckGame
                         DuckNews._stories.Add(duckNews);
                 }
             }
-            DuckNews._stories = DuckNews._stories.OrderBy<DuckNews, int>((Func<DuckNews, int>)(x => (int)x._section)).ToList<DuckNews>();
+            DuckNews._stories = DuckNews._stories.OrderBy<DuckNews, int>(x => (int)x._section).ToList<DuckNews>();
         }
 
         public static List<DuckStory> CalculateStories()
         {
             foreach (Profile profile in Profiles.active)
-                profile.endOfRoundStats = (ProfileStats)null;
+                profile.endOfRoundStats = null;
             List<DuckStory> stories = new List<DuckStory>();
             foreach (DuckNews storey in DuckNews._stories)
             {
                 List<DuckStory> story = storey.CalculateStory();
-                stories.AddRange((IEnumerable<DuckStory>)story);
+                stories.AddRange(story);
             }
             return stories;
         }
@@ -84,9 +84,9 @@ namespace DuckGame
                     case float _:
                     case int _:
                         float single = Change.ToSingle(result);
-                        text = text.Replace("%VALUE%", Change.ToString((object)single));
+                        text = text.Replace("%VALUE%", Change.ToString(single));
                         int int32 = Convert.ToInt32(result);
-                        text = text.Replace("%INTVALUE%", Change.ToString((object)int32));
+                        text = text.Replace("%INTVALUE%", Change.ToString(int32));
                         break;
                     case string _:
                         text = text.Replace("%VALUE%", result as string);
@@ -101,9 +101,9 @@ namespace DuckGame
                     case float _:
                     case int _:
                         float single = Change.ToSingle(result);
-                        text = text.Replace("%VALUE2%", Change.ToString((object)single));
+                        text = text.Replace("%VALUE2%", Change.ToString(single));
                         int int32 = Convert.ToInt32(result);
-                        text = text.Replace("%INTVALUE2%", Change.ToString((object)int32));
+                        text = text.Replace("%INTVALUE2%", Change.ToString(int32));
                         break;
                     case string _:
                         text = text.Replace("%VALUE2%", result as string);
@@ -120,14 +120,14 @@ namespace DuckGame
             if (this._cycle == CycleMode.Once)
             {
                 p.Add(Profiles.DefaultPlayer1);
-                story.AddRange((IEnumerable<DuckStory>)this.CalculateStory(p));
+                story.AddRange(this.CalculateStory(p));
             }
             else if (this._cycle == CycleMode.PerProfile)
             {
                 foreach (Profile profile in Profiles.active)
                 {
                     p.Add(profile);
-                    story.AddRange((IEnumerable<DuckStory>)this.CalculateStory(p));
+                    story.AddRange(this.CalculateStory(p));
                     p.Clear();
                 }
             }
@@ -146,14 +146,14 @@ namespace DuckGame
                     bool flag = false;
                     for (int index = 0; index < source.Count; ++index)
                     {
-                        if ((double)source[index][0].storeValue < (double)num)
+                        if (source[index][0].storeValue < (double)num)
                         {
                             source.Insert(index, new List<Profile>());
                             source[index].Add(profile);
                             flag = true;
                             break;
                         }
-                        if ((double)source[index][0].storeValue == (double)num)
+                        if (source[index][0].storeValue == (double)num)
                         {
                             source[index].Add(profile);
                             flag = true;
@@ -172,8 +172,8 @@ namespace DuckGame
                 foreach (List<Profile> collection in source)
                 {
                     Script.currentPosition = num1;
-                    p.AddRange((IEnumerable<Profile>)collection);
-                    story.AddRange((IEnumerable<DuckStory>)this.CalculateStory(p));
+                    p.AddRange(collection);
+                    story.AddRange(this.CalculateStory(p));
                     p.Clear();
                     --num1;
                 }
@@ -211,9 +211,9 @@ namespace DuckGame
                 if (subStorey._section == NewsSection.None)
                     subStorey._section = this._section;
                 if (subStorey._cycle == CycleMode.None)
-                    story.AddRange((IEnumerable<DuckStory>)subStorey.CalculateStory(p));
+                    story.AddRange(subStorey.CalculateStory(p));
                 else
-                    story.AddRange((IEnumerable<DuckStory>)subStorey.CalculateStory());
+                    story.AddRange(subStorey.CalculateStory());
             }
             return story;
         }
@@ -237,7 +237,7 @@ namespace DuckGame
                         }
                         catch
                         {
-                            return (DuckNews)null;
+                            return null;
                         }
                     }
                 }

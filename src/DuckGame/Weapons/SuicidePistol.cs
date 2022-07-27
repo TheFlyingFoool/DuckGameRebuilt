@@ -14,7 +14,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 6;
-            this._ammoType = (AmmoType)new AT9mm();
+            this._ammoType = new AT9mm();
             this._ammoType.barrelAngleDegrees = 180f;
             this._ammoType.immediatelyDeadly = true;
             this._type = "gun";

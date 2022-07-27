@@ -33,7 +33,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._watermark;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._watermark;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             this.SetValue("fade", this._fade);
             this.SetValue("dim", this.dim);

@@ -58,7 +58,7 @@ namespace DuckGame
         public void FinishChallenge()
         {
             this._afterChallengeWait = 0.0f;
-            this._lastPlayed = (ChallengeCard)null;
+            this._lastPlayed = null;
             this._afterChallenge = false;
         }
 
@@ -87,21 +87,21 @@ namespace DuckGame
             if (!this._afterChallenge)
             {
                 HUD.CloseAllCorners();
-                HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding((object)Profiles.active[0], "ticketCount"), animateCount: true);
+                HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding(Profiles.active[0], "ticketCount"), animateCount: true);
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@SELECT");
             }
             else
             {
                 HUD.CloseAllCorners();
-                HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding((object)Profiles.active[0], "ticketCount"), animateCount: true);
+                HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding(Profiles.active[0], "ticketCount"), animateCount: true);
             }
         }
 
         public void MakeConfetti()
         {
             for (int index = 0; index < 40; ++index)
-                Level.Add((Thing)new ChallengeConfetti((float)(index * 8) + Rando.Float(-10f, 10f), Rando.Float(110f) - 124f));
+                Level.Add(new ChallengeConfetti(index * 8 + Rando.Float(-10f, 10f), Rando.Float(110f) - 124f));
             SFX.Play("dacBang", pitch: -0.7f);
         }
 
@@ -244,7 +244,7 @@ namespace DuckGame
                 }
                 if (this._afterChallenge)
                 {
-                    if ((double)this._afterChallengeWait > 0.0)
+                    if (_afterChallengeWait > 0.0)
                         this._afterChallengeWait -= 0.03f;
                     else if (this._lastPlayed == null)
                     {
@@ -280,7 +280,7 @@ namespace DuckGame
                     else
                     {
                         this._afterChallengeWait = 0.0f;
-                        this._lastPlayed = (ChallengeCard)null;
+                        this._lastPlayed = null;
                         this._afterChallenge = false;
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@SELECT");
@@ -290,10 +290,10 @@ namespace DuckGame
                 if (this._goBack)
                 {
                     this._lerpOffset = Lerp.Float(this._lerpOffset, this._oldLerpOffset, 8f);
-                    if ((double)this._lerpOffset == (double)this._oldLerpOffset)
+                    if (_lerpOffset == (double)this._oldLerpOffset)
                     {
                         this._goBack = false;
-                        this._viewing = (ChallengeCard)null;
+                        this._viewing = null;
                     }
                 }
                 else if (this._viewing != null)
@@ -319,11 +319,11 @@ namespace DuckGame
             this._font.Draw(nameForDisplay, (float)(160.0 - (double)width / 2.0), ypos, Color.White);
             this._titleWing.alpha = this.alpha;
             this._titleWing.flipH = false;
-            this._titleWing.x = (float)(160.0 - (double)width / 2.0) - (float)(this._titleWing.width + 1);
+            this._titleWing.x = (float)(160.0 - (double)width / 2.0) - (this._titleWing.width + 1);
             this._titleWing.y = ypos;
             this._titleWing.Draw();
             this._titleWing.flipH = true;
-            this._titleWing.x = (float)(160.0 + (double)width / 2.0) + (float)this._titleWing.width;
+            this._titleWing.x = (float)(160.0 + (double)width / 2.0) + _titleWing.width;
             this._titleWing.y = ypos;
             this._titleWing.Draw();
             int num = 0;
@@ -333,7 +333,7 @@ namespace DuckGame
                 if (num == this._selected && card == this._viewing)
                     card.position = new Vec2(31f, this._lerpOffset);
                 else
-                    card.position = new Vec2(31f, ypos + 12f + (float)(num * 44));
+                    card.position = new Vec2(31f, ypos + 12f + num * 44);
                 card.Draw();
                 ++num;
             }

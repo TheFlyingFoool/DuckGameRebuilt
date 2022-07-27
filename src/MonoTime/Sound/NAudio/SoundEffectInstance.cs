@@ -47,25 +47,25 @@ namespace DuckGame
         {
             if (this._chainEnd != null)
                 Windows_Audio.RemoveSound(this._chainEnd);
-            this._chainEnd = (ISampleProvider)this;
+            this._chainEnd = this;
             if (this._data == null)
                 return;
-            if (this._data.format.Channels == 1 || (double)this._pan != 0.0)
+            if (this._data.format.Channels == 1 || _pan != 0.0)
             {
                 this._panChain = new PanningSampleProvider(this._chainEnd);
-                this._chainEnd = (ISampleProvider)this._panChain;
+                this._chainEnd = _panChain;
                 this._panChain.Pan = this._pan;
             }
-            if ((double)this._volume != 1.0)
+            if (_volume != 1.0)
             {
                 this._volumeChain = new VolumeSampleProvider(this._chainEnd);
-                this._chainEnd = (ISampleProvider)this._volumeChain;
+                this._chainEnd = _volumeChain;
                 this._volumeChain.Volume = this._volume * this._data.replaygainModifier;
             }
-            if ((double)this._pitch != 0.0)
+            if (_pitch != 0.0)
             {
                 this._pitchChain = new SoundEffectInstance.PitchShiftProvider(this._chainEnd);
-                this._chainEnd = (ISampleProvider)this._pitchChain;
+                this._chainEnd = _pitchChain;
                 this._pitchChain.pitch = this._pitch;
             }
             if (!this._inMixer)
@@ -138,7 +138,7 @@ namespace DuckGame
             set
             {
                 this._pitch = value;
-                if ((double)this._pitch != 0.0 && this._pitchChain == null)
+                if (_pitch != 0.0 && this._pitchChain == null)
                     this.RebuildChain();
                 if (this._pitchChain == null)
                     return;
@@ -152,7 +152,7 @@ namespace DuckGame
             set
             {
                 this._volume = value;
-                if ((double)this._volume != 1.0 && this._volumeChain == null)
+                if (_volume != 1.0 && this._volumeChain == null)
                     this.RebuildChain();
                 if (this._volumeChain == null || this._data == null)
                     return;
@@ -166,7 +166,7 @@ namespace DuckGame
             set
             {
                 this._pan = value;
-                if ((double)this._pan != 0.0 && this._panChain == null)
+                if (_pan != 0.0 && this._panChain == null)
                     this.RebuildChain();
                 if (this._panChain == null)
                     return;
@@ -191,7 +191,7 @@ namespace DuckGame
                 else
                 {
                     length = Math.Min(val1, count);
-                    Array.Copy((Array)this._data.data, this._position, (Array)buffer, offset, length);
+                    Array.Copy(_data.data, this._position, buffer, offset, length);
                 }
                 this._position += length;
                 if (length != count)
@@ -210,7 +210,7 @@ namespace DuckGame
                         else
                         {
                             length = Math.Min(this._data.dataSize - this._position, count - length);
-                            Array.Copy((Array)this._data.data, this._position, (Array)buffer, offset, length);
+                            Array.Copy(_data.data, this._position, buffer, offset, length);
                         }
                         this._position += length;
                         length = count;
@@ -230,12 +230,12 @@ namespace DuckGame
             if (this._data == null)
                 return;
             pProgress = Maths.Clamp(pProgress, 0.0f, 1f);
-            this._position = (int)((double)pProgress * (double)this._data.data.Length);
+            this._position = (int)((double)pProgress * _data.data.Length);
         }
 
-        public float Platform_GetProgress() => this._data == null ? 1f : (float)this._position / (float)this._data.data.Length;
+        public float Platform_GetProgress() => this._data == null ? 1f : _position / (float)this._data.data.Length;
 
-        public int Platform_GetLengthInMilliseconds() => this._data == null ? 0 : (int)((double)(this._data.data.Length * 4) / (double)this.WaveFormat.AverageBytesPerSecond) * 500;
+        public int Platform_GetLengthInMilliseconds() => this._data == null ? 0 : (int)(this._data.data.Length * 4 / (double)this.WaveFormat.AverageBytesPerSecond) * 500;
 
         public class PitchShiftProvider : ISampleProvider
         {
@@ -254,10 +254,8 @@ namespace DuckGame
 
             public int Read(float[] buffer, int offset, int count)
             {
-                double pitch1 = (double)this.pitch;
-                if ((double)this.pitch < 0.0)
+                if (pitch < 0.0)
                 {
-                    double pitch2 = (double)this.pitch;
                 }
                 this._resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, -(double)this.pitch));
                 return this._resampler.Read(buffer, offset, count);

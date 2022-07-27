@@ -82,7 +82,7 @@ namespace DuckGame
 
         public InputDevice(int idx = 0) => this._index = idx;
 
-        public virtual Dictionary<int, string> GetTriggerNames() => (Dictionary<int, string>)null;
+        public virtual Dictionary<int, string> GetTriggerNames() => null;
 
         public virtual Sprite DoGetMapImage(int map, bool skipStyleCheck = false)
         {
@@ -101,7 +101,7 @@ namespace DuckGame
 
         public float RumbleIntensityModifier()
         {
-            if ((double)this.rumbleIntensity > 0.3)
+            if (rumbleIntensity > 0.3)
                 this._rumbleThisFrame = true;
             return this._framesRumbled > 120 ? 0.0f : Options.Data.rumbleIntensity;
         }
@@ -110,7 +110,7 @@ namespace DuckGame
         {
         }
 
-        public virtual Sprite GetMapImage(int map) => (Sprite)null;
+        public virtual Sprite GetMapImage(int map) => null;
 
         public virtual void Update()
         {

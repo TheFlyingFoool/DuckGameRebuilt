@@ -22,7 +22,7 @@ namespace DuckGame
       {
         id = "requiredwins",
         name = "Required Wins",
-        value = (object) 10,
+        value =  10,
         min = DuckNetworkCore.kWinsMin,
         max = 100,
         step = DuckNetworkCore.kWinsStep,
@@ -50,7 +50,7 @@ namespace DuckGame
       {
         id = "restsevery",
         name = "Rests Every",
-        value = (object) 10,
+        value =  10,
         min = DuckNetworkCore.kWinsMin,
         max = 100,
         step = DuckNetworkCore.kWinsStep,
@@ -78,13 +78,13 @@ namespace DuckGame
       {
         id = "wallmode",
         name = "Wall Mode",
-        value = (object) false
+        value =  false
       },
       new MatchSetting()
       {
         id = "normalmaps",
         name = "@NORMALICON@|DGBLUE|Normal Levels",
-        value = (object) 90,
+        value =  90,
         suffix = "%",
         min = 0,
         max = 100,
@@ -100,7 +100,7 @@ namespace DuckGame
       {
         id = "randommaps",
         name = "@RANDOMICON@|DGBLUE|Random Levels",
-        value = (object) 10,
+        value =  10,
         suffix = "%",
         min = 0,
         max = 100,
@@ -116,7 +116,7 @@ namespace DuckGame
       {
         id = "custommaps",
         name = "@CUSTOMICON@|DGBLUE|Custom Levels",
-        value = (object) 0,
+        value =  0,
         suffix = "%",
         min = 0,
         max = 100,
@@ -132,7 +132,7 @@ namespace DuckGame
       {
         id = "workshopmaps",
         name = "@RAINBOWICON@|DGBLUE|Internet Levels",
-        value = (object) 0,
+        value =  0,
         suffix = "%",
         min = 0,
         max = 100,
@@ -148,7 +148,7 @@ namespace DuckGame
       {
         id = "clientlevelsenabled",
         name = "Client Maps",
-        value = (object) false
+        value =  false
       }
     };
         public List<MatchSetting> onlineSettings = new List<MatchSetting>()
@@ -157,7 +157,7 @@ namespace DuckGame
       {
         id = "maxplayers",
         name = "Max Players",
-        value = (object) 4,
+        value =  4,
         min = 2,
         max = 8,
         step = 1
@@ -166,7 +166,7 @@ namespace DuckGame
       {
         id = "teams",
         name = "Teams",
-        value = (object) false,
+        value =  false,
         filtered = false,
         filterOnly = true
       },
@@ -174,7 +174,7 @@ namespace DuckGame
       {
         id = "customlevelsenabled",
         name = "Custom Levels",
-        value = (object) false,
+        value =  false,
         filtered = false,
         filterOnly = true
       },
@@ -182,7 +182,7 @@ namespace DuckGame
       {
         id = "modifiers",
         name = "Modifiers",
-        value = (object) false,
+        value =  false,
         filtered = true,
         filterOnly = true
       },
@@ -190,7 +190,7 @@ namespace DuckGame
       {
         id = "type",
         name = "Type",
-        value = (object) 2,
+        value =  2,
         min = 0,
         max = 3,
         createOnly = true,
@@ -206,7 +206,7 @@ namespace DuckGame
       {
         id = "name",
         name = "Name",
-        value = (object) "",
+        value =  "",
         filtered = false,
         filterOnly = false,
         createOnly = true
@@ -215,7 +215,7 @@ namespace DuckGame
       {
         id = "password",
         name = "Password",
-        value = (object) "",
+        value =  "",
         filtered = false,
         filterOnly = false,
         createOnly = true
@@ -224,16 +224,16 @@ namespace DuckGame
       {
         id = "port",
         name = "Port",
-        value = (object) "1337",
+        value =  "1337",
         filtered = false,
         filterOnly = false,
-        condition = (Func<bool>) (() => (int) TeamSelect2.GetOnlineSetting("type").value == 3)
+        condition =  () => (int) TeamSelect2.GetOnlineSetting("type").value == 3
       },
       new MatchSetting()
       {
         id = "dedicated",
         name = "Dedicated",
-        value = (object) false,
+        value =  false,
         filtered = false,
         filterOnly = false,
         createOnly = true
@@ -262,7 +262,7 @@ namespace DuckGame
         public int cursorFlash;
         public ushort chatIndex;
         public ushort levelTransferSession;
-        public NetworkConnection localConnection = new NetworkConnection((object)null);
+        public NetworkConnection localConnection = new NetworkConnection(null);
         public DuckNetStatus status;
         public FancyBitmapFont _builtInChatFont;
         public FancyBitmapFont _rasterChatFont;
@@ -380,7 +380,7 @@ namespace DuckGame
             this.randomID = Rando.Int(2147483646);
         }
 
-        public void ReorderFixedList() => this.profilesFixedOrder = this.profiles.OrderBy<Profile, byte>((Func<Profile, byte>)(x => x.fixedGhostIndex)).ToList<Profile>();
+        public void ReorderFixedList() => this.profilesFixedOrder = this.profiles.OrderBy<Profile, byte>(x => x.fixedGhostIndex).ToList<Profile>();
 
         public FancyBitmapFont _chatFont => this._rasterChatFont == null ? this._builtInChatFont : this._rasterChatFont;
 
@@ -437,10 +437,10 @@ namespace DuckGame
         {
             if (pMessage.who == null)
                 return;
-            ChatMessage chatMessage = (ChatMessage)null;
+            ChatMessage chatMessage = null;
             if (this.chatMessages.Count > 0)
                 chatMessage = this.chatMessages[0];
-            pMessage.text = this.FilterText(pMessage.text, (User)null);
+            pMessage.text = this.FilterText(pMessage.text, null);
             if (Options.Data.textToSpeech)
             {
                 if (Options.Data.textToSpeechReadNames)
@@ -453,7 +453,7 @@ namespace DuckGame
             if (this._chatFont is RasterFont)
             {
                 FancyBitmapFont chatFont = this._chatFont;
-                chatFont.scale = chatFont.scale * 0.5f;
+                chatFont.scale *= 0.5f;
             }
             try
             {
@@ -463,8 +463,8 @@ namespace DuckGame
             {
                 pMessage.text = "??????";
             }
-            int num = pMessage.text.Count<char>((Func<char, bool>)(x => x == '\n'));
-            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && (double)chatMessage.timeout > 2.0 && chatMessage.who == pMessage.who)
+            int num = pMessage.text.Count<char>(x => x == '\n');
+            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2.0 && chatMessage.who == pMessage.who)
             {
                 pMessage.text = "|GRAY|" + pMessage.who.nameUI + ": |BLACK|" + pMessage.text;
                 chatMessage.timeout = 10f;
@@ -480,7 +480,7 @@ namespace DuckGame
                 pMessage.text = "|WHITE|" + pMessage.who.nameUI + ": |BLACK|" + pMessage.text;
                 this.chatMessages.Add(pMessage);
             }
-            this.chatMessages = this.chatMessages.OrderBy<ChatMessage, int>((Func<ChatMessage, int>)(x => (int)-x.index)).ToList<ChatMessage>();
+            this.chatMessages = this.chatMessages.OrderBy<ChatMessage, int>(x => -x.index).ToList<ChatMessage>();
         }
     }
 }

@@ -28,18 +28,22 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 99;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";
-            this._sprite = new SpriteMap("mindControlGun", 16, 16);
-            this._sprite.frame = 2;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("mindControlGun", 16, 16)
+            {
+                frame = 2
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 10f);
-            this._hat = new SpriteMap("mindControlHelmet", 32, 32);
-            this._hat.center = new Vec2(16f, 16f);
+            this._hat = new SpriteMap("mindControlHelmet", 32, 32)
+            {
+                center = new Vec2(16f, 16f)
+            };
             this._barrelOffsetTL = new Vec2(18f, 8f);
             this._fireSound = "smg";
             this._fullAuto = true;
@@ -72,7 +76,7 @@ namespace DuckGame
             this.immobilizeOwner = this._controlledDuck != null;
             if (this.isServerForObject)
             {
-                if ((double)this._beamTime > 1.0 || this.owner == null)
+                if (_beamTime > 1.0 || this.owner == null)
                 {
                     this._beamTime = 0.0f;
                     this._triggerHeld = false;
@@ -83,13 +87,13 @@ namespace DuckGame
                     if (Network.isActive)
                     {
                         this._controlledDuck.mindControl = owner.inputProfile;
-                        owner.Fondle((Thing)this._controlledDuck);
-                        owner.Fondle((Thing)this._controlledDuck.holdObject);
+                        owner.Fondle(_controlledDuck);
+                        owner.Fondle(_controlledDuck.holdObject);
                         foreach (Equipment t in this._controlledDuck._equipment)
-                            owner.Fondle((Thing)t);
-                        owner.Fondle((Thing)this._controlledDuck._ragdollInstance);
-                        owner.Fondle((Thing)this._controlledDuck._trappedInstance);
-                        owner.Fondle((Thing)this._controlledDuck._cookedInstance);
+                            owner.Fondle(t);
+                        owner.Fondle(_controlledDuck._ragdollInstance);
+                        owner.Fondle(_controlledDuck._trappedInstance);
+                        owner.Fondle(_controlledDuck._cookedInstance);
                     }
                     if (owner.inputProfile.Pressed("QUACK") || this._controlledDuck.dead || this._controlledDuck.HasEquipment(typeof(TinfoilHat)))
                     {
@@ -100,9 +104,9 @@ namespace DuckGame
                     }
                     this._triggerHeld = true;
                     if ((double)this._controlledDuck.x < (double)owner.x)
-                        owner.offDir = (sbyte)-1;
+                        owner.offDir = -1;
                     else
-                        owner.offDir = (sbyte)1;
+                        owner.offDir = 1;
                 }
             }
             else
@@ -111,15 +115,15 @@ namespace DuckGame
                 if (this._controlledDuck != null && owner != null)
                 {
                     this._controlledDuck.mindControl = owner.inputProfile;
-                    owner.Fondle((Thing)this._controlledDuck.holdObject);
+                    owner.Fondle(_controlledDuck.holdObject);
                     foreach (Equipment t in this._controlledDuck._equipment)
-                        owner.Fondle((Thing)t);
-                    owner.Fondle((Thing)this._controlledDuck._ragdollInstance);
-                    owner.Fondle((Thing)this._controlledDuck._trappedInstance);
-                    owner.Fondle((Thing)this._controlledDuck._cookedInstance);
+                        owner.Fondle(t);
+                    owner.Fondle(_controlledDuck._ragdollInstance);
+                    owner.Fondle(_controlledDuck._trappedInstance);
+                    owner.Fondle(_controlledDuck._cookedInstance);
                 }
                 if (this._controlledDuck == null && this._prevControlDuck != null)
-                    this._prevControlDuck.mindControl = (InputProfile)null;
+                    this._prevControlDuck.mindControl = null;
                 this._prevControlDuck = this._controlledDuck;
             }
             if (this._triggerHeld && this._controlledDuck != null)
@@ -133,13 +137,13 @@ namespace DuckGame
             if (this._triggerHeld && this._beamTimer.hit)
             {
                 Vec2 vec2 = this.Offset(this.barrelOffset);
-                Level.Add((Thing)new ControlWave(vec2.x, vec2.y, this.barrelAngle, this, this.isServerForObject));
+                Level.Add(new ControlWave(vec2.x, vec2.y, this.barrelAngle, this, this.isServerForObject));
                 if (this._controlledDuck != null)
                 {
                     ++this._boltWait;
                     if (this._boltWait > 2)
                     {
-                        Level.Add((Thing)new MindControlBolt(vec2.x, vec2.y, this._controlledDuck));
+                        Level.Add(new MindControlBolt(vec2.x, vec2.y, this._controlledDuck));
                         this._boltWait = 0;
                     }
                 }
@@ -148,7 +152,7 @@ namespace DuckGame
             }
             this._beamSound.lerpVolume = this._triggerHeld ? 0.55f : 0.0f;
             this._beamSound.Update();
-            if ((double)this._canConvert > 0.0)
+            if (_canConvert > 0.0)
                 this._canConvert -= 0.02f;
             else
                 this._canConvert = 0.0f;
@@ -173,12 +177,12 @@ namespace DuckGame
             else
                 this._hat.angleDegrees = 0.0f;
             Vec2 hatPoint = DuckRig.GetHatPoint(owner._sprite.imageIndex);
-            Graphics.Draw((Sprite)this._hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
+            Graphics.Draw(_hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
         }
 
         public void ControlDuck(Duck d)
         {
-            if (d == null || (double)this._canConvert > 0.00999999977648258 || d.dead)
+            if (d == null || _canConvert > 0.00999999977648258 || d.dead)
                 return;
             this.LoseControl();
             if (!(this.owner is Duck owner) || owner == d)
@@ -188,20 +192,20 @@ namespace DuckGame
             this._controlledDuck = d;
             if (Network.isActive)
             {
-                owner.Fondle((Thing)d);
-                owner.Fondle((Thing)this._controlledDuck.holdObject);
+                owner.Fondle(d);
+                owner.Fondle(_controlledDuck.holdObject);
                 foreach (Equipment t in this._controlledDuck._equipment)
-                    owner.Fondle((Thing)t);
-                owner.Fondle((Thing)this._controlledDuck._ragdollInstance);
-                owner.Fondle((Thing)this._controlledDuck._trappedInstance);
-                owner.Fondle((Thing)this._controlledDuck._cookedInstance);
+                    owner.Fondle(t);
+                owner.Fondle(_controlledDuck._ragdollInstance);
+                owner.Fondle(_controlledDuck._trappedInstance);
+                owner.Fondle(_controlledDuck._cookedInstance);
             }
             this._controlledDuck.resetAction = true;
             this._controlledDuck.mindControl = owner.inputProfile;
             this._controlledDuck.controlledBy = owner;
             this.immobilizeOwner = true;
             SFX.Play("radioNoise", 0.8f);
-            Event.Log((Event)new MindControlEvent(this.responsibleProfile, d.profile));
+            Event.Log(new MindControlEvent(this.responsibleProfile, d.profile));
             if (Recorder.currentRecording == null)
                 return;
             Recorder.currentRecording.LogBonus();
@@ -217,10 +221,10 @@ namespace DuckGame
                 duck.immobilized = false;
             if (this._controlledDuck != null)
             {
-                this._controlledDuck.mindControl = (InputProfile)null;
-                this._controlledDuck.controlledBy = (Duck)null;
+                this._controlledDuck.mindControl = null;
+                this._controlledDuck.controlledBy = null;
             }
-            this._controlledDuck = (Duck)null;
+            this._controlledDuck = null;
             this._canConvert = 1f;
         }
 

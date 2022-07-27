@@ -9,8 +9,8 @@ namespace DuckGame
 {
     public class QuadLaserBullet : Thing, ITeleport
     {
-        public StateBinding _positionBinding = (StateBinding)new CompressedVec2Binding("position", doLerp: true);
-        public StateBinding _travelBinding = (StateBinding)new CompressedVec2Binding(nameof(travel), 20);
+        public StateBinding _positionBinding = new CompressedVec2Binding("position", doLerp: true);
+        public StateBinding _travelBinding = new CompressedVec2Binding(nameof(travel), 20);
         private Vec2 _travel;
         private SinWaveManualUpdate _wave = (SinWaveManualUpdate)0.5f;
         private SinWaveManualUpdate _wave2 = (SinWaveManualUpdate)1f;
@@ -37,15 +37,15 @@ namespace DuckGame
             this._wave.Update();
             this._wave2.Update();
             this.timeAlive += 0.016f;
-            this.position = this.position + this._travel * 0.5f;
-            if (this.isServerForObject && ((double)this.x > (double)Level.current.bottomRight.x + 200.0 || (double)this.x < (double)Level.current.topLeft.x - 200.0))
-                Level.Remove((Thing)this);
+            this.position += this._travel * 0.5f;
+            if (this.isServerForObject && ((double)this.x > Level.current.bottomRight.x + 200.0 || (double)this.x < Level.current.topLeft.x - 200.0))
+                Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(this.topLeft, this.bottomRight))
             {
                 if ((this.safeFrames <= 0 || materialThing != this.safeDuck) && materialThing.isServerForObject)
                 {
                     bool destroyed = materialThing.destroyed;
-                    materialThing.Destroy((DestroyType)new DTIncinerate((Thing)this));
+                    materialThing.Destroy(new DTIncinerate(this));
                     if (materialThing.destroyed && !destroyed)
                     {
                         if (Recorder.currentRecording != null)
@@ -62,8 +62,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawRect(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), new Color((int)byte.MaxValue - (int)((double)this._wave.normalized * 90.0), 137 + (int)((double)this._wave.normalized * 50.0), 31 + (int)((double)this._wave.normalized * 30.0)), this.depth);
-            Graphics.DrawRect(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), new Color((int)byte.MaxValue, 224 - (int)((double)this._wave2.normalized * 150.0), 90 + (int)((double)this._wave2.normalized * 50.0)), this.depth + 1, false);
+            Graphics.DrawRect(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)((double)this._wave.normalized * 90.0), 137 + (int)((double)this._wave.normalized * 50.0), 31 + (int)((double)this._wave.normalized * 30.0)), this.depth);
+            Graphics.DrawRect(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)((double)this._wave2.normalized * 150.0), 90 + (int)((double)this._wave2.normalized * 50.0)), this.depth + 1, false);
             base.Draw();
         }
     }

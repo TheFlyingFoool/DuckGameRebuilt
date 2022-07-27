@@ -13,8 +13,8 @@ namespace DuckGame
 
         public override object value
         {
-            get => (object)this._value;
-            set => this._value = (T)(object)value;
+            get => _value;
+            set => this._value = (T)value;
         }
 
         public override bool Refresh()
@@ -50,7 +50,7 @@ namespace DuckGame
             {
                 if (this.binding.name == "netPosition")
                 {
-                    double x = (double)((Vec2)this.value).x;
+                    double x = ((Vec2)value).x;
                 }
                 this.binding.setTyped<T>(this._value);
             }

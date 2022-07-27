@@ -23,7 +23,7 @@ namespace DuckGame
                 this._numBytes = 4;
             this._serializedData.Write(this._numBytes);
             for (int index = 0; index < this._numBytes - 4; ++index)
-                this._serializedData.Write((byte)Rando.Int((int)byte.MaxValue));
+                this._serializedData.Write((byte)Rando.Int(byte.MaxValue));
             base.OnSerialize();
         }
 
@@ -32,7 +32,7 @@ namespace DuckGame
             this._numBytes = msg.ReadInt();
             for (int index = 0; index < this._numBytes - 4; ++index)
             {
-                int num = (int)msg.ReadByte();
+                int num = msg.ReadByte();
             }
             base.OnDeserialize(msg);
         }

@@ -34,7 +34,7 @@ namespace DuckGame
             if (this.tail.Count > 1)
             {
                 for (int index = 1; index < this.tail.Count; ++index)
-                    Graphics.DrawLine(this.tail[index - 1], this.tail[index], Color.White * ((float)index / (float)this.tail.Count) * 0.5f, depth: ((Depth)0.5f));
+                    Graphics.DrawLine(this.tail[index - 1], this.tail[index], Color.White * (index / (float)this.tail.Count) * 0.5f, depth: ((Depth)0.5f));
             }
             base.Draw();
         }

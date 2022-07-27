@@ -20,13 +20,13 @@ namespace DuckGame
             this.center = new Vec2(16f, 32f);
             this.alpha = 0.6f;
             this.depth = (Depth)0.9f;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
         }
 
         public override void Update()
         {
             if (this._sprite.finished)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
     }

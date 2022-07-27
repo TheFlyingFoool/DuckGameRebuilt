@@ -37,18 +37,18 @@ namespace DuckGame
         {
             this.profiles = new List<Profile>();
             byte num1 = msg.ReadByte();
-            for (int index1 = 0; index1 < (int)num1; ++index1)
+            for (int index1 = 0; index1 < num1; ++index1)
             {
                 this.profiles.Add(msg.ReadProfile());
-                this.profiles[index1].latestGhostIndex = (NetIndex16)(int)msg.ReadUShort();
+                this.profiles[index1].latestGhostIndex = (NetIndex16)msg.ReadUShort();
                 Team team = msg.ReadTeam();
                 if (team != null)
                     this.profiles[index1].reservedTeam = team;
                 sbyte num2 = msg.ReadSByte();
                 this.profiles[index1].reservedSpectatorPersona = num2;
                 sbyte index2 = msg.ReadSByte();
-                if (index2 >= (sbyte)0 && (int)index2 < Persona.all.Count<DuckPersona>())
-                    this.profiles[index1].persona = Persona.all.ElementAt<DuckPersona>((int)index2);
+                if (index2 >= 0 && index2 < Persona.all.Count<DuckPersona>())
+                    this.profiles[index1].persona = Persona.all.ElementAt<DuckPersona>(index2);
             }
         }
     }

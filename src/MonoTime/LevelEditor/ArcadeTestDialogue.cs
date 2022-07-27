@@ -22,7 +22,7 @@ namespace DuckGame
         private string _caption;
 
         public ArcadeTestDialogue()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -85,9 +85,9 @@ namespace DuckGame
             Vec2 vec2_6 = new Vec2(100f, 30f);
             Vec2 vec2_7 = new Vec2(vec2_1.x - 5f, vec2_2.y - 66f) + new Vec2(18f, 28f);
             Vec2 vec2_8 = new Vec2(290f, 30f);
-            this._hoverOk = (double)Mouse.x > (double)vec2_3.x && (double)Mouse.x < (double)vec2_3.x + (double)vec2_4.x && (double)Mouse.y > (double)vec2_3.y && (double)Mouse.y < (double)vec2_3.y + (double)vec2_4.y;
-            this._hoverCancel = (double)Mouse.x > (double)vec2_5.x && (double)Mouse.x < (double)vec2_5.x + (double)vec2_6.x && (double)Mouse.y > (double)vec2_5.y && (double)Mouse.y < (double)vec2_5.y + (double)vec2_6.y;
-            this._hoverBack = (double)Mouse.x > (double)vec2_7.x && (double)Mouse.x < (double)vec2_7.x + (double)vec2_8.x && (double)Mouse.y > (double)vec2_7.y && (double)Mouse.y < (double)vec2_7.y + (double)vec2_8.y;
+            this._hoverOk = (double)Mouse.x > vec2_3.x && (double)Mouse.x < vec2_3.x + (double)vec2_4.x && (double)Mouse.y > vec2_3.y && (double)Mouse.y < vec2_3.y + (double)vec2_4.y;
+            this._hoverCancel = (double)Mouse.x > vec2_5.x && (double)Mouse.x < vec2_5.x + (double)vec2_6.x && (double)Mouse.y > vec2_5.y && (double)Mouse.y < vec2_5.y + (double)vec2_6.y;
+            this._hoverBack = (double)Mouse.x > vec2_7.x && (double)Mouse.x < vec2_7.x + (double)vec2_8.x && (double)Mouse.y > vec2_7.y && (double)Mouse.y < vec2_7.y + (double)vec2_8.y;
             if (this._selectedIndex < 0)
                 this._selectedIndex = 0;
             if (this._selectedIndex > 1)
@@ -145,12 +145,12 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2(290f, 30f);
             Graphics.DrawRect(p1_2, p1_2 + vec2_1, this._hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             string text1 = "LETS DO IT!";
-            this._font.Draw(text1, (float)((double)p1_2.x + (double)vec2_1.x / 2.0 - (double)this._font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw(text1, (float)(p1_2.x + vec2_1.x / 2.0 - (double)this._font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
             Graphics.DrawRect(p1_3, p1_3 + vec2_2, this._hoverCancel ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             string text2 = "NOPE!";
-            this._font.Draw(text2, (float)((double)p1_3.x + (double)vec2_2.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
             Graphics.DrawRect(p1_4, p1_4 + vec2_3, this._hoverBack ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
-            this._font.Draw("CANCEL", (float)((double)p1_4.x + (double)vec2_3.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0 - 4.0), p1_4.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw("CANCEL", (float)(p1_4.x + vec2_3.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0 - 4.0), p1_4.y + 8f, Color.White, this.depth + 3);
         }
     }
 }

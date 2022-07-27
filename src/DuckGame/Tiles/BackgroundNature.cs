@@ -13,7 +13,7 @@ namespace DuckGame
         public BackgroundNature(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("natureBackground", 16, 16);
+            this.graphic = new SpriteMap("natureBackground", 16, 16);
             this._opacityFromGraphic = true;
             this.center = new Vec2(8f, 8f);
             this.collisionSize = new Vec2(16f, 16f);

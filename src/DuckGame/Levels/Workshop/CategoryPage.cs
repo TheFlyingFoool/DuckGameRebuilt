@@ -40,12 +40,12 @@ namespace DuckGame
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
             if (this._grid)
             {
-                this._strip = (Thing)new CategoryGrid(12f, 31f, this._cards, (IPageListener)this);
+                this._strip = new CategoryGrid(12f, 31f, this._cards, this);
                 Level.Add(this._strip);
             }
             else
             {
-                this._strip = (Thing)new CardStrip(12f, 31f, this._cards, (IPageListener)this, false, 4);
+                this._strip = new CardStrip(12f, 31f, this._cards, this, false, 4);
                 Level.Add(this._strip);
             }
             base.Initialize();
@@ -58,18 +58,18 @@ namespace DuckGame
             {
                 this._strip.active = false;
                 CategoryPage.camOffset = Lerp.FloatSmooth(CategoryPage.camOffset, 360f, 0.1f);
-                if ((double)CategoryPage.camOffset <= 330.0 || !(this._pageToOpen.specialText == "VIEW ALL"))
+                if (camOffset <= 330.0 || !(this._pageToOpen.specialText == "VIEW ALL"))
                     return;
-                Level.current = (Level)new CategoryPage(this._cards, true);
+                Level.current = new CategoryPage(this._cards, true);
             }
             else
             {
                 if (this._state != CategoryState.Idle)
                     return;
                 CategoryPage.camOffset = Lerp.FloatSmooth(CategoryPage.camOffset, -40f, 0.1f);
-                if ((double)CategoryPage.camOffset < 0.0)
+                if (camOffset < 0.0)
                     CategoryPage.camOffset = 0.0f;
-                this._strip.active = (double)CategoryPage.camOffset == 0.0;
+                this._strip.active = camOffset == 0.0;
             }
         }
 

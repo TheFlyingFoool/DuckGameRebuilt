@@ -142,128 +142,152 @@ namespace DuckGame
       };
             BitmapFont bitmapFont = new BitmapFont("smallBiosFontUI", 7, 5);
             UIBox uiBox = new UIBox(isVisible: false);
-            this._configuringToggle = new UIMenuItemToggle("", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.SwitchConfigType)), new FieldBinding((object)this, nameof(inputConfigType)), multi: this.inputTypes, compressedMulti: true, tiny: true);
-            uiBox.Add((UIComponent)this._configuringToggle, true);
+            this._configuringToggle = new UIMenuItemToggle("", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.SwitchConfigType)), new FieldBinding(this, nameof(inputConfigType)), multi: this.inputTypes, compressedMulti: true, tiny: true);
+            uiBox.Add(_configuringToggle, true);
             UIText uiText = new UIText(" ", Color.White);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|{LEFT", "LEFT", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|/RIGHT", "RIGHT", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|}UP", "UP", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|~DOWN", "DOWN", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|JUMP", "JUMP", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|FIRE", "SHOOT", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|GRAB", "GRAB", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|QUACK", "QUACK", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|STRAFE", "STRAFE", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGBLUE|RAGDOLL", "RAGDOLL", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            uiBox.Add((UIComponent)new UIText(" ", Color.White, heightAdd: -6f), true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|{MENU LEFT", "MENULEFT", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|/MENU RIGHT", "MENURIGHT", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|}MENU UP", "MENUUP", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|~MENU DOWN", "MENUDOWN", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|ACCEPT", "SELECT", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|MENU 1", "MENU1", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|MENU 2", "MENU2", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|CANCEL", "CANCEL", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGPURPLE|START", "START", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            uiBox.Add((UIComponent)new UIText(" ", Color.White, heightAdd: -6f), true);
-            this._controlElements.Add(new UIControlElement("|DGGREEN|MOVE STICK", "LSTICK", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGGREEN|LICK STICK", "RSTICK", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGGREEN|QUACK PITCH", "LTRIGGER", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            this._controlElements.Add(new UIControlElement("|DGGREEN|ZOOM   ", "RTRIGGER", new DeviceInputMapping(), field: new FieldBinding((object)Options.Data, "sfxVolume")));
-            uiBox.Add((UIComponent)this._controlElements[this._controlElements.Count - 1], true);
-            UIMenuItem component1 = new UIMenuItem("|RED|REVERT TO DEFAULT", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.ResetToDefault)));
+            this._controlElements.Add(new UIControlElement("|DGBLUE|{LEFT", "LEFT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|/RIGHT", "RIGHT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|}UP", "UP", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|~DOWN", "DOWN", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|JUMP", "JUMP", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|FIRE", "SHOOT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|GRAB", "GRAB", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|QUACK", "QUACK", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|STRAFE", "STRAFE", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGBLUE|RAGDOLL", "RAGDOLL", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|{MENU LEFT", "MENULEFT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|/MENU RIGHT", "MENURIGHT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|}MENU UP", "MENUUP", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|~MENU DOWN", "MENUDOWN", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|ACCEPT", "SELECT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|MENU 1", "MENU1", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|MENU 2", "MENU2", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|CANCEL", "CANCEL", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGPURPLE|START", "START", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
+            this._controlElements.Add(new UIControlElement("|DGGREEN|MOVE STICK", "LSTICK", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGGREEN|LICK STICK", "RSTICK", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGGREEN|QUACK PITCH", "LTRIGGER", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            this._controlElements.Add(new UIControlElement("|DGGREEN|ZOOM   ", "RTRIGGER", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(this._controlElements[this._controlElements.Count - 1], true);
+            UIMenuItem component1 = new UIMenuItem("|RED|REVERT TO DEFAULT", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.ResetToDefault)));
             component1.SetFont(bitmapFont);
-            uiBox.Add((UIComponent)component1, true);
+            uiBox.Add(component1, true);
             UIText component2 = new UIText(" ", Color.White);
             component2.SetFont(bitmapFont);
-            uiBox.Add((UIComponent)component2, true);
+            uiBox.Add(component2, true);
             UIText component3 = new UIText("Personal controls can be", Color.White);
             component3.SetFont(bitmapFont);
-            uiBox.Add((UIComponent)component3, true);
+            uiBox.Add(component3, true);
             UIText component4 = new UIText("set in profile screen.", Color.White);
             component4.SetFont(bitmapFont);
-            uiBox.Add((UIComponent)component4, true);
+            uiBox.Add(component4, true);
             this._controlBox = uiBox;
             this._playerBoxes.Add(uiBox);
-            this.Add((UIComponent)this._playerBoxes[0], true);
+            this.Add(this._playerBoxes[0], true);
             this._confirmMenu = new UIMenu("SAVE CHANGES?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT @CANCEL@BACK");
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.CloseMenuSaving))), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.CloseMenu))), true);
-            this._confirmMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._confirmMenu, (UIComponent)this));
+            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.CloseMenuSaving))), true);
+            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.CloseMenu))), true);
+            this._confirmMenu.SetBackFunction(new UIMenuActionOpenMenu(_confirmMenu, this));
             this._confirmMenu.Close();
             this._warningMenu = new UIMenu("WARNING!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 180f, conString: "@SELECT@ I see...");
             UIMenu warningMenu1 = this._warningMenu;
-            UIText component5 = new UIText("", Color.White, heightAdd: -3f);
-            component5.scale = new Vec2(0.5f);
-            warningMenu1.Add((UIComponent)component5, true);
+            UIText component5 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu1.Add(component5, true);
             UIMenu warningMenu2 = this._warningMenu;
-            UIText component6 = new UIText("One or more profiles have", Color.White, heightAdd: -4f);
-            component6.scale = new Vec2(0.5f);
-            warningMenu2.Add((UIComponent)component6, true);
+            UIText component6 = new UIText("One or more profiles have", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu2.Add(component6, true);
             UIMenu warningMenu3 = this._warningMenu;
-            UIText component7 = new UIText("|DGBLUE|custom controls|PREV| defined, which will", Color.White, heightAdd: -4f);
-            component7.scale = new Vec2(0.5f);
-            warningMenu3.Add((UIComponent)component7, true);
+            UIText component7 = new UIText("|DGBLUE|custom controls|PREV| defined, which will", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu3.Add(component7, true);
             UIMenu warningMenu4 = this._warningMenu;
-            UIText component8 = new UIText("|DGRED|override|PREV| any controls set here!", Color.White, heightAdd: -4f);
-            component8.scale = new Vec2(0.5f);
-            warningMenu4.Add((UIComponent)component8, true);
+            UIText component8 = new UIText("|DGRED|override|PREV| any controls set here!", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu4.Add(component8, true);
             UIMenu warningMenu5 = this._warningMenu;
-            UIText component9 = new UIText("", Color.White, heightAdd: -3f);
-            component9.scale = new Vec2(0.5f);
-            warningMenu5.Add((UIComponent)component9, true);
+            UIText component9 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu5.Add(component9, true);
             UIMenu warningMenu6 = this._warningMenu;
-            UIText component10 = new UIText("If these controls are not working,", Color.White, heightAdd: -4f);
-            component10.scale = new Vec2(0.5f);
-            warningMenu6.Add((UIComponent)component10, true);
+            UIText component10 = new UIText("If these controls are not working,", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu6.Add(component10, true);
             UIMenu warningMenu7 = this._warningMenu;
-            UIText component11 = new UIText("enter the hat console in the lobby", Color.White, heightAdd: -4f);
-            component11.scale = new Vec2(0.5f);
-            warningMenu7.Add((UIComponent)component11, true);
+            UIText component11 = new UIText("enter the hat console in the lobby", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu7.Add(component11, true);
             UIMenu warningMenu8 = this._warningMenu;
-            UIText component12 = new UIText("and press |DGORANGE|EDIT|PREV| on your profile name.", Color.White, heightAdd: -4f);
-            component12.scale = new Vec2(0.5f);
-            warningMenu8.Add((UIComponent)component12, true);
+            UIText component12 = new UIText("and press |DGORANGE|EDIT|PREV| on your profile name.", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu8.Add(component12, true);
             UIMenu warningMenu9 = this._warningMenu;
-            UIText component13 = new UIText("Select |DGORANGE|CONTROLS|PREV|, select your desired", Color.White, heightAdd: -4f);
-            component13.scale = new Vec2(0.5f);
-            warningMenu9.Add((UIComponent)component13, true);
+            UIText component13 = new UIText("Select |DGORANGE|CONTROLS|PREV|, select your desired", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu9.Add(component13, true);
             UIMenu warningMenu10 = this._warningMenu;
-            UIText component14 = new UIText("input device, go to |DGORANGE|PAGE 2|PREV|", Color.White, heightAdd: -4f);
-            component14.scale = new Vec2(0.5f);
-            warningMenu10.Add((UIComponent)component14, true);
+            UIText component14 = new UIText("input device, go to |DGORANGE|PAGE 2|PREV|", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu10.Add(component14, true);
             UIMenu warningMenu11 = this._warningMenu;
-            UIText component15 = new UIText("and select |DGORANGE|RESET|PREV|.", Color.White, heightAdd: -4f);
-            component15.scale = new Vec2(0.5f);
-            warningMenu11.Add((UIComponent)component15, true);
+            UIText component15 = new UIText("and select |DGORANGE|RESET|PREV|.", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu11.Add(component15, true);
             UIMenu warningMenu12 = this._warningMenu;
-            UIText component16 = new UIText("", Color.White, heightAdd: -3f);
-            component16.scale = new Vec2(0.5f);
-            warningMenu12.Add((UIComponent)component16, true);
-            this._warningMenu.SetAcceptFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._warningMenu, (UIComponent)this));
-            this._warningMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._warningMenu, (UIComponent)this));
+            UIText component16 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            warningMenu12.Add(component16, true);
+            this._warningMenu.SetAcceptFunction(new UIMenuActionOpenMenu(_warningMenu, this));
+            this._warningMenu.SetBackFunction(new UIMenuActionOpenMenu(_warningMenu, this));
             this._warningMenu.Close();
         }
 
@@ -292,13 +316,13 @@ namespace DuckGame
             {
                 if (!UIMenu.globalUILock && UIControlConfig.showWarning)
                 {
-                    new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._warningMenu).Activate();
+                    new UIMenuActionOpenMenu(this, _warningMenu).Activate();
                     UIControlConfig.showWarning = false;
                     return;
                 }
                 if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.OemTilde)))
                 {
-                    new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._confirmMenu).Activate();
+                    new UIMenuActionOpenMenu(this, _confirmMenu).Activate();
                     return;
                 }
                 if (Input.uiDevicesHaveChanged)

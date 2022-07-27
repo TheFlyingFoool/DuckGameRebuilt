@@ -28,7 +28,7 @@ namespace DuckGame
             if (this.length + 3 >= this.size)
             {
                 VertexPositionColorTexture[] positionColorTextureArray = new VertexPositionColorTexture[this.size * 2];
-                this.vertices.CopyTo((Array)positionColorTextureArray, 0);
+                this.vertices.CopyTo(positionColorTextureArray, 0);
                 this.vertices = positionColorTextureArray;
                 this.size *= 2;
             }
@@ -58,7 +58,7 @@ namespace DuckGame
             if (this.length + 3 >= this.size)
             {
                 VertexPositionColorTexture[] positionColorTextureArray = new VertexPositionColorTexture[this.size * 2];
-                this.vertices.CopyTo((Array)positionColorTextureArray, 0);
+                this.vertices.CopyTo(positionColorTextureArray, 0);
                 this.vertices = positionColorTextureArray;
                 this.size *= 2;
             }

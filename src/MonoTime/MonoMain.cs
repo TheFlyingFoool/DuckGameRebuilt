@@ -29,7 +29,7 @@ namespace DuckGame
         //private Effect myEffect;
         private static MonoMainCore _core = new MonoMainCore();
         public static TransitionDirection transitionDirection = TransitionDirection.None;
-        public static Level transitionLevel = (Level)null;
+        public static Level transitionLevel = null;
         public static float transitionWait;
         public static RenderTarget2D _screenCapture;
         private static bool _didPauseCapture = false;
@@ -52,16 +52,16 @@ namespace DuckGame
         public int _adapterH;
         private static List<Func<string>> _extraExceptionDetails = new List<Func<string>>()
     {
-      (Func<string>) (() => "Date: " + DateTime.UtcNow.ToString((IFormatProvider) DateTimeFormatInfo.InvariantInfo)),
-      (Func<string>) (() => "Version: " + DG.version),
-      (Func<string>) (() => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")"),
-      (Func<string>) (() => MonoMain.GetOnlineString()),
-      (Func<string>) (() => "Mods: " + ModLoader.modHash),
-      (Func<string>) (() => "Time Played: " + MonoMain.TimeString(DateTime.Now - MonoMain.startTime) + " (" + DuckGame.Graphics.frame.ToString() + ")"),
-      (Func<string>) (() => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2),
-      (Func<string>) (() => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + MonoMain.framesSinceFocusChange.ToString() + ")"),
-      (Func<string>) (() => "Level: " + MonoMain.GetLevelString()),
-      (Func<string>) (() => "Command Line: " + Program.commandLine)
+       () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
+       () => "Version: " + DG.version,
+       () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")",
+       () => MonoMain.GetOnlineString(),
+       () => "Mods: " + ModLoader.modHash,
+       () => "Time Played: " + MonoMain.TimeString(DateTime.Now - MonoMain.startTime) + " (" + DuckGame.Graphics.frame.ToString() + ")",
+       () => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2,
+       () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + MonoMain.framesSinceFocusChange.ToString() + ")",
+       () => "Level: " + MonoMain.GetLevelString(),
+       () => "Command Line: " + Program.commandLine
     };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static int timeInMatches;
@@ -199,7 +199,7 @@ namespace DuckGame
 
         public static UIComponent pauseMenu
         {
-            get => MonoMain._pauseMenu != null && !MonoMain._pauseMenu.inWorld && !MonoMain._pauseMenu.open ? (UIComponent)null : MonoMain._pauseMenu;
+            get => MonoMain._pauseMenu != null && !MonoMain._pauseMenu.inWorld && !MonoMain._pauseMenu.open ? null : MonoMain._pauseMenu;
             set
             {
                 if (MonoMain._pauseMenu != value && MonoMain._pauseMenu != null && MonoMain._pauseMenu.open && !MonoMain._pauseMenu.inWorld)
@@ -218,9 +218,9 @@ namespace DuckGame
 
         public static int screenHeight => MonoMain._screenHeight;
 
-        public static int windowWidth => (int)Math.Round((double)MonoMain.screenWidth * (double)Options.GetWindowScaleMultiplier());
+        public static int windowWidth => (int)Math.Round(screenWidth * (double)Options.GetWindowScaleMultiplier());
 
-        public static int windowHeight => (int)Math.Round((double)MonoMain.screenHeight * (double)Options.GetWindowScaleMultiplier());
+        public static int windowHeight => (int)Math.Round(screenHeight * (double)Options.GetWindowScaleMultiplier());
 
         public static string GetOnlineString()
         {
@@ -349,11 +349,11 @@ namespace DuckGame
 
         public static int GetHexVal(char hex)
         {
-            int num = (int)hex;
+            int num = hex;
             return num - (num < 58 ? 48 : 55);
         }
 
-        public static byte[] StringToByteArray(string hex) => Enumerable.Range(0, hex.Length).Where<int>((Func<int, bool>)(x => x % 2 == 0)).Select<int, byte>((Func<int, byte>)(x => Convert.ToByte(hex.Substring(x, 2), 16))).ToArray<byte>();
+        public static byte[] StringToByteArray(string hex) => Enumerable.Range(0, hex.Length).Where<int>(x => x % 2 == 0).Select<int, byte>(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray<byte>();
 
         public static Texture2D RequestRandomDoodle()
         {
@@ -371,20 +371,20 @@ namespace DuckGame
                             string[] strArray = streamReader.ReadToEnd().Split('=');
                             byte[] byteArray = MonoMain.StringToByteArray(strArray[1].Split('&')[0]);
                             string str = strArray[2];
-                            return ContentPack.LoadTexture2DFromStream((Stream)new MemoryStream(byteArray), false);
+                            return ContentPack.LoadTexture2DFromStream(new MemoryStream(byteArray), false);
                         }
                     }
                 }
                 else
                 {
                     response.Close();
-                    return (Texture2D)null;
+                    return null;
                 }
             }
             catch (Exception)
             {
             }
-            return (Texture2D)null;
+            return null;
         }
 
         public static MonoMain.WebCharData RequestRandomCharacter()
@@ -411,12 +411,12 @@ namespace DuckGame
                             Tex2D tex2D = new Tex2D(128, 128);
                             Color[] colorArray = new Color[16384];
                             int index1 = 0;
-                            for (int index2 = 0; index2 < ((IEnumerable<byte>)source).Count<byte>() && index1 < ((IEnumerable<Color>)colorArray).Count<Color>(); ++index2)
+                            for (int index2 = 0; index2 < source.Count<byte>() && index1 < colorArray.Count<Color>(); ++index2)
                             {
                                 byte num2 = source[index2];
                                 for (int index3 = 0; index3 < 8; ++index3)
                                 {
-                                    colorArray[index1] = ((int)num2 & 128) == 0 ? Color.White : Color.Black;
+                                    colorArray[index1] = (num2 & 128) == 0 ? Color.White : Color.Black;
                                     num2 <<= 1;
                                     ++index1;
                                 }
@@ -434,13 +434,13 @@ namespace DuckGame
                 else
                 {
                     response.Close();
-                    return (MonoMain.WebCharData)null;
+                    return null;
                 }
             }
             catch (Exception)
             {
             }
-            return (MonoMain.WebCharData)null;
+            return null;
         }
 
         public void SaveShot() => new Thread(new ThreadStart(this.SaveShotThread))
@@ -459,16 +459,16 @@ namespace DuckGame
             if (!Directory.Exists("screenshots"))
                 Directory.CreateDirectory("screenshots");
             FileStream fileStream = System.IO.File.OpenWrite("screenshots/duckscreen-" + str2 + ".png");
-            (saveShot.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D).SaveAsPng((Stream)fileStream, saveShot.width, saveShot.height);
+            (saveShot.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D).SaveAsPng(fileStream, saveShot.width, saveShot.height);
             fileStream.Close();
         }
 
         public static string TimeString(TimeSpan span, int places = 3, bool small = false)
         {
             if (!small)
-                return (places > 2 ? (span.Hours < 10 ? "0" + Change.ToString((object)span.Hours) : Change.ToString((object)span.Hours)) + ":" : "") + (places > 1 ? (span.Minutes < 10 ? "0" + Change.ToString((object)span.Minutes) : Change.ToString((object)span.Minutes)) + ":" : "") + (span.Seconds < 10 ? "0" + Change.ToString((object)span.Seconds) : Change.ToString((object)span.Seconds));
-            int num = (int)((double)span.Milliseconds / 1000.0 * 99.0);
-            return (places > 2 ? (span.Minutes < 10 ? "0" + Change.ToString((object)span.Minutes) : Change.ToString((object)span.Minutes)) + ":" : "") + (places > 1 ? (span.Seconds < 10 ? "0" + Change.ToString((object)span.Seconds) : Change.ToString((object)span.Seconds)) + ":" : "") + (num < 10 ? "0" + Change.ToString((object)num) : Change.ToString((object)num));
+                return (places > 2 ? (span.Hours < 10 ? "0" + Change.ToString(span.Hours) : Change.ToString(span.Hours)) + ":" : "") + (places > 1 ? (span.Minutes < 10 ? "0" + Change.ToString(span.Minutes) : Change.ToString(span.Minutes)) + ":" : "") + (span.Seconds < 10 ? "0" + Change.ToString(span.Seconds) : Change.ToString(span.Seconds));
+            int num = (int)(span.Milliseconds / 1000.0 * 99.0);
+            return (places > 2 ? (span.Minutes < 10 ? "0" + Change.ToString(span.Minutes) : Change.ToString(span.Minutes)) + ":" : "") + (places > 1 ? (span.Seconds < 10 ? "0" + Change.ToString(span.Seconds) : Change.ToString(span.Seconds)) + ":" : "") + (num < 10 ? "0" + Change.ToString(num) : Change.ToString(num));
         }
 
         private void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
@@ -487,10 +487,10 @@ namespace DuckGame
         {
             MonoMain.mainThread = Thread.CurrentThread;
             MonoMain.cultureCode = CultureInfo.CurrentCulture.LCID;
-            MonoMain.startupAssemblies = ((IEnumerable<Assembly>)AppDomain.CurrentDomain.GetAssemblies()).Where<Assembly>((Func<Assembly, bool>)(x => !x.IsDynamic)).Select<Assembly, string>((Func<Assembly, string>)(assembly => assembly.Location)).ToArray<string>();
-            this.Content = (ContentManager)new SynchronizedContentManager((System.IServiceProvider)this.Services);
+            MonoMain.startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where<Assembly>(x => !x.IsDynamic).Select<Assembly, string>(assembly => assembly.Location).ToArray<string>();
+            this.Content = new SynchronizedContentManager(Services);
             DG.SetVersion(Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            this.graphics = new GraphicsDeviceManager((Game)this);
+            this.graphics = new GraphicsDeviceManager(this);
             this.graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(this.graphics_PreparingDeviceSettings);
             this.Content.RootDirectory = "Content";
             this._adapterW = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -506,13 +506,13 @@ namespace DuckGame
                 num1 = 320;
             if (this._adapterW > 1920)
                 num1 = 1920;
-            float num2 = (float)this._adapterH / (float)this._adapterW;
+            float num2 = _adapterH / (float)this._adapterW;
             if ((double)num2 < 0.560000002384186)
             {
                 num2 = 9f / 16f;
-                this._adapterH = (int)((double)this._adapterW * (double)num2);
+                this._adapterH = (int)(_adapterW * (double)num2);
             }
-            int num3 = (int)((double)num2 * (double)num1);
+            int num3 = (int)((double)num2 * num1);
             if (num3 > 1200)
                 num3 = 1200;
             MonoMain._screenWidth = num1;
@@ -521,7 +521,7 @@ namespace DuckGame
             Options.Load();
             Cloud.Initialize();
             MonoMain.instance = this;
-            Resolution.Initialize((object)(Form)Control.FromHandle(this.Window.Handle), this.graphics);
+            Resolution.Initialize((Form)Control.FromHandle(this.Window.Handle), this.graphics);
             Options.Load();
             Options.PostLoad();
             if (MonoMain.noFullscreen)
@@ -562,7 +562,7 @@ namespace DuckGame
                         }
                         MonoMain.hadInfiniteLoop = true;
                         MonoMain.mainThread.Resume();
-                        MonoMain.mainThread.Abort((object)new Exception(MonoMain.infiniteLoopDetails));
+                        MonoMain.mainThread.Abort(new Exception(MonoMain.infiniteLoopDetails));
                     }
                     catch (Exception ex)
                     {
@@ -606,13 +606,15 @@ namespace DuckGame
             DuckGame.Graphics.device.DeviceLost += new EventHandler<EventArgs>(this.DeviceLost);
             DuckGame.Graphics.device.DeviceResetting += new EventHandler<EventArgs>(this.DeviceResetting);
             DuckGame.Graphics.device.DeviceReset += new EventHandler<EventArgs>(this.DeviceReset);
-            this.graphicsService.DeviceCreated += (EventHandler<EventArgs>)((_param1, _param2) => this.OnDeviceCreated());
+            this.graphicsService.DeviceCreated += (_param1, _param2) => this.OnDeviceCreated();
             if (MonoMain.infiniteLoopDebug)
             {
-                this._infiniteLoopDetector = new Thread(new ThreadStart(this.InfiniteLoopDetector));
-                this._infiniteLoopDetector.CurrentCulture = CultureInfo.InvariantCulture;
-                this._infiniteLoopDetector.Priority = ThreadPriority.Lowest;
-                this._infiniteLoopDetector.IsBackground = true;
+                this._infiniteLoopDetector = new Thread(new ThreadStart(this.InfiniteLoopDetector))
+                {
+                    CurrentCulture = CultureInfo.InvariantCulture,
+                    Priority = ThreadPriority.Lowest,
+                    IsBackground = true
+                };
                 this._infiniteLoopDetector.Start();
                 MonoMain._loopTimer.Start();
             }
@@ -647,8 +649,8 @@ namespace DuckGame
                     {
                         for (int index = 0; index < 5; ++index)
                         {
-                            Send.ImmediateUnreliableBroadcast((NetMessage)new NMClientClosedGame());
-                            Send.ImmediateUnreliableBroadcast((NetMessage)new NMClientClosedGame());
+                            Send.ImmediateUnreliableBroadcast(new NMClientClosedGame());
+                            Send.ImmediateUnreliableBroadcast(new NMClientClosedGame());
                             Steam.Update();
                             Thread.Sleep(16);
                         }
@@ -717,7 +719,7 @@ namespace DuckGame
             }
             if (this._infiniteLoopDetector == null)
                 return;
-            this._infiniteLoopDetector = (Thread)null;
+            this._infiniteLoopDetector = null;
         }
 
         protected override void OnExiting(object sender, EventArgs args)
@@ -759,8 +761,8 @@ namespace DuckGame
             if (result == null || result.details == null)
                 return;
             WorkshopItem publishedFile = result.details.publishedFile;
-            int num1 = ((IEnumerable<string>)DuckFile.GetFiles(publishedFile.path)).Count<string>();
-            int num2 = ((IEnumerable<string>)DuckFile.GetDirectories(publishedFile.path)).Count<string>();
+            int num1 = DuckFile.GetFiles(publishedFile.path).Count<string>();
+            int num2 = DuckFile.GetDirectories(publishedFile.path).Count<string>();
             if ((num1 != 0 || num2 != 0) && (publishedFile.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && (publishedFile.stateFlags & WorkshopItemState.NeedsUpdate) == WorkshopItemState.None)
                 return;
             MonoMain.availableModsToDownload.Add(publishedFile);
@@ -772,24 +774,24 @@ namespace DuckGame
             if (!Steam.IsInitialized())
                 return;
             LoadingAction steamLoad = new LoadingAction();
-            steamLoad.action = (Action)(() =>
+            steamLoad.action = () =>
            {
                WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
                queryUser.requiredTags.Add("Mod");
                queryUser.onlyQueryIDs = true;
-               queryUser.QueryFinished += (WorkshopQueryFinished)(sender => steamLoad.flag = true);
+               queryUser.QueryFinished += sender => steamLoad.flag = true;
                queryUser.ResultFetched += new WorkshopQueryResultFetched(MonoMain.ResultFetched);
                queryUser.Request();
                Steam.Update();
-           });
-            steamLoad.waitAction = (Func<bool>)(() =>
+           };
+            steamLoad.waitAction = () =>
            {
                Steam.Update();
                return steamLoad.flag;
-           });
+           };
             MonoMain._thingsToLoad.Enqueue(steamLoad);
             steamLoad = new LoadingAction();
-            steamLoad.action = (Action)(() =>
+            steamLoad.action = () =>
            {
                MonoMain.totalLoadyBits = MonoMain.availableModsToDownload.Count;
                MonoMain.loadyBits = 0;
@@ -797,26 +799,26 @@ namespace DuckGame
                {
                    WorkshopItem u = workshopItem;
                    LoadingAction itemDownload = new LoadingAction();
-                   itemDownload.action = (Action)(() =>
+                   itemDownload.action = () =>
              {
                  MonoMain.loadMessage = "Downloading workshop mods (" + MonoMain.loadyBits.ToString() + "/" + MonoMain.totalLoadyBits.ToString() + ")";
                  if (Steam.DownloadWorkshopItem(u))
-                     itemDownload.context = (object)u;
+                     itemDownload.context = u;
                  ++MonoMain.loadyBits;
-             });
-                   itemDownload.waitAction = (Func<bool>)(() =>
+             };
+                   itemDownload.waitAction = () =>
              {
                  Steam.Update();
                  return u == null || u.finishedProcessing;
-             });
+             };
                    steamLoad.actions.Enqueue(itemDownload);
                }
-           });
-            steamLoad.waitAction = (Func<bool>)(() =>
+           };
+            steamLoad.waitAction = () =>
            {
                Steam.Update();
                return steamLoad.flag;
-           });
+           };
             MonoMain._thingsToLoad.Enqueue(steamLoad);
         }
 
@@ -827,7 +829,7 @@ namespace DuckGame
             this._threadedLoadingStarted = true;
             MonoMain.currentActionQueue = MonoMain._thingsToLoad;
             this.AddLoadingAction(new Action(ManagedContent.PreInitializeMods));
-            this.AddLoadingAction((Action)(() =>
+            this.AddLoadingAction(() =>
            {
                DuckGame.Content.InitializeTextureSizeDictionary();
                Network.Initialize();
@@ -838,7 +840,7 @@ namespace DuckGame
                DuckNetwork.Initialize();
                Persona.Initialize();
                DuckRig.Initialize();
-           }));
+           });
             this.AddLoadingAction(new Action(Input.Initialize));
             if (MonoMain.downloadWorkshopMods)
                 this.DownloadWorkshopItems();
@@ -859,7 +861,7 @@ namespace DuckGame
             this.AddLoadingAction(new Action(Level.InitializeCollisionLists));
             this.AddLoadingAction(new Action(Keyboard.InitTriggerImages));
             this.AddLoadingAction(new Action(MapPack.RegeneratePreviewsIfNecessary));
-            this.AddLoadingAction((Action)(() => this.StartLazyLoad()));
+            this.AddLoadingAction(() => this.StartLazyLoad());
             this.AddLoadingAction(new Action(this.SetStarted));
         }
 
@@ -868,10 +870,12 @@ namespace DuckGame
             this._doStart = true;
             if (MonoMain.enableThreadedLoading)
             {
-                MonoMain._lazyLoadThread = new Thread(new ThreadStart(this.DoLazyLoading));
-                MonoMain._lazyLoadThread.CurrentCulture = CultureInfo.InvariantCulture;
-                MonoMain._lazyLoadThread.Priority = ThreadPriority.BelowNormal;
-                MonoMain._lazyLoadThread.IsBackground = true;
+                MonoMain._lazyLoadThread = new Thread(new ThreadStart(this.DoLazyLoading))
+                {
+                    CurrentCulture = CultureInfo.InvariantCulture,
+                    Priority = ThreadPriority.BelowNormal,
+                    IsBackground = true
+                };
                 MonoMain._lazyLoadThread.Start();
             }
             else
@@ -1016,7 +1020,7 @@ namespace DuckGame
                     Input.ignoreInput = true;
                 }
                 if (MonoMain._pauseMenu != null && !MonoMain._pauseMenu.open)
-                    MonoMain._pauseMenu = (UIComponent)null;
+                    MonoMain._pauseMenu = null;
             }
             else
                 MonoMain.shouldPauseGameplay = false;
@@ -1038,7 +1042,7 @@ namespace DuckGame
 
         public static void CalculateModMemoryOffendersList()
         {
-            List<ModConfiguration> list = MonoMain.loadedModsWithAssemblies.OrderByDescending<ModConfiguration, long>((Func<ModConfiguration, long>)(x => x.content == null ? -1L : x.content.kilobytesPreAllocated)).ToList<ModConfiguration>();
+            List<ModConfiguration> list = MonoMain.loadedModsWithAssemblies.OrderByDescending<ModConfiguration, long>(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList<ModConfiguration>();
             bool flag = false;
             MonoMain.modMemoryOffendersString = "Mods taking up the most memory:\n";
             foreach (ModConfiguration modConfiguration in list)
@@ -1189,7 +1193,7 @@ namespace DuckGame
                         if ((double)DuckGame.Graphics.fade <= 0.0)
                         {
                             Level.current = MonoMain.transitionLevel;
-                            MonoMain.transitionLevel = (Level)null;
+                            MonoMain.transitionLevel = null;
                             MonoMain.transitionDirection = TransitionDirection.None;
                         }
                     }
@@ -1198,7 +1202,7 @@ namespace DuckGame
                         DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.1f);
                         if ((double)DuckGame.Graphics.fade >= 1.0)
                         {
-                            MonoMain.transitionLevel = (Level)null;
+                            MonoMain.transitionLevel = null;
                             MonoMain.transitionDirection = TransitionDirection.None;
                         }
                     }
@@ -1258,12 +1262,12 @@ namespace DuckGame
             DuckGame.Graphics.width = target.width;
             DuckGame.Graphics.height = target.height;
             Level.DrawCurrentLevel();
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
+            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
             MonoMain.instance.OnDraw();
             DuckGame.Graphics.screen.End();
             DuckGame.Graphics.width = width;
             DuckGame.Graphics.height = height;
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
         }
 
         [DllImport("ntdll.dll", SetLastError = true)]
@@ -1291,45 +1295,45 @@ namespace DuckGame
                 int MaximumResolution;
                 int CurrentResolution;
                 MonoMain.NtQueryTimerResolution(out MinimumResolution, out MaximumResolution, out CurrentResolution);
-                MonoMain.LowestSleepThreshold = 1.0 + (double)MaximumResolution / 10000.0;
+                MonoMain.LowestSleepThreshold = 1.0 + MaximumResolution / 10000.0;
                 DevConsole.Log(DCSection.General, "TIMER RES(" + MinimumResolution.ToString() + ", " + MaximumResolution.ToString() + ", " + CurrentResolution.ToString() + ")");
             }
             if (milliseconds < MonoMain.LowestSleepThreshold)
                 return;
-            int millisecondsTimeout = (int)(milliseconds - (double)MonoMain.GetCurrentResolution());
+            int millisecondsTimeout = (int)(milliseconds - MonoMain.GetCurrentResolution());
             if (millisecondsTimeout < 1)
                 return;
             Thread.Sleep(millisecondsTimeout);
         }
 
-        public static MaterialPause pauseMaterial => MonoMain._pauseMaterial;
+        //public static MaterialPause pauseMaterial => MonoMain._pauseMaterial;
 
-        private static int JulianDate(int d, int m, int y)
-        {
-            int num1 = y - (12 - m) / 10;
-            int num2 = m + 9;
-            if (num2 >= 12)
-                num2 -= 12;
-            int num3 = (int)(365.25 * (double)(num1 + 4712));
-            int num4 = (int)(30.6001 * (double)num2 + 0.5);
-            int num5 = (int)((double)(num1 / 100 + 49) * 0.75) - 38;
-            int num6 = num4;
-            int num7 = num3 + num6 + d + 59;
-            if (num7 > 2299160)
-                num7 -= num5;
-            return num7;
-        }
+        //private static int JulianDate(int d, int m, int y)
+        //{
+        //    int num1 = y - (12 - m) / 10;
+        //    int num2 = m + 9;
+        //    if (num2 >= 12)
+        //        num2 -= 12;
+        //    int num3 = (int)(365.25 * (double)(num1 + 4712));
+        //    int num4 = (int)(30.6001 * (double)num2 + 0.5);
+        //    int num5 = (int)((double)(num1 / 100 + 49) * 0.75) - 38;
+        //    int num6 = num4;
+        //    int num7 = num3 + num6 + d + 59;
+        //    if (num7 > 2299160)
+        //        num7 -= num5;
+        //    return num7;
+        //}
 
-        private static MonoMain.MoonInfo MoonPhase(int d, int m, int y)
-        {
-            MonoMain.MoonInfo moonInfo = new MonoMain.MoonInfo();
-            int num = MonoMain.JulianDate(d, m, y);
-            moonInfo.phase = ((double)num + 4.867) / 29.53059;
-            moonInfo.phase -= Math.Floor(moonInfo.phase);
-            moonInfo.age = moonInfo.phase >= 0.5 ? moonInfo.phase * 29.53059 - 14.765295 : moonInfo.phase * 29.53059 + 14.765295;
-            moonInfo.age = Math.Floor(moonInfo.age) + 1.0;
-            return moonInfo;
-        }
+        //private static MonoMain.MoonInfo MoonPhase(int d, int m, int y)
+        //{
+        //    MonoMain.MoonInfo moonInfo = new MonoMain.MoonInfo();
+        //    int num = MonoMain.JulianDate(d, m, y);
+        //    moonInfo.phase = ((double)num + 4.867) / 29.53059;
+        //    moonInfo.phase -= Math.Floor(moonInfo.phase);
+        //    moonInfo.age = moonInfo.phase >= 0.5 ? moonInfo.phase * 29.53059 - 14.765295 : moonInfo.phase * 29.53059 + 14.765295;
+        //    moonInfo.age = Math.Floor(moonInfo.age) + 1.0;
+        //    return moonInfo;
+        //}
 
         public static bool FullMoon
         {
@@ -1347,7 +1351,7 @@ namespace DuckGame
             if (MonoMain.loseDevice > 0)
             {
                 DuckGame.Graphics.Clear(Color.Black);
-                this.GraphicsDevice.SetRenderTarget((Microsoft.Xna.Framework.Graphics.RenderTarget2D)null);
+                this.GraphicsDevice.SetRenderTarget(null);
                 --MonoMain.loseDevice;
                 base.Draw(gameTime);
             }
@@ -1365,7 +1369,7 @@ namespace DuckGame
                     if (Resolution.Update())
                     {
                         DuckGame.Graphics.Clear(Color.Black);
-                        this.GraphicsDevice.SetRenderTarget((Microsoft.Xna.Framework.Graphics.RenderTarget2D)null);
+                        this.GraphicsDevice.SetRenderTarget(null);
                         base.Draw(gameTime);
                         DuckGame.Graphics.drawing = false;
                     }
@@ -1376,17 +1380,17 @@ namespace DuckGame
                         if (DuckGame.Graphics._screenBufferTarget != null)
                         {
                             MonoMain._tempRecordingReference = Recorder.currentRecording;
-                            Recorder.currentRecording = (Recording)null;
+                            Recorder.currentRecording = null;
                             DuckGame.Graphics.SetScreenTargetViewport();
                             DuckGame.Graphics.Clear(Color.Black);
-                            Camera camera = new Camera(0.0f, 0.0f, (float)DuckGame.Graphics._screenBufferTarget.width, (float)DuckGame.Graphics._screenBufferTarget.height);
-                            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
-                            DuckGame.Graphics.Draw((Tex2D)DuckGame.Graphics._screenBufferTarget, 0.0f, 0.0f);
+                            Camera camera = new Camera(0.0f, 0.0f, Graphics._screenBufferTarget.width, Graphics._screenBufferTarget.height);
+                            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
+                            DuckGame.Graphics.Draw(Graphics._screenBufferTarget, 0.0f, 0.0f);
                             DuckGame.Graphics.screen.End();
                             Recorder.currentRecording = MonoMain._tempRecordingReference;
                         }
                         DuckGame.Graphics.UpdateScreenViewport();
-                        this.GraphicsDevice.SetRenderTarget((Microsoft.Xna.Framework.Graphics.RenderTarget2D)null);
+                        this.GraphicsDevice.SetRenderTarget(null);
                         base.Draw(gameTime);
                         DuckGame.Graphics.drawing = false;
                     }
@@ -1405,13 +1409,13 @@ namespace DuckGame
             DuckGame.Graphics.frameFlipFlop = !DuckGame.Graphics.frameFlipFlop;
             if (DuckGame.Graphics.device.IsDisposed)
                 return;
-            DuckGame.Graphics.SetScissorRectangle(new Rectangle(0.0f, 0.0f, (float)DuckGame.Graphics.width, (float)DuckGame.Graphics.height));
+            DuckGame.Graphics.SetScissorRectangle(new Rectangle(0.0f, 0.0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
             if (!MonoMain._started)
             {
                 ++this._loadingFramesRendered;
-                DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                DuckGame.Graphics.SetRenderTarget(null);
                 MonoMain._pauseMaterial = new MaterialPause();
                 if (!this._setCulture)
                 {
@@ -1419,12 +1423,12 @@ namespace DuckGame
                     this._setCulture = true;
                 }
                 DuckGame.Graphics.Clear(new Color(0, 0, 0));
-                Camera camera = new Camera(0.0f, 0.0f, (float)DuckGame.Graphics.width, (float)DuckGame.Graphics.height);
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
-                Vec2 p1 = new Vec2(50f, (float)(DuckGame.Graphics.height - 50));
-                Vec2 vec2_1 = new Vec2((float)(DuckGame.Graphics.width - 100), 20f);
+                Camera camera = new Camera(0.0f, 0.0f, Graphics.width, Graphics.height);
+                DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
+                Vec2 p1 = new Vec2(50f, DuckGame.Graphics.height - 50);
+                Vec2 vec2_1 = new Vec2(DuckGame.Graphics.width - 100, 20f);
                 DuckGame.Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
-                float num = (float)MonoMain.loadyBits / (float)MonoMain.totalLoadyBits;
+                float num = loadyBits / (float)MonoMain.totalLoadyBits;
                 if ((double)num > 1.0)
                     num = 1f;
                 DuckGame.Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
@@ -1438,13 +1442,13 @@ namespace DuckGame
                 this._duckRun.color = new Color(80, 80, 80);
                 if (this._timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
                     ++this._duckRun.frame;
-                Vec2 vec2_2 = new Vec2((float)(DuckGame.Graphics.width - this._duckRun.width * 4 - 50), (float)(DuckGame.Graphics.height - this._duckRun.height * 4 - 55));
-                DuckGame.Graphics.Draw((Sprite)this._duckRun, vec2_2.x, vec2_2.y);
+                Vec2 vec2_2 = new Vec2(DuckGame.Graphics.width - this._duckRun.width * 4 - 50, DuckGame.Graphics.height - this._duckRun.height * 4 - 55);
+                DuckGame.Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
                 this._duckArm.frame = this._duckRun.imageIndex;
                 this._duckArm.scale = new Vec2(4f, 4f);
                 this._duckArm.depth = (Depth)0.6f;
                 this._duckArm.color = new Color(80, 80, 80);
-                DuckGame.Graphics.Draw((Sprite)this._duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
+                DuckGame.Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 DuckGame.Graphics.screen.End();
                 this._timeSinceLastLoadFrame.Restart();
             }
@@ -1480,19 +1484,19 @@ namespace DuckGame
                     DuckGame.Graphics.UpdateScreenViewport(true);
                     HUD.hide = true;
                     Level.DrawCurrentLevel();
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
+                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
                     this.OnDraw();
                     DuckGame.Graphics.screen.End();
                     HUD.hide = false;
-                    DuckGame.Graphics.screenCapture = (RenderTarget2D)null;
+                    DuckGame.Graphics.screenCapture = null;
                     DuckGame.Graphics.width = width;
                     DuckGame.Graphics.height = height;
-                    DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                    DuckGame.Graphics.SetRenderTarget(null);
                 }
                 if (this._screenshotTarget != null)
                 {
                     this.saveShot = this._screenshotTarget;
-                    this._screenshotTarget = (RenderTarget2D)null;
+                    this._screenshotTarget = null;
                     this.SaveShot();
                 }
                 if (DuckGame.Graphics.screenTarget != null)
@@ -1503,15 +1507,15 @@ namespace DuckGame
                     DuckGame.Graphics.UpdateScreenViewport();
                     HUD.hide = true;
                     Level.DrawCurrentLevel();
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
+                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
                     this.OnDraw();
                     DuckGame.Graphics.screen.End();
                     HUD.hide = false;
                     DuckGame.Graphics.width = width;
                     DuckGame.Graphics.height = height;
-                    DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
-                    DuckGame.Graphics.Draw((Tex2D)DuckGame.Graphics.screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0.0f, Vec2.Zero, Vec2.One, SpriteEffects.None);
+                    DuckGame.Graphics.SetRenderTarget(null);
+                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
+                    DuckGame.Graphics.Draw(Graphics.screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0.0f, Vec2.Zero, Vec2.One, SpriteEffects.None);
                     DuckGame.Graphics.screen.End();
                 }
                 else
@@ -1521,7 +1525,7 @@ namespace DuckGame
                         flag = false;
                     if (MonoMain._pauseMenu != null && MonoMain._didPauseCapture && DuckGame.Graphics.screenCapture == null)
                     {
-                        DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                        DuckGame.Graphics.SetRenderTarget(null);
                         DuckGame.Graphics.Clear(Color.Black * DuckGame.Graphics.fade);
                         if (MonoMain.autoPauseFade)
                         {
@@ -1529,11 +1533,11 @@ namespace DuckGame
                             MonoMain._pauseMaterial.dim = Lerp.FloatSmooth(MonoMain._pauseMaterial.dim, MonoMain.doPauseFade ? 0.6f : 1f, 0.1f, 1.1f);
                         }
                         DuckGame.Graphics.SetFullViewport();
-                        Vec2 vec2 = new Vec2(Layer.HUD.camera.width / (float)MonoMain._screenCapture.width, Layer.HUD.camera.height / (float)MonoMain._screenCapture.height);
-                        DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
-                        DuckGame.Graphics.material = (Material)MonoMain._pauseMaterial;
-                        DuckGame.Graphics.Draw((Tex2D)MonoMain._screenCapture, new Vec2(0.0f, 0.0f), new Rectangle?(), new Color(120, 120, 120), 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, - 0.9f);
-                        DuckGame.Graphics.material = (Material)null;
+                        Vec2 vec2 = new Vec2(Layer.HUD.camera.width / _screenCapture.width, Layer.HUD.camera.height / _screenCapture.height);
+                        DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
+                        DuckGame.Graphics.material = _pauseMaterial;
+                        DuckGame.Graphics.Draw(_screenCapture, new Vec2(0.0f, 0.0f), new Rectangle?(), new Color(120, 120, 120), 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, - 0.9f);
+                        DuckGame.Graphics.material = null;
                         DuckGame.Graphics.screen.End();
                         DuckGame.Graphics.RestoreOldViewport();
                         Layer.HUD.Begin(true);
@@ -1558,9 +1562,9 @@ namespace DuckGame
                             MonoMain._pauseMaterial.fade = 0.0f;
                             MonoMain._pauseMaterial.dim = 0.6f;
                         }
-                        DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                        DuckGame.Graphics.SetRenderTarget(null);
                         Level.DrawCurrentLevel();
-                        DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (MTEffect)null, Resolution.getTransformationMatrix());
+                        DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
                         this.OnDraw();
                         DuckGame.Graphics.screen.End();
                         if (MonoMain.closeMenuUpdate.Count > 0)

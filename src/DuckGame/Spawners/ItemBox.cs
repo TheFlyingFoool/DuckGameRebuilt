@@ -18,7 +18,7 @@ namespace DuckGame
     {
         public StateBinding _positionBinding = new StateBinding("position");
         public StateBinding _containedObjectBinding = new StateBinding(nameof(containedObject));
-        public StateBinding _boxStateBinding = (StateBinding)new ItemBoxFlagBinding();
+        public StateBinding _boxStateBinding = new ItemBoxFlagBinding();
         public StateBinding _chargingBinding = new StateBinding(nameof(charging), 9);
         public StateBinding _netDisarmIndexBinding = new StateBinding(nameof(netDisarmIndex));
         public byte netDisarmIndex;
@@ -49,7 +49,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("itemBox", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.layer = Layer.Foreground;
             this.center = new Vec2(8f, 8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -91,15 +91,15 @@ namespace DuckGame
                 {
                     if (above.grounded || (double)above.vSpeed > 0.0 || (double)above.vSpeed == 0.0)
                     {
-                        this.Fondle((Thing)above);
+                        this.Fondle(above);
                         above.y -= 2f;
                         above.vSpeed = -3f;
                         if (above is Duck pTarget)
                         {
                             if (!pTarget.isServerForObject)
-                                Send.Message((NetMessage)new NMDisarmVertical(pTarget, -3f), pTarget.connection);
+                                Send.Message(new NMDisarmVertical(pTarget, -3f), pTarget.connection);
                             else
-                                pTarget.Disarm((Thing)this);
+                                pTarget.Disarm(this);
                         }
                     }
                 }
@@ -110,11 +110,11 @@ namespace DuckGame
         {
             if (from != ImpactedFrom.Bottom || !with.isServerForObject)
                 return;
-            with.Fondle((Thing)this);
+            with.Fondle(this);
             if (with is Duck duck)
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
             if (this.containedObject != null)
-                with.Fondle((Thing)this.containedObject);
+                with.Fondle(containedObject);
             this.Pop();
         }
 
@@ -156,26 +156,26 @@ namespace DuckGame
             this.containedObject.visible = false;
             this.containedObject.active = false;
             this.containedObject.position = this.position;
-            Level.Add((Thing)this.containedObject);
+            Level.Add(containedObject);
         }
 
         public override void Update()
         {
             this.UpdateContainedObject();
             this._aboveList.Clear();
-            if ((double)this.startY < -9999.0)
+            if (startY < -9999.0)
                 this.startY = this.y;
             this._sprite.frame = this._hit ? 1 : 0;
-            if (this.contains == (System.Type)null && this.containedObject == null && !(this is ItemBoxRandom))
+            if (this.contains == null && this.containedObject == null && !(this is ItemBoxRandom))
                 this._sprite.frame = 1;
-            if ((int)this.netDisarmIndex != (int)this.localNetDisarm)
+            if (netDisarmIndex != localNetDisarm)
             {
                 this.localNetDisarm = this.netDisarmIndex;
                 this._aboveList = Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(1f, -4f), this.bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
                 foreach (PhysicsObject above in this._aboveList)
                 {
                     if (this.isServerForObject && above.owner == null)
-                        this.Fondle((Thing)above);
+                        this.Fondle(above);
                     if (above.isServerForObject && (above.grounded || (double)above.vSpeed > 0.0 || (double)above.vSpeed == 0.0))
                     {
                         above.y -= 2f;
@@ -183,24 +183,24 @@ namespace DuckGame
                         if (above is Duck pTarget)
                         {
                             if (!pTarget.isServerForObject)
-                                Send.Message((NetMessage)new NMDisarmVertical(pTarget, -3f), pTarget.connection);
+                                Send.Message(new NMDisarmVertical(pTarget, -3f), pTarget.connection);
                             else
-                                pTarget.Disarm((Thing)this);
+                                pTarget.Disarm(this);
                         }
                     }
                 }
             }
             this.UpdateCharging();
-            if ((double)this.bounceAmount > 0.0)
+            if (bounceAmount > 0.0)
                 this.bounceAmount -= 0.8f;
             else
                 this.bounceAmount = 0.0f;
             this.y -= this.bounceAmount;
             if (this._canBounce)
                 return;
-            if ((double)this.y < (double)this.startY)
+            if ((double)this.y < startY)
                 this.y += (float)(0.800000011920929 + (double)Math.Abs(this.y - this.startY) * 0.400000005960464);
-            if ((double)this.y > (double)this.startY)
+            if ((double)this.y > startY)
                 this.y -= (float)(0.800000011920929 - (double)Math.Abs(this.y - this.startY) * 0.400000005960464);
             if ((double)Math.Abs(this.y - this.startY) >= 0.800000011920929)
                 return;
@@ -210,8 +210,8 @@ namespace DuckGame
 
         public virtual PhysicsObject GetSpawnItem()
         {
-            if (this.contains == (System.Type)null)
-                return (PhysicsObject)null;
+            if (this.contains == null)
+                return null;
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(this.contains);
             return !Network.isActive || bag.GetOrDefault("isOnlineCapable", true) ? Editor.CreateThing(this.contains) as PhysicsObject : Activator.CreateInstance(typeof(Pistol), Editor.GetConstructorParameters(typeof(Pistol))) as PhysicsObject;
         }
@@ -219,7 +219,7 @@ namespace DuckGame
         public virtual void SpawnItem()
         {
             this.charging = 500;
-            if (this.containContext == null && (!Network.isActive && this.contains == (System.Type)null && !(this is ItemBoxRandom) || Network.isActive && this.containedObject == null))
+            if (this.containContext == null && (!Network.isActive && this.contains == null && !(this is ItemBoxRandom) || Network.isActive && this.containedObject == null))
                 return;
             PhysicsObject t = this.containContext;
             if (t == null)
@@ -242,12 +242,12 @@ namespace DuckGame
             if (t == null)
                 return;
             foreach (PhysicsObject above in this._aboveList)
-                t.clip.Add((MaterialThing)above);
+                t.clip.Add(above);
             t.x = this.x;
             t.bottom = this.bottom;
             t.y -= 12f;
             t.vSpeed = -3.5f;
-            t.clip.Add((MaterialThing)this);
+            t.clip.Add(this);
             if (t is Gun)
             {
                 Gun gun = t as Gun;
@@ -256,32 +256,32 @@ namespace DuckGame
             }
             Block block1 = Level.CheckPoint<Block>(this.position + new Vec2(-16f, 0.0f));
             if (block1 != null)
-                t.clip.Add((MaterialThing)block1);
+                t.clip.Add(block1);
             Block block2 = Level.CheckPoint<Block>(this.position + new Vec2(16f, 0.0f));
             if (block2 != null)
-                t.clip.Add((MaterialThing)block2);
+                t.clip.Add(block2);
             if (!Network.isActive || this is PurpleBlock)
-                Level.Add((Thing)t);
+                Level.Add(t);
             if (!Network.isActive)
                 SFX.Play("hitBox");
             else if (this.isServerForObject)
                 NetSoundEffect.Play("itemBoxHit");
-            Thing.Fondle((Thing)t, DuckNetwork.localConnection);
-            this.containedObject = (PhysicsObject)null;
+            Thing.Fondle(t, DuckNetwork.localConnection);
+            this.containedObject = null;
         }
 
-        public static List<System.Type> GetPhysicsObjects(EditorGroup group) => Editor.ThingTypes.Where<System.Type>((Func<System.Type, bool>)(t =>
+        public static List<System.Type> GetPhysicsObjects(EditorGroup group) => Editor.ThingTypes.Where<System.Type>(t =>
        {
            if (t.IsAbstract || !t.IsSubclassOf(typeof(PhysicsObject)) || t.GetCustomAttributes(typeof(EditorGroupAttribute), false).Length == 0)
                return false;
            IReadOnlyPropertyBag bag = ContentProperties.GetBag(t);
            return bag.GetOrDefault("canSpawn", true) && (!Network.isActive || !bag.GetOrDefault("noRandomSpawningOnline", false)) && (!Network.isActive || bag.GetOrDefault("isOnlineCapable", true)) && (Main.isDemo || !bag.GetOrDefault("onlySpawnInDemo", false));
-       })).ToList<System.Type>();
+       }).ToList<System.Type>();
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", (object)Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
             return binaryClassChunk;
         }
 
@@ -295,7 +295,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", this.contains != (System.Type)null ? (object)this.contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -310,24 +310,24 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding radioBinding = new FieldBinding((object)this, "contains");
+            FieldBinding radioBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
             contextMenu.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), radioBinding);
-            return (ContextMenu)contextMenu;
+            return contextMenu;
         }
 
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 str = this.contains.Name;
-            return this.contains == (System.Type)null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
+            return this.contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
         }
 
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 text = this.contains.Name;
             Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
         }

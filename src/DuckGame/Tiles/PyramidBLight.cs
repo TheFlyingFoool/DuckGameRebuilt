@@ -23,7 +23,7 @@ namespace DuckGame
             this._sprite = new SpriteMap("pyramidBackgroundLight", 14, 12);
             this._sprite.AddAnimation("go", 0.2f, true, 0, 1, 2, 3, 4);
             this._sprite.SetAnimation("go");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 8f);
             this._collisionSize = new Vec2(8f, 8f);
             this._collisionOffset = new Vec2(-4f, -4f);
@@ -37,7 +37,7 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            Level.Add((Thing)new PointLight(this.x, this.y - 1f, PyramidWallLight.lightColor, 120f, strangeFalloff: true));
+            Level.Add(new PointLight(this.x, this.y - 1f, PyramidWallLight.lightColor, 120f, strangeFalloff: true));
         }
     }
 }

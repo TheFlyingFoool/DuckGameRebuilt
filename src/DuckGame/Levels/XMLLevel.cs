@@ -94,7 +94,7 @@ namespace DuckGame
                 if (Network.isServer && Network.isActive)
                 {
                     MemoryStream memoryStream = new MemoryStream();
-                    BinaryWriter binaryWriter = new BinaryWriter((Stream)new GZipStream((Stream)memoryStream, CompressionMode.Compress));
+                    BinaryWriter binaryWriter = new BinaryWriter(new GZipStream(memoryStream, CompressionMode.Compress));
                     binaryWriter.Write(nextLevel.metaData.guid.ToString());
                     BitBuffer data = nextLevel.GetData();
                     binaryWriter.Write(data.lengthInBytes);
@@ -115,7 +115,7 @@ namespace DuckGame
         public static byte[] GetCompressedLevelData(LevelData pLevel, string pLevelName)
         {
             MemoryStream memoryStream = new MemoryStream();
-            BinaryWriter binaryWriter = new BinaryWriter((Stream)new GZipStream((Stream)memoryStream, CompressionMode.Compress));
+            BinaryWriter binaryWriter = new BinaryWriter(new GZipStream(memoryStream, CompressionMode.Compress));
             binaryWriter.Write(pLevelName);
             BitBuffer data = pLevel.GetData();
             binaryWriter.Write(data.lengthInBytes);
@@ -138,7 +138,7 @@ namespace DuckGame
             if (str2.EndsWith(".custom"))
                 str2 = str2.Substring(0, this.level.Length - 7);
             DuckFile.EnsureDownloadFileSpaceAvailable();
-            return DuckFile.SaveChunk((BinaryClassChunk)this._data, str1 + str2 + ".lev");
+            return DuckFile.SaveChunk(_data, str1 + str2 + ".lev");
         }
 
         public string ProcessLevelPath(string path)
@@ -164,7 +164,7 @@ namespace DuckGame
                 if (NetworkDebugger.currentIndex != 0)
                     str4 = str4.Insert(str4.Length - 1, NetworkDebugger.currentIndex.ToString());
                 string path2 = str4 + str3 + ".lev";
-                return System.IO.File.Exists(path2) ? path2 : (string)null;
+                return System.IO.File.Exists(path2) ? path2 : null;
             }
             this._data = Content.GetLevel(path);
             if (this._data != null)
@@ -173,7 +173,7 @@ namespace DuckGame
             if (System.IO.File.Exists(path3))
                 return path3;
             string path4 = Editor.initialDirectory + "/" + path + ".lev";
-            return System.IO.File.Exists(path4) ? path4 : (string)null;
+            return System.IO.File.Exists(path4) ? path4 : null;
         }
 
         private LevelData LoadLevelDoc()
@@ -230,7 +230,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            AutoBlock._kBlockIndex = (ushort)0;
+            AutoBlock._kBlockIndex = 0;
             if (this.level == "RANDOM" || this.cancelLoading)
                 return;
             if (this._data == null)
@@ -241,16 +241,16 @@ namespace DuckGame
             if ((this.level == "WORKSHOP" || this._customLoad || this._customLevel) && !this.bareInitialize)
                 Global.PlayCustomLevel(this._id);
             Custom.ClearCustomData();
-            Custom.previewData[CustomType.Block][0] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Block][1] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Block][2] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Background][0] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Background][1] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Background][2] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Platform][0] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Platform][1] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Platform][2] = (CustomTileDataChunk)null;
-            Custom.previewData[CustomType.Parallax][0] = (CustomTileDataChunk)null;
+            Custom.previewData[CustomType.Block][0] = null;
+            Custom.previewData[CustomType.Block][1] = null;
+            Custom.previewData[CustomType.Block][2] = null;
+            Custom.previewData[CustomType.Background][0] = null;
+            Custom.previewData[CustomType.Background][1] = null;
+            Custom.previewData[CustomType.Background][2] = null;
+            Custom.previewData[CustomType.Platform][0] = null;
+            Custom.previewData[CustomType.Platform][1] = null;
+            Custom.previewData[CustomType.Platform][2] = null;
+            Custom.previewData[CustomType.Parallax][0] = null;
             if (this._data.customData != null)
             {
                 if (this._data.customData.customTileset01Data != null)
@@ -352,7 +352,7 @@ namespace DuckGame
             if (flag)
                 this.onlineEnabled = true;
             this._things.RefreshState();
-            Thing.loadingLevel = (LevelData)null;
+            Thing.loadingLevel = null;
         }
 
         private void NetPrepare(Thing pThing)

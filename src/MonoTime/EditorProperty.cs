@@ -29,13 +29,13 @@ namespace DuckGame
                 this._value = value;
                 if (this._notify == null)
                     return;
-                this._notify.EditorPropertyChanged((object)this);
+                this._notify.EditorPropertyChanged(this);
             }
         }
 
         public EditorPropertyInfo info => new EditorPropertyInfo()
         {
-            value = (object)this._value,
+            value = _value,
             min = this._min,
             max = this._max,
             increment = this._increment,

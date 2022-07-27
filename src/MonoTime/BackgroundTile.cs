@@ -61,9 +61,9 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("frame", (object)this._frame);
+            binaryClassChunk.AddProperty("frame", _frame);
             if (this.flipHorizontal)
-                binaryClassChunk.AddProperty("f", (object)1);
+                binaryClassChunk.AddProperty("f", 1);
             return binaryClassChunk;
         }
 
@@ -80,7 +80,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("frame", (object)(this.graphic as SpriteMap).frame));
+            dxmlNode.Add(new DXMLNode("frame", (graphic as SpriteMap).frame));
             return dxmlNode;
         }
 
@@ -102,6 +102,6 @@ namespace DuckGame
                 base.Draw();
         }
 
-        public override ContextMenu GetContextMenu() => (ContextMenu)null;
+        public override ContextMenu GetContextMenu() => null;
     }
 }

@@ -19,10 +19,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 2;
-            this._ammoType = (AmmoType)new ATOldPistol();
+            this._ammoType = new ATOldPistol();
             this._type = "gun";
             this._sprite = new SpriteMap("oldPistol", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 17f);
             this.collisionOffset = new Vec2(-8f, -4f);
             this.collisionSize = new Vec2(16f, 8f);
@@ -73,7 +73,7 @@ namespace DuckGame
             }
             else if (this._loadState == 1)
             {
-                if ((double)this._angleOffset < 0.159999996423721)
+                if (_angleOffset < 0.159999996423721)
                     this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.08f);
                 else
                     ++this._loadState;
@@ -81,7 +81,7 @@ namespace DuckGame
             else if (this._loadState == 2)
             {
                 this.handOffset.y -= 0.28f;
-                if ((double)this.handOffset.y >= -4.0)
+                if (handOffset.y >= -4.0)
                     return;
                 ++this._loadState;
                 this.ammo = 2;
@@ -98,7 +98,7 @@ namespace DuckGame
             else if (this._loadState == 3)
             {
                 this.handOffset.y += 0.15f;
-                if ((double)this.handOffset.y < 0.0)
+                if (handOffset.y < 0.0)
                     return;
                 ++this._loadState;
                 this.handOffset.y = 0.0f;
@@ -115,7 +115,7 @@ namespace DuckGame
             {
                 if (this._loadState != 4)
                     return;
-                if ((double)this._angleOffset > 0.0399999991059303)
+                if (_angleOffset > 0.0399999991059303)
                 {
                     this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.08f);
                 }
@@ -144,9 +144,9 @@ namespace DuckGame
             {
                 base.OnPressAction();
                 for (int index = 0; index < 4; ++index)
-                    Level.Add((Thing)Spark.New(this.offDir > (sbyte)0 ? this.x - 9f : this.x + 9f, this.y - 6f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.05f));
+                    Level.Add(Spark.New(this.offDir > 0 ? this.x - 9f : this.x + 9f, this.y - 6f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.05f));
                 for (int index = 0; index < 4; ++index)
-                    Level.Add((Thing)SmallSmoke.New(this.barrelPosition.x + (float)this.offDir * 4f, this.barrelPosition.y));
+                    Level.Add(SmallSmoke.New(this.barrelPosition.x + offDir * 4f, this.barrelPosition.y));
                 this.ammo = 1;
             }
             else
@@ -160,7 +160,7 @@ namespace DuckGame
         public override void Draw()
         {
             float angle = this.angle;
-            if (this.offDir > (sbyte)0)
+            if (this.offDir > 0)
                 this.angle -= this._angleOffset;
             else
                 this.angle += this._angleOffset;

@@ -24,31 +24,33 @@ namespace DuckGame
             List<TeamSpawn> teamSpawnList = new List<TeamSpawn>();
             foreach (TeamSpawn teamSpawn in Level.current.things[typeof(TeamSpawn)])
             {
-                if (!usedSpawns.Contains((SpawnPoint)teamSpawn) && (!teamSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
+                if (!usedSpawns.Contains(teamSpawn) && (!teamSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
                     teamSpawnList.Add(teamSpawn);
             }
             if (teamSpawnList.Count <= 0)
-                return (SpawnPoint)null;
+                return null;
             TeamSpawn teamSpawn1 = teamSpawnList[Rando.Int(teamSpawnList.Count - 1)];
-            usedSpawns.Add((SpawnPoint)teamSpawn1);
+            usedSpawns.Add(teamSpawn1);
             for (int index = 0; index < team.numMembers; ++index)
             {
                 Vec2 position = teamSpawn1.position;
                 if (team.numMembers == 2)
                 {
                     float num = 18.82353f;
-                    position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
+                    position.x = (float)(teamSpawn1.position.x - 16.0 + (double)num * index);
                 }
                 else if (team.numMembers == 3)
                 {
                     float num = 9.411764f;
-                    position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
+                    position.x = (float)(teamSpawn1.position.x - 16.0 + (double)num * index);
                 }
-                Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index]);
-                duck.offDir = teamSpawn1.offDir;
+                Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index])
+                {
+                    offDir = teamSpawn1.offDir
+                };
                 spawned.Add(duck);
             }
-            return (SpawnPoint)teamSpawn1;
+            return teamSpawn1;
         }
 
         private static SpawnPoint AttemptFreeSpawn(
@@ -59,23 +61,25 @@ namespace DuckGame
             List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
             foreach (FreeSpawn freeSpawn in Level.current.things[typeof(FreeSpawn)])
             {
-                if (freeSpawn.secondSpawn.value == Spawn.runningSecondSpawn && !usedSpawns.Contains((SpawnPoint)freeSpawn) && (!freeSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
-                    spawnPointList.Add((SpawnPoint)freeSpawn);
+                if (freeSpawn.secondSpawn.value == Spawn.runningSecondSpawn && !usedSpawns.Contains(freeSpawn) && (!freeSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
+                    spawnPointList.Add(freeSpawn);
             }
             if (spawnPointList.Count == 0)
             {
                 foreach (FreeSpawn freeSpawn in Level.current.things[typeof(FreeSpawn)])
                 {
-                    if (!usedSpawns.Contains((SpawnPoint)freeSpawn) && (!freeSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
-                        spawnPointList.Add((SpawnPoint)freeSpawn);
+                    if (!usedSpawns.Contains(freeSpawn) && (!freeSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
+                        spawnPointList.Add(freeSpawn);
                 }
             }
             if (spawnPointList.Count == 0)
-                return (SpawnPoint)null;
+                return null;
             SpawnPoint spawnPoint = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
             usedSpawns.Add(spawnPoint);
-            Duck duck = new Duck(spawnPoint.x, spawnPoint.y - 7f, profile);
-            duck.offDir = spawnPoint.offDir;
+            Duck duck = new Duck(spawnPoint.x, spawnPoint.y - 7f, profile)
+            {
+                offDir = spawnPoint.offDir
+            };
             spawned.Add(duck);
             Spawn.runningSecondSpawn = !Spawn.runningSecondSpawn;
             return spawnPoint;
@@ -91,15 +95,17 @@ namespace DuckGame
             List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
             foreach (FreeSpawn freeSpawn in Level.current.things[typeof(FreeSpawn)])
             {
-                if (!usedSpawns.Contains((SpawnPoint)freeSpawn) && (int)freeSpawn.spawnType == num)
-                    spawnPointList.Add((SpawnPoint)freeSpawn);
+                if (!usedSpawns.Contains(freeSpawn) && (int)freeSpawn.spawnType == num)
+                    spawnPointList.Add(freeSpawn);
             }
             if (spawnPointList.Count == 0)
-                return (SpawnPoint)null;
+                return null;
             SpawnPoint spawnPoint = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
             usedSpawns.Add(spawnPoint);
-            Duck duck = new Duck(spawnPoint.x, spawnPoint.y - 7f, profile);
-            duck.offDir = spawnPoint.offDir;
+            Duck duck = new Duck(spawnPoint.x, spawnPoint.y - 7f, profile)
+            {
+                offDir = spawnPoint.offDir
+            };
             spawned.Add(duck);
             return spawnPoint;
         }
@@ -118,13 +124,15 @@ namespace DuckGame
             if (spawnPointList.Count == 0)
             {
                 if (usedSpawns.Count <= 0)
-                    return (SpawnPoint)null;
-                spawnPointList.AddRange((IEnumerable<SpawnPoint>)usedSpawns);
+                    return null;
+                spawnPointList.AddRange(usedSpawns);
             }
             SpawnPoint spawnPoint1 = spawnPointList[Rando.Int(spawnPointList.Count - 1)];
             usedSpawns.Add(spawnPoint1);
-            Duck duck = new Duck(spawnPoint1.x, spawnPoint1.y - 7f, profile);
-            duck.offDir = spawnPoint1.offDir;
+            Duck duck = new Duck(spawnPoint1.x, spawnPoint1.y - 7f, profile)
+            {
+                offDir = spawnPoint1.offDir
+            };
             spawned.Add(duck);
             return spawnPoint1;
         }
@@ -208,7 +216,7 @@ namespace DuckGame
             foreach (Duck duck1 in duckList1)
             {
                 Duck d = duck1;
-                Duck duck2 = duckList1.FirstOrDefault<Duck>((Func<Duck, bool>)(x => x != d && x.position == d.position));
+                Duck duck2 = duckList1.FirstOrDefault<Duck>(x => x != d && x.position == d.position);
                 if (duck2 != null && !duckList2.Contains(duck2) && !duckList2.Contains(d))
                 {
                     d.x += 4f;

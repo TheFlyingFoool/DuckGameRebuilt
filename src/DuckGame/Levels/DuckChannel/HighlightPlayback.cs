@@ -51,12 +51,12 @@ namespace DuckGame
             {
                 HighlightLevel.didSkip = true;
                 Vote.CloseVoting();
-                Level.current = !Main.isDemo ? (Level)new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : (Level)new HighlightLevel(true);
+                Level.current = !Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
             }
             if (!this._showHighlight && (double)DuckGame.Graphics.fade > 0.949999988079071)
             {
                 this._waitToShow -= 0.02f;
-                if ((double)this._waitToShow <= 0.0)
+                if (_waitToShow <= 0.0)
                 {
                     this._waitToShow = 0.0f;
                     this._fadeOut = true;
@@ -72,16 +72,16 @@ namespace DuckGame
             if (this._currentHighlight >= 0 && !this._highlights[this._currentHighlight].finished)
                 return;
             this._endWait -= 0.03f;
-            if ((double)this._endWait > 0.0)
+            if (_endWait > 0.0)
                 return;
             this._fadeOut = true;
             if ((double)DuckGame.Graphics.fade >= 0.00999999977648258)
                 return;
             int highlight = this._currentHighlight - 1;
             if (this._currentHighlight <= 0)
-                Level.current = (Level)new HighlightLevel(true);
+                Level.current = new HighlightLevel(true);
             else
-                Level.current = (Level)new HighlightPlayback(highlight);
+                Level.current = new HighlightPlayback(highlight);
         }
 
         public override void DoDraw()
@@ -98,10 +98,10 @@ namespace DuckGame
         {
             if (!this._showHighlight || this._currentHighlight < 0)
                 return;
-            if ((double)this._keepPaused > 0.0)
+            if (_keepPaused > 0.0)
                 this._highlights[this._currentHighlight].frame = this._highlights[this._currentHighlight].startFrame + 5;
             this._highlights[this._currentHighlight].RenderFrame();
-            if ((double)this._keepPaused > 0.0 || this._highlights[this._currentHighlight].finished)
+            if (_keepPaused > 0.0 || this._highlights[this._currentHighlight].finished)
                 return;
             this._highlights[this._currentHighlight].UpdateFrame();
             this._highlights[this._currentHighlight].IncrementFrame();
@@ -109,16 +109,16 @@ namespace DuckGame
 
         public override void AfterDrawLayers()
         {
-            if ((double)this._keepPaused <= 0.0 || this._currentHighlight < 0)
+            if (_keepPaused <= 0.0 || this._currentHighlight < 0)
                 return;
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (MTEffect)null, Resolution.getTransformationMatrix());
+            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
             this._font.scale = new Vec2(8f, 8f);
-            double width = (double)this._font.GetWidth(Change.ToString((object)(this._currentHighlight + 1)));
+            double width = (double)this._font.GetWidth(Change.ToString(this._currentHighlight + 1));
             double height = (double)this._font.height;
             this._numbers.frame = 4 - this._currentHighlight;
             this._numbers.depth = (Depth)1f;
             this._numbers.scale = new Vec2(4f, 4f);
-            DuckGame.Graphics.Draw((Sprite)this._numbers, 32f, 32f);
+            DuckGame.Graphics.Draw(_numbers, 32f, 32f);
             DuckGame.Graphics.screen.End();
         }
     }

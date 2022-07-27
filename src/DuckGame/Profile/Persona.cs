@@ -15,7 +15,7 @@ namespace DuckGame
     {
         private static List<DuckPersona> _personasOriginalOrder = new List<DuckPersona>()
     {
-      new DuckPersona(new Vec3((float) byte.MaxValue, (float) byte.MaxValue, (float) byte.MaxValue))
+      new DuckPersona(new Vec3( byte.MaxValue,  byte.MaxValue,  byte.MaxValue))
       {
         index = 0
       },
@@ -26,7 +26,7 @@ namespace DuckGame
       {
         index = 4
       },
-      new DuckPersona(new Vec3((float) byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3((float) byte.MaxValue, 158f, 166f))
+      new DuckPersona(new Vec3( byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3( byte.MaxValue, 158f, 166f))
       {
         index = 5
       },
@@ -68,7 +68,7 @@ namespace DuckGame
 
         public static DuckPersona Duck8 => Persona._personas[7];
 
-        public static IEnumerable<DuckPersona> all => (IEnumerable<DuckPersona>)Persona._personas;
+        public static IEnumerable<DuckPersona> all => _personas;
 
         public static void Initialize()
         {

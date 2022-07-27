@@ -18,12 +18,12 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("popLine", 16, 16);
-            this.center = new Vec2((float)(this._sprite.w / 2), (float)(this._sprite.h / 2));
-            this.graphic = (Sprite)this._sprite;
+            this.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
+            this.graphic = _sprite;
             int num1 = 8;
             for (int index = 0; index < num1; ++index)
             {
-                float num2 = 360f / (float)num1 * (float)index;
+                float num2 = 360f / num1 * index;
                 this.parts.Add(new PopEffect.PopEffectPart()
                 {
                     scale = Rando.Float(0.6f, 1f),
@@ -40,7 +40,7 @@ namespace DuckGame
             this.yscale = this.xscale;
             if ((double)this.xscale >= 0.00999999977648258)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw()
@@ -49,9 +49,9 @@ namespace DuckGame
             {
                 this._sprite.angle = part.rot;
                 this._sprite.xscale = this._sprite.yscale = this.xscale * part.scale;
-                this._sprite.center = new Vec2((float)(this._sprite.w / 2), (float)(this._sprite.h / 2));
+                this._sprite.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
                 this._sprite.alpha = 0.8f;
-                Graphics.Draw((Sprite)this._sprite, this.x, this.y);
+                Graphics.Draw(_sprite, this.x, this.y);
             }
             base.Draw();
         }

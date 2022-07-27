@@ -30,10 +30,10 @@ namespace DuckGame
             {
                 if (Graphics.currentLayer == door.layer)
                 {
-                    if (door.isLeft && (double)this._thing.x > (double)door.center.x + 32.0)
-                        this._thing.position = this._thing.position + (door.center - this._portal.GetOtherDoor(door).center);
-                    else if (!door.isLeft && (double)this._thing.x < (double)door.center.x - 32.0)
-                        this._thing.position = this._thing.position + (this._portal.GetOtherDoor(door).center - door.center);
+                    if (door.isLeft && (double)this._thing.x > door.center.x + 32.0)
+                        this._thing.position += (door.center - this._portal.GetOtherDoor(door).center);
+                    else if (!door.isLeft && (double)this._thing.x < door.center.x - 32.0)
+                        this._thing.position += (this._portal.GetOtherDoor(door).center - door.center);
                     this._thing.DoDraw();
                     this._thing.position = position;
                 }

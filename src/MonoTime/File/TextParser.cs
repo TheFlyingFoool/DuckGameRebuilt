@@ -30,16 +30,16 @@ namespace DuckGame
 
         public static string ReadNextWord(string s, ref int index, char? stop = null)
         {
-            if (index < s.Length && stop.HasValue && (int)s[index] == (int)stop.Value)
-                return (string)null;
+            if (index < s.Length && stop.HasValue && s[index] == stop.Value)
+                return null;
             while (index < s.Length && TextParser._wordSeparators.Contains(s[index]))
             {
-                if (stop.HasValue && (int)s[index] == (int)stop.Value)
-                    return (string)null;
+                if (stop.HasValue && s[index] == stop.Value)
+                    return null;
                 ++index;
             }
             string str = "";
-            while (index < s.Length && !TextParser._wordSeparators.Contains(s[index]) && (!stop.HasValue || (int)s[index] != (int)stop.Value))
+            while (index < s.Length && !TextParser._wordSeparators.Contains(s[index]) && (!stop.HasValue || s[index] != stop.Value))
             {
                 str += s[index].ToString();
                 ++index;
@@ -49,11 +49,11 @@ namespace DuckGame
 
         public static string ReadNextWordBetween(char between, string s, ref int index)
         {
-            while (index < s.Length && (int)s[index] != (int)between)
+            while (index < s.Length && s[index] != between)
                 ++index;
             ++index;
             string str = "";
-            while (index < s.Length && (int)s[index] != (int)between)
+            while (index < s.Length && s[index] != between)
             {
                 str += s[index].ToString();
                 ++index;
@@ -102,10 +102,10 @@ namespace DuckGame
         {
             while (index < s.Length && (s[index] == ' ' || s[index] == '\n' || s[index] == '\r' || s[index] == '\t'))
                 ++index;
-            while (index < s.Length && (int)s[index] != (int)c)
+            while (index < s.Length && s[index] != c)
                 ++index;
             if (index >= s.Length)
-                return (string)null;
+                return null;
             ++index;
             return s[index - 1].ToString() ?? "";
         }
@@ -125,7 +125,7 @@ namespace DuckGame
             --index;
             while (index >= 0 && (s[index] == ' ' || s[index] == '\n' || s[index] == '\r' || s[index] == '\t'))
                 --index;
-            while (index >= 0 && (int)s[index] != (int)c)
+            while (index >= 0 && s[index] != c)
                 --index;
             return s[index].ToString() ?? "";
         }

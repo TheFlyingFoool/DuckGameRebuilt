@@ -28,9 +28,9 @@ namespace DuckGame
 
         public override void Touch(MaterialThing with)
         {
-            if (with.isServerForObject && with.Sprung((Thing)this))
+            if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed > -22.0 * (double)this._mult)
+                if ((double)with.vSpeed > -22.0 * _mult)
                     with.vSpeed = -22f * this._mult;
                 if (!this.flipHorizontal)
                 {

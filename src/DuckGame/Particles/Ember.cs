@@ -31,12 +31,12 @@ namespace DuckGame
             this.position.x += this.hSpeed;
             this.position.y += this.vSpeed;
             this._initialLife -= 0.1f;
-            if ((double)this._initialLife >= 0.0)
+            if (_initialLife >= 0.0)
                 return;
             this.alpha -= 0.025f;
             if ((double)this.alpha >= 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw() => Graphics.DrawRect(this.position, this.position + new Vec2(1f, 1f), this._col * this.alpha, this.depth);

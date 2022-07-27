@@ -45,7 +45,7 @@ namespace DuckGame
         private ushort[] _inputStates = new ushort[NetworkConnection.packetsEvery];
         private int framesSinceRequestInitialize = 999;
         private int _stateTimelineIndex;
-        private const int kStateHistoryLength = 360;
+        //private const int kStateHistoryLength = 360;
         public static GhostObject applyContext;
         private Thing _prevOwner;
         private Thing _thing;
@@ -202,8 +202,8 @@ namespace DuckGame
         public GhostConnectionData GetConnectionData(NetworkConnection c)
         {
             if (c == null)
-                return (GhostConnectionData)null;
-            GhostConnectionData connectionData = (GhostConnectionData)null;
+                return null;
+            GhostConnectionData connectionData;
             if (!this._connectionData.TryGetValue(c, out connectionData))
             {
                 connectionData = new GhostConnectionData();
@@ -235,35 +235,35 @@ namespace DuckGame
 
         public static long ReadMinimalStateMask(System.Type t, BitBuffer b) => b.ReadBits<long>(Editor.AllStateFields[t].Length);
 
-        private object GetMinimalStateMask(NetworkConnection c)
-        {
-            long connectionStateMask = this.GetConnectionData(c).connectionStateMask;
-            int count = this._fields.Count;
-            if (count <= 8)
-                return (object)(byte)connectionStateMask;
-            if (count <= 16)
-                return (object)(short)connectionStateMask;
-            return count <= 32 ? (object)(int)connectionStateMask : (object)connectionStateMask;
-        }
+        //private object GetMinimalStateMask(NetworkConnection c)
+        //{
+        //    long connectionStateMask = this.GetConnectionData(c).connectionStateMask;
+        //    int count = this._fields.Count;
+        //    if (count <= 8)
+        //        return (object)(byte)connectionStateMask;
+        //    if (count <= 16)
+        //        return (object)(short)connectionStateMask;
+        //    return count <= 32 ? (object)(int)connectionStateMask : (object)connectionStateMask;
+        //}
 
         public static long ReadMask(System.Type t, BitBuffer b)
         {
             int length = Editor.AllStateFields[t].Length;
             if (length <= 8)
-                return (long)b.ReadByte();
+                return b.ReadByte();
             if (length <= 16)
-                return (long)b.ReadUShort();
-            return length <= 32 ? (long)b.ReadUInt() : b.ReadLong();
+                return b.ReadUShort();
+            return length <= 32 ? b.ReadUInt() : b.ReadLong();
         }
 
         public static bool MaskIsMaxValue(System.Type t, long mask)
         {
             int length = Editor.AllStateFields[t].Length;
             if (length <= 8)
-                return mask == (long)byte.MaxValue;
+                return mask == byte.MaxValue;
             if (length <= 16)
-                return mask == (long)short.MaxValue;
-            return length <= 32 ? mask == (long)int.MaxValue : mask == long.MaxValue;
+                return mask == short.MaxValue;
+            return length <= 32 ? mask == int.MaxValue : mask == long.MaxValue;
         }
 
         public void ClearStateMask(NetworkConnection c) => this.GetConnectionData(c).connectionStateMask = 0L;
@@ -288,7 +288,7 @@ namespace DuckGame
         public bool IsDirty(NetworkConnection c)
         {
             GhostConnectionData connectionData = this.GetConnectionData(c);
-            return connectionData.connectionStateMask != 0L || connectionData.authority != this.thing.authority || (int)connectionData.prevInputState != (int)this._inputStates[0];
+            return connectionData.connectionStateMask != 0L || connectionData.authority != this.thing.authority || connectionData.prevInputState != this._inputStates[0];
         }
 
         public bool isDestroyed => this._thing.removeFromLevel;
@@ -359,7 +359,7 @@ namespace DuckGame
             else
             {
                 GhostObjectHeader.Serialize(pBuffer, this, (NetIndex16)0, false, true);
-                pBuffer.Write(this.FillStateData((GhostConnectionData)null, true), true);
+                pBuffer.Write(this.FillStateData(null, true), true);
             }
             return pBuffer;
         }
@@ -382,20 +382,20 @@ namespace DuckGame
                 {
                     this._body.Write(true);
                     for (int index = 0; index < NetworkConnection.packetsEvery; ++index)
-                        this._body.Write(this._inputStates[((int)this._storedInputStates + index) % NetworkConnection.packetsEvery]);
+                        this._body.Write(this._inputStates[(_storedInputStates + index) % NetworkConnection.packetsEvery]);
                 }
                 else
                     this._body.Write(false);
             }
             else
                 this.lastWrittenMask = long.MaxValue;
-            StateBinding stateBinding = (StateBinding)null;
+            StateBinding stateBinding = null;
             try
             {
                 foreach (StateBinding field in this._fields)
                 {
                     stateBinding = field;
-                    if (!flag || (pConnectionData.connectionStateMask & 1L << (int)num) != 0L)
+                    if (!flag || (pConnectionData.connectionStateMask & 1L << num) != 0L)
                     {
                         if (field is DataBinding)
                             this._body.Write(field.GetNetValue() as BitBuffer, true);
@@ -455,10 +455,12 @@ namespace DuckGame
             }
             if (ghostState.authority > this.thing.authority)
                 this.thing.authority = ghostState.authority;
-            BufferedGhostState pState = new BufferedGhostState();
-            pState.tick = ghostState.tick;
-            pState.mask = mask;
-            pState.authority = ghostState.authority;
+            BufferedGhostState pState = new BufferedGhostState
+            {
+                tick = ghostState.tick,
+                mask = mask,
+                authority = ghostState.authority
+            };
             if (ghostState.header.delta && ghostState.data.ReadBool())
             {
                 pState.inputStates.Clear();
@@ -468,14 +470,14 @@ namespace DuckGame
             short index1 = 0;
             foreach (StateBinding field in this._fields)
             {
-                long num = 1L << (int)index1;
+                long num = 1L << index1;
                 if ((ghostState.mask & num) != 0L)
                 {
-                    pState.properties.Add(GhostObject.MakeBufferedProperty(field, field.ReadNetValue(ghostState.data), (int)index1, pState.tick));
+                    pState.properties.Add(GhostObject.MakeBufferedProperty(field, field.ReadNetValue(ghostState.data), index1, pState.tick));
                     field.initialized = true;
                 }
                 else
-                    pState.properties.Add(this._networkState.properties[(int)index1]);
+                    pState.properties.Add(this._networkState.properties[index1]);
                 ++index1;
             }
             if (!this.IsInitialized())
@@ -558,18 +560,18 @@ namespace DuckGame
             return currentState;
         }
 
-        private Vec2 Slerp(Vec2 from, Vec2 to, float step)
-        {
-            if ((double)step == 0.0)
-                return from;
-            if (from == to || (double)step == 1.0)
-                return to;
-            double a = Math.Acos((double)Vec2.Dot(from, to));
-            if (a == 0.0)
-                return to;
-            double num = Math.Sin(a);
-            return (float)(Math.Sin((1.0 - (double)step) * a) / num) * from + (float)(Math.Sin((double)step * a) / num) * to;
-        }
+        //private Vec2 Slerp(Vec2 from, Vec2 to, float step)
+        //{
+        //    if ((double)step == 0.0)
+        //        return from;
+        //    if (from == to || (double)step == 1.0)
+        //        return to;
+        //    double a = Math.Acos((double)Vec2.Dot(from, to));
+        //    if (a == 0.0)
+        //        return to;
+        //    double num = Math.Sin(a);
+        //    return (float)(Math.Sin((1.0 - (double)step) * a) / num) * from + (float)(Math.Sin((double)step * a) / num) * to;
+        //}
 
         public bool isLocalController => this._inputObject != null && this._inputObject.inputProfile != null && this._inputObject.inputProfile.virtualDevice == null;
 
@@ -620,19 +622,19 @@ namespace DuckGame
                 return;
             if (MonoMain.pauseMenu != null)
             {
-                this._inputStates[(int)this._storedInputStates] = (ushort)0;
-                this._storedInputStates = (byte)(((int)this._storedInputStates + 1) % NetworkConnection.packetsEvery);
+                this._inputStates[_storedInputStates] = 0;
+                this._storedInputStates = (byte)((_storedInputStates + 1) % NetworkConnection.packetsEvery);
             }
             else
             {
-                this._inputStates[(int)this._storedInputStates] = this._inputObject.inputProfile.state;
-                this._storedInputStates = (byte)(((int)this._storedInputStates + 1) % NetworkConnection.packetsEvery);
+                this._inputStates[_storedInputStates] = this._inputObject.inputProfile.state;
+                this._storedInputStates = (byte)((_storedInputStates + 1) % NetworkConnection.packetsEvery);
             }
         }
 
         public void Update()
         {
-            if (this.removeLogCooldown > (byte)0)
+            if (this.removeLogCooldown > 0)
                 --this.removeLogCooldown;
             if (this._thing == null)
                 return;
@@ -665,7 +667,7 @@ namespace DuckGame
 
         public void UpdateRemoval()
         {
-            if (this._thing.ghostType != (ushort)0 && (this._thing.level == null || this._thing.level == Level.current || Level.core.nextLevel != null))
+            if (this._thing.ghostType != 0 && (this._thing.level == null || this._thing.level == Level.current || Level.core.nextLevel != null))
                 return;
             this._shouldRemove = true;
         }
@@ -678,7 +680,7 @@ namespace DuckGame
                 if ((int)stateForTick.tick <= (int)t)
                     return stateForTick;
             }
-            return (BufferedGhostState)null;
+            return null;
         }
 
         private BufferedGhostState GetStateToProcess() => this._stateTimelineIndex < this._stateTimeline.Count ? this._stateTimeline[this._stateTimelineIndex] : this._stateTimeline.LastOrDefault<BufferedGhostState>();
@@ -694,7 +696,7 @@ namespace DuckGame
                     this._stateTimeline[index].Apply(1f, this._networkState);
                 }
             }
-            GhostObject.applyContext = (GhostObject)null;
+            GhostObject.applyContext = null;
         }
 
         private void ApplyState(
@@ -705,25 +707,25 @@ namespace DuckGame
             GhostObject.applyContext = this;
             pState.Apply(pLerp, pNetworkState);
             this.ApplyStateInput(pState);
-            GhostObject.applyContext = (GhostObject)null;
+            GhostObject.applyContext = null;
         }
 
         public void ReleaseReferences(bool pFull = true)
         {
             if (this.thing != null && this.thing.ghostObject == this)
-                this.thing.ghostObject = (GhostObject)null;
+                this.thing.ghostObject = null;
             if (!pFull)
                 return;
-            this._thing = (Thing)null;
-            this._stateTimeline = (List<BufferedGhostState>)null;
-            this._networkState = (BufferedGhostState)null;
-            this._manager = (GhostManager)null;
-            this._fields = (List<StateBinding>)null;
-            this._inputObject = (ITakeInput)null;
-            this._prevOwner = (Thing)null;
-            this.netPositionProperty = (BufferedGhostProperty)null;
-            this.netVelocityProperty = (BufferedGhostProperty)null;
-            this.netAngleProperty = (BufferedGhostProperty)null;
+            this._thing = null;
+            this._stateTimeline = null;
+            this._networkState = null;
+            this._manager = null;
+            this._fields = null;
+            this._inputObject = null;
+            this._prevOwner = null;
+            this.netPositionProperty = null;
+            this.netVelocityProperty = null;
+            this.netAngleProperty = null;
         }
 
         private void ApplyStateInput(BufferedGhostState pState)
@@ -769,8 +771,8 @@ namespace DuckGame
                         if (this._stateTimeline.Count > 0)
                         {
                             BufferedGhostState bufferedGhostState = this._stateTimeline.ElementAt<BufferedGhostState>(0);
-                            bufferedGhostState.previousState = (BufferedGhostState)null;
-                            bufferedGhostState.nextState = (BufferedGhostState)null;
+                            bufferedGhostState.previousState = null;
+                            bufferedGhostState.nextState = null;
                             this._stateTimeline.RemoveAt(0);
                             this._stateTimelineIndex = Math.Max(0, this._stateTimelineIndex - 1);
                         }
@@ -797,7 +799,7 @@ namespace DuckGame
                 if (this.thing.owner != this._prevOwner)
                     this.ReapplyStates();
                 this._prevOwner = this.thing.owner;
-                if (this._thing.ghostType != (ushort)0)
+                if (this._thing.ghostType != 0)
                     return;
                 this._shouldRemove = true;
             }
@@ -813,8 +815,8 @@ namespace DuckGame
 
         public static Profile IndexToProfile(NetIndex16 pIndex)
         {
-            int index = (int)((double)pIndex._index / (double)GhostManager.kGhostIndexMax);
-            return index < 0 || index >= DuckNetwork.profiles.Count ? (Profile)null : DuckNetwork.profiles[index];
+            int index = (int)(pIndex._index / (double)GhostManager.kGhostIndexMax);
+            return index < 0 || index >= DuckNetwork.profiles.Count ? null : DuckNetwork.profiles[index];
         }
 
         public GhostObject(Thing thing, GhostManager manager, int ghostIndex = -1, bool levelInit = false)
@@ -829,7 +831,7 @@ namespace DuckGame
                 this.initializedCached = false;
                 foreach (FieldInfo fieldInfo in Editor.AllStateFields[this._thing.GetType()])
                 {
-                    StateBinding stateBinding = fieldInfo.GetValue((object)this._thing) as StateBinding;
+                    StateBinding stateBinding = fieldInfo.GetValue(_thing) as StateBinding;
                     stateBinding.Connect(this._thing);
                     this._fields.Add(stateBinding);
                 }

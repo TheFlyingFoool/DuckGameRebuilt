@@ -37,8 +37,8 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("width", texture.frameWidth / (float)texture.width);
-                this.SetValue("height", texture.frameHeight / (float)texture.height);
+                this.SetValue("width", texture.frameWidth / texture.width);
+                this.SetValue("height", texture.frameHeight / texture.height);
                 if (this._thing != null)
                 {
                     this.SetValue("xpos", this._thing.x);
@@ -56,7 +56,7 @@ namespace DuckGame
                     this.SetValue("bladeColor", this._thing2.swordColor);
                 }
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._energyTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._energyTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
                 pass.Apply();

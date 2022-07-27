@@ -29,7 +29,7 @@ namespace DuckGame
         public override void Update()
         {
             if (Input.Pressed("START"))
-                Level.current = (Level)new TitleScreen();
+                Level.current = new TitleScreen();
             base.Update();
         }
 

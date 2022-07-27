@@ -32,7 +32,7 @@ namespace DuckGame
                 if (this.profile.connection == DuckNetwork.localConnection)
                     DuckNetwork.OpenSpectatorInfo(false);
             }
-            Send.Message((NetMessage)new NMSpecChangeIndexUpdated(this.profile, this.specChangeIndex), NetMessagePriority.ReliableOrdered);
+            Send.Message(new NMSpecChangeIndexUpdated(this.profile, this.specChangeIndex), NetMessagePriority.ReliableOrdered);
         }
     }
 }

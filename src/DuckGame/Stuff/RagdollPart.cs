@@ -75,7 +75,7 @@ namespace DuckGame
         public byte netPart
         {
             get => (byte)this._part;
-            set => this.part = (int)value;
+            set => this.part = value;
         }
 
         public RagdollPart joint
@@ -126,7 +126,7 @@ namespace DuckGame
                 this._quackSprite.frame = 18;
                 this._sprite.frame = 18;
                 if (part != this._part || this.graphic == null)
-                    this.graphic = (Sprite)this._sprite;
+                    this.graphic = _sprite;
                 this._quackSprite.frame = this._part == 0 ? 18 : 19;
                 this._sprite.frame = this._part == 0 ? 18 : 19;
                 if (this.doll != null && this.doll.captureDuck != null && this.doll.captureDuck.eyesClosed)
@@ -157,7 +157,7 @@ namespace DuckGame
             this._sprite = this._quackSprite;
             this._quackSprite.frame = 0;
             this._sprite.frame = 0;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._quackSprite.frame = this._part == 0 ? 0 : 1;
             this._sprite.frame = this._part == 0 ? 0 : 1;
             if (this.part == 0)
@@ -196,7 +196,7 @@ namespace DuckGame
                 persona = Persona.Duck1;
             this._sprite = new SpriteMap("crate", 16, 16);
             this._campDuck = new SpriteMap("campduck", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._editorName = "Crate";
             this.thickness = 0.5f;
             this.weight = 0.05f;
@@ -240,7 +240,7 @@ namespace DuckGame
 
         public override void OnTeleport()
         {
-            this.position.x += (float)(Math.Sign(this.hSpeed) * 8);
+            this.position.x += Math.Sign(this.hSpeed) * 8;
             this.doll.part1.position = this.position;
             this.doll.part2.position = this.position;
             this.doll.part3.position = this.position;
@@ -254,31 +254,31 @@ namespace DuckGame
             if (this._doll == null)
                 return false;
             if (bullet.isLocal && this.owner == null)
-                Thing.Fondle((Thing)this._doll, DuckNetwork.localConnection);
+                Thing.Fondle(_doll, DuckNetwork.localConnection);
             if (bullet.isLocal && this._doll.captureDuck != null)
             {
                 Duck captureDuck = this._doll.captureDuck;
                 Equipment equipment1 = captureDuck.GetEquipment(typeof(ChestPlate));
-                if (equipment1 != null && Collision.Point(hitPos, (Thing)equipment1))
+                if (equipment1 != null && Collision.Point(hitPos, equipment1))
                 {
                     equipment1.UnEquip();
                     SFX.Play("ting2");
                     captureDuck.Unequip(equipment1);
                     equipment1.hSpeed = bullet.travelDirNormalized.x;
                     equipment1.vSpeed = -2f;
-                    equipment1.Destroy((DestroyType)new DTShot(bullet));
+                    equipment1.Destroy(new DTShot(bullet));
                     equipment1.solid = false;
                     return true;
                 }
                 Equipment equipment2 = captureDuck.GetEquipment(typeof(Helmet));
-                if (equipment2 != null && Collision.Point(hitPos, (Thing)equipment2))
+                if (equipment2 != null && Collision.Point(hitPos, equipment2))
                 {
                     equipment2.UnEquip();
                     SFX.Play("ting2");
                     captureDuck.Unequip(equipment2);
                     equipment2.hSpeed = bullet.travelDirNormalized.x;
                     equipment2.vSpeed = -2f;
-                    equipment2.Destroy((DestroyType)new DTShot(bullet));
+                    equipment2.Destroy(new DTShot(bullet));
                     equipment2.solid = false;
                     return true;
                 }
@@ -287,7 +287,7 @@ namespace DuckGame
             feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = hitPos;
-            Level.Add((Thing)feather);
+            Level.Add(feather);
             if (bullet.isLocal)
             {
                 this.hSpeed += bullet.travelDirNormalized.x * bullet.ammo.impactPower;
@@ -307,15 +307,15 @@ namespace DuckGame
                 if (!this._doll.removeFromLevel && this._doll.captureDuck != null && this._doll.captureDuck.dead)
                 {
                     CookedDuck t = new CookedDuck(this._doll.x, this._doll.y);
-                    Level.Add((Thing)SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
-                    Level.Add((Thing)SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
-                    Level.Add((Thing)SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
-                    this.ReturnItemToWorld((Thing)t);
+                    Level.Add(SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
+                    Level.Add(SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
+                    Level.Add(SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
+                    this.ReturnItemToWorld(t);
                     t.vSpeed = this.vSpeed - 2f;
                     t.hSpeed = this.hSpeed;
-                    Level.Add((Thing)t);
+                    Level.Add(t);
                     SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
-                    Level.Remove((Thing)this._doll);
+                    Level.Remove(_doll);
                     this._doll.captureDuck._cooked = t;
                 }
                 else
@@ -337,7 +337,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._doll.captureDuck != null && !this._doll.captureDuck.dead && (this.part == 0 || this.part == 1) && (double)this.totalImpactPower > 5.0 && (double)this._doll.captureDuck.quack < 0.25)
+            if (this._doll.captureDuck != null && !this._doll.captureDuck.dead && (this.part == 0 || this.part == 1) && (double)this.totalImpactPower > 5.0 && _doll.captureDuck.quack < 0.25)
             {
                 this._doll.captureDuck.Swear();
                 float intensityToSet = Math.Min(this.totalImpactPower * 0.01f, 1f);
@@ -354,7 +354,7 @@ namespace DuckGame
             if (with is Duck)
             {
                 Holdable lastHoldItem = (with as Duck)._lastHoldItem;
-                if ((with as Duck)._timeSinceThrow < (byte)15 && (lastHoldItem == this._doll.part1 || lastHoldItem == this._doll.part2 || lastHoldItem == this._doll.part3))
+                if ((with as Duck)._timeSinceThrow < 15 && (lastHoldItem == this._doll.part1 || lastHoldItem == this._doll.part2 || lastHoldItem == this._doll.part3))
                     return;
             }
             if (this._doll.captureDuck == null)
@@ -369,14 +369,14 @@ namespace DuckGame
 
         public void UpdateLastReasonablePosition(Vec2 pPosition)
         {
-            if ((double)pPosition.y <= -7000.0 || (double)pPosition.y >= (double)Level.activeLevel.lowestPoint + 400.0)
+            if (pPosition.y <= -7000.0 || pPosition.y >= Level.activeLevel.lowestPoint + 400.0)
                 return;
             this._lastReasonablePosition = pPosition;
         }
 
         public override void Update()
         {
-            if (this._doll == null || (double)this.y > (double)Level.activeLevel.lowestPoint + 1000.0 && this.isOffBottomOfLevel)
+            if (this._doll == null || (double)this.y > Level.activeLevel.lowestPoint + 1000.0 && this.isOffBottomOfLevel)
                 return;
             this.UpdateLastReasonablePosition(this.position);
             if (this.clipFrames > 0)
@@ -415,11 +415,11 @@ namespace DuckGame
             {
                 if (this.owner == null && this.prevOwner != null)
                 {
-                    this.clip.Add((MaterialThing)(this.prevOwner as PhysicsObject));
-                    this.connect.clip.Add((MaterialThing)(this.prevOwner as PhysicsObject));
+                    this.clip.Add(this.prevOwner as PhysicsObject);
+                    this.connect.clip.Add(this.prevOwner as PhysicsObject);
                     this._joint.clipFrames = 12;
                     this._joint.clipThing = this._prevOwner;
-                    this._prevOwner = (Thing)null;
+                    this._prevOwner = null;
                 }
                 if (this.owner != null)
                 {
@@ -499,12 +499,12 @@ namespace DuckGame
             if (this._joint != null)
             {
                 if (this._doll.captureDuck != null && this._doll.captureDuck.IsQuacking())
-                    this.graphic = (Sprite)this._quackSprite;
+                    this.graphic = _quackSprite;
                 else
-                    this.graphic = (Sprite)this._sprite;
+                    this.graphic = _sprite;
                 if (this.isServerForObject)
                 {
-                    if (this.offDir < (sbyte)0)
+                    if (this.offDir < 0)
                         this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
                     else
                         this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) - 90.0);
@@ -524,7 +524,7 @@ namespace DuckGame
             {
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                 for (int index = 0; index < 2; ++index)
-                    Level.Add((Thing)SmallFire.New(Rando.Float(6f) - 3f, Rando.Float(2f) - 2f, 0.0f, 0.0f, stick: ((MaterialThing)this)));
+                    Level.Add(SmallFire.New(Rando.Float(6f) - 3f, Rando.Float(2f) - 2f, 0.0f, 0.0f, stick: this));
                 this._onFire = true;
                 this._doll.LitOnFire(litBy);
             }
@@ -550,7 +550,7 @@ namespace DuckGame
                 this._stickSlowLerp = Lerp.Vec2Smooth(this._stickSlowLerp, tounge, 0.1f);
                 Vec2 stickLerp = this._stickLerp;
                 Vec2 vec = Maths.AngleToVec(this.angle);
-                Vec2 vec2_2 = this.offDir >= (sbyte)0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0.0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0.0f, 1f);
+                Vec2 vec2_2 = this.offDir >= 0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0.0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0.0f, 1f);
                 vec2_2.y *= -1f;
                 Vec2 vec2_3 = this._stickSlowLerp;
                 vec2_3.y *= -1f;
@@ -590,8 +590,8 @@ namespace DuckGame
                     {
                         SpriteMap graphic = this.graphic as SpriteMap;
                         if (this.doll != null && this.doll.inSleepingBag)
-                            this._graphic = (Sprite)this._campDuck;
-                        if (this._offDir < (sbyte)0)
+                            this._graphic = _campDuck;
+                        if (this._offDir < 0)
                             this._graphic.flipH = true;
                         else
                             this._graphic.flipH = false;
@@ -612,7 +612,7 @@ namespace DuckGame
                             this._graphic.Draw();
                             (this._graphic as SpriteMap).frame -= 36;
                         }
-                        this._graphic = (Sprite)graphic;
+                        this._graphic = graphic;
                     }
                 }
                 else if (this.doll != null && this.doll.captureDuck != null)
@@ -631,16 +631,16 @@ namespace DuckGame
                     this._campDuck.frame = 2;
                 if (graphic1 == this._quackSprite && graphic1.frame == 18)
                     this._campDuck.frame = 3;
-                this.graphic = (Sprite)this._campDuck;
+                this.graphic = _campDuck;
             }
             float angleDegrees = this.angleDegrees;
-            if (this.offDir < (sbyte)0)
+            if (this.offDir < 0)
                 this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
             else
                 this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) - 90.0);
             base.Draw();
             this.angleDegrees = angleDegrees;
-            this.graphic = (Sprite)graphic1;
+            this.graphic = graphic1;
             this.position = position;
         }
     }

@@ -47,7 +47,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    this._text = str + Change.ToString((object)(int)this._field.value) + this._append;
+                    this._text = str + Change.ToString((int)this._field.value) + this._append;
                     if (this._filterField != null && !(bool)this._filterField.value)
                         this._text = "ANY";
                 }

@@ -39,7 +39,7 @@ namespace DuckGame
             this.originalConfiguration = msg.ReadBool();
             this.slots = new List<byte>();
             byte num = msg.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
                 this.slots.Add(msg.ReadByte());
             base.OnDeserialize(msg);
         }

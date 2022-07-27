@@ -55,7 +55,7 @@ namespace DuckGame
             if (Windows_Audio._output != null)
             {
                 Windows_Audio._output.Dispose();
-                Windows_Audio._output = (IWavePlayer)null;
+                Windows_Audio._output = null;
             }
             --Windows_Audio._losingDevice;
             if (Windows_Audio._losingDevice != 0)
@@ -100,7 +100,7 @@ namespace DuckGame
                 {
                     Windows_Audio._output.Stop();
                     Windows_Audio._output.Dispose();
-                    Windows_Audio._output = (IWavePlayer)null;
+                    Windows_Audio._output = null;
                 }
                 if (Windows_Audio._forceMode != AudioMode.None && !this._recreateAlternateAudio && !this._recreateNonExclusive)
                     Windows_Audio._mode = Windows_Audio._forceMode;
@@ -108,14 +108,14 @@ namespace DuckGame
                 {
                     case AudioMode.Wave:
                         int deviceCount = WaveOut.DeviceCount;
-                        Windows_Audio._output = (IWavePlayer)new WaveOutEvent()
+                        Windows_Audio._output = new WaveOutEvent()
                         {
                             DesiredLatency = 50,
                             NumberOfBuffers = 10
                         };
                         break;
                     case AudioMode.DirectSound:
-                        Windows_Audio._output = (IWavePlayer)new DirectSoundOut();
+                        Windows_Audio._output = new DirectSoundOut();
                         break;
                     default:
                         if (!this._recreateAlternateAudio)
@@ -123,31 +123,33 @@ namespace DuckGame
                             if (this.notificationClient == null)
                             {
                                 this.notificationClient = new Windows_Audio.NotificationClientImplementation(this);
-                                this.notifyClient = (IMMNotificationClient)this.notificationClient;
+                                this.notifyClient = notificationClient;
                                 if (this.deviceEnum == null)
                                     this.deviceEnum = new MMDeviceEnumerator();
                                 this.deviceEnum.RegisterEndpointNotificationCallback(this.notifyClient);
                             }
                             new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-                            Windows_Audio._output = (IWavePlayer)new WasapiOut(this._recreateNonExclusive || !Options.Data.audioExclusiveMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, 20);
+                            Windows_Audio._output = new WasapiOut(this._recreateNonExclusive || !Options.Data.audioExclusiveMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, 20);
                             break;
                         }
                         goto case AudioMode.Wave;
                 }
                 if (Windows_Audio._mixer == null)
                 {
-                    Windows_Audio._mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
-                    Windows_Audio._mixer.ReadFully = true;
+                    Windows_Audio._mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+                    {
+                        ReadFully = true
+                    };
                 }
-                Windows_Audio._output.Init((ISampleProvider)Windows_Audio._mixer);
+                Windows_Audio._output.Init(_mixer);
             }
             catch (Exception ex)
             {
                 if (this._recreateAlternateAudio)
                 {
                     Windows_Audio.initialized = false;
-                    Windows_Audio._output = (IWavePlayer)null;
-                    Windows_Audio._mixer = (MixingSampleProvider)null;
+                    Windows_Audio._output = null;
+                    Windows_Audio._mixer = null;
                     return;
                 }
                 if (this._recreateNonExclusive)
@@ -183,7 +185,7 @@ namespace DuckGame
             {
                 lock (Windows_Audio._mixer.MixerInputs)
                 {
-                    ISampleProvider mixerInput = Windows_Audio._mixer.MixerInputs.Where<ISampleProvider>((Func<ISampleProvider, bool>)(x => x != Windows_Audio._currentMusic)).First<ISampleProvider>();
+                    ISampleProvider mixerInput = Windows_Audio._mixer.MixerInputs.Where<ISampleProvider>(x => x != Windows_Audio._currentMusic).First<ISampleProvider>();
                     Windows_Audio._mixer.RemoveMixerInput(mixerInput);
                 }
             }
@@ -206,7 +208,7 @@ namespace DuckGame
         {
             if (!Windows_Audio.initialized || this.notificationClient == null)
                 return;
-            this.UnRegisterEndpointNotificationCallback((IMMNotificationClient)this.notificationClient);
+            this.UnRegisterEndpointNotificationCallback(notificationClient);
             Windows_Audio._output.Dispose();
         }
 

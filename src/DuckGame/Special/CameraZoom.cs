@@ -36,7 +36,7 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("zoom", (object)this._zoomMult);
+            binaryClassChunk.AddProperty("zoom", _zoomMult);
             return binaryClassChunk;
         }
 
@@ -50,7 +50,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("zoom", (object)Change.ToString((object)this._zoomMult)));
+            dxmlNode.Add(new DXMLNode("zoom", Change.ToString(_zoomMult)));
             return dxmlNode;
         }
 
@@ -67,7 +67,7 @@ namespace DuckGame
         {
             ContextMenu contextMenu = base.GetContextMenu();
             if (!(this is CameraZoomNew))
-                contextMenu.AddItem((ContextMenu)new ContextSlider("Zoom", (IContextListener)null, new FieldBinding((object)this, "zoomMult", 0.5f, 4f), 0.1f));
+                contextMenu.AddItem(new ContextSlider("Zoom", null, new FieldBinding(this, "zoomMult", 0.5f, 4f), 0.1f));
             return contextMenu;
         }
     }

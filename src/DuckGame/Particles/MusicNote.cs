@@ -19,8 +19,10 @@ namespace DuckGame
         public MusicNote(float xpos, float ypos, Vec2 dir)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("notes", 8, 8);
-            this._sprite.frame = Rando.Int(1);
+            this._sprite = new SpriteMap("notes", 8, 8)
+            {
+                frame = Rando.Int(1)
+            };
             this._sprite.CenterOrigin();
             int num1 = Rando.ChooseInt(0, 1, 2, 3);
             if (num1 == 0)
@@ -49,12 +51,12 @@ namespace DuckGame
             Vec2 scale = this.scale;
             scale.x = scale.y = Lerp.Float(scale.x, 1f, 0.05f);
             this.scale = scale;
-            if ((double)this.scale.x <= 0.899999976158142)
+            if (this.scale.x <= 0.899999976158142)
                 return;
             this.alpha -= 0.01f;
             if ((double)this.alpha > 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw()
@@ -63,7 +65,7 @@ namespace DuckGame
             position.y += this._sin.value * this._size;
             this._sprite.alpha = this.alpha;
             this._sprite.scale = this.scale;
-            Graphics.Draw((Sprite)this._sprite, position.x, position.y);
+            Graphics.Draw(_sprite, position.x, position.y);
         }
     }
 }

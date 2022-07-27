@@ -27,7 +27,7 @@ namespace DuckGame
             this._maxHealth = 15f;
             this._hitPoints = 15f;
             this._sprite = new SpriteMap("desk", 19, 12);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(9f, 6f);
             this.collisionOffset = new Vec2(-8f, -3f);
             this.collisionSize = new Vec2(17f, 6f);
@@ -46,49 +46,49 @@ namespace DuckGame
         {
             this._hitPoints = 0.0f;
             SFX.Play("crateDestroy");
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             Vec2 vec2 = Vec2.Zero;
             if (type is DTShot)
                 vec2 = (type as DTShot).bullet.travelDirNormalized;
             for (int index = 0; index < 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)(((double)Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * (double)Rando.Float(3f) + (double)Math.Sign(vec2.x) * 0.5);
+                woodDebris.hSpeed = (float)(((double)Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * (double)Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
-                Level.Add((Thing)woodDebris);
+                Level.Add(woodDebris);
             }
             for (int index = 0; index < 5; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-6f, 6f), this.y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                Level.Add((Thing)smallSmoke);
+                Level.Add(smallSmoke);
             }
             return true;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if ((double)this._flip < 0.0500000007450581 && (double)hitPos.y > (double)this.top + 4.0)
+            if (_flip < 0.0500000007450581 && hitPos.y > (double)this.top + 4.0)
                 return false;
-            if ((double)this._hitPoints <= 0.0)
+            if (_hitPoints <= 0.0)
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && this.owner == null)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
-            for (int index = 0; (double)index < 1.0 + (double)this.damageMultiplier; ++index)
+                Thing.Fondle(this, DuckNetwork.localConnection);
+            for (int index = 0; index < 1.0 + damageMultiplier; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)((double)Math.Sign(bullet.travel.x) * (double)Rando.Float(2f) + (double)Math.Sign(bullet.travel.x) * 0.5);
+                woodDebris.hSpeed = (float)(Math.Sign(bullet.travel.x) * (double)Rando.Float(2f) + Math.Sign(bullet.travel.x) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
-                Level.Add((Thing)woodDebris);
+                Level.Add(woodDebris);
             }
             SFX.Play("woodHit");
             if (this.isServerForObject && bullet.isLocal)
             {
                 this._hitPoints -= this.damageMultiplier;
                 this.damageMultiplier += 2f;
-                if ((double)this._hitPoints <= 0.0)
-                    this.Destroy((DestroyType)new DTShot(bullet));
+                if (_hitPoints <= 0.0)
+                    this.Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);
         }
@@ -96,31 +96,31 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this.offDir = (sbyte)1;
-            if ((double)this.damageMultiplier > 1.0)
+            this.offDir = 1;
+            if (damageMultiplier > 1.0)
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1.0 - (double)this._hitPoints / (double)this._maxHealth) * 4.0);
-            if ((double)this._hitPoints <= 0.0 && !this._destroyed)
-                this.Destroy((DestroyType)new DTImpact((Thing)this));
+            this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / (double)this._maxHealth) * 4.0);
+            if (_hitPoints <= 0.0 && !this._destroyed)
+                this.Destroy(new DTImpact(this));
             this._flip = MathHelper.Lerp(this._flip, this.flipped != 0 ? 1.1f : -0.1f, 0.2f);
-            if ((double)this._flip > 1.0)
+            if (_flip > 1.0)
                 this._flip = 1f;
-            if ((double)this._flip < 0.0)
+            if (_flip < 0.0)
                 this._flip = 0.0f;
             if (this.owner != null && this.flipped != 0)
                 this.flipped = 0;
             Vec2 collisionSize = this.collisionSize;
             Vec2 collisionOffset = this.collisionOffset;
-            if ((double)this._flip == 0.0)
+            if (_flip == 0.0)
             {
                 if (!this.landed)
                     this.Land();
                 this.collisionOffset = new Vec2(-8f, -6f);
                 this.collisionSize = new Vec2(17f, 11f);
             }
-            else if ((double)this._flip == 1.0)
+            else if (_flip == 1.0)
             {
                 if (!this.landed)
                     this.Land();
@@ -142,17 +142,17 @@ namespace DuckGame
                 this.collisionSize = new Vec2(4f, 1f);
             }
             if (!this.firstFrame && (collisionOffset != this.collisionOffset || collisionSize != this.collisionSize))
-                this.ReturnItemToWorld((Thing)this);
+                this.ReturnItemToWorld(this);
             if (this.flipped != 0)
             {
-                this.centerx = (float)(9.0 + 4.0 * (double)this._flip * (this.flipped > 0 ? 1.0 : -1.0));
-                this.centery = (float)(6.0 + 4.0 * (double)this._flip);
+                this.centerx = (float)(9.0 + 4.0 * _flip * (this.flipped > 0 ? 1.0 : -1.0));
+                this.centery = (float)(6.0 + 4.0 * _flip);
                 this.angle = this._flip * (float)(1.5 * (this.flipped > 0 ? 1.0 : -1.0));
             }
             else
             {
-                this.centerx = (float)(9.0 + 4.0 * (double)this._flip * ((double)this.angle > 0.0 ? 1.0 : -1.0));
-                this.centery = (float)(6.0 + 4.0 * (double)this._flip);
+                this.centerx = (float)(9.0 + 4.0 * _flip * ((double)this.angle > 0.0 ? 1.0 : -1.0));
+                this.centery = (float)(6.0 + 4.0 * _flip);
                 this.angle = this._flip * (float)(1.5 * ((double)this.angle > 0.0 ? 1.0 : -1.0));
             }
             this.firstFrame = false;
@@ -184,14 +184,14 @@ namespace DuckGame
             if (this.flipped > 0)
             {
                 for (int index = 0; index < 2; ++index)
-                    Level.Add((Thing)SmallSmoke.New(this.bottomRight.x, this.bottomRight.y));
+                    Level.Add(SmallSmoke.New(this.bottomRight.x, this.bottomRight.y));
             }
             else
             {
                 if (this.flipped >= 0)
                     return;
                 for (int index = 0; index < 2; ++index)
-                    Level.Add((Thing)SmallSmoke.New(this.bottomLeft.x, this.bottomLeft.y));
+                    Level.Add(SmallSmoke.New(this.bottomLeft.x, this.bottomLeft.y));
             }
         }
     }

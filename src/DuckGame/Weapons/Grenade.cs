@@ -36,11 +36,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 1;
-            this._ammoType = (AmmoType)new ATShrapnel();
+            this._ammoType = new ATShrapnel();
             this._ammoType.penetration = 0.4f;
             this._type = "gun";
             this._sprite = new SpriteMap(nameof(grenade), 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 8f);
             this.collisionOffset = new Vec2(-4f, -5f);
             this.collisionSize = new Vec2(8f, 10f);
@@ -73,15 +73,15 @@ namespace DuckGame
                 return;
             float x = pos.x;
             float ypos = pos.y - 2f;
-            Level.Add((Thing)new ExplosionPart(x, ypos));
+            Level.Add(new ExplosionPart(x, ypos));
             int num1 = 6;
             if (Graphics.effectsLevel < 2)
                 num1 = 3;
             for (int index = 0; index < num1; ++index)
             {
-                float deg = (float)index * 60f + Rando.Float(-10f, 10f);
+                float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add((Thing)new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
             }
             this._explosionCreated = true;
             SFX.Play("explode");
@@ -96,13 +96,13 @@ namespace DuckGame
                 this._timer -= 0.01f;
                 this.holsterable = false;
             }
-            if ((double)this._timer < 0.5 && this.owner == null && !this._didBonus)
+            if (_timer < 0.5 && this.owner == null && !this._didBonus)
             {
                 this._didBonus = true;
                 if (Recorder.currentRecording != null)
                     Recorder.currentRecording.LogBonus();
             }
-            if (!this._localDidExplode && (double)this._timer < 0.0)
+            if (!this._localDidExplode && _timer < 0.0)
             {
                 if (this._explodeFrames < 0)
                 {
@@ -121,27 +121,31 @@ namespace DuckGame
                         {
                             for (int index = 0; index < 20; ++index)
                             {
-                                float num2 = (float)((double)index * 18.0 - 5.0) + Rando.Float(10f);
-                                ATShrapnel type = new ATShrapnel();
-                                type.range = 60f + Rando.Float(18f);
-                                Bullet bullet = new Bullet(x + (float)(Math.Cos((double)Maths.DegToRad(num2)) * 6.0), num1 - (float)(Math.Sin((double)Maths.DegToRad(num2)) * 6.0), (AmmoType)type, num2);
-                                bullet.firedFrom = (Thing)this;
+                                float num2 = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                                ATShrapnel type = new ATShrapnel
+                                {
+                                    range = 60f + Rando.Float(18f)
+                                };
+                                Bullet bullet = new Bullet(x + (float)(Math.Cos((double)Maths.DegToRad(num2)) * 6.0), num1 - (float)(Math.Sin((double)Maths.DegToRad(num2)) * 6.0), type, num2)
+                                {
+                                    firedFrom = this
+                                };
                                 this.firedBullets.Add(bullet);
-                                Level.Add((Thing)bullet);
+                                Level.Add(bullet);
                             }
                             foreach (Window ignore in Level.CheckCircleAll<Window>(this.position, 40f))
                             {
-                                if (Level.CheckLine<Block>(this.position, ignore.position, (Thing)ignore) == null)
-                                    ignore.Destroy((DestroyType)new DTImpact((Thing)this));
+                                if (Level.CheckLine<Block>(this.position, ignore.position, ignore) == null)
+                                    ignore.Destroy(new DTImpact(this));
                             }
-                            this.bulletFireIndex += (byte)20;
+                            this.bulletFireIndex += 20;
                             if (Network.isActive)
                             {
-                                Send.Message((NetMessage)new NMFireGun((Gun)this, this.firedBullets, this.bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                                Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
                                 this.firedBullets.Clear();
                             }
                         }
-                        Level.Remove((Thing)this);
+                        Level.Remove(this);
                         this._destroyed = true;
                         this._explodeFrames = -1;
                     }
@@ -167,10 +171,12 @@ namespace DuckGame
             if (!this._pin)
                 return;
             this._pin = false;
-            GrenadePin grenadePin = new GrenadePin(this.x, this.y);
-            grenadePin.hSpeed = (float)-this.offDir * (1.5f + Rando.Float(0.5f));
-            grenadePin.vSpeed = -2f;
-            Level.Add((Thing)grenadePin);
+            GrenadePin grenadePin = new GrenadePin(this.x, this.y)
+            {
+                hSpeed = -this.offDir * (1.5f + Rando.Float(0.5f)),
+                vSpeed = -2f
+            };
+            Level.Add(grenadePin);
             if (this.duck != null)
                 RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
             SFX.Play("pullPin");

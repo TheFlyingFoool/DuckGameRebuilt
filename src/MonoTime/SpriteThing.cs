@@ -15,9 +15,9 @@ namespace DuckGame
         public SpriteThing(float xpos, float ypos, Sprite spr)
           : base(xpos, ypos, spr)
         {
-            this.collisionSize = new Vec2((float)spr.width, (float)spr.height);
-            this.center = new Vec2((float)(spr.w / 2), (float)(spr.h / 2));
-            this.collisionOffset = new Vec2((float)-(spr.w / 2), (float)-(spr.h / 2));
+            this.collisionSize = new Vec2(spr.width, spr.height);
+            this.center = new Vec2(spr.w / 2, spr.h / 2);
+            this.collisionOffset = new Vec2(-(spr.w / 2), -(spr.h / 2));
             this.color = Color.White;
         }
 

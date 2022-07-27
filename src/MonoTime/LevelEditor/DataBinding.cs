@@ -16,6 +16,6 @@ namespace DuckGame
 
         public override object ReadNetValue(object val) => val;
 
-        public override object ReadNetValue(BitBuffer pData) => (object)pData.ReadBitBuffer();
+        public override object ReadNetValue(BitBuffer pData) => pData.ReadBitBuffer();
     }
 }

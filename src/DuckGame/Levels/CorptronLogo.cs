@@ -39,10 +39,10 @@ namespace DuckGame
             else
             {
                 Graphics.fade = 0.0f;
-                Level.current = (Level)new AdultSwimLogo();
+                Level.current = new AdultSwimLogo();
             }
             this._wait -= 3f / 500f;
-            if ((double)this._wait >= 0.0 && !Input.Pressed("START") && !Input.Pressed("SELECT"))
+            if (_wait >= 0.0 && !Input.Pressed("START") && !Input.Pressed("SELECT"))
                 return;
             this._fading = true;
         }

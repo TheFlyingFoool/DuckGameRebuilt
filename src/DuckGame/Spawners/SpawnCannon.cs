@@ -38,19 +38,21 @@ namespace DuckGame
                 this._sprite = new SpriteMap("cannonTimer", 18, 18);
             else
                 this._sprite = new SpriteMap("cannon", 18, 18);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
         }
 
         public SpawnCannon(float xpos, float ypos, System.Type c = null)
           : base(xpos, ypos)
         {
-            this.bing = new EditorProperty<int>(0, (Thing)this, max: 240f, increment: 1f, minSpecial: "none");
-            this.bing._tooltip = "If set, this cannon will BING this many frames before it activates.";
-            this.showClock = new EditorProperty<bool>(false, (Thing)this);
-            this.cannonColor = new EditorProperty<int>(0, (Thing)this, max: 3f, increment: 1f);
+            this.bing = new EditorProperty<int>(0, this, max: 240f, increment: 1f, minSpecial: "none")
+            {
+                _tooltip = "If set, this cannon will BING this many frames before it activates."
+            };
+            this.showClock = new EditorProperty<bool>(false, this);
+            this.cannonColor = new EditorProperty<int>(0, this, max: 3f, increment: 1f);
             this._arrowHead = new Sprite("arrowHead", new Vec2(3.5f, 8f));
             this._sprite = new SpriteMap("cannon", 18, 18);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 9f);
             this.collisionSize = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-6f, -6f);
@@ -59,8 +61,10 @@ namespace DuckGame
             this.hugWalls = WallHug.None;
             this._placementCost += 4;
             this.editorTooltip = "Shoots the specified item in the specified direction after the specified delay.";
-            this.sequence = new SequenceItem((Thing)this);
-            this.sequence.type = SequenceItemType.Activator;
+            this.sequence = new SequenceItem(this)
+            {
+                type = SequenceItemType.Activator
+            };
         }
 
         public override void OnSequenceActivate()
@@ -111,21 +115,21 @@ namespace DuckGame
                 else if (this.possible.Count > 0)
                 {
                     System.Type type = MysteryGun.PickType(this.chanceGroup, this.possible);
-                    if (type != (System.Type)null)
+                    if (type != null)
                         this.contains = type;
                 }
                 this._spawnWait = 0.0f;
                 ++this._numSpawned;
-                if (this.contains == (System.Type)null || !(Editor.CreateThing(this.contains) is PhysicsObject thing))
+                if (this.contains == null || !(Editor.CreateThing(this.contains) is PhysicsObject thing))
                     return;
                 Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad(this.direction)) * this.firePower;
                 thing.position = this.position + vec2.normalized * 8f;
                 thing.hSpeed = vec2.x;
                 thing.vSpeed = vec2.y;
-                Level.Add((Thing)thing);
-                thing.Ejected((Thing)this);
-                Level.Add((Thing)SmallSmoke.New(thing.x, thing.y));
-                Level.Add((Thing)SmallSmoke.New(thing.x, thing.y));
+                Level.Add(thing);
+                thing.Ejected(this);
+                Level.Add(SmallSmoke.New(thing.x, thing.y));
+                Level.Add(SmallSmoke.New(thing.x, thing.y));
                 SFX.Play("netGunFire", Rando.Float(0.9f, 1f), Rando.Float(-0.1f, 0.1f));
                 if (thing is Equipment)
                     (thing as Equipment).autoEquipTime = 0.5f;
@@ -151,7 +155,7 @@ namespace DuckGame
                 if (this.bing.value > 0)
                 {
                     float num1 = Math.Max(this.spawnTime - this._spawnWait, 0.0f) + this.initialDelay;
-                    float num2 = (float)this.bing.value * Maths.IncFrameTimer();
+                    float num2 = bing.value * Maths.IncFrameTimer();
                     float num3 = (num2 - num1) / num2;
                     if (this.beeps == 0 && (double)num3 > 0.0)
                     {
@@ -169,9 +173,9 @@ namespace DuckGame
                         ++this.beeps;
                     }
                 }
-                if (Level.current.simulatePhysics && (double)this._spawnWait >= (double)this.spawnTime)
+                if (Level.current.simulatePhysics && _spawnWait >= (double)this.spawnTime)
                 {
-                    if ((double)this.initialDelay > 0.0)
+                    if (initialDelay > 0.0)
                     {
                         this.initialDelay -= 0.0166666f;
                     }
@@ -204,8 +208,8 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("fireDirection", (object)this.fireDirection);
-            binaryClassChunk.AddProperty("firePower", (object)this.firePower);
+            binaryClassChunk.AddProperty("fireDirection", fireDirection);
+            binaryClassChunk.AddProperty("firePower", firePower);
             return binaryClassChunk;
         }
 
@@ -220,8 +224,8 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("fireDirection", (object)Change.ToString((object)this.fireDirection)));
-            dxmlNode.Add(new DXMLNode("firePower", (object)Change.ToString((object)this.firePower)));
+            dxmlNode.Add(new DXMLNode("fireDirection", Change.ToString(fireDirection)));
+            dxmlNode.Add(new DXMLNode("firePower", Change.ToString(firePower)));
             return dxmlNode;
         }
 
@@ -240,18 +244,18 @@ namespace DuckGame
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Angle", (IContextListener)null, new FieldBinding((object)this, "fireDirection", max: 360f), 1f));
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Power", (IContextListener)null, new FieldBinding((object)this, "firePower", 1f, 20f)));
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(new ContextSlider("Angle", null, new FieldBinding(this, "fireDirection", max: 360f), 1f));
+            contextMenu.AddItem(new ContextSlider("Power", null, new FieldBinding(this, "firePower", 1f, 20f)));
+            return contextMenu;
         }
 
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 text = this.contains.Name;
             Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
-            if (!(this.contains != (System.Type)null))
+            if (!(this.contains != null))
                 return;
             if (this._hoverThing == null || this._hoverThing.GetType() != this.contains)
                 this._hoverThing = Editor.CreateThing(this.contains) as PhysicsObject;

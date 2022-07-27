@@ -31,7 +31,7 @@ namespace DuckGame
             {
                 this.DeactivateAll();
                 Page.camOffset = Lerp.FloatSmooth(Page.camOffset, 360f, 0.1f);
-                if ((double)Page.camOffset <= 330.0)
+                if (camOffset <= 330.0)
                     return;
                 this.TransitionOutComplete();
             }
@@ -40,9 +40,9 @@ namespace DuckGame
                 if (this._state != CategoryState.Idle)
                     return;
                 Page.camOffset = Lerp.FloatSmooth(Page.camOffset, -40f, 0.1f);
-                if ((double)Page.camOffset < 0.0)
+                if (camOffset < 0.0)
                     Page.camOffset = 0.0f;
-                if ((double)Page.camOffset == 0.0)
+                if (camOffset == 0.0)
                     this.ActivateAll();
                 else
                     this.DeactivateAll();

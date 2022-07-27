@@ -33,7 +33,7 @@ namespace DuckGame
                 return;
             this._occluders.Add(new LightOccluder(this.position + new Vec2(-7f, -8f), this.position + new Vec2(7f, -8f), new Color(0.7f, 0.7f, 0.7f)));
             this._light = new PointLight(this.x + 1f, this.y - 7f, new Color(100, 130, 180), 30f, this._occluders);
-            Level.Add((Thing)this._light);
+            Level.Add(_light);
         }
 
         public override void Update()

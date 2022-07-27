@@ -69,10 +69,10 @@ namespace DuckGame
             this.hSpeed *= Math.Min(1f, (float)((double)lengthSq / 128.0 + 0.25));
             this.vSpeed *= Math.Min(1f, (float)((double)lengthSq / 128.0 + 0.25));
             this.life -= 0.02f;
-            if ((double)this.life < 0.0)
+            if (life < 0.0)
                 this.alpha -= 0.08f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 

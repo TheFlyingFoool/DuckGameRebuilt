@@ -61,20 +61,24 @@ namespace DuckGame
             this._uiText.SetFont(f);
             this._uiText.align = UIAlign.Left;
             this._uiText.specialScale = 0.5f;
-            component1.leftSection.Add((UIComponent)this._uiText, true);
-            UIMultiToggle component2 = new UIMultiToggle(-1f, -1f, new FieldBinding((object)this, nameof(randomAssIntField)), this._captionList, true);
+            component1.leftSection.Add(_uiText, true);
+            UIMultiToggle component2 = new UIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), this._captionList, true);
             component2.SetFont(f);
             component2.align = UIAlign.Right;
-            component1.rightSection.Add((UIComponent)component2, true);
-            this.rightSection.Add((UIComponent)component1, true);
+            component1.rightSection.Add(component2, true);
+            this.rightSection.Add(component1, true);
             component2.specialScale = 0.5f;
-            this._arrow = new UIImage("littleContextArrowRight");
-            this._arrow.scale = new Vec2(0.5f, 0.5f);
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
-            this._styleBubble = new Sprite("buttons/styleBubble");
-            this._styleBubble.center = new Vec2(0.0f, 11f);
+            this._arrow = new UIImage("littleContextArrowRight")
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
+            this._styleBubble = new Sprite("buttons/styleBubble")
+            {
+                center = new Vec2(0.0f, 11f)
+            };
             this._styleTray = new Sprite("buttons/styleTray");
             this._styleTray.CenterOrigin();
             this._field = field;
@@ -189,7 +193,7 @@ namespace DuckGame
                     if (Input.Pressed("SELECT"))
                     {
                         flag = true;
-                        int key = -1;
+                        int key;
                         if (this.inputMapping.map.TryGetValue(this._trigger, out key))
                         {
                             this.inputMapping.graphicMap[key] = Input.buttonStyles[this._selectionIndex].texture.textureName;
@@ -243,7 +247,7 @@ namespace DuckGame
                     int num = 0;
                     foreach (Sprite buttonStyle in Input.buttonStyles)
                     {
-                        Vec2 vec2_3 = vec2_2 + new Vec2((float)(num % 4 * 14), (float)(num / 4 * 14));
+                        Vec2 vec2_3 = vec2_2 + new Vec2(num % 4 * 14, num / 4 * 14);
                         buttonStyle.depth = (Depth)0.95f;
                         buttonStyle.color = Color.White * (num == this._selectionIndex ? 1f : 0.4f);
                         Graphics.Draw(buttonStyle, vec2_3.x, vec2_3.y);
@@ -329,7 +333,7 @@ namespace DuckGame
                 UIMenu.globalUILock = true;
                 this._editing = true;
                 this._skipStep = true;
-                int mapping = -1;
+                int mapping;
                 if (this.inputMapping.map.TryGetValue(this._trigger, out mapping))
                 {
                     int num = 0;

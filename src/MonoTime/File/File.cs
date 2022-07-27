@@ -16,13 +16,13 @@ namespace DuckGame
         private byte[] _readShort = new byte[2];
         private byte[] _readInt = new byte[4];
 
-        public BinaryFile(string name, BinaryFileMode m) => this._stream = (Stream)new FileStream(name, (FileMode)m);
+        public BinaryFile(string name, BinaryFileMode m) => this._stream = new FileStream(name, (FileMode)m);
 
-        public BinaryFile(byte[] data) => this._stream = (Stream)new MemoryStream(data);
+        public BinaryFile(byte[] data) => this._stream = new MemoryStream(data);
 
         public void Close() => this._stream.Close();
 
-        public void SkipBytes(int bytes) => this._stream.Seek((long)bytes, SeekOrigin.Current);
+        public void SkipBytes(int bytes) => this._stream.Seek(bytes, SeekOrigin.Current);
 
         public void ResetPosition() => this._stream.Seek(0L, SeekOrigin.Begin);
 

@@ -37,9 +37,11 @@ namespace DuckGame
         public Teleporter(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.teleHeight = new EditorProperty<int>(2, (Thing)this, 1f, 16f, 1f);
-            this.teleHeight.name = "height";
-            this.horizontal = new EditorProperty<bool>(false, (Thing)this);
+            this.teleHeight = new EditorProperty<int>(2, this, 1f, 16f, 1f)
+            {
+                name = "height"
+            };
+            this.horizontal = new EditorProperty<bool>(false, this);
             this.center = new Vec2(8f, 24f);
             this.collisionSize = new Vec2(6f, 32f);
             this.collisionOffset = new Vec2(-3f, -24f);
@@ -64,14 +66,14 @@ namespace DuckGame
             if ((bool)this.horizontal)
             {
                 this.center = new Vec2(24f, 8f);
-                this.collisionSize = new Vec2((float)((int)this.teleHeight * 16), 6f);
+                this.collisionSize = new Vec2((int)this.teleHeight * 16, 6f);
                 this.collisionOffset = new Vec2(-8f, -3f);
             }
             else
             {
                 this.center = new Vec2(8f, 24f);
-                this.collisionSize = new Vec2(6f, (float)((int)this.teleHeight * 16));
-                this.collisionOffset = new Vec2(-3f, (float)-((int)this.teleHeight * 16 - 8));
+                this.collisionSize = new Vec2(6f, (int)this.teleHeight * 16);
+                this.collisionOffset = new Vec2(-3f, -((int)this.teleHeight * 16 - 8));
             }
         }
 
@@ -117,14 +119,14 @@ namespace DuckGame
             if (this.horizontal.value)
             {
                 Vec2 center = this.rectangle.Center;
-                Teleporter teleporter = Level.CheckRay<Teleporter>(center + vec2_1 * 20f, center + vec2_1 * 5000f, (Thing)this, out hitPos);
+                Teleporter teleporter = Level.CheckRay<Teleporter>(center + vec2_1 * 20f, center + vec2_1 * 5000f, this, out hitPos);
                 if (teleporter != null)
                     this._link = teleporter;
             }
             else
             {
-                Vec2 vec2_2 = this.position + new Vec2(0.0f, (float)-((double)(int)this.teleHeight * 16.0 / 2.0 - 8.0));
-                Teleporter teleporter = Level.CheckRay<Teleporter>(vec2_2 + vec2_1 * 20f, vec2_2 + vec2_1 * 5000f, (Thing)this, out hitPos);
+                Vec2 vec2_2 = this.position + new Vec2(0.0f, (float)-((int)this.teleHeight * 16.0 / 2.0 - 8.0));
+                Teleporter teleporter = Level.CheckRay<Teleporter>(vec2_2 + vec2_1 * 20f, vec2_2 + vec2_1 * 5000f, this, out hitPos);
                 if (teleporter != null)
                     this._link = teleporter;
             }
@@ -172,7 +174,7 @@ namespace DuckGame
                 Thing thing1 = this._teleporting[index1] as Thing;
                 this._teleporting.RemoveAt(index1);
                 for (int index2 = 0; index2 < 2; ++index2)
-                    Level.Add((Thing)SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
+                    Level.Add(SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
                 Vec2 position1 = thing1.position;
                 float num2 = 0.0f;
                 if (thing1 is RagdollPart)
@@ -180,7 +182,7 @@ namespace DuckGame
                 this._link._teleported.Add(thing1 as ITeleport);
                 if ((int)this.teleHeight != 2 || (int)this._link.teleHeight != 2)
                 {
-                    if ((double)this._dir.y == 0.0)
+                    if (_dir.y == 0.0)
                     {
                         thing1.x = this._link.x - (this.x - thing1.x);
                         if (!this.horizontal.value)
@@ -272,7 +274,7 @@ namespace DuckGame
                     }
                 }
                 for (int index3 = 0; index3 < 2; ++index3)
-                    Level.Add((Thing)SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
+                    Level.Add(SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
                 num1 = index1 - 1;
                 Vec2 vec2 = position1;
                 Vec2 position2 = thing1.position;
@@ -281,12 +283,12 @@ namespace DuckGame
                     vec2.y += 9f;
                     position2.y += 9f;
                 }
-                if ((double)this._dir.y != 0.0 && !this.horizontal.value)
+                if (_dir.y != 0.0 && !this.horizontal.value)
                 {
                     vec2.x = this.position.x;
                     position2.x = this._link.position.x;
                 }
-                float num3 = Math.Max((double)this._dir.x != 0.0 ? thing1.height : thing1.width, 8f);
+                float num3 = Math.Max(_dir.x != 0.0 ? thing1.height : thing1.width, 8f);
                 this.warpLines.Add(new WarpLine()
                 {
                     start = vec2,
@@ -311,7 +313,7 @@ namespace DuckGame
                 Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.start + vec2_2 * warpLine.lerp, warpLine.start, color * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.1f;
             }
-            this.warpLines.RemoveAll((Predicate<WarpLine>)(v => (double)v.lerp >= 1.0));
+            this.warpLines.RemoveAll(v => v.lerp >= 1.0);
         }
 
         public override void Draw()
@@ -321,14 +323,14 @@ namespace DuckGame
             {
                 Color purple = Color.Purple;
                 if ((bool)this.noduck)
-                    Graphics.DrawRect(new Vec2(this.x + (float)((int)this.teleHeight * 16 - 9), this.y - 2f), new Vec2(this.x - 5f, this.y + 2f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 2f), new Vec2(this.x - 5f, this.y + 2f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
-                    Graphics.DrawRect(new Vec2(this.x + (float)((int)this.teleHeight * 16 - 9), this.y - 4f), new Vec2(this.x - 5f, this.y + 4f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 4f), new Vec2(this.x - 5f, this.y + 4f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 this._top.angleDegrees = 90f;
                 this._bottom.angleDegrees = 90f;
                 this._top.depth = this.depth + 1;
                 this._bottom.depth = this.depth + 1;
-                Graphics.Draw(this._top, this.x + (float)((int)this.teleHeight * 16 - 9), this.y);
+                Graphics.Draw(this._top, this.x + ((int)this.teleHeight * 16 - 9), this.y);
                 Graphics.Draw(this._bottom, this.x - 5f, this.y);
                 this._arrow.depth = this.depth + 2;
                 this._arrow.alpha = 0.5f;
@@ -340,20 +342,20 @@ namespace DuckGame
                     this._arrow.angleDegrees = -90f;
                 else if (this.direction == 3)
                     this._arrow.angleDegrees = 90f;
-                Graphics.Draw(this._arrow, (float)((double)this.x - 8.0 + (double)((int)this.teleHeight * 16 / 2) + (double)(float)this._float * 2.0), this.y);
+                Graphics.Draw(this._arrow, (float)((double)this.x - 8.0 + (int)this.teleHeight * 16 / 2 + (double)(float)this._float * 2.0), this.y);
             }
             else
             {
                 Color purple = Color.Purple;
                 if ((bool)this.noduck)
-                    Graphics.DrawRect(new Vec2(this.x - 2f, this.y - (float)((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x - 2f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
-                    Graphics.DrawRect(new Vec2(this.x - 4f, this.y - (float)((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x - 4f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 this._top.angle = 0.0f;
                 this._bottom.angle = 0.0f;
                 this._top.depth = this.depth + 1;
                 this._bottom.depth = this.depth + 1;
-                Graphics.Draw(this._top, this.x, this.y - (float)((int)this.teleHeight * 16 - 9));
+                Graphics.Draw(this._top, this.x, this.y - ((int)this.teleHeight * 16 - 9));
                 Graphics.Draw(this._bottom, this.x, this.y + 5f);
                 this._arrow.depth = this.depth + 2;
                 this._arrow.alpha = 0.5f;
@@ -365,15 +367,15 @@ namespace DuckGame
                     this._arrow.angleDegrees = -90f;
                 else if (this.direction == 3)
                     this._arrow.angleDegrees = 90f;
-                Graphics.Draw(this._arrow, this.x, (float)((double)this.y + 8.0 - (double)((int)this.teleHeight * 16 / 2) + (double)(float)this._float * 2.0));
+                Graphics.Draw(this._arrow, this.x, (float)((double)this.y + 8.0 - (int)this.teleHeight * 16 / 2 + (double)(float)this._float * 2.0));
             }
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("direction", (object)this.direction);
-            binaryClassChunk.AddProperty("newVersion", (object)true);
+            binaryClassChunk.AddProperty("direction", direction);
+            binaryClassChunk.AddProperty("newVersion", true);
             return binaryClassChunk;
         }
 
@@ -391,7 +393,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("direction", (object)Change.ToString((object)this.direction)));
+            dxmlNode.Add(new DXMLNode("direction", Change.ToString(direction)));
             return dxmlNode;
         }
 
@@ -408,11 +410,11 @@ namespace DuckGame
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            contextMenu.AddItem((ContextMenu)new ContextRadio("Up", this.direction == 0, (object)0, (IContextListener)null, new FieldBinding((object)this, "direction")));
-            contextMenu.AddItem((ContextMenu)new ContextRadio("Down", this.direction == 1, (object)1, (IContextListener)null, new FieldBinding((object)this, "direction")));
-            contextMenu.AddItem((ContextMenu)new ContextRadio("Left", this.direction == 2, (object)2, (IContextListener)null, new FieldBinding((object)this, "direction")));
-            contextMenu.AddItem((ContextMenu)new ContextRadio("Right", this.direction == 3, (object)3, (IContextListener)null, new FieldBinding((object)this, "direction")));
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(new ContextRadio("Up", this.direction == 0, 0, null, new FieldBinding(this, "direction")));
+            contextMenu.AddItem(new ContextRadio("Down", this.direction == 1, 1, null, new FieldBinding(this, "direction")));
+            contextMenu.AddItem(new ContextRadio("Left", this.direction == 2, 2, null, new FieldBinding(this, "direction")));
+            contextMenu.AddItem(new ContextRadio("Right", this.direction == 3, 3, null, new FieldBinding(this, "direction")));
+            return contextMenu;
         }
 
         public override void EditorUpdate()

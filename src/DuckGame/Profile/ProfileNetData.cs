@@ -58,8 +58,8 @@ namespace DuckGame
         public T Get<T>(string pKey, T pDefault)
         {
             int hashCode = pKey.GetHashCode();
-            ProfileNetData.NetDataPair netDataPair = (ProfileNetData.NetDataPair)null;
-            return this._elements.TryGetValue(hashCode, out netDataPair) && netDataPair.data is T ? (T)(object)netDataPair.data : pDefault;
+            NetDataPair netDataPair;
+            return this._elements.TryGetValue(hashCode, out netDataPair) && netDataPair.data is T ? (T)netDataPair.data : pDefault;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace DuckGame
         public void Set<T>(string pKey, T pValue)
         {
             int hashCode = pKey.GetHashCode();
-            ProfileNetData.NetDataPair netDataPair = (ProfileNetData.NetDataPair)null;
+            NetDataPair netDataPair;
             if (!this._elements.TryGetValue(hashCode, out netDataPair))
             {
                 this._elements[hashCode] = netDataPair = new ProfileNetData.NetDataPair();
@@ -82,9 +82,9 @@ namespace DuckGame
             }
             if (netDataPair.id != null && netDataPair.id != pKey)
                 throw new Exception("Profile.netData.Set<" + typeof(T).Name + ">(" + pKey + ") error: GetHashCode for (" + pKey + ") is identical to GetHashCode for (" + netDataPair.id + "), a value already set in Profile.netData! Please use a more unique key name.");
-            if (object.Equals(netDataPair.data, (object)pValue) && netDataPair.activeControllingConnection == DuckNetwork.localConnection)
+            if (object.Equals(netDataPair.data, pValue) && netDataPair.activeControllingConnection == DuckNetwork.localConnection)
                 return;
-            netDataPair.data = (object)pValue;
+            netDataPair.data = pValue;
             netDataPair.id = pKey;
             netDataPair.MakeDirty();
         }
@@ -105,7 +105,7 @@ namespace DuckGame
             }
             else
             {
-                ProfileNetData.NetDataPair netDataPair = (ProfileNetData.NetDataPair)null;
+                NetDataPair netDataPair;
                 if (!this._elements.TryGetValue(pHash, out netDataPair) || (int)netDataPair.GetLastSyncIndex(pConnection) > (int)pSyncIndex)
                     return;
                 netDataPair.SetConnectionDirty(pConnection, true);
@@ -124,7 +124,7 @@ namespace DuckGame
           NetIndex16 pSyncIndex,
           NetworkConnection pConnection)
         {
-            ProfileNetData.NetDataPair netDataPair = (ProfileNetData.NetDataPair)null;
+            NetDataPair netDataPair;
             if (!this._elements.TryGetValue(pHash, out netDataPair))
                 this._elements[pHash] = netDataPair = new ProfileNetData.NetDataPair();
             if (netDataPair.lastReceivedIndex > pSyncIndex && netDataPair.activeControllingConnection == pConnection)
@@ -157,10 +157,10 @@ namespace DuckGame
         public void Deserialize(BitBuffer pBuffer, NetworkConnection pConnection, bool pMakingDirty)
         {
             NetIndex16 pSyncIndex = pBuffer.ReadNetIndex16();
-            while ((long)pBuffer.positionInBits != (long)pBuffer.lengthInBits)
+            while (pBuffer.positionInBits != pBuffer.lengthInBits)
             {
                 int pHash = pBuffer.ReadInt();
-                System.Type pTypeRead = (System.Type)null;
+                Type pTypeRead;
                 object pValue = pBuffer.ReadObject(out pTypeRead);
                 if (!pMakingDirty)
                     this.Set(pHash, pValue, pSyncIndex, pConnection);

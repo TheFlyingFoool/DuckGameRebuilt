@@ -96,7 +96,7 @@ namespace DuckGame
             if (this.Group_Wait.value && this._up.Count != 0 || this._up.Count >= (int)this.Max_Up && (int)this.Max_Up != 0)
                 return;
             this._waitCount += Maths.IncFrameTimer();
-            if ((double)this._waitCount < (double)this.Delay.value)
+            if (_waitCount < (double)this.Delay.value)
                 return;
             this.PopUpItems();
             this._waitCount = 0.0f;
@@ -110,25 +110,25 @@ namespace DuckGame
                 num1 = 9999;
             while (this._up.Count < num1)
             {
-                List<Thing> source1 = this.Group.value >= 0 ? (this.Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>((Func<Thing, bool>)(x => x.sequence.type == this.Type.value && x.sequence.order == this.Group.value)).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].Where<Thing>((Func<Thing, bool>)(x => x.sequence.order == this.Group.value)).ToList<Thing>()) : (this.Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>((Func<Thing, bool>)(x => x.sequence.type == this.Type.value)).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].ToList<Thing>());
+                List<Thing> source1 = this.Group.value >= 0 ? (this.Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == this.Type.value && x.sequence.order == this.Group.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.order == this.Group.value).ToList<Thing>()) : (this.Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == this.Type.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].ToList<Thing>());
                 IEnumerable<Thing> source2;
                 while (true)
                 {
-                    IEnumerable<Thing> source3 = source1.Where<Thing>((Func<Thing, bool>)(v => v.sequence.isValid && v.sequence.order != this._sequenceNumber && v.sequence.timesActivated <= this._activationCycle));
-                    source2 = source1.Where<Thing>((Func<Thing, bool>)(v => v.sequence.isValid && v.sequence.order == this._sequenceNumber));
+                    IEnumerable<Thing> source3 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order != this._sequenceNumber && v.sequence.timesActivated <= this._activationCycle);
+                    source2 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order == this._sequenceNumber);
                     if (source3.Count<Thing>() > 0)
                         this._hadFutureItems = true;
                     if (this._hadFutureItems)
                     {
-                        source2 = source2.Where<Thing>((Func<Thing, bool>)(v => v.sequence.timesActivated == this._activationCycle));
+                        source2 = source2.Where<Thing>(v => v.sequence.timesActivated == this._activationCycle);
                         if (source2.Count<Thing>() == 0)
                         {
                             if (!this.Ordered_Groups.value)
                             {
-                                IEnumerable<Thing> source4 = source1.Where<Thing>((Func<Thing, bool>)(x => x.sequence.order != this._sequenceNumber));
+                                IEnumerable<Thing> source4 = source1.Where<Thing>(x => x.sequence.order != this._sequenceNumber);
                                 if (!this.Continuous.value)
                                 {
-                                    source4 = source4.Where<Thing>((Func<Thing, bool>)(x => x.sequence.timesActivated <= this._activationCycle));
+                                    source4 = source4.Where<Thing>(x => x.sequence.timesActivated <= this._activationCycle);
                                 }
                                 else
                                 {
@@ -137,7 +137,7 @@ namespace DuckGame
                                 }
                                 if (source4.Count<Thing>() > 0)
                                 {
-                                    this._sequenceNumber = source4.OrderBy<Thing, int>((Func<Thing, int>)(x => x.sequence.likelyhood + ChallengeRando.Int(8))).ElementAt<Thing>(0).sequence.order;
+                                    this._sequenceNumber = source4.OrderBy<Thing, int>(x => x.sequence.likelyhood + ChallengeRando.Int(8)).ElementAt<Thing>(0).sequence.order;
                                     this.Max_Up.value = this._originalMaxUp;
                                     continue;
                                 }
@@ -204,7 +204,7 @@ namespace DuckGame
                 bool flag3 = false;
                 foreach (SequenceItem sequenceItem in sequenceItemList)
                 {
-                    float num5 = (float)sequenceItem.likelyhood / (float)num2;
+                    float num5 = sequenceItem.likelyhood / (float)num2;
                     if ((double)num3 > (double)num4 && (double)num3 < (double)num4 + (double)num5)
                     {
                         sequenceItem.randomMode = true;

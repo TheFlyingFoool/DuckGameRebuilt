@@ -47,7 +47,7 @@ namespace DuckGame
                 this.solid = false;
                 this._sprite.flipH = this.duck._sprite.flipH;
                 this._spriteOver.flipH = this.duck._sprite.flipH;
-                this.graphic = (Sprite)this._sprite;
+                this.graphic = _sprite;
                 if (this._equippedDuck.sliding)
                 {
                     this._equippedCollisionOffset = new Vec2(-5f, -5f);
@@ -61,7 +61,7 @@ namespace DuckGame
             }
             else
             {
-                this.center = new Vec2((float)(this._pickupSprite.w / 2), (float)(this._pickupSprite.h / 2));
+                this.center = new Vec2(this._pickupSprite.w / 2, this._pickupSprite.h / 2);
                 this.solid = true;
                 this._sprite.frame = 0;
                 this._sprite.flipH = false;
@@ -70,7 +70,7 @@ namespace DuckGame
             if (this.destroyed)
                 this.alpha -= 0.05f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 
@@ -87,7 +87,7 @@ namespace DuckGame
             this._spriteOver.scale = this.scale;
             this._spriteOver.depth = this.owner.depth + (this.duck.holdObject != null ? 5 : 12);
             this._spriteOver.center = this.center;
-            Graphics.Draw((Sprite)this._spriteOver, this.x, this.y);
+            Graphics.Draw(_spriteOver, this.x, this.y);
         }
     }
 }

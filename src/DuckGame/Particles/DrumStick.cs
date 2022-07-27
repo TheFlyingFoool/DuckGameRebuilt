@@ -15,7 +15,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.graphic = new Sprite("drumset/drumStick");
-            this.center = new Vec2((float)(this.graphic.w / 2), (float)(this.graphic.h / 2));
+            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
             this._startY = ypos;
             this.vSpeed = -3f;
         }
@@ -25,9 +25,9 @@ namespace DuckGame
             this.angle += 0.6f;
             this.y += this.vSpeed;
             this.vSpeed += 0.2f;
-            if ((double)this.y <= (double)this._startY)
+            if ((double)this.y <= _startY)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

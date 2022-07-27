@@ -15,7 +15,7 @@ namespace DuckGame
 
         public override object classValue
         {
-            get => (object)this.ushortValue;
+            get => ushortValue;
             set => this.ushortValue = (ushort)value;
         }
 
@@ -27,6 +27,6 @@ namespace DuckGame
             this._priority = p;
         }
 
-        public override void Connect(Thing t) => this._thing = (object)t;
+        public override void Connect(Thing t) => this._thing = t;
     }
 }

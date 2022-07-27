@@ -75,13 +75,13 @@ namespace DuckGame
                 if (History._currentAction.actions.Count > 0)
                 {
                     UndoData currentAction = History._currentAction;
-                    History._currentAction = (UndoData)null;
+                    History._currentAction = null;
                     History.Add(currentAction);
                 }
                 else
-                    History._currentAction = (UndoData)null;
+                    History._currentAction = null;
             }
-            History._currentAction = (UndoData)null;
+            History._currentAction = null;
         }
 
         public static void Undo()

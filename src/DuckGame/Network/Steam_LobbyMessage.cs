@@ -48,7 +48,7 @@ namespace DuckGame
             }
             catch (Exception)
             {
-                return (Steam_LobbyMessage)null;
+                return null;
             }
         }
     }

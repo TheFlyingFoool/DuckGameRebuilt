@@ -22,9 +22,11 @@ namespace DuckGame
 
         public override void PopShell(float x, float y, int dir)
         {
-            MagnumShell magnumShell = new MagnumShell(x, y);
-            magnumShell.hSpeed = (float)dir * (1.5f + Rando.Float(1f));
-            Level.Add((Thing)magnumShell);
+            MagnumShell magnumShell = new MagnumShell(x, y)
+            {
+                hSpeed = dir * (1.5f + Rando.Float(1f))
+            };
+            Level.Add(magnumShell);
         }
     }
 }

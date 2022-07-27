@@ -272,14 +272,14 @@ namespace DuckGame
                         this._rootMenu.Close();
                         this._kickMenu.Open();
                         if (MonoMain.pauseMenu == this._rootMenu)
-                            MonoMain.pauseMenu = (UIComponent)this._kickMenu;
+                            MonoMain.pauseMenu = _kickMenu;
                     }
                     else if (this._additionalOptionIndex == this._aoBanIndex)
                     {
                         this._rootMenu.Close();
                         this._banMenu.Open();
                         if (MonoMain.pauseMenu == this._rootMenu)
-                            MonoMain.pauseMenu = (UIComponent)this._banMenu;
+                            MonoMain.pauseMenu = _banMenu;
                     }
                     else if (this._additionalOptionIndex == this._aoMuteIndex)
                     {
@@ -299,7 +299,7 @@ namespace DuckGame
                             this._rootMenu.Close();
                             this._blockMenu.Open();
                             if (MonoMain.pauseMenu == this._rootMenu)
-                                MonoMain.pauseMenu = (UIComponent)this._blockMenu;
+                                MonoMain.pauseMenu = _blockMenu;
                         }
                     }
                     if (flag)
@@ -339,27 +339,27 @@ namespace DuckGame
             {
                 Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.85f);
                 Vec2 p1_1 = this.position + new Vec2(-60f, 4f);
-                Vec2 p2_1 = p1_1 + new Vec2(76f, (float)(this._additionalOptions.Count * 8 + 3));
+                Vec2 p2_1 = p1_1 + new Vec2(76f, this._additionalOptions.Count * 8 + 3);
                 Graphics.DrawRect(p1_1, p2_1, Color.Black, (Depth)0.9f);
                 Graphics.DrawRect(p1_1, p2_1, Color.White, (Depth)0.9f, false);
                 for (int index1 = 0; index1 < this._additionalOptions.Count; ++index1)
                 {
-                    this._littleFont.Draw(this._additionalOptions[index1], p1_1 + new Vec2(10f, (float)(3 + index1 * 8)), this._additionalOptionIndex == index1 ? Color.White : Color.White * 0.6f, (Depth)0.91f);
+                    this._littleFont.Draw(this._additionalOptions[index1], p1_1 + new Vec2(10f, 3 + index1 * 8), this._additionalOptionIndex == index1 ? Color.White : Color.White * 0.6f, (Depth)0.91f);
                     if (this._additionalOptionIndex == index1)
-                        Graphics.Draw(this._arrow._image, p1_1.x + 4f, p1_1.y + 6f + (float)(index1 * 8), (Depth)0.91f);
+                        Graphics.Draw(this._arrow._image, p1_1.x + 4f, p1_1.y + 6f + index1 * 8, (Depth)0.91f);
                     if (index1 == this._aoMuteIndex && this._showMuteMenu)
                     {
                         Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.92f);
                         Vec2 p1_2 = p1_1 + new Vec2(8f, 26f);
-                        Vec2 p2_2 = p1_2 + new Vec2(60f, (float)(this._muteOptions.Count * 8 + 4));
+                        Vec2 p2_2 = p1_2 + new Vec2(60f, this._muteOptions.Count * 8 + 4);
                         Graphics.DrawRect(p1_2, p2_2, Color.Black, (Depth)0.93f);
                         Graphics.DrawRect(p1_2, p2_2, Color.White, (Depth)0.93f, false);
                         for (int index2 = 0; index2 < this._muteOptions.Count; ++index2)
                         {
                             string muteOption = this._muteOptions[index2];
-                            this._littleFont.Draw(index2 != 0 || !this._profile.muteChat ? (index2 != 1 || !this._profile.muteHat ? (index2 != 2 || !this._profile.muteRoom ? (index2 != 3 || !this._profile.muteName ? "@DELETEFLAG_OFF@" + muteOption : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption, p1_2 + new Vec2(10f, (float)(4 + index2 * 8)), this._muteOptionIndex == index2 ? Color.White : Color.White * 0.6f, (Depth)0.94f);
+                            this._littleFont.Draw(index2 != 0 || !this._profile.muteChat ? (index2 != 1 || !this._profile.muteHat ? (index2 != 2 || !this._profile.muteRoom ? (index2 != 3 || !this._profile.muteName ? "@DELETEFLAG_OFF@" + muteOption : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption, p1_2 + new Vec2(10f, 4 + index2 * 8), this._muteOptionIndex == index2 ? Color.White : Color.White * 0.6f, (Depth)0.94f);
                             if (this._muteOptionIndex == index2)
-                                Graphics.Draw(this._arrow._image, p1_2.x + 4f, p1_2.y + 6f + (float)(index2 * 8), (Depth)0.94f);
+                                Graphics.Draw(this._arrow._image, p1_2.x + 4f, p1_2.y + 6f + index2 * 8, (Depth)0.94f);
                         }
                     }
                 }

@@ -56,12 +56,12 @@ namespace DuckGame
         {
             this.info = NMRequestJoin.Info.Deserialize(d);
             this.wasInvited = d.ReadBool();
-            int num = (int)d.ReadByte();
+            int num = d.ReadByte();
             if (num == 0)
             {
                 this.password = d.ReadString();
                 this.localID = d.ReadULong();
-                num = (int)d.ReadByte();
+                num = d.ReadByte();
             }
             this.names = new List<string>();
             this.personas = new List<byte>();

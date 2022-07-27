@@ -13,7 +13,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.graphic = new Sprite("drumset/smallTom");
-            this.center = new Vec2((float)(this.graphic.w / 2), (float)(this.graphic.h / 2));
+            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
             this._sound = "hiTom";
         }
 

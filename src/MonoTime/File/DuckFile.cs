@@ -367,13 +367,13 @@ namespace DuckGame
         public static Sprite GetMoji(string moji, NetworkConnection pConnection = null)
         {
             if (!DuckFile.mojimode)
-                return (Sprite)null;
+                return null;
             if (Options.Data.mojiFilter == 1 && pConnection != null && pConnection.data is User && (pConnection.data as User).relationship != FriendRelationship.Friend)
-                return (Sprite)null;
-            Sprite s1 = (Sprite)null;
+                return null;
+            Sprite s1 = null;
             if (pConnection != null)
             {
-                Dictionary<string, Sprite> dictionary = (Dictionary<string, Sprite>)null;
+                Dictionary<string, Sprite> dictionary = null;
                 if (DuckFile._profileMojis.TryGetValue(pConnection.identifier, out dictionary))
                     dictionary.TryGetValue(moji, out s1);
             }
@@ -428,7 +428,7 @@ namespace DuckGame
                                 {
                                     try
                                     {
-                                        DuckFile.TryFileOperation((Action)(() =>
+                                        DuckFile.TryFileOperation(() =>
                                        {
                                            string str = fileName;
                                            DuckFile.Delete(str);
@@ -438,8 +438,8 @@ namespace DuckGame
                                                str = str.Replace(".bmp", ".png");
                                            if (str.EndsWith(".jpeg"))
                                                str = str.Replace(".jpeg", ".png");
-                                           t.SaveAsPng((Stream)System.IO.File.Create(str), t.Width, t.Height);
-                                       }), "InitializeMojis.Resize");
+                                           t.SaveAsPng(System.IO.File.Create(str), t.Width, t.Height);
+                                       }, "InitializeMojis.Resize");
                                     }
                                     catch (Exception)
                                     {
@@ -507,7 +507,7 @@ namespace DuckGame
             s.moji = true;
             if (pConnection != null)
             {
-                Dictionary<string, Sprite> dictionary = (Dictionary<string, Sprite>)null;
+                Dictionary<string, Sprite> dictionary;
                 if (!DuckFile._profileMojis.TryGetValue(pConnection.identifier, out dictionary))
                     dictionary = DuckFile._profileMojis[pConnection.identifier] = new Dictionary<string, Sprite>();
                 dictionary[moji] = s;
@@ -520,10 +520,10 @@ namespace DuckGame
         {
             if (!DuckFile.mojimode)
                 return;
-            List<string> list = ((IEnumerable<string>)DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.png")).ToList<string>();
-            list.AddRange((IEnumerable<string>)DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.jpg"));
-            list.AddRange((IEnumerable<string>)DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.jpeg"));
-            list.AddRange((IEnumerable<string>)DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.bmp"));
+            List<string> list = DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.png").ToList<string>();
+            list.AddRange(DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.jpg"));
+            list.AddRange(DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.jpeg"));
+            list.AddRange(DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.bmp"));
             foreach (string str1 in list)
             {
                 string s = str1;
@@ -540,7 +540,7 @@ namespace DuckGame
                             {
                                 try
                                 {
-                                    DuckFile.TryFileOperation((Action)(() =>
+                                    DuckFile.TryFileOperation(() =>
                                    {
                                        string str2 = s;
                                        DuckFile.Delete(str2);
@@ -550,8 +550,8 @@ namespace DuckGame
                                            str2 = str2.Replace(".bmp", ".png");
                                        if (str2.EndsWith(".jpeg"))
                                            str2 = str2.Replace(".jpeg", ".png");
-                                       t.SaveAsPng((Stream)System.IO.File.Create(str2), t.Width, t.Height);
-                                   }), "InitializeMojis.Resize");
+                                       t.SaveAsPng(System.IO.File.Create(str2), t.Width, t.Height);
+                                   }, "InitializeMojis.Resize");
                                 }
                                 catch (Exception)
                                 {
@@ -562,11 +562,11 @@ namespace DuckGame
                             DevConsole.Log("Error loading " + Path.GetFileName(s) + " MOJI (must be smaller than 28x28)", Color.Red);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
-            foreach (string str in ((IEnumerable<string>)DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.moj")).ToList<string>())
+            foreach (string str in DuckFile.GetFiles(DuckFile.customMojiDirectory, "*.moj").ToList<string>())
             {
                 try
                 {
@@ -586,7 +586,7 @@ namespace DuckGame
                 {
                 }
             }
-            DuckFile._mojis = DuckFile._mojis.OrderByDescending<KeyValuePair<string, Sprite>, string>((Func<KeyValuePair<string, Sprite>, string>)(x => x.Key)).ToDictionary<KeyValuePair<string, Sprite>, string, Sprite>((Func<KeyValuePair<string, Sprite>, string>)(pair => pair.Key), (Func<KeyValuePair<string, Sprite>, Sprite>)(pair => pair.Value));
+            DuckFile._mojis = DuckFile._mojis.OrderByDescending<KeyValuePair<string, Sprite>, string>(x => x.Key).ToDictionary<KeyValuePair<string, Sprite>, string, Sprite>(pair => pair.Key, pair => pair.Value);
         }
 
         public static void BeginDataCommit() => DuckFile._suppressCommit = true;
@@ -613,9 +613,9 @@ namespace DuckGame
             pathString = pathString.Replace('\\', '/');
             string[] source = pathString.Split('/');
             string str = "";
-            for (int index = 0; index < ((IEnumerable<string>)source).Count<string>(); ++index)
+            for (int index = 0; index < source.Count<string>(); ++index)
             {
-                if (!(source[index] == "") && !(source[index] == "/") && (!(source[index].Contains<char>('.') | ignoreLast) || index != ((IEnumerable<string>)source).Count<string>() - 1))
+                if (!(source[index] == "") && !(source[index] == "/") && (!(source[index].Contains<char>('.') | ignoreLast) || index != source.Count<string>() - 1))
                 {
                     string path = str + source[index];
                     if (!Directory.Exists(path))
@@ -623,7 +623,7 @@ namespace DuckGame
                         if (MonoMain.logFileOperations)
                             DevConsole.Log(DCSection.General, "DuckFile.CreatePath(" + path + ")");
                         Directory.CreateDirectory(path);
-                        DuckFile.Commit((string)null);
+                        DuckFile.Commit(null);
                     }
                     str = path + "/";
                 }
@@ -643,7 +643,7 @@ namespace DuckGame
             pPath = DuckFile.PreparePath(pPath);
             DuckFile.TryClearAttributes(pPath);
             string text = "";
-            DuckFile.TryFileOperation((Action)(() => text = System.IO.File.ReadAllText(pPath)), "ReadAllText(" + pPath + ")");
+            DuckFile.TryFileOperation(() => text = System.IO.File.ReadAllText(pPath), "ReadAllText(" + pPath + ")");
             return text;
         }
 
@@ -678,7 +678,7 @@ namespace DuckGame
             {
                 return Steam.user != null && Path.GetDirectoryName(path).Contains(Steam.user.id.ToString());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -701,7 +701,7 @@ namespace DuckGame
                 if (num != -1)
                     return path.Substring(num + saveDirectory.Length, path.Length - num - saveDirectory.Length);
             }
-            return (string)null;
+            return null;
         }
 
         public static string GetShortDirectory(string path)
@@ -737,7 +737,7 @@ namespace DuckGame
                     foreach (string directory in Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly))
                     {
                         List<string> filesNoCloud2 = DuckFile.GetFilesNoCloud(directory, filter, so);
-                        filesNoCloud1.AddRange((IEnumerable<string>)filesNoCloud2);
+                        filesNoCloud1.AddRange(filesNoCloud2);
                     }
                 }
                 catch (Exception)
@@ -804,7 +804,7 @@ namespace DuckGame
                 foreach (string directory in Directory.GetDirectories(path, filter, SearchOption.TopDirectoryOnly))
                     directoriesNoCloud.Add(directory);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return directoriesNoCloud;
@@ -864,7 +864,7 @@ namespace DuckGame
 
         public static LevelData LoadLevelHeaderCached(string path)
         {
-            LevelData levelData = (LevelData)null;
+            LevelData levelData;
             if (!DuckFile._levelCache.TryGetValue(path, out levelData))
                 levelData = DuckFile._levelCache[path] = DuckFile.LoadLevel(path, true);
             return levelData;
@@ -880,7 +880,7 @@ namespace DuckGame
         {
             Cloud.ReplaceLocalFileWithCloudFile(path);
             if (!System.IO.File.Exists(path))
-                return (LevelData)null;
+                return null;
             if (MonoMain.logLevelOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.LoadLevel(" + path + ")");
             LevelData levelData = DuckFile.LoadLevel(System.IO.File.ReadAllBytes(path), pHeaderOnly);
@@ -892,12 +892,12 @@ namespace DuckGame
         {
             if (MonoMain.logLevelOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.ConvertLevel()");
-            LevelData levelData = (LevelData)null;
+            LevelData levelData = null;
             Editor editor = new Editor();
             bool skipInitialize = Level.skipInitialize;
             Level.skipInitialize = true;
             Level currentLevel = Level.core.currentLevel;
-            Level.core.currentLevel = (Level)editor;
+            Level.core.currentLevel = editor;
             try
             {
                 editor.minimalConversionLoad = true;
@@ -908,7 +908,7 @@ namespace DuckGame
                 if (!editor.hadGUID)
                 {
                     uint key = Editor.Checksum(data);
-                    string str = (string)null;
+                    string str = null;
                     if (!DuckFile._conversionGUIDMap.TryGetValue(key, out str))
                     {
                         str = levelData.metaData.guid;
@@ -932,7 +932,7 @@ namespace DuckGame
             LevelData levelData = BinaryClassChunk.FromData<LevelData>(new BitBuffer(data, false), pHeaderOnly);
             if (!pHeaderOnly && levelData == null || levelData != null && levelData.GetResult() == DeserializeResult.InvalidMagicNumber)
             {
-                Promise<LevelData> promise = Tasker.Task<LevelData>((Func<LevelData>)(() => DuckFile.ConvertLevel(data)));
+                Promise<LevelData> promise = Tasker.Task<LevelData>(() => DuckFile.ConvertLevel(data));
                 promise.WaitForComplete();
                 return promise.Result;
             }
@@ -955,14 +955,14 @@ namespace DuckGame
             byte[] bytes = Encoding.UTF8.GetBytes(contents);
             using (FileStream fileStream = System.IO.File.Create(tempFileName, 4096, FileOptions.WriteThrough))
                 fileStream.Write(bytes, 0, bytes.Length);
-            System.IO.File.Replace(tempFileName, path, (string)null);
+            System.IO.File.Replace(tempFileName, path, null);
         }
 
         public static void WriteAllText(string pPath, string pContents)
         {
             pPath = DuckFile.PreparePath(pPath, true);
             DuckFile.TryClearAttributes(pPath);
-            DuckFile.TryFileOperation((Action)(() => System.IO.File.WriteAllText(pPath, pContents)), "WriteAllText(" + pPath + ")");
+            DuckFile.TryFileOperation(() => System.IO.File.WriteAllText(pPath, pContents), "WriteAllText(" + pPath + ")");
             DuckFile.Commit(pPath);
         }
 
@@ -970,10 +970,10 @@ namespace DuckGame
         {
             Cloud.ReplaceLocalFileWithCloudFile(path);
             if (!System.IO.File.Exists(path))
-                return (DuckXML)null;
+                return null;
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.LoadDuckXML(" + path + ")");
-            DuckXML duckXml = (DuckXML)null;
+            DuckXML duckXml = null;
             try
             {
                 duckXml = DuckXML.Load(path);
@@ -993,7 +993,7 @@ namespace DuckGame
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.SaveDuckXML(" + path + ")");
             DuckFile.TryClearAttributes(path);
-            DuckFile.TryFileOperation((Action)(() => System.IO.File.WriteAllText(path, docString)), "SaveDuckXML(" + path + ")");
+            DuckFile.TryFileOperation(() => System.IO.File.WriteAllText(path, docString), "SaveDuckXML(" + path + ")");
             DuckFile.Commit(path);
         }
 
@@ -1005,7 +1005,7 @@ namespace DuckGame
                     return;
                 System.IO.File.SetAttributes(pFilename, FileAttributes.Normal);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -1035,7 +1035,7 @@ namespace DuckGame
         {
             DuckFile.CreatePath(Path.GetDirectoryName(path));
             if (!System.IO.File.Exists(path))
-                return (XDocument)null;
+                return null;
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.LoadXDocument(" + path + ")");
             try
@@ -1044,7 +1044,7 @@ namespace DuckGame
             }
             catch
             {
-                return (XDocument)null;
+                return null;
             }
         }
 
@@ -1057,7 +1057,7 @@ namespace DuckGame
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.SaveXDocument(" + path + ")");
             DuckFile.TryClearAttributes(path);
-            DuckFile.TryFileOperation((Action)(() => System.IO.File.WriteAllText(path, docString)), "SaveXDocument(" + path + ")");
+            DuckFile.TryFileOperation(() => System.IO.File.WriteAllText(path, docString), "SaveXDocument(" + path + ")");
             DuckFile.Commit(path);
         }
 
@@ -1065,7 +1065,7 @@ namespace DuckGame
         {
             DuckFile.CreatePath(Path.GetDirectoryName(pPath));
             if (!System.IO.File.Exists(pPath))
-                return (string)null;
+                return null;
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.LoadString(" + pPath + ")");
             try
@@ -1074,7 +1074,7 @@ namespace DuckGame
             }
             catch
             {
-                return (string)null;
+                return null;
             }
         }
 
@@ -1083,11 +1083,11 @@ namespace DuckGame
             pPath = DuckFile.PreparePath(pPath, true);
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.SaveString(" + pPath + ")");
-            DuckFile.TryFileOperation((Action)(() =>
+            DuckFile.TryFileOperation(() =>
            {
                DuckFile.TryClearAttributes(pPath);
                System.IO.File.WriteAllText(pPath, pString);
-           }), "SaveString(" + pPath + ")");
+           }, "SaveString(" + pPath + ")");
             DuckFile.Commit(pPath);
         }
 
@@ -1117,7 +1117,7 @@ namespace DuckGame
                 DevConsole.Log(DCSection.General, "DuckFile.LoadSharpXML(" + pPath + ")");
             pPath = DuckFile.PreparePath(pPath);
             if (!System.IO.File.Exists(pPath))
-                return (XmlDocument)null;
+                return null;
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(pPath);
             return xmlDocument;
@@ -1127,12 +1127,12 @@ namespace DuckGame
         {
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.SaveSharpXML(" + pPath + ")");
-            DuckFile.TryFileOperation((Action)(() =>
+            DuckFile.TryFileOperation(() =>
            {
                pPath = DuckFile.PreparePath(pPath, true);
                DuckFile.TryClearAttributes(pPath);
                pDoc.Save(pPath);
-           }), "SaveSharpXML(" + pPath + ")");
+           }, "SaveSharpXML(" + pPath + ")");
             DuckFile.Commit(pPath);
         }
 
@@ -1157,14 +1157,14 @@ namespace DuckGame
             path = DuckFile.PreparePath(path, true);
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.SaveChunk(" + path + ")");
-            BitBuffer data = (BitBuffer)null;
+            BitBuffer data = null;
             data = doc.Serialize();
-            DuckFile.TryFileOperation((Action)(() =>
+            DuckFile.TryFileOperation(() =>
            {
                FileStream fileStream = System.IO.File.Create(path);
                fileStream.Write(data.buffer, 0, data.lengthInBytes);
                fileStream.Close();
-           }), "SaveChunk(" + path + ")");
+           }, "SaveChunk(" + path + ")");
             DuckFile.Commit(path);
             return true;
         }
@@ -1186,7 +1186,7 @@ namespace DuckGame
                 }
                 Directory.Delete(folder);
             }
-            DuckFile.Commit((string)null);
+            DuckFile.Commit(null);
         }
 
         public static byte[] ReadAllBytes(BinaryReader reader)
@@ -1223,8 +1223,8 @@ namespace DuckGame
                         if (num3 != -1)
                         {
                             byte[] dst = new byte[numArray.Length * 2];
-                            Buffer.BlockCopy((Array)numArray, 0, (Array)dst, 0, numArray.Length);
-                            Buffer.SetByte((Array)dst, length, (byte)num3);
+                            Buffer.BlockCopy(numArray, 0, dst, 0, numArray.Length);
+                            Buffer.SetByte(dst, length, (byte)num3);
                             numArray = dst;
                             ++length;
                         }
@@ -1234,7 +1234,7 @@ namespace DuckGame
                 if (numArray.Length != length)
                 {
                     dst1 = new byte[length];
-                    Buffer.BlockCopy((Array)numArray, 0, (Array)dst1, 0, length);
+                    Buffer.BlockCopy(numArray, 0, dst1, 0, length);
                 }
                 return dst1;
             }
@@ -1250,13 +1250,13 @@ namespace DuckGame
             file = DuckFile.PreparePath(file);
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "DuckFile.Delete(" + file + ")");
-            DuckFile.TryFileOperation((Action)(() =>
+            DuckFile.TryFileOperation(() =>
            {
                if (!System.IO.File.Exists(file))
                    return;
                DuckFile.TryClearAttributes(file);
                System.IO.File.Delete(file);
-           }), "DuckFile.Delete(" + file + ")");
+           }, "DuckFile.Delete(" + file + ")");
             DuckFile.Commit(file, true);
         }
     }

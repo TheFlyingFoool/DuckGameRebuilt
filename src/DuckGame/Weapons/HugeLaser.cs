@@ -12,13 +12,13 @@ namespace DuckGame
     [EditorGroup("Guns|Lasers")]
     public class HugeLaser : Gun
     {
-        public StateBinding _laserStateBinding = (StateBinding)new HugeLaserFlagBinding();
+        public StateBinding _laserStateBinding = new HugeLaserFlagBinding();
         public StateBinding _animationIndexBinding = new StateBinding(nameof(netAnimationIndex), 4);
         public StateBinding _frameBinding = new StateBinding(nameof(spriteFrame));
-        public StateBinding _chargeVolumeBinding = (StateBinding)new CompressedFloatBinding(GhostPriority.High, nameof(_chargeVolume), bits: 8);
-        public StateBinding _chargeVolumeShortBinding = (StateBinding)new CompressedFloatBinding(GhostPriority.High, nameof(_chargeVolumeShort), bits: 8);
-        public StateBinding _unchargeVolumeBinding = (StateBinding)new CompressedFloatBinding(GhostPriority.High, nameof(_unchargeVolume), bits: 8);
-        public StateBinding _unchargeVolumeShortBinding = (StateBinding)new CompressedFloatBinding(GhostPriority.High, nameof(_unchargeVolumeShort), bits: 8);
+        public StateBinding _chargeVolumeBinding = new CompressedFloatBinding(GhostPriority.High, nameof(_chargeVolume), bits: 8);
+        public StateBinding _chargeVolumeShortBinding = new CompressedFloatBinding(GhostPriority.High, nameof(_chargeVolumeShort), bits: 8);
+        public StateBinding _unchargeVolumeBinding = new CompressedFloatBinding(GhostPriority.High, nameof(_unchargeVolume), bits: 8);
+        public StateBinding _unchargeVolumeShortBinding = new CompressedFloatBinding(GhostPriority.High, nameof(_unchargeVolumeShort), bits: 8);
         private float _chargeVolume;
         private float _chargeVolumeShort;
         private float _unchargeVolume;
@@ -41,9 +41,9 @@ namespace DuckGame
             get => this._chargeAnim == null ? (byte)0 : (byte)this._chargeAnim.animationIndex;
             set
             {
-                if (this._chargeAnim == null || this._chargeAnim.animationIndex == (int)value)
+                if (this._chargeAnim == null || this._chargeAnim.animationIndex == value)
                     return;
-                this._chargeAnim.animationIndex = (int)value;
+                this._chargeAnim.animationIndex = value;
             }
         }
 
@@ -54,7 +54,7 @@ namespace DuckGame
             {
                 if (this._chargeAnim == null)
                     return;
-                this._chargeAnim._frame = (int)value;
+                this._chargeAnim._frame = value;
             }
         }
 
@@ -132,26 +132,26 @@ namespace DuckGame
                     this._chargeSoundShort.Volume = this._chargeVolumeShort;
                     this._unchargeSound.Volume = this._unchargeVolume;
                     this._unchargeSoundShort.Volume = this._unchargeVolumeShort;
-                    if ((double)this._chargeVolume > 0.0 && this._chargeSound.State != SoundState.Playing)
+                    if (_chargeVolume > 0.0 && this._chargeSound.State != SoundState.Playing)
                         this._chargeSound.Play();
-                    else if ((double)this._chargeVolume <= 0.0)
+                    else if (_chargeVolume <= 0.0)
                         this._chargeSound.Stop();
-                    if ((double)this._chargeVolumeShort > 0.0 && this._chargeSoundShort.State != SoundState.Playing)
+                    if (_chargeVolumeShort > 0.0 && this._chargeSoundShort.State != SoundState.Playing)
                         this._chargeSoundShort.Play();
-                    else if ((double)this._chargeVolumeShort <= 0.0)
+                    else if (_chargeVolumeShort <= 0.0)
                         this._chargeSoundShort.Stop();
-                    if ((double)this._unchargeVolume > 0.0 && this._unchargeSound.State != SoundState.Playing)
+                    if (_unchargeVolume > 0.0 && this._unchargeSound.State != SoundState.Playing)
                         this._unchargeSound.Play();
-                    else if ((double)this._unchargeVolume <= 0.0)
+                    else if (_unchargeVolume <= 0.0)
                         this._unchargeSound.Stop();
-                    if ((double)this._unchargeVolumeShort > 0.0 && this._unchargeSoundShort.State != SoundState.Playing)
+                    if (_unchargeVolumeShort > 0.0 && this._unchargeSoundShort.State != SoundState.Playing)
                         this._unchargeSoundShort.Play();
-                    else if ((double)this._unchargeVolumeShort <= 0.0)
+                    else if (_unchargeVolumeShort <= 0.0)
                         this._unchargeSoundShort.Stop();
                 }
             }
             base.Update();
-            if ((double)this._charge > 0.0)
+            if (_charge > 0.0)
                 this._charge -= 0.1f;
             else
                 this._charge = 0.0f;
@@ -186,17 +186,19 @@ namespace DuckGame
                 {
                     Vec2 barrelVector = this.barrelVector;
                     this.hSpeed -= barrelVector.x * 9f;
-                    this.vSpeed -= (float)((double)barrelVector.y * 9.0 + 3.0);
+                    this.vSpeed -= (float)(barrelVector.y * 9.0 + 3.0);
                 }
                 Vec2 vec2_1 = this.Offset(this.barrelOffset);
                 Vec2 vec2_2 = this.Offset(this.barrelOffset + new Vec2(1200f, 0.0f)) - vec2_1;
                 if (this.isServerForObject)
                     ++Global.data.laserBulletsFired.valueInt;
                 if (Network.isActive)
-                    Send.Message((NetMessage)new NMDeathBeam(this, vec2_1, vec2_2));
-                DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner);
-                deathBeam.isLocal = this.isServerForObject;
-                Level.Add((Thing)deathBeam);
+                    Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
+                DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
+                {
+                    isLocal = this.isServerForObject
+                };
+                Level.Add(deathBeam);
                 this.doBlast = true;
             }
             if (this.doBlast && this.isServerForObject)
@@ -221,9 +223,9 @@ namespace DuckGame
             this._tip.depth = this.depth + 1;
             this._tip.alpha = this._charge;
             if (this._chargeAnim.currentAnimation == "charge")
-                this._tip.alpha = (float)this._chargeAnim.frame / 24f;
+                this._tip.alpha = _chargeAnim.frame / 24f;
             else if (this._chargeAnim.currentAnimation == "uncharge")
-                this._tip.alpha = (float)(24 - this._chargeAnim.frame) / 24f;
+                this._tip.alpha = (24 - this._chargeAnim.frame) / 24f;
             else
                 this._tip.alpha = 0.0f;
             Graphics.Draw(this._tip, this.barrelPosition.x, this.barrelPosition.y);
@@ -231,7 +233,7 @@ namespace DuckGame
             this._chargeAnim.depth = this.depth + 1;
             this._chargeAnim.angle = this.angle;
             this._chargeAnim.alpha = this.alpha;
-            Graphics.Draw((Sprite)this._chargeAnim, this.x, this.y);
+            Graphics.Draw(_chargeAnim, this.x, this.y);
             Graphics.material = material;
             float num1 = Maths.NormalizeSection(this._tip.alpha, 0.0f, 0.7f);
             float num2 = Maths.NormalizeSection(this._tip.alpha, 0.6f, 1f);

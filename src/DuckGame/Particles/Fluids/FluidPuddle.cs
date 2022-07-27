@@ -46,24 +46,24 @@ namespace DuckGame
             this.alpha = 0.0f;
             List<BlockCorner> groupCorners = b.GetGroupCorners();
             this._coll = new List<PhysicsObject>();
-            this._leftCorner = (BlockCorner)null;
-            this._rightCorner = (BlockCorner)null;
+            this._leftCorner = null;
+            this._rightCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
             {
                 if ((double)Math.Abs(ypos - blockCorner.corner.y) < 4.0)
                 {
-                    if ((double)blockCorner.corner.x > (double)xpos)
+                    if (blockCorner.corner.x > (double)xpos)
                     {
                         if (this._rightCorner == null)
                             this._rightCorner = blockCorner;
-                        else if ((double)blockCorner.corner.x < (double)this._rightCorner.corner.x)
+                        else if (blockCorner.corner.x < (double)this._rightCorner.corner.x)
                             this._rightCorner = blockCorner;
                     }
-                    else if ((double)blockCorner.corner.x < (double)xpos)
+                    else if (blockCorner.corner.x < (double)xpos)
                     {
                         if (this._leftCorner == null)
                             this._leftCorner = blockCorner;
-                        else if ((double)blockCorner.corner.x > (double)this._leftCorner.corner.x)
+                        else if (blockCorner.corner.x > (double)this._leftCorner.corner.x)
                             this._leftCorner = blockCorner;
                     }
                 }
@@ -72,9 +72,9 @@ namespace DuckGame
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
         {
-            if (!this._onFire && (double)this.data.flammable > 0.5)
+            if (!this._onFire && data.flammable > 0.5)
             {
-                this._fireID = (float)FireManager.GetFireID();
+                this._fireID = FireManager.GetFireID();
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                 this._onFire = true;
                 this.alpha = 1f;
@@ -95,7 +95,7 @@ namespace DuckGame
         public override void Initialize()
         {
             if (this._leftCorner == null || this._rightCorner == null)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             else
                 this.y = this._leftCorner.corner.y;
         }
@@ -117,10 +117,10 @@ namespace DuckGame
             }
             if (this._lightRect == null && Layer.lighting)
             {
-                this._lightRect = new WhiteRectangle(this.x, this.y, this.width, this.height, (double)dat.heat <= 0.0);
-                Level.Add((Thing)this._lightRect);
+                this._lightRect = new WhiteRectangle(this.x, this.y, this.width, this.height, dat.heat <= 0.0);
+                Level.Add(_lightRect);
             }
-            if ((double)dat.amount > 0.0)
+            if (dat.amount > 0.0)
                 this._framesSinceFeed = 0;
             this.data.Mix(dat);
             this.data.amount = Maths.Clamp(this.data.amount, 0.0f, this.MaxFluidFill());
@@ -129,10 +129,10 @@ namespace DuckGame
             this._collisionOffset.x = (float)-((double)num1 / 2.0);
             this._collisionSize.x = num1;
             this.FeedEdges();
-            if (this._leftCorner != null && this._rightCorner != null && (double)this._wide > (double)this._rightCorner.corner.x - (double)this._leftCorner.corner.x)
+            if (this._leftCorner != null && this._rightCorner != null && _wide > _rightCorner.corner.x - (double)this._leftCorner.corner.x)
             {
                 this._wide = this._rightCorner.corner.x - this._leftCorner.corner.x;
-                this.x = this._leftCorner.corner.x + (float)(((double)this._rightCorner.corner.x - (double)this._leftCorner.corner.x) / 2.0);
+                this.x = this._leftCorner.corner.x + (float)((_rightCorner.corner.x - (double)this._leftCorner.corner.x) / 2.0);
             }
             float num2 = this._wide + 4f;
             this._collisionOffset.x = (float)-((double)num2 / 2.0);
@@ -175,21 +175,21 @@ namespace DuckGame
             if (this._topLeftCorner == null || this._topRightCorner == null)
                 return 999999f;
             float num = this._topLeftCorner.corner.y + 8f;
-            if ((double)this._topRightCorner.corner.y > (double)num)
+            if (_topRightCorner.corner.y > (double)num)
                 num = this._topRightCorner.corner.y + 8f;
             return this.DistanceToFeedAmount((this._leftCorner.corner.y - num) * this._collisionSize.x);
         }
 
         public void FeedEdges()
         {
-            if (this._rightCorner != null && (double)this.right > (double)this._rightCorner.corner.x && this._rightCorner.wallCorner)
+            if (this._rightCorner != null && (double)this.right > _rightCorner.corner.x && this._rightCorner.wallCorner)
                 this.x -= this.right - this._rightCorner.corner.x;
-            if (this._leftCorner != null && (double)this.left < (double)this._leftCorner.corner.x && this._leftCorner.wallCorner)
+            if (this._leftCorner != null && (double)this.left < _leftCorner.corner.x && this._leftCorner.wallCorner)
                 this.x += this._leftCorner.corner.x - this.left;
-            if (this._rightCorner != null && (double)this.right > (double)this._rightCorner.corner.x && !this._rightCorner.wallCorner)
+            if (this._rightCorner != null && (double)this.right > _rightCorner.corner.x && !this._rightCorner.wallCorner)
             {
                 float feedAmount = this.DistanceToFeedAmount(this.right - this._rightCorner.corner.x);
-                this.x -= (float)(((double)this.right - (double)this._rightCorner.corner.x) / 2.0);
+                this.x -= (float)(((double)this.right - _rightCorner.corner.x) / 2.0);
                 if (this._rightStream == null)
                     this._rightStream = new FluidStream(this._rightCorner.corner.x - 2f, this.y, new Vec2(1f, 0.0f), 1f);
                 this._rightStream.position.y = this.y - this._collisionOffset.y;
@@ -200,10 +200,10 @@ namespace DuckGame
             float num1 = this._wide + 4f;
             this._collisionOffset.x = (float)-((double)num1 / 2.0);
             this._collisionSize.x = num1;
-            if (this._leftCorner != null && (double)this.left < (double)this._leftCorner.corner.x && !this._leftCorner.wallCorner)
+            if (this._leftCorner != null && (double)this.left < _leftCorner.corner.x && !this._leftCorner.wallCorner)
             {
                 float feedAmount = this.DistanceToFeedAmount(this._leftCorner.corner.x - this.left);
-                this.x += (float)(((double)this._leftCorner.corner.x - (double)this.left) / 2.0);
+                this.x += (float)((_leftCorner.corner.x - (double)this.left) / 2.0);
                 if (this._leftStream == null)
                     this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0.0f), 1f);
                 this._leftStream.position.y = this.y - this._collisionOffset.y;
@@ -219,15 +219,15 @@ namespace DuckGame
         public float CalculateDepth()
         {
             double distance = (double)this.FeedAmountToDistance(this.data.amount);
-            if ((double)this._wide == 0.0)
+            if (_wide == 0.0)
                 this._wide = 1f / 1000f;
-            double wide = (double)this._wide;
+            double wide = _wide;
             return Maths.Clamp((float)(distance / wide), 1f, 99999f);
         }
 
         public void PrepareFloaters()
         {
-            if ((double)this.collisionSize.y <= 10.0)
+            if (collisionSize.y <= 10.0)
                 return;
             foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -8f), this.topRight + new Vec2(0.0f, -8f)))
             {
@@ -240,17 +240,17 @@ namespace DuckGame
         {
             ++this._framesSinceFeed;
             this.fluidWave += 0.1f;
-            if ((double)this.data.amount < 9.99999974737875E-05)
-                Level.Remove((Thing)this);
-            if ((double)this.collisionSize.y > 10.0)
+            if (data.amount < 9.99999974737875E-05)
+                Level.Remove(this);
+            if (collisionSize.y > 10.0)
             {
                 ++this.bubbleWait;
                 if (this.bubbleWait > Rando.Int(15, 25))
                 {
-                    for (int index = 0; index < (int)Math.Floor((double)this.collisionSize.x / 16.0); ++index)
+                    for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16.0); ++index)
                     {
                         if ((double)Rando.Float(1f) > 0.850000023841858)
-                            Level.Add((Thing)new TinyBubble(this.left + (float)(index * 16) + Rando.Float(-4f, 4f), this.bottom + Rando.Float(-4f), 0.0f, this.top + 10f));
+                            Level.Add(new TinyBubble(this.left + index * 16 + Rando.Float(-4f, 4f), this.bottom + Rando.Float(-4f), 0.0f, this.top + 10f));
                     }
                     this.bubbleWait = 0;
                 }
@@ -259,15 +259,15 @@ namespace DuckGame
                 foreach (PhysicsObject physicsObject in this._coll)
                     physicsObject.sleeping = false;
             }
-            FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(this.left, this.y), new Vec2(this.right, this.y), (Thing)this);
-            if (fluidPuddle != null && (double)fluidPuddle.data.amount < (double)this.data.amount)
+            FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(this.left, this.y), new Vec2(this.right, this.y), this);
+            if (fluidPuddle != null && fluidPuddle.data.amount < (double)this.data.amount)
             {
                 fluidPuddle.active = false;
                 float num1 = Math.Min(fluidPuddle.left, this.left);
                 float num2 = Math.Max(fluidPuddle.right, this.right);
                 this.x = num1 + (float)(((double)num2 - (double)num1) / 2.0);
                 this.Feed(fluidPuddle.data);
-                Level.Remove((Thing)fluidPuddle);
+                Level.Remove(fluidPuddle);
             }
             if (this._leftStream != null)
             {
@@ -280,9 +280,9 @@ namespace DuckGame
                 this._rightStream.onFire = this.onFire;
             }
             double distance = (double)this.FeedAmountToDistance(this.data.amount);
-            if ((double)this._wide == 0.0)
+            if (_wide == 0.0)
                 this._wide = 1f / 1000f;
-            double wide = (double)this._wide;
+            double wide = _wide;
             float num = Maths.Clamp((float)(distance / wide), 1f, 99999f);
             if (this.onFire)
             {
@@ -327,18 +327,18 @@ namespace DuckGame
                 this._initializedUpperCorners = true;
                 foreach (BlockCorner groupCorner in this._block.GetGroupCorners())
                 {
-                    if (this._leftCorner != null && (double)groupCorner.corner.x == (double)this._leftCorner.corner.x && (double)groupCorner.corner.y < (double)this._leftCorner.corner.y)
+                    if (this._leftCorner != null && groupCorner.corner.x == (double)this._leftCorner.corner.x && groupCorner.corner.y < (double)this._leftCorner.corner.y)
                     {
                         if (this._topLeftCorner == null)
                             this._topLeftCorner = groupCorner;
-                        else if ((double)groupCorner.corner.y > (double)this._topLeftCorner.corner.y)
+                        else if (groupCorner.corner.y > (double)this._topLeftCorner.corner.y)
                             this._topLeftCorner = groupCorner;
                     }
-                    else if (this._rightCorner != null && (double)groupCorner.corner.x == (double)this._rightCorner.corner.x && (double)groupCorner.corner.y < (double)this._rightCorner.corner.y)
+                    else if (this._rightCorner != null && groupCorner.corner.x == (double)this._rightCorner.corner.x && groupCorner.corner.y < (double)this._rightCorner.corner.y)
                     {
                         if (this._topRightCorner == null)
                             this._topRightCorner = groupCorner;
-                        else if ((double)groupCorner.corner.y > (double)this._topRightCorner.corner.y)
+                        else if (groupCorner.corner.y > (double)this._topRightCorner.corner.y)
                             this._topRightCorner = groupCorner;
                     }
                 }
@@ -353,31 +353,31 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)((double)this.collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)((double)this.collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color) * this.data.transparent, this._collisionSize.y, (Depth)0.9f);
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)((double)this.collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)((double)this.collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color), this._collisionSize.y, - 0.99f);
+            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color) * this.data.transparent, this._collisionSize.y, (Depth)0.9f);
+            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color), this._collisionSize.y, - 0.99f);
             if (this._lightRect != null)
             {
                 this._lightRect.position = this.topLeft;
                 this._lightRect.size = new Vec2(this.width, this.height);
             }
-            int num1 = (int)Math.Ceiling((double)this._collisionSize.x / 16.0);
-            float num2 = this._collisionSize.x / (float)num1;
+            int num1 = (int)Math.Ceiling(_collisionSize.x / 16.0);
+            float num2 = this._collisionSize.x / num1;
             if (this._onFire)
             {
                 while (this._surfaceFire.Count < num1)
                     this.AddFire();
                 float num3 = 0.0f;
-                if ((double)this._collisionSize.y > 2.0)
+                if (_collisionSize.y > 2.0)
                     num3 = 2f;
                 for (int index = 0; index < num1; ++index)
                 {
                     this._surfaceFire[index].alpha = this.alpha;
                     this._surfaceFire[index].yscale = this._fireRise;
                     this._surfaceFire[index].depth = this.depth + 1;
-                    Graphics.Draw((Sprite)this._surfaceFire[index], (float)((double)this.left + 8.0 + (double)index * (double)num2), (float)((double)this.y + (double)this._collisionOffset.y + 1.0) - num3);
+                    Graphics.Draw(this._surfaceFire[index], (float)((double)this.left + 8.0 + index * (double)num2), (float)((double)this.y + _collisionOffset.y + 1.0) - num3);
                 }
             }
-            if (this._lava != null && (double)this.collisionSize.y > 2.0)
+            if (this._lava != null && collisionSize.y > 2.0)
             {
                 bool flag = false;
                 for (int index = 0; index < num1; ++index)
@@ -387,9 +387,9 @@ namespace DuckGame
                         g = this._lavaAlternate;
                     g.depth = - 0.7f;
                     SpriteMap spriteMap = g;
-                    spriteMap.depth = spriteMap.depth + index;
+                    spriteMap.depth += index;
                     g.alpha = 1f;
-                    Graphics.DrawWithoutUpdate(g, (float)Math.Round((double)this.left + 8.0 + (double)index * (double)num2), (float)((double)this.y + (double)this._collisionOffset.y - 4.5));
+                    Graphics.DrawWithoutUpdate(g, (float)Math.Round((double)this.left + 8.0 + index * (double)num2), (float)((double)this.y + _collisionOffset.y - 4.5));
                     flag = !flag;
                 }
                 this._lava.UpdateFrame();
@@ -401,7 +401,7 @@ namespace DuckGame
         public override void Terminate()
         {
             if (this._lightRect != null)
-                Level.Remove((Thing)this._lightRect);
+                Level.Remove(_lightRect);
             base.Terminate();
         }
     }

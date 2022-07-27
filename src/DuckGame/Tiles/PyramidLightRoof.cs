@@ -39,11 +39,13 @@ namespace DuckGame
             this._occluders.Add(new LightOccluder(this.position + new Vec2(15f, -3f), this.position + new Vec2(15f, 4f), new Color(1f, 0.9f, 0.8f)));
             this._occluders.Add(new LightOccluder(this.position + new Vec2(-15f, -2f), this.position + new Vec2(15f, -2f), new Color(1f, 0.9f, 0.8f)));
             this.light = new PointLight(this.x, this.y - 1f, PyramidWallLight.lightColor, 110f, this._occluders, true);
-            Level.Add((Thing)this.light);
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("pyramidRoofLightShade"));
-            this._shade.center = this.center;
-            this._shade.layer = Layer.Foreground;
-            Level.Add((Thing)this._shade);
+            Level.Add(light);
+            this._shade = new SpriteThing(this.x, this.y, new Sprite("pyramidRoofLightShade"))
+            {
+                center = this.center,
+                layer = Layer.Foreground
+            };
+            Level.Add(_shade);
         }
 
         public override void Update()
@@ -55,9 +57,9 @@ namespace DuckGame
             }
             if (this.myBlock != null && this.myBlock.removeFromLevel)
             {
-                Level.Remove((Thing)this);
-                Level.Remove((Thing)this.light);
-                Level.Remove((Thing)this._shade);
+                Level.Remove(this);
+                Level.Remove(light);
+                Level.Remove(_shade);
             }
             base.Update();
         }

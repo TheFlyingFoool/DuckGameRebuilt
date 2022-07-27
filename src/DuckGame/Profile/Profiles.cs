@@ -83,7 +83,7 @@ namespace DuckGame
 
         public static Profile GetLastProfileWithInput()
         {
-            Profile profileWithInput = (Profile)null;
+            Profile profileWithInput = null;
             long num = -1;
             foreach (Profile profile in Profiles.active)
             {
@@ -129,7 +129,7 @@ namespace DuckGame
                 if (profile.id == pID)
                     return profile;
             }
-            return (Profile)null;
+            return null;
         }
     }
 }

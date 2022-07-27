@@ -14,7 +14,7 @@ namespace DuckGame
         public PhysicsObject thing => this._thing;
 
         public DTCrush(PhysicsObject t)
-          : base((Thing)t)
+          : base(t)
         {
             this._thing = t;
         }

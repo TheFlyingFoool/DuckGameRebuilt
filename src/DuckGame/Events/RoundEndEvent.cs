@@ -10,7 +10,7 @@ namespace DuckGame
     public class RoundEndEvent : Event
     {
         public RoundEndEvent()
-          : base((Profile)null, (Profile)null)
+          : base(null, null)
         {
         }
     }

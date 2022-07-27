@@ -28,7 +28,7 @@ namespace DuckGame
         public SpikeHelm(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._pickupSprite = (Sprite)new SpriteMap("spikehelm", 17, 22, 0);
+            this._pickupSprite = new SpriteMap("spikehelm", 17, 22, 0);
             this._sprite = new SpriteMap("spikehelmWorn", 17, 22);
             this.graphic = this._pickupSprite;
             this.center = new Vec2(9f, 10f);
@@ -109,21 +109,21 @@ namespace DuckGame
                                     ragdollPart.doll.part2.vSpeed += this.equippedDuck.vSpeed * 0.75f;
                                     ragdollPart.doll.part1.hSpeed += this.equippedDuck.hSpeed * 0.75f;
                                     ragdollPart.doll.part1.vSpeed += this.equippedDuck.vSpeed * 0.75f;
-                                    this.equippedDuck.clip.Add((MaterialThing)ragdollPart.doll.part1);
-                                    this.equippedDuck.clip.Add((MaterialThing)ragdollPart.doll.part2);
-                                    this.equippedDuck.clip.Add((MaterialThing)ragdollPart.doll.part3);
+                                    this.equippedDuck.clip.Add(ragdollPart.doll.part1);
+                                    this.equippedDuck.clip.Add(ragdollPart.doll.part2);
+                                    this.equippedDuck.clip.Add(ragdollPart.doll.part3);
                                 }
                             }
                             MaterialThing materialThing2 = materialThing1;
                             if (materialThing2 != null)
                             {
-                                if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || (double)spikeDir.y >= 0.5 || (double)Math.Abs(spikeDir.x) >= 0.200000002980232)
+                                if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || spikeDir.y >= 0.5 || (double)Math.Abs(spikeDir.x) >= 0.200000002980232)
                                 {
-                                    Duck associatedDuck = Duck.GetAssociatedDuck((Thing)materialThing2);
-                                    if ((associatedDuck == null || associatedDuck != this._equippedDuck && (this._equippedDuck == null || !this._equippedDuck.IsOwnedBy((Thing)associatedDuck))) && (associatedDuck != this._filteredDuck || this.throwCooldown <= 0))
+                                    Duck associatedDuck = Duck.GetAssociatedDuck(materialThing2);
+                                    if ((associatedDuck == null || associatedDuck != this._equippedDuck && (this._equippedDuck == null || !this._equippedDuck.IsOwnedBy(associatedDuck))) && (associatedDuck != this._filteredDuck || this.throwCooldown <= 0))
                                     {
-                                        Thing.Fondle((Thing)materialThing2, DuckNetwork.localConnection);
-                                        materialThing2.Destroy((DestroyType)new DTImpale((Thing)this));
+                                        Thing.Fondle(materialThing2, DuckNetwork.localConnection);
+                                        materialThing2.Destroy(new DTImpale(this));
                                         continue;
                                     }
                                     continue;
@@ -133,7 +133,7 @@ namespace DuckGame
                         }
                         if (this._pokables.Contains(materialThing1.GetType()) && materialThing1 is PhysicsObject && materialThing1.owner == null)
                         {
-                            materialThing1.owner = (Thing)this;
+                            materialThing1.owner = this;
                             this.poked = materialThing1 as PhysicsObject;
                             this.poked.enablePhysics = false;
                             this._pokedOldDepth = this.poked.depth;
@@ -145,7 +145,7 @@ namespace DuckGame
                             if (materialThing1 is YellowBarrel)
                                 (materialThing1 as YellowBarrel).MakeHole(this.spikePoint, spikeDir);
                             materialThing1.PlayCollideSound(ImpactedFrom.Top);
-                            this.Fondle((Thing)this.poked);
+                            this.Fondle(poked);
                             this.prevRagdoll = this.equippedDuck.ragdoll;
                             break;
                         }
@@ -161,22 +161,22 @@ namespace DuckGame
                 this.collisionSize = new Vec2(11f, 10f);
             }
             base.Update();
-            if ((double)this.oldPokeCooldown > 0.0)
+            if (oldPokeCooldown > 0.0)
             {
                 this.oldPokeCooldown -= Maths.IncFrameTimer();
-                if ((double)this.oldPokeCooldown <= 0.0)
-                    this.oldPoke = (PhysicsObject)null;
+                if (oldPokeCooldown <= 0.0)
+                    this.oldPoke = null;
             }
             if (this.poked == null || !this.isServerForObject)
                 return;
             if (!this.poked.isServerForObject)
-                this.Fondle((Thing)this.poked);
+                this.Fondle(poked);
             this.poked.position = this.Offset(new Vec2(1f, -9f));
             this.poked.lastGrounded = DateTime.Now;
             this.poked.visible = false;
             this.poked.solid = false;
             this.poked.grounded = true;
-            if (this.poked.removeFromLevel || (double)this.poked.y < (double)this.level.topLeft.y - 2000.0 || !this.poked.active)
+            if (this.poked.removeFromLevel || (double)this.poked.y < level.topLeft.y - 2000.0 || !this.poked.active)
             {
                 this.ReleasePokedObject();
             }
@@ -201,7 +201,7 @@ namespace DuckGame
                 this.poked.hSpeed = 0.0f;
                 this.poked.vSpeed = -2f;
                 this.poked.y += 8f;
-                this.poked.owner = (Thing)null;
+                this.poked.owner = null;
                 this.poked.enablePhysics = true;
                 this.poked.depth = this._pokedOldDepth;
                 this.poked.visible = true;
@@ -211,7 +211,7 @@ namespace DuckGame
                 this.oldPoke = this.poked;
                 this.oldPokeCooldown = 0.5f;
             }
-            this.poked = (PhysicsObject)null;
+            this.poked = null;
         }
 
         public override void Draw()

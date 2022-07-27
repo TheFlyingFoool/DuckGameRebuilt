@@ -32,7 +32,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._cone;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._cone;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
             this.SetValue("topLeft", this.position);
             this.SetValue("size", this.size);

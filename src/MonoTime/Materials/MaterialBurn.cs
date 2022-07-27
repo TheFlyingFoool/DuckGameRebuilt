@@ -30,9 +30,9 @@ namespace DuckGame
         public override void Apply()
         {
             Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._burnTexture;
-            this.SetValue("width", texture.frameWidth / (float)texture.width);
-            this.SetValue("height", texture.frameHeight / (float)texture.height);
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._burnTexture;
+            this.SetValue("width", texture.frameWidth / texture.width);
+            this.SetValue("height", texture.frameHeight / texture.height);
             this.SetValue("burn", this._burnVal);
             foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
                 pass.Apply();

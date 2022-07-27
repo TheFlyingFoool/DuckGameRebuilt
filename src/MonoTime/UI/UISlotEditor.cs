@@ -10,9 +10,9 @@ namespace DuckGame
     public class UISlotEditor : UIMenu
     {
         private UIMenu _closeMenu;
-        private Rectangle _captureRectangle;
-        private BitmapFont _littleFont;
-        private BitmapFont _littleFont2;
+        //private Rectangle _captureRectangle;
+        //private BitmapFont _littleFont;
+        //private BitmapFont _littleFont2;
         public static int _slot = 0;
         public static int _indexX;
         public static int _indexY;
@@ -46,10 +46,10 @@ namespace DuckGame
           : base("", xpos, ypos, wide, high)
         {
             float num = 38f;
-            this._captureRectangle = new Rectangle((float)(int)((double)Layer.HUD.camera.width / 2.0 - (double)num / 2.0), (float)(int)((double)Layer.HUD.camera.height / 2.0 - (double)num / 2.0), (float)(int)num, (float)(int)num);
+            //this._captureRectangle = new Rectangle((float)(int)((double)Layer.HUD.camera.width / 2.0 - (double)num / 2.0), (float)(int)((double)Layer.HUD.camera.height / 2.0 - (double)num / 2.0), (float)(int)num, (float)(int)num);
             this._closeMenu = closeMenu;
-            this._littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
-            this._littleFont2 = new BitmapFont("smallBiosFont", 7, 6);
+            //this._littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
+            //this._littleFont2 = new BitmapFont("smallBiosFont", 7, 6);
         }
 
         public override void Open()
@@ -199,7 +199,7 @@ namespace DuckGame
                     if (Input.Pressed("CANCEL"))
                     {
                         SFX.Play("consoleCancel");
-                        new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._closeMenu).Activate();
+                        new UIMenuActionOpenMenu(this, _closeMenu).Activate();
                     }
                 }
             }

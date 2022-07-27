@@ -32,7 +32,7 @@ namespace DuckGame
         private Dictionary<ConcaveLine, ConcaveLine> pairG1val = new Dictionary<ConcaveLine, ConcaveLine>();
         private Dictionary<ConcaveLine, ConcaveLine> pairG2val = new Dictionary<ConcaveLine, ConcaveLine>();
         private List<KeyValuePair<ConcaveLine, ConcaveLine>> matchingSet = new List<KeyValuePair<ConcaveLine, ConcaveLine>>();
-        private List<ConcaveLine> minimumVertex = new List<ConcaveLine>();
+        //private List<ConcaveLine> minimumVertex = new List<ConcaveLine>();
         //private int _initializeWait = 20;
 
         public bool groupedWithNeighbors
@@ -171,7 +171,7 @@ namespace DuckGame
                 }
             }
             List<ConcaveLine> concaveLineList = new List<ConcaveLine>();
-            concaveLineList.AddRange((IEnumerable<ConcaveLine>)this._concaveLines);
+            concaveLineList.AddRange(_concaveLines);
             foreach (KeyValuePair<ConcaveLine, ConcaveLine> matching in this.matchingSet)
             {
                 concaveLineList.Remove(matching.Key);
@@ -183,7 +183,7 @@ namespace DuckGame
         {
             List<BlockCorner> groupCorners = this.GetGroupCorners();
             float num = 9999999f;
-            BlockCorner nearestCorner = (BlockCorner)null;
+            BlockCorner nearestCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
             {
                 float length = (blockCorner.corner - to).length;
@@ -201,7 +201,7 @@ namespace DuckGame
             this._concaveLines = new List<ConcaveLine>();
             List<ConcaveLine> concaveLineList1 = new List<ConcaveLine>();
             List<ConcaveLine> concaveLineList2 = new List<ConcaveLine>();
-            List<BlockCorner> list = this._structure.corners.Where<BlockCorner>((Func<BlockCorner, bool>)(v => v.wallCorner)).ToList<BlockCorner>();
+            List<BlockCorner> list = this._structure.corners.Where<BlockCorner>(v => v.wallCorner).ToList<BlockCorner>();
             foreach (BlockCorner blockCorner1 in list)
             {
                 foreach (BlockCorner blockCorner2 in list)
@@ -210,20 +210,20 @@ namespace DuckGame
                     {
                         blockCorner1.testedCorners.Add(blockCorner2);
                         blockCorner2.testedCorners.Add(blockCorner1);
-                        if ((double)blockCorner1.corner.x == (double)blockCorner2.corner.x)
+                        if (blockCorner1.corner.x == (double)blockCorner2.corner.x)
                         {
                             int num = 8;
-                            if ((double)blockCorner1.corner.y > (double)blockCorner2.corner.y)
+                            if (blockCorner1.corner.y > (double)blockCorner2.corner.y)
                                 num = -8;
-                            if (Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + 8f, blockCorner1.corner.y + (float)num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x - 8f, blockCorner1.corner.y + (float)num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x + 8f, blockCorner2.corner.y - (float)num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - 8f, blockCorner2.corner.y - (float)num)) != null)
+                            if (Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + 8f, blockCorner1.corner.y + num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x - 8f, blockCorner1.corner.y + num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x + 8f, blockCorner2.corner.y - num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - 8f, blockCorner2.corner.y - num)) != null)
                                 concaveLineList2.Add(new ConcaveLine(blockCorner1.corner, blockCorner2.corner));
                         }
-                        else if ((double)blockCorner1.corner.y == (double)blockCorner2.corner.y)
+                        else if (blockCorner1.corner.y == (double)blockCorner2.corner.y)
                         {
                             int num = 8;
-                            if ((double)blockCorner1.corner.x > (double)blockCorner2.corner.x)
+                            if (blockCorner1.corner.x > (double)blockCorner2.corner.x)
                                 num = -8;
-                            if (Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + (float)num, blockCorner1.corner.y - 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + (float)num, blockCorner1.corner.y + 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - (float)num, blockCorner2.corner.y - 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - (float)num, blockCorner2.corner.y + 8f)) != null)
+                            if (Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + num, blockCorner1.corner.y - 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + num, blockCorner1.corner.y + 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - num, blockCorner2.corner.y - 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - num, blockCorner2.corner.y + 8f)) != null)
                                 concaveLineList1.Add(new ConcaveLine(blockCorner1.corner, blockCorner2.corner));
                         }
                     }
@@ -268,8 +268,8 @@ namespace DuckGame
             }
             else
             {
-                this._concaveLines.AddRange((IEnumerable<ConcaveLine>)concaveLineList2);
-                this._concaveLines.AddRange((IEnumerable<ConcaveLine>)concaveLineList1);
+                this._concaveLines.AddRange(concaveLineList2);
+                this._concaveLines.AddRange(concaveLineList1);
             }
             this.Calculate(concaveLineList2, concaveLineList1);
         }

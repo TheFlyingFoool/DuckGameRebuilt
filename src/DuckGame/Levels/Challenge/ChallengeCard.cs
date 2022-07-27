@@ -44,14 +44,18 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._challenge = c;
-            this._thumb = new SpriteMap("arcade/challengeThumbnails", 38, 38);
-            this._thumb.frame = 1;
+            this._thumb = new SpriteMap("arcade/challengeThumbnails", 38, 38)
+            {
+                frame = 1
+            };
             this._font = new BitmapFont("biosFont", 8);
             this._medalNoRibbon = new SpriteMap("arcade/medalNoRibbon", 18, 18);
             this._realSave = Profiles.active[0].GetSaveData(this._challenge.levelID);
             this._save = this._realSave.Clone();
-            this._medalRibbon = new SpriteMap("arcade/medalRibbon", 18, 27);
-            this._medalRibbon.center = new Vec2(6f, 3f);
+            this._medalRibbon = new SpriteMap("arcade/medalRibbon", 18, 27)
+            {
+                center = new Vec2(6f, 3f)
+            };
             this._fancyFont = new FancyBitmapFont("smallFont");
         }
 
@@ -59,13 +63,15 @@ namespace DuckGame
         {
             if (this._preview == null && this._challenge.preview != null)
             {
-                Texture2D tex = Texture2D.FromStream(DuckGame.Graphics.device, (Stream)new MemoryStream(Convert.FromBase64String(this._challenge.preview)));
-                this._preview = new SpriteMap((Tex2D)tex, tex.Width, tex.Height);
-                this._preview.scale = new Vec2(0.25f);
+                Texture2D tex = Texture2D.FromStream(DuckGame.Graphics.device, new MemoryStream(Convert.FromBase64String(this._challenge.preview)));
+                this._preview = new SpriteMap((Tex2D)tex, tex.Width, tex.Height)
+                {
+                    scale = new Vec2(0.25f)
+                };
             }
             this._size = Lerp.Float(this._size, this.contract ? 1f : (this.expand ? 130f : 42f), 8f);
             this._alphaMul = Lerp.Float(this._alphaMul, this.contract ? 0.0f : 1f, 0.1f);
-            this._dataAlpha = Lerp.Float(this._dataAlpha, (double)this._size <= 126.0 || !this.expand ? 0.0f : 1f, !this.expand ? 1f : 0.2f);
+            this._dataAlpha = Lerp.Float(this._dataAlpha, _size <= 126.0 || !this.expand ? 0.0f : 1f, !this.expand ? 1f : 0.2f);
         }
 
         public string MakeQuestionMarks(string val)
@@ -129,7 +135,7 @@ namespace DuckGame
             SFX.Play("landTV", pitch: -0.3f);
             SmallSmoke smallSmoke = SmallSmoke.New(this.x + 2f, this.y + 2f);
             smallSmoke.layer = Layer.HUD;
-            Level.Add((Thing)smallSmoke);
+            Level.Add(smallSmoke);
         }
 
         public override void Draw()
@@ -152,14 +158,14 @@ namespace DuckGame
                     this._medalRibbon.frame = 3;
                 else if (this._save.trophy == TrophyType.Developer)
                     this._medalRibbon.frame = 4;
-                DuckGame.Graphics.Draw((Sprite)this._medalRibbon, this.position.x, this.position.y);
+                DuckGame.Graphics.Draw(_medalRibbon, this.position.x, this.position.y);
             }
             else if (!this._unlocked)
             {
                 this._medalRibbon.depth = (Depth)(float)(0.810000002384186 + (double)num1 * 0.0399999991059303);
                 this._medalRibbon.color = new Color(num1, num1, num1);
                 this._medalRibbon.frame = 5;
-                DuckGame.Graphics.Draw((Sprite)this._medalRibbon, this.position.x, this.position.y);
+                DuckGame.Graphics.Draw(_medalRibbon, this.position.x, this.position.y);
             }
             this._thumb.alpha = num1;
             this._thumb.depth = (Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303);
@@ -168,10 +174,10 @@ namespace DuckGame
             {
                 this._preview.alpha = num1;
                 this._preview.depth = (Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303);
-                DuckGame.Graphics.Draw((Sprite)this._preview, this.x + 2f, this.y + 2f);
+                DuckGame.Graphics.Draw(_preview, this.x + 2f, this.y + 2f);
             }
             else
-                DuckGame.Graphics.Draw((Sprite)this._thumb, this.x + 2f, this.y + 2f);
+                DuckGame.Graphics.Draw(_thumb, this.x + 2f, this.y + 2f);
             this._font.maxWidth = 200;
             string str1 = this._challenge.GetNameForDisplay();
             if (!this._unlocked)
@@ -185,7 +191,7 @@ namespace DuckGame
             this._fancyFont.alpha = num1;
             this._fancyFont.xscale = this._fancyFont.yscale = 0.75f;
             this._fancyFont.Draw(str2, this.x + 41f, this.y + 12f, c1, (Depth)1f);
-            if ((double)this._dataAlpha <= 0.00999999977648258)
+            if (_dataAlpha <= 0.00999999977648258)
                 return;
             float num2 = this._dataAlpha * num1;
             DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: ((Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303)));
@@ -211,15 +217,15 @@ namespace DuckGame
             this._medalNoRibbon.frame = 2;
             float x = this.x + 6f;
             float num3 = this.y + 68f;
-            DuckGame.Graphics.Draw((Sprite)this._medalNoRibbon, x, num3);
+            DuckGame.Graphics.Draw(_medalNoRibbon, x, num3);
             Color c3 = new Color(245, 165, 36);
             this._font.Draw("GOLD", x + 22f, num3, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy1 = this._challenge.trophies.FirstOrDefault<ChallengeTrophy>((Func<ChallengeTrophy, bool>)(val => val.type == TrophyType.Gold));
+            ChallengeTrophy challengeTrophy1 = this._challenge.trophies.FirstOrDefault<ChallengeTrophy>(val => val.type == TrophyType.Gold);
             string text1 = "";
             bool flag2 = false;
             if (challengeTrophy1.timeRequirement > 0)
             {
-                TimeSpan span = TimeSpan.FromSeconds((double)challengeTrophy1.timeRequirement);
+                TimeSpan span = TimeSpan.FromSeconds(challengeTrophy1.timeRequirement);
                 text1 = text1 + MonoMain.TimeString(span, small: true) + " ";
                 flag1 = true;
                 flag2 = true;
@@ -259,16 +265,16 @@ namespace DuckGame
             float num5 = (float)((double)this.y + 68.0 + 20.0);
             this._medalNoRibbon.alpha = num2;
             this._medalNoRibbon.frame = 1;
-            DuckGame.Graphics.Draw((Sprite)this._medalNoRibbon, x, num5);
+            DuckGame.Graphics.Draw(_medalNoRibbon, x, num5);
             c3 = new Color(173, 173, 173);
             this._font.Draw("SILVER", x + 22f, num5, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy2 = this._challenge.trophies.FirstOrDefault<ChallengeTrophy>((Func<ChallengeTrophy, bool>)(val => val.type == TrophyType.Silver));
+            ChallengeTrophy challengeTrophy2 = this._challenge.trophies.FirstOrDefault<ChallengeTrophy>(val => val.type == TrophyType.Silver);
             string text2 = "";
             if (flag2 && challengeTrophy2.timeRequirement == 0 && this._challenge.trophies[0].timeRequirement != 0)
                 challengeTrophy2.timeRequirement = this._challenge.trophies[0].timeRequirement;
             if (challengeTrophy2.timeRequirement > 0)
             {
-                TimeSpan span = TimeSpan.FromSeconds((double)challengeTrophy2.timeRequirement);
+                TimeSpan span = TimeSpan.FromSeconds(challengeTrophy2.timeRequirement);
                 text2 = text2 + MonoMain.TimeString(span, small: true) + " ";
                 flag1 = true;
                 flag2 = true;
@@ -309,16 +315,16 @@ namespace DuckGame
             float num6 = (float)((double)this.y + 68.0 + 40.0);
             this._medalNoRibbon.alpha = num2;
             this._medalNoRibbon.frame = 0;
-            DuckGame.Graphics.Draw((Sprite)this._medalNoRibbon, x, num6);
+            DuckGame.Graphics.Draw(_medalNoRibbon, x, num6);
             c3 = new Color(181, 86, 3);
             this._font.Draw("BRONZE", x + 22f, num6, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy3 = this._challenge.trophies.FirstOrDefault<ChallengeTrophy>((Func<ChallengeTrophy, bool>)(val => val.type == TrophyType.Bronze));
+            ChallengeTrophy challengeTrophy3 = this._challenge.trophies.FirstOrDefault<ChallengeTrophy>(val => val.type == TrophyType.Bronze);
             string text3 = "";
             if (flag2 && challengeTrophy3.timeRequirement == 0 && this._challenge.trophies[0].timeRequirement != 0)
                 challengeTrophy3.timeRequirement = this._challenge.trophies[0].timeRequirement;
             if (challengeTrophy3.timeRequirement > 0)
             {
-                TimeSpan span = TimeSpan.FromSeconds((double)challengeTrophy3.timeRequirement);
+                TimeSpan span = TimeSpan.FromSeconds(challengeTrophy3.timeRequirement);
                 text3 = text3 + MonoMain.TimeString(span, small: true) + " ";
             }
             else if (flag1 && this._challenge.trophies[0].timeRequirement == 0)

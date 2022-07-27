@@ -56,7 +56,7 @@ namespace DuckGame
             for (int index = 0; index < 8; ++index)
             {
                 ChainLink chainLink = new ChainLink(this.x, this.y);
-                Level.Add((Thing)chainLink);
+                Level.Add(chainLink);
                 this._links.Add(chainLink);
             }
             base.Initialize();
@@ -72,7 +72,7 @@ namespace DuckGame
                     RumbleManager.AddRumbleEvent(this.collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
                 if (!this._isMace)
                     return;
-                with.Destroy((DestroyType)new DTCrush((PhysicsObject)this));
+                with.Destroy(new DTCrush(this));
             }
             else
                 base.OnSoftImpact(with, from);
@@ -95,8 +95,8 @@ namespace DuckGame
 
         public float Solve(PhysicsObject b1, PhysicsObject b2, float dist)
         {
-            Thing thing1 = b1.owner != null ? b1.owner : (Thing)b1;
-            Thing thing2 = b2.owner != null ? b2.owner : (Thing)b2;
+            Thing thing1 = b1.owner != null ? b1.owner : b1;
+            Thing thing2 = b2.owner != null ? b2.owner : b2;
             float num1 = dist;
             Vec2 vec2_1 = b2.position - b1.position;
             float num2 = vec2_1.length;
@@ -152,30 +152,30 @@ namespace DuckGame
             if (this._attach is Duck)
             {
                 Duck attach = this._attach as Duck;
-                physicsObject = attach.ragdoll != null ? (PhysicsObject)attach.ragdoll.part1 : (PhysicsObject)attach;
+                physicsObject = attach.ragdoll != null ? attach.ragdoll.part1 : attach;
             }
             if (physicsObject == null)
                 return;
-            double num1 = (double)this.Solve((PhysicsObject)this, physicsObject, 30f);
+            double num1 = (double)this.Solve(this, physicsObject, 30f);
             int num2 = 0;
-            PhysicsObject b2 = (PhysicsObject)this;
+            PhysicsObject b2 = this;
             foreach (ChainLink link in this._links)
             {
-                double num3 = (double)this.Solve((PhysicsObject)link, b2, 2f);
-                b2 = (PhysicsObject)link;
+                double num3 = (double)this.Solve(link, b2, 2f);
+                b2 = link;
                 link.depth = this._attach.depth - 8 - num2;
                 ++num2;
             }
             double num4 = (double)this.Solve(physicsObject, b2, 2f);
             base.Update();
-            if ((double)this._sparkWait > 0.0)
+            if (_sparkWait > 0.0)
                 this._sparkWait -= 0.1f;
             else
                 this._sparkWait = 0.0f;
-            if ((double)this._sparkWait != 0.0 || !this.grounded || (double)Math.Abs(this.hSpeed) <= 1.0)
+            if (_sparkWait != 0.0 || !this.grounded || (double)Math.Abs(this.hSpeed) <= 1.0)
                 return;
             this._sparkWait = 0.25f;
-            Level.Add((Thing)Spark.New(this.x + ((double)this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0.0f, 0.5f)));
+            Level.Add(Spark.New(this.x + ((double)this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0.0f, 0.5f)));
         }
     }
 }

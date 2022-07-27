@@ -38,7 +38,7 @@ namespace DuckGame
         {
             this.alpha -= this.fade;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             this.x += this._move.x * this._moveSpeed;
             this.y += this._move.y * this._moveSpeed;
         }

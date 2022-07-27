@@ -18,7 +18,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = s.CloneMap();
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this._dir = dir;
             this.depth = (Depth)0.9f;
@@ -26,7 +26,7 @@ namespace DuckGame
                 this.angleDegrees = 70f;
             else
                 this.angleDegrees = 120f;
-            this.owner = (Thing)own;
+            this.owner = own;
             this._closer = closer;
             if (this._dir >= 0)
                 return;
@@ -36,17 +36,17 @@ namespace DuckGame
         public override void Update()
         {
             float num = 0.3f;
-            this.x += (float)this._dir * num;
+            this.x += _dir * num;
             this._move += num;
             if (this._dir < 0)
                 this.angleDegrees += 2f;
             else
                 this.angleDegrees -= 2f;
-            if ((double)this._move > 4.0)
+            if (_move > 4.0)
                 this._closer.eyesClosed = true;
-            if ((double)this._move <= 8.0)
+            if (_move <= 8.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             (this._owner as Duck).closingEyes = false;
         }
 

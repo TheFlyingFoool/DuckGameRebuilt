@@ -53,7 +53,7 @@ namespace DuckGame
                 }
             }
             Vec2 scale = this._font.scale;
-            if ((double)this.specialScale != 0.0)
+            if (specialScale != 0.0)
                 this._font.scale = new Vec2(this.specialScale);
             float width = this._font.GetWidth(text);
             float num1 = (this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-(double)width / 2.0) : this.width / 2f - width) : (float)-((double)this.width / 2.0);

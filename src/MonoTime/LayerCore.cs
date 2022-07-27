@@ -68,7 +68,7 @@ namespace DuckGame
         {
             if (e == null)
                 return false;
-            return (int)e.effectIndex == (int)this._basicEffect.effectIndex || (int)e.effectIndex == (int)this._basicEffectAdd.effectIndex || (int)e.effectIndex == (int)this._basicEffectFade.effectIndex || (int)e.effectIndex == (int)this._basicEffectFadeAdd.effectIndex;
+            return e.effectIndex == _basicEffect.effectIndex || e.effectIndex == _basicEffectAdd.effectIndex || e.effectIndex == _basicEffectFade.effectIndex || e.effectIndex == _basicEffectFadeAdd.effectIndex;
         }
 
         public void InitializeLayers()
@@ -99,22 +99,24 @@ namespace DuckGame
             this._foreground.allowTallAspect = true;
             this._layers.Add(new Layer("HUD", -90));
             this._hud = this._layers[this._layers.Count - 1];
-            this._layers.Add(new Layer("CONSOLE", -100, new Camera((float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2))));
+            this._layers.Add(new Layer("CONSOLE", -100, new Camera(Resolution.current.x / 2, Resolution.current.y / 2)));
             this._console = this._layers[this._layers.Count - 1];
             this._console.allowTallAspect = true;
             this._layers.Add(new Layer("GLOW", -21));
             this._glow = this._layers[this._layers.Count - 1];
             this._glow.allowTallAspect = true;
-            this._layers.Add(new Layer("LIGHTING", Layer.lightingTwoPointOh ? -20 : -10, targetLayer: true, targetSize: new Vec2((float)DuckGame.Graphics.width, (float)DuckGame.Graphics.height)));
+            this._layers.Add(new Layer("LIGHTING", Layer.lightingTwoPointOh ? -20 : -10, targetLayer: true, targetSize: new Vec2(Graphics.width, Graphics.height)));
             this._lighting = this._layers[this._layers.Count - 1];
             this._lighting.allowTallAspect = true;
-            BlendState blendState1 = new BlendState();
-            blendState1.ColorSourceBlend = Blend.Zero;
-            blendState1.ColorDestinationBlend = Blend.SourceColor;
-            blendState1.ColorBlendFunction = BlendFunction.Add;
-            blendState1.AlphaSourceBlend = Blend.Zero;
-            blendState1.AlphaDestinationBlend = Blend.SourceAlpha;
-            blendState1.AlphaBlendFunction = BlendFunction.Add;
+            BlendState blendState1 = new BlendState
+            {
+                ColorSourceBlend = Blend.Zero,
+                ColorDestinationBlend = Blend.SourceColor,
+                ColorBlendFunction = BlendFunction.Add,
+                AlphaSourceBlend = Blend.Zero,
+                AlphaDestinationBlend = Blend.SourceAlpha,
+                AlphaBlendFunction = BlendFunction.Add
+            };
             this._glow.blend = BlendState.Additive;
             this._lighting.targetBlend = BlendState.Additive;
             this._lighting.targetBlend = new BlendState()
@@ -139,7 +141,7 @@ namespace DuckGame
                 AlphaSourceBlend = Blend.DestinationColor,
                 AlphaDestinationBlend = Blend.Zero
             };
-            this._layers = this._layers.OrderBy<Layer, int>((Func<Layer, int>)(l => -l.depth)).ToList<Layer>();
+            this._layers = this._layers.OrderBy<Layer, int>(l => -l.depth).ToList<Layer>();
             Layer.Parallax.flashAddInfluence = 1f;
             Layer.HUD.flashAddInfluence = 1f;
             if (this._basicEffect == null)
@@ -194,7 +196,7 @@ namespace DuckGame
             }
             if (flag)
                 return;
-            Array.Sort<LayerCore.MapEntry>(this._layerMap, (Comparison<LayerCore.MapEntry>)((x, y) => x.order.CompareTo(y.order)));
+            Array.Sort<LayerCore.MapEntry>(this._layerMap, (x, y) => x.order.CompareTo(y.order));
         }
 
         public void DrawTargetLayers()
@@ -206,8 +208,8 @@ namespace DuckGame
                 Layer hybrid = this._hybridList[this._layerMap[index].index];
                 if (hybrid.visible && hybrid.isTargetLayer && (Layer.lighting && !NetworkDebugger.enabled || hybrid != this._lighting))
                 {
-                    double num2 = 2.0 / (double)this._hybridList.Count * (double)index / 2.0;
-                    double num3 = 2.0 / (double)this._hybridList.Count * (double)(index + 1) / 2.0;
+                    double num2 = 2.0 / _hybridList.Count * index / 2.0;
+                    double num3 = 2.0 / _hybridList.Count * (index + 1) / 2.0;
                     hybrid.Draw(true, true);
                     ++num1;
                 }
@@ -228,8 +230,8 @@ namespace DuckGame
                     int num2 = 1;
                     if (hybrid == Layer.Game)
                         num2 = 3;
-                    double num3 = 2.0 / (double)this._lastDrawIndexCount * (double)num1 / 2.0;
-                    double num4 = 2.0 / (double)this._lastDrawIndexCount * (double)(num1 + num2) / 2.0;
+                    double num3 = 2.0 / _lastDrawIndexCount * num1 / 2.0;
+                    double num4 = 2.0 / _lastDrawIndexCount * (num1 + num2) / 2.0;
                     hybrid.Draw(true);
                     num1 += num2;
                 }
@@ -249,8 +251,8 @@ namespace DuckGame
             foreach (Layer layer in this._layers)
             {
                 layer.fade = 1f;
-                layer.effect = (Effect)null;
-                layer.camera = (Camera)null;
+                layer.effect = null;
+                layer.camera = null;
                 layer.perspective = false;
                 layer.fadeAdd = 0.0f;
                 layer.colorAdd = Vec3.Zero;
@@ -268,12 +270,12 @@ namespace DuckGame
             this._virtual.camera = new Camera(0.0f, 0.0f, 320f, 320f * Resolution.current.aspect);
             this._hud.camera = new Camera();
             this._hud.allowTallAspect = false;
-            this._console.camera = new Camera(0.0f, 0.0f, (float)(Resolution.current.x / 2), (float)(Resolution.current.y / 2));
+            this._console.camera = new Camera(0.0f, 0.0f, Resolution.current.x / 2, Resolution.current.y / 2);
             this._hybridList.Clear();
-            this._hybridList.AddRange((IEnumerable<Layer>)this._layers);
+            this._hybridList.AddRange(_layers);
         }
 
-        public Layer Get(string layer) => this._layers.FirstOrDefault<Layer>((Func<Layer, bool>)(x => x.name == layer));
+        public Layer Get(string layer) => this._layers.FirstOrDefault<Layer>(x => x.name == layer);
 
         public void Add(Layer l)
         {

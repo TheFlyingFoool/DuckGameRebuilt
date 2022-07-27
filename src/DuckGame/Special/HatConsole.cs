@@ -37,7 +37,7 @@ namespace DuckGame
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(0.0f, 0.0f);
             this.depth = - 0.5f;
-            this.graphic = (Sprite)this._selectConsole;
+            this.graphic = _selectConsole;
         }
 
         public override void Initialize()
@@ -45,20 +45,22 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             this._light = new PointLight(this.x + 9f, this.y + 7f, new Color(160, (int)byte.MaxValue, 160), 70f, new List<LightOccluder>());
-            Level.Add((Thing)this._light);
+            Level.Add(_light);
         }
 
         public void MakeHatSelector(Duck d)
         {
             if (this._profileBox != null || d == null)
                 return;
-            this._profileBox = new ProfileBox2(9999f, 9999f, d.inputProfile, d.profile, (TeamSelect2)null, 0);
-            this._profileBox.duck = d;
+            this._profileBox = new ProfileBox2(9999f, 9999f, d.inputProfile, d.profile, null, 0)
+            {
+                duck = d
+            };
             this._profileBox._hatSelector.layer = Layer.HUD;
             this._profileBox._hatSelector.isArcadeHatSelector = true;
             this._profile = d.profile;
             this._duck = d;
-            Level.Add((Thing)this._profileBox);
+            Level.Add(_profileBox);
         }
 
         public bool IsOpen() => this._profileBox._hatSelector.open;
@@ -111,7 +113,7 @@ namespace DuckGame
             Graphics.Draw(this._consoleFlash, this.x + 9f, this.y + 7f);
             this._base.depth = this.depth - 10;
             Graphics.Draw(this._base, this.x + 3f, this.y + 13f);
-            if ((double)this._consoleFade > 0.00999999977648258)
+            if (_consoleFade > 0.00999999977648258)
             {
                 this._consoleHighlight.depth = this.depth + 5;
                 this._consoleHighlight.alpha = this._consoleFade;

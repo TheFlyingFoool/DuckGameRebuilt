@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class MTSpriteBatch : SpriteBatch
     {
-        private int _globalIndex = (int)Thing.GetGlobalIndex();
+        private int _globalIndex = Thing.GetGlobalIndex();
         private readonly MTSpriteBatcher _batcher;
         private SpriteSortMode _sortMode;
         private BlendState _blendState;
@@ -56,7 +56,7 @@ namespace DuckGame
             this._beginCalled = false;
         }
 
-        public new void Begin() => this.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, (MTEffect)null, Matrix.Identity);
+        public new void Begin() => this.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity);
 
         public void Begin(
           SpriteSortMode sortMode,
@@ -87,7 +87,7 @@ namespace DuckGame
             this._beginCalled = true;
         }
 
-        public new void Begin(SpriteSortMode sortMode, BlendState blendState) => this.Begin(sortMode, blendState, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, (MTEffect)null, Matrix.Identity);
+        public new void Begin(SpriteSortMode sortMode, BlendState blendState) => this.Begin(sortMode, blendState, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity);
 
         public new void Begin(
           SpriteSortMode sortMode,
@@ -96,7 +96,7 @@ namespace DuckGame
           DepthStencilState depthStencilState,
           RasterizerState rasterizerState)
         {
-            this.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, (MTEffect)null, Matrix.Identity);
+            this.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, null, Matrix.Identity);
         }
 
         public void Begin(
@@ -163,7 +163,7 @@ namespace DuckGame
             graphicsDevice.RasterizerState = this._rasterizerState;
             graphicsDevice.SamplerStates[0] = this._samplerState;
             Viewport viewport = graphicsDevice.Viewport;
-            Matrix.CreateOrthographicOffCenter(0.0f, (float)viewport.Width, (float)viewport.Height, 0.0f, 1f, -1f, out this._projMatrix);
+            Matrix.CreateOrthographicOffCenter(0.0f, viewport.Width, viewport.Height, 0.0f, 1f, -1f, out this._projMatrix);
             if (!Program.isLinux)
             {
                 this._projMatrix.M41 += -0.5f * this._projMatrix.M11;
@@ -292,14 +292,14 @@ namespace DuckGame
           float depth)
         {
             this.CheckValid(texture);
-            float z = (float)texture.width * scale.x;
-            float w = (float)texture.height * scale.y;
+            float z = texture.width * scale.x;
+            float w = texture.height * scale.y;
             if (sourceRectangle.HasValue)
             {
                 z = sourceRectangle.Value.width * scale.x;
                 w = sourceRectangle.Value.height * scale.y;
             }
-            this.DoDrawInternal(texture, new Vec4(position.x, position.y, z, w), sourceRectangle, color, rotation, origin * scale, effect, depth, true, (Material)null);
+            this.DoDrawInternal(texture, new Vec4(position.x, position.y, z, w), sourceRectangle, color, rotation, origin * scale, effect, depth, true, null);
         }
 
         public void DrawWithMaterial(
@@ -315,8 +315,8 @@ namespace DuckGame
           Material fx)
         {
             this.CheckValid(texture);
-            float z = (float)texture.width * scale.x;
-            float w = (float)texture.height * scale.y;
+            float z = texture.width * scale.x;
+            float w = texture.height * scale.y;
             if (sourceRectangle.HasValue)
             {
                 z = sourceRectangle.Value.width * scale.x;
@@ -337,14 +337,14 @@ namespace DuckGame
           float depth)
         {
             this.CheckValid(texture);
-            float z = (float)texture.width * scale;
-            float w = (float)texture.height * scale;
+            float z = texture.width * scale;
+            float w = texture.height * scale;
             if (sourceRectangle.HasValue)
             {
                 z = sourceRectangle.Value.width * scale;
                 w = sourceRectangle.Value.height * scale;
             }
-            this.DoDrawInternal(texture, new Vec4(position.x, position.y, z, w), sourceRectangle, color, rotation, origin * scale, effect, depth, true, (Material)null);
+            this.DoDrawInternal(texture, new Vec4(position.x, position.y, z, w), sourceRectangle, color, rotation, origin * scale, effect, depth, true, null);
         }
 
         public void Draw(
@@ -358,7 +358,7 @@ namespace DuckGame
           float depth)
         {
             this.CheckValid(texture);
-            this.DoDrawInternal(texture, new Vec4(destinationRectangle.x, destinationRectangle.y, destinationRectangle.width, destinationRectangle.height), sourceRectangle, color, rotation, new Vec2(origin.x * (destinationRectangle.width / (!sourceRectangle.HasValue || (double)sourceRectangle.Value.width == 0.0 ? (float)texture.width : sourceRectangle.Value.width)), (float)((double)origin.y * (double)destinationRectangle.height / (!sourceRectangle.HasValue || (double)sourceRectangle.Value.height == 0.0 ? (double)texture.height : (double)sourceRectangle.Value.height))), effect, depth, true, (Material)null);
+            this.DoDrawInternal(texture, new Vec4(destinationRectangle.x, destinationRectangle.y, destinationRectangle.width, destinationRectangle.height), sourceRectangle, color, rotation, new Vec2(origin.x * (destinationRectangle.width / (!sourceRectangle.HasValue || sourceRectangle.Value.width == 0.0 ? texture.width : sourceRectangle.Value.width)), (float)(origin.y * (double)destinationRectangle.height / (!sourceRectangle.HasValue || sourceRectangle.Value.height == 0.0 ? texture.height : sourceRectangle.Value.height))), effect, depth, true, null);
         }
 
         public void DrawQuad(
@@ -378,7 +378,7 @@ namespace DuckGame
             MTSpriteBatchItem batchItem = this._batcher.CreateBatchItem();
             batchItem.Depth = depth;
             batchItem.Texture = tex.nativeObject as Texture2D;
-            batchItem.Material = (Material)null;
+            batchItem.Material = null;
             batchItem.Set(p1, p2, p3, p4, t1, t2, t3, t4, c);
         }
 
@@ -407,13 +407,13 @@ namespace DuckGame
             {
                 this._tempRect.x = 0.0f;
                 this._tempRect.y = 0.0f;
-                this._tempRect.width = (float)texture.width;
-                this._tempRect.height = (float)texture.height;
+                this._tempRect.width = texture.width;
+                this._tempRect.height = texture.height;
             }
-            this._texCoordTL.x = this._tempRect.x / (float)texture.width + MTSpriteBatch.edgeBias;
-            this._texCoordTL.y = this._tempRect.y / (float)texture.height + MTSpriteBatch.edgeBias;
-            this._texCoordBR.x = (this._tempRect.x + this._tempRect.width) / (float)texture.width - MTSpriteBatch.edgeBias;
-            this._texCoordBR.y = (this._tempRect.y + this._tempRect.height) / (float)texture.height - MTSpriteBatch.edgeBias;
+            this._texCoordTL.x = this._tempRect.x / texture.width + MTSpriteBatch.edgeBias;
+            this._texCoordTL.y = this._tempRect.y / texture.height + MTSpriteBatch.edgeBias;
+            this._texCoordBR.x = (this._tempRect.x + this._tempRect.width) / texture.width - MTSpriteBatch.edgeBias;
+            this._texCoordBR.y = (this._tempRect.y + this._tempRect.height) / texture.height - MTSpriteBatch.edgeBias;
             if ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None)
             {
                 float y = this._texCoordBR.y;
@@ -429,16 +429,18 @@ namespace DuckGame
             batchItem.Set(destinationRectangle.x, destinationRectangle.y, -origin.x, -origin.y, destinationRectangle.z, destinationRectangle.w, (float)Math.Sin((double)rotation), (float)Math.Cos((double)rotation), color, this._texCoordTL, this._texCoordBR);
             if (DuckGame.Graphics.recordMetadata)
             {
-                batchItem.MetaData = new MTSpriteBatchItemMetaData();
-                batchItem.MetaData.texture = texture;
-                batchItem.MetaData.rotation = rotation;
-                batchItem.MetaData.color = color;
-                batchItem.MetaData.tempRect = this._tempRect;
-                batchItem.MetaData.effect = effect;
-                batchItem.MetaData.depth = depth;
+                batchItem.MetaData = new MTSpriteBatchItemMetaData
+                {
+                    texture = texture,
+                    rotation = rotation,
+                    color = color,
+                    tempRect = this._tempRect,
+                    effect = effect,
+                    depth = depth
+                };
             }
             if (!DuckGame.Graphics.skipReplayRender && Recorder.currentRecording != null && DuckGame.Graphics.currentRenderTarget == null)
-                Recorder.currentRecording.LogDraw(texture.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)this._tempRect.x, (short)this._tempRect.y, (short)((double)this._tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)((double)this._tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
+                Recorder.currentRecording.LogDraw(texture.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)this._tempRect.x, (short)this._tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
             if (!autoFlush)
                 return;
             this.FlushIfNeeded();
@@ -450,14 +452,14 @@ namespace DuckGame
             this._batcher.SqueezeInItem(item);
             if (Recorder.currentRecording == null)
                 return;
-            Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)((double)item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)((double)item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), item.MetaData.depth);
+            Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), item.MetaData.depth);
         }
 
         public void DrawRecorderItem(ref RecorderFrameItem frame)
         {
             MTSpriteBatchItem batchItem = this._batcher.CreateBatchItem();
             batchItem.Depth = frame.depth;
-            if (frame.texture == (short)-1)
+            if (frame.texture == -1)
             {
                 batchItem.Texture = DuckGame.Graphics.blankWhiteSquare.nativeObject as Texture2D;
             }
@@ -470,26 +472,26 @@ namespace DuckGame
             }
             if (batchItem.Texture == null)
                 return;
-            float num1 = (float)Math.Abs(frame.texW);
-            float num2 = (float)Math.Abs(frame.texH);
-            this._texCoordTL.x = (float)frame.texX / (float)batchItem.Texture.Width + MTSpriteBatch.edgeBias;
-            this._texCoordTL.y = (float)frame.texY / (float)batchItem.Texture.Height + MTSpriteBatch.edgeBias;
-            this._texCoordBR.x = ((float)frame.texX + num1) / (float)batchItem.Texture.Width - MTSpriteBatch.edgeBias;
-            this._texCoordBR.y = ((float)frame.texY + num2) / (float)batchItem.Texture.Height - MTSpriteBatch.edgeBias;
-            if (frame.texH < (short)0)
+            float num1 = Math.Abs(frame.texW);
+            float num2 = Math.Abs(frame.texH);
+            this._texCoordTL.x = frame.texX / (float)batchItem.Texture.Width + MTSpriteBatch.edgeBias;
+            this._texCoordTL.y = frame.texY / (float)batchItem.Texture.Height + MTSpriteBatch.edgeBias;
+            this._texCoordBR.x = (frame.texX + num1) / batchItem.Texture.Width - MTSpriteBatch.edgeBias;
+            this._texCoordBR.y = (frame.texY + num2) / batchItem.Texture.Height - MTSpriteBatch.edgeBias;
+            if (frame.texH < 0)
             {
                 float y = this._texCoordBR.y;
                 this._texCoordBR.y = this._texCoordTL.y;
                 this._texCoordTL.y = y;
             }
-            if (frame.texW < (short)0)
+            if (frame.texW < 0)
             {
                 float x = this._texCoordBR.x;
                 this._texCoordBR.x = this._texCoordTL.x;
                 this._texCoordTL.x = x;
             }
             Vec2 vec2 = frame.bottomRight.Rotate(-frame.rotation, frame.topLeft);
-            batchItem.Set(frame.topLeft.x, frame.topLeft.y, 0.0f, 0.0f, vec2.x - frame.topLeft.x, vec2.y - frame.topLeft.y, (float)Math.Sin((double)frame.rotation), (float)Math.Cos((double)frame.rotation), frame.color, this._texCoordTL, this._texCoordBR);
+            batchItem.Set(frame.topLeft.x, frame.topLeft.y, 0.0f, 0.0f, vec2.x - frame.topLeft.x, vec2.y - frame.topLeft.y, (float)Math.Sin(frame.rotation), (float)Math.Cos(frame.rotation), frame.color, this._texCoordTL, this._texCoordBR);
         }
 
         public void Flush(bool doSetup)
@@ -547,7 +549,7 @@ namespace DuckGame
             if (!this.IsDisposed && disposing && this._spriteEffect != null)
             {
                 this._spriteEffect.effect.Dispose();
-                this._spriteEffect = (MTEffect)null;
+                this._spriteEffect = null;
             }
             base.Dispose(disposing);
         }

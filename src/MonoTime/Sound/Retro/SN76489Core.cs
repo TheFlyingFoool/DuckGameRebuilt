@@ -229,7 +229,7 @@ namespace DuckGame
         {
             if (0U >= 1U)
                 return 0.0f;
-            for (; (double)this.ticksCount > 0.0; --this.ticksCount)
+            for (; ticksCount > 0.0; --this.ticksCount)
             {
                 --this.cntA;
                 if (this.cntA < 0)

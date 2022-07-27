@@ -22,7 +22,7 @@ namespace DuckGame
             if (this._frames == null)
                 this._frames = new PhysicsSnapshotObject[this._numFrames];
             this._frames[this._curFrame] = frame;
-            this._curFrame = (this._curFrame + 1) % ((IEnumerable<PhysicsSnapshotObject>)this._frames).Count<PhysicsSnapshotObject>();
+            this._curFrame = (this._curFrame + 1) % _frames.Count<PhysicsSnapshotObject>();
             ++this._storedFrames;
             if (this._storedFrames <= this._numFrames)
                 return;
@@ -39,7 +39,7 @@ namespace DuckGame
 
         public int GetIndex(PhysicsSnapshotObject frame)
         {
-            for (int index = 0; index < ((IEnumerable<PhysicsSnapshotObject>)this._frames).Count<PhysicsSnapshotObject>(); ++index)
+            for (int index = 0; index < _frames.Count<PhysicsSnapshotObject>(); ++index)
             {
                 if (frame == this._frames[index])
                     return index;

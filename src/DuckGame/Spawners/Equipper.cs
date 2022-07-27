@@ -47,24 +47,24 @@ namespace DuckGame
 
         public Thing GetContainedInstance(Vec2 pos = default(Vec2))
         {
-            if (this.contains == (System.Type)null)
-                return (Thing)null;
+            if (this.contains == null)
+                return null;
             object[] constructorParameters = Editor.GetConstructorParameters(this.contains);
-            if (((IEnumerable<object>)constructorParameters).Count<object>() > 1)
+            if (constructorParameters.Count<object>() > 1)
             {
-                constructorParameters[0] = (object)pos.x;
-                constructorParameters[1] = (object)pos.y;
+                constructorParameters[0] = pos.x;
+                constructorParameters[1] = pos.y;
             }
             PhysicsObject thing = Editor.CreateThing(this.contains, constructorParameters) as PhysicsObject;
             if (thing is Gun)
                 (thing as Gun).infinite = this.infinite;
-            return (Thing)thing;
+            return thing;
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", (object)Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
             return binaryClassChunk;
         }
 
@@ -78,7 +78,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", this.contains != (System.Type)null ? (object)this.contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -93,18 +93,18 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding radioBinding = new FieldBinding((object)this, "contains");
+            FieldBinding radioBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
             contextMenu.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), radioBinding);
-            return (ContextMenu)contextMenu;
+            return contextMenu;
         }
 
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 str = this.contains.Name;
-            return this.contains == (System.Type)null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
+            return this.contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
         }
 
         public override void EditorUpdate()
@@ -124,12 +124,12 @@ namespace DuckGame
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 text = this.contains.Name;
             Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
             if (this.radius.value == 0)
                 return;
-            Graphics.DrawCircle(this.position, (float)this.radius.value, Color.Red, depth: ((Depth)0.9f));
+            Graphics.DrawCircle(this.position, radius.value, Color.Red, depth: ((Depth)0.9f));
         }
 
         public override void Draw()

@@ -215,11 +215,11 @@ namespace DuckGame
             foreach (FieldInfo field in this.GetType().GetFields(bindingAttr))
             {
                 if (field.FieldType == typeof(int))
-                    field.SetValue((object)randomLevelData, (object)((int)field.GetValue((object)this) + (int)field.GetValue((object)dat)));
+                    field.SetValue(randomLevelData, (int)field.GetValue(this) + (int)field.GetValue(dat));
                 if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 {
-                    Dictionary<System.Type, int> dictionary1 = field.GetValue((object)this) as Dictionary<System.Type, int>;
-                    Dictionary<System.Type, int> dictionary2 = field.GetValue((object)dat) as Dictionary<System.Type, int>;
+                    Dictionary<System.Type, int> dictionary1 = field.GetValue(this) as Dictionary<System.Type, int>;
+                    Dictionary<System.Type, int> dictionary2 = field.GetValue(dat) as Dictionary<System.Type, int>;
                     Dictionary<System.Type, int> dictionary3 = new Dictionary<System.Type, int>();
                     foreach (KeyValuePair<System.Type, int> keyValuePair in dictionary1)
                     {
@@ -233,7 +233,7 @@ namespace DuckGame
                             dictionary3[keyValuePair.Key] = 0;
                         dictionary3[keyValuePair.Key] += keyValuePair.Value;
                     }
-                    field.SetValue((object)randomLevelData, (object)dictionary3);
+                    field.SetValue(randomLevelData, dictionary3);
                 }
             }
             return randomLevelData;
@@ -274,9 +274,9 @@ namespace DuckGame
             if (this.mainLoad && Level.symmetry && !(t is ThingContainer))
             {
                 if (Level.leftSymmetry && (double)t.x > 88.0)
-                    return (Thing)null;
+                    return null;
                 if (!Level.leftSymmetry && (double)t.x < 88.0)
-                    return (Thing)null;
+                    return null;
             }
             if (flag)
             {
@@ -287,7 +287,6 @@ namespace DuckGame
                     case BackgroundTile _:
                     label_14:
                         t.flipHorizontal = true;
-                        BackgroundTile backgroundTile = t as BackgroundTile;
                         if (t is Teleporter)
                         {
                             if ((t as Teleporter).direction == 2)
@@ -346,7 +345,7 @@ namespace DuckGame
                     Thing thing1 = this.ProcessThing(t1, x, y);
                     if (thing1 != null)
                     {
-                        if (!(thing1 is ThingContainer) && Level.symmetry && ((double)this.posBeforeTranslate.x - 8.0 < 80.0 || (double)this.posBeforeTranslate.x - 8.0 > 96.0))
+                        if (!(thing1 is ThingContainer) && Level.symmetry && (posBeforeTranslate.x - 8.0 < 80.0 || posBeforeTranslate.x - 8.0 > 96.0))
                         {
                             Thing t2 = Thing.LoadThing(node, false);
                             if (t2 != null)

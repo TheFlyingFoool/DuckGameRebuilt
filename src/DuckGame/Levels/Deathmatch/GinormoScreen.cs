@@ -30,19 +30,19 @@ namespace DuckGame
                 if (team.activeProfiles.Count > 0)
                     teamList.Add(team);
             }
-            teamList.Sort((Comparison<Team>)((a, b) =>
+            teamList.Sort((a, b) =>
            {
                if (a.score == b.score)
                    return 0;
                return a.score >= b.score ? -1 : 1;
-           }));
+           });
             bool smallMode = teamList.Count > 4;
             foreach (Team team in teamList)
             {
-                float y = this.y + 2f + (float)((smallMode ? 12 : 25) * idx);
+                float y = this.y + 2f + (smallMode ? 12 : 25) * idx;
                 if ((double)Graphics.aspect > 0.589999973773956)
                     y += 10f;
-                Level.current.AddThing((Thing)new GinormoCard((float)idx * 1f, new Vec2(300f, y), new Vec2(this.x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
+                Level.current.AddThing(new GinormoCard(idx * 1f, new Vec2(300f, y), new Vec2(this.x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
                 ++idx;
             }
         }

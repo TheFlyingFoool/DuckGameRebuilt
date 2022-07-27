@@ -29,9 +29,9 @@ namespace DuckGame
             if (this.target == null || this.actionIndex == byte.MaxValue)
                 return;
             MethodInfo methodInfo = Editor.MethodFromNetworkActionIndex(this.target.GetType(), this.actionIndex);
-            if (!(methodInfo != (MethodInfo)null))
+            if (!(methodInfo != null))
                 return;
-            methodInfo.Invoke((object)this.target, (object[])null);
+            methodInfo.Invoke(target, null);
         }
     }
 }

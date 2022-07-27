@@ -42,18 +42,18 @@ namespace DuckGame
         {
             this.currentObject = 0;
             this.totalVelocity = 0.0f;
-            this.actions = (byte)0;
-            this.bonus = (byte)0;
-            this.deaths = (byte)0;
-            this.coolness = (byte)0;
+            this.actions = 0;
+            this.bonus = 0;
+            this.deaths = 0;
+            this.coolness = 0;
             this._states.Clear();
             this.sounds.Clear();
             this.sortedObjects.Clear();
         }
 
-        public RecorderFrameStateChange GetStateWithIndex(int index) => this._states.FirstOrDefault<KeyValuePair<int, RecorderFrameStateChange>>((Func<KeyValuePair<int, RecorderFrameStateChange>, bool>)(x => x.Value.stateIndex == index)).Value;
+        public RecorderFrameStateChange GetStateWithIndex(int index) => this._states.FirstOrDefault<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Value;
 
-        public bool HasStateWithIndex(int index) => this._states.Where<KeyValuePair<int, RecorderFrameStateChange>>((Func<KeyValuePair<int, RecorderFrameStateChange>, bool>)(x => x.Value.stateIndex == index)).Count<KeyValuePair<int, RecorderFrameStateChange>>() > 0;
+        public bool HasStateWithIndex(int index) => this._states.Where<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Count<KeyValuePair<int, RecorderFrameStateChange>>() > 0;
 
         public void StateChange(
           SpriteSortMode sortModeVal,

@@ -23,7 +23,7 @@ namespace DuckGame
             this.ammo = this._ammoMax;
             this._type = "gun";
             this._sprite = new SpriteMap("fireCrackers", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-4f, -4f);
             this.collisionSize = new Vec2(8f, 8f);
@@ -45,7 +45,7 @@ namespace DuckGame
             {
                 if (this.held && this.owner is Duck owner)
                     owner.ThrowItem();
-                this.level.RemoveThing((Thing)this);
+                this.level.RemoveThing(this);
             }
             if (this.onFire && this.infinite.value)
             {
@@ -54,15 +54,17 @@ namespace DuckGame
                 {
                     for (int index = 0; index < 3; ++index)
                     {
-                        Firecracker firecracker = new Firecracker(this.barrelPosition.x, this.barrelPosition.y);
-                        firecracker.hSpeed = Rando.Float(-4f, 4f);
-                        firecracker.vSpeed = Rando.Float(-1f, -6f);
-                        Level.Add((Thing)firecracker);
+                        Firecracker firecracker = new Firecracker(this.barrelPosition.x, this.barrelPosition.y)
+                        {
+                            hSpeed = Rando.Float(-4f, 4f),
+                            vSpeed = Rando.Float(-1f, -6f)
+                        };
+                        Level.Add(firecracker);
                     }
                     SFX.PlaySynchronized("lightMatch", 0.5f, Rando.Float(0.2f) - 0.4f);
                 }
                 if (this.burnTime > 120)
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
             }
             base.Update();
         }
@@ -90,12 +92,12 @@ namespace DuckGame
             Firecracker firecracker = new Firecracker(this.barrelPosition.x, this.barrelPosition.y);
             if (!owner.crouch)
             {
-                firecracker.hSpeed = (float)this.offDir * Rando.Float(2f, 2.5f) + num1;
+                firecracker.hSpeed = offDir * Rando.Float(2f, 2.5f) + num1;
                 firecracker.vSpeed = num2 - 1f + Rando.Float(-0.2f, 0.8f);
             }
             else
                 firecracker.spinAngle = 90f;
-            Level.Add((Thing)firecracker);
+            Level.Add(firecracker);
         }
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
@@ -106,12 +108,14 @@ namespace DuckGame
                 {
                     for (int index = 0; index < Math.Min(this.ammo, this._ammoMax); ++index)
                     {
-                        Firecracker firecracker = new Firecracker(this.barrelPosition.x, this.barrelPosition.y);
-                        firecracker.hSpeed = Rando.Float(-4f, 4f);
-                        firecracker.vSpeed = Rando.Float(-1f, -6f);
-                        Level.Add((Thing)firecracker);
+                        Firecracker firecracker = new Firecracker(this.barrelPosition.x, this.barrelPosition.y)
+                        {
+                            hSpeed = Rando.Float(-4f, 4f),
+                            vSpeed = Rando.Float(-1f, -6f)
+                        };
+                        Level.Add(firecracker);
                     }
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
                 }
                 if (this.owner is Duck owner)
                     owner.ThrowItem();

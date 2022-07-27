@@ -21,7 +21,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 36;
-            this._ammoType = (AmmoType)new ATPewPew();
+            this._ammoType = new ATPewPew();
             this._type = "gun";
             this.graphic = new Sprite("pewpewLaser");
             this.center = new Vec2(16f, 16f);
@@ -34,8 +34,10 @@ namespace DuckGame
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
             this._holdOffset = new Vec2(0.0f, 0.0f);
-            this._flare = new SpriteMap("laserFlare", 16, 16);
-            this._flare.center = new Vec2(0.0f, 8f);
+            this._flare = new SpriteMap("laserFlare", 16, 16)
+            {
+                center = new Vec2(0.0f, 8f)
+            };
             this.editorTooltip = "Quick-fire laser beam of ULTIMATE DESTRUCTION... with an adorable wittle name.";
         }
 
@@ -44,7 +46,7 @@ namespace DuckGame
             if (this._bursting)
             {
                 this._burstWait = Maths.CountDown(this._burstWait, 0.16f);
-                if ((double)this._burstWait <= 0.0)
+                if (_burstWait <= 0.0)
                 {
                     this._burstWait = 1f;
                     if (this.isServerForObject)
@@ -53,7 +55,7 @@ namespace DuckGame
                         this.Fire();
                         PewPewLaser.inFire = false;
                         if (Network.isActive)
-                            Send.Message((NetMessage)new NMFireGun((Gun)this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
+                            Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         this.firedBullets.Clear();
                     }
                     this._wait = 0.0f;
@@ -78,7 +80,7 @@ namespace DuckGame
                 this.Fire();
                 PewPewLaser.inFire = false;
             }
-            if (this._bursting || (double)this._wait != 0.0)
+            if (this._bursting || _wait != 0.0)
                 return;
             this._bursting = true;
         }

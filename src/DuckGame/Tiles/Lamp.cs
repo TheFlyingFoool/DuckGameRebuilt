@@ -34,11 +34,13 @@ namespace DuckGame
                 return;
             this._occluders.Add(new LightOccluder(this.position + new Vec2(-7f, -16f), this.position + new Vec2(-3f, -28f), new Color(1f, 0.7f, 0.7f)));
             this._occluders.Add(new LightOccluder(this.position + new Vec2(7f, -16f), this.position + new Vec2(3f, -28f), new Color(1f, 0.7f, 0.7f)));
-            Level.Add((Thing)new PointLight(this.x, this.y - 24f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 180), 100f, this._occluders));
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("lampShade"));
-            this._shade.center = this.center;
-            this._shade.layer = Layer.Foreground;
-            Level.Add((Thing)this._shade);
+            Level.Add(new PointLight(this.x, this.y - 24f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 180), 100f, this._occluders));
+            this._shade = new SpriteThing(this.x, this.y, new Sprite("lampShade"))
+            {
+                center = this.center,
+                layer = Layer.Foreground
+            };
+            Level.Add(_shade);
         }
     }
 }

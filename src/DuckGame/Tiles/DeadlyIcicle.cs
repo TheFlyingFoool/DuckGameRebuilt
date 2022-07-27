@@ -15,7 +15,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("icicleBig", 10, 18);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(5f, 5f);
             this.collisionOffset = new Vec2(-3f, -4f);
             this.collisionSize = new Vec2(6f, 12f);
@@ -36,14 +36,14 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && this.owner == null)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
                 glassParticle.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
                 glassParticle.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
             }
             SFX.Play("glassHit", 0.6f);
             return base.Hit(bullet, hitPos);

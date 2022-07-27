@@ -30,19 +30,19 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding radioBinding = new FieldBinding((object)this, "contains");
+            FieldBinding radioBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            EditorGroupMenu editorGroupMenu = new EditorGroupMenu((IContextListener)contextMenu);
+            EditorGroupMenu editorGroupMenu = new EditorGroupMenu(contextMenu);
             editorGroupMenu.InitializeGroups(new EditorGroup(typeof(Holdable)), radioBinding);
             editorGroupMenu.text = "Contains";
-            contextMenu.AddItem((ContextMenu)editorGroupMenu);
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(editorGroupMenu);
+            return contextMenu;
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", (object)Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
             return binaryClassChunk;
         }
 
@@ -55,7 +55,7 @@ namespace DuckGame
 
         public override void EditorUpdate()
         {
-            if (this.contains != (System.Type)null && (this._previewSprite == null || this._previewType != this.contains))
+            if (this.contains != null && (this._previewSprite == null || this._previewType != this.contains))
             {
                 Thing thing = Editor.GetThing(this.contains);
                 if (thing != null)
@@ -70,15 +70,15 @@ namespace DuckGame
 
         public override void EditorRender()
         {
-            if (this.contains != (System.Type)null && this._previewSprite != null)
+            if (this.contains != null && this._previewSprite != null)
             {
                 if (this._frozen == null)
-                    this._frozen = new MaterialFrozen((Thing)this)
+                    this._frozen = new MaterialFrozen(this)
                     {
                         intensity = 1f
                     };
                 Material material = DuckGame.Graphics.material;
-                DuckGame.Graphics.material = (Material)this._frozen;
+                DuckGame.Graphics.material = _frozen;
                 this._previewSprite.alpha = 0.5f;
                 DuckGame.Graphics.Draw(this._previewSprite, this.x, this.y, this.depth + 10);
                 DuckGame.Graphics.material = material;
@@ -90,7 +90,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("iceBlock", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -119,7 +119,7 @@ namespace DuckGame
 
         private void UpdateContainedThing()
         {
-            if (!(this.contains != (System.Type)null) || Level.current is Editor)
+            if (!(this.contains != null) || Level.current is Editor)
                 return;
             this._containedThing = Editor.CreateThing(this.contains);
             this._containedThing.active = false;
@@ -150,30 +150,30 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && this.owner == null)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
                 glassParticle.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
                 glassParticle.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
             }
             SFX.Play("glassHit", 0.6f);
             if (bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
                 if (this.duck != null)
                     this.duck.ThrowItem();
-                this.Destroy((DestroyType)new DTShot(bullet));
-                Level.Add((Thing)new GrenadeExplosion(this.x, this.y));
+                this.Destroy(new DTShot(bullet));
+                Level.Add(new GrenadeExplosion(this.x, this.y));
             }
             if (this.isServerForObject && bullet.isLocal)
             {
                 this.breakPoints -= this.damageMultiplier;
                 this.damageMultiplier += 2f;
-                if ((double)this.breakPoints <= 0.0)
-                    this.Destroy((DestroyType)new DTShot(bullet));
+                if (breakPoints <= 0.0)
+                    this.Destroy(new DTShot(bullet));
                 --this.vSpeed;
                 this.hSpeed += bullet.travelDirNormalized.x;
                 this.vSpeed += bullet.travelDirNormalized.y;
@@ -183,7 +183,7 @@ namespace DuckGame
 
         public override bool Hurt(float points)
         {
-            if ((double)this.carved >= 0.0)
+            if (carved >= 0.0)
                 this.carved += points * 0.05f;
             return true;
         }
@@ -191,7 +191,7 @@ namespace DuckGame
         protected override bool OnDestroy(DestroyType type = null)
         {
             this._hitPoints = 0.0f;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             SFX.Play("glassHit");
             Vec2 hitAngle = Vec2.Zero;
             if (type is DTShot)
@@ -199,17 +199,17 @@ namespace DuckGame
             for (int index = 0; index < 8; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), hitAngle);
-                Level.Add((Thing)glassParticle);
-                glassParticle.hSpeed = (float)((double)hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                glassParticle.vSpeed = (float)((double)hitAngle.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
+                glassParticle.hSpeed = (float)(hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
+                glassParticle.vSpeed = (float)(hitAngle.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                Level.Add(glassParticle);
             }
             for (int index = 0; index < 5; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-6f, 6f), this.y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                Level.Add((Thing)smallSmoke);
+                Level.Add(smallSmoke);
             }
             this.ReleaseContainedObject();
             return true;
@@ -220,10 +220,10 @@ namespace DuckGame
             for (int index = 0; index < 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(exitPos.x, exitPos.y, bullet.travelDirNormalized);
-                Level.Add((Thing)glassParticle);
-                glassParticle.hSpeed = (float)((double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                glassParticle.vSpeed = (float)((double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
+                glassParticle.hSpeed = (float)(bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
+                glassParticle.vSpeed = (float)(bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                Level.Add(glassParticle);
             }
         }
 
@@ -234,7 +234,7 @@ namespace DuckGame
             this.Fondle(this._containedThing);
             this._containedThing.alpha = 1f;
             this._containedThing.active = true;
-            this._containedThing.material = (Material)null;
+            this._containedThing.material = null;
             this._containedThing.visible = true;
             this._containedThing.velocity = this.velocity + new Vec2(0.0f, -2f);
             if (this.duck == null)
@@ -245,27 +245,31 @@ namespace DuckGame
         public override void HeatUp(Vec2 location)
         {
             this._hitPoints -= 0.01f;
-            if ((double)this._hitPoints < 0.0500000007450581)
+            if (_hitPoints < 0.0500000007450581)
             {
-                Level.Remove((Thing)this);
+                Level.Remove(this);
                 this._destroyed = true;
                 this.ReleaseContainedObject();
                 for (int index = 0; index < 16; ++index)
                 {
                     FluidData water = Fluid.Water;
                     water.amount = 1f / 1000f;
-                    Fluid fluid = new Fluid(this.x + (float)Rando.Int(-6, 6), this.y + (float)Rando.Int(-6, 6), Vec2.Zero, water);
-                    fluid.hSpeed = (float)((double)index / 16.0 - 0.5) * Rando.Float(0.3f, 0.4f);
-                    fluid.vSpeed = Rando.Float(-1.5f, 0.5f);
-                    Level.Add((Thing)fluid);
+                    Fluid fluid = new Fluid(this.x + Rando.Int(-6, 6), this.y + Rando.Int(-6, 6), Vec2.Zero, water)
+                    {
+                        hSpeed = (float)(index / 16.0 - 0.5) * Rando.Float(0.3f, 0.4f),
+                        vSpeed = Rando.Float(-1.5f, 0.5f)
+                    };
+                    Level.Add(fluid);
                 }
             }
             FluidData water1 = Fluid.Water;
             water1.amount = 1f / 1000f;
-            Fluid fluid1 = new Fluid(this.x + (float)Rando.Int(-6, 6), this.y + (float)Rando.Int(-6, 6), Vec2.Zero, water1);
-            fluid1.hSpeed = Rando.Float(-0.1f, 0.1f);
-            fluid1.vSpeed = Rando.Float(-0.3f, 0.3f);
-            Level.Add((Thing)fluid1);
+            Fluid fluid1 = new Fluid(this.x + Rando.Int(-6, 6), this.y + Rando.Int(-6, 6), Vec2.Zero, water1)
+            {
+                hSpeed = Rando.Float(-0.1f, 0.1f),
+                vSpeed = Rando.Float(-0.3f, 0.3f)
+            };
+            Level.Add(fluid1);
             base.HeatUp(location);
         }
 
@@ -278,11 +282,13 @@ namespace DuckGame
                 base.Draw();
                 if (this._frozen == null)
                 {
-                    this._frozen = new MaterialFrozen(this._containedThing);
-                    this._frozen.intensity = 1f;
+                    this._frozen = new MaterialFrozen(this._containedThing)
+                    {
+                        intensity = 1f
+                    };
                 }
                 Material material = DuckGame.Graphics.material;
-                DuckGame.Graphics.material = (Material)this._frozen;
+                DuckGame.Graphics.material = _frozen;
                 this._containedThing.position = this.position;
                 this._containedThing.alpha = 1f;
                 this._containedThing.depth = depth - 4;
@@ -299,15 +305,15 @@ namespace DuckGame
             else if (this.didCarve)
             {
                 float y1 = this.y;
-                this.graphic.flipH = this.offDir <= (sbyte)0;
+                this.graphic.flipH = this.offDir <= 0;
                 this._graphic.position = this.position;
                 this._graphic.alpha = this.alpha;
                 this._graphic.angle = this.angle;
                 this._graphic.depth = this.depth;
                 this._graphic.scale = this.scale;
                 this._graphic.center = this.center;
-                int y2 = (int)((1.0 - (double)this._hitPoints) * 12.0);
-                DuckGame.Graphics.Draw(this._graphic.texture, this.position + new Vec2(0.0f, (float)y2), new Rectangle?(new Rectangle(0.0f, 0.0f, 16f, (float)(24 - y2))), Color.White, this.angle, this._graphic.center, this.scale, this.graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
+                int y2 = (int)((1.0 - _hitPoints) * 12.0);
+                DuckGame.Graphics.Draw(this._graphic.texture, this.position + new Vec2(0.0f, y2), new Rectangle?(new Rectangle(0.0f, 0.0f, 16f, 24 - y2)), Color.White, this.angle, this._graphic.center, this.scale, this.graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
                 this.y = y1;
             }
             else
@@ -341,28 +347,28 @@ namespace DuckGame
                 (this._containedThing as MaterialThing).heat = -1f;
                 (this._containedThing as Holdable).UpdateMaterial();
             }
-            if ((double)this.carved >= 1.0 && !this.didCarve)
+            if (carved >= 1.0 && !this.didCarve)
             {
                 if (this._containedThing != null)
                 {
-                    this.Destroy((DestroyType)new DTImpale((Thing)this));
+                    this.Destroy(new DTImpale(this));
                 }
                 else
                 {
                     this._sprite = new SpriteMap("iceSculpture", 16, 24);
-                    this.graphic = (Sprite)this._sprite;
+                    this.graphic = _sprite;
                     this.center = new Vec2(8f, 15f);
                     for (int index = 0; index < 12; ++index)
                     {
                         SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-9f, 9f), this.y + Rando.Float(-9f, 9f));
                         smallSmoke._sprite.color = Color.White;
-                        Level.Add((Thing)smallSmoke);
+                        Level.Add(smallSmoke);
                     }
                     SFX.Play("crateDestroy", pitch: Rando.Float(0.1f, 0.3f));
                     this.didCarve = true;
                 }
             }
-            if ((double)this.damageMultiplier > 1.0)
+            if (damageMultiplier > 1.0)
             {
                 this.damageMultiplier -= 0.2f;
             }
@@ -373,7 +379,7 @@ namespace DuckGame
             }
             if (!this.didCarve)
             {
-                this._sprite.frame = (int)Math.Floor((1.0 - (double)this._hitPoints / 1.0) * 5.0);
+                this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / 1.0) * 5.0);
                 if (this._sprite.frame == 0)
                 {
                     this.collisionOffset = new Vec2(-8f, -8f);
@@ -404,9 +410,9 @@ namespace DuckGame
             }
             else
             {
-                int num = (int)((1.0 - (double)this._hitPoints) * 12.0);
-                this.collisionOffset = new Vec2(-8f, (float)(num - 8));
-                this.collisionSize = new Vec2(16f, (float)(16 - num));
+                int num = (int)((1.0 - _hitPoints) * 12.0);
+                this.collisionOffset = new Vec2(-8f, num - 8);
+                this.collisionSize = new Vec2(16f, 16 - num);
             }
         }
     }

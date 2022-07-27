@@ -29,7 +29,7 @@ namespace DuckGame
           bool mirror)
         {
             if (requirement == TileConnection.None && filter == TileConnection.None)
-                return new List<RandomLevelData>((IEnumerable<RandomLevelData>)LevelGenerator._tiles);
+                return new List<RandomLevelData>(_tiles);
             bool flag1 = (requirement & TileConnection.Left) != 0;
             bool flag2 = (requirement & TileConnection.Right) != 0;
             bool flag3 = (requirement & TileConnection.Up) != 0;
@@ -77,7 +77,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    int num2 = 0;
+                    int num2;
                     if (LevelGenerator._used.TryGetValue(tile2.file, out num2) && num2 >= tile2.max)
                     {
                         tiles.Remove(tile2);
@@ -93,16 +93,16 @@ namespace DuckGame
                                 return tile1;
                             tile2 = tiles.First<RandomLevelData>();
                         }
-                        else if ((double)tile2.chance != 1.0 && (double)Rando.Float(1f) > (double)chance)
+                        else if (tile2.chance != 1.0 && (double)Rando.Float(1f) > (double)chance)
                         {
                             tile1 = tile2;
                             tiles.Remove(tile2);
                             flag = true;
-                            tile2 = (RandomLevelData)null;
+                            tile2 = null;
                         }
                         if (tile2 != null)
                         {
-                            if ((double)tile2.chance == 1.0 && (double)Rando.Float(1f) < 0.300000011920929 && num1 < 4)
+                            if (tile2.chance == 1.0 && (double)Rando.Float(1f) < 0.300000011920929 && num1 < 4)
                             {
                                 tile1 = tile2;
                                 ++num1;
@@ -117,11 +117,11 @@ namespace DuckGame
                             }
                         }
                         else if (tiles.Count == 0)
-                            return flag ? tile1 : (RandomLevelData)null;
+                            return flag ? tile1 : null;
                     }
                 }
             }
-            return flag ? tile1 : (RandomLevelData)null;
+            return flag ? tile1 : null;
         }
 
         public static void ReInitialize()
@@ -134,8 +134,10 @@ namespace DuckGame
 
         public static RandomLevelData LoadInTile(string tile, string realName = null)
         {
-            RandomLevelData element = new RandomLevelData();
-            element.file = tile;
+            RandomLevelData element = new RandomLevelData
+            {
+                file = tile
+            };
             if (realName != null)
                 element.file = realName;
             LevelData levelData = Content.GetLevel(tile) ?? DuckFile.LoadLevel(tile);
@@ -272,8 +274,10 @@ namespace DuckGame
             {
                 for (int pY = 0; pY < length2; ++pY)
                 {
-                    randomLevelNodeArray[pX, pY] = new RandomLevelNode(pX, pY);
-                    randomLevelNodeArray[pX, pY].map = randomLevelNodeArray;
+                    randomLevelNodeArray[pX, pY] = new RandomLevelNode(pX, pY)
+                    {
+                        map = randomLevelNodeArray
+                    };
                 }
             }
             for (int index1 = 0; index1 < length1; ++index1)

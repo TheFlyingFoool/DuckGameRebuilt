@@ -26,7 +26,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 6;
-            this._ammoType = (AmmoType)new ATMagnum();
+            this._ammoType = new ATMagnum();
             this._type = "gun";
             this.graphic = new Sprite("magnum");
             this.center = new Vec2(16f, 16f);
@@ -46,8 +46,8 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this._angleOffset = this.owner == null ? 0.0f : (this.offDir >= (sbyte)0 ? -Maths.DegToRad(this.rise * 65f) : -Maths.DegToRad((float)(-(double)this.rise * 65.0)));
-            if ((double)this.rise > 0.0)
+            this._angleOffset = this.owner == null ? 0.0f : (this.offDir >= 0 ? -Maths.DegToRad(this.rise * 65f) : -Maths.DegToRad((float)(-(double)this.rise * 65.0)));
+            if (rise > 0.0)
                 this.rise -= 0.013f;
             else
                 this.rise = 0.0f;
@@ -59,7 +59,7 @@ namespace DuckGame
         public override void OnPressAction()
         {
             base.OnPressAction();
-            if (this.ammo <= 0 || (double)this.rise >= 1.0)
+            if (this.ammo <= 0 || rise >= 1.0)
                 return;
             this.rise += 0.4f;
         }

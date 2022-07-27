@@ -11,25 +11,27 @@ namespace DuckGame
     {
         public override void Activate(DeathCrate c, bool server = true)
         {
-            Level.Add((Thing)new ExplosionPart(c.x, c.y - 2f));
+            Level.Add(new ExplosionPart(c.x, c.y - 2f));
             if (server)
             {
-                YellowBarrel yellowBarrel = new YellowBarrel(c.x, c.y);
-                yellowBarrel.vSpeed = -3f;
-                Level.Add((Thing)yellowBarrel);
+                YellowBarrel yellowBarrel = new YellowBarrel(c.x, c.y)
+                {
+                    vSpeed = -3f
+                };
+                Level.Add(yellowBarrel);
                 Grenade grenade1 = new Grenade(c.x, c.y);
                 grenade1.PressAction();
                 grenade1.hSpeed = -1f;
                 grenade1.vSpeed = -2f;
-                Level.Add((Thing)grenade1);
+                Level.Add(grenade1);
                 Grenade grenade2 = new Grenade(c.x, c.y);
                 grenade2.PressAction();
                 grenade2.hSpeed = 1f;
                 grenade2.vSpeed = -2f;
-                Level.Add((Thing)grenade2);
-                Level.Remove((Thing)c);
+                Level.Add(grenade2);
+                Level.Remove(c);
             }
-            Level.Add((Thing)new MusketSmoke(c.x, c.y));
+            Level.Add(new MusketSmoke(c.x, c.y));
         }
     }
 }

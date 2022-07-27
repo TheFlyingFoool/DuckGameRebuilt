@@ -53,7 +53,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 99;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 150f;
             this._ammoType.accuracy = 0.8f;
             this._ammoType.penetration = -1f;
@@ -81,7 +81,7 @@ namespace DuckGame
             this._beamSound = SFX.Get("magnetBeam", 0.0f, looped: true);
             int num = 10;
             for (int index = 0; index < num; ++index)
-                this._lines.Add(new MagnaLine(0.0f, 0.0f, (Gun)this, this._ammoType.range, (float)index / (float)num));
+                this._lines.Add(new MagnaLine(0.0f, 0.0f, this, this._ammoType.range, index / (float)num));
             base.Initialize();
         }
 
@@ -96,7 +96,7 @@ namespace DuckGame
         {
             this._waveMult = Lerp.Float(this._waveMult, 0.0f, 0.1f);
             if (this.isServerForObject)
-                this._magnetActive = this.action && (double)this._power > 0.00999999977648258;
+                this._magnetActive = this.action && _power > 0.00999999977648258;
             if (this._magnetActive)
                 this._waveMult = 1f;
             if (this.isServerForObject && this._magnetActive && !this.prevMagActive)
@@ -107,11 +107,11 @@ namespace DuckGame
             else if ((double)this._beamSound.Volume < 0.00999999977648258 && this._beamSound.State == SoundState.Playing)
                 this._beamSound.Stop();
             this._beamSound.Volume = Maths.LerpTowards(this._beamSound.Volume, this._magnetActive ? 0.1f : 0.0f, 0.1f);
-            if ((double)this._power > 1.0)
+            if (_power > 1.0)
                 this._power = 1f;
-            if ((double)this._power < 0.0)
+            if (_power < 0.0)
                 this._power = 0.0f;
-            this._beamSound.Pitch = (double)this._power >= 0.5 ? 0.0f : this._power - 0.5f;
+            this._beamSound.Pitch = _power >= 0.5 ? 0.0f : this._power - 0.5f;
             if (this.isServerForObject && (this.duck == null && this.grounded || this.duck != null && this.duck.grounded || this.infinite.value))
                 this._power = 1f;
             Vec2 p1_1 = this.Offset(this.barrelOffset);
@@ -131,7 +131,7 @@ namespace DuckGame
                 }
                 if (this._grabbed == null && this._stuck == null)
                 {
-                    Holdable holdable1 = (Holdable)null;
+                    Holdable holdable1 = null;
                     float val1 = 0.0f;
                     Vec2 vec2_1 = this.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                     Vec2 normalized1 = vec2_1.normalized;
@@ -148,7 +148,7 @@ namespace DuckGame
                             {
                                 Holdable holdable3 = holdable2;
                                 if (holdable2.tape != null)
-                                    holdable3 = (Holdable)holdable2.tape;
+                                    holdable3 = holdable2.tape;
                                 vec2_1 = holdable3.position - p1_1;
                                 float length = vec2_1.length;
                                 if (holdable1 == null || (double)length < (double)val1)
@@ -162,19 +162,19 @@ namespace DuckGame
                     this._hasRay = false;
                     if (holdable1 != null && Level.CheckLine<Block>(p1_1, holdable1.position) == null)
                     {
-                        float num = (float)((1.0 - (double)Math.Min(val1, this._ammoType.range) / (double)this._ammoType.range) * 0.800000011920929);
+                        float num = (float)((1.0 - (double)Math.Min(val1, this._ammoType.range) / _ammoType.range) * 0.800000011920929);
                         Duck duck = holdable1.owner as Duck;
                         if (duck != null && !(duck.holdObject is MagnetGun) && (double)num > 0.300000011920929)
                         {
                             if (!(holdable1 is Equipment) || holdable1.equippedDuck == null)
                             {
                                 duck.ThrowItem(false);
-                                duck = (Duck)null;
+                                duck = null;
                             }
                             else if (holdable1 is TinfoilHat)
                             {
                                 duck.Unequip(holdable1 as Equipment);
-                                duck = (Duck)null;
+                                duck = null;
                             }
                         }
                         vec2_1 = p1_1 - holdable1.position;
@@ -189,15 +189,15 @@ namespace DuckGame
                             if (!(holdable1.owner.realObject is Duck) && Network.isActive)
                                 return;
                             holdable1.owner.realObject.hSpeed += normalized2.x * num;
-                            holdable1.owner.realObject.vSpeed += (float)((double)normalized2.y * (double)num * 4.0);
+                            holdable1.owner.realObject.vSpeed += (float)(normalized2.y * (double)num * 4.0);
                             if ((holdable1.owner.realObject as PhysicsObject).grounded && (double)holdable1.owner.realObject.vSpeed > 0.0)
                                 holdable1.owner.realObject.vSpeed = 0.0f;
                         }
                         else
                         {
-                            this.Fondle((Thing)holdable1);
+                            this.Fondle(holdable1);
                             holdable1.hSpeed += normalized2.x * num;
-                            holdable1.vSpeed += (float)((double)normalized2.y * (double)num * 4.0);
+                            holdable1.vSpeed += (float)(normalized2.y * (double)num * 4.0);
                             if (holdable1.grounded && (double)holdable1.vSpeed > 0.0)
                                 holdable1.vSpeed = 0.0f;
                         }
@@ -214,16 +214,16 @@ namespace DuckGame
                                 holdable1.duck.ThrowItem();
                                 if (this._grabbed != null && holdable1.owner != null && !(this._grabbed is Duck))
                                 {
-                                    this._grabbed.owner = (Thing)this;
+                                    this._grabbed.owner = this;
                                     this._grabbed.offDir = this.offDir;
                                     Thing.SuperFondle(this._grabbed, DuckNetwork.localConnection);
                                 }
                             }
                             else
                             {
-                                this._grabbed = (Thing)holdable1;
+                                this._grabbed = holdable1;
                                 RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));
-                                holdable1.owner = (Thing)this;
+                                holdable1.owner = this;
                                 holdable1.owner.offDir = this.offDir;
                                 if (holdable1 is Grenade)
                                     (holdable1 as Grenade).OnPressAction();
@@ -243,7 +243,7 @@ namespace DuckGame
                         if (block != null && block.physicsMaterial == PhysicsMaterial.Metal)
                         {
                             vec2_1 = block.position - position;
-                            float num = (float)((1.0 - (double)Math.Min(vec2_1.length, this._ammoType.range) / (double)this._ammoType.range) * 0.800000011920929);
+                            float num = (float)((1.0 - (double)Math.Min(vec2_1.length, this._ammoType.range) / _ammoType.range) * 0.800000011920929);
                             Vec2 vec2_2 = hitPos - this.duck.position;
                             double length = (double)vec2_2.length;
                             vec2_2.Normalize();
@@ -268,12 +268,12 @@ namespace DuckGame
                     if (this._grabbed != null)
                     {
                         this.ReleaseGrab(this._grabbed);
-                        this._grabbed = (Thing)null;
+                        this._grabbed = null;
                         this._collisionSize = new Vec2(14f, this._collisionSize.y);
                     }
                     if (this._stuck != null)
                     {
-                        this._stuck = (Block)null;
+                        this._stuck = null;
                         if (this.owner != null && !this._raised)
                             this.duck._groundValid = 6;
                     }
@@ -283,8 +283,8 @@ namespace DuckGame
             }
             if (this.owner is MagnetGun && (this.owner as MagnetGun)._grabbed != this)
             {
-                this.Fondle((Thing)this);
-                this.ReleaseGrab((Thing)this);
+                this.Fondle(this);
+                this.ReleaseGrab(this);
             }
             if (Network.isActive)
             {
@@ -292,14 +292,14 @@ namespace DuckGame
                 {
                     if (this._grabbed is TrappedDuck && this._grabbed.connection != this.connection)
                     {
-                        this._grabbed = (Thing)(this._grabbed as TrappedDuck)._duckOwner;
+                        this._grabbed = (_grabbed as TrappedDuck)._duckOwner;
                         if (this._grabbed != null)
                         {
                             Duck grabbed = this._grabbed as Duck;
                             grabbed.immobilized = true;
                             grabbed.gripped = true;
                             grabbed.ThrowItem();
-                            grabbed._trapped = (TrappedDuck)null;
+                            grabbed._trapped = null;
                         }
                     }
                     if (this._grabbed is Duck grabbed1)
@@ -307,13 +307,13 @@ namespace DuckGame
                         grabbed1.isGrabbedByMagnet = true;
                         if (this.isServerForObject)
                         {
-                            this.Fondle((Thing)grabbed1);
-                            this.Fondle((Thing)grabbed1.holdObject);
+                            this.Fondle(grabbed1);
+                            this.Fondle(grabbed1.holdObject);
                             foreach (Thing t in grabbed1._equipment)
                                 this.Fondle(t);
-                            this.Fondle((Thing)grabbed1._ragdollInstance);
-                            this.Fondle((Thing)grabbed1._trappedInstance);
-                            this.Fondle((Thing)grabbed1._cookedInstance);
+                            this.Fondle(grabbed1._ragdollInstance);
+                            this.Fondle(grabbed1._trappedInstance);
+                            this.Fondle(grabbed1._cookedInstance);
                         }
                     }
                 }
@@ -343,10 +343,10 @@ namespace DuckGame
             if (this.localAttachIndex < this.attachIndex)
             {
                 for (int index = 0; index < 2; ++index)
-                    Level.Add((Thing)SmallSmoke.New(p1_1.x + Rando.Float(-1f, 1f), p1_1.y + Rando.Float(-1f, 1f)));
+                    Level.Add(SmallSmoke.New(p1_1.x + Rando.Float(-1f, 1f), p1_1.y + Rando.Float(-1f, 1f)));
                 SFX.Play("grappleHook");
                 for (int index = 0; index < 6; ++index)
-                    Level.Add((Thing)Spark.New(p1_1.x - this.barrelVector.x * 2f + Rando.Float(-1f, 1f), p1_1.y - this.barrelVector.y * 2f + Rando.Float(-1f, 1f), this.barrelVector + new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                    Level.Add(Spark.New(p1_1.x - this.barrelVector.x * 2f + Rando.Float(-1f, 1f), p1_1.y - this.barrelVector.y * 2f + Rando.Float(-1f, 1f), this.barrelVector + new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 this.localAttachIndex = this.attachIndex;
             }
             if (this.isServerForObject)
@@ -357,7 +357,7 @@ namespace DuckGame
                     this._keepRaised = false;
                 if (this._stuck != null && this.duck != null)
                 {
-                    if ((double)this._stickPos.y < (double)this.owner.position.y - 8.0)
+                    if (_stickPos.y < owner.position.y - 8.0)
                     {
                         this.owner.position = this._stickPos + this._stickNormal * 12f;
                         this._raised = true;
@@ -378,7 +378,7 @@ namespace DuckGame
                 {
                     if (this.prevOwner is Duck prevOwner)
                         prevOwner.moveLock = false;
-                    this._prevOwner = (Thing)null;
+                    this._prevOwner = null;
                 }
             }
             bool flag2 = this._grabbed is MagnetGun && (this._grabbed as MagnetGun)._grabbed == this;
@@ -405,9 +405,9 @@ namespace DuckGame
             pThing.angle = 0.0f;
             if (pThing is Holdable t)
             {
-                t.owner = (Thing)null;
+                t.owner = null;
                 t.ReturnToWorld();
-                this.ReturnItemToWorld((Thing)t);
+                this.ReturnItemToWorld(t);
             }
             if (pThing is Duck duck)
             {
@@ -420,13 +420,13 @@ namespace DuckGame
             pThing.vSpeed = this.barrelVector.y * 5f;
             if (!(pThing is EnergyScimitar))
                 return;
-            (pThing as EnergyScimitar).StartFlying(this.offDir < (sbyte)0 ? (float)(-(double)this.angleDegrees - 180.0) : -this.angleDegrees, true);
+            (pThing as EnergyScimitar).StartFlying(this.offDir < 0 ? (float)(-(double)this.angleDegrees - 180.0) : -this.angleDegrees, true);
         }
 
         public override void Draw()
         {
             base.Draw();
-            this.Draw(this._magnet, new Vec2(5f, (float)((double)(float)this._wave * (double)this._waveMult - 2.0)));
+            this.Draw(this._magnet, new Vec2(5f, (float)((double)(float)this._wave * _waveMult - 2.0)));
             foreach (Thing line in this._lines)
                 line.Draw();
         }

@@ -57,15 +57,15 @@ namespace DuckGame
             else
             {
                 this._swapFade += 0.1f;
-                if ((double)this._swapFade > 1.0)
+                if (_swapFade > 1.0)
                     this._swapFade = 1f;
             }
-            if ((double)this._swapFade > 0.0 || !this._swap)
+            if (_swapFade > 0.0 || !this._swap)
                 return;
             this._swap = false;
             this._swapFade = 0.0f;
             this._profiles.Clear();
-            this._profiles.AddRange((IEnumerable<Profile>)collection);
+            this._profiles.AddRange(collection);
         }
 
         public override void Draw()
@@ -90,11 +90,11 @@ namespace DuckGame
                 profile.persona.sprite.scale = new Vec2(1f, 1f);
                 profile.persona.armSprite.scale = new Vec2(1f, 1f);
                 float num3 = 12f;
-                float num4 = (float)((double)this.x - (double)(count - 1) * (double)num3 / 2.0 + (double)num2 * (double)num3);
-                profile.persona.sprite.depth = (Depth)(float)((double)num1 + 0.00999999977648258 + (double)num2 * (1.0 / 1000.0));
-                profile.persona.armSprite.depth = (Depth)(float)((double)num1 + 0.0199999995529652 + (double)num2 * (1.0 / 1000.0));
-                Graphics.Draw((Sprite)profile.persona.sprite, num4 + 1f, this.y - 17f);
-                Graphics.Draw((Sprite)profile.persona.armSprite, (float)((double)num4 + 1.0 - 3.0), (float)((double)this.y - 17.0 + 6.0));
+                float num4 = (float)((double)this.x - (count - 1) * (double)num3 / 2.0 + num2 * (double)num3);
+                profile.persona.sprite.depth = (Depth)(float)((double)num1 + 0.00999999977648258 + num2 * (1.0 / 1000.0));
+                profile.persona.armSprite.depth = (Depth)(float)((double)num1 + 0.0199999995529652 + num2 * (1.0 / 1000.0));
+                Graphics.Draw(profile.persona.sprite, num4 + 1f, this.y - 17f);
+                Graphics.Draw(profile.persona.armSprite, (float)((double)num4 + 1.0 - 3.0), (float)((double)this.y - 17.0 + 6.0));
                 Team team = profile.team;
                 if (team != null)
                 {
@@ -105,7 +105,7 @@ namespace DuckGame
                     hat.color = profile.persona.sprite.color;
                     hat.center = new Vec2(16f, 16f) + team.hatOffset;
                     hat.flipH = false;
-                    Graphics.Draw((Sprite)hat, (float)((double)num4 + (double)hatPoint.x + 1.0), this.y - 17f + hatPoint.y);
+                    Graphics.Draw(hat, (float)((double)num4 + hatPoint.x + 1.0), this.y - 17f + hatPoint.y);
                     hat.color = Color.White;
                 }
                 this._profile.persona.sprite.color = Color.White;

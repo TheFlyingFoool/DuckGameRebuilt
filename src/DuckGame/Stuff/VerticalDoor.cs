@@ -35,7 +35,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sensorSprite = this._sprite = new SpriteMap("verticalDoor", 16, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 24f);
             this.collisionSize = new Vec2(6f, 32f);
             this.collisionOffset = new Vec2(-3f, -24f);
@@ -74,7 +74,7 @@ namespace DuckGame
                         this.showedWarning = true;
                     }
                 }
-                else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), (Predicate<PhysicsObject>)(d => !(d is TeamHat))) == null)
+                else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) == null)
                     this._desiredOpen = 0.0f;
             }
             else
@@ -83,23 +83,23 @@ namespace DuckGame
                     this._noSensorSprite = new SpriteMap("verticalDoorNoSensor", 16, 32);
                 this._sprite = this._noSensorSprite;
                 this._desiredOpen = this.slideLockOpened ? 1f : 0.0f;
-                if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), (Predicate<PhysicsObject>)(d => !(d is TeamHat))) != null && this._opened)
+                if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) != null && this._opened)
                     this._desiredOpen = 1f;
             }
-            if ((double)this._desiredOpen > 0.5 && !this._opened)
+            if (_desiredOpen > 0.5 && !this._opened)
             {
                 this._opened = true;
                 SFX.Play("slideDoorOpen", 0.6f);
             }
-            if ((double)this._desiredOpen < 0.5 && this._opened)
+            if (_desiredOpen < 0.5 && this._opened)
             {
                 this._opened = false;
                 SFX.Play("slideDoorClose", 0.6f);
             }
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._open = Maths.LerpTowards(this._open, this._desiredOpen, 0.15f);
-            this._sprite.frame = (int)((double)this._open * 32.0);
-            this._collisionSize.y = (float)((1.0 - (double)this._open) * 32.0);
+            this._sprite.frame = (int)(_open * 32.0);
+            this._collisionSize.y = (float)((1.0 - _open) * 32.0);
         }
 
         public override void Draw()

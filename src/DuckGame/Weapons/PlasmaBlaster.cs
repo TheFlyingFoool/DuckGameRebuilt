@@ -18,7 +18,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 99;
-            this._ammoType = (AmmoType)new ATPlasmaBlaster();
+            this._ammoType = new ATPlasmaBlaster();
             this._type = "gun";
             this.graphic = new Sprite("plasmaBlaster");
             this.center = new Vec2(8f, 8f);
@@ -43,7 +43,7 @@ namespace DuckGame
         public override void Update()
         {
             this.ammo = 99;
-            if ((double)this._fireWait > 6.0)
+            if (_fireWait > 6.0)
                 this._fireWait = 6f;
             this._fireWait = Maths.LerpTowards(this._fireWait, 0.3f, 0.01f);
             base.Update();
@@ -52,7 +52,7 @@ namespace DuckGame
         public override void Draw()
         {
             this._barrelHeat = 0.0f;
-            if ((double)this._flareAlpha > 0.0 && !this._flared)
+            if (_flareAlpha > 0.0 && !this._flared)
             {
                 this._flared = true;
                 this._bigFlare.SetAnimation("idle");
@@ -61,7 +61,7 @@ namespace DuckGame
             }
             if (this._flared)
             {
-                this.Draw((Sprite)this._bigFlare, this.barrelOffset + new Vec2(-8f, -1f));
+                this.Draw(_bigFlare, this.barrelOffset + new Vec2(-8f, -1f));
                 if (this._bigFlare.finished)
                 {
                     this._flared = false;

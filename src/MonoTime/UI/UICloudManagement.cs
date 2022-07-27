@@ -33,19 +33,19 @@ namespace DuckGame
         public UICloudManagement(UIMenu openOnClose)
           : base("MANAGE CLOUD", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, 180f)
         {
-            this.Add((UIComponent)new UIBox(0.0f, 0.0f, 100f, 150f, isVisible: false), true);
+            this.Add(new UIBox(0.0f, 0.0f, 100f, 150f, isVisible: false), true);
             this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
             this._downArrow = new Sprite("cloudDown");
             this._downArrow.CenterOrigin();
             this._deleteMenu = new UIMenu("ARE YOU SURE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@WASD@ADJUST @CANCEL@EXIT");
-            this._deleteMenu.Add((UIComponent)new UIText("The selected files will be", Colors.DGBlue), true);
-            this._deleteMenu.Add((UIComponent)new UIText("|DGRED|permenantly deleted|DGBLUE| from", Colors.DGBlue), true);
-            this._deleteMenu.Add((UIComponent)new UIText("everywhere, |DGRED|forever!", Colors.DGBlue), true);
-            this._deleteMenu.Add((UIComponent)new UIText(" ", Colors.DGBlue), true);
-            this._deleteMenu.Add((UIComponent)new UIMenuItem("|DGRED|DELETE", (UIMenuAction)new UIMenuActionCallFunctionOpenMenu((UIComponent)this._deleteMenu, (UIComponent)this, new UIMenuActionCallFunctionOpenMenu.Function(this.DeleteFiles)), backButton: true), true);
-            this._deleteMenu.Add((UIComponent)new UIMenuItem("|DGGREEN|CANCEL", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._deleteMenu, (UIComponent)this), backButton: true), true);
+            this._deleteMenu.Add(new UIText("The selected files will be", Colors.DGBlue), true);
+            this._deleteMenu.Add(new UIText("|DGRED|permenantly deleted|DGBLUE| from", Colors.DGBlue), true);
+            this._deleteMenu.Add(new UIText("everywhere, |DGRED|forever!", Colors.DGBlue), true);
+            this._deleteMenu.Add(new UIText(" ", Colors.DGBlue), true);
+            this._deleteMenu.Add(new UIMenuItem("|DGRED|DELETE", new UIMenuActionCallFunctionOpenMenu(_deleteMenu, this, new UIMenuActionCallFunctionOpenMenu.Function(this.DeleteFiles)), backButton: true), true);
+            this._deleteMenu.Add(new UIMenuItem("|DGGREEN|CANCEL", new UIMenuActionOpenMenu(_deleteMenu, this), backButton: true), true);
             this._deleteMenu._defaultSelection = 1;
-            this._deleteMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._deleteMenu, (UIComponent)this));
+            this._deleteMenu.SetBackFunction(new UIMenuActionOpenMenu(_deleteMenu, this));
             this._deleteMenu.Close();
             this._openOnClose = openOnClose;
         }
@@ -134,7 +134,7 @@ namespace DuckGame
         {
             if (pRoot.files == null)
                 return;
-            pRoot.files = pRoot.files.OrderBy<UICloudManagement.File, bool>((Func<UICloudManagement.File, bool>)(x => x.name != "..")).ThenBy<UICloudManagement.File, bool>((Func<UICloudManagement.File, bool>)(x => x.files == null)).ThenBy<UICloudManagement.File, string>((Func<UICloudManagement.File, string>)(x => x.name)).ToList<UICloudManagement.File>();
+            pRoot.files = pRoot.files.OrderBy<UICloudManagement.File, bool>(x => x.name != "..").ThenBy<UICloudManagement.File, bool>(x => x.files == null).ThenBy<UICloudManagement.File, string>(x => x.name).ToList<UICloudManagement.File>();
             foreach (UICloudManagement.File file in pRoot.files)
                 this.SortFiles(file);
         }
@@ -148,7 +148,7 @@ namespace DuckGame
             {
                 files = new List<UICloudManagement.File>()
             };
-            this.profileRoot = (UICloudManagement.File)null;
+            this.profileRoot = null;
             int count = Steam.FileGetCount();
             for (int file = 0; file < count; ++file)
             {
@@ -210,16 +210,16 @@ namespace DuckGame
                 if (Input.Pressed("MENU2") && this._flagged.Count > 0)
                 {
                     this._deleteMenu.dirty = true;
-                    new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._deleteMenu).Activate();
+                    new UIMenuActionOpenMenu(this, _deleteMenu).Activate();
                 }
                 if (Input.Pressed("CANCEL"))
                 {
                     if (this.currentFolder.parent != null)
                         this.SelectFolder(this.currentFolder.parent);
                     else if (this._openOnClose != null)
-                        new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._openOnClose).Activate();
+                        new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     else
-                        new UIMenuActionCloseMenu((UIComponent)this).Activate();
+                        new UIMenuActionCloseMenu(this).Activate();
                 }
             }
             this._opening = false;

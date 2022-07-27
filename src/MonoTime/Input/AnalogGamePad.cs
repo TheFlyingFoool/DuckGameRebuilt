@@ -18,7 +18,7 @@ namespace DuckGame
         protected PadState _state;
         protected PadState _statePrev;
         protected Queue<PadState> _delayBuffer = new Queue<PadState>();
-        private const int numStates = 256;
+        //private const int numStates = 256;
         private int _curState;
         private int _numState;
         private int _realState;
@@ -65,9 +65,9 @@ namespace DuckGame
             else
             {
                 this._rumble = new Vec2(leftIntensity, rightIntensity);
-                if ((double)this._rumble.x > (double)this._highestRumble.x)
+                if (_rumble.x > (double)this._highestRumble.x)
                     this._highestRumble.x = this._rumble.x;
-                if ((double)this._rumble.y <= (double)this._highestRumble.y)
+                if (_rumble.y <= (double)this._highestRumble.y)
                     return;
                 this._highestRumble.y = this._rumble.y;
             }
@@ -90,7 +90,7 @@ namespace DuckGame
                 if (this._rumbleWait <= 0)
                 {
                     this._rumbleWait = 4;
-                    if (this._rumble != this._prevRumble || (double)this._highestRumble.x > (double)this._rumble.x || (double)this._highestRumble.y > (double)this._rumble.y)
+                    if (this._rumble != this._prevRumble || _highestRumble.x > (double)this._rumble.x || _highestRumble.y > (double)this._rumble.y)
                         this.RumbleNow(this._highestRumble.x, this._highestRumble.y);
                 }
             }
@@ -141,7 +141,7 @@ namespace DuckGame
             PadButton butt = (PadButton)mapping;
             if (butt == PadButton.Start && this._startPressed)
                 return true;
-            return any ? (this._state.buttons & ~this._statePrev.buttons) != (PadButton)0 : this._state.IsButtonDown(butt) && !this._statePrev.IsButtonDown(butt);
+            return any ? (this._state.buttons & ~this._statePrev.buttons) != 0 : this._state.IsButtonDown(butt) && !this._statePrev.IsButtonDown(butt);
         }
 
         public override bool MapReleased(int mapping)

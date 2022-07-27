@@ -21,13 +21,13 @@ namespace DuckGame
             set => this._value = value;
         }
 
-        public float normalized => (float)(((double)this._value + 1.0) / 2.0);
+        public float normalized => (float)((_value + 1.0) / 2.0);
 
         public SinWave(float inc, float start = 0.0f)
         {
             this._increment = inc;
             this._wave = start;
-            AutoUpdatables.Add((IAutoUpdate)this);
+            AutoUpdatables.Add(this);
         }
 
         public SinWave()
@@ -39,7 +39,7 @@ namespace DuckGame
         public void Update()
         {
             this._wave += this._increment;
-            this._value = (float)Math.Sin((double)this._wave);
+            this._value = (float)Math.Sin(_wave);
         }
 
         public static implicit operator float(SinWave val) => val.value;

@@ -65,25 +65,27 @@ namespace DuckGame
             this.itemSize.x = Graphics.GetFancyStringWidth(this._text) + 16f;
             foreach (EditorGroup subGroup in group.SubGroups)
             {
-                EditorGroupMenu editorGroupMenu = new EditorGroupMenu((IContextListener)this);
-                editorGroupMenu.fancy = this.fancy;
+                EditorGroupMenu editorGroupMenu = new EditorGroupMenu(this)
+                {
+                    fancy = this.fancy
+                };
                 editorGroupMenu.InitializeGroups(subGroup, radioBinding, setPinnable: setPinnable);
                 if (!editorGroupMenu.greyOut)
                     this.greyOut = false;
                 if (!editorGroupMenu.willOnlineGrayout)
                     this.willOnlineGrayout = false;
                 editorGroupMenu.isPinnable = setPinnable;
-                this.AddItem((ContextMenu)editorGroupMenu);
+                this.AddItem(editorGroupMenu);
             }
             if (scriptingGroup != null)
             {
-                EditorGroupMenu editorGroupMenu = new EditorGroupMenu((IContextListener)this);
+                EditorGroupMenu editorGroupMenu = new EditorGroupMenu(this);
                 editorGroupMenu.InitializeGroups(scriptingGroup, radioBinding);
                 if (!editorGroupMenu.greyOut)
                     this.greyOut = false;
                 if (!editorGroupMenu.willOnlineGrayout)
                     this.willOnlineGrayout = false;
-                this.AddItem((ContextMenu)editorGroupMenu);
+                this.AddItem(editorGroupMenu);
             }
             foreach (Thing allThing in group.AllThings)
             {
@@ -100,9 +102,11 @@ namespace DuckGame
                     case BackgroundTile _:
                     case ForegroundTile _:
                     case SubBackgroundTile _:
-                        ContextBackgroundTile contextBackgroundTile = new ContextBackgroundTile(allThing, (IContextListener)this);
-                        contextBackgroundTile.contextThing = allThing;
-                        this.AddItem((ContextMenu)contextBackgroundTile);
+                        ContextBackgroundTile contextBackgroundTile = new ContextBackgroundTile(allThing, this)
+                        {
+                            contextThing = allThing
+                        };
+                        this.AddItem(contextBackgroundTile);
                         continue;
                     default:
                         if (radioBinding != null)
@@ -111,34 +115,42 @@ namespace DuckGame
                             {
                                 if (radioBinding.value is List<TypeProbPair>)
                                 {
-                                    ContextSlider contextSlider = new ContextSlider(allThing.editorName, (IContextListener)this, radioBinding, 0.05f, myType: allThing.GetType());
-                                    contextSlider.greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false);
-                                    contextSlider.contextThing = allThing;
+                                    ContextSlider contextSlider = new ContextSlider(allThing.editorName, this, radioBinding, 0.05f, myType: allThing.GetType())
+                                    {
+                                        greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false),
+                                        contextThing = allThing
+                                    };
                                     if (bag.GetOrDefault("isOnlineCapable", true))
                                         this.willOnlineGrayout = false;
-                                    this.AddItem((ContextMenu)contextSlider);
+                                    this.AddItem(contextSlider);
                                     continue;
                                 }
-                                ContextCheckBox contextCheckBox = new ContextCheckBox(allThing.editorName, (IContextListener)this, radioBinding, allThing.GetType());
-                                contextCheckBox.greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false);
-                                contextCheckBox.contextThing = allThing;
+                                ContextCheckBox contextCheckBox = new ContextCheckBox(allThing.editorName, this, radioBinding, allThing.GetType())
+                                {
+                                    greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false),
+                                    contextThing = allThing
+                                };
                                 if (bag.GetOrDefault("isOnlineCapable", true))
                                     this.willOnlineGrayout = false;
-                                this.AddItem((ContextMenu)contextCheckBox);
+                                this.AddItem(contextCheckBox);
                                 continue;
                             }
-                            ContextRadio contextRadio = new ContextRadio(allThing.editorName, false, (object)allThing.GetType(), (IContextListener)this, radioBinding);
-                            contextRadio.greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false);
-                            contextRadio.contextThing = allThing;
+                            ContextRadio contextRadio = new ContextRadio(allThing.editorName, false, allThing.GetType(), this, radioBinding)
+                            {
+                                greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false),
+                                contextThing = allThing
+                            };
                             if (bag.GetOrDefault("isOnlineCapable", true))
                                 this.willOnlineGrayout = false;
-                            this.AddItem((ContextMenu)contextRadio);
+                            this.AddItem(contextRadio);
                             continue;
                         }
-                        ContextObject contextObject = new ContextObject(allThing, (IContextListener)this);
-                        contextObject.contextThing = allThing;
-                        contextObject.isPinnable = setPinnable;
-                        this.AddItem((ContextMenu)contextObject);
+                        ContextObject contextObject = new ContextObject(allThing, this)
+                        {
+                            contextThing = allThing,
+                            isPinnable = setPinnable
+                        };
+                        this.AddItem(contextObject);
                         continue;
                 }
             }
@@ -150,44 +162,48 @@ namespace DuckGame
 
         public void InitializeTypelist(System.Type pType, FieldBinding pBinding)
         {
-            this.AddItem((ContextMenu)new ContextRadio("None", false, (object)null, (IContextListener)this, pBinding));
+            this.AddItem(new ContextRadio("None", false, null, this, pBinding));
             this.InitializeGroups(new EditorGroup(pType), pBinding);
         }
 
         public void InitializeTeams(FieldBinding radioBinding)
         {
-            this.AddItem((ContextMenu)new ContextRadio("None", false, (object)0, (IContextListener)this, radioBinding));
-            EditorGroupMenu editorGroupMenu = (EditorGroupMenu)null;
+            this.AddItem(new ContextRadio("None", false, 0, this, radioBinding));
+            EditorGroupMenu editorGroupMenu = null;
             int num1 = 0;
             if (Teams.all.Count > 10)
             {
-                editorGroupMenu = new EditorGroupMenu((IContextListener)this);
-                editorGroupMenu.text = "Hats " + num1.ToString();
+                editorGroupMenu = new EditorGroupMenu(this)
+                {
+                    text = "Hats " + num1.ToString()
+                };
             }
             int num2 = 0;
             for (int index = 0; index < Teams.all.Count; ++index)
             {
                 if (index >= 4)
                 {
-                    ContextRadio contextRadio = new ContextRadio(Teams.all[index].name, false, (object)index, (IContextListener)this, radioBinding);
+                    ContextRadio contextRadio = new ContextRadio(Teams.all[index].name, false, index, this, radioBinding);
                     if (editorGroupMenu != null)
-                        editorGroupMenu.AddItem((ContextMenu)contextRadio);
+                        editorGroupMenu.AddItem(contextRadio);
                     else
-                        this.AddItem((ContextMenu)contextRadio);
+                        this.AddItem(contextRadio);
                     ++num2;
                     if (num2 == 10)
                     {
                         ++num1;
                         num2 = 0;
-                        this.AddItem((ContextMenu)editorGroupMenu);
-                        editorGroupMenu = new EditorGroupMenu((IContextListener)this);
-                        editorGroupMenu.text = "Hats " + num1.ToString();
+                        this.AddItem(editorGroupMenu);
+                        editorGroupMenu = new EditorGroupMenu(this)
+                        {
+                            text = "Hats " + num1.ToString()
+                        };
                     }
                 }
             }
             if (editorGroupMenu == null || num2 <= 0)
                 return;
-            this.AddItem((ContextMenu)editorGroupMenu);
+            this.AddItem(editorGroupMenu);
         }
     }
 }

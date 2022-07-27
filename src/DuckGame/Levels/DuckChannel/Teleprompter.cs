@@ -50,7 +50,7 @@ namespace DuckGame
 
         public void SkipToClose()
         {
-            this._lines.RemoveAll((Predicate<DuckStory>)(x => x.section < NewsSection.BeforeClosing));
+            this._lines.RemoveAll(x => x.section < NewsSection.BeforeClosing);
             this._lines.Insert(0, new DuckStory()
             {
                 section = NewsSection.DemoClosing,
@@ -143,12 +143,12 @@ namespace DuckGame
                 {
                     this._waitAfterLine -= 0.03f;
                     this._talkMove += 0.75f;
-                    if ((double)this._talkMove > 1.0)
+                    if (_talkMove > 1.0)
                     {
                         this.SetCasterFrame(0);
                         this._talkMove = 0.0f;
                     }
-                    if ((double)this._waitAfterLine <= 0.0)
+                    if (_waitAfterLine <= 0.0)
                     {
                         this._lineProgress.Clear();
                         if (!this._lines[0].text.StartsWith("CUE%"))
@@ -164,10 +164,10 @@ namespace DuckGame
                 if (this._currentLine != "")
                 {
                     this._waitLetter -= 0.5f;
-                    if ((double)this._waitLetter >= 0.0)
+                    if (_waitLetter >= 0.0)
                         return;
                     this._talkMove += 0.75f;
-                    if ((double)this._talkMove > 1.0)
+                    if (_talkMove > 1.0)
                     {
                         if (this._currentLine[0] != ' ' && this.GetCasterFrame() == 0)
                             this.SetCasterFrame(Rando.Int(1) + 1);
@@ -301,7 +301,7 @@ namespace DuckGame
                 else
                 {
                     this._talkMove += 0.75f;
-                    if ((double)this._talkMove <= 1.0)
+                    if (_talkMove <= 1.0)
                         return;
                     this.SetCasterFrame(0);
                     this._talkMove = 0.0f;
@@ -315,13 +315,13 @@ namespace DuckGame
             for (int index1 = this._lineProgress.Count - 1; index1 >= 0; --index1)
             {
                 float width = this._font.GetWidth(this._lineProgress[index1].text);
-                float ypos = (float)(140 - (this._lineProgress.Count - 1) * 9 + num * 9);
+                float ypos = 140 - (this._lineProgress.Count - 1) * 9 + num * 9;
                 Graphics.DrawRect(new Vec2((float)(132.0 - (double)width / 2.0 - 1.0), ypos - 1f), new Vec2((float)(132.0 + (double)width / 2.0), ypos + 9f), Color.Black, (Depth)0.84f);
                 float xpos = (float)(132.0 - (double)width / 2.0);
                 for (int index2 = this._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     this._font.Draw(this._lineProgress[index1].segments[index2].text, xpos, ypos, this._lineProgress[index1].segments[index2].color, (Depth)0.85f);
-                    xpos += (float)(this._lineProgress[index1].segments[index2].text.Length * 8);
+                    xpos += this._lineProgress[index1].segments[index2].text.Length * 8;
                 }
                 ++num;
             }

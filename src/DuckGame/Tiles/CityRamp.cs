@@ -14,7 +14,7 @@ namespace DuckGame
           : base(xpos, ypos, dir)
         {
             this._canFlipVert = true;
-            this.graphic = (Sprite)new SpriteMap("cityWedge", 17, 17);
+            this.graphic = new SpriteMap("cityWedge", 17, 17);
             this.hugWalls = WallHug.Left | WallHug.Right | WallHug.Floor;
             this.center = new Vec2(8f, 14f);
             this.collisionSize = new Vec2(14f, 8f);

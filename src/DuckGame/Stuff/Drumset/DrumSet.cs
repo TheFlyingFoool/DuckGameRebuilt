@@ -18,15 +18,15 @@ namespace DuckGame
         private CrashCymbal _crash;
         private MediumTom _medTom;
         private HighTom _highTom;
-        public StateBinding _netBassDrumBinding = (StateBinding)new NetSoundBinding(nameof(_netBassDrum));
-        public StateBinding _netSnareBinding = (StateBinding)new NetSoundBinding(nameof(_netSnare));
-        public StateBinding _netHatBinding = (StateBinding)new NetSoundBinding(nameof(_netHat));
-        public StateBinding _netHatAlternateBinding = (StateBinding)new NetSoundBinding(nameof(_netHatAlternate));
-        public StateBinding _netLowTomBinding = (StateBinding)new NetSoundBinding(nameof(_netLowTom));
-        public StateBinding _netMediumTomBinding = (StateBinding)new NetSoundBinding(nameof(_netMediumTom));
-        public StateBinding _netHighTomBinding = (StateBinding)new NetSoundBinding(nameof(_netHighTom));
-        public StateBinding _netCrashBinding = (StateBinding)new NetSoundBinding(nameof(_netCrash));
-        public StateBinding _netThrowStickBinding = (StateBinding)new NetSoundBinding(nameof(_netThrowStick));
+        public StateBinding _netBassDrumBinding = new NetSoundBinding(nameof(_netBassDrum));
+        public StateBinding _netSnareBinding = new NetSoundBinding(nameof(_netSnare));
+        public StateBinding _netHatBinding = new NetSoundBinding(nameof(_netHat));
+        public StateBinding _netHatAlternateBinding = new NetSoundBinding(nameof(_netHatAlternate));
+        public StateBinding _netLowTomBinding = new NetSoundBinding(nameof(_netLowTom));
+        public StateBinding _netMediumTomBinding = new NetSoundBinding(nameof(_netMediumTom));
+        public StateBinding _netHighTomBinding = new NetSoundBinding(nameof(_netHighTom));
+        public StateBinding _netCrashBinding = new NetSoundBinding(nameof(_netCrash));
+        public StateBinding _netThrowStickBinding = new NetSoundBinding(nameof(_netThrowStick));
         public NetSoundEffect _netBassDrum = new NetSoundEffect();
         public NetSoundEffect _netSnare = new NetSoundEffect();
         public NetSoundEffect _netHat = new NetSoundEffect();
@@ -69,27 +69,27 @@ namespace DuckGame
         public void ThrowStick()
         {
             if ((double)Rando.Float(1f) >= 0.5)
-                Level.Add((Thing)new DrumStick(this.x - 5f, this.y - 8f));
+                Level.Add(new DrumStick(this.x - 5f, this.y - 8f));
             else
-                Level.Add((Thing)new DrumStick(this.x + 5f, this.y - 8f));
+                Level.Add(new DrumStick(this.x + 5f, this.y - 8f));
         }
 
         public override void Initialize()
         {
             this._bass = new BassDrum(this.x, this.y);
-            Level.Add((Thing)this._bass);
+            Level.Add(_bass);
             this._snare = new Snare(this.x, this.y);
-            Level.Add((Thing)this._snare);
+            Level.Add(_snare);
             this._hat = new HiHat(this.x, this.y);
-            Level.Add((Thing)this._hat);
+            Level.Add(_hat);
             this._lowTom = new LowTom(this.x, this.y);
-            Level.Add((Thing)this._lowTom);
+            Level.Add(_lowTom);
             this._crash = new CrashCymbal(this.x, this.y);
-            Level.Add((Thing)this._crash);
+            Level.Add(_crash);
             this._medTom = new MediumTom(this.x, this.y);
-            Level.Add((Thing)this._medTom);
+            Level.Add(_medTom);
             this._highTom = new HighTom(this.x, this.y);
-            Level.Add((Thing)this._highTom);
+            Level.Add(_highTom);
             this._bass.position = this.position;
             this._bass.depth = this.depth + 1;
             this._snare.position = this.position + new Vec2(10f, -7f);
@@ -104,26 +104,26 @@ namespace DuckGame
             this._medTom.position = this.position + new Vec2(-8f, -12f);
             this._highTom.depth = this.depth + 3;
             this._highTom.position = this.position + new Vec2(7f, -12f);
-            this._netBassDrum.function = new NetSoundEffect.Function(((Drum)this._bass).Hit);
-            this._netSnare.function = new NetSoundEffect.Function(((Drum)this._snare).Hit);
-            this._netHat.function = new NetSoundEffect.Function(((Drum)this._hat).Hit);
-            this._netHatAlternate.function = new NetSoundEffect.Function(((Drum)this._hat).AlternateHit);
-            this._netLowTom.function = new NetSoundEffect.Function(((Drum)this._lowTom).Hit);
-            this._netMediumTom.function = new NetSoundEffect.Function(((Drum)this._medTom).Hit);
-            this._netHighTom.function = new NetSoundEffect.Function(((Drum)this._highTom).Hit);
-            this._netCrash.function = new NetSoundEffect.Function(((Drum)this._crash).Hit);
+            this._netBassDrum.function = new NetSoundEffect.Function(_bass.Hit);
+            this._netSnare.function = new NetSoundEffect.Function(_snare.Hit);
+            this._netHat.function = new NetSoundEffect.Function(_hat.Hit);
+            this._netHatAlternate.function = new NetSoundEffect.Function(_hat.AlternateHit);
+            this._netLowTom.function = new NetSoundEffect.Function(_lowTom.Hit);
+            this._netMediumTom.function = new NetSoundEffect.Function(_medTom.Hit);
+            this._netHighTom.function = new NetSoundEffect.Function(_highTom.Hit);
+            this._netCrash.function = new NetSoundEffect.Function(_crash.Hit);
             this._netThrowStick.function = new NetSoundEffect.Function(this.ThrowStick);
         }
 
         public override void Terminate()
         {
-            Level.Remove((Thing)this._bass);
-            Level.Remove((Thing)this._snare);
-            Level.Remove((Thing)this._hat);
-            Level.Remove((Thing)this._lowTom);
-            Level.Remove((Thing)this._medTom);
-            Level.Remove((Thing)this._highTom);
-            Level.Remove((Thing)this._crash);
+            Level.Remove(_bass);
+            Level.Remove(_snare);
+            Level.Remove(_hat);
+            Level.Remove(_lowTom);
+            Level.Remove(_medTom);
+            Level.Remove(_highTom);
+            Level.Remove(_crash);
         }
 
         public override void Update()
@@ -215,7 +215,7 @@ namespace DuckGame
                         if (this.duck != null)
                             RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
                         ++this.hitsSinceThrow;
-                        if ((double)this.hits * 0.0199999995529652 > (double)Rando.Float(1f) && (double)Rando.Float(1f) > 0.949999988079071 && this.hitsSinceThrow > 10)
+                        if (hits * 0.0199999995529652 > (double)Rando.Float(1f) && (double)Rando.Float(1f) > 0.949999988079071 && this.hitsSinceThrow > 10)
                         {
                             if (Network.isActive)
                                 this._netThrowStick.Play();

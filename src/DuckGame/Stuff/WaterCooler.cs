@@ -28,7 +28,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("waterCoolerJug", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-5f, -5f);
             this.collisionSize = new Vec2(10f, 10f);
@@ -51,7 +51,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - ((double)hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < (double)this._fluidLevel)
+            if (1.0 - (hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < _fluidLevel)
             {
                 this.thickness = 2f;
                 Vec2 off = hitPos - this.position;
@@ -115,8 +115,8 @@ namespace DuckGame
                     hole.DoUpdate();
                     hole.position = this.Offset(hole.offset);
                     hole.sprayAngle = this.OffsetLocal(hole.startSprayAngle);
-                    float num1 = (float)(1.0 - ((double)hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
-                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num1 < (double)this._fluidLevel)
+                    float num1 = (float)(1.0 - (hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
+                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num1 < _fluidLevel)
                     {
                         float num2 = Maths.Clamp(this._fluidLevel - num1, 0.1f, 1f) * 0.0012f * hole.holeThickness;
                         FluidData fluid = this._fluid;
@@ -135,9 +135,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._sprite.frame = (int)((1.0 - (double)this._fluidLevel) * 10.0);
+            this._sprite.frame = (int)((1.0 - _fluidLevel) * 10.0);
             Vec2 position = this.position;
-            float num = (float)(Math.Sin((double)this._shakeInc) * (double)this._shakeMult * 1.0);
+            float num = (float)(Math.Sin(_shakeInc) * _shakeMult * 1.0);
             this.position.x += num;
             base.Draw();
             this.position = position;
@@ -145,8 +145,8 @@ namespace DuckGame
             Graphics.Draw(this._bottom, this.x, this.y + 9f);
             this._jugLine.depth = this.depth + 1;
             this._jugLine.imageIndex = this._sprite.imageIndex;
-            this._jugLine.alpha = (float)((double)this._fluidLevel * 10.0 % 1.0);
-            Graphics.Draw((Sprite)this._jugLine, this.x + num, this.y);
+            this._jugLine.alpha = (float)(_fluidLevel * 10.0 % 1.0);
+            Graphics.Draw(_jugLine, this.x + num, this.y);
         }
     }
 }

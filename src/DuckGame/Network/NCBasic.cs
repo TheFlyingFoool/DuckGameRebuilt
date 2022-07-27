@@ -20,14 +20,14 @@ namespace DuckGame
         //private bool _initializedSettings = true;
         public const long kLanMessageHeader = 2449832521355936907;
         protected UdpClient _socket;
-        private byte[] _receiveBuffer = new byte[4096];
+        //private byte[] _receiveBuffer = new byte[4096];
         private string _serverIdentifier = "";
         private List<NCBasicConnection> _basicConnections = new List<NCBasicConnection>();
         public int bytesThisFrame;
         public int headerBytes;
         public int ghostBytes;
         public int ackBytes;
-        private const long kDuckGameLANHeader = 5892070176735;
+        //private const long kDuckGameLANHeader = 5892070176735;
         private int _port;
         protected IPEndPoint localEndPoint;
         public static string _localName = "";
@@ -52,10 +52,10 @@ namespace DuckGame
                 bitBuffer.Write(data, length: length);
             this._socket.Send(numArray, length + 8, connection as IPEndPoint);
             this.bytesThisFrame += length + 8;
-            return (NCError)null;
+            return null;
         }
 
-        protected override object GetConnectionObject(string identifier) => (object)this.MakeConnection(NCBasic.CreateIPEndPoint(identifier)).connection;
+        protected override object GetConnectionObject(string identifier) => this.MakeConnection(CreateIPEndPoint(identifier)).connection;
 
         private void BroadcastServerHeader()
         {
@@ -66,7 +66,7 @@ namespace DuckGame
             bitBuffer.Write(DG.versionMajor);
             bitBuffer.Write(DG.versionHigh);
             bitBuffer.Write(DG.versionLow);
-            bitBuffer.Write((byte)DuckNetwork.profiles.Where<Profile>((Func<Profile, bool>)(x => x.connection != null)).Count<Profile>());
+            bitBuffer.Write((byte)DuckNetwork.profiles.Where<Profile>(x => x.connection != null).Count<Profile>());
             bitBuffer.Write(TeamSelect2.GetOnlineSetting("name").value);
             bitBuffer.Write(ModLoader.modHash);
             bitBuffer.Write((byte)TeamSelect2.GetSettingInt("requiredwins"));
@@ -95,7 +95,7 @@ namespace DuckGame
             this._serverIdentifier = identifier;
             this._socket = new UdpClient();
             this._socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            this._socket.Client.Bind((EndPoint)new IPEndPoint(IPAddress.Any, port));
+            this._socket.Client.Bind(new IPEndPoint(IPAddress.Any, port));
             this._socket.AllowNatTraversal(true);
             this.localEndPoint = !NetworkDebugger.enabled ? new IPEndPoint(IPAddress.Parse("127.0.0.1"), this._port) : new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1330 + NetworkDebugger.currentIndex);
             this._port = port;
@@ -118,7 +118,7 @@ namespace DuckGame
             else if (!IPAddress.TryParse(strArray[0], out address))
                 throw new FormatException("Invalid ip-adress");
             int result;
-            if (!int.TryParse(strArray[strArray.Length - 1], NumberStyles.None, (IFormatProvider)NumberFormatInfo.CurrentInfo, out result))
+            if (!int.TryParse(strArray[strArray.Length - 1], NumberStyles.None, NumberFormatInfo.CurrentInfo, out result))
                 throw new FormatException("Invalid port");
             return new IPEndPoint(address, result);
         }
@@ -148,11 +148,11 @@ namespace DuckGame
                     }
                     else
                         this.localEndPoint = new IPEndPoint(IPAddress.Any, port1);
-                    this._socket.Client.Bind((EndPoint)this.localEndPoint);
+                    this._socket.Client.Bind(localEndPoint);
                     this._socket.AllowNatTraversal(true);
                     this.MakeConnection(endPoint, true);
                     this.StartClientThread();
-                    return (NCError)null;
+                    return null;
             }
         }
 
@@ -160,7 +160,7 @@ namespace DuckGame
         {
             lock (this._basicConnections)
             {
-                NCBasicConnection ncBasicConnection1 = this._basicConnections.FirstOrDefault<NCBasicConnection>((Func<NCBasicConnection, bool>)(x => x.connection.ToString() == endPoint.ToString()));
+                NCBasicConnection ncBasicConnection1 = this._basicConnections.FirstOrDefault<NCBasicConnection>(x => x.connection.ToString() == endPoint.ToString());
                 if (ncBasicConnection1 != null)
                     return ncBasicConnection1;
                 NCBasicConnection ncBasicConnection2 = new NCBasicConnection()
@@ -184,7 +184,7 @@ namespace DuckGame
         protected override NCError OnSpinServerThread()
         {
             if (this._socket == null)
-                return NetworkDebugger.enabled ? (NCError)null : new NCError("NCBasic connection was lost.", NCErrorType.CriticalError);
+                return NetworkDebugger.enabled ? null : new NCError("NCBasic connection was lost.", NCErrorType.CriticalError);
             for (int index = 0; index < this._basicConnections.Count; ++index)
             {
                 NCBasicConnection basicConnection = this._basicConnections[index];
@@ -206,7 +206,7 @@ namespace DuckGame
                         {
                             basicConnection.heartbeat.Restart();
                             BitBuffer bitBuffer = new BitBuffer();
-                            this.OnSendPacket((byte[])null, 0, (object)basicConnection.connection);
+                            this.OnSendPacket(null, 0, basicConnection.connection);
                             if (basicConnection.status == NCBasicStatus.TryingToConnect)
                                 basicConnection.status = NCBasicStatus.Connecting;
                         }
@@ -226,7 +226,7 @@ namespace DuckGame
                     {
                         if (new BitBuffer(data).ReadLong() == 2449832521355936907L)
                         {
-                            NCBasicConnection ncBasicConnection = this._basicConnections.FirstOrDefault<NCBasicConnection>((Func<NCBasicConnection, bool>)(x => x.connection.ToString() == address));
+                            NCBasicConnection ncBasicConnection = this._basicConnections.FirstOrDefault<NCBasicConnection>(x => x.connection.ToString() == address);
                             if (ncBasicConnection == null)
                             {
                                 ncBasicConnection = new NCBasicConnection()
@@ -245,8 +245,8 @@ namespace DuckGame
                                     if (data.Length > 8)
                                     {
                                         byte[] numArray = new byte[data.Length - 8];
-                                        Array.Copy((Array)data, 8, (Array)numArray, 0, data.Length - 8);
-                                        this.OnPacket(numArray, (object)ncBasicConnection.connection);
+                                        Array.Copy(data, 8, numArray, 0, data.Length - 8);
+                                        this.OnPacket(numArray, ncBasicConnection.connection);
                                     }
                                 }
                             }
@@ -254,14 +254,14 @@ namespace DuckGame
                     }
                 }
             }
-            return (NCError)null;
+            return null;
         }
 
         protected virtual void ReceivePackets(Queue<NCBasicPacket> packets)
         {
             try
             {
-                IPEndPoint remoteEP = (IPEndPoint)null;
+                IPEndPoint remoteEP = null;
                 while (this._socket.Available > 0)
                 {
                     byte[] numArray = this._socket.Receive(ref remoteEP);
@@ -287,7 +287,7 @@ namespace DuckGame
                 if (Network.isServer)
                 {
                     this._broadcastWait += Maths.IncFrameTimer();
-                    if ((double)this._broadcastWait > 0.75)
+                    if (_broadcastWait > 0.75)
                     {
                         this._broadcastWait = 0.0f;
                         this.BroadcastServerHeader();
@@ -300,7 +300,7 @@ namespace DuckGame
                     {
                         this._pendingMessages.Enqueue(new NCError("connection to " + basicConnection.connection.ToString() + " succeeded!", NCErrorType.Success));
                         basicConnection.status = NCBasicStatus.Connected;
-                        this.AttemptConnection((object)basicConnection.connection, basicConnection.isHost);
+                        this.AttemptConnection(basicConnection.connection, basicConnection.isHost);
                         basicConnection.isHost = false;
                     }
                 }
@@ -313,7 +313,7 @@ namespace DuckGame
             this._basicConnections.Clear();
             if (this._socket != null)
                 this._socket.Close();
-            this._socket = (UdpClient)null;
+            this._socket = null;
             base.KillConnection();
         }
 
@@ -321,7 +321,7 @@ namespace DuckGame
         {
             if (c != null)
             {
-                NCBasicConnection ncBasicConnection = this._basicConnections.FirstOrDefault<NCBasicConnection>((Func<NCBasicConnection, bool>)(x => x.connection.ToString() == c.identifier));
+                NCBasicConnection ncBasicConnection = this._basicConnections.FirstOrDefault<NCBasicConnection>(x => x.connection.ToString() == c.identifier);
                 if (ncBasicConnection != null)
                     ncBasicConnection.status = NCBasicStatus.Disconnecting;
             }
@@ -341,7 +341,7 @@ namespace DuckGame
                 lock (this.lobbyLock)
                 {
                     this._foundLobbies = this._threadLobbies;
-                    this._threadLobbies = (List<UIServerBrowser.LobbyData>)null;
+                    this._threadLobbies = null;
                 }
             }
             return true;
@@ -356,11 +356,19 @@ namespace DuckGame
                 using (UdpClient udpClient = new UdpClient())
                 {
                     udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                    udpClient.Client.Bind((EndPoint)new IPEndPoint(IPAddress.Any, NCBasic.lobbySearchPort));
+                    udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, NCBasic.lobbySearchPort));
                     udpClient.Client.ReceiveTimeout = 100;
                     IPEndPoint remoteEP = new IPEndPoint(0L, 0);
                     for (int index = 0; index < 15; ++index)
                     {
+                        if (udpClient.Client.Available == 0) // added this because can. prevent crashs when possible :)
+                        {
+                            Thread.Sleep(100);
+                        }
+                        if (udpClient.Client.Available == 0)
+                        {
+                            continue;
+                        }//
                         try
                         {
                             byte[] data = udpClient.Receive(ref remoteEP);
@@ -371,15 +379,17 @@ namespace DuckGame
                                 string address = remoteEP.ToString();
                                 if (num1 == 5892070176735L)
                                 {
-                                    if (this._threadLobbies.FirstOrDefault<UIServerBrowser.LobbyData>((Func<UIServerBrowser.LobbyData, bool>)(x => x.lanAddress == address)) == null)
+                                    if (this._threadLobbies.FirstOrDefault<UIServerBrowser.LobbyData>(x => x.lanAddress == address) == null)
                                     {
-                                        UIServerBrowser.LobbyData lobbyData1 = new UIServerBrowser.LobbyData();
-                                        lobbyData1.lanAddress = address;
+                                        UIServerBrowser.LobbyData lobbyData1 = new UIServerBrowser.LobbyData
+                                        {
+                                            lanAddress = address
+                                        };
                                         int pMajor = bitBuffer.ReadInt();
                                         int pHigh = bitBuffer.ReadInt();
                                         int pLow = bitBuffer.ReadInt();
                                         lobbyData1.version = DG.MakeVersionString(pMajor, pHigh, pLow);
-                                        lobbyData1._userCount = (int)bitBuffer.ReadByte();
+                                        lobbyData1._userCount = bitBuffer.ReadByte();
                                         lobbyData1.name = bitBuffer.ReadString();
                                         lobbyData1.modHash = bitBuffer.ReadString();
                                         lobbyData1.requiredWins = bitBuffer.ReadByte().ToString();
@@ -397,7 +407,7 @@ namespace DuckGame
                                         lobbyData3.numSlots = num3;
                                         lobbyData1.hasPassword = bitBuffer.ReadBool();
                                         lobbyData1.dedicated = bitBuffer.ReadBool();
-                                        if ((long)bitBuffer.positionInBits != (long)bitBuffer.lengthInBits && bitBuffer.ReadBool())
+                                        if (bitBuffer.positionInBits != bitBuffer.lengthInBits && bitBuffer.ReadBool())
                                             lobbyData1.datahash = bitBuffer.ReadLong();
                                         this._threadLobbies.Add(lobbyData1);
                                         --index;
@@ -420,7 +430,7 @@ namespace DuckGame
             if (this._lobbyThreadRunning)
                 return;
             this._foundLobbies.Clear();
-            new Thread((ThreadStart)(() => this.SearchForLobbyThread())).Start();
+            new Thread(() => this.SearchForLobbyThread()).Start();
         }
 
         public override int NumLobbiesFound() => this._foundLobbies.Count;

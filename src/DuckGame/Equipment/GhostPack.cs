@@ -13,7 +13,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("jetpack", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-5f, -5f);
             this.collisionSize = new Vec2(11f, 12f);
@@ -28,7 +28,7 @@ namespace DuckGame
             {
                 this.depth = - 0.5f;
                 Vec2 offset = this._offset;
-                if (this.duck.offDir < (sbyte)0)
+                if (this.duck.offDir < 0)
                     offset.x *= -1f;
                 this.position = this.duck.position + offset;
             }

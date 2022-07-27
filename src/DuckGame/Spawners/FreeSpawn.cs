@@ -20,9 +20,11 @@ namespace DuckGame
         public FreeSpawn(float xpos = 0.0f, float ypos = 0.0f)
           : base(xpos, ypos)
         {
-            SpriteMap spriteMap = new SpriteMap("duckSpawn", 32, 32);
-            spriteMap.depth = (Depth)0.9f;
-            this.graphic = (Sprite)spriteMap;
+            SpriteMap spriteMap = new SpriteMap("duckSpawn", 32, 32)
+            {
+                depth = (Depth)0.9f
+            };
+            this.graphic = spriteMap;
             this._editorName = "Spawn Point";
             this.center = new Vec2(16f, 23f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -44,7 +46,7 @@ namespace DuckGame
                     this._eight = new SpriteMap("redEight", 10, 10);
                     this._eight.CenterOrigin();
                 }
-                Graphics.Draw((Sprite)this._eight, this.x - 5f, this.y + 7f, (Depth)1f);
+                Graphics.Draw(_eight, this.x - 5f, this.y + 7f, (Depth)1f);
             }
             base.Draw();
         }

@@ -28,7 +28,7 @@ namespace DuckGame
             if (this._directionalPassword && this._text != "  NONE")
             {
                 this._collisionSize.x = 48f;
-                float num = (float)(this._text.Length * 8);
+                float num = this._text.Length * 8;
                 Graphics.DrawPassword(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-(double)num / 2.0) : this.width / 2f - num) : (float)-((double)this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-(double)this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-((double)this.height / 2.0))), this._color, this.depth);
             }
             else
@@ -36,7 +36,7 @@ namespace DuckGame
                 if (this._text.Length > 10)
                     this._text = this._text.Substring(0, 8) + "..";
                 this._collisionSize.x = 48f;
-                float num = (float)(this._text.Length * 8);
+                float num = this._text.Length * 8;
                 Graphics.DrawString(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-(double)num / 2.0) : this.width / 2f - num) : (float)-((double)this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-(double)this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-((double)this.height / 2.0))), this._color, this.depth);
             }
         }

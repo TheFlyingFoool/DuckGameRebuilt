@@ -36,7 +36,7 @@ namespace DuckGame
         {
             if (AutoUpdatables.ignoreAdditions)
                 return;
-            AutoUpdatables._updateables.Add(new WeakReference((object)update));
+            AutoUpdatables._updateables.Add(new WeakReference(update));
         }
 
         public static void Clear() => AutoUpdatables._updateables.Clear();
@@ -77,7 +77,7 @@ namespace DuckGame
                 {
                     IAutoUpdate target = AutoUpdatables._updateables[index].Target as IAutoUpdate;
                     if (!AutoUpdatables._updateables[index].IsAlive || target == null)
-                        AutoUpdatables._updateables[index] = (WeakReference)null;
+                        AutoUpdatables._updateables[index] = null;
                     else
                         target.Update();
                 }

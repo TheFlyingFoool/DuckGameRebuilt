@@ -25,8 +25,8 @@ namespace DuckGame
         public SnowDrift(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this.style = new EditorProperty<int>(-1, (Thing)this, -1f, 3f, 1f);
-            this.graphic = (Sprite)new SpriteMap("drifts", 16, 17);
+            this.style = new EditorProperty<int>(-1, this, -1f, 3f, 1f);
+            this.graphic = new SpriteMap("drifts", 16, 17);
             if ((int)this.style == -1)
                 (this.graphic as SpriteMap).frame = Rando.Int(3);
             this.hugWalls = WallHug.Floor;
@@ -55,7 +55,7 @@ namespace DuckGame
                 this.y += 0.16f;
             }
             if ((double)this.yscale < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 
@@ -74,7 +74,7 @@ namespace DuckGame
                     float num3 = 1f;
                     if (index < 10)
                         num3 = 0.7f;
-                    Level.Add((Thing)new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-6f, 0.0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
+                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-6f, 0.0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
                 }
                 this.kill = true;
             }

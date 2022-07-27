@@ -26,7 +26,7 @@ namespace DuckGame
         {
             if (Level.current == null)
                 return;
-            Level.Add((Thing)new EnergyScimitarBlast(this.position, this.target));
+            Level.Add(new EnergyScimitarBlast(this.position, this.target));
         }
     }
 }

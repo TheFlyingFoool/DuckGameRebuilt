@@ -28,17 +28,21 @@ namespace DuckGame
         public YellowBarrel(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.valid = new EditorProperty<bool>(false, (Thing)this);
+            this.valid = new EditorProperty<bool>(false, this);
             this._maxHealth = 15f;
             this._hitPoints = 15f;
             this.graphic = new Sprite("yellowBarrel");
             this.center = new Vec2(7f, 8f);
             this._melting = new Sprite("yellowBarrelMelting");
-            this._toreUp = new SpriteMap("yellowBarrelToreUp", 14, 17);
-            this._toreUp.frame = 1;
-            this._toreUp.center = new Vec2(0.0f, -6f);
-            this.sequence = new SequenceItem((Thing)this);
-            this.sequence.type = SequenceItemType.Goody;
+            this._toreUp = new SpriteMap("yellowBarrelToreUp", 14, 17)
+            {
+                frame = 1,
+                center = new Vec2(0.0f, -6f)
+            };
+            this.sequence = new SequenceItem(this)
+            {
+                type = SequenceItemType.Goody
+            };
             this.collisionOffset = new Vec2(-7f, -8f);
             this.collisionSize = new Vec2(14f, 16f);
             this.depth = - 0.1f;
@@ -63,10 +67,10 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if ((double)this._hitPoints <= 0.0)
+            if (_hitPoints <= 0.0)
                 return false;
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - ((double)hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < (double)this._fluidLevel)
+            if (1.0 - (hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < _fluidLevel)
             {
                 this.thickness = 2f;
                 this.MakeHole(hitPos, bullet.travelDirNormalized);
@@ -119,8 +123,8 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this.offDir = (sbyte)1;
-            if ((double)this._hitPoints <= 0.0)
+            this.offDir = 1;
+            if (_hitPoints <= 0.0)
             {
                 if (this.graphic != this._toreUp)
                 {
@@ -129,14 +133,14 @@ namespace DuckGame
                     FluidData fluid = this._fluid;
                     fluid.amount = num1 / 20f;
                     for (int index = 0; index < 20; ++index)
-                        Level.Add((Thing)new Fluid(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-4f, 4f), Rando.Float(-4f, 0.0f)), fluid));
+                        Level.Add(new Fluid(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-4f, 4f), Rando.Float(-4f, 0.0f)), fluid));
                     fluid.amount = num2;
-                    Level.Add((Thing)new Fluid(this.x, this.y - 8f, new Vec2(0.0f, -1f), fluid));
-                    Level.Add((Thing)SmallSmoke.New(this.x, this.y));
+                    Level.Add(new Fluid(this.x, this.y - 8f, new Vec2(0.0f, -1f), fluid));
+                    Level.Add(SmallSmoke.New(this.x, this.y));
                     SFX.Play("bulletHitWater");
                     SFX.Play("crateDestroy");
                 }
-                this.graphic = (Sprite)this._toreUp;
+                this.graphic = _toreUp;
                 this._onFire = false;
                 this.burnt = 0.0f;
                 this._fluidLevel = 0.0f;
@@ -145,16 +149,16 @@ namespace DuckGame
                 this._collisionOffset.y = -2f;
             }
             this.burnSpeed = 0.0015f;
-            if (this._onFire && (double)this.burnt < 0.899999976158142)
+            if (this._onFire && burnt < 0.899999976158142)
             {
-                if ((double)this.burnt > 0.300000011920929)
+                if (burnt > 0.300000011920929)
                     this.graphic = this._melting;
-                this.yscale = (float)(0.5 + (1.0 - (double)this.burnt) * 0.5);
-                this.centery = (float)(8.0 - (double)this.burnt * 7.0);
-                this._collisionOffset.y = (float)((double)this.burnt * 7.0 - 8.0);
-                this._collisionSize.y = (float)(16.0 - (double)this.burnt * 7.0);
+                this.yscale = (float)(0.5 + (1.0 - burnt) * 0.5);
+                this.centery = (float)(8.0 - burnt * 7.0);
+                this._collisionOffset.y = (float)(burnt * 7.0 - 8.0);
+                this._collisionSize.y = (float)(16.0 - burnt * 7.0);
             }
-            if (!this._bottomHoles && (double)this.burnt > 0.600000023841858)
+            if (!this._bottomHoles && burnt > 0.600000023841858)
             {
                 this._bottomHoles = true;
                 this._holes.Add(new FluidStream(0.0f, 0.0f, new Vec2(-1f, -1f), 1f, new Vec2(-7f, 8f))
@@ -171,7 +175,7 @@ namespace DuckGame
                 this.hSpeed = this.owner.hSpeed;
                 this.vSpeed = this.owner.vSpeed;
             }
-            if ((double)this._fluidLevel > 0.0 && this._alternate == 0)
+            if (_fluidLevel > 0.0 && this._alternate == 0)
             {
                 foreach (FluidStream hole in this._holes)
                 {
@@ -181,8 +185,8 @@ namespace DuckGame
                     hole.DoUpdate();
                     hole.position = this.Offset(hole.offset);
                     hole.sprayAngle = this.OffsetLocal(hole.startSprayAngle);
-                    float num3 = (float)(1.0 - ((double)hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
-                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num3 < (double)this._fluidLevel)
+                    float num3 = (float)(1.0 - (hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
+                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num3 < _fluidLevel)
                     {
                         float num4 = Maths.Clamp(this._fluidLevel - num3, 0.1f, 1f);
                         FluidData fluid = this._fluid;
@@ -191,7 +195,7 @@ namespace DuckGame
                         hole.Feed(fluid);
                         this._fluidLevel -= num5;
                         this._lossAccum += num5;
-                        while ((double)this._lossAccum > 0.0500000007450581)
+                        while (_lossAccum > 0.0500000007450581)
                         {
                             this._lossAccum -= 0.05f;
                             if (this.sequence != null && this.sequence.isValid && ChallengeLevel.running)
@@ -213,18 +217,18 @@ namespace DuckGame
         public override void Draw()
         {
             float num1 = 1f - this._fluidLevel;
-            float num2 = (float)(0.600000023841858 + (1.0 - (double)this.burnt) * 0.400000005960464);
+            float num2 = (float)(0.600000023841858 + (1.0 - burnt) * 0.400000005960464);
             this.graphic.color = new Color((byte)(150.0 * (double)num2), (byte)(150.0 * (double)num2), (byte)(150.0 * (double)num2));
             base.Draw();
-            if ((double)this._hitPoints <= 0.0)
+            if (_hitPoints <= 0.0)
                 return;
-            this.graphic.color = new Color((byte)((double)byte.MaxValue * (double)num2), (byte)((double)byte.MaxValue * (double)num2), (byte)((double)byte.MaxValue * (double)num2));
+            this.graphic.color = new Color((byte)(byte.MaxValue * (double)num2), (byte)(byte.MaxValue * (double)num2), (byte)(byte.MaxValue * (double)num2));
             this.graphic.angle = this.angle;
             this.graphic.depth = this.depth + 1;
             this.graphic.scale = this.scale;
-            float y = num1 * (float)this.graphic.height;
-            this.graphic.center = this.center - new Vec2(0.0f, (float)(int)y);
-            Graphics.Draw(this.graphic, this.x, this.y, new Rectangle(0.0f, (float)(int)y, (float)this.graphic.w, (float)(int)((double)this.graphic.h - (double)y)));
+            float y = num1 * graphic.height;
+            this.graphic.center = this.center - new Vec2(0.0f, (int)y);
+            Graphics.Draw(this.graphic, this.x, this.y, new Rectangle(0.0f, (int)y, graphic.w, (int)(graphic.h - (double)y)));
         }
     }
 }

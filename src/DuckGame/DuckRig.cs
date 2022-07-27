@@ -22,19 +22,19 @@ namespace DuckGame
             {
                 DuckRig._hatPoints.Clear();
                 DuckRig._chestPoints.Clear();
-                BinaryReader binaryReader = new BinaryReader((Stream)System.IO.File.OpenRead(Content.path + "rig_duckRig.rig"));
+                BinaryReader binaryReader = new BinaryReader(System.IO.File.OpenRead(Content.path + "rig_duckRig.rig"));
                 int num = binaryReader.ReadInt32();
                 for (int index = 0; index < num; ++index)
                 {
                     DuckRig._hatPoints.Add(new Vec2()
                     {
-                        x = (float)binaryReader.ReadInt32(),
-                        y = (float)binaryReader.ReadInt32()
+                        x = binaryReader.ReadInt32(),
+                        y = binaryReader.ReadInt32()
                     });
                     DuckRig._chestPoints.Add(new Vec2()
                     {
-                        x = (float)binaryReader.ReadInt32(),
-                        y = (float)binaryReader.ReadInt32()
+                        x = binaryReader.ReadInt32(),
+                        y = binaryReader.ReadInt32()
                     });
                 }
                 binaryReader.Close();
@@ -42,7 +42,7 @@ namespace DuckGame
             }
             catch (Exception ex)
             {
-                Program.LogLine(MonoMain.GetExceptionString((object)ex));
+                Program.LogLine(MonoMain.GetExceptionString(ex));
             }
         }
 

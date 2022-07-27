@@ -34,7 +34,7 @@ namespace DuckGame
             if (connection.debuggerContext.lagSpike > 0)
                 num = 1f / 1000f;
             if ((double)num == 3.40282346638529E+38)
-                return (NCError)null;
+                return null;
             if ((double)num <= 0.0)
                 return this._impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
             connection.debuggerContext.packets.Add(new DataLayerDebug.BadConnection.DelayedPacket()
@@ -42,7 +42,7 @@ namespace DuckGame
                 data = sendData,
                 time = num
             });
-            return (NCError)null;
+            return null;
         }
 
         public override void Update()
@@ -62,25 +62,25 @@ namespace DuckGame
 
             public float latency
             {
-                get => (double)this._latency == 0.0 ? DuckNetwork.localConnection.debuggerContext._latency : this._latency;
+                get => _latency == 0.0 ? DuckNetwork.localConnection.debuggerContext._latency : this._latency;
                 set => this._latency = value;
             }
 
             public float jitter
             {
-                get => (double)this._jitter == 0.0 ? DuckNetwork.localConnection.debuggerContext._jitter : this._jitter;
+                get => _jitter == 0.0 ? DuckNetwork.localConnection.debuggerContext._jitter : this._jitter;
                 set => this._jitter = value;
             }
 
             public float loss
             {
-                get => (double)this._loss == 0.0 ? DuckNetwork.localConnection.debuggerContext._loss : this._loss;
+                get => _loss == 0.0 ? DuckNetwork.localConnection.debuggerContext._loss : this._loss;
                 set => this._loss = value;
             }
 
             public float duplicate
             {
-                get => (double)this._duplicate == 0.0 ? DuckNetwork.localConnection.debuggerContext._duplicate : this._duplicate;
+                get => _duplicate == 0.0 ? DuckNetwork.localConnection.debuggerContext._duplicate : this._duplicate;
                 set => this._duplicate = value;
             }
 
@@ -106,7 +106,7 @@ namespace DuckGame
                 foreach (DataLayerDebug.BadConnection.DelayedPacket packet in this.packets)
                 {
                     packet.time -= Maths.IncFrameTimer();
-                    if ((double)packet.time <= 0.0 && this.connection.debuggerContext.lagSpike <= 0)
+                    if (packet.time <= 0.0 && this.connection.debuggerContext.lagSpike <= 0)
                     {
                         pNetwork.OnSendPacket(packet.data.buffer, packet.data.lengthInBytes, this.connection.data);
                         delayedPacketList.Add(packet);

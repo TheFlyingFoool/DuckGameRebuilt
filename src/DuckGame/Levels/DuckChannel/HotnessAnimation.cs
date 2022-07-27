@@ -77,7 +77,7 @@ namespace DuckGame
 
         public void Draw()
         {
-            if ((double)this._wait > 1.0)
+            if (_wait > 1.0)
             {
                 bool flag = true;
                 for (int index = 0; index < this._cool.Count; ++index)
@@ -98,7 +98,7 @@ namespace DuckGame
                 if (flag)
                 {
                     this._wait += 0.015f;
-                    if ((double)this._wait > 2.0)
+                    if (_wait > 2.0)
                         this._readyToTalk = true;
                 }
             }
@@ -121,19 +121,19 @@ namespace DuckGame
             int index1 = 0;
             foreach (Profile profile in active)
             {
-                float num1 = active.Count != 1 ? (active.Count != 2 ? (float)index1 * (vec2_3.x / (float)(active.Count - 1)) : (float)((double)vec2_3.x / 2.0 - (double)vec2_3.x / 4.0 + (double)index1 * ((double)vec2_3.x / 2.0))) : vec2_3.x / 2f;
-                float num2 = (float)(this._cool[index1] + 50) / 250f;
-                float num3 = 1f / (float)(this._tempMap.Count - 2);
-                int index2 = (int)((double)num2 * (double)(this._tempMap.Count - 2));
+                float num1 = active.Count != 1 ? (active.Count != 2 ? index1 * (vec2_3.x / (active.Count - 1)) : (float)(vec2_3.x / 2.0 - vec2_3.x / 4.0 + index1 * (vec2_3.x / 2.0))) : vec2_3.x / 2f;
+                float num2 = (this._cool[index1] + 50) / 250f;
+                float num3 = 1f / (this._tempMap.Count - 2);
+                int index2 = (int)((double)num2 * (this._tempMap.Count - 2));
                 if (index2 < 0)
                     index2 = 0;
                 int temp = this._tempMap[index2];
-                float num4 = Maths.NormalizeSection(num2, num3 * (float)index2, num3 * (float)(index2 + 1));
-                int num5 = (int)((double)this._tempMap[index2] + (double)(this._tempMap[index2 + 1] - this._tempMap[index2]) * (double)num4);
+                float num4 = Maths.NormalizeSection(num2, num3 * index2, num3 * (index2 + 1));
+                int num5 = (int)(this._tempMap[index2] + (this._tempMap[index2 + 1] - this._tempMap[index2]) * (double)num4);
                 float num6 = 50f;
                 float num7 = num2 + 0.28f;
                 float x = vec2_1.x + num1;
-                float y = (float)((double)vec2_2.y - 32.0 - (double)num7 * (double)num6);
+                float y = (float)(vec2_2.y - 32.0 - (double)num7 * (double)num6);
                 profile.persona.sprite.depth = (Depth)0.3f;
                 profile.persona.sprite.color = Color.White;
                 Graphics.Draw(profile.persona.sprite, 0, x, y);
@@ -159,7 +159,7 @@ namespace DuckGame
                     this._upScale[index1] = 0.5f;
                 }
                 this._icon.scale = new Vec2(1f + this._upScale[index1]);
-                Graphics.Draw((Sprite)this._icon, x, y + 28f);
+                Graphics.Draw(_icon, x, y + 28f);
                 ++index1;
             }
         }

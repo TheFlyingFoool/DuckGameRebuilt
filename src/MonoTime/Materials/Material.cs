@@ -34,7 +34,7 @@ namespace DuckGame
 
         public virtual void SetValue(string name, Matrix value) => this._effect.effect.Parameters[name]?.SetValue((Microsoft.Xna.Framework.Matrix)value);
 
-        public virtual void SetValue(string name, Texture2D value) => this._effect.effect.Parameters[name]?.SetValue((Texture)value);
+        public virtual void SetValue(string name, Texture2D value) => this._effect.effect.Parameters[name]?.SetValue(value);
 
         public virtual void Update()
         {

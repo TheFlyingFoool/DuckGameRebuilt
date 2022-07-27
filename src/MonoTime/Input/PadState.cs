@@ -16,7 +16,7 @@ namespace DuckGame
 
         public bool IsButtonDown(PadButton butt) => (this.buttons & butt) != 0;
 
-        public bool IsButtonUp(PadButton butt) => (this.buttons & butt) == (PadButton)0;
+        public bool IsButtonUp(PadButton butt) => (this.buttons & butt) == 0;
 
         public struct TriggerStates
         {

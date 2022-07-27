@@ -31,11 +31,11 @@ namespace DuckGame
             switch (info)
             {
                 case StatInfo.KillDeathRatio:
-                    return (float)(this.kills / this.timesKilled);
+                    return this.kills / this.timesKilled;
                 case StatInfo.Coolness:
-                    return (float)this.coolness;
+                    return coolness;
                 case StatInfo.ProfileScore:
-                    return (float)this.GetProfileScore();
+                    return this.GetProfileScore();
                 default:
                     return 0.0f;
             }
@@ -43,7 +43,7 @@ namespace DuckGame
 
         public int GetProfileScore() => (int)Math.Round((double)Maths.Clamp((float)((double)this.CalculateProfileScore() * 0.300000011920929 * 250.0), -50f, 200f));
 
-        public string GetCoolnessString() => this._hotnessStrings[(int)Math.Floor((double)(Maths.Clamp(this.GetProfileScore(), -50, 200) + 50) / 250.0 * 8.98999977111816)];
+        public string GetCoolnessString() => this._hotnessStrings[(int)Math.Floor((Maths.Clamp(this.GetProfileScore(), -50, 200) + 50) / 250.0 * 8.98999977111816)];
 
         public string currentTitle { get; set; }
 
@@ -214,7 +214,7 @@ namespace DuckGame
             float num3 = 0.0f;
             float num4 = 0.0f;
             if (this.timesSpawned > 0)
-                num4 = (float)((double)this.matchesWon / (double)this.timesSpawned * 0.400000005960464);
+                num4 = (float)(matchesWon / (double)this.timesSpawned * 0.400000005960464);
             float num5 = num1 + num4;
             if ((double)num4 > 0.0)
                 num3 += num4;
@@ -226,7 +226,7 @@ namespace DuckGame
                 amount = num4
             });
             if (this.gamesPlayed > 0)
-                num4 = (float)((double)this.trophiesWon / (double)this.gamesPlayed * 0.400000005960464);
+                num4 = (float)(trophiesWon / (double)this.gamesPlayed * 0.400000005960464);
             float num6 = num5 + num4;
             if ((double)num4 > 0.0)
                 num3 += num4;
@@ -240,7 +240,7 @@ namespace DuckGame
             int num7 = this.timesKilled;
             if (num7 < 1)
                 num7 = 1;
-            float num8 = (float)Math.Log(1.0 + (double)this.kills / (double)num7) * 0.4f;
+            float num8 = (float)Math.Log(1.0 + kills / (double)num7) * 0.4f;
             float num9 = num6 + num8;
             if ((double)num8 > 0.0)
                 num3 += num8;
@@ -251,7 +251,7 @@ namespace DuckGame
                 name = "KDR",
                 amount = num8
             });
-            float num10 = (float)((double)Maths.Clamp((DateTime.Now - this.lastPlayed).Days, 0, 60) / 60.0 * 0.5);
+            float num10 = (float)(Maths.Clamp((DateTime.Now - this.lastPlayed).Days, 0, 60) / 60.0 * 0.5);
             float num11 = num9 + num10;
             if ((double)num10 > 0.0)
                 num3 += num10;
@@ -262,7 +262,7 @@ namespace DuckGame
                 name = "LVE",
                 amount = num10
             });
-            float num12 = (float)Math.Log(1.0 + (double)this.quacks * 9.99999974737875E-05) * 0.4f;
+            float num12 = (float)Math.Log(1.0 + quacks * 9.99999974737875E-05) * 0.4f;
             float num13 = num11 + num12;
             if ((double)num12 > 0.0)
                 num3 += num12;
@@ -273,7 +273,7 @@ namespace DuckGame
                 name = "CHR",
                 amount = num12
             });
-            float num14 = (float)Math.Log(0.75 + (double)this.coolness * 0.025000000372529);
+            float num14 = (float)Math.Log(0.75 + coolness * 0.025000000372529);
             float num15 = num13 + num14;
             if ((double)num14 > 0.0)
                 num3 += num14;
@@ -284,7 +284,7 @@ namespace DuckGame
                 name = "COO",
                 amount = num14
             });
-            float num16 = (float)Math.Log(1.0 + (double)this.bulletsFired * 9.99999974737875E-05);
+            float num16 = (float)Math.Log(1.0 + bulletsFired * 9.99999974737875E-05);
             float num17 = num15 + num16;
             if ((double)num16 > 0.0)
                 num3 += num16;
@@ -296,7 +296,7 @@ namespace DuckGame
                 amount = num16
             });
             if (this.bulletsFired > 0)
-                num16 = (float)((double)this.bulletsThatHit / (double)this.bulletsFired * 0.200000002980232 - 0.100000001490116);
+                num16 = (float)(bulletsThatHit / (double)this.bulletsFired * 0.200000002980232 - 0.100000001490116);
             float num18 = num17 + num16;
             if ((double)num16 > 0.0)
                 num3 += num16;
@@ -307,7 +307,7 @@ namespace DuckGame
                 name = "ACC",
                 amount = num16
             });
-            float num19 = (float)Math.Log(1.0 + (double)this.disarms * 0.000500000023748726) * 0.5f;
+            float num19 = (float)Math.Log(1.0 + disarms * 0.000500000023748726) * 0.5f;
             float num20 = num18 + num19;
             if ((double)num19 > 0.0)
                 num3 += num19;
@@ -318,7 +318,7 @@ namespace DuckGame
                 name = "DSM",
                 amount = num19
             });
-            float num21 = -(float)(Math.Log(1.0 + (double)(this.timesLitOnFire + this.timesMindControlled + this.timesNetted + this.timesDisarmed + this.minesSteppedOn + this.fallDeaths) * 0.000500000023748726) * 0.5);
+            float num21 = -(float)(Math.Log(1.0 + (this.timesLitOnFire + this.timesMindControlled + this.timesNetted + this.timesDisarmed + this.minesSteppedOn + this.fallDeaths) * 0.000500000023748726) * 0.5);
             float num22 = num20 + num21;
             if ((double)num21 > 0.0)
                 num3 += num21;
@@ -329,7 +329,7 @@ namespace DuckGame
                 name = "BAD",
                 amount = num21
             });
-            float num23 = (float)(-((double)Maths.Clamp((DateTime.Now - this.lastWon).Days, 0, 60) / 60.0) * 0.300000011920929);
+            float num23 = (float)(-(Maths.Clamp((DateTime.Now - this.lastWon).Days, 0, 60) / 60.0) * 0.300000011920929);
             float num24 = num22 + num23;
             if ((double)num23 > 0.0)
                 num3 += num23;
@@ -340,7 +340,7 @@ namespace DuckGame
                 name = "LOS",
                 amount = num23
             });
-            float num25 = (float)Math.Log(1.0 + (double)this.timesJumped * 9.99999974737875E-05) * 0.2f;
+            float num25 = (float)Math.Log(1.0 + timesJumped * 9.99999974737875E-05) * 0.2f;
             float num26 = num24 + num25;
             if ((double)num25 > 0.0)
                 num3 += num25;
@@ -362,7 +362,7 @@ namespace DuckGame
                 name = "MTH",
                 amount = num27
             });
-            float num29 = (float)Math.Log(1.0 + (double)this.timesSwore) * 0.5f;
+            float num29 = (float)Math.Log(1.0 + timesSwore) * 0.5f;
             float profileScore = num28 + num29;
             if ((double)num29 > 0.0)
                 num3 += num29;
@@ -378,9 +378,9 @@ namespace DuckGame
                 foreach (StatContribution statContribution in statContributionList)
                 {
                     float num30 = 0.0f;
-                    if ((double)statContribution.amount != 0.0)
-                        num30 = (double)statContribution.amount <= 0.0 ? (float)((double)Math.Abs(statContribution.amount) / (double)Math.Abs(num2) * ((double)Math.Abs(num2) / ((double)num3 + (double)Math.Abs(num2)))) : (float)((double)Math.Abs(statContribution.amount) / (double)Math.Abs(num3) * ((double)num3 / ((double)num3 + (double)Math.Abs(num2))));
-                    if ((double)statContribution.amount < 0.0)
+                    if (statContribution.amount != 0.0)
+                        num30 = statContribution.amount <= 0.0 ? (float)((double)Math.Abs(statContribution.amount) / (double)Math.Abs(num2) * ((double)Math.Abs(num2) / ((double)num3 + (double)Math.Abs(num2)))) : (float)((double)Math.Abs(statContribution.amount) / (double)Math.Abs(num3) * ((double)num3 / ((double)num3 + (double)Math.Abs(num2))));
+                    if (statContribution.amount < 0.0)
                         num30 = -num30;
                     float num31 = 0.5f;
                     float num32 = 0.5f;

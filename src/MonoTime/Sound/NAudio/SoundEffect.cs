@@ -57,7 +57,7 @@ namespace DuckGame
             if (soundEffect.Platform_Construct(stream, extension))
                 return soundEffect;
             DevConsole.Log(DCSection.General, "|DGRED|SoundEffect.FromStream Failed!");
-            return (SoundEffect)null;
+            return null;
         }
 
         public static SoundEffect CreateStreaming(string pPath)
@@ -69,7 +69,7 @@ namespace DuckGame
                     file = pPath
                 };
             DevConsole.Log(DCSection.General, "|DGRED|SoundEffect.CreateStreaming Failed (file not found)!");
-            return (SoundEffect)null;
+            return null;
         }
 
         public SoundEffect(string pPath)
@@ -107,7 +107,7 @@ namespace DuckGame
                     if (this._decodedSamples + this.kDecoderChunkSize > SoundEffect._songBuffer.Length)
                     {
                         float[] destinationArray = new float[SoundEffect._songBuffer.Length * 2];
-                        Array.Copy((Array)SoundEffect._songBuffer, (Array)destinationArray, SoundEffect._songBuffer.Length);
+                        Array.Copy(_songBuffer, destinationArray, SoundEffect._songBuffer.Length);
                         SoundEffect._songBuffer = destinationArray;
                     }
                     int num = this._decoderReader.Read(SoundEffect._songBuffer, this._decodedSamples, this.kDecoderChunkSize);
@@ -119,12 +119,12 @@ namespace DuckGame
                     {
                         this.dataSize = this._decodedSamples;
                         this._decode.Dispose();
-                        this._decode = (WaveStream)null;
-                        this._decoderReader = (ISampleProvider)null;
+                        this._decode = null;
+                        this._decoderReader = null;
                     }
                     return num > 0;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 return false;
@@ -152,7 +152,7 @@ namespace DuckGame
                 return;
             lock (this._decoderReader)
             {
-                this._decoderReader = (ISampleProvider)null;
+                this._decoderReader = null;
                 this._decode.Dispose();
                 if (this._stream == null)
                     return;
@@ -165,20 +165,20 @@ namespace DuckGame
         {
             pExtension = pExtension.Replace(".", "");
             this._stream = pStream;
-            WaveStream waveStream = (WaveStream)null;
+            WaveStream waveStream = null;
             if (pExtension == "wav")
             {
-                waveStream = (WaveStream)new WaveFileReader(pStream);
+                waveStream = new WaveFileReader(pStream);
                 if (waveStream.WaveFormat.Encoding != WaveFormatEncoding.Pcm && waveStream.WaveFormat.Encoding != WaveFormatEncoding.IeeeFloat)
-                    waveStream = (WaveStream)new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(waveStream));
+                    waveStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(waveStream));
             }
             else if (pExtension == "mp3")
-                waveStream = (WaveStream)new Mp3FileReader(pStream);
+                waveStream = new Mp3FileReader(pStream);
             else if (pExtension == "aiff")
-                waveStream = (WaveStream)new AiffFileReader(pStream);
+                waveStream = new AiffFileReader(pStream);
             else if (pExtension == "ogg")
             {
-                waveStream = (WaveStream)new VorbisWaveReader(pStream);
+                waveStream = new VorbisWaveReader(pStream);
                 float num = 0.0f;
                 try
                 {
@@ -199,7 +199,7 @@ namespace DuckGame
                     }
                     pStream.Position = 0L;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     num = 0.0f;
                 }
@@ -214,11 +214,11 @@ namespace DuckGame
         private void PrepareReader(WaveStream reader, Stream pStream)
         {
             this._decode = reader;
-            this._totalSamples = (int)(this._decode.Length * 8L / (long)this._decode.WaveFormat.BitsPerSample);
-            this._decoderReader = (ISampleProvider)new SampleChannel((IWaveProvider)this._decode);
+            this._totalSamples = (int)(this._decode.Length * 8L / _decode.WaveFormat.BitsPerSample);
+            this._decoderReader = new SampleChannel(_decode);
             if (this._decoderReader.WaveFormat.SampleRate != 44100)
             {
-                this._decoderReader = (ISampleProvider)new WdlResamplingSampleProvider(this._decoderReader, 44100);
+                this._decoderReader = new WdlResamplingSampleProvider(this._decoderReader, 44100);
                 this._totalSamples *= this._decoderReader.WaveFormat.BitsPerSample / this._decode.WaveFormat.BitsPerSample;
             }
             this.format = this._decoderReader.WaveFormat;
@@ -234,17 +234,17 @@ namespace DuckGame
                     this._waveBuffer = new float[this._totalSamples];
                     this._decoderReader.Read(this._waveBuffer, 0, this._totalSamples);
                     this._decode.Dispose();
-                    this._decoderReader = (ISampleProvider)null;
+                    this._decoderReader = null;
                     if (this._stream != null)
                     {
                         this._stream.Dispose();
-                        this._stream = (Stream)null;
+                        this._stream = null;
                     }
                     int num = this._totalSamples * 4 / 1000;
-                    ContentPack.kTotalKilobytesAllocated += (long)num;
+                    ContentPack.kTotalKilobytesAllocated += num;
                     if (ContentPack.currentPreloadPack == null)
                         return;
-                    ContentPack.currentPreloadPack.kilobytesPreAllocated += (long)num;
+                    ContentPack.currentPreloadPack.kilobytesPreAllocated += num;
                 }
             }
             else
@@ -268,11 +268,11 @@ namespace DuckGame
             byte[] buffer = System.IO.File.ReadAllBytes(pPath);
             if (buffer == null)
             {
-                this.PrepareReader((WaveStream)new AudioFileReader(pPath), (Stream)null);
+                this.PrepareReader(new AudioFileReader(pPath), null);
             }
             else
             {
-                if (this.Platform_Construct((Stream)new MemoryStream(buffer), Path.GetExtension(pPath)))
+                if (this.Platform_Construct(new MemoryStream(buffer), Path.GetExtension(pPath)))
                     return;
                 DevConsole.Log(DCSection.General, "Tried to read invalid sound format (" + pPath + ")");
             }

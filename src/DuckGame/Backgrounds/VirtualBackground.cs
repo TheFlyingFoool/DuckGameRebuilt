@@ -36,7 +36,7 @@ namespace DuckGame
         public VirtualBackground(float xpos, float ypos, BackgroundUpdater realBackground, bool fore = false)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 2
             };
@@ -101,7 +101,7 @@ namespace DuckGame
             this._parallax = VirtualBackground._para;
             Layer.Add(this._parallax.layer);
             this._parallax.layer.Clear();
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
             this.visible = true;
             this.parallax.y = 0.0f;
             this.layer = this._parallax.layer;
@@ -128,10 +128,10 @@ namespace DuckGame
             }
             else if (this._realBackground != null)
                 Level.current.backgroundColor = Lerp.Color(Level.current.backgroundColor, this._realBackground.backgroundColor, 0.04f);
-            Rectangle rectangle1 = new Rectangle((float)(int)((1.0 - (double)num) * (double)Resolution.current.x), 0.0f, (float)(Resolution.current.x - (int)((1.0 - (double)num) * (double)Resolution.current.x)), (float)Resolution.current.y);
+            Rectangle rectangle1 = new Rectangle((int)((1.0 - (double)num) * Resolution.current.x), 0.0f, Resolution.current.x - (int)((1.0 - (double)num) * Resolution.current.x), Resolution.current.y);
             if (this._realBackground != null)
             {
-                if ((double)rectangle1.width == 0.0)
+                if (rectangle1.width == 0.0)
                 {
                     this._realBackground.SetVisible(false);
                 }
@@ -141,8 +141,8 @@ namespace DuckGame
                     this._realBackground.SetVisible(true);
                 }
             }
-            Rectangle rectangle2 = new Rectangle(0.0f, 0.0f, (float)Resolution.current.x - rectangle1.width, (float)Resolution.current.y);
-            if ((double)rectangle2.width == 0.0)
+            Rectangle rectangle2 = new Rectangle(0.0f, 0.0f, Resolution.current.x - rectangle1.width, Resolution.current.y);
+            if (rectangle2.width == 0.0)
             {
                 this.SetVisible(false);
                 this.visible = false;
@@ -169,7 +169,7 @@ namespace DuckGame
                 if (this.scanStage == 0)
                 {
                     this.stick = Lerp.Float(this.stick, 1f, amount1);
-                    if ((double)this.stick > 0.949999988079071)
+                    if (stick > 0.949999988079071)
                     {
                         this.stick = 1f;
                         this.incStage = true;
@@ -178,7 +178,7 @@ namespace DuckGame
                 else if (this.scanStage == 1)
                 {
                     this.stick = Lerp.Float(this.stick, 0.0f, amount1);
-                    if ((double)this.stick < 0.0500000007450581)
+                    if (stick < 0.0500000007450581)
                     {
                         this.stick = 0.0f;
                         this.incStage = true;
@@ -187,7 +187,7 @@ namespace DuckGame
                 else if (this.scanStage == 2)
                 {
                     this.stick = Lerp.Float(this.stick, 1f, amount1);
-                    if ((double)this.stick > 0.949999988079071)
+                    if (stick > 0.949999988079071)
                     {
                         this.stick = 1f;
                         this.incStage = true;
@@ -198,7 +198,7 @@ namespace DuckGame
             else if (this.scanStage == 2)
             {
                 this.stick = Lerp.Float(this.stick, 0.0f, amount2);
-                if ((double)this.stick < 0.0500000007450581)
+                if (stick < 0.0500000007450581)
                 {
                     this.stick = 0.0f;
                     this.decStage = true;
@@ -207,7 +207,7 @@ namespace DuckGame
             else if (this.scanStage == 1)
             {
                 this.stick = Lerp.Float(this.stick, 1f, amount2);
-                if ((double)this.stick > 0.949999988079071)
+                if (stick > 0.949999988079071)
                 {
                     this.stick = 1f;
                     this.decStage = true;
@@ -216,7 +216,7 @@ namespace DuckGame
             else if (this.scanStage == 0)
             {
                 this.stick = Lerp.Float(this.stick, 0.0f, amount2);
-                if ((double)this.stick < 0.0500000007450581)
+                if (stick < 0.0500000007450581)
                 {
                     this.stick = 0.0f;
                     this.decStage = true;
@@ -266,16 +266,16 @@ namespace DuckGame
             {
                 this.position = this._parallax.position;
                 float num1 = this.stick * 300f;
-                float x = (float)(360.0 - (double)this.stick * 400.0);
+                float x = (float)(360.0 - stick * 400.0);
                 Vec2 vec2_1 = new Vec2(this.x + num1, this.y + 72f);
                 Graphics.Draw(this._scanner, vec2_1.x, vec2_1.y);
                 float num2 = Math.Abs(this.stick - 0.5f);
                 float num3 = 0.5f - num2;
-                Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)((double)vec2_1.y - 100.0 + (double)num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
-                Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)((double)vec2_1.y - 10.0 + 80.0 * (double)num2)), Color.Red * num3, 2f, (Depth)0.9f);
-                Vec2 vec2_2 = vec2_1 + new Vec2(0.0f, (float)this._scanner.height);
-                Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)((double)vec2_2.y + 100.0 - (double)num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
-                Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)((double)vec2_2.y + 10.0 - 80.0 * (double)num2)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)(vec2_1.y - 100.0 + (double)num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)(vec2_1.y - 10.0 + 80.0 * (double)num2)), Color.Red * num3, 2f, (Depth)0.9f);
+                Vec2 vec2_2 = vec2_1 + new Vec2(0.0f, _scanner.height);
+                Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)(vec2_2.y + 100.0 - (double)num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)(vec2_2.y + 10.0 - 80.0 * (double)num2)), Color.Red * num3, 2f, (Depth)0.9f);
             }
         }
     }

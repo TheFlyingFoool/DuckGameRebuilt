@@ -20,7 +20,7 @@ namespace DuckGame
         {
             this.secondaryFrame = true;
             this._sprite = new SpriteMap("flimsyDoor", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.colWide = 4f;
             base.Initialize();
         }

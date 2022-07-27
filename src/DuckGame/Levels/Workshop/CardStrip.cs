@@ -58,10 +58,12 @@ namespace DuckGame
                 {
                     LevelInfo card = this._cards[0] as LevelInfo;
                     List<Card> cards1 = this._cards;
-                    LevelInfo levelInfo = new LevelInfo();
-                    levelInfo.specialText = "VIEW ALL";
-                    levelInfo.large = card.large;
-                    cards1.Add((Card)levelInfo);
+                    LevelInfo levelInfo = new LevelInfo
+                    {
+                        specialText = "VIEW ALL",
+                        large = card.large
+                    };
+                    cards1.Add(levelInfo);
                 }
             }
             else
@@ -75,7 +77,7 @@ namespace DuckGame
             float height = cards[0].height;
             if (heading != null && heading != "")
                 height += 10f;
-            this.collisionSize = new Vec2((float)this._numCardsPerScreen * (cards[0].width + 4f), height);
+            this.collisionSize = new Vec2(_numCardsPerScreen * (cards[0].width + 4f), height);
         }
 
         public override void Initialize()
@@ -102,9 +104,9 @@ namespace DuckGame
                 this._selectedCardIndex = 0;
             if (this._levelIndex + (this._numCardsPerScreen - 1) < this._selectedCardIndex)
             {
-                if ((double)this._indexSlide > -1.0)
+                if (_indexSlide > -1.0)
                     this._indexSlide = Lerp.FloatSmooth(this._indexSlide, -1.2f, 0.2f);
-                if ((double)this._indexSlide <= -1.0)
+                if (_indexSlide <= -1.0)
                 {
                     ++this._levelIndex;
                     this._indexSlide = 0.0f;
@@ -112,9 +114,9 @@ namespace DuckGame
             }
             if (this._levelIndex <= this._selectedCardIndex)
                 return;
-            if ((double)this._indexSlide < 1.0)
+            if (_indexSlide < 1.0)
                 this._indexSlide = Lerp.FloatSmooth(this._indexSlide, 1.2f, 0.2f);
-            if ((double)this._indexSlide < 1.0)
+            if (_indexSlide < 1.0)
                 return;
             --this._levelIndex;
             this._indexSlide = 0.0f;
@@ -134,7 +136,7 @@ namespace DuckGame
             if (this._cards.Count > 0)
             {
                 vec2_2 = new Vec2(this._cards[0].width, this._cards[0].height);
-                vec2_1 = new Vec2((float)((double)this.x - ((double)vec2_2.x + 4.0) + (double)this._indexSlide * ((double)vec2_2.x + 4.0)), y);
+                vec2_1 = new Vec2((float)((double)this.x - (vec2_2.x + 4.0) + _indexSlide * (vec2_2.x + 4.0)), y);
             }
             int num1 = 0;
             for (int index = this._levelIndex - 1; index < this._levelIndex + (this._numCardsPerScreen + 1); ++index)
@@ -145,7 +147,7 @@ namespace DuckGame
                     float num2 = 1f;
                     if (num1 == this._numCardsPerScreen + 1)
                         num2 = Math.Abs(this._indexSlide);
-                    else if (num1 == this._numCardsPerScreen && (double)this._indexSlide > 0.0)
+                    else if (num1 == this._numCardsPerScreen && _indexSlide > 0.0)
                     {
                         num2 = 1f - Math.Abs(this._indexSlide);
                     }
@@ -157,7 +159,7 @@ namespace DuckGame
                                 num2 = Math.Abs(this._indexSlide);
                                 break;
                             case 1:
-                                if ((double)this._indexSlide < 0.0)
+                                if (_indexSlide < 0.0)
                                 {
                                     num2 = 1f - Math.Abs(this._indexSlide);
                                     break;

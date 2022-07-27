@@ -13,14 +13,14 @@ namespace DuckGame
     public class Ragdoll : Thing
     {
         public bool inSleepingBag;
-        public StateBinding _positionBinding = (StateBinding)new InterpolatedVec2Binding("position");
+        public StateBinding _positionBinding = new InterpolatedVec2Binding("position");
         public StateBinding _part1Binding = new StateBinding(nameof(part1));
         public StateBinding _part2Binding = new StateBinding(nameof(part2));
         public StateBinding _part3Binding = new StateBinding(nameof(part3));
         public StateBinding _tongueStuckBinding = new StateBinding(nameof(tongueStuck));
         public StateBinding _sleepingBagHealthBinding = new StateBinding(nameof(sleepingBagHealth));
         public byte sleepingBagHealth;
-        public StateBinding _physicsStateBinding = (StateBinding)new RagdollFlagBinding();
+        public StateBinding _physicsStateBinding = new RagdollFlagBinding();
         public Vec2 tongueStuck = Vec2.Zero;
         public Thing tongueStuckThing;
         private bool _zekeBear;
@@ -50,7 +50,7 @@ namespace DuckGame
                     return this._part1.owner;
                 if (this._part2 != null && this._part2.owner != null)
                     return this._part2.owner;
-                return this._part3 != null && this._part3.owner != null ? this._part3.owner : (Thing)null;
+                return this._part3 != null && this._part3.owner != null ? this._part3.owner : null;
             }
         }
 
@@ -126,18 +126,18 @@ namespace DuckGame
                     this._makeActive = false;
                     if (this._part1 != null)
                     {
-                        this._part1.owner = (Thing)null;
-                        this._part1.framesSinceGrounded = (byte)99;
+                        this._part1.owner = null;
+                        this._part1.framesSinceGrounded = 99;
                     }
                     if (this._part2 != null)
                     {
-                        this._part2.owner = (Thing)null;
-                        this._part2.framesSinceGrounded = (byte)99;
+                        this._part2.owner = null;
+                        this._part2.framesSinceGrounded = 99;
                     }
                     if (this._part3 != null)
                     {
-                        this._part3.owner = (Thing)null;
-                        this._part3.framesSinceGrounded = (byte)99;
+                        this._part3.owner = null;
+                        this._part3.framesSinceGrounded = 99;
                     }
                 }
                 base.visible = value;
@@ -284,12 +284,12 @@ namespace DuckGame
         public Profile PartHeldProfile()
         {
             if (this._part1 == null || this._part2 == null || this._part3 == null)
-                return (Profile)null;
+                return null;
             if (this._part1.duck != null)
                 return this._part1.duck.profile;
             if (this._part2.duck != null)
                 return this._part2.duck.profile;
-            return this._part3.duck != null ? this._part3.duck.profile : (Profile)null;
+            return this._part3.duck != null ? this._part3.duck.profile : null;
         }
 
         public void SortOutParts(
@@ -315,39 +315,39 @@ namespace DuckGame
             Vec2 vec = Maths.AngleToVec(this.angle);
             if (this._part1 == null)
             {
-                this._part1 = new RagdollPart(this.x - vec.x * this.partSep, this.y - vec.y * this.partSep, 0, this._duck != null ? this._duck.persona : this.persona, (int)this.offDir, this);
+                this._part1 = new RagdollPart(this.x - vec.x * this.partSep, this.y - vec.y * this.partSep, 0, this._duck != null ? this._duck.persona : this.persona, offDir, this);
                 if (Network.isActive && !GhostManager.inGhostLoop)
-                    GhostManager.context.MakeGhost((Thing)this._part1);
-                this._part2 = new RagdollPart(this.x, this.y, 2, this._duck != null ? this._duck.persona : this.persona, (int)this.offDir, this);
+                    GhostManager.context.MakeGhost(_part1);
+                this._part2 = new RagdollPart(this.x, this.y, 2, this._duck != null ? this._duck.persona : this.persona, offDir, this);
                 if (Network.isActive && !GhostManager.inGhostLoop)
-                    GhostManager.context.MakeGhost((Thing)this._part2);
-                this._part3 = new RagdollPart(this.x + vec.x * this.partSep, this.y + vec.y * this.partSep, 1, this._duck != null ? this._duck.persona : this.persona, (int)this.offDir, this);
+                    GhostManager.context.MakeGhost(_part2);
+                this._part3 = new RagdollPart(this.x + vec.x * this.partSep, this.y + vec.y * this.partSep, 1, this._duck != null ? this._duck.persona : this.persona, offDir, this);
                 if (Network.isActive && !GhostManager.inGhostLoop)
-                    GhostManager.context.MakeGhost((Thing)this._part3);
-                Level.Add((Thing)this._part1);
-                Level.Add((Thing)this._part2);
-                Level.Add((Thing)this._part3);
+                    GhostManager.context.MakeGhost(_part3);
+                Level.Add(_part1);
+                Level.Add(_part2);
+                Level.Add(_part3);
             }
             else
             {
-                this._part1.SortOutDetails(this.x - vec.x * this.partSep, this.y - vec.y * this.partSep, 0, this._duck != null ? this._duck.persona : this.persona, (int)this.offDir, this);
-                this._part2.SortOutDetails(this.x, this.y, 2, this._duck != null ? this._duck.persona : this.persona, (int)this.offDir, this);
-                this._part3.SortOutDetails(this.x + vec.x * this.partSep, this.y + vec.y * this.partSep, 1, this._duck != null ? this._duck.persona : this.persona, (int)this.offDir, this);
+                this._part1.SortOutDetails(this.x - vec.x * this.partSep, this.y - vec.y * this.partSep, 0, this._duck != null ? this._duck.persona : this.persona, offDir, this);
+                this._part2.SortOutDetails(this.x, this.y, 2, this._duck != null ? this._duck.persona : this.persona, offDir, this);
+                this._part3.SortOutDetails(this.x + vec.x * this.partSep, this.y + vec.y * this.partSep, 1, this._duck != null ? this._duck.persona : this.persona, offDir, this);
             }
             this._part1.joint = this._part2;
             this._part3.joint = this._part2;
             this._part1.connect = this._part3;
             this._part3.connect = this._part1;
-            this._part1.framesSinceGrounded = (byte)99;
-            this._part2.framesSinceGrounded = (byte)99;
-            this._part3.framesSinceGrounded = (byte)99;
+            this._part1.framesSinceGrounded = 99;
+            this._part2.framesSinceGrounded = 99;
+            this._part3.framesSinceGrounded = 99;
             if (this._duck == null)
                 return;
             if (!(Level.current is GameLevel) || !(Level.current as GameLevel).isRandom)
             {
-                this._duck.ReturnItemToWorld((Thing)this._part1);
-                this._duck.ReturnItemToWorld((Thing)this._part2);
-                this._duck.ReturnItemToWorld((Thing)this._part3);
+                this._duck.ReturnItemToWorld(_part1);
+                this._duck.ReturnItemToWorld(_part2);
+                this._duck.ReturnItemToWorld(_part3);
             }
             this._part3.depth = new Depth(this._duck.depth.value);
             this._part1.depth = this._part3.depth - 1;
@@ -359,7 +359,7 @@ namespace DuckGame
         {
             this.Organize();
             if (Network.isActive && !GhostManager.inGhostLoop)
-                GhostManager.context.MakeGhost((Thing)this);
+                GhostManager.context.MakeGhost(this);
             if ((double)Math.Abs(this.hSpeed) < 0.200000002980232)
                 this.hSpeed = NetRand.Float(0.3f, 1f) * ((double)NetRand.Float(1f) >= 0.5 ? 1f : -1f);
             float num1 = this._slide ? 1f : 1.05f;
@@ -381,10 +381,10 @@ namespace DuckGame
             this._part3.enablePhysics = true;
             if (Network.isActive)
             {
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
-                Thing.Fondle((Thing)this._part1, DuckNetwork.localConnection);
-                Thing.Fondle((Thing)this._part2, DuckNetwork.localConnection);
-                Thing.Fondle((Thing)this._part3, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
+                Thing.Fondle(_part1, DuckNetwork.localConnection);
+                Thing.Fondle(_part2, DuckNetwork.localConnection);
+                Thing.Fondle(_part3, DuckNetwork.localConnection);
             }
             if (this._duck == null || !this._duck.onFire)
                 return;
@@ -419,14 +419,14 @@ namespace DuckGame
             this._duck.immobilized = false;
             this._duck.enablePhysics = true;
             this._duck._jumpValid = 0;
-            this._duck._lastHoldItem = (Holdable)null;
+            this._duck._lastHoldItem = null;
             this._makeActive = false;
-            this._part2.ReturnItemToWorld((Thing)this._duck);
+            this._part2.ReturnItemToWorld(_duck);
             if (Network.isActive)
             {
                 this.active = false;
                 this.visible = false;
-                this.owner = (Thing)null;
+                this.owner = null;
                 if ((double)this.y > -1000.0)
                 {
                     this.y = -9999f;
@@ -434,20 +434,20 @@ namespace DuckGame
                     this._part2.y = -9999f;
                     this._part3.y = -9999f;
                 }
-                this._part1.owner = (Thing)null;
-                this._part2.owner = (Thing)null;
-                this._part3.owner = (Thing)null;
+                this._part1.owner = null;
+                this._part2.owner = null;
+                this._part3.owner = null;
                 if (this._duck.isServerForObject)
                 {
-                    Thing.Fondle((Thing)this, this._duck.connection);
-                    Thing.Fondle((Thing)this._part1, this._duck.connection);
-                    Thing.Fondle((Thing)this._part2, this._duck.connection);
-                    Thing.Fondle((Thing)this._part3, this._duck.connection);
+                    Thing.Fondle(this, this._duck.connection);
+                    Thing.Fondle(_part1, this._duck.connection);
+                    Thing.Fondle(_part2, this._duck.connection);
+                    Thing.Fondle(_part3, this._duck.connection);
                 }
             }
             else
-                Level.Remove((Thing)this);
-            this._duck.ragdoll = (Ragdoll)null;
+                Level.Remove(this);
+            this._duck.ragdoll = null;
             if (num == 0)
                 this._duck.vSpeed = -2f;
             else
@@ -459,7 +459,7 @@ namespace DuckGame
             if (this._duck == null || this._duck.dead)
                 return;
             this._duck.position = this._part2.position;
-            this._duck.Kill((DestroyType)new DTShot(bullet));
+            this._duck.Kill(new DTShot(bullet));
             this._duck.y -= 5000f;
         }
 
@@ -483,9 +483,9 @@ namespace DuckGame
         {
             if (this._part1 == null || this._part2 == null || this._part3 == null)
                 return;
-            Level.Remove((Thing)this._part1);
-            Level.Remove((Thing)this._part2);
-            Level.Remove((Thing)this._part3);
+            Level.Remove(_part1);
+            Level.Remove(_part2);
+            Level.Remove(_part3);
         }
 
         public void Solve(PhysicsObject body1, PhysicsObject body2, float dist)
@@ -530,8 +530,8 @@ namespace DuckGame
 
         public float SpecialSolve(PhysicsObject b1, PhysicsObject b2, float dist)
         {
-            Thing thing1 = b1.owner != null ? b1.owner : (Thing)b1;
-            Thing thing2 = b2.owner != null ? b2.owner : (Thing)b2;
+            Thing thing1 = b1.owner != null ? b1.owner : b1;
+            Thing thing2 = b2.owner != null ? b2.owner : b2;
             float num1 = dist;
             Vec2 vec2_1 = b2.position - b1.position;
             float num2 = vec2_1.length;
@@ -583,7 +583,7 @@ namespace DuckGame
 
         public float SpecialSolve(PhysicsObject b1, Vec2 stuck, float dist)
         {
-            Thing thing = b1.owner != null ? b1.owner : (Thing)b1;
+            Thing thing = b1.owner != null ? b1.owner : b1;
             float num1 = dist;
             Vec2 vec2_1 = stuck - b1.position;
             float num2 = vec2_1.length;
@@ -623,7 +623,7 @@ namespace DuckGame
             this._timeSinceNudge += 0.07f;
             if (this._part1 == null || this._part2 == null || this._part3 == null)
                 return;
-            if ((double)this._zap > 0.0)
+            if (_zap > 0.0)
             {
                 this._part1.vSpeed += Rando.Float(-1f, 0.5f);
                 this._part1.hSpeed += Rando.Float(-0.5f, 0.5f);
@@ -631,12 +631,12 @@ namespace DuckGame
                 this._part2.hSpeed += Rando.Float(-0.5f, 0.5f);
                 this._part3.vSpeed += Rando.Float(-1f, 0.5f);
                 this._part3.hSpeed += Rando.Float(-0.5f, 0.5f);
-                this._part1.x += (float)Rando.Int(-2, 2);
-                this._part1.y += (float)Rando.Int(-2, 2);
-                this._part2.x += (float)Rando.Int(-2, 2);
-                this._part2.y += (float)Rando.Int(-2, 2);
-                this._part3.x += (float)Rando.Int(-2, 2);
-                this._part3.y += (float)Rando.Int(-2, 2);
+                this._part1.x += Rando.Int(-2, 2);
+                this._part1.y += Rando.Int(-2, 2);
+                this._part2.x += Rando.Int(-2, 2);
+                this._part2.y += Rando.Int(-2, 2);
+                this._part3.x += Rando.Int(-2, 2);
+                this._part3.y += Rando.Int(-2, 2);
                 this._zap -= 0.05f;
                 this._wasZapping = true;
             }
@@ -650,7 +650,7 @@ namespace DuckGame
                         this.captureDuck.Ressurect();
                         return;
                     }
-                    this.captureDuck.Kill((DestroyType)new DTElectrocute(this._zapper));
+                    this.captureDuck.Kill(new DTElectrocute(this._zapper));
                     return;
                 }
             }
@@ -665,7 +665,7 @@ namespace DuckGame
             if (this._zekeBear)
                 this.partSep = 4f;
             Vec2 vec2_1 = this._part1.position - this._part3.position;
-            if ((double)vec2_1.length > (double)this.partSep * 5.0)
+            if ((double)vec2_1.length > partSep * 5.0)
             {
                 if (this._part1.owner != null)
                 {
@@ -690,35 +690,35 @@ namespace DuckGame
                 }
                 this._part1.vSpeed = this._part2.vSpeed = this._part3.vSpeed = 0.0f;
                 this._part1.hSpeed = this._part2.hSpeed = this._part3.hSpeed = 0.0f;
-                this.Solve((PhysicsObject)this._part1, (PhysicsObject)this._part2, this.partSep);
-                this.Solve((PhysicsObject)this._part2, (PhysicsObject)this._part3, this.partSep);
-                this.Solve((PhysicsObject)this._part1, (PhysicsObject)this._part3, this.partSep * 2f);
+                this.Solve(_part1, _part2, this.partSep);
+                this.Solve(_part2, _part3, this.partSep);
+                this.Solve(_part1, _part3, this.partSep * 2f);
             }
-            this.Solve((PhysicsObject)this._part1, (PhysicsObject)this._part2, this.partSep);
-            this.Solve((PhysicsObject)this._part2, (PhysicsObject)this._part3, this.partSep);
-            this.Solve((PhysicsObject)this._part1, (PhysicsObject)this._part3, this.partSep * 2f);
+            this.Solve(_part1, _part2, this.partSep);
+            this.Solve(_part2, _part3, this.partSep);
+            this.Solve(_part1, _part3, this.partSep * 2f);
             if (this._part1.owner is Duck && this._part3.owner is Duck)
             {
-                double num1 = (double)this.SpecialSolve((PhysicsObject)this._part3, (PhysicsObject)(this._part1.owner as Duck), 16f);
-                double num2 = (double)this.SpecialSolve((PhysicsObject)this._part1, (PhysicsObject)(this._part3.owner as Duck), 16f);
+                double num1 = (double)this.SpecialSolve(_part3, this._part1.owner as Duck, 16f);
+                double num2 = (double)this.SpecialSolve(_part1, this._part3.owner as Duck, 16f);
             }
             if (this.tongueStuck != Vec2.Zero && this.captureDuck != null)
             {
-                Vec2 vec2_5 = this.tongueStuck + new Vec2((float)((int)this.captureDuck.offDir * -4), -6f);
+                Vec2 vec2_5 = this.tongueStuck + new Vec2(captureDuck.offDir * -4, -6f);
                 if (this._part1.owner is Duck)
                 {
-                    double num3 = (double)this.SpecialSolve((PhysicsObject)this._part3, (PhysicsObject)(this._part1.owner as Duck), 16f);
-                    double num4 = (double)this.SpecialSolve((PhysicsObject)this._part1, vec2_5, 16f);
+                    double num3 = (double)this.SpecialSolve(_part3, this._part1.owner as Duck, 16f);
+                    double num4 = (double)this.SpecialSolve(_part1, vec2_5, 16f);
                 }
                 if (this._part3.owner is Duck)
                 {
-                    double num5 = (double)this.SpecialSolve((PhysicsObject)this._part1, (PhysicsObject)(this._part3.owner as Duck), 16f);
-                    double num6 = (double)this.SpecialSolve((PhysicsObject)this._part3, vec2_5, 16f);
+                    double num5 = (double)this.SpecialSolve(_part1, this._part3.owner as Duck, 16f);
+                    double num6 = (double)this.SpecialSolve(_part3, vec2_5, 16f);
                 }
                 vec2_1 = this.part1.position - vec2_5;
                 if ((double)vec2_1.length > 4.0)
                 {
-                    double num = (double)this.SpecialSolve((PhysicsObject)this._part1, vec2_5, 4f);
+                    double num = (double)this.SpecialSolve(_part1, vec2_5, 4f);
                     vec2_1 = vec2_5 - this.part1.position;
                     Vec2 normalized = vec2_1.normalized;
                     vec2_1 = this.part1.position - vec2_5;
@@ -727,7 +727,7 @@ namespace DuckGame
                 }
             }
             this.position = (this._part1.position + this._part2.position + this._part3.position) / 3f;
-            if (this._duck == null || (double)this._zap > 0.0)
+            if (this._duck == null || _zap > 0.0)
                 return;
             if (this._duck.eyesClosed)
                 this._part1.frame = 20;
@@ -738,7 +738,7 @@ namespace DuckGame
             {
                 if (this.isOffBottomOfLevel && !this._duck.dead)
                 {
-                    flag = this._duck.Kill((DestroyType)new DTFall());
+                    flag = this._duck.Kill(new DTFall());
                     ++this._duck.profile.stats.fallDeaths;
                 }
                 this.jetting = false;
@@ -763,9 +763,9 @@ namespace DuckGame
         public void UpdateInput()
         {
             this.sleepingBagTimer -= Maths.IncFrameTimer();
-            if ((double)this.sleepingBagTimer < 0.0 && this.sleepingBagHealth > (byte)20)
+            if (sleepingBagTimer < 0.0 && this.sleepingBagHealth > 20)
             {
-                this.sleepingBagHealth -= (byte)4;
+                this.sleepingBagHealth -= 4;
                 this.sleepingBagTimer = 1f;
             }
             if (!this._duck.dead)
@@ -776,22 +776,22 @@ namespace DuckGame
                     {
                         Vec2 vec2_1 = (this._part1.position - this._part2.position).Rotate(1.570796f, Vec2.Zero);
                         RagdollPart part1 = this.part1;
-                        part1.velocity = part1.velocity + vec2_1 * 0.2f;
+                        part1.velocity += vec2_1 * 0.2f;
                         Vec2 vec2_2 = (this._part3.position - this._part2.position).Rotate(1.570796f, Vec2.Zero);
                         RagdollPart part3 = this.part3;
-                        part3.velocity = part3.velocity + vec2_2 * 0.2f;
+                        part3.velocity += vec2_2 * 0.2f;
                     }
                     else if (this.captureDuck.inputProfile.Pressed("LEFT"))
                     {
                         Vec2 vec2_3 = (this._part1.position - this._part2.position).Rotate(1.570796f, Vec2.Zero);
                         RagdollPart part1 = this.part1;
-                        part1.velocity = part1.velocity + vec2_3 * -0.2f;
+                        part1.velocity += vec2_3 * -0.2f;
                         Vec2 vec2_4 = (this._part3.position - this._part2.position).Rotate(1.570796f, Vec2.Zero);
                         RagdollPart part3 = this.part3;
-                        part3.velocity = part3.velocity + vec2_4 * -0.2f;
+                        part3.velocity += vec2_4 * -0.2f;
                     }
                 }
-                else if ((double)this._timeSinceNudge > 1.0 && !this.jetting)
+                else if (_timeSinceNudge > 1.0 && !this.jetting)
                 {
                     if (this.captureDuck.inputProfile.Pressed("LEFT"))
                     {
@@ -828,14 +828,14 @@ namespace DuckGame
             {
                 this.tongueStuck = Vec2.Zero;
                 if (Network.isActive)
-                    Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                    Thing.Fondle(this, DuckNetwork.localConnection);
                 this._makeActive = true;
             }
-            if (this._duck.dead || !this.captureDuck.inputProfile.Pressed("RAGDOLL") && !this.captureDuck.inputProfile.Pressed("JUMP") || ((this._part1.framesSinceGrounded < (byte)5 || this._part2.framesSinceGrounded < (byte)5 || this._part3.framesSinceGrounded < (byte)5 ? 1 : (this._part1.doFloat || this.part2.doFloat ? 1 : (this._part3.doFloat ? 1 : 0))) | (flag ? 1 : 0)) == 0 && this._part1.owner == null && this._part2.owner == null && this._part3.owner == null)
+            if (this._duck.dead || !this.captureDuck.inputProfile.Pressed("RAGDOLL") && !this.captureDuck.inputProfile.Pressed("JUMP") || ((this._part1.framesSinceGrounded < 5 || this._part2.framesSinceGrounded < 5 || this._part3.framesSinceGrounded < 5 ? 1 : (this._part1.doFloat || this.part2.doFloat ? 1 : (this._part3.doFloat ? 1 : 0))) | (flag ? 1 : 0)) == 0 && this._part1.owner == null && this._part2.owner == null && this._part3.owner == null)
                 return;
             if (this.inSleepingBag)
             {
-                if ((double)this._timeSinceNudge <= 1.0)
+                if (_timeSinceNudge <= 1.0)
                     return;
                 this._part1.vSpeed += NetRand.Float(-2f, 1f);
                 this._part3.vSpeed += NetRand.Float(-2f, 1f);
@@ -849,7 +849,7 @@ namespace DuckGame
                     return;
                 this.tongueStuck = Vec2.Zero;
                 if (Network.isActive)
-                    Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                    Thing.Fondle(this, DuckNetwork.localConnection);
                 this._makeActive = true;
             }
         }
@@ -859,10 +859,10 @@ namespace DuckGame
             ++this.tongueShakes;
             if (this._part1 != null && this._part1.owner == null && this._part2 != null && this._part2.owner == null && this._part3 != null && this._part3.owner == null && this.tongueStuck != Vec2.Zero && this.tongueShakes > 5)
                 this.tongueStuck = Vec2.Zero;
-            if (this.sleepingBagHealth < (byte)0 || this.captureDuck == null)
+            if (this.sleepingBagHealth < 0 || this.captureDuck == null)
                 return;
-            this.sleepingBagHealth = (byte)Math.Max((int)this.sleepingBagHealth - 5, 0);
-            if (this.sleepingBagHealth != (byte)0)
+            this.sleepingBagHealth = (byte)Math.Max(sleepingBagHealth - 5, 0);
+            if (this.sleepingBagHealth != 0)
                 return;
             if (this.inSleepingBag && this.captureDuck.isServerForObject)
                 this._makeActive = true;

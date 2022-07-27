@@ -37,8 +37,8 @@ namespace DuckGame
                 {
                     foreach (Block t in door.collision)
                     {
-                        if (Collision.Rect(TopLeft, BottomRight, (Thing)t))
-                            source.Add((MaterialThing)t);
+                        if (Collision.Rect(TopLeft, BottomRight, t))
+                            source.Add(t);
                     }
                 }
             }
@@ -70,7 +70,7 @@ namespace DuckGame
             if (autoBlock1 != null)
             {
                 Vec2 topLeft = autoBlock1.topLeft;
-                if ((double)topLeft.y < (double)door.bottom)
+                if (topLeft.y < (double)door.bottom)
                     topLeft.y = door.bottom;
                 float hi = autoBlock1.bottom - topLeft.y;
                 if ((double)hi < 8.0)
@@ -81,7 +81,7 @@ namespace DuckGame
             if (autoBlock2 != null)
             {
                 Vec2 bottomLeft = autoBlock1.bottomLeft;
-                if ((double)bottomLeft.y > (double)door.top)
+                if (bottomLeft.y > (double)door.top)
                     bottomLeft.y = door.top;
                 float hi = bottomLeft.y - autoBlock2.top;
                 if ((double)hi < 8.0)
@@ -90,12 +90,14 @@ namespace DuckGame
             }
             if (door.layer == null)
             {
-                door.layer = new Layer("PORTAL", Layer.Game.depth, Layer.Game.camera);
-                door.layer.scissor = (Rectangle)Graphics.viewport.Bounds;
+                door.layer = new Layer("PORTAL", Layer.Game.depth, Layer.Game.camera)
+                {
+                    scissor = (Rectangle)Graphics.viewport.Bounds
+                };
                 Layer.Add(door.layer);
             }
             door.isLeft = Level.CheckPoint<AutoBlock>(door.center + new Vec2(-8f, 0.0f)) != null;
-            door.rect = new Rectangle((float)((int)door.point1.x - 8), (float)(int)door.point1.y, 16f, (float)((int)door.point2.y - (int)door.point1.y));
+            door.rect = new Rectangle((int)door.point1.x - 8, (int)door.point1.y, 16f, (int)door.point2.y - (int)door.point1.y);
         }
 
         public override void Initialize()
@@ -112,7 +114,7 @@ namespace DuckGame
         {
             if (this._doors.Count != 2)
                 return;
-            IEnumerable<ITeleport> teleports = (IEnumerable<ITeleport>)null;
+            IEnumerable<ITeleport> teleports = null;
             foreach (PortalDoor door in this._doors)
             {
                 IEnumerable<ITeleport> second = door.horizontal ? Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(0.0f, -8f), door.point2 + new Vec2(0.0f, 8f)) : Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(-8f, 0.0f), door.point2 + new Vec2(8f, 0.0f));
@@ -127,22 +129,22 @@ namespace DuckGame
             foreach (PortalDrawTransformer portalDrawTransformer in portalDrawTransformerList)
             {
                 this._inPortal.Remove(portalDrawTransformer);
-                portalDrawTransformer.thing.portal = (Portal)null;
+                portalDrawTransformer.thing.portal = null;
                 portalDrawTransformer.thing.layer = Layer.Game;
                 foreach (PortalDoor door in this._doors)
-                    door.layer.Remove((Thing)portalDrawTransformer);
+                    door.layer.Remove(portalDrawTransformer);
             }
             foreach (ITeleport teleport in teleports)
             {
                 ITeleport t = teleport;
-                if (this._inPortal.FirstOrDefault<PortalDrawTransformer>((Func<PortalDrawTransformer, bool>)(v => v.thing == t)) == null)
+                if (this._inPortal.FirstOrDefault<PortalDrawTransformer>(v => v.thing == t) == null)
                 {
                     PortalDrawTransformer portalDrawTransformer = new PortalDrawTransformer(t as Thing, this);
                     this._inPortal.Add(portalDrawTransformer);
                     (t as Thing).portal = this;
                     (t as Thing).layer = this._fakeLayer;
                     foreach (PortalDoor door in this._doors)
-                        door.layer.Add((Thing)portalDrawTransformer);
+                        door.layer.Add(portalDrawTransformer);
                 }
             }
             foreach (PortalDoor door in this._doors)
@@ -150,15 +152,15 @@ namespace DuckGame
                 door.Update();
                 foreach (PortalDrawTransformer portalDrawTransformer in this._inPortal)
                 {
-                    if (door.isLeft && (double)portalDrawTransformer.thing.x < (double)door.center.x)
+                    if (door.isLeft && (double)portalDrawTransformer.thing.x < door.center.x)
                     {
                         Thing thing = portalDrawTransformer.thing;
-                        thing.position = thing.position + (this.GetOtherDoor(door).center - door.center);
+                        thing.position += (this.GetOtherDoor(door).center - door.center);
                     }
-                    else if (!door.isLeft && (double)portalDrawTransformer.thing.x > (double)door.center.x)
+                    else if (!door.isLeft && (double)portalDrawTransformer.thing.x > door.center.x)
                     {
                         Thing thing = portalDrawTransformer.thing;
-                        thing.position = thing.position + (this.GetOtherDoor(door).center - door.center);
+                        thing.position += (this.GetOtherDoor(door).center - door.center);
                     }
                 }
             }

@@ -30,14 +30,14 @@ namespace DuckGame
 
         public bool HasArg<T>(string pName)
         {
-            CMD.Argument obj = ((IEnumerable<CMD.Argument>)this.arguments).FirstOrDefault<CMD.Argument>((Func<CMD.Argument, bool>)(x => x.name == pName));
+            CMD.Argument obj = arguments.FirstOrDefault<CMD.Argument>(x => x.name == pName);
             return obj != null && obj.value != null;
         }
 
         public T Arg<T>(string pName)
         {
-            CMD.Argument obj = ((IEnumerable<CMD.Argument>)this.arguments).FirstOrDefault<CMD.Argument>((Func<CMD.Argument, bool>)(x => x.name == pName));
-            return obj != null && obj.value != null ? (T)(object)obj.value : default(T);
+            CMD.Argument obj = arguments.FirstOrDefault<CMD.Argument>(x => x.name == pName);
+            return obj != null && obj.value != null ? (T)obj.value : default(T);
         }
 
         public string fullCommandName => this.parent != null ? this.parent.fullCommandName + " " + this.keyword : this.keyword;
@@ -94,13 +94,13 @@ namespace DuckGame
 
         public bool Run(string pArguments)
         {
-            this.logMessage = (string)null;
+            this.logMessage = null;
             string[] source = pArguments.Split(' ');
             if (this.subcommand != null)
                 return this.Error("|DGRED|Command (" + this.keyword + ") requires a sub command.");
-            if (((IEnumerable<string>)source).Count<string>() > 0 && source[0] == "?")
+            if (source.Count<string>() > 0 && source[0] == "?")
                 return this.Help(this.info);
-            if (((IEnumerable<string>)source).Count<string>() > 0 && source[0].Trim().Length > 0 && this.arguments == null)
+            if (source.Count<string>() > 0 && source[0].Trim().Length > 0 && this.arguments == null)
                 return this.Error("|DGRED|Command (" + this.keyword + ") takes no arguments.");
             if (this.arguments != null)
             {
@@ -115,7 +115,7 @@ namespace DuckGame
                     }
                     else if (num >= 0)
                         return this.Error("|DGRED|Command implementation error: 'optional' arguments must appear last.");
-                    if (((IEnumerable<string>)source).Count<string>() > index1)
+                    if (source.Count<string>() > index1)
                     {
                         if (!string.IsNullOrWhiteSpace(source[index1]))
                         {
@@ -168,7 +168,7 @@ namespace DuckGame
             if (this.arguments == null)
                 return;
             foreach (CMD.Argument obj in this.arguments)
-                obj.value = (object)null;
+                obj.value = null;
         }
 
         protected bool Error(string pError = null)
@@ -212,7 +212,7 @@ namespace DuckGame
             {
                 if (pError != null)
                     this._parseFailMessage = pError;
-                return (object)null;
+                return null;
             }
         }
 
@@ -224,7 +224,7 @@ namespace DuckGame
                 this.type = typeof(string);
             }
 
-            public override object Parse(string pValue) => (object)pValue;
+            public override object Parse(string pValue) => pValue;
         }
 
         public class Integer : CMD.Argument
@@ -239,7 +239,7 @@ namespace DuckGame
             {
                 try
                 {
-                    return (object)Convert.ToInt32(pValue);
+                    return Convert.ToInt32(pValue);
                 }
                 catch (Exception)
                 {
@@ -263,7 +263,7 @@ namespace DuckGame
             public override object Parse(string pValue)
             {
                 if (pValue == "clear" || pValue == "default" || pValue == "none")
-                    return (object)"";
+                    return "";
                 bool flag1 = false;
                 bool flag2 = false;
                 if (pValue.EndsWith(" bold"))
@@ -285,7 +285,7 @@ namespace DuckGame
                     name += "@BOLD@";
                 if (flag2)
                     name += "@ITALIC@";
-                return (object)name;
+                return name;
             }
         }
 
@@ -297,7 +297,7 @@ namespace DuckGame
                 this.type = typeof(CMD.Layer);
             }
 
-            public override object Parse(string pValue) => (object)DuckGame.Layer.core._layers.FirstOrDefault<DuckGame.Layer>((Func<DuckGame.Layer, bool>)(x => x.name.ToLower() == pValue)) ?? this.Error("Layer named (" + pValue + ") was not found.");
+            public override object Parse(string pValue) => (object)DuckGame.Layer.core._layers.FirstOrDefault<DuckGame.Layer>(x => x.name.ToLower() == pValue) ?? this.Error("Layer named (" + pValue + ") was not found.");
         }
 
         public class Level : CMD.Argument
@@ -324,34 +324,34 @@ namespace DuckGame
                         {
                         }
                     }
-                    return (object)new GameLevel("RANDOM", seedVal);
+                    return new GameLevel("RANDOM", seedVal);
                 }
                 if (pValue == "title")
-                    return (object)new TitleScreen();
+                    return new TitleScreen();
                 if (pValue == "rockintro")
-                    return (object)new RockIntro((DuckGame.Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)));
+                    return new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)));
                 if (pValue == "rockthrow")
-                    return (object)new RockScoreboard();
+                    return new RockScoreboard();
                 if (pValue == "finishscreen")
-                    return (object)new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
+                    return new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
                 if (pValue == "highlights")
-                    return (object)new HighlightLevel();
+                    return new HighlightLevel();
                 if (pValue == "next")
-                    return (object)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
+                    return new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
                 if (pValue == "editor")
-                    return (object)Main.editor;
+                    return Main.editor;
                 if (pValue == "arcade")
-                    return (object)new ArcadeLevel(Content.GetLevelID("arcade"));
+                    return new ArcadeLevel(Content.GetLevelID("arcade"));
                 if (!pValue.EndsWith(".lev"))
                     pValue += ".lev";
                 LevelData levelData1 = DuckFile.LoadLevel(Content.path + "/levels/" + ("deathmatch/" + pValue));
                 if (levelData1 != null)
-                    return (object)new GameLevel(levelData1.metaData.guid);
+                    return new GameLevel(levelData1.metaData.guid);
                 if (DuckFile.LoadLevel(DuckFile.levelDirectory + pValue) != null)
-                    return (object)new GameLevel(pValue);
+                    return new GameLevel(pValue);
                 LevelData levelData2 = DuckFile.LoadLevel(Content.path + "/levels/" + pValue);
                 if (levelData2 != null)
-                    return (object)new GameLevel(levelData2.metaData.guid);
+                    return new GameLevel(levelData2.metaData.guid);
                 foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                 {
                     if (accessibleMod.configuration.content != null)
@@ -359,7 +359,7 @@ namespace DuckGame
                         foreach (string level in accessibleMod.configuration.content.levels)
                         {
                             if (level.ToLowerInvariant().EndsWith(pValue))
-                                return (object)new GameLevel(level);
+                                return new GameLevel(level);
                         }
                     }
                 }
@@ -379,18 +379,18 @@ namespace DuckGame
             {
                 pValue = pValue.ToLowerInvariant();
                 if (pValue == "gun")
-                    return (object)ItemBoxRandom.GetRandomItem();
+                    return ItemBoxRandom.GetRandomItem();
                 if (typeof(T) == typeof(Duck))
                 {
                     Profile profile = DevConsole.ProfileByName(pValue);
                     if (profile == null)
                         return this.Error("Argument (" + pValue + ") should be the name of a player.");
-                    return profile.duck == null ? this.Error("Player (" + pValue + ") is not present in the game.") : (object)profile.duck;
+                    return profile.duck == null ? this.Error("Player (" + pValue + ") is not present in the game.") : profile.duck;
                 }
                 if (typeof(T) == typeof(TeamHat))
                 {
-                    Team t = Teams.all.FirstOrDefault<Team>((Func<Team, bool>)(x => x.name.ToLower() == pValue));
-                    return t != null ? (object)new TeamHat(0.0f, 0.0f, t) : this.Error("Argument (" + pValue + ") should be the name of a team");
+                    Team t = Teams.all.FirstOrDefault<Team>(x => x.name.ToLower() == pValue);
+                    return t != null ? new TeamHat(0.0f, 0.0f, t) : this.Error("Argument (" + pValue + ") should be the name of a team");
                 }
                 foreach (System.Type thingType in Editor.ThingTypes)
                 {
@@ -398,7 +398,7 @@ namespace DuckGame
                     {
                         if (!Editor.HasConstructorParameter(thingType))
                             return this.Error(thingType.Name + " can not be spawned this way.");
-                        return !typeof(T).IsAssignableFrom(thingType) ? this.Error("Wrong object type (requires " + typeof(T).Name + ").") : (object)(Editor.CreateThing(thingType) as T);
+                        return !typeof(T).IsAssignableFrom(thingType) ? this.Error("Wrong object type (requires " + typeof(T).Name + ").") : Editor.CreateThing(thingType) as T;
                     }
                 }
                 return this.Error(typeof(T).Name + " of type (" + pValue + ") was not found.");

@@ -21,14 +21,14 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 12;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this.wideBarrel = true;
             this.barrelInsertOffset = new Vec2(-3f, -1f);
             this._type = "gun";
             this._sprite = new SpriteMap("dartgun", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 16f);
             this.collisionOffset = new Vec2(-8f, -4f);
             this.collisionSize = new Vec2(16f, 9f);
@@ -54,23 +54,23 @@ namespace DuckGame
             if (!this.onFire)
                 return;
             this._burnWait -= 0.01f;
-            if ((double)this._burnWait < 0.0)
+            if (_burnWait < 0.0)
             {
-                Level.Add((Thing)SmallFire.New(10f, 0.0f, 0.0f, 0.0f, stick: ((MaterialThing)this), canMultiply: false, firedFrom: ((Thing)this)));
+                Level.Add(SmallFire.New(10f, 0.0f, 0.0f, 0.0f, stick: this, canMultiply: false, firedFrom: this));
                 this._burnWait = 1f;
             }
-            if ((double)this.burnt >= 1.0)
+            if (burnt >= 1.0)
                 return;
             this.burnt += 1f / 1000f;
         }
 
         public override void Update()
         {
-            if (!this.burntOut && (double)this.burnt >= 1.0)
+            if (!this.burntOut && burnt >= 1.0)
             {
                 this._sprite.frame = 1;
                 Vec2 vec2 = this.Offset(new Vec2(10f, 0.0f));
-                Level.Add((Thing)SmallSmoke.New(vec2.x, vec2.y));
+                Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                 this._onFire = false;
                 this.flammable = 0.0f;
                 this.burntOut = true;
@@ -90,7 +90,7 @@ namespace DuckGame
         {
             if (this.ammo > 0)
             {
-                if ((double)this._burnLife <= 0.0)
+                if (_burnLife <= 0.0)
                 {
                     SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
                 }
@@ -104,10 +104,10 @@ namespace DuckGame
                     Vec2 vec2 = this.Offset(this.barrelOffset + new Vec2(-8f, 0.0f));
                     float radians = this.barrelAngle + Rando.Float(-0.05f, 0.05f);
                     Dart dart = new Dart(vec2.x, vec2.y, this.owner as Duck, -radians);
-                    this.Fondle((Thing)dart);
+                    this.Fondle(dart);
                     if (this.onFire)
                     {
-                        Level.Add((Thing)SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: ((MaterialThing)dart), firedFrom: ((Thing)this)));
+                        Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: dart, firedFrom: this));
                         dart.burning = true;
                         dart.onFire = true;
                     }
@@ -115,7 +115,7 @@ namespace DuckGame
                     Vec2 vec = Maths.AngleToVec(radians);
                     dart.hSpeed = vec.x * 10f;
                     dart.vSpeed = vec.y * 10f;
-                    Level.Add((Thing)dart);
+                    Level.Add(dart);
                 }
             }
             else

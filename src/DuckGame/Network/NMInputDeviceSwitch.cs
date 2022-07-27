@@ -25,14 +25,14 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.index < (byte)0 || this.index > (byte)3)
+            if (this.index < 0 || this.index > 3)
                 return;
-            Profile profile = DuckNetwork.profiles[(int)this.index];
+            Profile profile = DuckNetwork.profiles[index];
             if (profile != null && profile.inputProfile != null)
             {
                 foreach (DeviceInputMapping inputMappingOverride in profile.inputMappingOverrides)
                 {
-                    if (inputMappingOverride.inputOverrideType == (int)this.inputType && inputMappingOverride.deviceOverride != null)
+                    if (inputMappingOverride.inputOverrideType == inputType && inputMappingOverride.deviceOverride != null)
                     {
                         profile.inputProfile.lastActiveOverride = inputMappingOverride.deviceOverride;
                         break;

@@ -49,13 +49,17 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._textElement = new UIText(text, c);
-            this._textElement.align = UIAlign.Left;
-            this.rightSection.Add((UIComponent)this._textElement, true);
-            this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            this._textElement = new UIText(text, c)
+            {
+                align = UIAlign.Left
+            };
+            this.rightSection.Add(_textElement, true);
+            this._arrow = new UIImage("contextArrowRight")
+            {
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
             this._action = action;
             this.align = al;
             this._isBackButton = backButton;
@@ -71,13 +75,17 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._textElement = new UIText(pTextFunc, c);
-            this._textElement.align = UIAlign.Left;
-            this.rightSection.Add((UIComponent)this._textElement, true);
-            this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            this._textElement = new UIText(pTextFunc, c)
+            {
+                align = UIAlign.Left
+            };
+            this.rightSection.Add(_textElement, true);
+            this._arrow = new UIImage("contextArrowRight")
+            {
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
             this._action = action;
             this.align = al;
             this._isBackButton = backButton;

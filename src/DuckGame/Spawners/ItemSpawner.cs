@@ -67,7 +67,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("gunSpawner", 14, 10);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 0.0f);
             this.collisionSize = new Vec2(14f, 2f);
             this.collisionOffset = new Vec2(-7f, 0.0f);
@@ -84,8 +84,8 @@ namespace DuckGame
                 this._isClassicSpawner = true;
             this._ball1 = new SpawnerBall(this.x, this.y - 1f, false);
             this._ball2 = new SpawnerBall(this.x, this.y - 1f, true);
-            Level.Add((Thing)this._ball1);
-            Level.Add((Thing)this._ball2);
+            Level.Add(_ball1);
+            Level.Add(_ball2);
             if (this.spawnOnStart)
                 this._spawnWait = this.spawnTime;
             if (Level.current is Editor)
@@ -98,7 +98,7 @@ namespace DuckGame
             }
             else
             {
-                if (this.possible.Count <= 0 || !(this.contains == (System.Type)null))
+                if (this.possible.Count <= 0 || !(this.contains == null))
                     return;
                 this.PreparePossibilities();
             }
@@ -109,15 +109,15 @@ namespace DuckGame
             if (this._hoverItem == null)
                 return;
             this._hoverItem.gravMultiplier = 1f;
-            this._hoverItem.hoverSpawner = (ItemSpawner)null;
-            this._hoverItem = (Holdable)null;
+            this._hoverItem.hoverSpawner = null;
+            this._hoverItem = null;
         }
 
         public virtual void SpawnItem()
         {
             this._spawnWait = 0.0f;
             if (Network.isActive && this.isServerForObject)
-                Send.Message((NetMessage)new NMItemSpawned(this));
+                Send.Message(new NMItemSpawned(this));
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(this.contains);
             PhysicsObject hover = !Network.isActive || bag.GetOrDefault("isOnlineCapable", true) ? Editor.CreateThing(this.contains) as PhysicsObject : Activator.CreateInstance(typeof(Pistol), Editor.GetConstructorParameters(typeof(Pistol))) as PhysicsObject;
             if (hover == null)
@@ -128,7 +128,7 @@ namespace DuckGame
             hover.spawnAnimation = true;
             hover.isSpawned = true;
             hover.offDir = this.offDir;
-            Level.Add((Thing)hover);
+            Level.Add(hover);
             if (!this._seated)
                 return;
             this.SetHoverItem(hover as Holdable);
@@ -140,7 +140,7 @@ namespace DuckGame
                 return;
             if (this._hoverItem != null)
             {
-                this._hoverItem.hoverSpawner = (ItemSpawner)null;
+                this._hoverItem.hoverSpawner = null;
                 this._hoverItem.grounded = false;
             }
             this.hoverItem = hover;
@@ -167,7 +167,7 @@ namespace DuckGame
         public override void EditorUpdate()
         {
             this._hoverSin.Update();
-            if (this.contains != (System.Type)null && !this.randomSpawn && Level.current is Editor && (this.previewThing == null || this.previewThing.GetType() != this.contains))
+            if (this.contains != null && !this.randomSpawn && Level.current is Editor && (this.previewThing == null || this.previewThing.GetType() != this.contains))
             {
                 this.previewThing = Editor.GetThing(this.contains);
                 if (this.previewThing != null)
@@ -186,7 +186,7 @@ namespace DuckGame
             {
                 if (this._seated)
                 {
-                    Holdable hover = Level.current.NearestThingFilter<Holdable>(this.position, (Predicate<Thing>)(d => !(d is TeamHat) && (d as Holdable).canPickUp), 16f);
+                    Holdable hover = Level.current.NearestThingFilter<Holdable>(this.position, d => !(d is TeamHat) && (d as Holdable).canPickUp, 16f);
                     if (hover != null && hover.owner == null && hover != null && hover.canPickUp && (double)Math.Abs(hover.hSpeed) + (double)Math.Abs(hover.vSpeed) < 2.5 && (!(hover is Gun) || (hover as Gun).ammo > 0))
                         this.SetHoverItem(hover);
                 }
@@ -211,9 +211,9 @@ namespace DuckGame
                 this._ball1.desiredOrbitHeight = 4f;
                 this._ball2.desiredOrbitHeight = 4f;
             }
-            if (!Network.isServer || this._numSpawned >= this.spawnNum && this.spawnNum != -1 || this._hoverItem != null || !(this.contains != (System.Type)null) && !this.randomSpawn || (double)this._spawnWait < (double)this.spawnTime)
+            if (!Network.isServer || this._numSpawned >= this.spawnNum && this.spawnNum != -1 || this._hoverItem != null || !(this.contains != null) && !this.randomSpawn || _spawnWait < (double)this.spawnTime)
                 return;
-            if ((double)this.initialDelay > 0.0)
+            if (initialDelay > 0.0)
             {
                 this.initialDelay -= 0.0166666f;
             }
@@ -235,13 +235,13 @@ namespace DuckGame
                 this.TrySeating();
             if (this._isClassicSpawner)
                 this._sprite.frame = (this._seated ? 0 : 1) + (this.keepRandom ? 4 : (this.randomSpawn ? 2 : 0));
-            if (this.contains != (System.Type)null && !this.randomSpawn && Level.current is Editor && this.previewThing != null)
+            if (this.contains != null && !this.randomSpawn && Level.current is Editor && this.previewThing != null)
             {
                 this._bob += 0.05f;
                 this.previewSprite.CenterOrigin();
                 this.previewSprite.alpha = 0.5f;
-                this.previewSprite.flipH = this.offDir < (sbyte)0;
-                Graphics.Draw(this.previewSprite, this.x, (float)((double)this.y - 8.0 + Math.Sin((double)this._bob) * 2.0));
+                this.previewSprite.flipH = this.offDir < 0;
+                Graphics.Draw(this.previewSprite, this.x, (float)((double)this.y - 8.0 + Math.Sin(_bob) * 2.0));
             }
             if (this._isClassicSpawner && (this._sprite.frame == 1 || this._sprite.frame == 3))
             {
@@ -255,8 +255,8 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            Level.Remove((Thing)this._ball1);
-            Level.Remove((Thing)this._ball2);
+            Level.Remove(_ball1);
+            Level.Remove(_ball2);
         }
 
         public List<TypeProbPair> possible => this._possible;
@@ -266,15 +266,15 @@ namespace DuckGame
             BinaryClassChunk binaryClassChunk = base.Serialize();
             if (this._hasContainedItem)
             {
-                binaryClassChunk.AddProperty("contains", (object)Editor.SerializeTypeName(this.contains));
-                binaryClassChunk.AddProperty("randomSpawn", (object)this.randomSpawn);
-                binaryClassChunk.AddProperty("keepRandom", (object)this.keepRandom);
+                binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+                binaryClassChunk.AddProperty("randomSpawn", randomSpawn);
+                binaryClassChunk.AddProperty("keepRandom", keepRandom);
             }
-            binaryClassChunk.AddProperty("possible", (object)MysteryGun.SerializeTypeProb(this.possible));
-            binaryClassChunk.AddProperty("spawnTime", (object)this.spawnTime);
-            binaryClassChunk.AddProperty("initialDelay", (object)this.initialDelay);
-            binaryClassChunk.AddProperty("spawnOnStart", (object)this.spawnOnStart);
-            binaryClassChunk.AddProperty("spawnNum", (object)this.spawnNum);
+            binaryClassChunk.AddProperty("possible", MysteryGun.SerializeTypeProb(this.possible));
+            binaryClassChunk.AddProperty("spawnTime", spawnTime);
+            binaryClassChunk.AddProperty("initialDelay", initialDelay);
+            binaryClassChunk.AddProperty("spawnOnStart", spawnOnStart);
+            binaryClassChunk.AddProperty("spawnNum", spawnNum);
             return binaryClassChunk;
         }
 
@@ -299,15 +299,15 @@ namespace DuckGame
         {
             DXMLNode dxmlNode = base.LegacySerialize();
             if (this._hasContainedItem)
-                dxmlNode.Add(new DXMLNode("contains", this.contains != (System.Type)null ? (object)this.contains.AssemblyQualifiedName : (object)""));
-            dxmlNode.Add(new DXMLNode("spawnTime", (object)Change.ToString((object)this.spawnTime)));
-            dxmlNode.Add(new DXMLNode("initialDelay", (object)Change.ToString((object)this.initialDelay)));
-            dxmlNode.Add(new DXMLNode("spawnOnStart", (object)Change.ToString((object)this.spawnOnStart)));
+                dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("spawnTime", Change.ToString(spawnTime)));
+            dxmlNode.Add(new DXMLNode("initialDelay", Change.ToString(initialDelay)));
+            dxmlNode.Add(new DXMLNode("spawnOnStart", Change.ToString(spawnOnStart)));
             if (this._hasContainedItem)
-                dxmlNode.Add(new DXMLNode("randomSpawn", (object)Change.ToString((object)this.randomSpawn)));
+                dxmlNode.Add(new DXMLNode("randomSpawn", Change.ToString(randomSpawn)));
             if (this._hasContainedItem)
-                dxmlNode.Add(new DXMLNode("keepRandom", (object)Change.ToString((object)this.keepRandom)));
-            dxmlNode.Add(new DXMLNode("spawnNum", (object)Change.ToString((object)this.spawnNum)));
+                dxmlNode.Add(new DXMLNode("keepRandom", Change.ToString(keepRandom)));
+            dxmlNode.Add(new DXMLNode("spawnNum", Change.ToString(spawnNum)));
             return dxmlNode;
         }
 
@@ -322,10 +322,10 @@ namespace DuckGame
             }
             DXMLNode dxmlNode1 = node.Element("spawnTime");
             if (dxmlNode1 != null)
-                this.spawnTime = Change.ToSingle((object)dxmlNode1.Value);
+                this.spawnTime = Change.ToSingle(dxmlNode1.Value);
             DXMLNode dxmlNode2 = node.Element("initialDelay");
             if (dxmlNode2 != null)
-                this.initialDelay = Change.ToSingle((object)dxmlNode2.Value);
+                this.initialDelay = Change.ToSingle(dxmlNode2.Value);
             DXMLNode dxmlNode3 = node.Element("spawnOnStart");
             if (dxmlNode3 != null)
                 this.spawnOnStart = Convert.ToBoolean(dxmlNode3.Value);
@@ -346,29 +346,29 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding radioBinding = new FieldBinding((object)this, "contains");
+            FieldBinding radioBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Delay", (IContextListener)null, new FieldBinding((object)this, "spawnTime", 0.25f, 100f)));
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Initial Delay", (IContextListener)null, new FieldBinding((object)this, "initialDelay", max: 100f)));
-            contextMenu.AddItem((ContextMenu)new ContextCheckBox("Start Spawned", (IContextListener)null, new FieldBinding((object)this, "spawnOnStart")));
+            contextMenu.AddItem(new ContextSlider("Delay", null, new FieldBinding(this, "spawnTime", 0.25f, 100f)));
+            contextMenu.AddItem(new ContextSlider("Initial Delay", null, new FieldBinding(this, "initialDelay", max: 100f)));
+            contextMenu.AddItem(new ContextCheckBox("Start Spawned", null, new FieldBinding(this, "spawnOnStart")));
             if (this._hasContainedItem)
             {
-                contextMenu.AddItem((ContextMenu)new ContextCheckBox("Random", (IContextListener)null, new FieldBinding((object)this, "randomSpawn")));
-                contextMenu.AddItem((ContextMenu)new ContextCheckBox("Keep Random", (IContextListener)null, new FieldBinding((object)this, "keepRandom")));
+                contextMenu.AddItem(new ContextCheckBox("Random", null, new FieldBinding(this, "randomSpawn")));
+                contextMenu.AddItem(new ContextCheckBox("Keep Random", null, new FieldBinding(this, "keepRandom")));
             }
-            contextMenu.AddItem((ContextMenu)new ContextSlider("Number", (IContextListener)null, new FieldBinding((object)this, "spawnNum", -1f, 100f), 1f, "INF"));
+            contextMenu.AddItem(new ContextSlider("Number", null, new FieldBinding(this, "spawnNum", -1f, 100f), 1f, "INF"));
             if (this._hasContainedItem)
             {
-                EditorGroupMenu editorGroupMenu = new EditorGroupMenu((IContextListener)contextMenu);
+                EditorGroupMenu editorGroupMenu = new EditorGroupMenu(contextMenu);
                 editorGroupMenu.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), radioBinding);
                 editorGroupMenu.text = "Contains";
-                contextMenu.AddItem((ContextMenu)editorGroupMenu);
+                contextMenu.AddItem(editorGroupMenu);
             }
-            EditorGroupMenu editorGroupMenu1 = new EditorGroupMenu((IContextListener)contextMenu);
-            editorGroupMenu1.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), new FieldBinding((object)this, "possible"));
+            EditorGroupMenu editorGroupMenu1 = new EditorGroupMenu(contextMenu);
+            editorGroupMenu1.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), new FieldBinding(this, "possible"));
             editorGroupMenu1.text = "Possible";
-            contextMenu.AddItem((ContextMenu)editorGroupMenu1);
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(editorGroupMenu1);
+            return contextMenu;
         }
 
         public override void DrawHoverInfo()
@@ -378,10 +378,10 @@ namespace DuckGame
                 float num = 0.0f;
                 foreach (TypeProbPair typeProbPair in this.possible)
                 {
-                    if ((double)typeProbPair.probability > 0.0)
+                    if (typeProbPair.probability > 0.0)
                     {
                         Color white = Color.White;
-                        Color color = (double)typeProbPair.probability != 0.0 ? ((double)typeProbPair.probability >= 0.300000011920929 ? ((double)typeProbPair.probability >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                        Color color = typeProbPair.probability != 0.0 ? (typeProbPair.probability >= 0.300000011920929 ? (typeProbPair.probability >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                         string text = typeProbPair.type.Name + ": " + typeProbPair.probability.ToString("0.000");
                         Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text, scale: 0.5f) / 2.0), (float)-(16.0 + (double)num)), color, (Depth)0.9f, scale: 0.5f);
                         num += 4f;
@@ -391,7 +391,7 @@ namespace DuckGame
             else
             {
                 string text = "EMPTY";
-                if (this.contains != (System.Type)null)
+                if (this.contains != null)
                     text = this.contains.Name;
                 Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
             }
@@ -400,11 +400,11 @@ namespace DuckGame
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 str = this.contains.Name;
-            if (this.contains == (System.Type)null && (double)this.spawnTime == 10.0)
+            if (this.contains == null && spawnTime == 10.0)
                 return base.GetDetailsString();
-            return base.GetDetailsString() + "Contains: " + str + "\nTime: " + this.spawnTime.ToString("0.00", (IFormatProvider)CultureInfo.InvariantCulture);
+            return base.GetDetailsString() + "Contains: " + str + "\nTime: " + this.spawnTime.ToString("0.00", CultureInfo.InvariantCulture);
         }
     }
 }

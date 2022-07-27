@@ -25,7 +25,7 @@ namespace DuckGame
             this._sprite = new SpriteMap("pyramidWallLight", 14, 12);
             this._sprite.AddAnimation("go", 0.2f, true, 0, 1, 2, 3, 4);
             this._sprite.SetAnimation("go");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 8f);
             this._collisionSize = new Vec2(8f, 8f);
             this._collisionOffset = new Vec2(-4f, -4f);
@@ -58,12 +58,12 @@ namespace DuckGame
             if (this.flipHorizontal)
             {
                 this.lightPos = new Vec2(this.x, this.y);
-                Level.Add((Thing)new PointLight(this.lightPos.x, this.lightPos.y, PyramidWallLight.lightColor, 120f, this._occluders, true));
+                Level.Add(new PointLight(this.lightPos.x, this.lightPos.y, PyramidWallLight.lightColor, 120f, this._occluders, true));
             }
             else
             {
                 this.lightPos = new Vec2(this.x, this.y);
-                Level.Add((Thing)new PointLight(this.lightPos.x, this.lightPos.y, PyramidWallLight.lightColor, 120f, this._occluders, true));
+                Level.Add(new PointLight(this.lightPos.x, this.lightPos.y, PyramidWallLight.lightColor, 120f, this._occluders, true));
             }
         }
     }

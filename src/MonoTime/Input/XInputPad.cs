@@ -218,7 +218,7 @@ namespace DuckGame
 
         public override Sprite GetMapImage(int map)
         {
-            Sprite mapImage = (Sprite)null;
+            Sprite mapImage;
             this._triggerImages.TryGetValue(map, out mapImage);
             return mapImage;
         }

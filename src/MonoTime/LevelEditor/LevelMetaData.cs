@@ -29,7 +29,7 @@ namespace DuckGame
 
         public LevelMetaData.PreviewPair LoadPreview()
         {
-            LevelMetaData.PreviewPair previewPair = (LevelMetaData.PreviewPair)null;
+            LevelMetaData.PreviewPair previewPair = null;
             try
             {
                 string str1 = DuckFile.LoadString(DuckFile.editorPreviewDirectory + this.guid);
@@ -38,10 +38,12 @@ namespace DuckGame
                     int length = str1.IndexOf('@');
                     string str2 = str1.Substring(0, length);
                     string pTexture = str1.Substring(length + 1);
-                    previewPair = new LevelMetaData.PreviewPair();
-                    previewPair.strange = str2[0] == '1';
-                    previewPair.challenge = str2[1] == '1';
-                    previewPair.arcade = str2[2] == '1';
+                    previewPair = new LevelMetaData.PreviewPair
+                    {
+                        strange = str2[0] == '1',
+                        challenge = str2[1] == '1',
+                        arcade = str2[2] == '1'
+                    };
                     string str3 = str2.Substring(3);
                     previewPair.preview = Editor.MassiveBitmapStringToTexture(pTexture);
                     if (previewPair.preview == null)
@@ -64,10 +66,10 @@ namespace DuckGame
                         previewPair.invalid = new Dictionary<string, int>();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "Failed to load preview string in metadata for " + this.guid);
-                previewPair = (LevelMetaData.PreviewPair)null;
+                previewPair = null;
             }
             return previewPair;
         }
@@ -80,7 +82,7 @@ namespace DuckGame
                 pTask.levelTexture.GetData<Color>(pTask.ltData);
                 pTask.ltWidth = pTask.levelTexture.Width;
                 pTask.ltHeight = pTask.levelTexture.Height;
-                new Task((Action)(() =>
+                new Task(() =>
                {
                    try
                    {
@@ -88,10 +90,10 @@ namespace DuckGame
                        lock (LevelMetaData._completedPreviewTasks)
                            LevelMetaData._completedPreviewTasks.Add(pTask);
                    }
-                   catch (Exception ex)
+                   catch (Exception)
                    {
                    }
-               })).Start();
+               }).Start();
             }
             catch (Exception)
             {
@@ -117,7 +119,7 @@ namespace DuckGame
                     savePath = DuckFile.editorPreviewDirectory + this.guid
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "Failed to save preview string in metadata for " + this.guid);
             }

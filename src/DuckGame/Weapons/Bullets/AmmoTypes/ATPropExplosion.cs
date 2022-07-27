@@ -16,7 +16,7 @@ namespace DuckGame
                 ExplosionPart explosionPart = new ExplosionPart(pos.x - 8f + Rando.Float(16f), pos.y - 8f + Rando.Float(16f));
                 explosionPart.xscale *= 0.7f;
                 explosionPart.yscale *= 0.7f;
-                Level.Add((Thing)explosionPart);
+                Level.Add(explosionPart);
             }
             SFX.Play("explode");
             Graphics.FlashScreen();

@@ -13,12 +13,12 @@ namespace DuckGame
 
         public Bullet bullet => this._bullet;
 
-        public Thing bulletOwner => this._bullet == null ? (Thing)null : this._bullet.owner;
+        public Thing bulletOwner => this._bullet == null ? null : this._bullet.owner;
 
-        public Thing bulletFiredFrom => this._bullet == null ? (Thing)null : this._bullet.firedFrom;
+        public Thing bulletFiredFrom => this._bullet == null ? null : this._bullet.firedFrom;
 
         public DTShot(Bullet b)
-          : base((Thing)b)
+          : base(b)
         {
             this._bullet = b;
         }

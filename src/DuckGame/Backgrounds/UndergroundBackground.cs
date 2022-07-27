@@ -18,7 +18,7 @@ namespace DuckGame
         public UndergroundBackground(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 4
             };
@@ -52,13 +52,13 @@ namespace DuckGame
             this._parallax.AddZone(18, 0.75f, speed);
             this._parallax.AddZone(19, 0.75f, speed);
             this._parallax.AddZone(20, 0.75f, speed);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
             this._parallax.x -= 340f;
             this._parallax.restrictBottom = false;
             this._undergroundRocks = new UndergroundRocksBackground(this.x, this.y);
-            Level.Add((Thing)this._undergroundRocks);
+            Level.Add(_undergroundRocks);
             this._skyline = new UndergroundSkyBackground(this.x, this.y);
-            Level.Add((Thing)this._skyline);
+            Level.Add(_skyline);
         }
 
         public override void Update()
@@ -68,18 +68,18 @@ namespace DuckGame
                 num1 = 0;
             if (num1 > Resolution.current.y)
                 num1 = Resolution.current.y;
-            float num2 = (float)Resolution.current.y / (float)Graphics.height;
+            float num2 = Resolution.current.y / (float)Graphics.height;
             Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
-            this._undergroundRocks.scissor = new Rectangle((float)(int)wallScissor.x, (float)num1 * num2, (float)(int)wallScissor.y, (float)(Resolution.current.y - num1));
-            int height = (int)((double)Vec2.Transform(new Vec2(0.0f, -10f), Level.current.camera.getMatrix()).y * (double)num2);
+            this._undergroundRocks.scissor = new Rectangle((int)wallScissor.x, num1 * num2, (int)wallScissor.y, Resolution.current.y - num1);
+            int height = (int)(Vec2.Transform(new Vec2(0.0f, -10f), Level.current.camera.getMatrix()).y * (double)num2);
             if (height < 0)
                 height = 0;
-            if ((double)height > (double)Resolution.size.y)
+            if (height > (double)Resolution.size.y)
                 height = (int)Resolution.size.y;
-            this._skyline.scissor = new Rectangle((float)(int)wallScissor.x, 0.0f, (float)(int)wallScissor.y, (float)height);
+            this._skyline.scissor = new Rectangle((int)wallScissor.x, 0.0f, (int)wallScissor.y, height);
             base.Update();
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

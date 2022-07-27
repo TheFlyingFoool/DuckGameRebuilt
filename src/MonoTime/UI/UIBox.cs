@@ -70,12 +70,12 @@ namespace DuckGame
             base.Insert(component, position, doAnchor);
         }
 
-        public virtual void AssignDefaultSelection() => this._defaultSelection = this._components.Where<UIComponent>((Func<UIComponent, bool>)(val =>
+        public virtual void AssignDefaultSelection() => this._defaultSelection = this._components.Where<UIComponent>(val =>
        {
            if (!(val is UIMenuItem))
                return false;
            return val.condition == null || val.condition();
-       })).ToList<UIComponent>().Count - 1;
+       }).ToList<UIComponent>().Count - 1;
 
         public override void Open()
         {
@@ -84,7 +84,7 @@ namespace DuckGame
             {
                 this._selection = this._defaultSelection;
                 if (this._willSelectLast)
-                    this._selection = this._components.Where<UIComponent>((Func<UIComponent, bool>)(val => val is UIMenuItem)).ToList<UIComponent>().Count - 1;
+                    this._selection = this._components.Where<UIComponent>(val => val is UIMenuItem).ToList<UIComponent>().Count - 1;
             }
             base.Open();
         }
@@ -114,15 +114,15 @@ namespace DuckGame
                     if (component.condition == null || component.condition())
                     {
                         num2 += component.collisionSize.y + this._seperation;
-                        if ((double)component.collisionSize.x > (double)num1)
+                        if (component.collisionSize.x > (double)num1)
                             num1 = component.collisionSize.x;
                     }
                 }
                 float num3 = num1 + this.borderSize.x * 2f;
                 float num4 = num2 - this._seperation + this.borderSize.y * 2f;
-                if (this._autoSizeHor && (this.fit & UIFit.Horizontal) == UIFit.None && (double)num3 > (double)this._collisionSize.x)
+                if (this._autoSizeHor && (this.fit & UIFit.Horizontal) == UIFit.None && (double)num3 > _collisionSize.x)
                     this._collisionSize.x = num3;
-                if (this._autoSizeVert && (this.fit & UIFit.Vertical) == UIFit.None && (double)num4 > (double)this._collisionSize.y)
+                if (this._autoSizeVert && (this.fit & UIFit.Vertical) == UIFit.None && (double)num4 > _collisionSize.y)
                     this._collisionSize.y = num4;
                 float num5 = (float)(-(double)num4 / 2.0) + this.borderSize.y;
                 foreach (UIComponent component in this._components)
@@ -131,10 +131,10 @@ namespace DuckGame
                     {
                         component.anchor.offset.x = 0.0f;
                         if ((component.align & UIAlign.Left) > UIAlign.Center)
-                            component.anchor.offset.x = (float)(-(double)this.collisionSize.x / 2.0 + (double)this.borderSize.x + (double)component.collisionSize.x / 2.0);
+                            component.anchor.offset.x = (float)(-(double)this.collisionSize.x / 2.0 + borderSize.x + component.collisionSize.x / 2.0);
                         else if ((component.align & UIAlign.Right) > UIAlign.Center)
-                            component.anchor.offset.x = (float)((double)this.collisionSize.x / 2.0 - (double)this.borderSize.x - (double)component.collisionSize.x / 2.0);
-                        component.anchor.offset.y = (float)((double)num5 * (double)this.scale.y + (double)component.height / 2.0);
+                            component.anchor.offset.x = (float)(collisionSize.x / 2.0 - borderSize.x - component.collisionSize.x / 2.0);
+                        component.anchor.offset.y = (float)((double)num5 * scale.y + (double)component.height / 2.0);
                         num5 += component.collisionSize.y + this._seperation;
                     }
                 }
@@ -148,22 +148,22 @@ namespace DuckGame
                     if (component.condition == null || component.condition())
                     {
                         num6 += component.collisionSize.x + this._seperation;
-                        if ((double)component.collisionSize.y > (double)num7)
+                        if (component.collisionSize.y > (double)num7)
                             num7 = component.collisionSize.y;
                     }
                 }
                 float num8 = num7 + this.borderSize.y * 2f;
                 float num9 = num6 - this._seperation + this.borderSize.x * 2f;
-                if (this._autoSizeHor && (this.fit & UIFit.Horizontal) == UIFit.None && (double)num9 > (double)this._collisionSize.x)
+                if (this._autoSizeHor && (this.fit & UIFit.Horizontal) == UIFit.None && (double)num9 > _collisionSize.x)
                     this._collisionSize.x = num9;
-                if (this._autoSizeVert && (this.fit & UIFit.Vertical) == UIFit.None && (double)num8 > (double)this._collisionSize.y)
+                if (this._autoSizeVert && (this.fit & UIFit.Vertical) == UIFit.None && (double)num8 > _collisionSize.y)
                     this._collisionSize.y = num8;
                 float num10 = (float)(-(double)num9 / 2.0) + this.borderSize.x;
                 foreach (UIComponent component in this._components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        component.anchor.offset.x = (float)((double)num10 * (double)this.scale.x + (double)component.width / 2.0);
+                        component.anchor.offset.x = (float)((double)num10 * scale.x + (double)component.width / 2.0);
                         component.anchor.offset.y = 0.0f;
                         num10 += component.collisionSize.x + this._seperation;
                     }
@@ -173,7 +173,7 @@ namespace DuckGame
 
         public virtual void SelectLastMenuItem()
         {
-            this._selection = this._components.Where<UIComponent>((Func<UIComponent, bool>)(val => val is UIMenuItem)).ToList<UIComponent>().Count - 1;
+            this._selection = this._components.Where<UIComponent>(val => val is UIMenuItem).ToList<UIComponent>().Count - 1;
             this._willSelectLast = true;
         }
 
@@ -232,12 +232,12 @@ namespace DuckGame
                 }
                 if (this._isMenu)
                 {
-                    this._currentMenuItemSelection = this._components.Where<UIComponent>((Func<UIComponent, bool>)(val =>
+                    this._currentMenuItemSelection = this._components.Where<UIComponent>(val =>
                    {
                        if (!(val is UIMenuItem))
                            return false;
                        return val.condition == null || val.condition();
-                   })).ToList<UIComponent>();
+                   }).ToList<UIComponent>();
                     if (this._vertical)
                     {
                         if (!this._animating && Input.Pressed("MENUUP"))
@@ -252,7 +252,7 @@ namespace DuckGame
                         if (!this._animating && Input.Pressed("MENURIGHT"))
                             this.SelectNext();
                     }
-                    this._hoverControlString = (string)null;
+                    this._hoverControlString = null;
                     for (int index = 0; index < this._currentMenuItemSelection.Count; ++index)
                     {
                         UIMenuItem uiMenuItem = this._currentMenuItemSelection[index] as UIMenuItem;
@@ -295,30 +295,30 @@ namespace DuckGame
                 this._sections.alpha = this.alpha;
                 this._sections.depth = this.depth;
                 this._sections.frame = 0;
-                Graphics.Draw((Sprite)this._sections, -this.halfWidth + this.x, -this.halfHeight + this.y);
+                Graphics.Draw(_sections, -this.halfWidth + this.x, -this.halfHeight + this.y);
                 this._sections.frame = 2;
-                Graphics.Draw((Sprite)this._sections, (float)((double)this.halfWidth + (double)this.x - (double)this._sections.w * (double)this.scale.x), -this.halfHeight + this.y);
+                Graphics.Draw(_sections, (float)((double)this.halfWidth + (double)this.x - _sections.w * (double)this.scale.x), -this.halfHeight + this.y);
                 this._sections.frame = 1;
-                this._sections.xscale = (this._collisionSize.x - (float)(this._sections.w * 2)) / (float)this._sections.w * this.xscale;
-                Graphics.Draw((Sprite)this._sections, (float)(-(double)this.halfWidth + (double)this.x + (double)this._sections.w * (double)this.scale.x), -this.halfHeight + this.y);
+                this._sections.xscale = (this._collisionSize.x - this._sections.w * 2) / _sections.w * this.xscale;
+                Graphics.Draw(_sections, (float)(-(double)this.halfWidth + (double)this.x + _sections.w * (double)this.scale.x), -this.halfHeight + this.y);
                 this._sections.xscale = this.xscale;
                 this._sections.frame = 3;
-                this._sections.yscale = (this._collisionSize.y - (float)(this._sections.h * 2)) / (float)this._sections.h * this.yscale;
-                Graphics.Draw((Sprite)this._sections, -this.halfWidth + this.x, (float)(-(double)this.halfHeight + (double)this.y + (double)this._sections.h * (double)this.scale.y));
+                this._sections.yscale = (this._collisionSize.y - this._sections.h * 2) / _sections.h * this.yscale;
+                Graphics.Draw(_sections, -this.halfWidth + this.x, (float)(-(double)this.halfHeight + (double)this.y + _sections.h * (double)this.scale.y));
                 this._sections.frame = 5;
-                Graphics.Draw((Sprite)this._sections, (float)((double)this.halfWidth + (double)this.x - (double)this._sections.w * (double)this.scale.x), (float)(-(double)this.halfHeight + (double)this.y + (double)this._sections.h * (double)this.scale.y));
+                Graphics.Draw(_sections, (float)((double)this.halfWidth + (double)this.x - _sections.w * (double)this.scale.x), (float)(-(double)this.halfHeight + (double)this.y + _sections.h * (double)this.scale.y));
                 this._sections.frame = 4;
-                this._sections.xscale = (this._collisionSize.x - (float)(this._sections.w * 2)) / (float)this._sections.w * this.xscale;
-                Graphics.Draw((Sprite)this._sections, (float)(-(double)this.halfWidth + (double)this.x + (double)this._sections.w * (double)this.scale.x), (float)(-(double)this.halfHeight + (double)this.y + (double)this._sections.h * (double)this.scale.y));
+                this._sections.xscale = (this._collisionSize.x - this._sections.w * 2) / _sections.w * this.xscale;
+                Graphics.Draw(_sections, (float)(-(double)this.halfWidth + (double)this.x + _sections.w * (double)this.scale.x), (float)(-(double)this.halfHeight + (double)this.y + _sections.h * (double)this.scale.y));
                 this._sections.xscale = this.xscale;
                 this._sections.yscale = this.yscale;
                 this._sections.frame = 6;
-                Graphics.Draw((Sprite)this._sections, -this.halfWidth + this.x, (float)((double)this.halfHeight + (double)this.y - (double)this._sections.h * (double)this.scale.y));
+                Graphics.Draw(_sections, -this.halfWidth + this.x, (float)((double)this.halfHeight + (double)this.y - _sections.h * (double)this.scale.y));
                 this._sections.frame = 8;
-                Graphics.Draw((Sprite)this._sections, (float)((double)this.halfWidth + (double)this.x - (double)this._sections.w * (double)this.scale.x), (float)((double)this.halfHeight + (double)this.y - (double)this._sections.h * (double)this.scale.y));
+                Graphics.Draw(_sections, (float)((double)this.halfWidth + (double)this.x - _sections.w * (double)this.scale.x), (float)((double)this.halfHeight + (double)this.y - _sections.h * (double)this.scale.y));
                 this._sections.frame = 7;
-                this._sections.xscale = (this._collisionSize.x - (float)(this._sections.w * 2)) / (float)this._sections.w * this.xscale;
-                Graphics.Draw((Sprite)this._sections, (float)(-(double)this.halfWidth + (double)this.x + (double)this._sections.w * (double)this.scale.x), (float)((double)this.halfHeight + (double)this.y - (double)this._sections.h * (double)this.scale.y));
+                this._sections.xscale = (this._collisionSize.x - this._sections.w * 2) / _sections.w * this.xscale;
+                Graphics.Draw(_sections, (float)(-(double)this.halfWidth + (double)this.x + _sections.w * (double)this.scale.x), (float)((double)this.halfHeight + (double)this.y - _sections.h * (double)this.scale.y));
             }
             base.Draw();
         }

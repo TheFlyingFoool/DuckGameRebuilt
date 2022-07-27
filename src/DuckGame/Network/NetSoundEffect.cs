@@ -192,27 +192,27 @@ namespace DuckGame
         {
             if (NetSoundEffect._soundsPlayedThisFrame.Count <= 0)
                 return;
-            Send.Message((NetMessage)new NMNetSoundEvents(NetSoundEffect._soundsPlayedThisFrame));
+            Send.Message(new NMNetSoundEvents(NetSoundEffect._soundsPlayedThisFrame));
             NetSoundEffect._soundsPlayedThisFrame.Clear();
         }
 
         public static NetSoundEffect Get(string pSound)
         {
-            NetSoundEffect netSoundEffect = (NetSoundEffect)null;
+            NetSoundEffect netSoundEffect;
             NetSoundEffect._sfxDictionary.TryGetValue(pSound, out netSoundEffect);
             return netSoundEffect;
         }
 
         public static NetSoundEffect Get(ushort pSound)
         {
-            NetSoundEffect netSoundEffect = (NetSoundEffect)null;
+            NetSoundEffect netSoundEffect;
             NetSoundEffect._sfxIndexDictionary.TryGetValue(pSound, out netSoundEffect);
             return netSoundEffect;
         }
 
         public static void Play(string pSound)
         {
-            NetSoundEffect pSound1 = (NetSoundEffect)null;
+            NetSoundEffect pSound1;
             if (!NetSoundEffect._sfxDictionary.TryGetValue(pSound, out pSound1))
                 return;
             NetSoundEffect.PlayAndSynchronize(pSound1);
@@ -220,7 +220,7 @@ namespace DuckGame
 
         public static void Play(string pSound, float pPitchOffset)
         {
-            NetSoundEffect pSound1 = (NetSoundEffect)null;
+            NetSoundEffect pSound1;
             if (!NetSoundEffect._sfxDictionary.TryGetValue(pSound, out pSound1))
                 return;
             NetSoundEffect.PlayAndSynchronize(pSound1, pPitchOffset);
@@ -228,7 +228,7 @@ namespace DuckGame
 
         public static void Play(ushort pSound)
         {
-            NetSoundEffect pSound1 = (NetSoundEffect)null;
+            NetSoundEffect pSound1;
             if (!NetSoundEffect._sfxIndexDictionary.TryGetValue(pSound, out pSound1))
                 return;
             NetSoundEffect.PlayAndSynchronize(pSound1);
@@ -244,7 +244,7 @@ namespace DuckGame
         {
         }
 
-        public NetSoundEffect(params string[] sounds) => this._sounds = new List<string>((IEnumerable<string>)sounds);
+        public NetSoundEffect(params string[] sounds) => this._sounds = new List<string>(sounds);
 
         public NetSoundEffect(List<string> sounds, List<string> rareSounds)
         {
@@ -286,7 +286,7 @@ namespace DuckGame
             if (this._sounds.Count <= 0)
                 return;
             if (this.pitchBinding != null)
-                pit = (float)(byte)this.pitchBinding.value / (float)byte.MaxValue;
+                pit = (byte)this.pitchBinding.value / (float)byte.MaxValue;
             string str = "";
             if (this.appendBinding != null)
                 str = ((byte)this.appendBinding.value).ToString();

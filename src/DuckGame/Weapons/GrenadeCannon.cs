@@ -49,7 +49,7 @@ namespace DuckGame
             this._sprite.AddAnimation("load1", 0.4f, false, 16, 17, 18, 19);
             this._sprite.AddAnimation("idle0", 0.4f, false, 20);
             this._sprite.SetAnimation("idle4");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(11f, 7f);
             this.collisionOffset = new Vec2(-6f, -4f);
             this.collisionSize = new Vec2(16f, 8f);
@@ -59,7 +59,7 @@ namespace DuckGame
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Light;
             this._holdOffset = new Vec2(2f, 0.0f);
-            this._ammoType = (AmmoType)new ATGrenade();
+            this._ammoType = new ATGrenade();
             this._fireSound = "deepMachineGun";
             this._bulletColor = Color.White;
             this.editorTooltip = "An unstable weapon filled with explosions. Spits fire if the trigger is held too long.";
@@ -70,17 +70,19 @@ namespace DuckGame
             base.Update();
             if (this._doLoad && this._sprite.finished)
             {
-                GrenadePin grenadePin = new GrenadePin(this.x, this.y);
-                grenadePin.hSpeed = (float)-this.offDir * (1.5f + Rando.Float(0.5f));
-                grenadePin.vSpeed = -2f;
-                Level.Add((Thing)grenadePin);
+                GrenadePin grenadePin = new GrenadePin(this.x, this.y)
+                {
+                    hSpeed = -this.offDir * (1.5f + Rando.Float(0.5f)),
+                    vSpeed = -2f
+                };
+                Level.Add(grenadePin);
                 SFX.Play("pullPin");
                 this._doneLoad = true;
                 this._doLoad = false;
             }
             if (this._doneLoad)
                 this._timer -= 0.01f;
-            if ((double)this._timer <= 0.0)
+            if (_timer <= 0.0)
             {
                 this._timer = 1.2f;
                 this._doneLoad = false;
@@ -91,9 +93,9 @@ namespace DuckGame
                     --this.ammo;
                     Vec2 vec = Maths.AngleToVec(this.barrelAngle + Rando.Float(-0.1f, 0.1f));
                     for (int index = 0; index < 12; ++index)
-                        Level.Add((Thing)SmallFire.New(vec2.x, vec2.y, vec.x * Rando.Float(3.5f, 5f) + Rando.Float(-2f, 2f), vec.y * Rando.Float(3.5f, 5f) + Rando.Float(-2f, 2f)));
+                        Level.Add(SmallFire.New(vec2.x, vec2.y, vec.x * Rando.Float(3.5f, 5f) + Rando.Float(-2f, 2f), vec.y * Rando.Float(3.5f, 5f) + Rando.Float(-2f, 2f)));
                     for (int index = 0; index < 6; ++index)
-                        Level.Add((Thing)SmallSmoke.New(vec2.x + Rando.Float(-2f, 2f), vec2.y + Rando.Float(-2f, 2f)));
+                        Level.Add(SmallSmoke.New(vec2.x + Rando.Float(-2f, 2f), vec2.y + Rando.Float(-2f, 2f)));
                     this._sprite.SetAnimation("idle" + Math.Min(this.ammo, 4).ToString());
                     this.kick = 1f;
                     this._aiming = false;
@@ -115,18 +117,18 @@ namespace DuckGame
             }
             if (this._doneLoad && this._aiming)
                 this.laserSight = true;
-            if (this._aiming && (double)this._aimWait <= 0.0 && (double)this._fireAngle < 90.0)
+            if (this._aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
                 this._fireAngle += 3f;
-            if ((double)this._aimWait > 0.0)
+            if (_aimWait > 0.0)
                 this._aimWait -= 0.9f;
-            if ((double)this._cooldown > 0.0)
+            if (_cooldown > 0.0)
                 this._cooldown -= 0.1f;
             else
                 this._cooldown = 0.0f;
             if (this.owner != null)
             {
                 this._aimAngle = -Maths.DegToRad(this._fireAngle);
-                if (this.offDir < (sbyte)0)
+                if (this.offDir < 0)
                     this._aimAngle = -this._aimAngle;
             }
             else
@@ -148,7 +150,7 @@ namespace DuckGame
                 this._sprite.SetAnimation("load" + Math.Min(this.ammo, 4).ToString());
                 this._doLoad = true;
             }
-            if (!this._doneLoad || (double)this._cooldown != 0.0)
+            if (!this._doneLoad || _cooldown != 0.0)
                 return;
             if (this.ammo > 0)
             {
@@ -161,7 +163,7 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (!this._doneLoad || (double)this._cooldown != 0.0 || !this._aiming || this.ammo <= 0)
+            if (!this._doneLoad || _cooldown != 0.0 || !this._aiming || this.ammo <= 0)
                 return;
             this._aiming = false;
             --this.ammo;
@@ -170,14 +172,16 @@ namespace DuckGame
             {
                 Vec2 vec2 = this.Offset(this.barrelOffset);
                 double radians = (double)this.barrelAngle + (double)Rando.Float(-0.1f, 0.1f);
-                CannonGrenade t = new CannonGrenade(vec2.x, vec2.y);
-                t._pin = false;
-                t._timer = this._timer;
-                this.Fondle((Thing)t);
+                CannonGrenade t = new CannonGrenade(vec2.x, vec2.y)
+                {
+                    _pin = false,
+                    _timer = this._timer
+                };
+                this.Fondle(t);
                 Vec2 vec = Maths.AngleToVec((float)radians);
                 t.hSpeed = vec.x * 10f;
                 t.vSpeed = vec.y * 10f;
-                Level.Add((Thing)t);
+                Level.Add(t);
                 this._timer = 1.2f;
                 this._doneLoad = false;
                 this._doLoad = false;

@@ -16,11 +16,13 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.chain = true;
-            this._vine = (Sprite)new SpriteMap("chain", 16, 16);
+            this._vine = new SpriteMap("chain", 16, 16);
             this.graphic = this._vine;
             this.center = new Vec2(8f, 8f);
-            this._vineEnd = new Sprite("chainStretchEnd");
-            this._vineEnd.center = new Vec2(8f, 0.0f);
+            this._vineEnd = new Sprite("chainStretchEnd")
+            {
+                center = new Vec2(8f, 0.0f)
+            };
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
             this.graphic = this._vine;
@@ -29,6 +31,6 @@ namespace DuckGame
             this.editorTooltip = "It's like a metal rope! Great for swinging through a factory.";
         }
 
-        public override Vine GetSection(float x, float y, int div) => (Vine)new ChainPart(x, y, (float)div);
+        public override Vine GetSection(float x, float y, int div) => new ChainPart(x, y, div);
     }
 }

@@ -51,7 +51,7 @@ namespace DuckGame
             this._hoverText = hover;
             this.collisionSize = new Vec2(16f, 16f);
             this.collisionOffset = new Vec2(-8f, -8f);
-            image.center = new Vec2((float)(image.w / 2), (float)(image.h / 2));
+            image.center = new Vec2(image.w / 2, image.h / 2);
             this._binding = binding;
             this._visibleBinding = visibleBinding;
             this._align = align;
@@ -83,26 +83,26 @@ namespace DuckGame
             {
                 if (((this._focus == null || !this._focus.Pressed("MENULEFT") ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
-                    this._binding.value = (object)Math.Max((float)this._binding.value - this._binding.inc * num, this._binding.min);
+                    this._binding.value = Math.Max((float)this._binding.value - this._binding.inc * num, this._binding.min);
                 }
                 else
                 {
                     if (((this._focus == null || !this._focus.Pressed("MENURIGHT") ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
                         return;
-                    this._binding.value = (object)Math.Min((float)this._binding.value + this._binding.inc * num, this._binding.max);
+                    this._binding.value = Math.Min((float)this._binding.value + this._binding.inc * num, this._binding.max);
                 }
             }
             else if (this._binding.value.GetType() == typeof(int))
             {
                 if (((this._focus == null || !this._focus.Pressed("MENULEFT") ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
-                    this._binding.value = (object)(int)Math.Max((float)(int)this._binding.value - this._binding.inc * num, this._binding.min);
+                    this._binding.value = (int)Math.Max((int)this._binding.value - this._binding.inc * num, this._binding.min);
                 }
                 else
                 {
                     if (((this._focus == null || !this._focus.Pressed("MENURIGHT") ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
                         return;
-                    this._binding.value = (object)(int)Math.Min((float)(int)this._binding.value + this._binding.inc * num, this._binding.max);
+                    this._binding.value = (int)Math.Min((int)this._binding.value + this._binding.inc * num, this._binding.max);
                 }
             }
             else if (this._binding.value.GetType() == typeof(Vec2))
@@ -111,19 +111,19 @@ namespace DuckGame
                 {
                     Vec2 vec2 = (Vec2)this._binding.value;
                     vec2.x = Math.Max(vec2.x - this._binding.inc * num, this._binding.min);
-                    this._binding.value = (object)vec2;
+                    this._binding.value = vec2;
                 }
                 else if (((this._focus == null || !this._focus.Pressed("MENURIGHT") ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) != 0)
                 {
                     Vec2 vec2 = (Vec2)this._binding.value;
                     vec2.x = Math.Min(vec2.x + this._binding.inc * num, this._binding.max);
-                    this._binding.value = (object)vec2;
+                    this._binding.value = vec2;
                 }
                 else if (((this._focus == null || !this._focus.Pressed("MENUUP") ? (Keyboard.Pressed(Keys.Up) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
                     Vec2 vec2 = (Vec2)this._binding.value;
                     vec2.y = Math.Max(vec2.y - this._binding.inc * num, this._binding.min);
-                    this._binding.value = (object)vec2;
+                    this._binding.value = vec2;
                 }
                 else
                 {
@@ -131,14 +131,14 @@ namespace DuckGame
                         return;
                     Vec2 vec2 = (Vec2)this._binding.value;
                     vec2.y = Math.Min(vec2.y + this._binding.inc * num, this._binding.max);
-                    this._binding.value = (object)vec2;
+                    this._binding.value = vec2;
                 }
             }
             else
             {
                 if (!(this._binding.value.GetType() == typeof(bool)) || ((this._focus == null || !this._focus.Pressed("SELECT") ? (Mouse.left == InputState.Pressed ? 1 : 0) : 1) | (flag1 ? 1 : 0) | (flag2 ? 1 : 0)) == 0)
                     return;
-                this._binding.value = (object)!(bool)this._binding.value;
+                this._binding.value = !(bool)this._binding.value;
             }
         }
 
@@ -151,7 +151,7 @@ namespace DuckGame
                 bool flag = (bool)this._binding.value;
                 this._sprite.color = Color.White * (flag ? 1f : 0.3f);
             }
-            Graphics.Draw((Sprite)this._sprite, this.x, this.y);
+            Graphics.Draw(_sprite, this.x, this.y);
             if (this._binding.value.GetType() == typeof(float))
                 Graphics.DrawString(((float)this._binding.value).ToString("0.00"), new Vec2(this.x + 12f, this.y - 4f), Color.White);
             if (this._binding.value.GetType() == typeof(int))

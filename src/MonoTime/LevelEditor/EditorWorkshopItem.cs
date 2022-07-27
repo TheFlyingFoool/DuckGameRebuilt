@@ -33,9 +33,9 @@ namespace DuckGame
                     {
                         string pathToScreenshot = this._mod.generateAndGetPathToScreenshot;
                         if (!System.IO.File.Exists(pathToScreenshot))
-                            return (Tex2D)null;
+                            return null;
                         using (FileStream fileStream = System.IO.File.Open(pathToScreenshot, FileMode.Open))
-                            this._preview = (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, (Stream)fileStream);
+                            this._preview = (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, fileStream);
                     }
                     else
                     {
@@ -63,7 +63,7 @@ namespace DuckGame
             }
         }
 
-        public IEnumerable<EditorWorkshopItem> subItems => (IEnumerable<EditorWorkshopItem>)this._subItems;
+        public IEnumerable<EditorWorkshopItem> subItems => _subItems;
 
         public int subIndex => this._parent == null ? -1 : this._parent._subItems.IndexOf(this);
 
@@ -73,7 +73,7 @@ namespace DuckGame
 
         public LevelSize levelSize => this._level.metaData.size;
 
-        public IEnumerable<string> tags => (IEnumerable<string>)this.workshopData.tags;
+        public IEnumerable<string> tags => workshopData.tags;
 
         public void AddTag(string pTag)
         {
@@ -118,7 +118,7 @@ namespace DuckGame
                 this.Wait();
                 this._level.workshopData.name = this._item.data.name;
                 this._level.workshopData.description = this._item.data.description;
-                this._level.workshopData.tags = new List<string>((IEnumerable<string>)this._item.data.tags);
+                this._level.workshopData.tags = new List<string>(_item.data.tags);
             }
             if (this._level.workshopData.name == "")
                 this._level.workshopData.name = Path.GetFileNameWithoutExtension(this._level.GetPath());
@@ -147,7 +147,7 @@ namespace DuckGame
                 this.Wait();
                 this._mod.workshopData.name = this._item.data.name;
                 this._mod.workshopData.description = this._item.data.description;
-                this._mod.workshopData.tags = new List<string>((IEnumerable<string>)this._item.data.tags);
+                this._mod.workshopData.tags = new List<string>(_item.data.tags);
             }
             this._mod.workshopData.name = this._mod.configuration.displayName;
             if (this.workshopData.tags.Contains("Mod"))
@@ -173,7 +173,7 @@ namespace DuckGame
                 return this.result;
             this._item.data.name = this.workshopData.name;
             this._item.data.description = this.workshopData.description;
-            this.workshopData.tags.RemoveAll((Predicate<string>)(x => !SteamUploadDialog.possibleTags.Contains(x)));
+            this.workshopData.tags.RemoveAll(x => !SteamUploadDialog.possibleTags.Contains(x));
             if (this._level.metaData.type != LevelType.Arcade_Machine)
             {
                 this.AddTag("Map");
@@ -208,11 +208,11 @@ namespace DuckGame
                 this.AddTag("Tested Challenge");
             else if (this._level.metaData.type == LevelType.Deathmatch)
                 this.AddTag("Strange");
-            if ((Level.current as Editor).levelThings.Exists((Predicate<Thing>)(x => x is CustomCamera)))
+            if ((Level.current as Editor).levelThings.Exists(x => x is CustomCamera))
                 this.AddTag("Fixed Camera");
             if (this._level.metaData.hasCustomArt)
                 this.AddTag("Custom Art");
-            this._item.data.tags = new List<string>((IEnumerable<string>)this.workshopData.tags);
+            this._item.data.tags = new List<string>(workshopData.tags);
             foreach (ulong dependency in this._level.workshopData.dependencies)
                 Steam.WorkshopRemoveDependency(this._item, WorkshopItem.GetItem(dependency));
             this._level.workshopData.dependencies.Clear();
@@ -229,7 +229,7 @@ namespace DuckGame
 
         private void CopyFiles()
         {
-            DuckFile.SaveChunk((BinaryClassChunk)this._level, this._level.GetPath());
+            DuckFile.SaveChunk(_level, this._level.GetPath());
             string pathString1 = DuckFile.workshopDirectory + this._level.metaData.workshopID.ToString() + "/";
             string pathString2 = DuckFile.workshopDirectory + this._level.metaData.workshopID.ToString() + "-preview/";
             DuckFile.CreatePath(pathString1);
@@ -244,7 +244,7 @@ namespace DuckGame
             string path = pathString2 + withoutExtension + ".png";
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
-            Stream stream = (Stream)DuckFile.Create(path);
+            Stream stream = DuckFile.Create(path);
             ((Texture2D)this.preview.nativeObject).SaveAsPng(stream, this.preview.width, this.preview.height);
             stream.Dispose();
             this._item.data.previewPath = path;

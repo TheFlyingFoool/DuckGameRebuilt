@@ -17,7 +17,7 @@ namespace DuckGame
         public override bool Update()
         {
             if (this.numWaitFrames == -1 && !Network.isServer)
-                this.numWaitFrames = this.syncWaitFrames - (int)Math.Min(Math.Min((float)((double)this.connection.manager.ping / 2.0 * 60.0), 30f), (float)this.syncWaitFrames);
+                this.numWaitFrames = this.syncWaitFrames - (int)Math.Min(Math.Min((float)((double)this.connection.manager.ping / 2.0 * 60.0), 30f), syncWaitFrames);
             --this.numWaitFrames;
             return this.numWaitFrames <= 0;
         }

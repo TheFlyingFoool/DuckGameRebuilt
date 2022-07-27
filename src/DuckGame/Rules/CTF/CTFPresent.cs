@@ -14,9 +14,11 @@ namespace DuckGame
         public CTFPresent(float xpos, float ypos, bool team)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("ctf/present", 18, 17);
-            this._sprite.frame = team ? 0 : 1;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("ctf/present", 18, 17)
+            {
+                frame = team ? 0 : 1
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(9f, 8f);
             this.collisionOffset = new Vec2(-9f, -6f);
             this.collisionSize = new Vec2(18f, 14f);
@@ -35,8 +37,8 @@ namespace DuckGame
         {
             if (type is DTIncinerate)
             {
-                Level.Remove((Thing)this);
-                Level.Add((Thing)SmallSmoke.New(this.x, this.y));
+                Level.Remove(this);
+                Level.Add(SmallSmoke.New(this.x, this.y));
             }
             return false;
         }

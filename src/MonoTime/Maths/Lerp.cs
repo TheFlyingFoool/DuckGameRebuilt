@@ -48,13 +48,13 @@ namespace DuckGame
                 return current;
             vec2_3.Normalize();
             DuckGame.Vec2 vec2_4 = vec2_1 + vec2_3 * amount;
-            if ((double)vec2_2.x > (double)vec2_1.x && (double)vec2_4.x > (double)vec2_2.x)
+            if (vec2_2.x > (double)vec2_1.x && vec2_4.x > (double)vec2_2.x)
                 vec2_4.x = vec2_2.x;
-            if ((double)vec2_2.x < (double)vec2_1.x && (double)vec2_4.x < (double)vec2_2.x)
+            if (vec2_2.x < (double)vec2_1.x && vec2_4.x < (double)vec2_2.x)
                 vec2_4.x = vec2_2.x;
-            if ((double)vec2_2.y > (double)vec2_1.y && (double)vec2_4.y > (double)vec2_2.y)
+            if (vec2_2.y > (double)vec2_1.y && vec2_4.y > (double)vec2_2.y)
                 vec2_4.y = vec2_2.y;
-            if ((double)vec2_2.y < (double)vec2_1.y && (double)vec2_4.y < (double)vec2_2.y)
+            if (vec2_2.y < (double)vec2_1.y && vec2_4.y < (double)vec2_2.y)
                 vec2_4.y = vec2_2.y;
             return vec2_4;
         }
@@ -83,17 +83,17 @@ namespace DuckGame
                 return current;
             vec3_3.Normalize();
             DuckGame.Vec3 vec3_4 = vec3_1 + vec3_3 * amount;
-            if ((double)vec3_2.x > (double)vec3_1.x && (double)vec3_4.x > (double)vec3_2.x)
+            if (vec3_2.x > (double)vec3_1.x && vec3_4.x > (double)vec3_2.x)
                 vec3_4.x = vec3_2.x;
-            if ((double)vec3_2.x < (double)vec3_1.x && (double)vec3_4.x < (double)vec3_2.x)
+            if (vec3_2.x < (double)vec3_1.x && vec3_4.x < (double)vec3_2.x)
                 vec3_4.x = vec3_2.x;
-            if ((double)vec3_2.y > (double)vec3_1.y && (double)vec3_4.y > (double)vec3_2.y)
+            if (vec3_2.y > (double)vec3_1.y && vec3_4.y > (double)vec3_2.y)
                 vec3_4.y = vec3_2.y;
-            if ((double)vec3_2.y < (double)vec3_1.y && (double)vec3_4.y < (double)vec3_2.y)
+            if (vec3_2.y < (double)vec3_1.y && vec3_4.y < (double)vec3_2.y)
                 vec3_4.y = vec3_2.y;
-            if ((double)vec3_2.z > (double)vec3_1.z && (double)vec3_4.z > (double)vec3_2.z)
+            if (vec3_2.z > (double)vec3_1.z && vec3_4.z > (double)vec3_2.z)
                 vec3_4.z = vec3_2.z;
-            if ((double)vec3_2.z < (double)vec3_1.z && (double)vec3_4.z < (double)vec3_2.z)
+            if (vec3_2.z < (double)vec3_1.z && vec3_4.z < (double)vec3_2.z)
                 vec3_4.z = vec3_2.z;
             return vec3_4;
         }
@@ -107,21 +107,21 @@ namespace DuckGame
                 return current;
             vec4_1.Normalize();
             Vec4 vec4_2 = vector4_1 + vec4_1 * amount;
-            if ((double)vector4_2.x > (double)vector4_1.x && (double)vec4_2.x > (double)vector4_2.x)
+            if (vector4_2.x > (double)vector4_1.x && vec4_2.x > (double)vector4_2.x)
                 vec4_2.x = vector4_2.x;
-            if ((double)vector4_2.x < (double)vector4_1.x && (double)vec4_2.x < (double)vector4_2.x)
+            if (vector4_2.x < (double)vector4_1.x && vec4_2.x < (double)vector4_2.x)
                 vec4_2.x = vector4_2.x;
-            if ((double)vector4_2.y > (double)vector4_1.y && (double)vec4_2.y > (double)vector4_2.y)
+            if (vector4_2.y > (double)vector4_1.y && vec4_2.y > (double)vector4_2.y)
                 vec4_2.y = vector4_2.y;
-            if ((double)vector4_2.y < (double)vector4_1.y && (double)vec4_2.y < (double)vector4_2.y)
+            if (vector4_2.y < (double)vector4_1.y && vec4_2.y < (double)vector4_2.y)
                 vec4_2.y = vector4_2.y;
-            if ((double)vector4_2.z > (double)vector4_1.z && (double)vec4_2.z > (double)vector4_2.z)
+            if (vector4_2.z > (double)vector4_1.z && vec4_2.z > (double)vector4_2.z)
                 vec4_2.z = vector4_2.z;
-            if ((double)vector4_2.z < (double)vector4_1.z && (double)vec4_2.z < (double)vector4_2.z)
+            if (vector4_2.z < (double)vector4_1.z && vec4_2.z < (double)vector4_2.z)
                 vec4_2.z = vector4_2.z;
-            if ((double)vector4_2.w > (double)vector4_1.w && (double)vec4_2.w > (double)vector4_2.w)
+            if (vector4_2.w > (double)vector4_1.w && vec4_2.w > (double)vector4_2.w)
                 vec4_2.w = vector4_2.w;
-            if ((double)vector4_2.w < (double)vector4_1.w && (double)vec4_2.w < (double)vector4_2.w)
+            if (vector4_2.w < (double)vector4_1.w && vec4_2.w < (double)vector4_2.w)
                 vec4_2.w = vector4_2.w;
             return new DuckGame.Color(vec4_2.x, vec4_2.y, vec4_2.z, vec4_2.w);
         }

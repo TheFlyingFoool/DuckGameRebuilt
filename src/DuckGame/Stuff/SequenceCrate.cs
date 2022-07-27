@@ -14,8 +14,10 @@ namespace DuckGame
         public SequenceCrate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.sequence = new SequenceItem((Thing)this);
-            this.sequence.type = SequenceItemType.Goody;
+            this.sequence = new SequenceItem(this)
+            {
+                type = SequenceItemType.Goody
+            };
             this._editorName = "Seq Crate";
         }
 

@@ -17,7 +17,7 @@ namespace DuckGame
         public BigTitleShrink(float vx, float vy, float vscale, Color vfade)
           : base()
         {
-            this.alpha = (float)vfade.a / (float)byte.MaxValue;
+            this.alpha = vfade.a / (float)byte.MaxValue;
             vfade.a = byte.MaxValue;
             this._sprite = new Sprite("duckGameTitleOutline");
             this.graphic = this._sprite;
@@ -26,8 +26,8 @@ namespace DuckGame
             this.scale = new Vec2(vscale, vscale);
             this.depth = (Depth)BigTitleShrink._dept;
             this.layer = Layer.HUD;
-            this.centerx = (float)(this._sprite.w / 2);
-            this.centery = (float)this._sprite.h;
+            this.centerx = this._sprite.w / 2;
+            this.centery = _sprite.h;
             this.graphic.color = vfade;
             this._black = vfade == Color.Black;
             BigTitleShrink._dept -= 0.0001f;
@@ -40,16 +40,16 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._size += (float)((0.980000019073486 - (double)this._size) * 0.0799999982118607);
+            this._size += (float)((0.980000019073486 - _size) * 0.0799999982118607);
             this.xscale = this._size;
             this.yscale = this._size;
             if ((double)this.xscale < 1.10000002384186)
                 this.alpha *= 0.8f;
             if ((double)this.xscale < 1.04999995231628 && this._black)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             if ((double)this.alpha > 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

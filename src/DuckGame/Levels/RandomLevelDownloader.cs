@@ -20,7 +20,7 @@ namespace DuckGame
         private static int _toFetchIndex = -1;
         private static int _numFetch = 0;
         public static List<WorkshopItem> _downloadingItems = new List<WorkshopItem>();
-        private static object _currentWorkshopLevelQuery = (object)null;
+        private static object _currentWorkshopLevelQuery = null;
         private static float _fetchDelay = 0.0f;
         private static int _totalMaps;
         private static WorkshopQueryFilterOrder _orderMode = WorkshopQueryFilterOrder.RankedByVote;
@@ -28,13 +28,13 @@ namespace DuckGame
         public static LevelData GetNextLevel()
         {
             if (RandomLevelDownloader._readyLevels.Count == 0)
-                return (LevelData)null;
+                return null;
             LevelData nextLevel = RandomLevelDownloader._readyLevels.First<LevelData>();
             RandomLevelDownloader._readyLevels.RemoveAt(0);
             return nextLevel;
         }
 
-        public static LevelData PeekNextLevel() => RandomLevelDownloader._readyLevels.Count == 0 ? (LevelData)null : RandomLevelDownloader._readyLevels.First<LevelData>();
+        public static LevelData PeekNextLevel() => RandomLevelDownloader._readyLevels.Count == 0 ? null : RandomLevelDownloader._readyLevels.First<LevelData>();
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
@@ -211,7 +211,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (RandomLevelDownloader._totalMaps == -1 || (double)RandomLevelDownloader._fetchDelay > 0.0)
+                    if (RandomLevelDownloader._totalMaps == -1 || _fetchDelay > 0.0)
                         return;
                     RandomLevelDownloader.DownloadRandomMap();
                 }

@@ -25,14 +25,14 @@ namespace DuckGame
 
         public FontInfo(System.Drawing.Graphics gr, System.Drawing.Font the_font)
         {
-            float emHeight = (float)the_font.FontFamily.GetEmHeight(the_font.Style);
+            float emHeight = the_font.FontFamily.GetEmHeight(the_font.Style);
             this.EmHeightPixels = this.ConvertUnits(gr, the_font.Size, the_font.Unit, GraphicsUnit.Pixel);
             float num = this.EmHeightPixels / emHeight;
-            this.AscentPixels = num * (float)the_font.FontFamily.GetCellAscent(the_font.Style);
-            this.DescentPixels = num * (float)the_font.FontFamily.GetCellDescent(the_font.Style);
+            this.AscentPixels = num * the_font.FontFamily.GetCellAscent(the_font.Style);
+            this.DescentPixels = num * the_font.FontFamily.GetCellDescent(the_font.Style);
             this.CellHeightPixels = this.AscentPixels + this.DescentPixels;
             this.InternalLeadingPixels = this.CellHeightPixels - this.EmHeightPixels;
-            this.LineSpacingPixels = num * (float)the_font.FontFamily.GetLineSpacing(the_font.Style);
+            this.LineSpacingPixels = num * the_font.FontFamily.GetLineSpacing(the_font.Style);
             this.ExternalLeadingPixels = this.LineSpacingPixels - this.CellHeightPixels;
             this.RelTop = this.InternalLeadingPixels;
             this.RelBaseline = this.AscentPixels;

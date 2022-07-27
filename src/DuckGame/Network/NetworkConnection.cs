@@ -74,8 +74,8 @@ namespace DuckGame
         private Dictionary<byte, NMNewPing> _pings = new Dictionary<byte, NMNewPing>();
         private int pingWait;
         private int _pingsSent;
-        private const int kConnectionTroubleGap = 400;
-        private const int kConnectionFailureGap = 960;
+        //private const int kConnectionTroubleGap = 400;
+        //private const int kConnectionFailureGap = 960;
         private int _numErrorLogs;
         public bool sendPacketsNow;
         /// <summary>
@@ -86,7 +86,7 @@ namespace DuckGame
         public static int packetsEvery = 1;
         public static float ghostLerpDivisor = 0.0f;
 
-        public int authorityPower => this.profile != null ? GameLevel.NumberOfDucks - ((int)this.profile.networkIndex + (int)DuckNetwork.levelIndex) % GameLevel.NumberOfDucks + 1 : 1;
+        public int authorityPower => this.profile != null ? GameLevel.NumberOfDucks - (profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks + 1 : 1;
 
         public override string ToString()
         {
@@ -95,7 +95,7 @@ namespace DuckGame
                 str1 = str1 + this.profile.persona.colorUsable.ToDGColorString() + "(" + this.profile.networkIndex.ToString() + ")";
             if (this.isHost)
                 str1 += "(H)";
-            string str2 = (string)null;
+            string str2 = null;
             if (!this.hasRealName || this.data == null)
                 str2 = !(this.data is User) ? (Steam.user == null ? "LAN USER" : Steam.user.id.ToString()) : (this.data as User).id.ToString();
             else if (Network.activeNetwork.core is NCSteam)
@@ -229,7 +229,7 @@ namespace DuckGame
 
         public uint estimatedClientTick
         {
-            get => (uint)((ulong)this._estimatedClientTick + (ulong)(int)((double)this.manager.ping / 2.0 * 60.0));
+            get => (uint)(_estimatedClientTick + (ulong)(int)((double)this.manager.ping / 2.0 * 60.0));
             set => this._estimatedClientTick = value;
         }
 
@@ -267,7 +267,7 @@ namespace DuckGame
             this._lastReceivedTime = 0U;
             this._lastSentTime = 0U;
             this._personalTick = 0U;
-            this._connectsReceived = (byte)0;
+            this._connectsReceived = 0;
             this.sentFilterMessage = false;
             this._numErrorLogs = 0;
             this._lastTickReceived = 0U;
@@ -276,7 +276,7 @@ namespace DuckGame
             this._ticksTillDisconnectAttempt = 0;
             this._disconnectsSent = 0;
             this.wantsGhostData = -1;
-            this._lastReceivedPacketOrder = (ushort)0;
+            this._lastReceivedPacketOrder = 0;
             this._packetHistory = new NetworkPacket[33];
             this._packetHistoryIndex = 0;
             this._theirVersion = "";
@@ -284,7 +284,7 @@ namespace DuckGame
             this.synchronizedInputDevices.Clear();
             this.lastSynchronizedDeviceType = byte.MaxValue;
             this.pingWait = 0;
-            this._realName = (string)null;
+            this._realName = null;
             this._pingsSent = 0;
             this.kicking = false;
             this.recentlyReceivedPackets.Clear();
@@ -326,9 +326,9 @@ namespace DuckGame
             {
                 if (this._packetHistory[index] != null)
                 {
-                    int num = (int)this._lastReceivedPacketOrder - (int)this._packetHistory[index].order;
+                    int num = _lastReceivedPacketOrder - _packetHistory[index].order;
                     if (num < 0)
-                        num += (int)ushort.MaxValue;
+                        num += ushort.MaxValue;
                     if (num > 0 && num < 17)
                         ackBitfield |= this.kAckOffsets[num - 1];
                 }
@@ -347,13 +347,15 @@ namespace DuckGame
 
         private static bool PacketOrderGreater(ushort s1, ushort s2)
         {
-            if ((int)s1 > (int)s2 && (int)s1 - (int)s2 <= 32768)
+            if (s1 > s2 && s1 - s2 <= 32768)
                 return true;
-            return (int)s1 < (int)s2 && (int)s2 - (int)s1 > 32768;
+            return s1 < s2 && s2 - s1 > 32768;
         }
 
-        public void PacketSent() => this._lastSentTime = this._personalTick;
-
+        public void PacketSent()
+        { 
+            this._lastSentTime = this._personalTick;
+        }
         public void OnNonConnectionMessage(NetMessage message)
         {
         }
@@ -435,13 +437,13 @@ namespace DuckGame
                     if (DG.version != nmConnect.version)
                     {
                         this._theirVersion = nmConnect.version;
-                        Send.Message((NetMessage)new NMWrongVersion(DG.version), NetMessagePriority.UnreliableUnordered, this);
+                        Send.Message(new NMWrongVersion(DG.version), NetMessagePriority.UnreliableUnordered, this);
                         this.Disconnect_DifferentVersion(this._theirVersion);
                         return;
                     }
                     if (ModLoader.modHash != nmConnect.modHash)
                     {
-                        Send.Message((NetMessage)new NMModIncompatibility(), NetMessagePriority.UnreliableUnordered, this);
+                        Send.Message(new NMModIncompatibility(), NetMessagePriority.UnreliableUnordered, this);
                         this.Disconnect_IncompatibleMods();
                         return;
                     }
@@ -452,7 +454,7 @@ namespace DuckGame
                 {
                     if (!this._pongedThisFrame)
                     {
-                        Send.Message((NetMessage)new NMNewPong((message as NMNewPing).index), NetMessagePriority.UnreliableUnordered, this);
+                        Send.Message(new NMNewPong((message as NMNewPing).index), NetMessagePriority.UnreliableUnordered, this);
                         this.sendPacketsNow = true;
                         this._pongedThisFrame = true;
                     }
@@ -462,7 +464,7 @@ namespace DuckGame
                 }
                 else if (message is NMNewPong)
                 {
-                    NMNewPing nmNewPing = (NMNewPing)null;
+                    NMNewPing nmNewPing;
                     if (!this._pings.TryGetValue((message as NMNewPong).index, out nmNewPing))
                         return;
                     this.manager.LogPing(nmNewPing.GetTotalSeconds() - 0.032f);
@@ -491,9 +493,9 @@ namespace DuckGame
             this._disconnectsSent = 0;
             this._ticksTillDisconnectAttempt = 0;
             this._connectionError = error;
-            Send.ImmediateUnreliableMessage((NetMessage)new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
-            Send.ImmediateUnreliableMessage((NetMessage)new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
-            Send.ImmediateUnreliableMessage((NetMessage)new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
+            Send.ImmediateUnreliableMessage(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
+            Send.ImmediateUnreliableMessage(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
+            Send.ImmediateUnreliableMessage(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
         }
 
         private int timeBetweenPings
@@ -520,7 +522,7 @@ namespace DuckGame
                 if (this._data == null || this._disconnectsSent > 10)
                 {
                     this.ChangeStatus(ConnectionStatus.Disconnected);
-                    this._connectionError = (DuckNetErrorInfo)null;
+                    this._connectionError = null;
                 }
                 else
                 {
@@ -529,7 +531,7 @@ namespace DuckGame
                         return;
                     if (!this.kicking)
                     {
-                        Send.Message((NetMessage)new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), NetMessagePriority.UnreliableUnordered, this);
+                        Send.Message(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), NetMessagePriority.UnreliableUnordered, this);
                         DevConsole.Log(DCSection.Connection, "Disconnect send    (" + this.sessionID.ToString() + ")", this);
                     }
                     ++this._disconnectsSent;
@@ -581,7 +583,7 @@ namespace DuckGame
                 {
                     if (this.pingWait <= 0)
                     {
-                        Send.Message((NetMessage)new NMConnect(this._connectsReceived, (NetIndex4)0, DG.version, ModLoader.modHash), NetMessagePriority.UnreliableUnordered, this);
+                        Send.Message(new NMConnect(this._connectsReceived, (NetIndex4)0, DG.version, ModLoader.modHash), NetMessagePriority.UnreliableUnordered, this);
                         DevConsole.Log(DCSection.Connection, "Connect send    (" + this.sessionID.ToString() + ")", this);
                         this.pingWait = 20;
                     }
@@ -592,11 +594,11 @@ namespace DuckGame
                     if (this.pingWait > this.timeBetweenPings)
                     {
                         this.restartPingTimer = true;
-                        NMNewPing msg = !Network.isServer ? new NMNewPing(this.pingIndex) : (NMNewPing)new NMNewPingHost(this.pingIndex);
+                        NMNewPing msg = !Network.isServer ? new NMNewPing(this.pingIndex) : new NMNewPingHost(this.pingIndex);
                         ++this._pingsSent;
                         this._pings[this.pingIndex] = msg;
-                        this.pingIndex = (byte)(((int)this.pingIndex + 1) % 10);
-                        Send.Message((NetMessage)msg, NetMessagePriority.UnreliableUnordered, this);
+                        this.pingIndex = (byte)((pingIndex + 1) % 10);
+                        Send.Message(msg, NetMessagePriority.UnreliableUnordered, this);
                         this.pingWait = 0;
                         this.sendPacketsNow = true;
                     }
@@ -622,7 +624,7 @@ namespace DuckGame
             SessionState sessionState = Steam.GetSessionState(this.data as User);
             DevConsole.Log("Information for " + this.ToString() + ":", Colors.DGBlue);
             foreach (FieldInfo field in sessionState.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-                DevConsole.Log(field.Name + ": " + field.GetValue((object)sessionState).ToString(), Colors.DGBlue);
+                DevConsole.Log(field.Name + ": " + field.GetValue(sessionState).ToString(), Colors.DGBlue);
             DevConsole.Log("", Colors.DGBlue);
         }
 
@@ -632,17 +634,17 @@ namespace DuckGame
 
         public void PostUpdate(int frameCounter)
         {
-            NetworkConnection.ghostLerpDivisor = 1f / (float)NetworkConnection.packetsEvery;
+            NetworkConnection.ghostLerpDivisor = 1f / packetsEvery;
             if (this._status == ConnectionStatus.Disconnected)
                 return;
             bool flag = (frameCounter + NetworkConnection.connectionLoopIndex) % NetworkConnection.packetsEvery == 0;
-            if ((int)DuckNetwork.levelIndex == (int)this.levelIndex && this.levelIndex != byte.MaxValue && this.status == ConnectionStatus.Connected)
+            if (DuckNetwork.levelIndex == levelIndex && this.levelIndex != byte.MaxValue && this.status == ConnectionStatus.Connected)
             {
                 foreach (Profile profile in DuckNetwork.profiles)
                 {
                     if (profile.connection == DuckNetwork.localConnection && profile.netData.IsDirty(this))
                     {
-                        Send.Message((NetMessage)new NMProfileNetData(profile, this), NetMessagePriority.Volatile, this);
+                        Send.Message(new NMProfileNetData(profile, this), NetMessagePriority.Volatile, this);
                         profile.netData.Clean(this);
                     }
                 }
@@ -651,7 +653,7 @@ namespace DuckGame
             NetSoundEffect.Update();
             this._manager.Flush(flag);
             if (flag && !this._sentThisFrame)
-                Network.activeNetwork.core.SendPacket((NetworkPacket)null, this);
+                Network.activeNetwork.core.SendPacket(null, this);
             this._sentThisFrame = false;
         }
 

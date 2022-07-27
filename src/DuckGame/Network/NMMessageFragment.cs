@@ -19,7 +19,7 @@ namespace DuckGame
         public BitBuffer data;
         public ushort type;
 
-        public static int FragmentsRequired(NetMessage pMessage) => (int)Math.Ceiling((double)pMessage.serializedData.lengthInBytes / 700.0);
+        public static int FragmentsRequired(NetMessage pMessage) => (int)Math.Ceiling(pMessage.serializedData.lengthInBytes / 700.0);
 
         public static List<NMMessageFragment> BreakApart(NetMessage pMessage)
         {
@@ -36,8 +36,8 @@ namespace DuckGame
                     nmMessageFragment.mod = ModLoader.GetModFromTypeIgnoreCore(pMessage.GetType());
                     nmMessageFragment.type = Network.allMessageTypesToID[pMessage.GetType()];
                 }
-                byte[] numArray = new byte[(int)nmMessageFragment.length];
-                Array.Copy((Array)pMessage.serializedData.buffer, index * 700, (Array)numArray, 0, (int)nmMessageFragment.length);
+                byte[] numArray = new byte[nmMessageFragment.length];
+                Array.Copy(pMessage.serializedData.buffer, index * 700, numArray, 0, nmMessageFragment.length);
                 nmMessageFragment.data = new BitBuffer(numArray);
                 nmMessageFragmentList.Add(nmMessageFragment);
             }
@@ -57,12 +57,12 @@ namespace DuckGame
                 if (this.mod is CoreMod)
                 {
                     DevConsole.Log(DCSection.DuckNet, "|GRAY|Ignoring fragmented message from unknown client mod.");
-                    return (NetMessage)null;
+                    return null;
                 }
-                netMessage = this.mod.constructorToMessageID[this.type].Invoke((object[])null) as NetMessage;
+                netMessage = this.mod.constructorToMessageID[this.type].Invoke(null) as NetMessage;
             }
             else
-                netMessage = Network.constructorToMessageID[this.type].Invoke((object[])null) as NetMessage;
+                netMessage = Network.constructorToMessageID[this.type].Invoke(null) as NetMessage;
             netMessage.order = this.order;
             netMessage.connection = this.connection;
             netMessage.priority = this.priority;
@@ -104,7 +104,7 @@ namespace DuckGame
                     this.type = pData.ReadUShort();
                     this.mod = ModLoader.GetModFromHash(pData.ReadUInt());
                     if (this.mod == null)
-                        this.mod = (Mod)CoreMod.coreMod;
+                        this.mod = CoreMod.coreMod;
                 }
             }
             this.data = pData.ReadBitBuffer();

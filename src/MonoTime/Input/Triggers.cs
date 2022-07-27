@@ -44,115 +44,115 @@ namespace DuckGame
         public static Dictionary<byte, string> fromIndex = new Dictionary<byte, string>()
     {
       {
-        (byte) 0,
+         0,
         "LEFT"
       },
       {
-        (byte) 1,
+         1,
         "RIGHT"
       },
       {
-        (byte) 2,
+         2,
         "UP"
       },
       {
-        (byte) 3,
+         3,
         "DOWN"
       },
       {
-        (byte) 4,
+         4,
         "JUMP"
       },
       {
-        (byte) 5,
+         5,
         "QUACK"
       },
       {
-        (byte) 6,
+         6,
         "SHOOT"
       },
       {
-        (byte) 7,
+         7,
         "GRAB"
       },
       {
-        (byte) 8,
+         8,
         "RAGDOLL"
       },
       {
-        (byte) 9,
+         9,
         "STRAFE"
       },
       {
-        (byte) 10,
+         10,
         "START"
       },
       {
-        (byte) 11,
+         11,
         "SELECT"
       },
       {
-        (byte) 12,
+         12,
         "CHAT"
       },
       {
-        (byte) 13,
+         13,
         "LTRIGGER"
       },
       {
-        (byte) 14,
+         14,
         "RTRIGGER"
       },
       {
-        (byte) 15,
+         15,
         "LSTICK"
       },
       {
-        (byte) 16,
+         16,
         "RSTICK"
       },
       {
-        (byte) 17,
+         17,
         "ANY"
       },
       {
-        (byte) 18,
+         18,
         "LBUMPER"
       },
       {
-        (byte) 19,
+         19,
         "RBUMPER"
       },
       {
-        (byte) 20,
+         20,
         "CANCEL"
       },
       {
-        (byte) 21,
+         21,
         "LOPTION"
       },
       {
-        (byte) 22,
+         22,
         "MENU1"
       },
       {
-        (byte) 23,
+         23,
         "MENU2"
       },
       {
-        (byte) 24,
+         24,
         "MENULEFT"
       },
       {
-        (byte) 25,
+         25,
         "MENURIGHT"
       },
       {
-        (byte) 26,
+         26,
         "MENUUP"
       },
       {
-        (byte) 27,
+         27,
         "MENUDOWN"
       }
     };
@@ -160,115 +160,115 @@ namespace DuckGame
     {
       {
         "LEFT",
-        (byte) 0
+         0
       },
       {
         "RIGHT",
-        (byte) 1
+         1
       },
       {
         "UP",
-        (byte) 2
+         2
       },
       {
         "DOWN",
-        (byte) 3
+         3
       },
       {
         "JUMP",
-        (byte) 4
+         4
       },
       {
         "QUACK",
-        (byte) 5
+         5
       },
       {
         "SHOOT",
-        (byte) 6
+         6
       },
       {
         "GRAB",
-        (byte) 7
+         7
       },
       {
         "RAGDOLL",
-        (byte) 8
+         8
       },
       {
         "STRAFE",
-        (byte) 9
+         9
       },
       {
         "START",
-        (byte) 10
+         10
       },
       {
         "SELECT",
-        (byte) 11
+         11
       },
       {
         "CHAT",
-        (byte) 12
+         12
       },
       {
         "LTRIGGER",
-        (byte) 13
+         13
       },
       {
         "RTRIGGER",
-        (byte) 14
+         14
       },
       {
         "LSTICK",
-        (byte) 15
+         15
       },
       {
         "RSTICK",
-        (byte) 16
+         16
       },
       {
         "ANY",
-        (byte) 17
+         17
       },
       {
         "LBUMPER",
-        (byte) 18
+         18
       },
       {
         "RBUMPER",
-        (byte) 19
+         19
       },
       {
         "CANCEL",
-        (byte) 20
+         20
       },
       {
         "LOPTION",
-        (byte) 21
+         21
       },
       {
         "MENU1",
-        (byte) 22
+         22
       },
       {
         "MENU2",
-        (byte) 23
+         23
       },
       {
         "MENULEFT",
-        (byte) 24
+         24
       },
       {
         "MENURIGHT",
-        (byte) 25
+         25
       },
       {
         "MENUUP",
-        (byte) 26
+         26
       },
       {
         "MENUDOWN",
-        (byte) 27
+         27
       }
     };
 

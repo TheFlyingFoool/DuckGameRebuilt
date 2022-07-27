@@ -23,8 +23,8 @@ namespace DuckGame
                 {
                     if ((double)sprite.x - (double)sprite.centerx < (double)num1)
                         num1 = sprite.x - sprite.centerx;
-                    if ((double)sprite.x - (double)sprite.centerx + (double)sprite.width > (double)num2)
-                        num2 = sprite.x - sprite.centerx + (float)sprite.width;
+                    if ((double)sprite.x - (double)sprite.centerx + sprite.width > (double)num2)
+                        num2 = sprite.x - sprite.centerx + sprite.width;
                 }
                 return (int)((double)num2 - (double)num1 + 0.5);
             }
@@ -42,8 +42,8 @@ namespace DuckGame
                 {
                     if ((double)sprite.y - (double)sprite.centery < (double)num1)
                         num1 = sprite.x - sprite.centery;
-                    if ((double)sprite.y - (double)sprite.centery + (double)sprite.height > (double)num2)
-                        num2 = sprite.y - sprite.centery + (float)sprite.width;
+                    if ((double)sprite.y - (double)sprite.centery + sprite.height > (double)num2)
+                        num2 = sprite.y - sprite.centery + sprite.width;
                 }
                 return (int)((double)num2 - (double)num1 + 0.5);
             }
@@ -65,11 +65,11 @@ namespace DuckGame
             {
                 Vec2 vec2_1 = new Vec2(sprite1.position);
                 Sprite sprite2 = sprite1;
-                sprite2.position = sprite2.position - this.center;
+                sprite2.position -= this.center;
                 sprite1.position.x *= this.xscale;
                 sprite1.position.y *= this.yscale;
                 Sprite sprite3 = sprite1;
-                sprite3.position = sprite3.position + this.position;
+                sprite3.position += this.position;
                 float alpha = sprite1.alpha;
                 sprite1.alpha *= this.alpha;
                 Vec2 vec2_2 = new Vec2(sprite1.scale);

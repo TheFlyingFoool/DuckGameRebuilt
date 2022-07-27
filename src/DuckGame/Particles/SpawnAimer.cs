@@ -59,14 +59,14 @@ namespace DuckGame
         {
             this._sin.Update();
             if (GameMode.started)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             this.distOut = Lerp.FloatSmooth(this.distOut, 16f, 0.08f, 1.2f);
             this.distLen = Lerp.FloatSmooth(this.distLen, 10f, 0.08f, 1.2f);
             this.rot = Lerp.FloatSmooth(this.rot, 45f, 0.08f, 1.1f);
             if ((double)Math.Abs(this.rot - 45f) < 20.0)
             {
                 this.streamAlpha -= 0.03f;
-                if ((double)this.streamAlpha < 0.0)
+                if (streamAlpha < 0.0)
                     this.streamAlpha = 0.0f;
             }
             Level.current.camera.getMatrix();
@@ -80,19 +80,19 @@ namespace DuckGame
 
         public override void Draw()
         {
-            float num1 = (this.distOut + (float)(Math.Sin((double)this.sizeWaver) * 2.0)) * this.aimerScale;
+            float num1 = (this.distOut + (float)(Math.Sin(sizeWaver) * 2.0)) * this.aimerScale;
             float distOut = this.distOut;
             if (Network.isActive && this.dugg != null && this.dugg.profile != null && this.dugg.profile.connection == DuckNetwork.localConnection)
                 distOut += this._sin.value * 2f;
             this._thickness = 2f;
             for (int index = 0; index < 4; ++index)
             {
-                float deg = this.rot + (float)index * 90f;
+                float deg = this.rot + index * 90f;
                 Vec2 vec2 = new Vec2((float)Math.Cos((double)Maths.DegToRad(deg)), (float)-Math.Sin((double)Maths.DegToRad(deg)));
                 Graphics.DrawLine(this.position + vec2 * distOut, this.position + vec2 * (distOut + this.distLen * this.aimerScale), this._color * this.alpha, this._thickness * this.aimerScale, (Depth)0.9f);
-                Graphics.DrawLine(this.position + vec2 * (distOut - 1f * this.aimerScale), this.position + vec2 * (float)((double)distOut + 1.0 * (double)this.aimerScale + (double)this.distLen * (double)this.aimerScale), Color.Black, (this._thickness + 2f) * this.aimerScale, (Depth)0.8f);
+                Graphics.DrawLine(this.position + vec2 * (distOut - 1f * this.aimerScale), this.position + vec2 * (float)((double)distOut + 1.0 * aimerScale + distLen * (double)this.aimerScale), Color.Black, (this._thickness + 2f) * this.aimerScale, (Depth)0.8f);
             }
-            if ((double)this.streamAlpha <= 0.00999999977648258)
+            if (streamAlpha <= 0.00999999977648258)
                 return;
             int num2 = 0;
             Vec2 vec2_1 = Vec2.Zero;
@@ -102,7 +102,7 @@ namespace DuckGame
                 if (flag)
                 {
                     Vec2 normalized = (vec2_1 - prevPo).normalized;
-                    Graphics.DrawLine(vec2_1 - normalized, prevPo + normalized, this._color * this.streamAlpha, (float)(4.0 + (double)num2 * 2.0) * this.aimerScale, (Depth)0.9f);
+                    Graphics.DrawLine(vec2_1 - normalized, prevPo + normalized, this._color * this.streamAlpha, (float)(4.0 + num2 * 2.0) * this.aimerScale, (Depth)0.9f);
                 }
                 vec2_1 = prevPo;
                 flag = true;

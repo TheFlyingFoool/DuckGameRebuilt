@@ -14,9 +14,11 @@ namespace DuckGame
         public OpenPresent(float xpos, float ypos, int frame)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("presents", 16, 16);
-            this._sprite.frame = frame + 8;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("presents", 16, 16)
+            {
+                frame = frame + 8
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 13f);
             this.hSpeed = 0.0f;
             this.vSpeed = 0.0f;

@@ -40,9 +40,9 @@ namespace DuckGame
         public Icicles(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this.style = new EditorProperty<int>(0, (Thing)this, max: 3f, increment: 1f);
-            this.background = new EditorProperty<bool>(false, (Thing)this);
-            this.graphic = (Sprite)new SpriteMap("icicles", 16, 21);
+            this.style = new EditorProperty<int>(0, this, max: 3f, increment: 1f);
+            this.background = new EditorProperty<bool>(false, this);
+            this.graphic = new SpriteMap("icicles", 16, 21);
             this.hugWalls = WallHug.Ceiling;
             this.center = new Vec2(8f, 5f);
             this.collisionSize = new Vec2(10f, 8f);
@@ -77,7 +77,7 @@ namespace DuckGame
             {
                 if ((this.graphic as SpriteMap).frame == 3 && this._deadlyIcicleInstance == null && Network.isServer)
                 {
-                    this._deadlyIcicleInstance = (Thing)new DeadlyIcicle(this.x, this.y + 8f);
+                    this._deadlyIcicleInstance = new DeadlyIcicle(this.x, this.y + 8f);
                     this._deadlyIcicleInstance.active = false;
                     this._deadlyIcicleInstance.visible = false;
                     this._deadlyIcicleInstance.solid = false;
@@ -115,11 +115,11 @@ namespace DuckGame
                 return;
             for (int index = 0; index < 4; ++index)
             {
-                GlassParticle glassParticle = new GlassParticle(this.x + (float)Rando.Int(-3, 3), this.y + (float)Rando.Int(-3, 3), Vec2.Zero);
-                Level.Add((Thing)glassParticle);
+                GlassParticle glassParticle = new GlassParticle(this.x + Rando.Int(-3, 3), this.y + Rando.Int(-3, 3), Vec2.Zero);
+                Level.Add(glassParticle);
                 glassParticle.hSpeed = Rando.Float(-1f, 1f);
                 glassParticle.vSpeed = Rando.Float(-1f, 1f);
-                Level.Add((Thing)glassParticle);
+                Level.Add(glassParticle);
             }
             SFX.Play("glassHit", 0.6f);
             if ((this.graphic as SpriteMap).frame == 3 & pLocal)
@@ -131,12 +131,12 @@ namespace DuckGame
                         this._deadlyIcicleInstance.visible = true;
                         this._deadlyIcicleInstance.active = true;
                         this._deadlyIcicleInstance.solid = true;
-                        Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                        Thing.Fondle(this, DuckNetwork.localConnection);
                         Thing.Fondle(this._deadlyIcicleInstance, DuckNetwork.localConnection);
                     }
                 }
                 else
-                    Level.Add((Thing)new DeadlyIcicle(this.x, this.y + 8f));
+                    Level.Add(new DeadlyIcicle(this.x, this.y + 8f));
             }
           (this.graphic as SpriteMap).frame += 4;
         }

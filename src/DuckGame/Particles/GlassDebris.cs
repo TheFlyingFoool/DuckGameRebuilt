@@ -16,10 +16,12 @@ namespace DuckGame
         {
             this.hSpeed = h;
             this.vSpeed = v;
-            this._sprite = new SpriteMap("windowDebris", 8, 8);
-            this._sprite.frame = Rando.Int(7);
-            this._sprite.color = Window.windowColors[tint] * 0.6f;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("windowDebris", 8, 8)
+            {
+                frame = Rando.Int(7),
+                color = Window.windowColors[tint] * 0.6f
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(4f, 4f);
             this._bounceEfficiency = 0.3f;
             if (!rotate)
@@ -31,7 +33,7 @@ namespace DuckGame
         {
             this.alpha -= 0.01f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
     }

@@ -28,7 +28,7 @@ namespace DuckGame
           trigger = "LEFT",
           position = new Vec2(0.0f, 0.0f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -36,7 +36,7 @@ namespace DuckGame
           trigger = "RIGHT",
           position = new Vec2(35f, 0.0f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -44,7 +44,7 @@ namespace DuckGame
           trigger = "UP",
           position = new Vec2(70f, 0.0f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -52,7 +52,7 @@ namespace DuckGame
           trigger = "DOWN",
           position = new Vec2(105f, 0.0f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -102,7 +102,7 @@ namespace DuckGame
           trigger = "START",
           position = new Vec2(0.0f, 48f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.allowStartRemap)
+          condition =  x => x.allowStartRemap
         },
         new ControlSetting()
         {
@@ -110,13 +110,13 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(70f, 48f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => !(x is Keyboard)),
-          action = (Action<ProfileSelector>) (x =>
+          condition =  x => !(x is Keyboard),
+          action =  x =>
           {
             ++x._controlPage;
-            x._selectedSetting = (ControlSetting) null;
+            x._selectedSetting =  null;
             SFX.Play("page");
-          })
+          }
         },
         new ControlSetting()
         {
@@ -124,13 +124,13 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(70f, 48f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x is Keyboard),
-          action = (Action<ProfileSelector>) (x =>
+          condition =  x => x is Keyboard,
+          action =  x =>
           {
             x._controlPage += 2;
-            x._selectedSetting = (ControlSetting) null;
+            x._selectedSetting =  null;
             SFX.Play("page");
-          })
+          }
         }
       },
       new List<ControlSetting>()
@@ -141,7 +141,7 @@ namespace DuckGame
           trigger = "LSTICK",
           position = new Vec2(0.0f, 12f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.numSticks > 1)
+          condition =  x => x.numSticks > 1
         },
         new ControlSetting()
         {
@@ -149,7 +149,7 @@ namespace DuckGame
           trigger = "LTRIGGER",
           position = new Vec2(0.0f, 24f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.numTriggers > 1)
+          condition =  x => x.numTriggers > 1
         },
         new ControlSetting()
         {
@@ -157,7 +157,7 @@ namespace DuckGame
           trigger = "RSTICK",
           position = new Vec2(70f, 12f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x.numSticks > 1)
+          condition =  x => x.numSticks > 1
         },
         new ControlSetting()
         {
@@ -165,7 +165,7 @@ namespace DuckGame
           trigger = "RTRIGGER",
           position = new Vec2(70f, 24f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x.numTriggers > 1)
+          condition =  x => x.numTriggers > 1
         },
         new ControlSetting()
         {
@@ -173,12 +173,12 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(0.0f, 60f),
           column = 0,
-          action = (Action<ProfileSelector>) (x =>
+          action =  x =>
           {
             --x._controlPage;
-            x._selectedSetting = (ControlSetting) null;
+            x._selectedSetting =  null;
             SFX.Play("page");
-          })
+          }
         },
         new ControlSetting()
         {
@@ -186,12 +186,12 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(70f, 60f),
           column = 1,
-          action = (Action<ProfileSelector>) (x =>
+          action =  x =>
           {
             ++x._controlPage;
-            x._selectedSetting = (ControlSetting) null;
+            x._selectedSetting =  null;
             SFX.Play("page");
-          })
+          }
         }
       },
       new List<ControlSetting>()
@@ -210,7 +210,7 @@ namespace DuckGame
           trigger = "MENULEFT",
           position = new Vec2(0.0f, 12f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -218,7 +218,7 @@ namespace DuckGame
           trigger = "MENURIGHT",
           position = new Vec2(35f, 12f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -226,7 +226,7 @@ namespace DuckGame
           trigger = "MENUUP",
           position = new Vec2(70f, 12f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -234,7 +234,7 @@ namespace DuckGame
           trigger = "MENUDOWN",
           position = new Vec2(105f, 12f),
           column = 1,
-          condition = (Func<InputDevice, bool>) (x => x.allowDirectionalMapping)
+          condition =  x => x.allowDirectionalMapping
         },
         new ControlSetting()
         {
@@ -270,13 +270,13 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(0.0f, 48f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => !(x is Keyboard)),
-          action = (Action<ProfileSelector>) (x =>
+          condition =  x => !(x is Keyboard),
+          action =  x =>
           {
             --x._controlPage;
-            x._selectedSetting = (ControlSetting) null;
+            x._selectedSetting =  null;
             SFX.Play("page");
-          })
+          }
         },
         new ControlSetting()
         {
@@ -284,13 +284,13 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(0.0f, 48f),
           column = 0,
-          condition = (Func<InputDevice, bool>) (x => x is Keyboard),
-          action = (Action<ProfileSelector>) (x =>
+          condition =  x => x is Keyboard,
+          action =  x =>
           {
             x._controlPage -= 2;
-            x._selectedSetting = (ControlSetting) null;
+            x._selectedSetting =  null;
             SFX.Play("page");
-          })
+          }
         },
         new ControlSetting()
         {
@@ -298,12 +298,12 @@ namespace DuckGame
           trigger = "ANY",
           position = new Vec2(70f, 48f),
           column = 1,
-          action = (Action<ProfileSelector>) (x =>
+          action =  x =>
           {
             ProfileSelector._madeControlChanges = true;
             x._configInputMapping = Input.GetDefaultMapping(x._inputProfile.lastActiveDevice.productName, x._inputProfile.lastActiveDevice.productGUID).Clone();
             SFX.Play("consoleSelect");
-          })
+          }
         }
       }
     };
@@ -397,8 +397,10 @@ namespace DuckGame
         public ProfileSelector(float xpos, float ypos, ProfileBox2 box, HatSelector sel)
           : base(xpos, ypos)
         {
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._font.scale = new Vec2(0.5f, 0.5f);
+            this._font = new BitmapFont("biosFontUI", 8, 7)
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             this._collisionSize = new Vec2(141f, 89f);
             this._spinnerArrows = new SpriteMap("spinnerArrows", 8, 4);
             this._box = box;
@@ -407,19 +409,23 @@ namespace DuckGame
             this._happyIcons.CenterOrigin();
             this._angryIcons = new SpriteMap("angryFace", 16, 16);
             this._angryIcons.CenterOrigin();
-            this._smallFont = new BitmapFont("smallBiosFont", 7, 6);
-            this._smallFont.scale = new Vec2(0.5f, 0.5f);
-            this._controlsFont = new BitmapFont("biosFontUIArrows", 8, 7);
-            this._controlsFont.scale = new Vec2(1f);
+            this._smallFont = new BitmapFont("smallBiosFont", 7, 6)
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
+            this._controlsFont = new BitmapFont("biosFontUIArrows", 8, 7)
+            {
+                scale = new Vec2(1f)
+            };
         }
 
         public override void Initialize()
         {
             this._confirmMenu = new UIMenu("DELETE PROFILE!?", 320f / 2f, 180f / 2f, 160f, conString: "@SELECT@SELECT @CANCEL@OH NO!");
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("WHAT? NO!", (UIMenuAction)new UIMenuActionCloseMenu((UIComponent)this._confirmMenu), backButton: true), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("YEAH!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean((UIComponent)this._confirmMenu, this._deleteProfile)), true);
+            this._confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
+            this._confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._deleteProfile)), true);
             this._confirmMenu.Close();
-            Level.Add((Thing)this._confirmMenu);
+            Level.Add(_confirmMenu);
             base.Initialize();
         }
 
@@ -430,8 +436,8 @@ namespace DuckGame
             this._fade = 0.0f;
             this._desiredMode = PSMode.SelectProfile;
             this._controlPage = 0;
-            this._selectedSetting = (ControlSetting)null;
-            this._configInputMapping = (DeviceInputMapping)null;
+            this._selectedSetting = null;
+            this._configInputMapping = null;
         }
 
         public string GetMaskName(int length)
@@ -464,7 +470,7 @@ namespace DuckGame
         {
             for (int index = 0; index < this._characters.Count; ++index)
             {
-                if ((int)this._characters[index] == (int)c)
+                if (this._characters[index] == c)
                     return index;
             }
             return -1;
@@ -548,7 +554,7 @@ namespace DuckGame
             this._takenFlash = Lerp.Float(this._takenFlash, 0.0f, 0.02f);
             if (!this._open)
             {
-                if ((double)this._fade >= 0.00999999977648258 || !this._closing)
+                if (_fade >= 0.00999999977648258 || !this._closing)
                     return;
                 this._closing = false;
             }
@@ -568,7 +574,7 @@ namespace DuckGame
                     this._selector.screen.DoFlashTransition();
                     this._mode = this._desiredMode;
                 }
-                if ((double)this._fade > 0.899999976158142 && this._mode != PSMode.CreateProfile && this._mode != PSMode.EditProfile && this._mode != PSMode.EditControls && this._mode != PSMode.EditControlsConfirm && this._desiredSelectorPosition == this._selectorPosition)
+                if (_fade > 0.899999976158142 && this._mode != PSMode.CreateProfile && this._mode != PSMode.EditProfile && this._mode != PSMode.EditControls && this._mode != PSMode.EditControlsConfirm && this._desiredSelectorPosition == this._selectorPosition)
                 {
                     if (this._inputProfile.Down("MENUUP"))
                     {
@@ -587,7 +593,7 @@ namespace DuckGame
                     if (this.HoveredProfileIsCustom() && MonoMain.pauseMenu == null && this._inputProfile.Pressed("MENU2"))
                     {
                         this._deleteContext = this._profiles[this._selectorPosition];
-                        MonoMain.pauseMenu = (UIComponent)this._confirmMenu;
+                        MonoMain.pauseMenu = _confirmMenu;
                         this._confirmMenu.Open();
                         SFX.Play("pause", 0.6f);
                     }
@@ -600,7 +606,7 @@ namespace DuckGame
                             this.SelectUp();
                             this.RebuildProfileList();
                             this._slide = this._slideTo;
-                            this._deleteContext = (Profile)null;
+                            this._deleteContext = null;
                         }
                     }
                     if (this._inputProfile.Pressed("CANCEL"))
@@ -645,7 +651,7 @@ namespace DuckGame
                                 {
                                     this._box.ChangeProfile(this._profiles[this._selectorPosition]);
                                     this._profile = this._profiles[this._selectorPosition];
-                                    this._profile.inputProfile = (InputProfile)null;
+                                    this._profile.inputProfile = null;
                                     this._profile.inputProfile = this._inputProfile;
                                     Input.ApplyDefaultMapping(this._inputProfile, this._profile);
                                 }
@@ -688,7 +694,7 @@ namespace DuckGame
                                 this.ApplyInputSettings(this._profile);
                             }
                             else
-                                this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : (Profile)null)).Clone();
+                                this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : null)).Clone();
                             this._desiredMode = PSMode.CreateProfile;
                         }
                     }
@@ -703,9 +709,9 @@ namespace DuckGame
                     {
                         InputDevice d = this._inputProfile.lastActiveDevice;
                         if (d is GenericController)
-                            d = (InputDevice)(d as GenericController).device;
+                            d = (d as GenericController).device;
                         if (this._selectedSetting == null)
-                            this._selectedSetting = this._controlSettingPages[this._controlPage].Find((Predicate<ControlSetting>)(x => (x.condition == null || x.condition(d)) && !x.caption));
+                            this._selectedSetting = this._controlSettingPages[this._controlPage].Find(x => (x.condition == null || x.condition(d)) && !x.caption);
                         Vec2 zero = Vec2.Zero;
                         if (this._inputProfile.Pressed("MENUUP"))
                             zero += new Vec2(0.0f, -8f);
@@ -717,32 +723,32 @@ namespace DuckGame
                             zero += new Vec2(30f, 0.0f);
                         if (zero != Vec2.Zero)
                         {
-                            ControlSetting controlSetting1 = (ControlSetting)null;
+                            ControlSetting controlSetting1 = null;
                             foreach (ControlSetting controlSetting2 in this._controlSettingPages[this._controlPage])
                             {
                                 if ((controlSetting2.condition == null || controlSetting2.condition(d)) && !controlSetting2.caption)
                                 {
-                                    if ((double)zero.x != 0.0)
+                                    if (zero.x != 0.0)
                                     {
-                                        if ((double)controlSetting2.position.y == (double)this._selectedSetting.position.y)
+                                        if (controlSetting2.position.y == (double)this._selectedSetting.position.y)
                                         {
-                                            if ((double)zero.x > 0.0)
+                                            if (zero.x > 0.0)
                                             {
-                                                if ((double)controlSetting2.position.x > (double)this._selectedSetting.position.x && (controlSetting1 == null || (double)controlSetting2.position.x < (double)controlSetting1.position.x))
+                                                if (controlSetting2.position.x > (double)this._selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x < (double)controlSetting1.position.x))
                                                     controlSetting1 = controlSetting2;
                                             }
-                                            else if ((double)controlSetting2.position.x < (double)this._selectedSetting.position.x && (controlSetting1 == null || (double)controlSetting2.position.x > (double)controlSetting1.position.x))
+                                            else if (controlSetting2.position.x < (double)this._selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x > (double)controlSetting1.position.x))
                                                 controlSetting1 = controlSetting2;
                                         }
                                     }
-                                    else if ((double)controlSetting2.position.x == (double)this._selectedSetting.position.x || controlSetting2.column == this._selectedSetting.column)
+                                    else if (controlSetting2.position.x == (double)this._selectedSetting.position.x || controlSetting2.column == this._selectedSetting.column)
                                     {
-                                        if ((double)zero.y > 0.0)
+                                        if (zero.y > 0.0)
                                         {
-                                            if ((double)controlSetting2.position.y > (double)this._selectedSetting.position.y && (controlSetting1 == null || (double)controlSetting2.position.y < (double)controlSetting1.position.y))
+                                            if (controlSetting2.position.y > (double)this._selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y < (double)controlSetting1.position.y))
                                                 controlSetting1 = controlSetting2;
                                         }
-                                        else if ((double)controlSetting2.position.y < (double)this._selectedSetting.position.y && (controlSetting1 == null || (double)controlSetting2.position.y > (double)controlSetting1.position.y))
+                                        else if (controlSetting2.position.y < (double)this._selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y > (double)controlSetting1.position.y))
                                             controlSetting1 = controlSetting2;
                                     }
                                 }
@@ -797,16 +803,16 @@ namespace DuckGame
                     {
                         this._configInputMapping.deviceOverride = this._inputProfile.lastActiveDevice;
                         if (this._configInputMapping.deviceOverride is GenericController)
-                            this._configInputMapping.deviceOverride = (InputDevice)(this._configInputMapping.deviceOverride as GenericController).device;
+                            this._configInputMapping.deviceOverride = (_configInputMapping.deviceOverride as GenericController).device;
                         if (this._selectedSetting.trigger != "ANY" && this._configInputMapping.RunMappingUpdate(this._selectedSetting.trigger, false))
                         {
                             this._editControl = false;
                             SFX.Play("consoleSelect");
                             ProfileSelector._madeControlChanges = true;
-                            this._configInputMapping.deviceOverride = (InputDevice)null;
+                            this._configInputMapping.deviceOverride = null;
                             return;
                         }
-                        this._configInputMapping.deviceOverride = (InputDevice)null;
+                        this._configInputMapping.deviceOverride = null;
                     }
                 }
                 else if (this._mode == PSMode.CreateProfile)
@@ -816,11 +822,11 @@ namespace DuckGame
                         if (this._createSelection == PSCreateSelection.Controls && this._inputProfile.Pressed("SELECT"))
                         {
                             this._desiredMode = PSMode.EditControls;
-                            this._selectedSetting = (ControlSetting)null;
+                            this._selectedSetting = null;
                             this._controlPage = 0;
                             ProfileSelector._madeControlChanges = false;
                             if (this._configInputMapping == null)
-                                this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : (Profile)null)).Clone();
+                                this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : null)).Clone();
                             SFX.Play("consoleTick");
                         }
                         if (this._createSelection == PSCreateSelection.Mood)
@@ -990,9 +996,9 @@ namespace DuckGame
                         }
                     }
                 }
-                if ((double)this._slideTo != 0.0 && (double)this._slide != (double)this._slideTo)
+                if (_slideTo != 0.0 && _slide != (double)this._slideTo)
                     this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
-                else if ((double)this._slideTo != 0.0 && (double)this._slide == (double)this._slideTo)
+                else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
                 {
                     this._slide = 0.0f;
                     this._slideTo = 0.0f;
@@ -1016,7 +1022,7 @@ namespace DuckGame
                             }
                             else
                             {
-                                this._box.ChangeProfile((Profile)null);
+                                this._box.ChangeProfile(null);
                                 this._profile = this._box.profile;
                             }
                         }
@@ -1069,12 +1075,12 @@ namespace DuckGame
                         {
                             InputDevice inputDevice = this._inputProfile.lastActiveDevice;
                             if (inputDevice is GenericController)
-                                inputDevice = (InputDevice)(inputDevice as GenericController).device;
+                                inputDevice = (inputDevice as GenericController).device;
                             if (controlSetting.condition == null || controlSetting.condition(inputDevice))
                             {
                                 string name = controlSetting.name;
                                 Vec2 position2 = controlSetting.position;
-                                if ((double)position2.y == 0.0)
+                                if (position2.y == 0.0)
                                     flag = true;
                                 else if (!flag && (this._controlPage != 0 || controlSetting != this._controlSettingPages[this._controlPage][this._controlSettingPages[this._controlPage].Count - 1]))
                                     position2.y -= 12f;
@@ -1082,7 +1088,7 @@ namespace DuckGame
                                 {
                                     name += ":|DGBLUE|";
                                     if (!this._editControl || this._selectedSetting != controlSetting)
-                                        Graphics.Draw(inputProfile.lastActiveDevice.GetMapImage(this._configInputMapping.map[controlSetting.trigger]), (float)((double)vec2.x + (double)position2.x + (double)this._smallFont.GetWidth(name) - 2.0), (float)((double)vec2.y + (double)position2.y - 3.0));
+                                        Graphics.Draw(inputProfile.lastActiveDevice.GetMapImage(this._configInputMapping.map[controlSetting.trigger]), (float)(vec2.x + (double)position2.x + (double)this._smallFont.GetWidth(name) - 2.0), (float)(vec2.y + (double)position2.y - 3.0));
                                     else
                                         name += "_";
                                 }
@@ -1130,17 +1136,17 @@ namespace DuckGame
                             else if (this._profiles[index].steamID != 0UL)
                                 text2 = "@STEAMICON@|DGBLUE|" + text2 + "|WHITE|";
                         }
-                        string text3 = (string)null;
-                        if (this._desiredSelectorPosition == index && (index1 == 3 || (double)this._slideTo > 0.0 && index1 == 4 || (double)this._slideTo < 0.0 && index1 == 2))
+                        string text3 = null;
+                        if (this._desiredSelectorPosition == index && (index1 == 3 || _slideTo > 0.0 && index1 == 4 || _slideTo < 0.0 && index1 == 2))
                             text3 = "> " + text2 + " <";
                         float num2 = (float)((double)this.y + (double)num1 + 33.0);
-                        float y = (float)((double)this.y + (double)num1 + (double)(index1 * 11) + -(double)this._slide * 11.0);
+                        float y = (float)((double)this.y + (double)num1 + index1 * 11 + -(double)this._slide * 11.0);
                         float num3 = Maths.Clamp((float)((33.0 - (double)Math.Abs(y - num2)) / 33.0), 0.0f, 1f);
                         float num4 = num3 * Maths.NormalizeSection(num3, 0.0f, 0.9f);
                         float num5 = 0.2f;
                         float num6 = Maths.Clamp((double)num3 >= 0.300000011920929 ? ((double)num3 >= 0.800000011920929 ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0.0f, 0.3f) * num5, 0.0f, 1f);
                         bool flag3 = false;
-                        if ((this._selector == null || !this._selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(this._profiles[index]) || Profiles.active.FirstOrDefault<Profile>((Func<Profile, bool>)(x => x.linkedProfile == this._profiles[index])) != null))
+                        if ((this._selector == null || !this._selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(this._profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == this._profiles[index]) != null))
                             flag3 = true;
                         if (flag3)
                             text2 = text2.Replace("|DGBLUE|", "");
@@ -1177,23 +1183,23 @@ namespace DuckGame
                             pos.x -= 2f;
                             for (int index = 0; index < 9; ++index)
                             {
-                                Graphics.DrawRect(pos + new Vec2((float)(index * 8), 0.0f), pos + new Vec2((float)(index * 8 + 7), 7f), new Color(60, 60, 60), (Depth)0.8f);
+                                Graphics.DrawRect(pos + new Vec2(index * 8, 0.0f), pos + new Vec2(index * 8 + 7, 7f), new Color(60, 60, 60), (Depth)0.8f);
                                 if (index == this._currentLetter)
                                 {
                                     this._spinnerArrows.frame = 0;
-                                    Vec2 vec2_1 = pos + new Vec2((float)(index * 8), -6f);
-                                    Graphics.Draw((Sprite)this._spinnerArrows, vec2_1.x, vec2_1.y, (Depth)0.95f);
+                                    Vec2 vec2_1 = pos + new Vec2(index * 8, -6f);
+                                    Graphics.Draw(_spinnerArrows, vec2_1.x, vec2_1.y, (Depth)0.95f);
                                     this._spinnerArrows.frame = 1;
-                                    Vec2 vec2_2 = pos + new Vec2((float)(index * 8), 9f);
-                                    Graphics.Draw((Sprite)this._spinnerArrows, vec2_2.x, vec2_2.y, (Depth)0.95f);
-                                    Graphics.DrawRect(pos + new Vec2((float)(index * 8 - 2), -2f), pos + new Vec2((float)(index * 8 + 9), 9f), Color.White * 0.8f, (Depth)0.97f, false);
+                                    Vec2 vec2_2 = pos + new Vec2(index * 8, 9f);
+                                    Graphics.Draw(_spinnerArrows, vec2_2.x, vec2_2.y, (Depth)0.95f);
+                                    Graphics.DrawRect(pos + new Vec2(index * 8 - 2, -2f), pos + new Vec2(index * 8 + 9, 9f), Color.White * 0.8f, (Depth)0.97f, false);
                                 }
                             }
                             this._font.Draw(str1, Maths.RoundToPixel(pos), Color.Lime * (this._createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                             pos.x += 2f;
                             string text4 = ">              <";
                             this._font.Draw(text4, Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._font.GetWidth(text4) / 2.0), pos.y)), Color.White * (this._createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
-                            if ((double)this._takenFlash > 0.0500000007450581)
+                            if (_takenFlash > 0.0500000007450581)
                             {
                                 string text5 = "Name Taken";
                                 this._font.Draw(text5, Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._font.GetWidth(text5) / 2.0), pos.y)), Color.Red * this._takenFlash, (Depth)0.97f);
@@ -1219,18 +1225,18 @@ namespace DuckGame
                     this._font.Draw(text6, (float)((double)this.x + (double)this.width / 2.0 - (double)this._font.GetWidth(text6) / 2.0), pos.y, Color.White * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), (Depth)0.95f);
                     Graphics.DrawLine(new Vec2((float)((double)this.x + (double)this.width / 4.0 + 4.0), pos.y + 5f), new Vec2(this.x + (float)((double)this.width / 4.0 * 3.0), pos.y + 5f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 2f, (Depth)0.95f);
                     float num = 60f;
-                    Graphics.DrawLine(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * (double)this._moodVal + 2.0), pos.y + 1f), new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * (double)this._moodVal + 2.0), pos.y + 4f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
-                    Graphics.DrawLine(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * (double)this._moodVal + 2.0), pos.y + 6f), new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * (double)this._moodVal + 2.0), pos.y + 9f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * _moodVal + 2.0), pos.y + 1f), new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * _moodVal + 2.0), pos.y + 4f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * _moodVal + 2.0), pos.y + 6f), new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)num / 2.0 + (double)num * _moodVal + 2.0), pos.y + 9f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
                     this._happyIcons.color = Color.White * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
                     this._happyIcons.alpha = this._fade;
-                    this._happyIcons.frame = (int)Math.Round((double)this._moodVal * 4.0);
+                    this._happyIcons.frame = (int)Math.Round(_moodVal * 4.0);
                     this._happyIcons.depth = (Depth)0.95f;
-                    Graphics.Draw((Sprite)this._happyIcons, (float)((double)this.x + (double)this.width / 6.0 + 2.0), pos.y + 4f);
+                    Graphics.Draw(_happyIcons, (float)((double)this.x + (double)this.width / 6.0 + 2.0), pos.y + 4f);
                     this._angryIcons.color = Color.White * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
                     this._angryIcons.alpha = this._fade;
-                    this._angryIcons.frame = (int)Math.Round((1.0 - (double)this._moodVal) * 4.0);
+                    this._angryIcons.frame = (int)Math.Round((1.0 - _moodVal) * 4.0);
                     this._angryIcons.depth = (Depth)0.95f;
-                    Graphics.Draw((Sprite)this._angryIcons, this.x + (float)((double)this.width / 6.0 * 5.0), pos.y + 4f);
+                    Graphics.Draw(_angryIcons, this.x + (float)((double)this.width / 6.0 * 5.0), pos.y + 4f);
                     pos.y += 16f;
                     string text7 = this._preferredColor >= 0 ? "COLOR" : "NO COLOR";
                     if (this._createSelection == PSCreateSelection.Color)
@@ -1258,7 +1264,7 @@ namespace DuckGame
                     if (this._changeName)
                     {
                         string text10 = "@DPAD@";
-                        if (this._selector != null && (this._selector.profileBoxNumber == (sbyte)0 || this._selector.profileBoxNumber == (sbyte)2))
+                        if (this._selector != null && (this._selector.profileBoxNumber == 0 || this._selector.profileBoxNumber == 2))
                             text10 = "@WASD@";
                         this._font.Draw(text10, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
                         this._font.Draw("@SELECT@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
@@ -1271,7 +1277,7 @@ namespace DuckGame
                     else if (this._createSelection == PSCreateSelection.Mood)
                     {
                         string text11 = "@DPAD@";
-                        if (this._selector != null && (this._selector.profileBoxNumber == (sbyte)0 || this._selector.profileBoxNumber == (sbyte)2))
+                        if (this._selector != null && (this._selector.profileBoxNumber == 0 || this._selector.profileBoxNumber == 2))
                             text11 = "@WASD@";
                         this._font.Draw(text11, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
                         this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
@@ -1279,7 +1285,7 @@ namespace DuckGame
                     else if (this._createSelection == PSCreateSelection.Color)
                     {
                         string text12 = "@DPAD@";
-                        if (this._selector != null && (this._selector.profileBoxNumber == (sbyte)0 || this._selector.profileBoxNumber == (sbyte)2))
+                        if (this._selector != null && (this._selector.profileBoxNumber == 0 || this._selector.profileBoxNumber == 2))
                             text12 = "@WASD@";
                         this._font.Draw(text12, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
                         this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
@@ -1319,7 +1325,7 @@ namespace DuckGame
             this._fade = 1f;
         }
 
-        private bool ProfileAlreadySelected(Profile p) => this._profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault<Profile>((Func<Profile, bool>)(x => x.linkedProfile == p)) != null && p != this._profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != this._profile;
+        private bool ProfileAlreadySelected(Profile p) => this._profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == p) != null && p != this._profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != this._profile;
 
         public void EditProfile(Profile p)
         {
@@ -1334,7 +1340,7 @@ namespace DuckGame
             this._moodVal = p.funslider;
             this._preferredColor = p.preferredColor;
             this._createSelection = PSCreateSelection.Accept;
-            this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : (Profile)null)).Clone();
+            this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : null)).Clone();
         }
 
         private int ProfileIndexAdd(int index, int plus)
@@ -1351,7 +1357,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this._fade < 0.00999999977648258)
+            if (_fade < 0.00999999977648258)
                 return;
             if (this._mode == PSMode.EditControlsConfirm)
             {

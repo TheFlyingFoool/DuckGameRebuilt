@@ -48,7 +48,7 @@ namespace DuckGame
                     if (rope == null && vine.nextVine != null)
                     {
                         collection.Reverse();
-                        points.AddRange((IEnumerable<VineSection>)collection);
+                        points.AddRange(collection);
                         collection.Clear();
                         vine = vine.nextVine;
                         rope = vine._rope;
@@ -57,7 +57,7 @@ namespace DuckGame
                 if (collection.Count > 0)
                 {
                     collection.Reverse();
-                    points.AddRange((IEnumerable<VineSection>)collection);
+                    points.AddRange(collection);
                 }
                 float num1 = 0.0f;
                 foreach (VineSection vineSection in points)
@@ -65,7 +65,7 @@ namespace DuckGame
                 int num2 = 0;
                 foreach (VineSection vineSection in points)
                 {
-                    vineSection.lowestSection = num2 + (int)Math.Round((double)vineSection.length / (double)num1 * (double)this.sectionIndex);
+                    vineSection.lowestSection = num2 + (int)Math.Round(vineSection.length / (double)num1 * sectionIndex);
                     num2 = vineSection.lowestSection;
                 }
                 return points;
@@ -76,10 +76,12 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("vine", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
-            this._vinePartSprite = new Sprite("vine");
-            this._vinePartSprite.center = new Vec2(8f, 0.0f);
+            this._vinePartSprite = new Sprite("vine")
+            {
+                center = new Vec2(8f, 0.0f)
+            };
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
             this.weight = 0.1f;
@@ -100,18 +102,18 @@ namespace DuckGame
         public override void Initialize()
         {
             base.Initialize();
-            this._harpoon = new Harpoon((Thing)this);
-            Level.Add((Thing)this._harpoon);
+            this._harpoon = new Harpoon(this);
+            Level.Add(_harpoon);
             if (Level.current is Editor)
                 return;
             Vec2 position = this.position;
-            this.position.y += (float)((int)this.length * 16 - 8);
+            this.position.y += (int)this.length * 16 - 8;
             this._harpoon.noisy = false;
             this._harpoon.Fire(position + new Vec2(0.0f, -8f), new Vec2(0.0f, -1f));
-            this._rope = new Rope(this.x, this.y, (Thing)null, (Thing)this._harpoon, (Thing)this.duck, true, this._vinePartSprite);
-            if ((double)this.initLength != 0.0)
+            this._rope = new Rope(this.x, this.y, null, _harpoon, duck, true, this._vinePartSprite);
+            if (initLength != 0.0)
                 this._rope.properLength = this.initLength;
-            Level.Add((Thing)this._rope);
+            Level.Add(_rope);
         }
 
         public override void Terminate()
@@ -119,8 +121,8 @@ namespace DuckGame
             if (this._rope == null)
                 return;
             this._rope.RemoveRope();
-            Level.Remove((Thing)this._harpoon);
-            Level.Remove((Thing)this._rope);
+            Level.Remove(_harpoon);
+            Level.Remove(_rope);
         }
 
         public Rope GetRopeParent(Thing child)
@@ -130,7 +132,7 @@ namespace DuckGame
                 if (ropeParent.attach2 == child)
                     return ropeParent;
             }
-            return (Rope)null;
+            return null;
         }
 
         public void Degrapple()
@@ -139,11 +141,11 @@ namespace DuckGame
             {
                 this.nextVine._rope.attach2 = this._rope.attach2;
                 this.nextVine._rope.properLength = (this.nextVine._rope.attach1Point - this._rope.attach2Point).length;
-                this.nextVine.prevVine = (Vine)null;
-                this.nextVine = (Vine)null;
+                this.nextVine.prevVine = null;
+                this.nextVine = null;
             }
             if (this.prevVine != null)
-                this.prevVine.nextVine = (Vine)null;
+                this.prevVine.nextVine = null;
             this._harpoon.Return();
             this._harpoon.visible = false;
             if (this._rope != null)
@@ -152,18 +154,18 @@ namespace DuckGame
                 this._rope.visible = false;
                 this.visible = false;
             }
-            this._rope = (Rope)null;
+            this._rope = null;
             if (this.duck != null)
             {
                 this.duck.frictionMult = 1f;
                 this.duck.gravMultiplier = 1f;
             }
-            this.owner = (Thing)null;
+            this.owner = null;
             this.frictionMult = 1f;
             this.gravMultiplier = 1f;
             this.visible = false;
-            Level.Remove((Thing)this._harpoon);
-            Level.Remove((Thing)this);
+            Level.Remove(_harpoon);
+            Level.Remove(this);
             this.Update();
         }
 
@@ -181,7 +183,7 @@ namespace DuckGame
             vec2_1 = vec2_1.normalized;
             if (this.duck == null)
                 return;
-            PhysicsObject duck = (PhysicsObject)this.duck;
+            PhysicsObject duck = this.duck;
             Vec2 position = duck.position;
             duck.position = this._rope.attach2.position + vec2_1 * this._rope.properLength;
             Vec2 vec2_2 = duck.position - duck.lastPosition;
@@ -198,7 +200,7 @@ namespace DuckGame
                 this.offDir = this.owner.offDir;
             if (this.duck != null && (this.duck.ragdoll != null || this.duck._trapped != null || this.duck.dead))
             {
-                this.owner = (Thing)null;
+                this.owner = null;
                 this._rope.visible = false;
             }
             if (this._rope == null)
@@ -215,10 +217,10 @@ namespace DuckGame
                     PhysicsObject prevOwner = this.prevOwner as PhysicsObject;
                     prevOwner.frictionMult = 1f;
                     prevOwner.gravMultiplier = 1f;
-                    this._prevOwner = (Thing)null;
+                    this._prevOwner = null;
                     this.frictionMult = 1f;
                     this.gravMultiplier = 1f;
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
                 }
             }
             if (!this._harpoon.stuck)
@@ -252,7 +254,7 @@ namespace DuckGame
             Vec2 normalized = vec2_1.normalized;
             if (this.duck != null)
             {
-                PhysicsObject duck = (PhysicsObject)this.duck;
+                PhysicsObject duck = this.duck;
                 if (this.duck.ragdoll != null)
                 {
                     this.Degrapple();
@@ -270,7 +272,6 @@ namespace DuckGame
             }
             else
             {
-                Vec2 position = this.position;
                 this.position = this._rope.attach2.position + normalized * this._rope.properLength;
                 Vec2 vec2_3 = this.position - this.lastPosition;
                 this.hSpeed = vec2_3.x;
@@ -285,7 +286,7 @@ namespace DuckGame
             this.graphic.center = new Vec2(8f, 8f);
             this.graphic.depth = this.depth;
             for (int index = 0; index < (int)this.length; ++index)
-                Graphics.Draw(this.graphic, this.x, this.y + (float)(index * 16));
+                Graphics.Draw(this.graphic, this.x, this.y + index * 16);
         }
     }
 }

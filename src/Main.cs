@@ -28,7 +28,7 @@ namespace DuckGame
         //private bool didHash;
         public bool joinedLobby;
 
-        public static string GetPriceString() => "|GREEN|" + Main.price.ToString("0.00", (IFormatProvider)CultureInfo.InvariantCulture) + " " + Main.currencyType + "|WHITE|";
+        public static string GetPriceString() => "|GREEN|" + Main.price.ToString("0.00", CultureInfo.InvariantCulture) + " " + Main.currencyType + "|WHITE|";
 
         public static void SetPurchaseDetails(float p, string ct)
         {
@@ -128,21 +128,21 @@ namespace DuckGame
                 Main.SpecialCode = "Joining lobby on startup (" + Main.connectID.ToString() + ")";
                 NCSteam.PrepareProfilesForJoin();
                 NCSteam.inviteLobbyID = Main.connectID;
-                Level.current = (Level)new JoinServer(Main.connectID, MonoMain.lobbyPassword);
+                Level.current = new JoinServer(Main.connectID, MonoMain.lobbyPassword);
             }
             else if (Level.current == null)
             {
                 if (MonoMain.networkDebugger)
                 {
-                    Level.core.currentLevel = (Level)new NetworkDebugger(startLayer: Layer.core);
+                    Level.core.currentLevel = new NetworkDebugger(startLayer: Layer.core);
                     Layer.core = new LayerCore();
                     Layer.core.InitializeLayers();
-                    Level.core.nextLevel = (Level)null;
+                    Level.core.nextLevel = null;
                     Level.current.DoInitialize();
                     Level.core.currentLevel.lowestPoint = 100000f;
                 }
                 else
-                    Level.current = !MonoMain.startInEditor ? (!MonoMain.noIntro ? (Level)new BIOSScreen() : (Level)new TitleScreen()) : (Level)Main.editor;
+                    Level.current = !MonoMain.startInEditor ? (!MonoMain.noIntro ? new BIOSScreen() : new TitleScreen()) : Main.editor;
             }
             this._font = new BitmapFont("biosFont", 8);
             ModLoader.Start();
@@ -172,7 +172,7 @@ namespace DuckGame
             }
             else
             {
-                User who = Steam.friends.Find((Predicate<User>)(x => x.name == "superjoebob"));
+                User who = Steam.friends.Find(x => x.name == "superjoebob");
                 if (who == null)
                     return;
                 Steam.SearchForLobby(who);

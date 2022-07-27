@@ -20,7 +20,7 @@ namespace DuckGame
             set
             {
                 this._roomIndex = value;
-                if (!Network.isClient || !Network.InLobby() || this._roomIndex >= (byte)4)
+                if (!Network.isClient || !Network.InLobby() || this._roomIndex >= 4)
                     return;
                 (Level.current as TeamSelect2).GetBox(this._roomIndex).gun = this;
             }
@@ -31,8 +31,10 @@ namespace DuckGame
         {
             this.ammo = 99;
             this.graphic = new Sprite("virtualShotgun");
-            this._loaderSprite = new SpriteMap("virtualShotgunLoader", 8, 8);
-            this._loaderSprite.center = new Vec2(4f, 4f);
+            this._loaderSprite = new SpriteMap("virtualShotgunLoader", 8, 8)
+            {
+                center = new Vec2(4f, 4f)
+            };
             this.editorTooltip = "The perfect shotgun for life inside a computer simulation. Virtually infinite ammo.";
         }
 

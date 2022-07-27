@@ -13,26 +13,26 @@ namespace DuckGame
         {
             get
             {
-                this._value = (ushort)0;
+                this._value = 0;
                 Door thing = this._thing as Door;
                 if (thing._didJiggle)
-                    this._value |= (ushort)8;
+                    this._value |= 8;
                 if (thing._jammed)
-                    this._value |= (ushort)4;
+                    this._value |= 4;
                 if (thing._destroyed)
-                    this._value |= (ushort)2;
+                    this._value |= 2;
                 if (thing.locked)
-                    this._value |= (ushort)1;
+                    this._value |= 1;
                 return this._value;
             }
             set
             {
                 this._value = value;
                 Door thing = this._thing as Door;
-                thing._didJiggle = ((uint)this._value & 8U) > 0U;
-                thing._jammed = ((uint)this._value & 4U) > 0U;
-                thing._destroyed = ((uint)this._value & 2U) > 0U;
-                thing.locked = ((uint)this._value & 1U) > 0U;
+                thing._didJiggle = (_value & 8U) > 0U;
+                thing._jammed = (_value & 4U) > 0U;
+                thing._destroyed = (_value & 2U) > 0U;
+                thing.locked = (_value & 1U) > 0U;
             }
         }
 

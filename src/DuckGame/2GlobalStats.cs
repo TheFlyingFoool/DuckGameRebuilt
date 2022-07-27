@@ -24,18 +24,18 @@ namespace DuckGame
             set
             {
                 if (!(this._value is int) || value > (int)this._value)
-                    this._value = (object)value;
+                    this._value = value;
                 Steam.SetStat(this._name, this.valueInt);
             }
         }
 
         public float valueFloat
         {
-            get => this._value is int ? (float)(int)this._value : (float)this._value;
+            get => this._value is int ? (int)this._value : (float)this._value;
             set
             {
                 if (!(this._value is float) || (double)value > (double)(float)this._value)
-                    this._value = (object)value;
+                    this._value = value;
                 Steam.SetStat(this._name, this.valueFloat);
             }
         }
@@ -43,13 +43,13 @@ namespace DuckGame
         public void BindName(string name)
         {
             this._name = name;
-            this._value = (object)0.0f;
+            this._value = 0.0f;
             if (!Steam.IsInitialized())
                 return;
             float stat = Steam.GetStat(this._name);
             if ((double)stat <= -99999.0)
                 return;
-            this._value = (object)stat;
+            this._value = stat;
         }
 
         public bool isFloat => this._value is float;

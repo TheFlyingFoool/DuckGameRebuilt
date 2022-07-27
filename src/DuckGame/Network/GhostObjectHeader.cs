@@ -20,12 +20,12 @@ namespace DuckGame
         public GhostObjectHeader(bool pClean)
         {
             this.id = new NetIndex16();
-            this.classID = (ushort)0;
-            this.levelIndex = (byte)0;
+            this.classID = 0;
+            this.levelIndex = 0;
             this.authority = (NetIndex8)0;
             this.tick = (NetIndex16)2;
             this.delta = false;
-            this.connection = (NetworkConnection)null;
+            this.connection = null;
         }
 
         public NetMessagePriority priority => !this.delta ? NetMessagePriority.ReliableOrdered : NetMessagePriority.UnreliableUnordered;
@@ -60,19 +60,21 @@ namespace DuckGame
 
         public static GhostObjectHeader Deserialize(BitBuffer pBuffer, bool pMinimal)
         {
-            GhostObjectHeader ghostObjectHeader = new GhostObjectHeader(true);
-            ghostObjectHeader.id = (NetIndex16)(int)pBuffer.ReadUShort();
-            ghostObjectHeader.authority = (NetIndex8)(int)pBuffer.ReadByte();
+            GhostObjectHeader ghostObjectHeader = new GhostObjectHeader(true)
+            {
+                id = (NetIndex16)pBuffer.ReadUShort(),
+                authority = (NetIndex8)pBuffer.ReadByte()
+            };
             if (pBuffer.ReadBool())
             {
-                ghostObjectHeader.tick = (NetIndex16)(int)pBuffer.ReadUShort();
+                ghostObjectHeader.tick = (NetIndex16)pBuffer.ReadUShort();
                 ghostObjectHeader.delta = true;
             }
             else
             {
                 byte index = pBuffer.ReadByte();
                 if (index != byte.MaxValue)
-                    ghostObjectHeader.connection = DuckNetwork.profiles[(int)index].connection;
+                    ghostObjectHeader.connection = DuckNetwork.profiles[index].connection;
                 if (!pMinimal)
                 {
                     ghostObjectHeader.classID = pBuffer.ReadUShort();

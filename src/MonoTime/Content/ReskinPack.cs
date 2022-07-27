@@ -27,7 +27,7 @@ namespace DuckGame
         private SoundEffect _currentMusic;
 
         public ReskinPack()
-          : base((ModConfiguration)null)
+          : base(null)
         {
         }
 
@@ -58,7 +58,7 @@ namespace DuckGame
             if (mod == null)
             {
                 reskinPack.contentPath = reskinPack.path + "/Content";
-                mod = (Mod)new ClientMod(pDir + "/", pExistingConfig);
+                mod = new ClientMod(pDir + "/", pExistingConfig);
                 mod.configuration.LoadOrCreateConfig();
                 mod.configuration.SetModType(ModConfiguration.Type.Reskin);
                 reskinPack.isHD = mod.configuration.isHighResReskin;
@@ -108,7 +108,7 @@ namespace DuckGame
         public static void FinalizeReskins()
         {
             List<ClassMember> staticMembers = Editor.GetStaticMembers(typeof(Color));
-            staticMembers.AddRange((IEnumerable<ClassMember>)Editor.GetStaticMembers(typeof(Colors)));
+            staticMembers.AddRange(Editor.GetStaticMembers(typeof(Colors)));
             Dictionary<string, ClassMember> dictionary = new Dictionary<string, ClassMember>();
             foreach (ClassMember classMember in staticMembers)
             {
@@ -122,9 +122,9 @@ namespace DuckGame
             {
                 foreach (KeyValuePair<string, Color> recolor in ReskinPack.active[index].recolors)
                 {
-                    ClassMember classMember = (ClassMember)null;
+                    ClassMember classMember = null;
                     if (dictionary.TryGetValue(recolor.Key, out classMember))
-                        classMember.SetValue((object)null, (object)recolor.Value);
+                        classMember.SetValue(null, recolor.Value);
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace DuckGame
             foreach (ReskinPack reskinPack in ReskinPack.active)
             {
                 T obj = reskinPack.Load<T>(pName);
-                if ((object)obj != null)
+                if (obj != null)
                     return obj;
             }
             return default(T);
@@ -156,7 +156,7 @@ namespace DuckGame
             {
                 if (typeof(T) == typeof(Texture2D) || typeof(T) == typeof(Tex2D))
                 {
-                    Texture2D texture2D1 = (Texture2D)null;
+                    Texture2D texture2D1;
                     if (this._textures.TryGetValue(name, out texture2D1))
                         return (T)(object)texture2D1;
                     Texture2D texture2D2 = ContentPack.LoadTexture2D(this.contentPath + "/" + name, this._modConfig == null || this._modConfig.processPinkTransparency);
@@ -165,7 +165,7 @@ namespace DuckGame
                 }
                 if (typeof(T) == typeof(SoundEffect))
                 {
-                    SoundEffect soundEffect1 = (SoundEffect)null;
+                    SoundEffect soundEffect1;
                     if (!ReskinPack._loadingMusic && this._sounds.TryGetValue(name, out soundEffect1))
                         return (T)(object)soundEffect1;
                     if (ReskinPack._loadingMusic && this._currentMusic != null)
@@ -179,7 +179,7 @@ namespace DuckGame
                 }
                 if (typeof(T) == typeof(Song))
                 {
-                    Song song1 = (Song)null;
+                    Song song1;
                     if (this._songs.TryGetValue(name, out song1))
                         return (T)(object)song1;
                     Song song2 = this.LoadSong(this.contentPath + "/" + name);

@@ -17,7 +17,7 @@ namespace DuckGame
 
         public short[][] stereoData => this._stereoData;
 
-        public int size => (int)(this._header.dataSize / (uint)this._header.blockSize);
+        public int size => (int)(this._header.dataSize / _header.blockSize);
 
         public int sampleRate => (int)this._header.sampleRate;
 
@@ -27,7 +27,7 @@ namespace DuckGame
             this._header = new WavHeader();
             using (FileStream input = new FileStream(file, FileMode.Open, FileAccess.Read))
             {
-                using (BinaryReader binaryReader = new BinaryReader((Stream)input))
+                using (BinaryReader binaryReader = new BinaryReader(input))
                 {
                     try
                     {
@@ -46,26 +46,26 @@ namespace DuckGame
                         {
                             this._header.dataID = binaryReader.ReadBytes(4);
                             this._header.dataSize = binaryReader.ReadUInt32();
-                            if (this._header.dataID[0] != (byte)100)
+                            if (this._header.dataID[0] != 100)
                                 binaryReader.ReadBytes((int)this._header.dataSize);
                             else
                                 break;
                         }
-                        if (this._header.channels == (ushort)1)
+                        if (this._header.channels == 1)
                         {
-                            uint length = this._header.dataSize / (uint)this._header.blockSize;
+                            uint length = this._header.dataSize / _header.blockSize;
                             this._stereoData[0] = new short[(int)length];
-                            for (int index = 0; (long)index < (long)length; ++index)
+                            for (int index = 0; index < length; ++index)
                                 this._stereoData[0][index] = (short)binaryReader.ReadUInt16();
                         }
                         else
                         {
-                            if (this._header.channels != (ushort)2)
+                            if (this._header.channels != 2)
                                 return;
-                            uint length = this._header.dataSize / (uint)this._header.blockSize;
+                            uint length = this._header.dataSize / _header.blockSize;
                             this._stereoData[0] = new short[(int)length];
                             this._stereoData[1] = new short[(int)length];
-                            for (int index = 0; (long)index < (long)length; ++index)
+                            for (int index = 0; index < length; ++index)
                             {
                                 this._stereoData[0][index] = (short)binaryReader.ReadUInt16();
                                 this._stereoData[1][index] = (short)binaryReader.ReadUInt16();

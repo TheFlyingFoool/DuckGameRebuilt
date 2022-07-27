@@ -63,9 +63,9 @@ namespace DuckGame
             }
         }
 
-        public AIPath GetPath(PathNode to) => this._paths.ContainsKey(to) ? this._paths[to] : (AIPath)null;
+        public AIPath GetPath(PathNode to) => this._paths.ContainsKey(to) ? this._paths[to] : null;
 
-        public PathNodeLink GetLink(PathNode with) => this._links.FirstOrDefault<PathNodeLink>((Func<PathNodeLink, bool>)(node => node.link == with));
+        public PathNodeLink GetLink(PathNode with) => this._links.FirstOrDefault<PathNodeLink>(node => node.link == with);
 
         public void UninitializeLinks()
         {
@@ -76,7 +76,7 @@ namespace DuckGame
         public static bool LineIsClear(Vec2 from, Vec2 to, Thing ignore = null)
         {
             IEnumerable<IPathNodeBlocker> pathNodeBlockers = Level.current.CollisionLineAll<IPathNodeBlocker>(from, to);
-            if ((double)to.y - (double)from.y < -64.0)
+            if (to.y - (double)from.y < -64.0)
                 return false;
             bool flag = false;
             foreach (IPathNodeBlocker pathNodeBlocker in pathNodeBlockers)
@@ -87,7 +87,7 @@ namespace DuckGame
                     switch (thing)
                     {
                         case IPlatform _:
-                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && !(thing is AutoPlatform) && (double)thing.y > (double)from.y && (double)to.y > (double)thing.y)
+                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && !(thing is AutoPlatform) && (double)thing.y > from.y && to.y > (double)thing.y)
                             {
                                 flag = true;
                                 goto label_13;
@@ -127,11 +127,11 @@ namespace DuckGame
                     };
                 }
                 else
-                    this._paths[pathNode1] = (AIPath)null;
+                    this._paths[pathNode1] = null;
             }
         }
 
-        public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => (double)from.y - (double)to.y <= 64.0 && (double)Math.Abs(from.x - to.x) <= 128.0 && ((double)from.y - (double)to.y <= 8.0 || (double)Math.Abs(from.x - to.x) <= 64.0);
+        public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - (double)to.y <= 64.0 && (double)Math.Abs(from.x - to.x) <= 128.0 && (from.y - (double)to.y <= 8.0 || (double)Math.Abs(from.x - to.x) <= 64.0);
 
         public static bool CanTraverse(Vec2 from, Vec2 to, Thing ignore) => PathNode.CheckTraversalLimits(from, to) && !PathNode.PathPhysicallyBlocked(from, to, ignore);
 
@@ -176,7 +176,7 @@ namespace DuckGame
                     switch (thing)
                     {
                         case IPlatform _:
-                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && (double)thing.y > (double)from.y)
+                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && (double)thing.y > from.y)
                             {
                                 flag = true;
                                 goto label_11;
@@ -199,10 +199,12 @@ namespace DuckGame
             {
                 if (to != this && PathNode.CheckTraversalLimits(this.position, to.position) && !this.PathBlocked(to))
                 {
-                    PathNodeLink pathNodeLink = new PathNodeLink();
-                    pathNodeLink.owner = (Thing)this;
-                    pathNodeLink.link = (Thing)to;
-                    pathNodeLink.distance = (to.position - this.position).length;
+                    PathNodeLink pathNodeLink = new PathNodeLink
+                    {
+                        owner = this,
+                        link = to,
+                        distance = (to.position - this.position).length
+                    };
                     if ((double)Math.Abs(this.y - to.y) < 8.0)
                     {
                         Vec2 p1 = (this.position + to.position) / 2f;
@@ -226,7 +228,7 @@ namespace DuckGame
         {
             this.cost = 0.0f;
             this.heuristic = 0.0f;
-            this._parent = (PathNode)null;
+            this._parent = null;
         }
 
         public static float CalculateCost(PathNode who, PathNode parent)

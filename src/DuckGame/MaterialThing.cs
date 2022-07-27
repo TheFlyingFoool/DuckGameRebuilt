@@ -95,7 +95,7 @@ namespace DuckGame
 
         public virtual bool Hurt(float points)
         {
-            if ((double)this._maxHealth == 0.0)
+            if (_maxHealth == 0.0)
                 return false;
             this._hitPoints -= points;
             return true;
@@ -214,7 +214,7 @@ namespace DuckGame
 
         public void CheckIsland()
         {
-            if (this.island == null || this.island.owner == this || this.level == null || !this.level.simulatePhysics || (double)(this.position - this.island.owner.position).lengthSq <= (double)this.island.radiusSquared)
+            if (this.island == null || this.island.owner == this || this.level == null || !this.level.simulatePhysics || (double)(this.position - this.island.owner.position).lengthSq <= island.radiusSquared)
                 return;
             this.island.RemoveThing(this);
             this.UpdateIsland();
@@ -291,9 +291,9 @@ namespace DuckGame
 
         public virtual void UpdateOnFire()
         {
-            if ((double)this.burnt < 1.0)
+            if (burnt < 1.0)
             {
-                if ((double)this._flameWait > 1.0)
+                if (_flameWait > 1.0)
                 {
                     this.AddFire();
                     this._flameWait = 0.0f;
@@ -302,12 +302,12 @@ namespace DuckGame
                 this.burnt += this.burnSpeed;
             }
             else
-                this.Destroy((DestroyType)new DTIncinerate(this._lastBurnedBy));
+                this.Destroy(new DTIncinerate(this._lastBurnedBy));
         }
 
         public override void DoUpdate()
         {
-            if ((double)this.spreadExtinguisherSmoke > 0.0)
+            if (spreadExtinguisherSmoke > 0.0)
             {
                 this.spreadExtinguisherSmoke -= 0.15f;
                 if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2.0)
@@ -315,9 +315,11 @@ namespace DuckGame
                     ++this.extWait;
                     if (this.extWait >= 3)
                     {
-                        JetpackSmoke t = new JetpackSmoke(this.x + Rando.Float(-1f, 1f), this.bottom + Rando.Float(-4f, 1f));
-                        t.depth = (Depth)0.9f;
-                        Level.current.AddThing((Thing)t);
+                        JetpackSmoke t = new JetpackSmoke(this.x + Rando.Float(-1f, 1f), this.bottom + Rando.Float(-4f, 1f))
+                        {
+                            depth = (Depth)0.9f
+                        };
+                        Level.current.AddThing(t);
                         t.hSpeed += this.hSpeed * Rando.Float(0.2f, 0.3f);
                         t.vSpeed = Rando.Float(-0.1f, 0.0f);
                         t.vSpeed -= Math.Abs(this.vSpeed) * Rando.Float(0.05f, 0.1f);
@@ -325,9 +327,9 @@ namespace DuckGame
                     }
                 }
             }
-            if ((double)this.heat > 0.0)
+            if (heat > 0.0)
                 this.heat -= this.coolingFactor;
-            else if ((double)this.heat < -0.00999999977648258)
+            else if (heat < -0.00999999977648258)
                 this.heat += this.coolingFactor;
             else
                 this.heat = 0.0f;
@@ -336,7 +338,7 @@ namespace DuckGame
             base.DoUpdate();
         }
 
-        public void NetworkDestroy() => this.OnDestroy((DestroyType)new DTImpact((Thing)this));
+        public void NetworkDestroy() => this.OnDestroy(new DTImpact(this));
 
         public virtual bool Destroy(DestroyType type = null)
         {
@@ -345,7 +347,7 @@ namespace DuckGame
                 this._destroyed = this.OnDestroy(type);
                 if (this.isServerForObject && (this._destroyed || this._sendDestroyMessage && !this._sentDestroyMessage) && this.isStateObject)
                 {
-                    Send.Message((NetMessage)new NMDestroyProp((Thing)this));
+                    Send.Message(new NMDestroyProp(this));
                     this._sentDestroyMessage = true;
                 }
             }
@@ -362,10 +364,10 @@ namespace DuckGame
         {
             if (this.physicsMaterial == PhysicsMaterial.Metal)
             {
-                Level.Add((Thing)MetalRebound.New(hitPos.x, hitPos.y, (double)bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
+                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
                 hitPos -= bullet.travelDirNormalized;
                 for (int index = 0; index < 3; ++index)
-                    Level.Add((Thing)Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                    Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
             }
             else if (this.physicsMaterial == PhysicsMaterial.Wood)
             {
@@ -375,10 +377,10 @@ namespace DuckGame
                     WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                     woodDebris.hSpeed = -bullet.travelDirNormalized.x + Rando.Float(-1f, 1f);
                     woodDebris.vSpeed = -bullet.travelDirNormalized.y + Rando.Float(-1f, 1f);
-                    Level.Add((Thing)woodDebris);
+                    Level.Add(woodDebris);
                 }
             }
-            return (double)this.thickness > (double)bullet.ammo.penetration;
+            return thickness > (double)bullet.ammo.penetration;
         }
 
         public virtual void DoExitHit(Bullet bullet, Vec2 exitPos) => this.ExitHit(bullet, exitPos);
@@ -396,7 +398,7 @@ namespace DuckGame
         public virtual void Burn(Vec2 firePosition, Thing litBy)
         {
             if (Network.isActive && !this.isServerForObject && !this.isBurnMessage && !this._onFire && this is Duck && (this as Duck).profile != null)
-                Send.Message((NetMessage)new NMLightDuck(this as Duck));
+                Send.Message(new NMLightDuck(this as Duck));
             if (!this.isServerForObject && !this.isBurnMessage || this._onFire || this._burnWaitTimer != null && !(bool)this._burnWaitTimer)
                 return;
             int num = this.onFire ? 1 : 0;
@@ -408,11 +410,11 @@ namespace DuckGame
         {
         }
 
-        public virtual void AddFire() => Level.Add((Thing)SmallFire.New(Rando.Float((float)(((double)this.left - (double)this.x) * 0.699999988079071), (float)(((double)this.right - (double)this.x) * 0.699999988079071)), Rando.Float((float)(((double)this.top - (double)this.y) * 0.699999988079071), (float)(((double)this.bottom - (double)this.y) * 0.699999988079071)), 0.0f, 0.0f, stick: this));
+        public virtual void AddFire() => Level.Add(SmallFire.New(Rando.Float((float)(((double)this.left - (double)this.x) * 0.699999988079071), (float)(((double)this.right - (double)this.x) * 0.699999988079071)), Rando.Float((float)(((double)this.top - (double)this.y) * 0.699999988079071), (float)(((double)this.bottom - (double)this.y) * 0.699999988079071)), 0.0f, 0.0f, stick: this));
 
         protected virtual bool OnBurn(Vec2 firePosition, Thing litBy)
         {
-            if ((double)this.flammable < 1.0 / 1000.0)
+            if (flammable < 1.0 / 1000.0)
                 return false;
             if (!this._onFire)
                 SFX.Play("ignite", 0.7f, Rando.Float(0.3f) - 0.3f);
@@ -423,13 +425,13 @@ namespace DuckGame
 
         public virtual void DoHeatUp(float val, Vec2 location)
         {
-            bool flag = (double)this.heat < 0.0;
+            bool flag = heat < 0.0;
             if (!flag || (double)val > 0.0)
             {
                 this.heat += val;
-                if ((double)this.heat > 1.5)
+                if (heat > 1.5)
                     this.heat = 1.5f;
-                if (!flag && (double)this.heat < 0.0)
+                if (!flag && heat < 0.0)
                     this.heat = 0.0f;
             }
             if ((double)val <= 0.0)
@@ -448,7 +450,7 @@ namespace DuckGame
             if ((double)val < 0.0)
                 val = -val;
             this.heat -= val;
-            if ((double)this.heat < -1.5)
+            if (heat < -1.5)
                 this.heat = -1.5f;
             this.Freeze(location);
         }
@@ -464,7 +466,7 @@ namespace DuckGame
             foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(this.position, 20f))
             {
                 if (smallFire.stick == this)
-                    Level.Remove((Thing)smallFire);
+                    Level.Remove(smallFire);
             }
             this._onFire = false;
             this._burnWaitTimer = new ActionTimer(0.05f, reset: false);
@@ -476,7 +478,7 @@ namespace DuckGame
 
         public virtual void Impact(MaterialThing with, ImpactedFrom from, bool solidImpact)
         {
-            if (with.ignoreCollisions || this.ignoreCollisions || (double)this.CalculateImpactPower(with, from) <= (double)this._impactThreshold)
+            if (with.ignoreCollisions || this.ignoreCollisions || (double)this.CalculateImpactPower(with, from) <= _impactThreshold)
                 return;
             if (!with.onlyCrush || from == ImpactedFrom.Top)
                 this.OnSoftImpact(with, from);
@@ -492,11 +494,11 @@ namespace DuckGame
             if (with.ignoreCollisions || this.ignoreCollisions)
                 return;
             double impactPower = (double)this.CalculateImpactPower(with, from);
-            if (impactPower > (double)this._breakForce)
-                this.Destroy((DestroyType)new DTImpact((Thing)with));
-            if ((double)this.CalculatePersonalImpactPower(with, from) > (double)this._impactThreshold)
+            if (impactPower > _breakForce)
+                this.Destroy(new DTImpact(with));
+            if ((double)this.CalculatePersonalImpactPower(with, from) > _impactThreshold)
                 this._didImpactSound = this.PlayCollideSound(from);
-            if (impactPower <= (double)this._impactThreshold)
+            if (impactPower <= _impactThreshold)
                 return;
             this.OnSolidImpact(with, from);
             this.OnImpact(with, from);

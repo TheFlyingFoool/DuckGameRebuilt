@@ -15,7 +15,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("smallFlare", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(0.0f, 8f);
         }
 
@@ -24,7 +24,7 @@ namespace DuckGame
             this.alpha -= 0.1f;
             if ((double)this.alpha >= 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

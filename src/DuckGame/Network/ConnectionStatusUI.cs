@@ -45,7 +45,7 @@ namespace DuckGame
                 if (profile.slotType == SlotType.Spectator || profile.pendingSpectatorMode == SlotType.Spectator)
                     ++ConnectionStatusUI.spectatorNum;
             }
-            ConnectionStatusUI._core.bars = new List<ConnectionStatusBar>((IEnumerable<ConnectionStatusBar>)ConnectionStatusUI._core.bars.OrderBy<ConnectionStatusBar, bool>((Func<ConnectionStatusBar, bool>)(x => x.profile.slotType == SlotType.Spectator || x.profile.pendingSpectatorMode == SlotType.Spectator)));
+            ConnectionStatusUI._core.bars = new List<ConnectionStatusBar>(ConnectionStatusUI._core.bars.OrderBy<ConnectionStatusBar, bool>(x => x.profile.slotType == SlotType.Spectator || x.profile.pendingSpectatorMode == SlotType.Spectator));
             ConnectionStatusUI._core.open = true;
         }
 
@@ -66,20 +66,20 @@ namespace DuckGame
             }
             if (ConnectionStatusUI._core.open)
             {
-                ConnectionStatusBar connectionStatusBar = (ConnectionStatusBar)null;
+                ConnectionStatusBar connectionStatusBar = null;
                 foreach (ConnectionStatusBar bar in ConnectionStatusUI._core.bars)
                 {
-                    if (connectionStatusBar == null || (double)connectionStatusBar.position > 0.300000011920929)
+                    if (connectionStatusBar == null || connectionStatusBar.position > 0.300000011920929)
                         bar.position = Lerp.FloatSmooth(bar.position, 1f, 0.16f, 1.1f);
                     connectionStatusBar = bar;
                 }
             }
             else
             {
-                ConnectionStatusBar connectionStatusBar = (ConnectionStatusBar)null;
+                ConnectionStatusBar connectionStatusBar = null;
                 foreach (ConnectionStatusBar bar in ConnectionStatusUI._core.bars)
                 {
-                    if (connectionStatusBar == null || (double)connectionStatusBar.position < 0.699999988079071)
+                    if (connectionStatusBar == null || connectionStatusBar.position < 0.699999988079071)
                         bar.position = Lerp.FloatSmooth(bar.position, 0.0f, 0.08f, 1.1f);
                     connectionStatusBar = bar;
                 }
@@ -92,7 +92,7 @@ namespace DuckGame
             if (ConnectionStatusUI.spectatorNum > 0)
                 ++count;
             float num1 = 14f;
-            Vec2 vec2_1 = new Vec2(30f, (float)((double)Layer.HUD.height / 2.0 - (double)count * (double)num1 / 2.0));
+            Vec2 vec2_1 = new Vec2(30f, (float)((double)Layer.HUD.height / 2.0 - count * (double)num1 / 2.0));
             bool flag1 = false;
             int num2 = 0;
             foreach (ConnectionStatusBar bar in ConnectionStatusUI._core.bars)
@@ -104,9 +104,9 @@ namespace DuckGame
                 }
                 if (bar.profile.connection != null && bar.profile.connection.status != ConnectionStatus.Disconnected)
                 {
-                    if ((double)bar.position > 0.00999999977648258)
+                    if (bar.position > 0.00999999977648258)
                     {
-                        Vec2 vec2_2 = new Vec2(vec2_1.x, vec2_1.y + (float)(num2 * 14));
+                        Vec2 vec2_2 = new Vec2(vec2_1.x, vec2_1.y + num2 * 14);
                         vec2_2.x -= Layer.HUD.width * (1f - bar.position);
                         ConnectionStatusUI._bar.depth = (Depth)0.84f;
                         Graphics.Draw(ConnectionStatusUI._bar, vec2_2.x, vec2_2.y);
@@ -152,16 +152,16 @@ namespace DuckGame
                                 ConnectionStatusUI._smallBios.Draw("@ONLINENEUTRAL@|DGYELLOW|DOWNLOADING   " + num4.ToString() + "\\" + num3.ToString() + "B", new Vec2(vec2_2.x + 3f, vec2_2.y + 3f), Color.White, (Depth)0.9f);
                             else
                                 ConnectionStatusUI._smallBios.Draw("@ONLINENEUTRAL@|DGYELLOW|SENDING " + str1 + " " + num4.ToString() + "\\" + num3.ToString() + "B", new Vec2(vec2_2.x + 3f, vec2_2.y + 3f), Color.White, (Depth)0.9f);
-                            float num5 = (float)num4 / (float)num3;
+                            float num5 = num4 / (float)num3;
                             int num6 = 3;
                             int x = 11;
                             int y = 7;
                             int num7 = 90;
-                            Graphics.DrawRect(vec2_2 + new Vec2((float)x, (float)y), vec2_2 + new Vec2((float)(x + num7), (float)(y + num6)), Color.White, (Depth)0.9f, false, 0.5f);
-                            Graphics.DrawRect(vec2_2 + new Vec2((float)x, (float)y), vec2_2 + new Vec2((float)x + (float)num7 * num5, (float)(y + num6)), Colors.DGGreen, (Depth)0.87f);
-                            Graphics.DrawRect(vec2_2 + new Vec2((float)x, (float)y), vec2_2 + new Vec2((float)(x + num7), (float)(y + num6)), Colors.DGRed, (Depth)0.84f);
+                            Graphics.DrawRect(vec2_2 + new Vec2(x, y), vec2_2 + new Vec2(x + num7, y + num6), Color.White, (Depth)0.9f, false, 0.5f);
+                            Graphics.DrawRect(vec2_2 + new Vec2(x, y), vec2_2 + new Vec2(x + num7 * num5, y + num6), Colors.DGGreen, (Depth)0.87f);
+                            Graphics.DrawRect(vec2_2 + new Vec2(x, y), vec2_2 + new Vec2(x + num7, y + num6), Colors.DGRed, (Depth)0.84f);
                         }
-                        else if ((int)bar.profile.connection.levelIndex != (int)DuckNetwork.levelIndex)
+                        else if (bar.profile.connection.levelIndex != DuckNetwork.levelIndex)
                             ConnectionStatusUI._smallBios.Draw("@ONLINENEUTRAL@|DGYELLOW|SENDING...", new Vec2(vec2_2.x + 3f, vec2_2.y + 3f), Color.White, (Depth)0.9f);
                         else
                             ConnectionStatusUI._smallBios.Draw("@ONLINEGOOD@|DGGREEN|READY!", new Vec2(vec2_2.x + 3f, vec2_2.y + 3f), Color.White, (Depth)0.9f);
@@ -189,14 +189,14 @@ namespace DuckGame
                             str3 = "|DGPURPLE|";
                         }
                         string text1 = str3 + str2;
-                        ConnectionStatusUI._smallBios.Draw(text1, new Vec2((float)((double)vec2_2.x + (double)ConnectionStatusUI._bar.width - 3.0 - (double)ConnectionStatusUI._smallBios.GetWidth(text1) - 60.0), vec2_2.y + 3f), Color.White, (Depth)0.9f);
+                        ConnectionStatusUI._smallBios.Draw(text1, new Vec2((float)(vec2_2.x + (double)ConnectionStatusUI._bar.width - 3.0 - (double)ConnectionStatusUI._smallBios.GetWidth(text1) - 60.0), vec2_2.y + 3f), Color.White, (Depth)0.9f);
                         int num8 = (int)Math.Round((double)bar.profile.connection.manager.ping * 1000.0);
                         if (bar.profile.connection == DuckNetwork.localConnection)
                             num8 = 0;
                         string source = num8.ToString() + "|WHITE|MS";
                         source.Count<char>();
                         string text2 = num8 >= 150 ? (num8 >= 250 ? (bar.profile.connection.status != ConnectionStatus.Connected ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
-                        ConnectionStatusUI._smallBios.Draw(text2, new Vec2((float)((double)vec2_2.x + (double)ConnectionStatusUI._bar.width - 3.0) - ConnectionStatusUI._smallBios.GetWidth(text2), vec2_2.y + 3f), Color.White, (Depth)0.9f);
+                        ConnectionStatusUI._smallBios.Draw(text2, new Vec2((float)(vec2_2.x + (double)ConnectionStatusUI._bar.width - 3.0) - ConnectionStatusUI._smallBios.GetWidth(text2), vec2_2.y + 3f), Color.White, (Depth)0.9f);
                     }
                     ++num2;
                 }

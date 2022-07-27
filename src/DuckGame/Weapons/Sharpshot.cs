@@ -20,7 +20,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 6;
-            this._ammoType = (AmmoType)new ATHighCalSniper();
+            this._ammoType = new ATHighCalSniper();
             this._type = "gun";
             this.graphic = new Sprite("highPowerRifle");
             this.center = new Vec2(16f, 7f);
@@ -64,7 +64,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 1)
                 {
-                    if ((double)this._angleOffset < 0.159999996423721)
+                    if (_angleOffset < 0.159999996423721)
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.25f, 0.25f);
                     else
                         ++this._loadState;
@@ -72,7 +72,7 @@ namespace DuckGame
                 else if (this._loadState == 2)
                 {
                     this.handOffset.x += 0.8f;
-                    if ((double)this.handOffset.x > 4.0)
+                    if (handOffset.x > 4.0)
                     {
                         ++this._loadState;
                         this.Reload();
@@ -82,7 +82,7 @@ namespace DuckGame
                 else if (this._loadState == 3)
                 {
                     this.handOffset.x -= 0.8f;
-                    if ((double)this.handOffset.x <= 0.0)
+                    if (handOffset.x <= 0.0)
                     {
                         ++this._loadState;
                         this.handOffset.x = 0.0f;
@@ -90,7 +90,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 4)
                 {
-                    if ((double)this._angleOffset > 0.0399999991059303)
+                    if (_angleOffset > 0.0399999991059303)
                     {
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.25f);
                     }
@@ -134,7 +134,7 @@ namespace DuckGame
         public override void Draw()
         {
             float angle = this.angle;
-            if (this.offDir > (sbyte)0)
+            if (this.offDir > 0)
                 this.angle -= this._angleOffset;
             else
                 this.angle += this._angleOffset;

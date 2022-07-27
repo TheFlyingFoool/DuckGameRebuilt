@@ -51,42 +51,42 @@ namespace DuckGame
                     --this._capturePosition.y;
                 if (Input.Down("MENUDOWN"))
                     ++this._capturePosition.y;
-                float num = (float)(DuckGame.Graphics.width / 320);
+                float num = DuckGame.Graphics.width / 320;
                 if (this._resizable)
                 {
                     this._captureSize += this._captureSize * ((float)-((double)InputProfile.DefaultPlayer1.leftTrigger - (double)InputProfile.DefaultPlayer1.rightTrigger) * 0.1f);
-                    if ((double)this._captureSize.x > 1280.0)
+                    if (_captureSize.x > 1280.0)
                         this._captureSize.x = 1280f;
-                    if ((double)this._captureSize.y > 720.0)
+                    if (_captureSize.y > 720.0)
                         this._captureSize.y = 720f;
                     Vec2 vec2 = this._capturePosition * num;
-                    if ((double)vec2.x < 0.0)
+                    if (vec2.x < 0.0)
                         vec2.x = 0.0f;
-                    if ((double)vec2.y < 0.0)
+                    if (vec2.y < 0.0)
                         vec2.y = 0.0f;
                     this._capturePosition = vec2 / num;
                 }
                 DuckGame.Graphics.SetRenderTarget(this._captureTarget);
-                Camera camera = new Camera(this._capturePosition.x * num, this._capturePosition.y * num, (float)(int)this._captureSize.x * num, (float)(int)this._captureSize.y * num);
+                Camera camera = new Camera(this._capturePosition.x * num, this._capturePosition.y * num, (int)this._captureSize.x * num, (int)this._captureSize.y * num);
                 DuckGame.Graphics.Clear(Color.Black);
                 Viewport viewport = DuckGame.Graphics.viewport;
-                DuckGame.Graphics.viewport = new Viewport(0, 0, (int)((double)this._captureSize.x * (double)num), (int)((double)this._captureSize.y * (double)num));
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
-                DuckGame.Graphics.Draw((Tex2D)MonoMain.screenCapture, 0.0f, 0.0f);
+                DuckGame.Graphics.viewport = new Viewport(0, 0, (int)(_captureSize.x * (double)num), (int)(_captureSize.y * (double)num));
+                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
+                DuckGame.Graphics.Draw(MonoMain.screenCapture, 0.0f, 0.0f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.viewport = viewport;
-                DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                DuckGame.Graphics.SetRenderTarget(null);
                 if (Input.Pressed("SELECT"))
                 {
                     SFX.Play("cameraFlash");
-                    Editor.previewCapture = (Texture2D)(Tex2D)this._captureTarget;
-                    this._captureTarget = (RenderTarget2D)null;
-                    new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._closeMenu).Activate();
+                    Editor.previewCapture = (Texture2D)_captureTarget;
+                    this._captureTarget = null;
+                    new UIMenuActionOpenMenu(this, _closeMenu).Activate();
                 }
                 else if (Input.Pressed("CANCEL"))
                 {
                     SFX.Play("consoleCancel");
-                    new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._closeMenu).Activate();
+                    new UIMenuActionOpenMenu(this, _closeMenu).Activate();
                 }
             }
             base.Update();
@@ -96,10 +96,10 @@ namespace DuckGame
         {
             if (!this.open)
                 return;
-            DuckGame.Graphics.DrawRect(new Vec2(this._capturePosition.x - 1f, this._capturePosition.y - 1f), new Vec2((float)((double)this._capturePosition.x + (double)(int)this._captureSize.x + 1.0), (float)((double)this._capturePosition.y + (double)(int)this._captureSize.y + 1.0)), Color.White, (Depth)1f, false);
+            DuckGame.Graphics.DrawRect(new Vec2(this._capturePosition.x - 1f, this._capturePosition.y - 1f), new Vec2((float)(_capturePosition.x + (double)(int)this._captureSize.x + 1.0), (float)(_capturePosition.y + (double)(int)this._captureSize.y + 1.0)), Color.White, (Depth)1f, false);
             if (this._captureTarget == null)
                 return;
-            DuckGame.Graphics.Draw((Tex2D)this._captureTarget, this._capturePosition, new Rectangle?(new Rectangle(0.0f, 0.0f, (float)((int)this._captureSize.x * 4), (float)((int)this._captureSize.y * 4))), Color.White, 0.0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)1f);
+            DuckGame.Graphics.Draw(_captureTarget, this._capturePosition, new Rectangle?(new Rectangle(0.0f, 0.0f, (int)this._captureSize.x * 4, (int)this._captureSize.y * 4)), Color.White, 0.0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)1f);
         }
     }
 }

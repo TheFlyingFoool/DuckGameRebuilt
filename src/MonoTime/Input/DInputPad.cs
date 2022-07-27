@@ -214,27 +214,27 @@ namespace DuckGame
     {
       {
         4096,
-        (Sprite) new ButtonImage('\u0002')
+         new ButtonImage('\u0002')
       },
       {
         8192,
-        (Sprite) new ButtonImage('\u0003')
+         new ButtonImage('\u0003')
       },
       {
         16384,
-        (Sprite) new ButtonImage('\u0001')
+         new ButtonImage('\u0001')
       },
       {
         32768,
-        (Sprite) new ButtonImage('\u0004')
+         new ButtonImage('\u0004')
       },
       {
         16,
-        (Sprite) new ButtonImage('\n')
+         new ButtonImage('\n')
       },
       {
         32,
-        (Sprite) new ButtonImage('\t')
+         new ButtonImage('\t')
       },
       {
         4,
@@ -254,27 +254,27 @@ namespace DuckGame
       },
       {
         256,
-        (Sprite) new ButtonImage('\u0005')
+         new ButtonImage('\u0005')
       },
       {
         512,
-        (Sprite) new ButtonImage('\u0006')
+         new ButtonImage('\u0006')
       },
       {
         8388608,
-        (Sprite) new ButtonImage('\a')
+         new ButtonImage('\a')
       },
       {
         4194304,
-        (Sprite) new ButtonImage('\b')
+         new ButtonImage('\b')
       },
       {
         64,
-        (Sprite) new ButtonImage('\f')
+         new ButtonImage('\f')
       },
       {
         128,
-        (Sprite) new ButtonImage('\r')
+         new ButtonImage('\r')
       },
       {
         9999,
@@ -380,7 +380,7 @@ namespace DuckGame
                     if (productName != null)
                         this._productName = productName.Trim();
                     else
-                        this._productName = (string)null;
+                        this._productName = null;
                 }
                 return this._productName;
             }
@@ -397,7 +397,7 @@ namespace DuckGame
                     if (productGuid != null)
                         this._productGUID = productGuid;
                     else
-                        this._productGUID = (string)null;
+                        this._productGUID = null;
                 }
                 return this._productGUID;
             }
@@ -431,7 +431,7 @@ namespace DuckGame
 
         public override Sprite GetMapImage(int map)
         {
-            Sprite mapImage = (Sprite)null;
+            Sprite mapImage;
             if (this.isXInput)
             {
                 if (this._internalXInput == null)
@@ -493,7 +493,7 @@ namespace DuckGame
                     padState.sticks.left = Vec2.Zero;
                 if ((double)padState.sticks.right.Length() < 0.100000001490116)
                     padState.sticks.right = Vec2.Zero;
-                if ((double)state.leftZ > 0.0)
+                if (state.leftZ > 0.0)
                     padState.triggers.left = state.leftZ;
             }
             else

@@ -27,7 +27,7 @@ namespace DuckGame
           : base(x, y)
         {
             this.customIndex = 1;
-            this.graphic = (Sprite)new SpriteMap("arcadeBackground", 16, 16, true);
+            this.graphic = new SpriteMap("arcadeBackground", 16, 16, true);
             this._opacityFromGraphic = true;
             this.center = new Vec2(8f, 8f);
             this.collisionSize = new Vec2(16f, 16f);

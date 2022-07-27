@@ -32,14 +32,16 @@ namespace DuckGame
             else
                 this.controlString = "@WASD@ADJUST @SELECT@APPLY @MENU2@ALL";
             UIDivider component1 = new UIDivider(true, 0.0f);
-            UIText component2 = new UIText(text, c);
-            component2.align = UIAlign.Left;
-            component1.leftSection.Add((UIComponent)component2, true);
+            UIText component2 = new UIText(text, c)
+            {
+                align = UIAlign.Left
+            };
+            component1.leftSection.Add(component2, true);
             this.RefreshValueList();
             this.currentIndex = this._values.IndexOf(field.value as Resolution);
             if (this.currentIndex < 0)
                 this.currentIndex = 0;
-            this._textItem = (UIText)new UIChangingText(-1f, -1f, field, (FieldBinding)null);
+            this._textItem = new UIChangingText(-1f, -1f, field, null);
             string str = "";
             foreach (Resolution resolution in this._values)
             {
@@ -50,12 +52,14 @@ namespace DuckGame
             this._textItem.minLength = str.Length + 3;
             this._textItem.text = this._values[this.currentIndex].ToShortString() + "   ";
             this._textItem.align = UIAlign.Right;
-            component1.rightSection.Add((UIComponent)this._textItem, true);
-            this.rightSection.Add((UIComponent)component1, true);
-            this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            component1.rightSection.Add(_textItem, true);
+            this.rightSection.Add(component1, true);
+            this._arrow = new UIImage("contextArrowRight")
+            {
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
             this._field = field;
             this.currentValue = this._field.value as Resolution;
         }
@@ -71,9 +75,9 @@ namespace DuckGame
             {
                 this.controlString = "@WASD@ADJUST @SELECT@APPLY @MENU2@ALL";
                 if (Resolution.current.mode == ScreenMode.Windowed)
-                    this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>((Func<Resolution, bool>)(x => x.recommended || x == Resolution.current)).ToList<Resolution>();
+                    this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => x.recommended || x == Resolution.current).ToList<Resolution>();
                 else
-                    this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>((Func<Resolution, bool>)(x => (double)Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.0500000007450581 || x == Resolution.current)).ToList<Resolution>();
+                    this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => (double)Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.0500000007450581 || x == Resolution.current).ToList<Resolution>();
             }
         }
 
@@ -81,7 +85,7 @@ namespace DuckGame
         {
             if (trigger == "SELECT")
             {
-                this._field.value = (object)this.currentValue;
+                this._field.value = currentValue;
                 if (this.selectAction == null)
                     return;
                 this.selectAction();
@@ -100,7 +104,7 @@ namespace DuckGame
             {
                 if (this.selectAction != null)
                     this.selectAction();
-                this._field.value = (object)this.currentValue;
+                this._field.value = currentValue;
             }
             else
             {

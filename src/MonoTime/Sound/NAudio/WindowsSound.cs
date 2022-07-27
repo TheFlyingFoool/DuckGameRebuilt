@@ -21,7 +21,7 @@ namespace DuckGame
         {
             if (this._data == null || !this._inMixer)
                 return 0;
-            if ((double)this._volume <= 0.0)
+            if (_volume <= 0.0)
                 return count;
             int length = 0;
             lock (this)
@@ -36,7 +36,7 @@ namespace DuckGame
                         ;
                     while (this._position + count > this._data.decodedSamples && this._data.Decoder_DecodeChunk());
                     length = Math.Min(count, this._data.decodedSamples - this._position);
-                    Array.Copy((Array)SoundEffect._songBuffer, this._position, (Array)buffer, offset, length);
+                    Array.Copy(SoundEffect._songBuffer, this._position, buffer, offset, length);
                 }
                 this._position += length;
                 if (length != count)
@@ -55,7 +55,7 @@ namespace DuckGame
                         else
                         {
                             length = Math.Min(SoundEffect._songBuffer.Length - this._position, count - length);
-                            Array.Copy((Array)SoundEffect._songBuffer, this._position, (Array)buffer, offset, length);
+                            Array.Copy(SoundEffect._songBuffer, this._position, buffer, offset, length);
                         }
                         this._position += length;
                         length = count;

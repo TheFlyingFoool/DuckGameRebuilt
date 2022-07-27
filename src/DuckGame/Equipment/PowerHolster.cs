@@ -18,11 +18,15 @@ namespace DuckGame
           : base(pX, pY)
         {
             this._sprite = new SpriteMap("powerHolster", 14, 12);
-            this._overPart = new SpriteMap("powerHolsterOver", 10, 3);
-            this._overPart.center = new Vec2(6f, -1f);
-            this._underPart = new SpriteMap("powerHolsterUnder", 11, 10);
-            this._underPart.center = new Vec2(10f, 8f);
-            this.graphic = (Sprite)this._sprite;
+            this._overPart = new SpriteMap("powerHolsterOver", 10, 3)
+            {
+                center = new Vec2(6f, -1f)
+            };
+            this._underPart = new SpriteMap("powerHolsterUnder", 11, 10)
+            {
+                center = new Vec2(10f, 8f)
+            };
+            this.graphic = _sprite;
             this.collisionOffset = new Vec2(-5f, -5f);
             this.collisionSize = new Vec2(10f, 10f);
             this.center = new Vec2(6f, 6f);
@@ -39,7 +43,7 @@ namespace DuckGame
             {
                 if (this._equippedDuck != null && this._equippedDuck.inputProfile != null)
                     this.trigger = this._equippedDuck.inputProfile.Down("QUACK");
-                if (this.containedObject != null && (!this.trigger || !this.containedObject.HolsterActivate((Holster)this)))
+                if (this.containedObject != null && (!this.trigger || !this.containedObject.HolsterActivate(this)))
                 {
                     this.containedObject.triggerAction = this.trigger;
                     if (this.containedObject is PowerHolster)
@@ -57,15 +61,15 @@ namespace DuckGame
             {
                 Thing thing = this.owner;
                 if (this._equippedDuck != null && this._equippedDuck._trapped != null)
-                    thing = (Thing)this._equippedDuck._trapped;
-                this._overPart.flipH = this.owner.offDir <= (sbyte)0;
+                    thing = _equippedDuck._trapped;
+                this._overPart.flipH = this.owner.offDir <= 0;
                 this._overPart.angle = this.angle;
                 this._overPart.alpha = this.alpha;
                 this._overPart.scale = this.scale;
                 this._overPart.depth = thing.depth + 5;
                 this._overPart.frame = this._equippedDuck.quack > 0 ? 1 : 0;
-                Graphics.Draw((Sprite)this._overPart, this.x, this.y);
-                this._underPart.flipH = this.owner.offDir <= (sbyte)0;
+                Graphics.Draw(_overPart, this.x, this.y);
+                this._underPart.flipH = this.owner.offDir <= 0;
                 this._underPart.angle = this.angle;
                 this._underPart.alpha = this.alpha;
                 this._underPart.scale = this.scale;
@@ -75,7 +79,7 @@ namespace DuckGame
                     this._underPart.depth = thing.depth + -7;
                 this._underPart.frame = this.trigger ? 1 : 0;
                 Vec2 vec2 = this.Offset(new Vec2(-2f, 0.0f));
-                Graphics.Draw((Sprite)this._underPart, vec2.x, vec2.y);
+                Graphics.Draw(_underPart, vec2.x, vec2.y);
             }
             else
                 this._sprite.frame = this.trigger ? 1 : 0;

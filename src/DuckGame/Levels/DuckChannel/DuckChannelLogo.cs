@@ -63,9 +63,9 @@ namespace DuckGame
             if (this._playSwipe)
             {
                 this._transitionWait += 0.02f;
-                if ((double)this._transitionWait > 1.0)
+                if (_transitionWait > 1.0)
                     this._doTransition = true;
-                if ((double)this._slideOutWait < 1.0)
+                if (_slideOutWait < 1.0)
                 {
                     this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 1f, 0.1f, 1.1f);
                     this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 1f, 0.1f, 1.1f);
@@ -77,7 +77,7 @@ namespace DuckGame
                     this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 0.0f, 0.1f, 1.1f);
                     this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 0.0f, 0.1f, 1.1f);
                     this._fiveLerp = Lerp.FloatSmooth(this._fiveLerp, 0.0f, 0.1f, 1.1f);
-                    if ((double)this._duckLerp < 0.00999999977648258)
+                    if (_duckLerp < 0.00999999977648258)
                         this._playSwipe = false;
                 }
                 for (int index = 0; index < this._swipeLines.Count; ++index)
@@ -90,9 +90,9 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 vec2_1 = new Vec2(10f, 12f);
-            Vec2 vec2_2 = new Vec2((float)(-200.0 * (1.0 - (double)this._duckLerp)), 0.0f);
-            Vec2 vec2_3 = new Vec2((float)(200.0 * (1.0 - (double)this._channelLerp)), 0.0f);
-            Vec2 vec2_4 = new Vec2((float)(300.0 * (1.0 - (double)this._channelLerp)), 0.0f);
+            Vec2 vec2_2 = new Vec2((float)(-200.0 * (1.0 - _duckLerp)), 0.0f);
+            Vec2 vec2_3 = new Vec2((float)(200.0 * (1.0 - _channelLerp)), 0.0f);
+            Vec2 vec2_4 = new Vec2((float)(300.0 * (1.0 - _channelLerp)), 0.0f);
             this._duck.depth = (Depth)0.85f;
             Graphics.Draw(this._duck, vec2_1.x + 80f + vec2_2.x, vec2_1.y + 60f + vec2_2.y);
             this._channel.depth = (Depth)0.86f;
@@ -106,7 +106,7 @@ namespace DuckGame
             for (int index = 0; index < this._swipeLines.Count; ++index)
             {
                 float num4 = this._swipeLines[index] * -1200f;
-                Graphics.DrawRect(new Vec2(vec2_5.x + num3 + num4, vec2_5.y + (float)index * num2), new Vec2(vec2_5.x + num1 + num3 + num4, vec2_5.y + (float)index * num2 + num2), Color.Black, (Depth)0.83f);
+                Graphics.DrawRect(new Vec2(vec2_5.x + num3 + num4, vec2_5.y + index * num2), new Vec2(vec2_5.x + num1 + num3 + num4, vec2_5.y + index * num2 + num2), Color.Black, (Depth)0.83f);
             }
         }
     }

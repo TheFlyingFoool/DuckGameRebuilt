@@ -48,12 +48,12 @@ namespace DuckGame
 
         public void Reset()
         {
-            this._unacknowledgedMessages.RemoveAll((Predicate<NetMessage>)(x => x.priority != 0));
+            this._unacknowledgedMessages.RemoveAll(x => x.priority != 0);
             this._unreliableMessages.Clear();
             this._previousReliableMessageSizes.Clear();
             this._receivedUrgentPackets.Clear();
             this._receivedVolatilePackets.Clear();
-            this._freshMessages.RemoveAll((Predicate<NetMessage>)(x => x.priority != 0));
+            this._freshMessages.RemoveAll(x => x.priority != 0);
         }
 
         public float ping => this._ping;
@@ -77,7 +77,7 @@ namespace DuckGame
 
         public float jitterPeak => this._jitterPeak;
 
-        public static StreamManager context => NetworkConnection.context != null ? NetworkConnection.context.manager : (StreamManager)null;
+        public static StreamManager context => NetworkConnection.context != null ? NetworkConnection.context.manager : null;
 
         public void LogPing(float pingVal)
         {
@@ -89,7 +89,7 @@ namespace DuckGame
             for (int index = 0; index < 32; ++index)
                 num += this._previousPings[index];
             this._ping = num / 32f;
-            if ((double)this._ping <= (double)this._pingPeak)
+            if (_ping <= (double)this._pingPeak)
                 return;
             this._pingPeak = this._ping;
         }
@@ -117,7 +117,7 @@ namespace DuckGame
 
         public ushort expectedReliableOrder => this._expectedReliableOrder;
 
-        private void IncrementExpectedOrder() => this._expectedReliableOrder = (ushort)(((int)this._expectedReliableOrder + 1) % (int)ushort.MaxValue);
+        private void IncrementExpectedOrder() => this._expectedReliableOrder = (ushort)((_expectedReliableOrder + 1) % ushort.MaxValue);
 
         public int lastReceivedAck => this._lastReceivedAck;
 
@@ -172,13 +172,13 @@ namespace DuckGame
                 foreach (NetMessage unreliableMessage in this._unreliableMessages)
                 {
                     unreliableMessage.timeout -= Maths.IncFrameTimer();
-                    if ((double)unreliableMessage.timeout <= 0.0)
+                    if (unreliableMessage.timeout <= 0.0)
                         netMessageList.Add(unreliableMessage);
                 }
                 foreach (NetMessage m in netMessageList)
                 {
                     m.queued = false;
-                    m.packet = (NetworkPacket)null;
+                    m.packet = null;
                     m.packetsActive.Clear();
                     this._unreliableMessages.Remove(m);
                     this.NotifyAfterMessageAck(m, true);
@@ -199,7 +199,7 @@ namespace DuckGame
 
         public uint GetExistingReceivedReliableMessageSize(ushort pMessageOrder)
         {
-            uint reliableMessageSize = 0;
+            uint reliableMessageSize;
             this._previousReliableMessageSizes.TryGetValue(pMessageOrder, out reliableMessageSize);
             return reliableMessageSize;
         }
@@ -220,10 +220,10 @@ namespace DuckGame
                 }
                 if (m.priority == NetMessagePriority.ReliableOrdered)
                 {
-                    if ((int)m.order >= (int)this._expectedReliableOrder && this._orderedPackets.FirstOrDefault<NetMessage>((Func<NetMessage, bool>)(x => (int)x.order == (int)m.order)) == null)
+                    if (m.order >= _expectedReliableOrder && this._orderedPackets.FirstOrDefault<NetMessage>(x => x.order == m.order) == null)
                     {
                         int index = 0;
-                        while (index < this._orderedPackets.Count && (int)this._orderedPackets[index].order <= (int)m.order)
+                        while (index < this._orderedPackets.Count && _orderedPackets[index].order <= m.order)
                             ++index;
                         this._orderedPackets.Insert(index, m);
                     }
@@ -234,7 +234,7 @@ namespace DuckGame
                     {
                         this.NetMessageReceived(m);
                         this._receivedVolatilePackets.Add(m.order);
-                        this._receivedVolatilePackets.Remove((ushort)((uint)m.order - 64U));
+                        this._receivedVolatilePackets.Remove((ushort)(m.order - 64U));
                     }
                 }
                 else if (m.priority == NetMessagePriority.Urgent)
@@ -243,7 +243,7 @@ namespace DuckGame
                     {
                         this.NetMessageReceived(m);
                         this._receivedUrgentPackets.Add(m.order);
-                        this._receivedUrgentPackets.Remove((ushort)((uint)m.order - 64U));
+                        this._receivedUrgentPackets.Remove((ushort)(m.order - 64U));
                     }
                 }
                 else
@@ -261,7 +261,7 @@ namespace DuckGame
         public void ProcessReceivedMessage(NetMessage m)
         {
             NetworkConnection.context = this._connection;
-            Main.codeNumber = (int)m.typeIndex;
+            Main.codeNumber = m.typeIndex;
             if (m.manager == BelongsToManager.GhostManager)
                 GhostManager.context.OnMessage(m);
             else if (m.manager == BelongsToManager.EventManager)
@@ -271,7 +271,7 @@ namespace DuckGame
             else if (m.manager == BelongsToManager.None)
                 Network.OnMessageStatic(m);
             Main.codeNumber = 12345;
-            NetworkConnection.context = (NetworkConnection)null;
+            NetworkConnection.context = null;
         }
 
         public void QueueMessage(NetMessage msg)
@@ -332,7 +332,7 @@ namespace DuckGame
                     NetMessage orderedPacket = this._orderedPackets[index];
                     orderedPacket.timeout += Maths.IncFrameTimer();
                     ushort expectedReliableOrder;
-                    if ((double)orderedPacket.timeout > 2.0 && (double)orderedPacket.timeout < 3.0)
+                    if (orderedPacket.timeout > 2.0 && orderedPacket.timeout < 3.0)
                     {
                         orderedPacket.timeout = 1000f;
                         string[] strArray = new string[7]
@@ -350,16 +350,16 @@ namespace DuckGame
                         strArray[6] = ") Has been stuck in queue for 2 seconds...";
                         DevConsole.Log(DCSection.DuckNet, string.Concat(strArray), orderedPacket.connection);
                     }
-                    if ((int)orderedPacket.order <= (int)this._expectedReliableOrder)
+                    if (orderedPacket.order <= _expectedReliableOrder)
                     {
-                        if ((int)orderedPacket.order == (int)this._expectedReliableOrder)
+                        if (orderedPacket.order == _expectedReliableOrder)
                             this.IncrementExpectedOrder();
                         if (orderedPacket.serializedData != null)
                         {
                             NetworkConnection.context = orderedPacket.connection;
                             orderedPacket.Deserialize(orderedPacket.serializedData);
                             orderedPacket.ClearSerializedData();
-                            NetworkConnection.context = (NetworkConnection)null;
+                            NetworkConnection.context = null;
                         }
                         if (orderedPacket is NMMessageFragment)
                         {
@@ -420,17 +420,17 @@ namespace DuckGame
 
         private ushort GetPacketOrder()
         {
-            this._packetOrder = (ushort)(((int)this._packetOrder + 1) % (int)ushort.MaxValue);
-            if (this._packetOrder == (ushort)0)
+            this._packetOrder = (ushort)((_packetOrder + 1) % ushort.MaxValue);
+            if (this._packetOrder == 0)
                 DevConsole.Log(DCSection.NetCore, "@error !!Packet order index wrapped!!@error");
             return this._packetOrder;
         }
 
         private ushort GetReliableOrder()
         {
-            int reliableOrder = (int)this._reliableOrder;
-            this._reliableOrder = (ushort)(((int)this._reliableOrder + 1) % (int)ushort.MaxValue);
-            if (this._reliableOrder != (ushort)0)
+            int reliableOrder = _reliableOrder;
+            this._reliableOrder = (ushort)((_reliableOrder + 1) % ushort.MaxValue);
+            if (this._reliableOrder != 0)
                 return (ushort)reliableOrder;
             DevConsole.Log(DCSection.NetCore, "@error !!Reliable message order wrapped!!@error");
             this._previousReliableMessageSizes.Clear();
@@ -439,15 +439,15 @@ namespace DuckGame
 
         private ushort GetVolatileID()
         {
-            int volatileId = (int)this._volatileID;
-            this._volatileID = (ushort)(((int)this._volatileID + 1) % (int)ushort.MaxValue);
+            int volatileId = _volatileID;
+            this._volatileID = (ushort)((_volatileID + 1) % ushort.MaxValue);
             return (ushort)volatileId;
         }
 
         private ushort GetUrgentID()
         {
-            int urgentId = (int)this._urgentID;
-            this._urgentID = (ushort)(((int)this._urgentID + 1) % (int)ushort.MaxValue);
+            int urgentId = _urgentID;
+            this._urgentID = (ushort)((_urgentID + 1) % ushort.MaxValue);
             return (ushort)urgentId;
         }
 
@@ -500,12 +500,12 @@ namespace DuckGame
                                 DevConsole.Log(DCSection.DuckNet, "@error |DGRED|Large retransmit! (" + this.currentPacket.data.lengthInBytes.ToString() + ")", this.connection);
                                 break;
                             }
-                            if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= (byte)2)
+                            if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {
                                 int num = (int)((double)MathHelper.Clamp(this.ping, 0.064f, 1f) * 60.0) + 1;
                                 if (unacknowledgedMessage.serializedData.lengthInBytes > 500)
                                     num += 30;
-                                if (unacknowledgedMessage.lastTransmitted + (long)num > Graphics.frame)
+                                if (unacknowledgedMessage.lastTransmitted + num > Graphics.frame)
                                     continue;
                             }
                             unacknowledgedMessage.packetsActive.Add(this.currentPacket.order);
@@ -528,9 +528,9 @@ namespace DuckGame
                                     DevConsole.Log(DCSection.DuckNet, "|DGRED|Holding back queued messages until a connection is established.", this.connection);
                                 }
                             }
-                            else if (this.connection.levelIndex != byte.MaxValue && (int)this.connection.levelIndex != (int)freshMessage.levelIndex && !(freshMessage is IConnectionMessage) && freshMessage.priority != NetMessagePriority.ReliableOrdered)
+                            else if (this.connection.levelIndex != byte.MaxValue && connection.levelIndex != freshMessage.levelIndex && !(freshMessage is IConnectionMessage) && freshMessage.priority != NetMessagePriority.ReliableOrdered)
                             {
-                                if ((int)freshMessage.levelIndex < (int)this.connection.levelIndex)
+                                if (freshMessage.levelIndex < connection.levelIndex)
                                 {
                                     this._freshMessages.Remove(freshMessage);
                                     --index;
@@ -548,7 +548,7 @@ namespace DuckGame
                                             foreach (NMMessageFragment nmMessageFragment in NMMessageFragment.BreakApart(freshMessage))
                                             {
                                                 nmMessageFragment.Serialize();
-                                                this._freshMessages.Insert(index, (NetMessage)nmMessageFragment);
+                                                this._freshMessages.Insert(index, nmMessageFragment);
                                                 ++index;
                                             }
                                             index = num - 1;
@@ -590,7 +590,7 @@ namespace DuckGame
             this.currentPacket.data.Write(false);
             ++this._sent;
             Network.activeNetwork.core.SendPacket(this.currentPacket, this._connection);
-            this._currentPacketInternal = (NetworkPacket)null;
+            this._currentPacketInternal = null;
         }
 
         private class NetQueue
@@ -616,7 +616,7 @@ namespace DuckGame
                 else
                 {
                     this._buffer[this._first++] = val;
-                    this._first &= (int)sbyte.MaxValue;
+                    this._first &= sbyte.MaxValue;
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this.wideBarrel = true;
@@ -94,18 +94,18 @@ namespace DuckGame
                             this.currentPitch = -1;
                         this.rightPressed = false;
                     }
-                    this.notePitch = this.currentPitch < 0 || this._raised ? 0.0f : (float)((double)this.currentPitch / 3.0 + 0.00999999977648258);
+                    this.notePitch = this.currentPitch < 0 || this._raised ? 0.0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
                 }
-                if ((double)this.notePitch != (double)this.prevNotePitch)
+                if (notePitch != (double)this.prevNotePitch)
                 {
-                    if ((double)this.notePitch != 0.0)
+                    if (notePitch != 0.0)
                     {
                         if (this.noteSound != null)
                         {
                             this.noteSound.Stop();
-                            this.noteSound = (Sound)null;
+                            this.noteSound = null;
                         }
-                        int num = (int)Math.Round((double)this.notePitch * 3.0);
+                        int num = (int)Math.Round(notePitch * 3.0);
                         if (num < 0)
                             num = 0;
                         if (num > 12)
@@ -113,16 +113,16 @@ namespace DuckGame
                         if (this.noteSound == null)
                         {
                             this.hitPitch = this.notePitch;
-                            this.noteSound = SFX.Play("trumpet0" + Change.ToString((object)(num + 1)), 0.8f);
-                            Level.Add((Thing)new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
+                            this.noteSound = SFX.Play("trumpet0" + Change.ToString(num + 1), 0.8f);
+                            Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = Maths.Clamp((float)(((double)this.notePitch - (double)this.hitPitch) * 0.00999999977648258), -1f, 1f);
+                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - (double)this.hitPitch) * 0.00999999977648258), -1f, 1f);
                     }
                     else if (this.noteSound != null)
                     {
                         this.noteSound.Stop();
-                        this.noteSound = (Sound)null;
+                        this.noteSound = null;
                     }
                 }
                 if (this._raised)
@@ -173,10 +173,10 @@ namespace DuckGame
                 SpriteMap fingerPositionSprite = this.duck.profile.persona.fingerPositionSprite;
                 fingerPositionSprite.frame = this.currentPitch + 1;
                 fingerPositionSprite.depth = this.depth - 100;
-                fingerPositionSprite.flipH = this.offDir <= (sbyte)0;
+                fingerPositionSprite.flipH = this.offDir <= 0;
                 fingerPositionSprite.angle = 0.0f;
                 Vec2 vec2 = this.Offset(new Vec2(-8f, -2f));
-                Graphics.Draw((Sprite)fingerPositionSprite, vec2.x, vec2.y);
+                Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
             }
             base.Draw();
         }

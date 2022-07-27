@@ -23,17 +23,23 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             UIDivider component1 = new UIDivider(true, 0.0f);
-            UIText component2 = new UIText(text, c);
-            component2.align = UIAlign.Left;
-            component1.leftSection.Add((UIComponent)component2, true);
-            UIProgressBar component3 = new UIProgressBar((double)step < 0.0526315793395042 ? 26f : 30f, 7f, field, step);
-            component3.align = UIAlign.Right;
-            component1.rightSection.Add((UIComponent)component3, true);
-            this.rightSection.Add((UIComponent)component1, true);
-            this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            UIText component2 = new UIText(text, c)
+            {
+                align = UIAlign.Left
+            };
+            component1.leftSection.Add(component2, true);
+            UIProgressBar component3 = new UIProgressBar((double)step < 0.0526315793395042 ? 26f : 30f, 7f, field, step)
+            {
+                align = UIAlign.Right
+            };
+            component1.rightSection.Add(component3, true);
+            this.rightSection.Add(component1, true);
+            this._arrow = new UIImage("contextArrowRight")
+            {
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
             this._field = field;
             this._step = step;
             this.controlString = "@CANCEL@BACK @WASD@ADJUST";
@@ -54,7 +60,7 @@ namespace DuckGame
             }
             if ((double)num != (double)(float)this._field.value)
                 SFX.Play("textLetter", 0.7f);
-            this._field.value = (object)num;
+            this._field.value = num;
         }
     }
 }

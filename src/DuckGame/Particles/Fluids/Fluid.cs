@@ -71,14 +71,14 @@ namespace DuckGame
             if (this._fire != null)
                 this._fire.position = this.position;
             this._life = 1f;
-            if ((double)this._thickness < 4.0 || (double)Math.Abs(this.vSpeed) < 1.5)
+            if (_thickness < 4.0 || (double)Math.Abs(this.vSpeed) < 1.5)
                 this.live -= 0.01f;
             this._thickness = Lerp.FloatSmooth(this.startThick, 0.1f, 1f - this.live);
-            if ((double)this.live < 0.0 || this._grounded && (double)Math.Abs(this.vSpeed) < 0.100000001490116)
+            if (live < 0.0 || this._grounded && (double)Math.Abs(this.vSpeed) < 0.100000001490116)
             {
-                Level.Remove((Thing)this);
+                Level.Remove(this);
                 this.active = false;
-                FluidPuddle fluidPuddle1 = (FluidPuddle)null;
+                FluidPuddle fluidPuddle1 = null;
                 foreach (FluidPuddle fluidPuddle2 in Level.current.things[typeof(FluidPuddle)])
                 {
                     if ((double)this.x > (double)fluidPuddle2.left && (double)this.x < (double)fluidPuddle2.right && (double)Math.Abs(fluidPuddle2.y - this.y) < 10.0)
@@ -90,11 +90,11 @@ namespace DuckGame
                 if (fluidPuddle1 == null)
                 {
                     Vec2 position;
-                    Block b = (Block)Level.CheckLine<AutoBlock>(this.position + new Vec2(0.0f, -8f), this.position + new Vec2(0.0f, 16f), out position);
-                    if (b != null && (double)position.y == (double)b.top)
+                    Block b = Level.CheckLine<AutoBlock>(this.position + new Vec2(0.0f, -8f), this.position + new Vec2(0.0f, 16f), out position);
+                    if (b != null && position.y == (double)b.top)
                     {
                         fluidPuddle1 = new FluidPuddle(position.x, position.y, b);
-                        Level.Add((Thing)fluidPuddle1);
+                        Level.Add(fluidPuddle1);
                     }
                 }
                 fluidPuddle1?.Feed(this.data);
@@ -121,11 +121,11 @@ namespace DuckGame
         public void BreakStream()
         {
             if (this._child != null)
-                this._child._stream = (Fluid)null;
-            this._child = (Fluid)null;
+                this._child._stream = null;
+            this._child = null;
             if (this._stream != null)
-                this._stream._child = (Fluid)null;
-            this._stream = (Fluid)null;
+                this._stream._child = null;
+            this._stream = null;
         }
 
         public override void Draw()
@@ -139,14 +139,14 @@ namespace DuckGame
             {
                 if (this._child != null)
                     return;
-                if ((double)this._thickness > 4.0)
+                if (_thickness > 4.0)
                 {
                     this._glob.depth = this.depth;
                     this._glob.frame = 2;
                     this._glob.color = new Color(this.data.color) * this.alpha;
                     this._glob.CenterOrigin();
                     this._glob.angle = Maths.DegToRad((float)(-(double)Maths.PointDirection(this.position, this.position + this.velocity) + 90.0));
-                    Graphics.Draw((Sprite)this._glob, this.x, this.y);
+                    Graphics.Draw(_glob, this.x, this.y);
                 }
                 else
                     Graphics.DrawRect(this.position - new Vec2(this._thickness / 2f, this._thickness / 2f), this.position + new Vec2(this._thickness / 2f, this._thickness / 2f), new Color(this.data.color) * this.alpha, this.depth);

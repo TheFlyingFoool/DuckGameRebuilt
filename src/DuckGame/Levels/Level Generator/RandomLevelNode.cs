@@ -109,7 +109,7 @@ namespace DuckGame
                 Rando.generator = new Random(seed);
             Level.InitChanceGroups();
             RandomLevelNode.processing = true;
-            RandomLevelNode.topLeft = new Vec2((float)(-this.gridX * 192), (float)(-this.gridY * 144));
+            RandomLevelNode.topLeft = new Vec2(-this.gridX * 192, -this.gridY * 144);
             RandomLevelNode._allPreparedThings = new HashSet<Thing>();
             this.PreparePartsRecurse(x, y, level);
             RandomLevelNode.processing = false;
@@ -118,26 +118,26 @@ namespace DuckGame
             {
                 List<NGeneratorRule> ngeneratorRuleList = new List<NGeneratorRule>()
         {
-          new NGeneratorRule((Func<bool>) (() =>
+          new NGeneratorRule( () =>
           {
             bool flag = false;
             for (int index = 0; index < 4; ++index)
             {
-              if (NGeneratorRule.Count(RandomLevelNode._allPreparedThings, (Func<Thing, bool>) (thing =>
+              if (NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing =>
               {
                 if (thing is IContainAThing)
                 {
                   System.Type contains = (thing as IContainAThing).contains;
-                  if (contains != (System.Type) null)
+                  if (contains !=  null)
                   {
                     Thing thing2 = Editor.GetThing(contains);
                     return thing2 is Gun && (thing2 as Gun).isFatal;
                   }
                 }
                 return false;
-              })) == 0)
+              }) == 0)
               {
-                foreach (Thing thing in (IEnumerable<Thing>) RandomLevelNode._allPreparedThings.AsEnumerable<Thing>().OrderBy<Thing, float>((Func<Thing, float>) (t => Rando.Float(1f))))
+                foreach (Thing thing in (IEnumerable<Thing>) RandomLevelNode._allPreparedThings.AsEnumerable<Thing>().OrderBy<Thing, float>( t => Rando.Float(1f)))
                 {
                   if (thing is IContainPossibleThings)
                     (thing as IContainPossibleThings).PreparePossibilities();
@@ -150,16 +150,16 @@ namespace DuckGame
               }
             }
             return flag;
-          })),
-          new NGeneratorRule((Func<bool>) (() =>
+          }),
+          new NGeneratorRule( () =>
           {
-            int num1 = NGeneratorRule.Count(RandomLevelNode._allPreparedThings, (Func<Thing, bool>) (thing => thing is Door && (thing as Door).locked));
-            int num2 = NGeneratorRule.Count(RandomLevelNode._allPreparedThings, (Func<Thing, bool>) (thing => thing is Key));
+            int num1 = NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Door && (thing as Door).locked);
+            int num2 = NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Key);
             if (num1 > 0 && num2 == 0)
-              RandomLevelNode._allPreparedThings.RemoveWhere((Predicate<Thing>) (v => v is Door && (v as Door).locked));
+              RandomLevelNode._allPreparedThings.RemoveWhere( v => v is Door && (v as Door).locked);
             return true;
-          })),
-          new NGeneratorRule((Func<bool>) (() => NGeneratorRule.Count(RandomLevelNode._allPreparedThings, (Func<Thing, bool>) (thing => thing is Warpgun)) > 0))
+          }),
+          new NGeneratorRule( () => NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Warpgun) > 0)
         };
             }
             this.LoadPartsRecurse(x, y, level);
@@ -171,13 +171,13 @@ namespace DuckGame
                 {
                     for (int index2 = -1; index2 < this.tilesHigh + 1; ++index2)
                     {
-                        RandomLevelNode randomLevelNode = (RandomLevelNode)null;
+                        RandomLevelNode randomLevelNode = null;
                         if (index1 >= 0 && index1 < this.tilesWide && index2 >= 0 && index2 < this.tilesHigh)
                             randomLevelNode = this.tiles[index1, index2];
                         if (randomLevelNode == null || randomLevelNode.data == null)
                         {
-                            Vec2 vec2 = new Vec2((float)(index1 * 192 - 8), (float)(index2 * 144 - 8)) + RandomLevelNode.topLeft;
-                            level.AddThing((Thing)new PyramidWall(vec2.x, vec2.y));
+                            Vec2 vec2 = new Vec2(index1 * 192 - 8, index2 * 144 - 8) + RandomLevelNode.topLeft;
+                            level.AddThing(new PyramidWall(vec2.x, vec2.y));
                         }
                     }
                 }
@@ -187,12 +187,12 @@ namespace DuckGame
             {
                 for (int index4 = 0; index4 < this.tilesHigh; ++index4)
                 {
-                    RandomLevelNode randomLevelNode = (RandomLevelNode)null;
+                    RandomLevelNode randomLevelNode = null;
                     if (index3 >= 0 && index3 < this.tilesWide && index4 >= 0 && index4 < this.tilesHigh)
                         randomLevelNode = this.tiles[index3, index4];
                     if (randomLevelNode != null && randomLevelNode.data != null)
                     {
-                        Vec2 vec2 = new Vec2((float)(index3 * 192 + 96), (float)(index4 * 144 + 72)) + RandomLevelNode.topLeft;
+                        Vec2 vec2 = new Vec2(index3 * 192 + 96, index4 * 144 + 72) + RandomLevelNode.topLeft;
                         PyramidWall pyramidWall1 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(-192f, 0.0f));
                         if (pyramidWall1 != null)
                             pyramidWall1.hasRight = true;
@@ -212,35 +212,35 @@ namespace DuckGame
                 pyramidWall.AddExtraWalls();
             foreach (PyramidDoor pyramidDoor in level.things[typeof(PyramidDoor)])
             {
-                Block block = level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(-16f, 0.0f), (Thing)pyramidDoor) ?? level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(16f, 0.0f), (Thing)pyramidDoor);
+                Block block = level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(-16f, 0.0f), pyramidDoor) ?? level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(16f, 0.0f), pyramidDoor);
                 if (block != null && !(block is PyramidDoor) && !(block is Door))
                 {
-                    level.RemoveThing((Thing)pyramidDoor);
-                    Level.Add((Thing)new PyramidTileset(pyramidDoor.x, pyramidDoor.y - 16f));
-                    Level.Add((Thing)new PyramidTileset(pyramidDoor.x, pyramidDoor.y));
+                    level.RemoveThing(pyramidDoor);
+                    Level.Add(new PyramidTileset(pyramidDoor.x, pyramidDoor.y - 16f));
+                    Level.Add(new PyramidTileset(pyramidDoor.x, pyramidDoor.y));
                 }
                 else
                 {
-                    Block t1 = level.CollisionPoint<Block>(pyramidDoor.x, pyramidDoor.y, (Thing)pyramidDoor);
+                    Block t1 = level.CollisionPoint<Block>(pyramidDoor.x, pyramidDoor.y, pyramidDoor);
                     if (t1 != null)
-                        level.RemoveThing((Thing)t1);
-                    Block t2 = level.CollisionPoint<Block>(pyramidDoor.x, pyramidDoor.y - 16f, (Thing)pyramidDoor);
+                        level.RemoveThing(t1);
+                    Block t2 = level.CollisionPoint<Block>(pyramidDoor.x, pyramidDoor.y - 16f, pyramidDoor);
                     if (t2 != null)
-                        level.RemoveThing((Thing)t2);
+                        level.RemoveThing(t2);
                 }
             }
             foreach (Door door in level.things[typeof(Door)])
             {
-                switch (level.CollisionLine<Block>(door.position + new Vec2(-16f, 0.0f), door.position + new Vec2(16f, 0.0f), (Thing)door))
+                switch (level.CollisionLine<Block>(door.position + new Vec2(-16f, 0.0f), door.position + new Vec2(16f, 0.0f), door))
                 {
                     case null:
                     case PyramidDoor _:
                     case Door _:
                         continue;
                     default:
-                        level.RemoveThing((Thing)door);
-                        Level.Add((Thing)new PyramidTileset(door.x, door.y - 16f));
-                        Level.Add((Thing)new PyramidTileset(door.x, door.y));
+                        level.RemoveThing(door);
+                        Level.Add(new PyramidTileset(door.x, door.y - 16f));
+                        Level.Add(new PyramidTileset(door.x, door.y));
                         continue;
                 }
             }
@@ -260,9 +260,9 @@ namespace DuckGame
                     t.InitLinks();
                     if (t._link == null)
                     {
-                        level.RemoveThing((Thing)t);
-                        Level.Add((Thing)new PyramidTileset(t.x, t.y - 16f));
-                        Level.Add((Thing)new PyramidTileset(t.x, t.y));
+                        level.RemoveThing(t);
+                        Level.Add(new PyramidTileset(t.x, t.y - 16f));
+                        Level.Add(new PyramidTileset(t.x, t.y));
                     }
                 }
             }
@@ -281,9 +281,11 @@ namespace DuckGame
                     autoPlatform.FindFrame();
                 }
             }
-            LightingTwoPointOH t3 = new LightingTwoPointOH();
-            t3.visible = false;
-            level.AddThing((Thing)t3);
+            LightingTwoPointOH t3 = new LightingTwoPointOH
+            {
+                visible = false
+            };
+            level.AddThing(t3);
             return true;
         }
 
@@ -411,31 +413,31 @@ namespace DuckGame
                         {
                             if (this.up != null)
                             {
-                                this.up.left = (RandomLevelNode)null;
+                                this.up.left = null;
                                 this.up.removeRight = true;
                             }
                             if (this.down != null)
                             {
-                                this.down.left = (RandomLevelNode)null;
+                                this.down.left = null;
                                 this.down.removeRight = true;
                             }
                             this.removeRight = true;
-                            this.left = (RandomLevelNode)null;
+                            this.left = null;
                         }
                         if (!this.connectionRight)
                         {
                             if (this.up != null)
                             {
-                                this.up.right = (RandomLevelNode)null;
+                                this.up.right = null;
                                 this.up.removeLeft = true;
                             }
                             if (this.down != null)
                             {
-                                this.down.right = (RandomLevelNode)null;
+                                this.down.right = null;
                                 this.down.removeLeft = true;
                             }
                             this.removeLeft = true;
-                            this.right = (RandomLevelNode)null;
+                            this.right = null;
                         }
                     }
                 }

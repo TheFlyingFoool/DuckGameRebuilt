@@ -21,7 +21,7 @@ namespace DuckGame
             this.horizontalHeight = 15f;
             this._tileset = "snowTileset";
             this._sprite = new SpriteMap("nublessSnow", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._sprite.frame = 40;
             this.willHeat = true;
             this._impactThreshold = -1f;

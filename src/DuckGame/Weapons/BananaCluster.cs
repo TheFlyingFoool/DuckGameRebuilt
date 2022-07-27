@@ -19,11 +19,13 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 3;
-            this._ammoType = (AmmoType)new ATShrapnel();
+            this._ammoType = new ATShrapnel();
             this._type = "gun";
-            this._sprite = new SpriteMap("banana", 16, 16);
-            this._sprite.frame = 4;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("banana", 16, 16)
+            {
+                frame = 4
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-6f, -4f);
             this.collisionSize = new Vec2(12f, 11f);
@@ -42,15 +44,17 @@ namespace DuckGame
             {
                 if (this.owner is Duck owner)
                     owner.ThrowItem();
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             }
             if (this.owner == null && this.ammo == 1)
             {
-                Banana banana = new Banana(this.x, this.y);
-                banana.hSpeed = this.hSpeed;
-                banana.vSpeed = this.vSpeed;
-                Level.Remove((Thing)this);
-                Level.Add((Thing)banana);
+                Banana banana = new Banana(this.x, this.y)
+                {
+                    hSpeed = this.hSpeed,
+                    vSpeed = this.vSpeed
+                };
+                Level.Remove(this);
+                Level.Add(banana);
             }
             base.Update();
         }
@@ -78,13 +82,13 @@ namespace DuckGame
             Banana banana = new Banana(this.barrelPosition.x, this.barrelPosition.y);
             if (!owner.crouch)
             {
-                banana.hSpeed = (float)this.offDir * Rando.Float(3f, 3.5f) + num1;
+                banana.hSpeed = offDir * Rando.Float(3f, 3.5f) + num1;
                 banana.vSpeed = num2 - 1.5f + Rando.Float(-0.5f, -1f);
             }
             banana.EatBanana();
-            banana.clip.Add((MaterialThing)owner);
-            owner.clip.Add((MaterialThing)banana);
-            Level.Add((Thing)banana);
+            banana.clip.Add(owner);
+            owner.clip.Add(banana);
+            Level.Add(banana);
         }
     }
 }

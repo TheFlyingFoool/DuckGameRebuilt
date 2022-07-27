@@ -39,7 +39,7 @@ namespace DuckGame
             this._max = max;
             this._parent = parent;
             this._center = this._position + new Vec2(this._halfWidth, this._halfWidth);
-            this._rectangle = new Rectangle((float)(int)position.x, (float)(int)position.y, (float)(int)width, (float)(int)width);
+            this._rectangle = new Rectangle((int)position.x, (int)position.y, (int)width, (int)width);
             if (this._depth != 0)
             {
                 for (int index = 0; index < 4; ++index)
@@ -70,19 +70,19 @@ namespace DuckGame
                         if (!t.removeFromLevel && t != ignore && Collision.Point(pos, t))
                             return t;
                     }
-                    return (Thing)null;
+                    return null;
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
-                    return (Thing)null;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
-                    return (Thing)null;
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                    return null;
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                    return null;
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
-            return (Thing)null;
+            return null;
         }
 
         public T CheckPoint<T>(Vec2 pos, Thing ignore, Layer layer)
@@ -101,14 +101,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
                     return default(T);
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
                     return default(T);
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -130,14 +130,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
                     return default(T);
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
                     return default(T);
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -159,14 +159,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
                     return default(T);
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
                     return default(T);
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -188,14 +188,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
                     return default(T);
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
                     return default(T);
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -214,19 +214,19 @@ namespace DuckGame
                         if (!t.removeFromLevel && t != ignore && (layer == null || layer == t.layer) && Collision.Point(pos, t))
                             return t;
                     }
-                    return (Thing)null;
+                    return null;
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
-                    return (Thing)null;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
-                    return (Thing)null;
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                    return null;
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                    return null;
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
-            return (Thing)null;
+            return null;
         }
 
         public Thing CheckPoint(Vec2 pos, System.Type typer, Thing ignore)
@@ -242,19 +242,19 @@ namespace DuckGame
                         if (!t.removeFromLevel && t != ignore && Collision.Point(pos, t))
                             return t;
                     }
-                    return (Thing)null;
+                    return null;
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
-                    return (Thing)null;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
-                    return (Thing)null;
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                    return null;
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                    return null;
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
-            return (Thing)null;
+            return null;
         }
 
         public Thing CheckPoint(Vec2 pos, System.Type typer)
@@ -270,19 +270,19 @@ namespace DuckGame
                         if (!t.removeFromLevel && Collision.Point(pos, t))
                             return t;
                     }
-                    return (Thing)null;
+                    return null;
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
-                    return (Thing)null;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
-                    return (Thing)null;
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                    return null;
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                    return null;
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
-            return (Thing)null;
+            return null;
         }
 
         public T CheckPointPlacementLayer<T>(Vec2 pos, Thing ignore = null, Layer layer = null)
@@ -301,14 +301,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
                     return default(T);
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
                     return default(T);
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -330,14 +330,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + (double)quadTree._width)
                     return default(T);
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + (double)quadTree._width)
                     return default(T);
                 index = 0;
-                if ((double)pos.x > (double)quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
                     index = 1;
-                if ((double)pos.y > (double)quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -887,7 +887,7 @@ namespace DuckGame
                     foreach (Thing t in quadTree._objects[key])
                     {
                         if (!t.removeFromLevel && Collision.Circle(p1, radius, t))
-                            outList.Add((object)(T)(object)t);
+                            outList.Add((T)(object)t);
                     }
                 }
                 else
@@ -979,12 +979,12 @@ namespace DuckGame
             Graphics.DrawRect(this._position, this._position + new Vec2(this._width, this._width), Color.Red, (Depth)1f, false);
             if (!this._split)
             {
-                Graphics.DrawString(Change.ToString((object)this._objects.Count), this._position + new Vec2(2f, 2f), Color.White, (Depth)0.9f);
-                Graphics.DrawString(Change.ToString((object)this._personalIDX), this._position + new Vec2(2f, 16f), Color.White, (Depth)0.9f, scale: 0.5f);
+                Graphics.DrawString(Change.ToString(_objects.Count), this._position + new Vec2(2f, 2f), Color.White, (Depth)0.9f);
+                Graphics.DrawString(Change.ToString(_personalIDX), this._position + new Vec2(2f, 16f), Color.White, (Depth)0.9f, scale: 0.5f);
                 foreach (Thing thing in this._objects)
                 {
                     Graphics.DrawRect(thing.rectangle, Color.Blue, (Depth)0.0f, false);
-                    Graphics.DrawString(Change.ToString((object)this._personalIDX), thing.position, Color.Green, (Depth)0.9f, scale: 0.5f);
+                    Graphics.DrawString(Change.ToString(_personalIDX), thing.position, Color.Green, (Depth)0.9f, scale: 0.5f);
                 }
             }
             if (this._depth == 0 || !this._split)

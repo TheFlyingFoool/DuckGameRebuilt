@@ -32,7 +32,7 @@ namespace DuckGame
         {
             byte val = (byte)Math.Min(this._sounds.Count, 16);
             this._serializedData.Write(val);
-            for (int index = 0; index < (int)val; ++index)
+            for (int index = 0; index < val; ++index)
                 this._serializedData.Write(this._sounds[index].sfxIndex);
         }
 
@@ -40,7 +40,7 @@ namespace DuckGame
         {
             this._sounds.Clear();
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
             {
                 NetSoundEffect netSoundEffect = NetSoundEffect.Get(d.ReadUShort());
                 if (netSoundEffect != null)

@@ -21,7 +21,7 @@ namespace DuckGame
         {
             DevConsole.Log(DCSection.DuckNet, "|DGORANGE|Level ready message(" + this.connection.levelIndex.ToString() + " -> " + this.levelIndex.ToString() + ")", this.connection);
             this.connection.levelIndex = this.levelIndex;
-            if (!Network.isServer || (int)this.levelIndex != (int)DuckNetwork.levelIndex)
+            if (!Network.isServer || levelIndex != DuckNetwork.levelIndex)
                 return;
             Level.current.ClientReady(this.connection);
         }

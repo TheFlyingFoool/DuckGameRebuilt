@@ -34,7 +34,7 @@ namespace DuckGame
         {
             if (!this.die)
             {
-                this.position = this.position + this.velocity;
+                this.position += this.velocity;
                 this.z += this.zSpeed;
             }
             else

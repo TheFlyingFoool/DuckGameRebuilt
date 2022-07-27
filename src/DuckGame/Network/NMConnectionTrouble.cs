@@ -19,9 +19,9 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.profileIndex < (byte)0 || (int)this.profileIndex >= DuckNetwork.profiles.Count)
+            if (this.profileIndex < 0 || profileIndex >= DuckNetwork.profiles.Count)
                 return;
-            Profile profile = DuckNetwork.profiles[(int)this.profileIndex];
+            Profile profile = DuckNetwork.profiles[profileIndex];
         }
     }
 }

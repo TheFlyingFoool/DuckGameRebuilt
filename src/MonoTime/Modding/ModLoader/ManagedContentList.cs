@@ -20,11 +20,11 @@ namespace DuckGame
 
         internal void Add(System.Type type) => this._types.Add(type);
 
-        internal IEnumerable<System.Type> SortedTypes => (IEnumerable<System.Type>)this._types.OrderBy<System.Type, string>((Func<System.Type, string>)(t => t.FullName));
+        internal IEnumerable<System.Type> SortedTypes => this._types.OrderBy<System.Type, string>(t => t.FullName);
 
         /// <summary>Gets the registered types.</summary>
         /// <value>The types registered.</value>
-        public IEnumerable<System.Type> Types => (IEnumerable<System.Type>)this._types;
+        public IEnumerable<System.Type> Types => _types;
 
         /// <summary>Removes a type from the type pool.</summary>
         /// <param name="type">The type.</param>

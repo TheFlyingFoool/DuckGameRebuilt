@@ -21,7 +21,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)RockWeather.lightOpacity < 0.00999999977648258 || Layer.blurry)
+            if (RockWeather.lightOpacity < 0.00999999977648258 || Layer.blurry)
                 return;
             base.Draw();
         }

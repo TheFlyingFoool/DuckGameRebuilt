@@ -55,7 +55,7 @@ namespace DuckGame
         public InputProfile Get(string name)
         {
             InputProfile inputProfile;
-            return this._profiles.TryGetValue(name, out inputProfile) ? inputProfile : (InputProfile)null;
+            return this._profiles.TryGetValue(name, out inputProfile) ? inputProfile : null;
         }
 
         public void Update()
@@ -71,10 +71,12 @@ namespace DuckGame
                 return virtualInput1;
             InputProfile virtualInput2 = this.Add("virtual" + index.ToString());
             virtualInput2.dindex = NetworkDebugger.currentIndex;
-            VirtualInput device = new VirtualInput(index);
-            device.pdraw = NetworkDebugger.currentIndex;
+            VirtualInput device = new VirtualInput(index)
+            {
+                pdraw = NetworkDebugger.currentIndex
+            };
             for (int index1 = 0; index1 < Network.synchronizedTriggers.Count; ++index1)
-                virtualInput2.Map((InputDevice)device, Network.synchronizedTriggers[index1], index1);
+                virtualInput2.Map(device, Network.synchronizedTriggers[index1], index1);
             device.availableTriggers = Network.synchronizedTriggers;
             this._virtualProfiles[index] = virtualInput2;
             return virtualInput2;

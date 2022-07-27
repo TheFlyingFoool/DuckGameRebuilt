@@ -65,7 +65,7 @@ namespace DuckGame
                 if ((double)Graphics.fade > 0.0)
                     return;
                 Main.isDemo = this._demo;
-                Level.current = (Level)new TitleScreen();
+                Level.current = new TitleScreen();
             }
             else
             {
@@ -104,18 +104,18 @@ namespace DuckGame
                 this._payScreen.depth = (Depth)0.5f;
                 this._moneyType.depth = (Depth)0.6f;
                 Graphics.Draw(this._payScreen, layer.width / 2f, layer.height / 2f);
-                Graphics.Draw((Sprite)this._moneyType, (float)((double)layer.width / 2.0 - 79.0), (float)((double)layer.height / 2.0 - 23.0));
-                string text1 = "Buy Game (" + this._currencyCharacter + this._price.ToString("0.00", (IFormatProvider)CultureInfo.InvariantCulture) + ")";
+                Graphics.Draw(_moneyType, (float)((double)layer.width / 2.0 - 79.0), (float)((double)layer.height / 2.0 - 23.0));
+                string text1 = "Buy Game (" + this._currencyCharacter + this._price.ToString("0.00", CultureInfo.InvariantCulture) + ")";
                 this._font.Draw(text1, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text1) / 2.0 + 15.0), (float)((double)layer.height / 2.0 - 18.0), Color.White, (Depth)0.8f);
                 if (this._buy)
                 {
-                    Vec2 p1 = new Vec2((float)((double)layer.width / 2.0 - (double)(this._payScreen.width / 2) + 6.0), (float)((double)layer.height / 2.0 - 25.0));
-                    Graphics.DrawRect(p1, p1 + new Vec2((float)this._payScreen.width - 11.5f, 22f), Color.White, (Depth)0.9f, false);
+                    Vec2 p1 = new Vec2((float)((double)layer.width / 2.0 - this._payScreen.width / 2 + 6.0), (float)((double)layer.height / 2.0 - 25.0));
+                    Graphics.DrawRect(p1, p1 + new Vec2(_payScreen.width - 11.5f, 22f), Color.White, (Depth)0.9f, false);
                 }
                 else
                 {
-                    Vec2 p1 = new Vec2((float)((double)layer.width / 2.0 - (double)(this._payScreen.width / 2) + 6.0), (float)((double)layer.height / 2.0 + 3.0));
-                    Graphics.DrawRect(p1, p1 + new Vec2((float)this._payScreen.width - 11.5f, 22f), Color.White, (Depth)0.9f, false);
+                    Vec2 p1 = new Vec2((float)((double)layer.width / 2.0 - this._payScreen.width / 2 + 6.0), (float)((double)layer.height / 2.0 + 3.0));
+                    Graphics.DrawRect(p1, p1 + new Vec2(_payScreen.width - 11.5f, 22f), Color.White, (Depth)0.9f, false);
                 }
                 string text2 = "PLAY DEMO";
                 this._font.Draw(text2, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text2) / 2.0 + 12.0), (float)((double)layer.height / 2.0 + 10.0), Color.White, (Depth)0.8f);

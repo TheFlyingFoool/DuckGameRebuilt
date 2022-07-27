@@ -22,7 +22,7 @@ namespace DuckGame
         public CityBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 5
             };
@@ -68,7 +68,7 @@ namespace DuckGame
             this._parallax.AddZone(28, distance, speed);
             this._parallax.AddZone(29, distance, speed);
             this.layer = Layer.Parallax;
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
             if (Rando.Int(200) == 0)
                 this.RandomSkySay();
             this._visibleInGame = true;
@@ -103,7 +103,7 @@ namespace DuckGame
                 flag = pFlyLeft;
             }
             else if (Network.isActive && Network.isServer)
-                Send.Message((NetMessage)new NMSkySay(text, vec2, flag));
+                Send.Message(new NMSkySay(text, vec2, flag));
             foreach (string text1 in stringList)
             {
                 CityBackground.Plane plane = new CityBackground.Plane(vec2, text1, flag);
@@ -173,11 +173,11 @@ namespace DuckGame
         {
             foreach (CityBackground.Plane plane in this._planes)
                 plane.UpdateFlying();
-            this._planes.RemoveAll((Predicate<CityBackground.Plane>)(x => x.finished));
+            this._planes.RemoveAll(x => x.finished);
             if (!Network.isActive || Network.isServer)
             {
                 this.timeSinceSkySay += Maths.IncFrameTimer();
-                if ((double)this.timeSinceSkySay > 30.0 && this._planes.Count == 0)
+                if (timeSinceSkySay > 30.0 && this._planes.Count == 0)
                 {
                     if ((double)Rando.Float(1f) > 0.5)
                         this.RandomSkySay();
@@ -198,34 +198,36 @@ namespace DuckGame
             }
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
 
         private class Plane : SpriteMap
         {
             private FancyBitmapFont _font;
             private RenderTarget2D bannerTarget;
             private MaterialWiggle _wiggle;
-            private float originalY;
-            private string _text = "";
+            //private float originalY;
+            //private string _text = "";
             private bool _flyLeft;
             public bool finished;
 
-            public float textWidth => this.bannerTarget != null ? (float)this.bannerTarget.width : 1f;
+            public float textWidth => this.bannerTarget != null ? bannerTarget.width : 1f;
 
             public Plane(Vec2 pos, string text, bool flyLeft)
               : base("plane", 18, 13)
             {
                 this._font = new FancyBitmapFont("smallFont");
                 this._flyLeft = flyLeft;
-                this._text = text;
-                this.originalY = pos.y;
+                //this._text = text;
+                //this.originalY = pos.y;
                 this.position = pos;
                 this.AddAnimation("idle", 0.8f, true, 0, 1);
                 this.SetAnimation("idle");
                 this.bannerTarget = new RenderTarget2D((int)((double)this._font.GetWidth(text) + 4.0) + 8, 15);
-                this._wiggle = new MaterialWiggle((Sprite)this);
-                Camera camera = new Camera(0.0f, 0.0f, (float)this.bannerTarget.width, (float)this.bannerTarget.height);
-                camera.position = Vec2.Zero;
+                this._wiggle = new MaterialWiggle(this);
+                Camera camera = new Camera(0.0f, 0.0f, bannerTarget.width, bannerTarget.height)
+                {
+                    position = Vec2.Zero
+                };
                 DuckGame.Graphics.SetRenderTarget(this.bannerTarget);
                 DepthStencilState depthStencilState = new DepthStencilState()
                 {
@@ -236,19 +238,19 @@ namespace DuckGame
                     DepthBufferEnable = false
                 };
                 DuckGame.Graphics.Clear(Color.Transparent);
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
-                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 2f), new Vec2((float)(this.bannerTarget.width - 8), (float)(this.bannerTarget.height - 2)), Color.Black);
+                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
+                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 2f), new Vec2(this.bannerTarget.width - 8, this.bannerTarget.height - 2), Color.Black);
                 this._font.Draw(text, new Vec2(1f, 3f), new Color(47, 0, 66), (Depth)1f);
                 DuckGame.Graphics.screen.End();
-                DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                DuckGame.Graphics.SetRenderTarget(null);
             }
 
             public void UpdateFlying()
             {
                 this.position.x += this._flyLeft ? -0.25f : 0.25f;
-                if (this.bannerTarget != null && (this._flyLeft && (double)this.x < (double)-(400 + this.bannerTarget.width) || !this._flyLeft && (double)this.x > (double)(400 + this.bannerTarget.width)))
+                if (this.bannerTarget != null && (this._flyLeft && (double)this.x < -(400 + this.bannerTarget.width) || !this._flyLeft && (double)this.x > 400 + this.bannerTarget.width))
                     this.finished = true;
-                double num = -((double)Level.current.bottomRight.y + (double)Level.current.topLeft.y) / 2.0;
+                double num = -(Level.current.bottomRight.y + (double)Level.current.topLeft.y) / 2.0;
             }
 
             public override void Draw()
@@ -260,16 +262,16 @@ namespace DuckGame
                 {
                     this.flipH = true;
                     base.Draw();
-                    DuckGame.Graphics.material = (Material)this._wiggle;
-                    DuckGame.Graphics.Draw((Tex2D)this.bannerTarget, this.x + 4f, this.y, 0.5f, 0.5f, (Depth)1f);
-                    DuckGame.Graphics.material = (Material)null;
+                    DuckGame.Graphics.material = _wiggle;
+                    DuckGame.Graphics.Draw(bannerTarget, this.x + 4f, this.y, 0.5f, 0.5f, (Depth)1f);
+                    DuckGame.Graphics.material = null;
                 }
                 else
                 {
                     base.Draw();
-                    DuckGame.Graphics.material = (Material)this._wiggle;
-                    DuckGame.Graphics.Draw((Tex2D)this.bannerTarget, this.x - (float)(this.bannerTarget.width / 2 + 4), this.y, 0.5f, 0.5f, (Depth)1f);
-                    DuckGame.Graphics.material = (Material)null;
+                    DuckGame.Graphics.material = _wiggle;
+                    DuckGame.Graphics.Draw(bannerTarget, this.x - (this.bannerTarget.width / 2 + 4), this.y, 0.5f, 0.5f, (Depth)1f);
+                    DuckGame.Graphics.material = null;
                 }
             }
         }

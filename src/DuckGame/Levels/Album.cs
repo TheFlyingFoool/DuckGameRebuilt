@@ -23,7 +23,7 @@ namespace DuckGame
         private int _prevPage = -1;
         private Sprite _album;
         private Sprite _screen;
-        private Material _pageMaterial;
+        //private Material _pageMaterial;
         private BitmapFont _font;
         private List<LockerStat> _stats = new List<LockerStat>();
         private bool _quit;
@@ -34,7 +34,7 @@ namespace DuckGame
         {
             this._album = new Sprite("album");
             this._screen = new Sprite("albumpic");
-            this._pageMaterial = (Material)new MaterialAlbum();
+            //this._pageMaterial = (Material)new MaterialAlbum();
             this._font = new BitmapFont("biosFont", 8);
             this._stats.Add(new LockerStat("QUACKS: " + Global.data.quacks.valueInt.ToString(), Color.DarkSlateGray));
             this._stats.Add(new LockerStat("", Color.Red));
@@ -46,7 +46,7 @@ namespace DuckGame
             {
                 try
                 {
-                    DateTime dateTime = DateTime.Parse(Path.GetFileNameWithoutExtension(file).Replace(';', ':'), (IFormatProvider)CultureInfo.InvariantCulture);
+                    DateTime dateTime = DateTime.Parse(Path.GetFileNameWithoutExtension(file).Replace(';', ':'), CultureInfo.InvariantCulture);
                     this._images.Add(new AlbumPic()
                     {
                         file = file,
@@ -62,31 +62,37 @@ namespace DuckGame
                 caption = "LIFETIME STATS",
                 statPage = true
             });
-            this._images = this._images.OrderBy<AlbumPic, DateTime>((Func<AlbumPic, DateTime>)(x => x.date)).ToList<AlbumPic>();
-            AlbumPage albumPage = (AlbumPage)null;
+            this._images = this._images.OrderBy<AlbumPic, DateTime>(x => x.date).ToList<AlbumPic>();
+            AlbumPage albumPage = null;
             int num = 1;
             foreach (AlbumPic image in this._images)
             {
-                string str = image.date.ToString("MMMM", (IFormatProvider)CultureInfo.InvariantCulture) + " " + image.date.Year.ToString();
+                string str = image.date.ToString("MMMM", CultureInfo.InvariantCulture) + " " + image.date.Year.ToString();
                 if (albumPage == null)
                 {
                     num = 1;
-                    albumPage = new AlbumPage();
-                    albumPage.caption = str;
+                    albumPage = new AlbumPage
+                    {
+                        caption = str
+                    };
                     this._pages.Add(albumPage);
                 }
                 if (!albumPage.caption.Contains(str))
                 {
                     num = 1;
-                    albumPage = new AlbumPage();
-                    albumPage.caption = str;
+                    albumPage = new AlbumPage
+                    {
+                        caption = str
+                    };
                     this._pages.Add(albumPage);
                 }
                 if (albumPage.pics.Count == 4)
                 {
                     ++num;
-                    albumPage = new AlbumPage();
-                    albumPage.caption = str + " (" + num.ToString() + ")";
+                    albumPage = new AlbumPage
+                    {
+                        caption = str + " (" + num.ToString() + ")"
+                    };
                     this._pages.Add(albumPage);
                 }
                 albumPage.pics.Add(image);
@@ -122,7 +128,7 @@ namespace DuckGame
                         {
                             Texture2D texture2D;
                             using (FileStream fileStream = new FileStream(pic.file, FileMode.Open))
-                                texture2D = Texture2D.FromStream(DuckGame.Graphics.device, (Stream)fileStream);
+                                texture2D = Texture2D.FromStream(DuckGame.Graphics.device, fileStream);
                             this._textures.Add(texture2D);
                         }
                         catch (Exception)
@@ -139,7 +145,7 @@ namespace DuckGame
             DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, this._quit ? 0.0f : 1f, 0.05f);
             if ((double)DuckGame.Graphics.fade >= 0.00999999977648258 || !this._quit)
                 return;
-            Level.current = (Level)new DoorRoom();
+            Level.current = new DoorRoom();
         }
 
         public override void Draw() => base.Draw();
@@ -159,7 +165,7 @@ namespace DuckGame
                         int num = 0;
                         foreach (LockerStat stat in this._stats)
                         {
-                            Vec2 vec2 = new Vec2(160f, (float)(40 + num * 10));
+                            Vec2 vec2 = new Vec2(160f, 40 + num * 10);
                             string name = stat.name;
                             DuckGame.Graphics.DrawString(name, vec2 + new Vec2((float)(-(double)DuckGame.Graphics.GetStringWidth(name) / 2.0), 0.0f), stat.color, (Depth)0.5f);
                             ++num;
@@ -177,17 +183,17 @@ namespace DuckGame
                                     {
                                         Vec2 vec2_1 = new Vec2(52f, 35f);
                                         float num = 0.3f;
-                                        Vec2 vec2_2 = new Vec2(vec2_1.x + (float)(index3 * 110), vec2_1.y + (float)(index2 * 65));
+                                        Vec2 vec2_2 = new Vec2(vec2_1.x + index3 * 110, vec2_1.y + index2 * 65);
                                         DuckGame.Graphics.Draw((Tex2D)this._textures[index1], vec2_2.x, vec2_2.y, num, num);
-                                        DuckGame.Graphics.DrawRect(vec2_2 + new Vec2(-3f, -3f), vec2_2 + new Vec2((float)((double)this._textures[index1].Width * (double)num + 3.0), (float)((double)this._textures[index1].Height * (double)num + 3.0)), Color.White, - 0.7f);
+                                        DuckGame.Graphics.DrawRect(vec2_2 + new Vec2(-3f, -3f), vec2_2 + new Vec2((float)(_textures[index1].Width * (double)num + 3.0), (float)(_textures[index1].Height * (double)num + 3.0)), Color.White, - 0.7f);
                                     }
                                     else
                                     {
                                         Vec2 vec2_3 = new Vec2(65f, 40f);
                                         float num = 0.25f;
-                                        Vec2 vec2_4 = new Vec2(vec2_3.x + (float)(index3 * 100), vec2_3.y + (float)(index2 * 65));
+                                        Vec2 vec2_4 = new Vec2(vec2_3.x + index3 * 100, vec2_3.y + index2 * 65);
                                         DuckGame.Graphics.Draw((Tex2D)this._textures[index1], vec2_4.x, vec2_4.y, num, num);
-                                        DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-3f, -3f), vec2_4 + new Vec2((float)((double)this._textures[index1].Width * (double)num + 3.0), (float)((double)this._textures[index1].Height * (double)num + 3.0)), Color.White, - 0.7f);
+                                        DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-3f, -3f), vec2_4 + new Vec2((float)(_textures[index1].Width * (double)num + 3.0), (float)(_textures[index1].Height * (double)num + 3.0)), Color.White, - 0.7f);
                                     }
                                 }
                                 ++index1;

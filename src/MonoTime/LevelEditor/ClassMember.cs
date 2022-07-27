@@ -28,9 +28,9 @@ namespace DuckGame
 
         public string name => this._name;
 
-        public System.Type type => this._fieldInfo != (FieldInfo)null ? this._fieldInfo.FieldType : this._propertyInfo.PropertyType;
+        public System.Type type => this._fieldInfo != null ? this._fieldInfo.FieldType : this._propertyInfo.PropertyType;
 
-        public bool isConst => this._fieldInfo != (FieldInfo)null && this._fieldInfo.IsLiteral && !this._fieldInfo.IsInitOnly;
+        public bool isConst => this._fieldInfo != null && this._fieldInfo.IsLiteral && !this._fieldInfo.IsInitOnly;
 
         public bool hasGetterAndSetter
         {
@@ -53,12 +53,12 @@ namespace DuckGame
         {
             if (this._accessor == null)
             {
-                if (this._fieldInfo != (FieldInfo)null)
+                if (this._fieldInfo != null)
                 {
                     string name = this._fieldInfo.Name;
                     System.Type fieldType = this._fieldInfo.FieldType;
                 }
-                if (this._propertyInfo != (PropertyInfo)null)
+                if (this._propertyInfo != null)
                 {
                     string name = this._propertyInfo.Name;
                     System.Type propertyType = this._propertyInfo.PropertyType;

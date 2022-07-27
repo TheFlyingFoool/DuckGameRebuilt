@@ -15,14 +15,16 @@ namespace DuckGame
         public override void Initialize()
         {
             this.camera.x = 480f;
-            UIMenu menu = new UIMenu("MULTIPLAYER", (float)Graphics.width / 2f, (float)Graphics.height / 2f, 160f);
-            menu.scale = new Vec2(4f);
-            menu.Add((UIComponent)new UIMenuItemNumber("ROUNDS PER SET", field: new FieldBinding((object)this, "roundsPerSet", max: 50f)), true);
-            menu.Add((UIComponent)new UIMenuItemNumber("SETS PER GAME", field: new FieldBinding((object)this, "setsPerGame", max: 50f)), true);
-            menu.Add((UIComponent)new UIText(" ", Color.White), true);
-            menu.Add((UIComponent)new UIMenuItem("START", (UIMenuAction)new UIMenuActionChangeLevel((UIComponent)menu, (Level)new TeamSelect2())), true);
-            menu.Add((UIComponent)new UIMenuItem("BACK", (UIMenuAction)new UIMenuActionChangeLevel((UIComponent)menu, (Level)new TitleScreen())), true);
-            Level.Add((Thing)menu);
+            UIMenu menu = new UIMenu("MULTIPLAYER", Graphics.width / 2f, Graphics.height / 2f, 160f)
+            {
+                scale = new Vec2(4f)
+            };
+            menu.Add(new UIMenuItemNumber("ROUNDS PER SET", field: new FieldBinding(this, "roundsPerSet", max: 50f)), true);
+            menu.Add(new UIMenuItemNumber("SETS PER GAME", field: new FieldBinding(this, "setsPerGame", max: 50f)), true);
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("START", new UIMenuActionChangeLevel(menu, new TeamSelect2())), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionChangeLevel(menu, new TitleScreen())), true);
+            Level.Add(menu);
             base.Initialize();
         }
 

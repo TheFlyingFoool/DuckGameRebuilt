@@ -17,6 +17,6 @@ namespace DuckGame
     /// </summary>
     internal class DefaultContentManager : IManageContent
     {
-        public IEnumerable<System.Type> Compile<T>(Mod mod) => ((IEnumerable<System.Type>)mod.configuration.assembly.GetTypes()).Where<System.Type>((Func<System.Type, bool>)(type => type.IsSubclassOf(typeof(T))));
+        public IEnumerable<System.Type> Compile<T>(Mod mod) => mod.configuration.assembly.GetTypes().Where<System.Type>(type => type.IsSubclassOf(typeof(T)));
     }
 }

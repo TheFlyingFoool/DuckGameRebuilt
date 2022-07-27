@@ -106,8 +106,8 @@ namespace DuckGame
 
         public static int SortSaleDayFurniture(Furniture t1, Furniture t2)
         {
-            float num1 = Rando.Float(1f) - (float)Profiles.experienceProfile.GetNumFurnitures((int)t1.index) * 1f;
-            float num2 = Rando.Float(1f) - (float)Profiles.experienceProfile.GetNumFurnitures((int)t2.index) * 1f;
+            float num1 = Rando.Float(1f) - Profiles.experienceProfile.GetNumFurnitures(t1.index) * 1f;
+            float num2 = Rando.Float(1f) - Profiles.experienceProfile.GetNumFurnitures(t2.index) * 1f;
             if ((double)num1 > (double)num2)
                 return 1;
             return (double)num1 < (double)num2 ? -1 : 0;
@@ -250,10 +250,10 @@ namespace DuckGame
                         Vincent.Add("|CONCERNED|If something catches my eye I'll try to buy it from you..");
                         Vincent.Add("|POINT|So!");
                     }
-                    List<Furniture> list1 = Profiles.experienceProfile.GetAvailableFurnis().Where<Furniture>((Func<Furniture, bool>)(x => Profiles.experienceProfile.GetNumFurnitures((int)x.index) > Profiles.experienceProfile.GetNumFurnituresPlaced((int)x.index) && x.group != Furniture.Momento && x.group != Furniture.Default)).ToList<Furniture>();
+                    List<Furniture> list1 = Profiles.experienceProfile.GetAvailableFurnis().Where<Furniture>(x => Profiles.experienceProfile.GetNumFurnitures(x.index) > Profiles.experienceProfile.GetNumFurnituresPlaced(x.index) && x.group != Furniture.Momento && x.group != Furniture.Default).ToList<Furniture>();
                     if (list1.Count<Furniture>() > 0)
                     {
-                        List<Furniture> list2 = list1.OrderBy<Furniture, float>((Func<Furniture, float>)(x => Rando.Float(1f) - Math.Min((float)Profiles.experienceProfile.GetNumFurnitures((int)x.index) / 10f, 1f) * 0.5f)).ToList<Furniture>();
+                        List<Furniture> list2 = list1.OrderBy<Furniture, float>(x => Rando.Float(1f) - Math.Min(Profiles.experienceProfile.GetNumFurnitures(x.index) / 10f, 1f) * 0.5f).ToList<Furniture>();
                         int num = Rando.Int(3);
                         Vincent.products.Clear();
                         VincentProduct vincentProduct = new VincentProduct()
@@ -262,9 +262,9 @@ namespace DuckGame
                             furnitureData = list2.First<Furniture>()
                         };
                         vincentProduct.originalCost = vincentProduct.furnitureData.price;
-                        vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 2.5);
+                        vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5);
                         if ((double)Rando.Float(1f) > 0.949999988079071)
-                            vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 4.0);
+                            vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4.0);
                         if (vincentProduct.furnitureData.name == "ROUND TABLE" && (double)Rando.Float(1f) > 0.5)
                         {
                             Vincent.Add("|POINT|Oh baby, is that one of them ROUND tables??");
@@ -511,7 +511,7 @@ namespace DuckGame
             300,
             500
           }.Contains(Profiles.experienceProfile.timesMetVincent);
-                    if (Profiles.experienceProfile.timesMetVincent >= 19 && Profiles.experienceProfile.GetNumFurnitures((int)RoomEditor.GetFurniture("YOYO").index) <= 0)
+                    if (Profiles.experienceProfile.timesMetVincent >= 19 && Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("YOYO").index) <= 0)
                     {
                         Vincent._willGiveYoYo = true;
                         Vincent.Add("|CONCERNED|You know what? |CALM|You're my best customer.");
@@ -520,7 +520,7 @@ namespace DuckGame
                         Vincent.Add("|POINT|Now then, |SHOW|Here's what I got!");
                         Vincent.hasKid = false;
                     }
-                    else if (Profiles.experienceProfile.numLittleMen > 0 && Profiles.experienceProfile.GetNumFurnitures((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) <= 0)
+                    else if (Profiles.experienceProfile.numLittleMen > 0 && Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("VOODOO VINCENT").index) <= 0)
                     {
                         Vincent._willGiveVooDoo = true;
                         Vincent.Add("|CONCERNED|Hey, I've got something special for you today..");
@@ -531,7 +531,7 @@ namespace DuckGame
                         Vincent.Add("|POINT|Now then, |SHOW|Here's what I've got for today!");
                         Vincent.hasKid = false;
                     }
-                    else if (UILevelBox.currentLevel > 2 && Profiles.experienceProfile.punished >= 10 && Profiles.experienceProfile.GetNumFurnitures((int)RoomEditor.GetFurniture("PERIMETER DEFENCE").index) <= 0)
+                    else if (UILevelBox.currentLevel > 2 && Profiles.experienceProfile.punished >= 10 && Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("PERIMETER DEFENCE").index) <= 0)
                     {
                         Vincent._willGivePerimeterDefence = true;
                         Vincent.Add("|CONCERNED|Hey.. I noticed other Ducks have been comin' into your room and givin' you a hard time.");
@@ -655,12 +655,14 @@ namespace DuckGame
                         while (enumerator.MoveNext())
                         {
                             Furniture current = enumerator.Current;
-                            VincentProduct vincentProduct = new VincentProduct();
-                            vincentProduct.type = VPType.Furniture;
-                            vincentProduct.furnitureData = current;
+                            VincentProduct vincentProduct = new VincentProduct
+                            {
+                                type = VPType.Furniture,
+                                furnitureData = current
+                            };
                             if (Rando.Int(120) == 0)
                             {
-                                vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 0.5);
+                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 0.5);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             }
                             else
@@ -681,7 +683,7 @@ namespace DuckGame
             Teams.GetTeam("TWINTAIL"),
             Teams.GetTeam("HIGHFIVES"),
             Teams.GetTeam("MOTHERS")
-          }.Where<Team>((Func<Team, bool>)(x => !Global.boughtHats.Contains(x.name)));
+          }.Where<Team>(x => !Global.boughtHats.Contains(x.name));
                     if (source.Count<Team>() <= 0)
                     {
                         using (List<Furniture>.Enumerator enumerator = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f).GetEnumerator())
@@ -694,7 +696,7 @@ namespace DuckGame
                                     type = VPType.Furniture,
                                     furnitureData = current
                                 };
-                                vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 0.5);
+                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 0.5);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                                 Vincent.products.Add(vincentProduct);
                             }
@@ -723,32 +725,34 @@ namespace DuckGame
                                 type = VPType.Furniture,
                                 furnitureData = current
                             };
-                            vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 0.5);
+                            vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 0.5);
                             vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             Vincent.products.Add(vincentProduct);
                         }
                         break;
                     }
                 case DayType.ImportDay:
-                    IOrderedEnumerable<Furniture> orderedEnumerable = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 8, 0.4f, avoidDupes: true).OrderBy<Furniture, int>((Func<Furniture, int>)(x => -x.rarity));
+                    IOrderedEnumerable<Furniture> orderedEnumerable = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 8, 0.4f, avoidDupes: true).OrderBy<Furniture, int>(x => -x.rarity);
                     int num = 0;
                     using (IEnumerator<Furniture> enumerator = orderedEnumerable.GetEnumerator())
                     {
                         while (enumerator.MoveNext())
                         {
                             Furniture current = enumerator.Current;
-                            VincentProduct vincentProduct = new VincentProduct();
-                            vincentProduct.type = VPType.Furniture;
-                            vincentProduct.furnitureData = current;
+                            VincentProduct vincentProduct = new VincentProduct
+                            {
+                                type = VPType.Furniture,
+                                furnitureData = current
+                            };
                             if (Rando.Int(50) == 0)
                             {
                                 vincentProduct.furnitureData = UIGachaBox.GetRandomFurniture(Rarity.SuperRare, 1, 0.3f)[0];
-                                vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 2.0);
+                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.0);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             }
                             else
                             {
-                                vincentProduct.cost = (int)((double)vincentProduct.furnitureData.price * 1.5);
+                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 1.5);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             }
                             Vincent.products.Add(vincentProduct);
@@ -804,7 +808,7 @@ namespace DuckGame
             {
                 if (Vincent._soldSelectIndex == Vincent._selectIndex)
                 {
-                    if (Vincent.products.Where<VincentProduct>((Func<VincentProduct, bool>)(x => !x.sold)).Count<VincentProduct>() == 0)
+                    if (Vincent.products.Where<VincentProduct>(x => !x.sold).Count<VincentProduct>() == 0)
                     {
                         Vincent.Add("|CONCERNED|WOAH...");
                         Vincent.Add("|POINT|YOU BOUGHT EVERYTHING!");
@@ -872,9 +876,9 @@ namespace DuckGame
             if (UILevelBox.menuOpen)
                 return;
             Vincent._showLerp = Lerp.FloatSmooth(Vincent._showLerp, Vincent.show ? 1f : 0.0f, 0.09f, 1.05f);
-            bool flag1 = Vincent.lookingAtList && (double)Vincent._challengeLerp < 0.300000011920929;
-            bool flag2 = Vincent.lookingAtChallenge && (double)Vincent._listLerp < 0.300000011920929;
-            bool flag3 = FurniShopScreen.open && (double)Vincent._listLerp < 0.300000011920929;
+            bool flag1 = Vincent.lookingAtList && _challengeLerp < 0.300000011920929;
+            bool flag2 = Vincent.lookingAtChallenge && _listLerp < 0.300000011920929;
+            bool flag3 = FurniShopScreen.open && _listLerp < 0.300000011920929;
             Vincent._listLerp = Lerp.FloatSmooth(Vincent._listLerp, flag1 ? 1f : 0.0f, 0.2f, 1.05f);
             Vincent._challengeLerp = Lerp.FloatSmooth(Vincent._challengeLerp, flag2 ? 1f : 0.0f, 0.2f, 1.05f);
             Vincent._chancyLerp = Lerp.FloatSmooth(Vincent._chancyLerp, flag3 ? 1f : 0.0f, 0.2f, 1.05f);
@@ -885,13 +889,13 @@ namespace DuckGame
             {
                 Vincent.openedCorners = true;
                 HUD.ClearCorners();
-                if (Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
+                if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
                 {
                     HUD.AddCornerControl(HUDCorner.TopLeft, "@START@SKIP");
                     HUD.AddCornerMessage(HUDCorner.BottomLeft, "@CANCEL@DITCH");
                 }
             }
-            if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
+            if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
             {
                 DuckGame.Graphics.fadeAdd = 1f;
                 SFX.skip = false;
@@ -990,7 +994,7 @@ namespace DuckGame
                         HUD.AddCornerMessage(HUDCorner.BottomMiddle, "|YELLOW|$" + Profiles.experienceProfile.littleManBucks.ToString());
                         if (Vincent.products[Vincent._selectIndex].furnitureData == null)
                             return;
-                        HUD.AddCornerMessage(HUDCorner.BottomRight, "|DGBLUE|HAVE " + Profiles.experienceProfile.GetNumFurnitures((int)Vincent.products[Vincent._selectIndex].furnitureData.index).ToString());
+                        HUD.AddCornerMessage(HUDCorner.BottomRight, "|DGBLUE|HAVE " + Profiles.experienceProfile.GetNumFurnitures(products[_selectIndex].furnitureData.index).ToString());
                         return;
                     }
                     if (Vincent._selectDescIndex != Vincent._selectIndex)
@@ -1007,7 +1011,7 @@ namespace DuckGame
                                 Vincent.ChangeSpeech();
                             num1 = Profiles.experienceProfile.littleManBucks;
                             HUD.AddCornerMessage(HUDCorner.BottomMiddle, "|YELLOW|$" + num1.ToString());
-                            int num2 = Vincent.products[Vincent._selectIndex].furnitureData != null ? Profiles.experienceProfile.GetNumFurnitures((int)Vincent.products[Vincent._selectIndex].furnitureData.index) : 0;
+                            int num2 = Vincent.products[Vincent._selectIndex].furnitureData != null ? Profiles.experienceProfile.GetNumFurnitures(products[_selectIndex].furnitureData.index) : 0;
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 if (Vincent.products[Vincent._selectIndex].sold)
@@ -1041,19 +1045,19 @@ namespace DuckGame
                 bool flag4 = !Vincent._allowMovement && Input.Down("SELECT");
                 if (Vincent._lines.Count > 0 && Vincent._currentLine == "")
                 {
-                    int num3 = (double)Vincent._waitAfterLine <= 0.0 ? 1 : 0;
+                    int num3 = _waitAfterLine <= 0.0 ? 1 : 0;
                     Vincent._waitAfterLine -= 0.045f;
                     if (flag4)
                         Vincent._waitAfterLine -= 0.045f;
                     if (Vincent.killSkip)
                         Vincent._waitAfterLine -= 0.1f;
                     Vincent._talkMove += 0.75f;
-                    if ((double)Vincent._talkMove > 1.0)
+                    if (_talkMove > 1.0)
                     {
                         Vincent.frame = 0;
                         Vincent._talkMove = 0.0f;
                     }
-                    if (num3 == 0 && (double)Vincent._waitAfterLine <= 0.0)
+                    if (num3 == 0 && _waitAfterLine <= 0.0)
                         HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                     if (Vincent._lineProgress.Count == 0 || Input.Pressed("SELECT"))
                     {
@@ -1071,12 +1075,12 @@ namespace DuckGame
                     Vincent._waitLetter -= 0.9f;
                     if (flag4)
                         Vincent._waitLetter -= 1.8f;
-                    if ((double)Vincent._waitLetter < 0.0)
+                    if (_waitLetter < 0.0)
                     {
                         Vincent._talkMove += 0.75f;
-                        if ((double)Vincent._talkMove > 1.0)
+                        if (_talkMove > 1.0)
                         {
-                            Vincent.frame = Vincent._currentLine[0] == ' ' || Vincent.frame != 1 || (double)Vincent._extraWait > 0.0 ? 1 : 2;
+                            Vincent.frame = Vincent._currentLine[0] == ' ' || Vincent.frame != 1 || _extraWait > 0.0 ? 1 : 2;
                             Vincent._talkMove = 0.0f;
                         }
                         Vincent._waitLetter = 1f;
@@ -1289,11 +1293,11 @@ namespace DuckGame
                     if (Vincent.show)
                     {
                         Vincent._afterShowWait += 0.12f;
-                        if ((double)Vincent._afterShowWait >= 1.0)
+                        if (_afterShowWait >= 1.0)
                             Vincent._allowMovement = true;
                     }
                     Vincent._talkMove += 0.75f;
-                    if ((double)Vincent._talkMove > 1.0)
+                    if (_talkMove > 1.0)
                     {
                         Vincent.frame = 0;
                         Vincent._talkMove = 0.0f;
@@ -1317,23 +1321,23 @@ namespace DuckGame
                         DepthBufferEnable = false
                     };
                     DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
+                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
                     num1 = Math.Min(Math.Max(Vincent.products[index].cost, 0), 9999);
                     string text = "$" + num1.ToString();
                     Vincent._furniTag.frame = text.Length - 1;
-                    Vincent._priceFontRightways.Draw(text, new Vec2((float)((double)(5 - text.Length) / 5.0 * 20.0), 0.0f), Vincent.products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
+                    Vincent._priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5.0 * 20.0), 0.0f), Vincent.products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
                     DuckGame.Graphics.screen.End();
-                    DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                    DuckGame.Graphics.SetRenderTarget(null);
                 }
             }
         }
 
         public static void Draw()
         {
-            Vec2 vec2_1 = new Vec2((float)((double)Vincent._listLerp * 270.0 - 200.0), 20f);
-            if ((double)Vincent._challengeLerp < 0.00999999977648258 && (double)Vincent._chancyLerp < 0.00999999977648258)
+            Vec2 vec2_1 = new Vec2((float)(_listLerp * 270.0 - 200.0), 20f);
+            if (_challengeLerp < 0.00999999977648258 && _chancyLerp < 0.00999999977648258)
                 return;
-            Vec2 vec2_2 = new Vec2((float)(100.0 * (1.0 - (double)Vincent._chancyLerp)), (float)(100.0 * (1.0 - (double)Vincent._chancyLerp) - 4.0));
+            Vec2 vec2_2 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
             Vec2 vec2_3 = new Vec2(280f, 30f);
             Vec2 vec2_4 = new Vec2(20f, 132f) + vec2_2;
             DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-2f, 0.0f), vec2_4 + vec2_3 + new Vec2(2f, 0.0f), Color.Black, (Depth)0.96f);
@@ -1341,12 +1345,12 @@ namespace DuckGame
             for (int index1 = Vincent._lineProgress.Count - 1; index1 >= 0; --index1)
             {
                 float stringWidth = DuckGame.Graphics.GetStringWidth(Vincent._lineProgress[index1].text);
-                float y = vec2_4.y + 2f + (float)(num * 9);
-                float x = (float)((double)vec2_4.x + (double)vec2_3.x / 2.0 - (double)stringWidth / 2.0);
+                float y = vec2_4.y + 2f + num * 9;
+                float x = (float)(vec2_4.x + vec2_3.x / 2.0 - (double)stringWidth / 2.0);
                 for (int index2 = Vincent._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     Vincent._descriptionFont.Draw(Vincent._lineProgress[index1].segments[index2].text, new Vec2(x, y), Vincent._lineProgress[index1].segments[index2].color, (Depth)0.97f);
-                    x += (float)(Vincent._lineProgress[index1].segments[index2].text.Length * 8);
+                    x += Vincent._lineProgress[index1].segments[index2].text.Length * 8;
                 }
                 ++num;
             }
@@ -1356,18 +1360,18 @@ namespace DuckGame
                 Vincent._dealer.frame += 9;
             Vincent._dealer.depth = (Depth)0.96f;
             Vincent._dealer.alpha = Vincent.alpha;
-            DuckGame.Graphics.Draw((Sprite)Vincent._dealer, 200f + vec2_2.x, 26f + vec2_2.y);
+            DuckGame.Graphics.Draw(_dealer, 200f + vec2_2.x, 26f + vec2_2.y);
             switch (Vincent.type)
             {
                 case DayType.SaleDay:
                     Vincent._bigBanner.depth = (Depth)0.96f;
-                    DuckGame.Graphics.Draw(Vincent._bigBanner, 22f, (float)((double)Vincent._showLerp * 100.0 - 80.0));
-                    DuckGame.Graphics.Draw(Vincent._bigBanner, 194f, (float)((double)Vincent._showLerp * 100.0 - 80.0));
+                    DuckGame.Graphics.Draw(Vincent._bigBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
+                    DuckGame.Graphics.Draw(Vincent._bigBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
                     break;
                 case DayType.ImportDay:
                     Vincent._fancyBanner.depth = (Depth)0.96f;
-                    DuckGame.Graphics.Draw(Vincent._fancyBanner, 22f, (float)((double)Vincent._showLerp * 100.0 - 80.0));
-                    DuckGame.Graphics.Draw(Vincent._fancyBanner, 194f, (float)((double)Vincent._showLerp * 100.0 - 80.0));
+                    DuckGame.Graphics.Draw(Vincent._fancyBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
+                    DuckGame.Graphics.Draw(Vincent._fancyBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
                     break;
             }
             Vincent._furniFrame.alpha = Vincent.alpha;
@@ -1390,7 +1394,7 @@ namespace DuckGame
             if (Vincent.products.Count > 0)
             {
                 int index3 = 0;
-                Vec2 pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * (float)(200 + 40 * index3), 200f), vec2_5.y);
+                Vec2 pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * (200 + 40 * index3), 200f), vec2_5.y);
                 if (Vincent.products.Count == 1)
                     pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * 275f, 240f), vec2_5.y + 30f);
                 DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
@@ -1400,7 +1404,7 @@ namespace DuckGame
                 {
                     flag1 = true;
                     val1_1 = Vincent.products[0].originalCost;
-                    DuckGame.Graphics.Draw((Tex2D)Vincent._priceTargets[0], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                    DuckGame.Graphics.Draw(Vincent._priceTargets[0], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
                     DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
                 }
                 Vincent._furniFill.color = Vincent.products[index3].color;
@@ -1411,12 +1415,12 @@ namespace DuckGame
                 if (Vincent.products[index3].type == VPType.Furniture && Vincent.products[index3].furnitureData.rarity >= Rarity.SuperRare)
                 {
                     Vincent._rareSticker.frame = index3 == Vincent._selectIndex ? 1 : 0;
-                    DuckGame.Graphics.Draw((Sprite)Vincent._rareSticker, pos.x - 23f, pos.y - 19f);
+                    DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                 }
-                else if (Vincent.products[index3].type == VPType.Hat || !Vincent.products[index3].sold && Profiles.experienceProfile.GetNumFurnitures((int)Vincent.products[index3].furnitureData.index) <= 0)
+                else if (Vincent.products[index3].type == VPType.Hat || !Vincent.products[index3].sold && Profiles.experienceProfile.GetNumFurnitures(products[index3].furnitureData.index) <= 0)
                 {
                     Vincent._newSticker.frame = index3 == Vincent._selectIndex ? 1 : 0;
-                    DuckGame.Graphics.Draw((Sprite)Vincent._newSticker, pos.x - 23f, pos.y - 19f);
+                    DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                 }
                 if (Vincent.products[index3].sold)
                 {
@@ -1426,7 +1430,7 @@ namespace DuckGame
                 {
                     string str = Math.Min(Math.Max(val1_1, 0), 9999).ToString();
                     Vincent._furniTag.frame = str.Length - 1;
-                    DuckGame.Graphics.Draw((Sprite)Vincent._furniTag, pos.x + 21f, pos.y - 25f);
+                    DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                     string text = "$\n";
                     foreach (char ch in str)
                         text = text + ch.ToString() + "\n";
@@ -1435,7 +1439,7 @@ namespace DuckGame
                 if (Vincent.products.Count > 1)
                 {
                     int index4 = 1;
-                    pos = new Vec2((float)((double)vec2_5.x + 70.0 - 200.0) + Math.Min(Vincent._showLerp * (float)(200 + 40 * index4), 200f), vec2_5.y);
+                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(Vincent._showLerp * (200 + 40 * index4), 200f), vec2_5.y);
                     DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
                     int val1_2 = Vincent.products[1].cost;
                     bool flag2 = false;
@@ -1443,7 +1447,7 @@ namespace DuckGame
                     {
                         flag2 = true;
                         val1_2 = Vincent.products[1].originalCost;
-                        DuckGame.Graphics.Draw((Tex2D)Vincent._priceTargets[1], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                        DuckGame.Graphics.Draw(Vincent._priceTargets[1], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
                         DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
                     }
                     Vincent._furniFill.color = Vincent.products[index4].color;
@@ -1454,12 +1458,12 @@ namespace DuckGame
                     if (Vincent.products[index4].type == VPType.Furniture && Vincent.products[index4].furnitureData.rarity >= Rarity.SuperRare)
                     {
                         Vincent._rareSticker.frame = index4 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._rareSticker, pos.x - 23f, pos.y - 19f);
+                        DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
-                    else if (Profiles.experienceProfile.GetNumFurnitures((int)Vincent.products[index4].furnitureData.index) <= 0)
+                    else if (Profiles.experienceProfile.GetNumFurnitures(products[index4].furnitureData.index) <= 0)
                     {
                         Vincent._newSticker.frame = index4 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._newSticker, pos.x - 23f, pos.y - 19f);
+                        DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
                     if (Vincent.products[index4].sold)
                     {
@@ -1469,7 +1473,7 @@ namespace DuckGame
                     {
                         string str = Math.Min(Math.Max(val1_2, 0), 9999).ToString();
                         Vincent._furniTag.frame = str.Length - 1;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._furniTag, pos.x + 21f, pos.y - 25f);
+                        DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
@@ -1479,7 +1483,7 @@ namespace DuckGame
                 if (Vincent.products.Count > 2)
                 {
                     int index5 = 2;
-                    pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * (float)(200 + 40 * index5), 200f), vec2_5.y + 54f);
+                    pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * (200 + 40 * index5), 200f), vec2_5.y + 54f);
                     DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
                     int val1_3 = Vincent.products[2].cost;
                     bool flag3 = false;
@@ -1487,7 +1491,7 @@ namespace DuckGame
                     {
                         flag3 = true;
                         val1_3 = Vincent.products[2].originalCost;
-                        DuckGame.Graphics.Draw((Tex2D)Vincent._priceTargets[2], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                        DuckGame.Graphics.Draw(Vincent._priceTargets[2], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
                         DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
                     }
                     Vincent._furniFill.color = Vincent.products[index5].color;
@@ -1498,12 +1502,12 @@ namespace DuckGame
                     if (Vincent.products[index5].type == VPType.Furniture && Vincent.products[index5].furnitureData.rarity >= Rarity.SuperRare)
                     {
                         Vincent._rareSticker.frame = index5 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._rareSticker, pos.x - 23f, pos.y - 19f);
+                        DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
-                    else if (Profiles.experienceProfile.GetNumFurnitures((int)Vincent.products[index5].furnitureData.index) <= 0)
+                    else if (Profiles.experienceProfile.GetNumFurnitures(products[index5].furnitureData.index) <= 0)
                     {
                         Vincent._newSticker.frame = index5 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._newSticker, pos.x - 23f, pos.y - 19f);
+                        DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
                     if (Vincent.products[index5].sold)
                     {
@@ -1513,7 +1517,7 @@ namespace DuckGame
                     {
                         string str = Math.Min(Math.Max(val1_3, 0), 9999).ToString();
                         Vincent._furniTag.frame = str.Length - 1;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._furniTag, pos.x + 21f, pos.y - 25f);
+                        DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
@@ -1523,7 +1527,7 @@ namespace DuckGame
                 if (Vincent.products.Count > 3)
                 {
                     int index6 = 3;
-                    pos = new Vec2((float)((double)vec2_5.x + 70.0 - 200.0) + Math.Min(Vincent._showLerp * (float)(200 + 40 * index6), 200f), vec2_5.y + 54f);
+                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(Vincent._showLerp * (200 + 40 * index6), 200f), vec2_5.y + 54f);
                     DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
                     int val1_4 = Vincent.products[3].cost;
                     bool flag4 = false;
@@ -1531,7 +1535,7 @@ namespace DuckGame
                     {
                         flag4 = true;
                         val1_4 = Vincent.products[3].originalCost;
-                        DuckGame.Graphics.Draw((Tex2D)Vincent._priceTargets[3], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                        DuckGame.Graphics.Draw(Vincent._priceTargets[3], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
                         DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
                     }
                     Vincent._furniFill.color = Vincent.products[index6].color;
@@ -1542,12 +1546,12 @@ namespace DuckGame
                     if (Vincent.products[index6].type == VPType.Furniture && Vincent.products[index6].furnitureData.rarity >= Rarity.SuperRare)
                     {
                         Vincent._rareSticker.frame = index6 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._rareSticker, pos.x - 23f, pos.y - 19f);
+                        DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
-                    else if (Profiles.experienceProfile.GetNumFurnitures((int)Vincent.products[index6].furnitureData.index) <= 0)
+                    else if (Profiles.experienceProfile.GetNumFurnitures(products[index6].furnitureData.index) <= 0)
                     {
                         Vincent._newSticker.frame = index6 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._newSticker, pos.x - 23f, pos.y - 19f);
+                        DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
                     if (Vincent.products[index6].sold)
                     {
@@ -1557,7 +1561,7 @@ namespace DuckGame
                     {
                         string str = Math.Min(Math.Max(val1_4, 0), 9999).ToString();
                         Vincent._furniTag.frame = str.Length - 1;
-                        DuckGame.Graphics.Draw((Sprite)Vincent._furniTag, pos.x + 21f, pos.y - 25f);
+                        DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
@@ -1574,7 +1578,7 @@ namespace DuckGame
                 Vec2 vec2_6 = new Vec2(226f, 11f);
                 DuckGame.Graphics.DrawRect(p1, p1 + vec2_6, Color.Black, (Depth)0.96f);
                 string name = Vincent.products[index].name;
-                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)((double)vec2_6.x / 2.0 - (double)DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
+                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - (double)DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
                 Vincent._tail.depth = (Depth)0.5f;
                 Vincent._tail.alpha = Vincent.alpha;
                 Vincent._tail.flipH = false;

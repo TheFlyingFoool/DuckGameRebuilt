@@ -24,9 +24,11 @@ namespace DuckGame
           List<GhostObject> pGhosts,
           int pStartIndex)
         {
-            NMGhostData serializedGhostData = new NMGhostData();
-            serializedGhostData._ghostSelection = pGhosts;
-            serializedGhostData._startIndex = pStartIndex;
+            NMGhostData serializedGhostData = new NMGhostData
+            {
+                _ghostSelection = pGhosts,
+                _startIndex = pStartIndex
+            };
             serializedGhostData.Serialize();
             return serializedGhostData;
         }
@@ -44,7 +46,7 @@ namespace DuckGame
                 GhostObject ghostObject = this._ghostSelection[startIndex];
                 if (this._serializedData.lengthInBytes + ghostObject.previouslySerializedData.lengthInBytes <= 512)
                 {
-                    if (val == ushort.MaxValue || (int)val != (int)ghostObject.thing.ghostType)
+                    if (val == ushort.MaxValue || val != ghostObject.thing.ghostType)
                     {
                         val = ghostObject.thing.ghostType;
                         this._serializedData.Write(true);
@@ -70,19 +72,21 @@ namespace DuckGame
         public override void OnDeserialize(BitBuffer pData)
         {
             this.levelIndex = pData.ReadByte();
-            ushort num1 = (ushort)pData.ReadByte();
+            ushort num1 = pData.ReadByte();
             ushort num2 = 0;
-            for (int index = 0; index < (int)num1; ++index)
+            for (int index = 0; index < num1; ++index)
             {
                 if (pData.ReadBool())
                     num2 = pData.ReadUShort();
                 BitBuffer msg = pData.ReadBitBuffer();
-                NMGhostState nmGhostState1 = new NMGhostState();
-                nmGhostState1.minimalState = true;
-                nmGhostState1.packet = this.packet;
+                NMGhostState nmGhostState1 = new NMGhostState
+                {
+                    minimalState = true,
+                    packet = this.packet
+                };
                 NMGhostState nmGhostState2 = nmGhostState1;
-                if (num2 == (ushort)0)
-                    nmGhostState2.header.id = (NetIndex16)(int)msg.ReadUShort();
+                if (num2 == 0)
+                    nmGhostState2.header.id = (NetIndex16)msg.ReadUShort();
                 else
                     nmGhostState2.Deserialize(msg);
                 nmGhostState2.header.levelIndex = this.levelIndex;
@@ -97,7 +101,7 @@ namespace DuckGame
         private void Compress(BitBuffer pCompress)
         {
             MemoryStream memoryStream = new MemoryStream();
-            BinaryWriter binaryWriter = new BinaryWriter((Stream)new GZipStream((Stream)memoryStream, CompressionMode.Compress));
+            BinaryWriter binaryWriter = new BinaryWriter(new GZipStream(memoryStream, CompressionMode.Compress));
             binaryWriter.Write((ushort)pCompress.lengthInBytes);
             binaryWriter.Write(pCompress.buffer, 0, pCompress.lengthInBytes);
             binaryWriter.Close();
@@ -109,8 +113,8 @@ namespace DuckGame
         private BitBuffer Decompress(BitBuffer pData)
         {
             ushort bytes = pData.ReadUShort();
-            BinaryReader binaryReader = new BinaryReader((Stream)new GZipStream((Stream)new MemoryStream(pData.ReadPacked((int)bytes)), CompressionMode.Decompress));
-            return new BitBuffer(binaryReader.ReadBytes((int)binaryReader.ReadUInt16()));
+            BinaryReader binaryReader = new BinaryReader(new GZipStream(new MemoryStream(pData.ReadPacked(bytes)), CompressionMode.Decompress));
+            return new BitBuffer(binaryReader.ReadBytes(binaryReader.ReadUInt16()));
         }
 
         public struct GhostMaskPair

@@ -26,7 +26,7 @@ namespace DuckGame
             this.target = pTarget;
             this._method = pMethod;
             this._parameters = pParameters;
-            if (((IEnumerable<ParameterInfo>)pMethod.GetParameters()).Count<ParameterInfo>() != ((IEnumerable<object>)pParameters).Count<object>())
+            if (pMethod.GetParameters().Count<ParameterInfo>() != pParameters.Count<object>())
                 throw new Exception("NMRunNetworkActionParameters.pParameters.Count() != MethodInfo.GetParameters().Count(). Are you including the correct parameters in your SyncNetworkAction call?");
         }
 
@@ -37,9 +37,9 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             BitBuffer val = new BitBuffer();
-            val.Write((object)this.target);
+            val.Write(target);
             val.Write(Editor.NetworkActionIndex(this.target.GetType(), this._method));
-            for (int index = 0; index < ((IEnumerable<object>)this._parameters).Count<object>(); ++index)
+            for (int index = 0; index < _parameters.Count<object>(); ++index)
                 val.Write(this._parameters[index]);
             this._serializedData.Write(val, true);
         }
@@ -51,7 +51,7 @@ namespace DuckGame
             if (this.target == null)
                 return;
             this._method = Editor.MethodFromNetworkActionIndex(this.target.GetType(), bitBuffer.ReadByte());
-            if (!(this._method != (MethodInfo)null))
+            if (!(this._method != null))
                 return;
             List<object> objectList = new List<object>();
             foreach (ParameterInfo parameter in this._method.GetParameters())
@@ -61,9 +61,9 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.target == null || !(this._method != (MethodInfo)null))
+            if (this.target == null || !(this._method != null))
                 return;
-            this._method.Invoke((object)this.target, this._parameters);
+            this._method.Invoke(target, this._parameters);
         }
     }
 }

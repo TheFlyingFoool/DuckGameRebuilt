@@ -14,13 +14,13 @@ namespace DuckGame
         public T Result { get; private set; }
 
         public Promise(Func<T> function)
-          : base((Delegate)function)
+          : base(function)
         {
         }
 
         public override void Execute()
         {
-            this.Result = (T)this._delegate.Method.Invoke(this._delegate.Target, (object[])null);
+            this.Result = (T)this._delegate.Method.Invoke(this._delegate.Target, null);
             this.Finished = true;
         }
     }

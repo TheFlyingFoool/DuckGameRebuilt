@@ -33,7 +33,7 @@ namespace DuckGame
             this.depth = (Depth)0.8f;
             this._myType = myType;
             if (field == null)
-                this._field = new FieldBinding((object)this, nameof(isChecked));
+                this._field = new FieldBinding(this, nameof(isChecked));
             this.tooltip = valTooltip;
         }
 
@@ -49,7 +49,7 @@ namespace DuckGame
             this._myType = myType;
             if (field != null)
                 return;
-            this._field = new FieldBinding((object)this, nameof(isChecked));
+            this._field = new FieldBinding(this, nameof(isChecked));
         }
 
         public override void Selected()
@@ -62,14 +62,14 @@ namespace DuckGame
                 if (this._field.value is IList)
                 {
                     IList list = this._field.value as IList;
-                    if (list.Contains((object)this._myType))
-                        list.Remove((object)this._myType);
+                    if (list.Contains(_myType))
+                        list.Remove(_myType);
                     else
-                        list.Add((object)this._myType);
+                        list.Add(_myType);
                 }
                 else
                 {
-                    this._field.value = (object)!(bool)this._field.value;
+                    this._field.value = !(bool)this._field.value;
                     Editor.hasUnsavedChanges = true;
                 }
             }
@@ -77,7 +77,7 @@ namespace DuckGame
             {
                 if (this._owner == null)
                     return;
-                this._owner.Selected((ContextMenu)this);
+                this._owner.Selected(this);
             }
         }
 
@@ -88,9 +88,9 @@ namespace DuckGame
             if (this._hover)
                 Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
             Graphics.DrawString(this._text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.85f);
-            bool flag = !(this._field.value is IList) ? (bool)this._field.value : (this._field.value as IList).Contains((object)this._myType);
+            bool flag = !(this._field.value is IList) ? (bool)this._field.value : (this._field.value as IList).Contains(_myType);
             this._checkBox.depth = (Depth)0.9f;
-            this._checkBox.x = (float)((double)this.x + (double)this.itemSize.x - 16.0);
+            this._checkBox.x = (float)((double)this.x + itemSize.x - 16.0);
             this._checkBox.y = this.y;
             this._checkBox.frame = flag ? 1 : 0;
             this._checkBox.Draw();

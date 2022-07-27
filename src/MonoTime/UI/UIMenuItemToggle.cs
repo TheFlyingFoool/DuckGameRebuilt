@@ -38,7 +38,7 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            BitmapFont f = (BitmapFont)null;
+            BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
             UIDivider component1 = new UIDivider(true, 0.0f);
@@ -48,19 +48,21 @@ namespace DuckGame
                 if (tiny)
                     component2.SetFont(f);
                 component2.align = UIAlign.Left;
-                component1.leftSection.Add((UIComponent)component2, true);
+                component1.leftSection.Add(component2, true);
             }
             if (multi != null)
             {
-                this._multiToggleElement = new UIMultiToggle(-1f, -1f, field, multi, compressedMulti);
-                this._multiToggleElement.align = compressedMulti ? UIAlign.Right : UIAlign.Right;
+                this._multiToggleElement = new UIMultiToggle(-1f, -1f, field, multi, compressedMulti)
+                {
+                    align = compressedMulti ? UIAlign.Right : UIAlign.Right
+                };
                 if (text != "")
                 {
-                    component1.rightSection.Add((UIComponent)this._multiToggleElement, true);
+                    component1.rightSection.Add(_multiToggleElement, true);
                 }
                 else
                 {
-                    component1.leftSection.Add((UIComponent)this._multiToggleElement, true);
+                    component1.leftSection.Add(_multiToggleElement, true);
                     this._multiToggleElement.align = UIAlign.Left;
                 }
                 if (tiny)
@@ -74,16 +76,16 @@ namespace DuckGame
                 if (tiny)
                     component3.SetFont(f);
                 component3.align = UIAlign.Right;
-                component1.rightSection.Add((UIComponent)component3, true);
+                component1.rightSection.Add(component3, true);
             }
-            this.rightSection.Add((UIComponent)component1, true);
+            this.rightSection.Add(component1, true);
             if (tiny)
                 this._arrow = new UIImage("littleContextArrowRight");
             else
                 this._arrow = new UIImage("contextArrowRight");
             this._arrow.align = UIAlign.Right;
             this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            this.leftSection.Add(_arrow, true);
             this._field = field;
             this._filterBinding = filterBinding;
             this.controlString = "@CANCEL@BACK @WASD@ADJUST";
@@ -120,13 +122,13 @@ namespace DuckGame
                 num3 = num2;
             if (num3 == -1)
             {
-                this._filterBinding.value = (object)false;
+                this._filterBinding.value = false;
             }
             else
             {
                 if (this._filterBinding != null)
-                    this._filterBinding.value = (object)true;
-                this._field.value = this._multiToggle == null ? (object)(num3 != 0) : (object)num3;
+                    this._filterBinding.value = true;
+                this._field.value = this._multiToggle == null ? num3 != 0 : num3;
             }
             if (!flag)
                 return;

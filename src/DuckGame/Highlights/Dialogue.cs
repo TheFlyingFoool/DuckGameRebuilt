@@ -25,7 +25,7 @@ namespace DuckGame
             }
         }
 
-        public static string GetLine(string type) => !Dialogue._speechLines.ContainsKey(type) ? (string)null : Dialogue._speechLines[type][Rando.Int(Dialogue._speechLines[type].Count - 1)];
+        public static string GetLine(string type) => !Dialogue._speechLines.ContainsKey(type) ? null : Dialogue._speechLines[type][Rando.Int(Dialogue._speechLines[type].Count - 1)];
 
         public static string GetRemark(
           string type,

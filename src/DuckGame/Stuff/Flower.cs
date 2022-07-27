@@ -44,28 +44,28 @@ namespace DuckGame
                 ConfettiParticle confettiParticle = new ConfettiParticle();
                 confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0.0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0.0f), Rando.Float(-1f, 1f)));
                 confettiParticle._color = new Color(49, 163, 242);
-                Level.Add((Thing)confettiParticle);
+                Level.Add(confettiParticle);
             }
             for (int index = 0; index < 2; ++index)
             {
                 ConfettiParticle confettiParticle = new ConfettiParticle();
                 confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0.0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0.0f), Rando.Float(-1f, 1f)));
                 confettiParticle._color = new Color(163, 206, 39);
-                Level.Add((Thing)confettiParticle);
+                Level.Add(confettiParticle);
             }
         }
 
         public override void Update()
         {
-            if ((double)this.burnt >= 1.0)
+            if (burnt >= 1.0)
             {
                 if (this.graphic != this._burnt)
                 {
                     SFX.Play("flameExplode");
-                    Level.Add((Thing)SmallFire.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: ((Thing)this)));
-                    Level.Add((Thing)SmallFire.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: ((Thing)this)));
+                    Level.Add(SmallFire.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
+                    Level.Add(SmallFire.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
                     for (int index = 0; index < 3; ++index)
-                        Level.Add((Thing)SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                        Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
                 }
                 this.graphic = this._burnt;
             }
@@ -74,34 +74,34 @@ namespace DuckGame
                 if (this.held || this.graphic == this._burnt)
                 {
                     this._stuck.plugged = false;
-                    this._stuck = (Gun)null;
+                    this._stuck = null;
                 }
                 else
                 {
                     this._stuck.plugged = true;
                     if (Network.isActive && this._stuck.isServerForObject)
-                        this._stuck.Fondle((Thing)this);
+                        this._stuck.Fondle(this);
                     if (this._stuck.removeFromLevel && this.isServerForObject)
                     {
                         if (this._stuck is DuelingPistol)
                             this.vSpeed -= 2f;
-                        this._stuck = (Gun)null;
+                        this._stuck = null;
                     }
                     else
                     {
                         this.position = this._stuck.Offset(this._stuck.barrelOffset + this._stuck.barrelInsertOffset + new Vec2(1f, 1f));
                         this.offDir = this._stuck.offDir;
-                        this.angleDegrees = this._stuck.angleDegrees + (float)(90 * (int)this.offDir);
+                        this.angleDegrees = this._stuck.angleDegrees + 90 * offDir;
                         this.depth = this._stuck.depth - 4;
                         this.velocity = Vec2.Zero;
-                        if ((double)this._stuck._barrelHeat < (double)this._prevBarrelHeat)
+                        if (_stuck._barrelHeat < (double)this._prevBarrelHeat)
                             this._prevBarrelHeat = this._stuck._barrelHeat;
-                        if (!this.isServerForObject || (double)this._stuck._barrelHeat <= (double)this._prevBarrelHeat + 0.00999999977648258)
+                        if (!this.isServerForObject || _stuck._barrelHeat <= _prevBarrelHeat + 0.00999999977648258)
                             return;
                         Flower.PoofEffect(this.position);
                         if (Network.isActive)
-                            Send.Message((NetMessage)new NMFlowerPoof(this.position));
-                        Level.Remove((Thing)this);
+                            Send.Message(new NMFlowerPoof(this.position));
+                        Level.Remove(this);
                         return;
                     }
                 }
@@ -117,7 +117,7 @@ namespace DuckGame
                     this.collisionOffset = new Vec2(-3f, -12f);
                     this.collisionSize = new Vec2(6f, 14f);
                     this.angleDegrees = 0.0f;
-                    this.graphic.flipH = this.offDir < (sbyte)0;
+                    this.graphic.flipH = this.offDir < 0;
                 }
                 else
                 {
@@ -125,7 +125,7 @@ namespace DuckGame
                     if (this.framesSinceThrown < 15)
                     {
                         Gun gun = Level.current.NearestThing<Gun>(this.position);
-                        if (gun != null && (double)(gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > (sbyte)0 && (double)this.hSpeed < 0.0 || gun.offDir < (sbyte)0 && (double)this.hSpeed > 0.0))
+                        if (gun != null && (double)(gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && (double)this.hSpeed < 0.0 || gun.offDir < 0 && (double)this.hSpeed > 0.0))
                         {
                             this._stuck = gun;
                             this._prevBarrelHeat = this._stuck._barrelHeat;
@@ -161,10 +161,10 @@ namespace DuckGame
             }
             else
             {
-                Level.Remove((Thing)this);
+                Level.Remove(this);
                 SFX.Play("flameExplode");
                 for (int index = 0; index < 8; ++index)
-                    Level.Add((Thing)SmallFire.New(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), Rando.Float(6f) - 3f, Rando.Float(6f) - 3f, firedFrom: ((Thing)this)));
+                    Level.Add(SmallFire.New(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), Rando.Float(6f) - 3f, Rando.Float(6f) - 3f, firedFrom: this));
             }
         }
 
@@ -181,7 +181,7 @@ namespace DuckGame
             {
                 this.position = this._stuck.Offset(this._stuck.barrelOffset + this._stuck.barrelInsertOffset + new Vec2(1f, 1f));
                 this.offDir = this._stuck.offDir;
-                this.angleDegrees = this._stuck.angleDegrees + (float)(90 * (int)this.offDir);
+                this.angleDegrees = this._stuck.angleDegrees + 90 * offDir;
                 this.depth = this._stuck.depth - 4;
                 this.velocity = Vec2.Zero;
             }

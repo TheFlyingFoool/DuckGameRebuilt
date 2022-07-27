@@ -37,14 +37,14 @@ namespace DuckGame
                 Vec2 vec2 = new Vec2(this.x - 1f, this.y - 1f);
                 this._occluders.Add(new LightOccluder(vec2 + new Vec2(2f, 4f), vec2 + new Vec2(2f, -4f), new Color(0.4f, 0.4f, 0.4f)));
                 this._occluders.Add(new LightOccluder(vec2 + new Vec2(2f, 2f), vec2 + new Vec2(-6f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-                Level.Add((Thing)new PointLight(vec2.x + 1f, vec2.y + 1f, new Color(247, 198, 150), 170f, this._occluders));
+                Level.Add(new PointLight(vec2.x + 1f, vec2.y + 1f, new Color(247, 198, 150), 170f, this._occluders));
             }
             else
             {
                 Vec2 vec2 = new Vec2(this.x + 1f, this.y - 1f);
                 this._occluders.Add(new LightOccluder(vec2 + new Vec2(-2f, 4f), vec2 + new Vec2(-2f, -4f), new Color(0.4f, 0.4f, 0.4f)));
                 this._occluders.Add(new LightOccluder(vec2 + new Vec2(-2f, 2f), vec2 + new Vec2(6f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-                Level.Add((Thing)new PointLight(vec2.x - 1f, vec2.y + 1f, new Color(247, 198, 150), 170f, this._occluders));
+                Level.Add(new PointLight(vec2.x - 1f, vec2.y + 1f, new Color(247, 198, 150), 170f, this._occluders));
             }
         }
 

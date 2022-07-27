@@ -26,15 +26,15 @@ namespace DuckGame
         {
             List<Thing> list = new List<Thing>();
             foreach (List<Thing> collection in this._objects.Values)
-                list.AddRange((IEnumerable<Thing>)collection);
+                list.AddRange(collection);
             return list;
         }
 
-        public IEnumerable<Thing> this[System.Type key] => this._objectsByType.ContainsKey(key) ? (IEnumerable<Thing>)this._objectsByType[key] : Enumerable.Empty<Thing>();
+        public IEnumerable<Thing> this[System.Type key] => this._objectsByType.ContainsKey(key) ? this._objectsByType[key] : Enumerable.Empty<Thing>();
 
-        public IEnumerable<Thing> this[string key] => this._objects.ContainsKey(key) ? (IEnumerable<Thing>)this._objects[key] : Enumerable.Empty<Thing>();
+        public IEnumerable<Thing> this[string key] => this._objects.ContainsKey(key) ? this._objects[key] : Enumerable.Empty<Thing>();
 
-        public Thing this[int key] => key < this._bigList.Count ? this._bigList[key] : (Thing)null;
+        public Thing this[int key] => key < this._bigList.Count ? this._bigList[key] : null;
 
         public int Count => this._bigList.Count;
 
@@ -119,8 +119,8 @@ namespace DuckGame
                 list.Remove(key, obj);
         }
 
-        public IEnumerator<Thing> GetEnumerator() => (IEnumerator<Thing>)this._bigList.GetEnumerator();
+        public IEnumerator<Thing> GetEnumerator() => this._bigList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 }

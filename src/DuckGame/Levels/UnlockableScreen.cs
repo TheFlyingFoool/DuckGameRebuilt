@@ -29,7 +29,7 @@ namespace DuckGame
             if (this._unlockBox == null)
             {
                 this._unlockBox = new UIUnlockBox(this._unlocks.ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                MonoMain.pauseMenu = (UIComponent)this._unlockBox;
+                MonoMain.pauseMenu = _unlockBox;
             }
             base.Update();
         }

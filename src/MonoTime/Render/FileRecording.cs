@@ -38,8 +38,10 @@ namespace DuckGame
         public FileRecording()
         {
             this.Initialize();
-            this._defaultRasterizerState = new RasterizerState();
-            this._defaultRasterizerState.CullMode = CullMode.None;
+            this._defaultRasterizerState = new RasterizerState
+            {
+                CullMode = CullMode.None
+            };
         }
 
         public void StopWriting()
@@ -56,7 +58,7 @@ namespace DuckGame
             if (this._reader != null)
             {
                 this._reader.Close();
-                this._reader = (BinaryReader)null;
+                this._reader = null;
             }
             this._loadedNextFrame = false;
             if (!this._setFile)
@@ -73,14 +75,14 @@ namespace DuckGame
                     string shortTimeString = now.ToShortTimeString();
                     this._fileName = "funstream-" + (shortDateString + "-" + shortTimeString).Replace("/", "_").Replace(":", "-").Replace(" ", "");
                 }
-                this._writer = new BinaryWriter((Stream)new GZipStream((Stream)System.IO.File.Open(this._fileName + ".vid", FileMode.Create), CompressionMode.Compress));
+                this._writer = new BinaryWriter(new GZipStream(System.IO.File.Open(this._fileName + ".vid", FileMode.Create), CompressionMode.Compress));
             }
             else
             {
                 if (this._writer == null)
                     return;
                 this._writer.Close();
-                this._writer = (BinaryWriter)null;
+                this._writer = null;
             }
         }
 
@@ -91,14 +93,14 @@ namespace DuckGame
             if (file == "")
                 file = this._fileName;
             this._fileName = file;
-            BinaryReader binaryReader = new BinaryReader((Stream)System.IO.File.Open(file + ".dat", FileMode.Open));
+            BinaryReader binaryReader = new BinaryReader(System.IO.File.Open(file + ".dat", FileMode.Open));
             while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
             {
-                int num = (int)binaryReader.ReadByte();
+                int num = binaryReader.ReadByte();
                 short index = binaryReader.ReadInt16();
                 if (num == 0)
                 {
-                    if (binaryReader.ReadByte() == (byte)0)
+                    if (binaryReader.ReadByte() == 0)
                     {
                         int width = binaryReader.ReadInt32();
                         int height = binaryReader.ReadInt32();
@@ -106,7 +108,7 @@ namespace DuckGame
                         binaryReader.Read(numArray, 0, width * height * 4);
                         RenderTarget2D tex = new RenderTarget2D(width, height);
                         tex.SetData<byte>(numArray);
-                        Content.SetTextureAtIndex(index, (Tex2D)tex);
+                        Content.SetTextureAtIndex(index, tex);
                     }
                     else
                     {
@@ -117,7 +119,7 @@ namespace DuckGame
                 else
                 {
                     string name = binaryReader.ReadString();
-                    Content.SetEffectAtIndex(index, name == "" ? (MTEffect)(Effect)new BasicEffect(DuckGame.Graphics.device) : Content.Load<MTEffect>(name));
+                    Content.SetEffectAtIndex(index, name == "" ? (MTEffect)new BasicEffect(DuckGame.Graphics.device) : Content.Load<MTEffect>(name));
                 }
             }
         }
@@ -126,7 +128,7 @@ namespace DuckGame
         {
             if (this._writer == null)
                 return;
-            BinaryWriter binaryWriter = new BinaryWriter((Stream)System.IO.File.Open(this._fileName + ".dat", FileMode.OpenOrCreate));
+            BinaryWriter binaryWriter = new BinaryWriter(System.IO.File.Open(this._fileName + ".dat", FileMode.OpenOrCreate));
             binaryWriter.Seek(0, SeekOrigin.End);
             for (int textureWrittenIndex = this._lastTextureWrittenIndex; textureWrittenIndex < Content.textureList.Count; ++textureWrittenIndex)
             {
@@ -166,16 +168,16 @@ namespace DuckGame
             if (this._writer != null)
             {
                 this._writer.Close();
-                this._writer = (BinaryWriter)null;
+                this._writer = null;
             }
             if (this._reader == null)
-                this._reader = new BinaryReader((Stream)new GZipStream((Stream)System.IO.File.Open(this._fileName + ".vid", FileMode.Open), CompressionMode.Decompress));
+                this._reader = new BinaryReader(new GZipStream(System.IO.File.Open(this._fileName + ".vid", FileMode.Open), CompressionMode.Decompress));
             int num1 = 2;
             int num2 = 0;
             if (this._loadedNextFrame)
             {
                 this._framePos += speed;
-                if ((double)this._framePos < 1.0)
+                if (_framePos < 1.0)
                     return;
                 --this._framePos;
                 num1 = 1;
@@ -205,14 +207,14 @@ namespace DuckGame
                 this._frames[this._frame].backgroundColor = color;
                 for (int key = 0; key < num4; ++key)
                 {
-                    if (this._reader.ReadByte() == (byte)0)
+                    if (this._reader.ReadByte() == 0)
                         this._frames[this._frame]._states[key] = new RecorderFrameStateChange()
                         {
                             rasterizerState = this._defaultRasterizerState,
                             samplerState = SamplerState.PointClamp,
                             blendState = BlendState.AlphaBlend,
                             sortMode = (SpriteSortMode)this._reader.ReadInt32(),
-                            depthStencilState = this._reader.ReadByte() == (byte)0 ? DepthStencilState.Default : DepthStencilState.DepthRead,
+                            depthStencilState = this._reader.ReadByte() == 0 ? DepthStencilState.Default : DepthStencilState.DepthRead,
                             effectIndex = this._reader.ReadInt16(),
                             stateIndex = this._reader.ReadInt32(),
                             camera = new Matrix()
@@ -234,7 +236,7 @@ namespace DuckGame
                                 M43 = this._reader.ReadSingle(),
                                 M44 = this._reader.ReadSingle()
                             },
-                            scissor = new Rectangle((float)this._reader.ReadInt32(), (float)this._reader.ReadInt32(), (float)this._reader.ReadInt32(), (float)this._reader.ReadInt32())
+                            scissor = new Rectangle(this._reader.ReadInt32(), this._reader.ReadInt32(), this._reader.ReadInt32(), this._reader.ReadInt32())
                         };
                     this._frames[this._frame].objects[key].texture = this._reader.ReadInt16();
                     this._frames[this._frame].objects[key].topLeft.x = this._reader.ReadSingle();

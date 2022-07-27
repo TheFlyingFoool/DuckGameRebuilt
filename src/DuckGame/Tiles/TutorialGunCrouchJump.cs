@@ -17,7 +17,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Color color = new Color((int)sbyte.MaxValue, (int)sbyte.MaxValue, (int)sbyte.MaxValue);
+            Color color = new Color(sbyte.MaxValue, sbyte.MaxValue, sbyte.MaxValue);
             Graphics.DrawString("@SHOOT@", new Vec2(this.x - 16f, this.y + 8f), Color.White * 0.5f);
             Graphics.DrawString("@JUMP@", new Vec2(this.x - 39f, this.y + 8f), Color.White * 0.5f);
             this.depth = (Depth)0.99f;

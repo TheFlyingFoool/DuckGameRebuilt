@@ -130,7 +130,7 @@ namespace DuckGame
             if (this._freeGeometryBatch.Count > 0)
             {
                 geometryItem = this._freeGeometryBatch.Dequeue();
-                geometryItem.material = (Material)null;
+                geometryItem.material = null;
             }
             else
                 geometryItem = new GeometryItem()
@@ -187,7 +187,7 @@ namespace DuckGame
             int num2 = 0;
             if (this._index != null)
             {
-                this._index.CopyTo((Array)numArray, 0);
+                this._index.CopyTo(numArray, 0);
                 num2 = this._index.Length / 6;
             }
             for (int index = num2; index < numBatchItems; ++index)
@@ -212,7 +212,7 @@ namespace DuckGame
             int num2 = 0;
             if (this._simpleIndex != null)
             {
-                this._simpleIndex.CopyTo((Array)numArray, 0);
+                this._simpleIndex.CopyTo(numArray, 0);
                 num2 = this._simpleIndex.Length / 6;
             }
             for (int index = num2; index < numBatchItems; ++index)
@@ -237,7 +237,7 @@ namespace DuckGame
             int num2 = 0;
             if (this._geometryIndex != null)
             {
-                this._geometryIndex.CopyTo((Array)numArray, 0);
+                this._geometryIndex.CopyTo(numArray, 0);
                 num2 = this._geometryIndex.Length / 3;
             }
             for (int index = num2; index < numTris; ++index)
@@ -259,7 +259,7 @@ namespace DuckGame
             int num2 = 0;
             if (this._texturedGeometryIndex != null)
             {
-                this._texturedGeometryIndex.CopyTo((Array)numArray, 0);
+                this._texturedGeometryIndex.CopyTo(numArray, 0);
                 num2 = this._texturedGeometryIndex.Length / 3;
             }
             for (int index = num2; index < numTris; ++index)
@@ -351,8 +351,8 @@ namespace DuckGame
             {
                 int start = 0;
                 int end = 0;
-                Texture2D texture2D = (Texture2D)null;
-                Material material = (Material)null;
+                Texture2D texture2D = null;
+                Material material = null;
                 numBatchItems = count;
                 if (numBatchItems > 5461)
                     numBatchItems = 5461;
@@ -366,10 +366,10 @@ namespace DuckGame
                         this.FlushVertexArray(start, end);
                         if (material != null && batchItem.Material == null)
                             this._batch.Setup();
-                        material = this._batch.transitionEffect ? (Material)null : batchItem.Material;
+                        material = this._batch.transitionEffect ? null : batchItem.Material;
                         texture2D = batchItem.Texture;
                         start = end = 0;
-                        this._device.Textures[0] = (Texture)texture2D;
+                        this._device.Textures[0] = texture2D;
                         if (material != null)
                         {
                             material.SetValue("MatrixTransform", this._batch.fullMatrix);
@@ -398,8 +398,8 @@ namespace DuckGame
                     vertexArray4[index5] = vertexBr;
                     if (batchItem.inPool)
                     {
-                        batchItem.Texture = (Texture2D)null;
-                        batchItem.Material = (Material)null;
+                        batchItem.Texture = null;
+                        batchItem.Material = null;
                         this._freeBatchItemQueue.Enqueue(batchItem);
                     }
                     ++num1;
@@ -483,7 +483,7 @@ namespace DuckGame
             foreach (GeometryItem geometryItem in this._geometryBatch)
                 num += geometryItem.length;
             this.EnsureGeometryArrayCapacity((num + 1) / 3);
-            Material material = (Material)null;
+            Material material = null;
             int start = 0;
             int end = 0;
             foreach (GeometryItem geometryItem in this._geometryBatch)
@@ -526,7 +526,7 @@ namespace DuckGame
             foreach (GeometryItemTexture geometryItemTexture in this._geometryBatchTextured)
                 num1 += geometryItemTexture.length;
             this.EnsureTexturedGeometryArrayCapacity((num1 + 1) / 3);
-            Texture2D texture2D = (Texture2D)null;
+            Texture2D texture2D = null;
             int start = 0;
             int end = 0;
             foreach (GeometryItemTexture geometryItemTexture in this._geometryBatchTextured)
@@ -536,7 +536,7 @@ namespace DuckGame
                     this.FlushTexturedGeometryVertexArray(start, end);
                     texture2D = geometryItemTexture.texture;
                     start = end = 0;
-                    this._device.Textures[0] = (Texture)texture2D;
+                    this._device.Textures[0] = texture2D;
                 }
                 for (int index1 = 0; index1 < geometryItemTexture.length; index1 += 3)
                 {
@@ -558,7 +558,7 @@ namespace DuckGame
                 }
                 if (geometryItemTexture.temporary)
                     this._freeGeometryBatchTextured.Enqueue(geometryItemTexture);
-                geometryItemTexture.texture = (Texture2D)null;
+                geometryItemTexture.texture = null;
                 this.FlushTexturedGeometryVertexArray(start, end);
             }
             this._geometryBatchTextured.Clear();

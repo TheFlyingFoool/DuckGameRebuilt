@@ -105,7 +105,7 @@ namespace DuckGame
                     num1 = num2 << 1;
                 }
             }
-            return (long)BitBuffer._maxMasks[bits];
+            return BitBuffer._maxMasks[bits];
         }
 
         /// <summary>
@@ -121,12 +121,12 @@ namespace DuckGame
                 try
                 {
                     byte[] destinationArray = new byte[this.lengthInBytes];
-                    Array.Copy((Array)this._buffer, (Array)destinationArray, this.lengthInBytes);
+                    Array.Copy(_buffer, destinationArray, this.lengthInBytes);
                     return destinationArray;
                 }
                 catch (Exception)
                 {
-                    return (byte[])null;
+                    return null;
                 }
             }
         }
@@ -267,7 +267,7 @@ namespace DuckGame
             int num1 = 0;
             if (bits <= 8 - this.bitOffset)
             {
-                num1 = (int)this._buffer[this.position] >> this.bitOffset & BitBuffer._readMasks[bits - 1];
+                num1 = this._buffer[this.position] >> this.bitOffset & BitBuffer._readMasks[bits - 1];
                 this.bitOffset += bits;
             }
             else
@@ -285,7 +285,7 @@ namespace DuckGame
                         int num3 = 8 - this.bitOffset;
                         if (num3 > bits)
                             num3 = bits;
-                        int num4 = (int)this._buffer[this.position] >> this.bitOffset & BitBuffer._readMasks[num3 - 1];
+                        int num4 = this._buffer[this.position] >> this.bitOffset & BitBuffer._readMasks[num3 - 1];
                         bits -= num3;
                         int num5 = num4 << num2;
                         num1 |= num5;
@@ -361,8 +361,8 @@ namespace DuckGame
 
         public void WritePacked(byte[] data, int bits)
         {
-            if (this.position + (int)Math.Ceiling((double)bits / 8.0) > this._buffer.Length)
-                this.resize((this.position + (int)Math.Ceiling((double)bits / 8.0)) * 2);
+            if (this.position + (int)Math.Ceiling(bits / 8.0) > this._buffer.Length)
+                this.resize((this.position + (int)Math.Ceiling(bits / 8.0)) * 2);
             int index = 0;
             if (!this.isPacked)
             {
@@ -377,24 +377,24 @@ namespace DuckGame
             {
                 for (; bits >= 8; bits -= 8)
                 {
-                    this.WritePacked((int)data[index], 8);
+                    this.WritePacked(data[index], 8);
                     ++index;
                 }
             }
             if (bits <= 0)
                 return;
-            this.WritePacked((int)data[index], bits);
+            this.WritePacked(data[index], bits);
         }
 
         public BitBuffer ReadBitBuffer(bool allowPacking = true)
         {
-            int length1 = (int)this.ReadUShort();
-            if (length1 == (int)ushort.MaxValue)
+            int length1 = this.ReadUShort();
+            if (length1 == ushort.MaxValue)
                 length1 = this.ReadInt();
             byte[] numArray;
             if (allowPacking)
             {
-                int length2 = (int)Math.Ceiling((double)length1 / 8.0);
+                int length2 = (int)Math.Ceiling(length1 / 8.0);
                 numArray = new byte[length2];
                 int num = length1;
                 for (int index = 0; index < length2; ++index)
@@ -407,7 +407,7 @@ namespace DuckGame
             else
             {
                 numArray = new byte[length1];
-                Array.Copy((Array)this.buffer, this.position, (Array)numArray, 0, length1);
+                Array.Copy(buffer, this.position, numArray, 0, length1);
                 this.position += length1;
                 length1 = 0;
             }
@@ -418,12 +418,12 @@ namespace DuckGame
         {
             if (TokenDeserializer.instance != null)
                 return this.ReadTokenizedString();
-            int num = (int)this.ReadUShort();
-            if (num == (int)ushort.MaxValue)
+            int num = this.ReadUShort();
+            if (num == ushort.MaxValue)
             {
                 int bitOffset = this.bitOffset;
                 int position = this.position;
-                if (this.ReadUShort() == (ushort)42252)
+                if (this.ReadUShort() == 42252)
                 {
                     num = this.ReadInt();
                 }
@@ -480,7 +480,7 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
                 return BitConverter.ToInt16(this.ReadPacked(2), 0);
-            int int16 = (int)BitConverter.ToInt16(this._buffer, this.position);
+            int int16 = BitConverter.ToInt16(this._buffer, this.position);
             this.position += 2;
             return (short)int16;
         }
@@ -489,7 +489,7 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
                 return BitConverter.ToUInt16(this.ReadPacked(2), 0);
-            int uint16 = (int)BitConverter.ToUInt16(this._buffer, this.position);
+            int uint16 = BitConverter.ToUInt16(this._buffer, this.position);
             this.position += 2;
             return (ushort)uint16;
         }
@@ -538,7 +538,7 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
                 return BitConverter.ToChar(this.ReadPacked(2), 0);
-            int num = (int)BitConverter.ToChar(this._buffer, this.position);
+            int num = BitConverter.ToChar(this._buffer, this.position);
             this.position += 2;
             return (char)num;
         }
@@ -547,7 +547,7 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
                 return this.ReadPacked(1)[0];
-            int num = (int)this._buffer[this.position];
+            int num = this._buffer[this.position];
             ++this.position;
             return (byte)num;
         }
@@ -556,7 +556,7 @@ namespace DuckGame
         {
             int length = this.ReadInt();
             byte[] destinationArray = new byte[length];
-            Array.Copy((Array)this.buffer, this.position, (Array)destinationArray, 0, length);
+            Array.Copy(buffer, this.position, destinationArray, 0, length);
             this.position += length;
             return destinationArray;
         }
@@ -565,7 +565,7 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
                 return (sbyte)this.ReadPacked(1)[0];
-            int num = (int)(sbyte)this._buffer[this.position];
+            int num = (sbyte)this._buffer[this.position];
             ++this.position;
             return (sbyte)num;
         }
@@ -574,7 +574,7 @@ namespace DuckGame
         {
             if (this._allowPacking)
                 return this.ReadPackedBits(1) > 0;
-            return this.ReadByte() > (byte)0;
+            return this.ReadByte() > 0;
         }
 
         public NetIndex4 ReadNetIndex4() => new NetIndex4(this.ReadPackedBits(4));
@@ -586,7 +586,7 @@ namespace DuckGame
         public byte[] ReadData(int length)
         {
             byte[] dst = new byte[length];
-            Buffer.BlockCopy((Array)this.buffer, this.position, (Array)dst, 0, length);
+            Buffer.BlockCopy(buffer, this.position, dst, 0, length);
             this.position += length;
             return dst;
         }
@@ -594,43 +594,43 @@ namespace DuckGame
         public object Read(System.Type type, bool allowPacking = true)
         {
             if (type == typeof(string))
-                return (object)this.ReadString();
+                return this.ReadString();
             if (type == typeof(float))
-                return (object)this.ReadFloat();
+                return this.ReadFloat();
             if (type == typeof(double))
-                return (object)this.ReadDouble();
+                return this.ReadDouble();
             if (type == typeof(byte))
-                return (object)this.ReadByte();
+                return this.ReadByte();
             if (type == typeof(sbyte))
-                return (object)this.ReadSByte();
+                return this.ReadSByte();
             if (type == typeof(bool))
-                return (object)this.ReadBool();
+                return this.ReadBool();
             if (type == typeof(short))
-                return (object)this.ReadShort();
+                return this.ReadShort();
             if (type == typeof(ushort))
-                return (object)this.ReadUShort();
+                return this.ReadUShort();
             if (type == typeof(int))
-                return (object)this.ReadInt();
+                return this.ReadInt();
             if (type == typeof(uint))
-                return (object)this.ReadUInt();
+                return this.ReadUInt();
             if (type == typeof(long))
-                return (object)this.ReadLong();
+                return this.ReadLong();
             if (type == typeof(ulong))
-                return (object)this.ReadULong();
+                return this.ReadULong();
             if (type == typeof(char))
-                return (object)this.ReadChar();
+                return this.ReadChar();
             if (type == typeof(Vec2))
-                return (object)this.ReadVec2();
+                return this.ReadVec2();
             if (type == typeof(BitBuffer))
-                return (object)this.ReadBitBuffer(allowPacking);
+                return this.ReadBitBuffer(allowPacking);
             if (type == typeof(NetIndex16))
-                return (object)new NetIndex16((int)this.ReadUShort());
+                return new NetIndex16(this.ReadUShort());
             if (type == typeof(NetIndex2))
-                return (object)new NetIndex2((int)this.ReadBits(typeof(int), 2));
+                return new NetIndex2((int)this.ReadBits(typeof(int), 2));
             if (type == typeof(NetIndex4))
-                return (object)new NetIndex4((int)this.ReadBits(typeof(int), 4));
+                return new NetIndex4((int)this.ReadBits(typeof(int), 4));
             if (type == typeof(NetIndex8))
-                return (object)new NetIndex8((int)this.ReadBits(typeof(int), 8));
+                return new NetIndex8((int)this.ReadBits(typeof(int), 8));
             return typeof(Thing).IsAssignableFrom(type) ? (object)this.ReadThing(type) : throw new Exception("Trying to read unsupported type " + type?.ToString() + " from BitBuffer!");
         }
 
@@ -639,11 +639,11 @@ namespace DuckGame
             byte num = this.ReadByte();
             ushort key = (ushort)this.ReadBits(typeof(ushort), 10);
             ushort index = this.ReadUShort();
-            if ((int)num != (int)DuckNetwork.levelIndex || index == (ushort)0)
-                return (Thing)null;
-            if (key == (ushort)0)
+            if (num != DuckNetwork.levelIndex || index == 0)
+                return null;
+            if (key == 0)
                 return GhostManager.context.GetSpecialSync(index);
-            NetIndex16 netIndex16 = (NetIndex16)(int)index;
+            NetIndex16 netIndex16 = (NetIndex16)index;
             Profile profile = GhostObject.IndexToProfile(netIndex16);
             if (profile != null && profile.removedGhosts.ContainsKey(netIndex16))
                 return profile.removedGhosts[netIndex16].thing;
@@ -651,7 +651,7 @@ namespace DuckGame
             if (!pThingType.IsAssignableFrom(type))
             {
                 DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, ignoring ghost (" + netIndex16.ToString() + "(" + type.GetType().Name + " vs. " + pThingType.Name + "))@error");
-                return (Thing)null;
+                return null;
             }
             GhostObject ghost = GhostManager.context.GetGhost(netIndex16);
             if (ghost != null && ghost.thing.GetType() != type)
@@ -660,7 +660,7 @@ namespace DuckGame
                 GhostManager.changingGhostType = true;
                 GhostManager.context.RemoveGhost(ghost, (NetIndex16)0);
                 GhostManager.changingGhostType = false;
-                ghost = (GhostObject)null;
+                ghost = null;
             }
             if (ghost == null)
             {
@@ -669,7 +669,7 @@ namespace DuckGame
                 thing.authority = (NetIndex8)1;
                 if (profile != null && netIndex16 > profile.latestGhostIndex)
                     profile.latestGhostIndex = netIndex16;
-                if ((int)num != (int)Level.core.currentLevel.networkIndex)
+                if (num != Level.core.currentLevel.networkIndex)
                 {
                     ghost = new GhostObject(thing, GhostManager.context, (int)netIndex16);
                     thing.position = new Vec2(-2000f, -2000f);
@@ -690,36 +690,36 @@ namespace DuckGame
 
         public object ReadBits(System.Type t, int bits) => bits == -1 ? this.Read(t) : this.ConvertType(this.ReadPackedBits(bits), t);
 
-        public T ReadBits<T>(int bits) => bits < 1 ? default(T) : (T)(object)this.ConvertType(this.ReadPackedBits(bits), typeof(T));
+        public T ReadBits<T>(int bits) => bits < 1 ? default(T) : (T)this.ConvertType(this.ReadPackedBits(bits), typeof(T));
 
         protected object ConvertType(int obj, System.Type type)
         {
             if (type == typeof(float))
-                return (object)(float)obj;
+                return (float)obj;
             if (type == typeof(double))
-                return (object)(double)obj;
+                return (double)obj;
             if (type == typeof(byte))
-                return (object)(byte)obj;
+                return (byte)obj;
             if (type == typeof(sbyte))
-                return (object)(sbyte)obj;
+                return (sbyte)obj;
             if (type == typeof(short))
-                return (object)(short)obj;
+                return (short)obj;
             if (type == typeof(ushort))
-                return (object)(ushort)obj;
+                return (ushort)obj;
             if (type == typeof(int))
-                return (object)obj;
+                return obj;
             if (type == typeof(uint))
-                return (object)(uint)obj;
+                return (uint)obj;
             if (type == typeof(long))
-                return (object)(long)obj;
+                return (long)obj;
             if (type == typeof(ulong))
-                return (object)(ulong)obj;
+                return (ulong)obj;
             if (type == typeof(char))
-                return (object)(char)obj;
+                return (char)obj;
             throw new Exception("unrecognized conversion type " + type?.ToString());
         }
 
-        public T Read<T>() => (T)(object)this.Read(typeof(T));
+        public T Read<T>() => (T)this.Read(typeof(T));
 
         public void AlignToByte()
         {
@@ -776,7 +776,7 @@ namespace DuckGame
                     length = data.Length;
                 if (this.position + length > this._buffer.Length)
                     this.resize(this.position + length);
-                Array.Copy((Array)data, offset, (Array)this.buffer, this.position, length);
+                Array.Copy(data, offset, buffer, this.position, length);
                 this.position += length;
             }
             else
@@ -794,24 +794,24 @@ namespace DuckGame
                 byte[] bytes = Encoding.UTF8.GetBytes(val);
                 if (this.bitOffset != 0)
                 {
-                    this.Write((ushort)((IEnumerable<byte>)bytes).Count<byte>());
+                    this.Write((ushort)bytes.Count<byte>());
                     this.WritePacked(bytes);
                 }
                 else
                 {
-                    int val1 = ((IEnumerable<byte>)bytes).Count<byte>();
-                    if (val1 > (int)ushort.MaxValue)
+                    int val1 = bytes.Count<byte>();
+                    if (val1 > ushort.MaxValue)
                     {
                         this.Write(ushort.MaxValue);
                         this.Write((ushort)42252);
                         this.Write(val1);
                     }
                     else
-                        this.Write((ushort)((IEnumerable<byte>)bytes).Count<byte>());
-                    int num = ((IEnumerable<byte>)bytes).Count<byte>();
-                    if (this.position + num > ((IEnumerable<byte>)this._buffer).Count<byte>())
+                        this.Write((ushort)bytes.Count<byte>());
+                    int num = bytes.Count<byte>();
+                    if (this.position + num > _buffer.Count<byte>())
                         this.resize(this.position + num);
-                    bytes.CopyTo((Array)this._buffer, this.position);
+                    bytes.CopyTo(_buffer, this.position);
                     this.position += num;
                 }
             }
@@ -826,11 +826,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -843,11 +843,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -860,11 +860,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -877,11 +877,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -894,11 +894,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -911,11 +911,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -928,11 +928,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -966,11 +966,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -983,11 +983,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)((IEnumerable<byte>)bytes).Count<byte>();
-                if (this.position + (int)num > ((IEnumerable<byte>)this._buffer).Count<byte>())
-                    this.resize(this.position + (int)num);
-                bytes.CopyTo((Array)this._buffer, this.position);
-                this.position += ((IEnumerable<byte>)bytes).Count<byte>();
+                byte num = (byte)bytes.Count<byte>();
+                if (this.position + num > _buffer.Count<byte>())
+                    this.resize(this.position + num);
+                bytes.CopyTo(_buffer, this.position);
+                this.position += bytes.Count<byte>();
             }
         }
 
@@ -995,11 +995,11 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
             {
-                this.WritePacked((int)val, 8);
+                this.WritePacked(val, 8);
             }
             else
             {
-                if (this.position + 1 > ((IEnumerable<byte>)this._buffer).Count<byte>())
+                if (this.position + 1 > _buffer.Count<byte>())
                     this.resize(this.position + 1);
                 this._buffer[this.position] = val;
                 ++this.position;
@@ -1010,11 +1010,11 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
             {
-                this.WritePacked((int)val, 8);
+                this.WritePacked(val, 8);
             }
             else
             {
-                if (this.position + 1 > ((IEnumerable<byte>)this._buffer).Count<byte>())
+                if (this.position + 1 > _buffer.Count<byte>())
                     this.resize(this.position + 1);
                 this._buffer[this.position] = (byte)val;
                 ++this.position;
@@ -1040,9 +1040,9 @@ namespace DuckGame
         public Profile ReadProfile()
         {
             sbyte index = this.ReadSByte();
-            Profile profile = (Profile)null;
-            if (index >= (sbyte)0 && (int)index < DuckNetwork.profiles.Count)
-                profile = DuckNetwork.profiles[(int)index];
+            Profile profile = null;
+            if (index >= 0 && index < DuckNetwork.profiles.Count)
+                profile = DuckNetwork.profiles[index];
             return profile;
         }
 
@@ -1058,7 +1058,7 @@ namespace DuckGame
 
         public void WriteObject(object obj)
         {
-            int val = (int)byte.MaxValue;
+            int val = byte.MaxValue;
             if (obj != null)
                 val = !(obj is Thing) ? BitBuffer.kTypeIndexList.IndexOf(obj.GetType()) : BitBuffer.kTypeIndexList.IndexOf(typeof(Thing));
             if (val < 0)
@@ -1070,12 +1070,12 @@ namespace DuckGame
         public object ReadObject(out System.Type pTypeRead)
         {
             byte index = this.ReadByte();
-            if (index == byte.MaxValue || (int)index >= BitBuffer.kTypeIndexList.Count)
+            if (index == byte.MaxValue || index >= BitBuffer.kTypeIndexList.Count)
             {
                 pTypeRead = typeof(Thing);
-                return (object)null;
+                return null;
             }
-            pTypeRead = BitBuffer.kTypeIndexList[(int)index];
+            pTypeRead = BitBuffer.kTypeIndexList[index];
             return this.Read(pTypeRead);
         }
 
@@ -1147,7 +1147,7 @@ namespace DuckGame
                     this.WritePacked((int)number3, 8);
                     break;
                 case Thing _:
-                    if (!(obj as Thing).isStateObject && (obj as Thing).specialSyncIndex == (ushort)0 || (obj as Thing).level == null)
+                    if (!(obj as Thing).isStateObject && (obj as Thing).specialSyncIndex == 0 || (obj as Thing).level == null)
                     {
                         if ((obj as Thing).level != null && MonoMain.modDebugging)
                         {
@@ -1160,7 +1160,7 @@ namespace DuckGame
                     this.Write((obj as Thing).level.networkIndex);
                     if ((obj as Thing).isStateObject)
                     {
-                        this.WritePacked((int)Editor.IDToType[(obj as Thing).GetType()], 10);
+                        this.WritePacked(Editor.IDToType[(obj as Thing).GetType()], 10);
                         GhostObject ghostObject = GhostManager.context.MakeGhostLater(obj as Thing);
                         this.Write((ushort)(int)ghostObject.ghostObjectIndex);
                         if (ghostObject.thing.connection != null)
@@ -1192,11 +1192,11 @@ namespace DuckGame
 
         private void resize(int bytes)
         {
-            int length = ((IEnumerable<byte>)this._buffer).Count<byte>() * 2;
+            int length = _buffer.Count<byte>() * 2;
             while (length < bytes)
                 length *= 2;
             byte[] numArray = new byte[length];
-            this._buffer.CopyTo((Array)numArray, 0);
+            this._buffer.CopyTo(numArray, 0);
             this._buffer = numArray;
         }
 
@@ -1206,7 +1206,7 @@ namespace DuckGame
             this._endPosition = 0;
             this._bitOffsetPosition = 0;
             this._bitEndOffset = 0;
-            Array.Clear((Array)this._buffer, 0, this._buffer.Length);
+            Array.Clear(_buffer, 0, this._buffer.Length);
         }
 
         public void QuickClear()

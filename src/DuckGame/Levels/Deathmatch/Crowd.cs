@@ -65,8 +65,8 @@ namespace DuckGame
                         }
                         bitBuffer.Write(true);
                         bitBuffer.WritePacked(crowdDuck.duckColor, 2);
-                        bitBuffer.WritePacked((crowdDuck.lastLoyalty != null ? (int)crowdDuck.lastLoyalty.networkIndex : -1) + 1, 3);
-                        bitBuffer.WritePacked((crowdDuck.loyalty != null ? (int)crowdDuck.loyalty.networkIndex : -1) + 1, 3);
+                        bitBuffer.WritePacked((crowdDuck.lastLoyalty != null ? crowdDuck.lastLoyalty.networkIndex : -1) + 1, 3);
+                        bitBuffer.WritePacked((crowdDuck.loyalty != null ? crowdDuck.loyalty.networkIndex : -1) + 1, 3);
                         if (crowdDuck.loyalty != null || crowdDuck.lastLoyalty != null)
                             bitBuffer.Write(crowdDuck.loyal);
                     }
@@ -98,8 +98,8 @@ namespace DuckGame
                 Crowd._members.Add(new List<CrowdDuck>());
                 for (int dist = 0; dist < 45; ++dist)
                 {
-                    Profile varLoyalty = (Profile)null;
-                    Profile varLastLoyalty = (Profile)null;
+                    Profile varLoyalty = null;
+                    Profile varLastLoyalty = null;
                     bool varLoyal = false;
                     int varColor = 0;
                     bool flag = false;
@@ -107,7 +107,7 @@ namespace DuckGame
                     {
                         if (!data.ReadBool())
                         {
-                            num1 = (int)data.ReadByte();
+                            num1 = data.ReadByte();
                         }
                         else
                         {
@@ -130,7 +130,7 @@ namespace DuckGame
                         --num1;
                     }
                     int facing = dist < 9 ? 0 : (dist < 16 ? 1 : 2);
-                    CrowdDuck crowdDuck = new CrowdDuck((float)(dist * 30 - 30 + 3), num3 + num2, zpos, facing, index, dist, flag ? 0 : 1, varLoyalty, varLastLoyalty, varLoyal, varColor);
+                    CrowdDuck crowdDuck = new CrowdDuck(dist * 30 - 30 + 3, num3 + num2, zpos, facing, index, dist, flag ? 0 : 1, varLoyalty, varLastLoyalty, varLoyal, varColor);
                     Crowd._members[index].Add(crowdDuck);
                 }
                 zpos -= 20f;
@@ -178,7 +178,7 @@ namespace DuckGame
                         };
                 }
                 int totalFansThisGame = Profile.totalFansThisGame;
-                int max = (int)(20.0 + (double)Profile.totalFansThisGame * 0.100000001490116);
+                int max = (int)(20.0 + Profile.totalFansThisGame * 0.100000001490116);
                 if (max > 36)
                     max = 36;
                 if (max < 0)
@@ -193,9 +193,9 @@ namespace DuckGame
                 foreach (int dist in list1)
                 {
                     int facing = dist < 9 ? 0 : (dist < 16 ? 1 : 2);
-                    Crowd._members[0].Add(new CrowdDuck((float)(dist * 30 - 30 + 3), 2f + num, -30f, facing, 0, dist));
+                    Crowd._members[0].Add(new CrowdDuck(dist * 30 - 30 + 3, 2f + num, -30f, facing, 0, dist));
                 }
-                Crowd._members[0].Sort((IComparer<CrowdDuck>)Crowd.helperChairDistanceSorter);
+                Crowd._members[0].Sort(helperChairDistanceSorter);
                 Crowd._members.Add(new List<CrowdDuck>());
                 List<int> list2 = new List<int>();
                 for (int index = 0; index < 45; ++index)
@@ -204,9 +204,9 @@ namespace DuckGame
                 foreach (int dist in list2)
                 {
                     int facing = dist < 9 ? 0 : (dist < 16 ? 1 : 2);
-                    Crowd._members[1].Add(new CrowdDuck((float)(dist * 30 - 30 + 3), num - 9f, -50f, facing, 1, dist));
+                    Crowd._members[1].Add(new CrowdDuck(dist * 30 - 30 + 3, num - 9f, -50f, facing, 1, dist));
                 }
-                Crowd._members[1].Sort((IComparer<CrowdDuck>)Crowd.helperChairDistanceSorter);
+                Crowd._members[1].Sort(helperChairDistanceSorter);
                 Crowd._members.Add(new List<CrowdDuck>());
                 List<int> list3 = new List<int>();
                 for (int index = 0; index < 45; ++index)
@@ -215,9 +215,9 @@ namespace DuckGame
                 foreach (int dist in list3)
                 {
                     int facing = dist < 9 ? 0 : (dist < 16 ? 1 : 2);
-                    Crowd._members[2].Add(new CrowdDuck((float)(dist * 30 - 30 + 3), num - 20f, -70f, facing, 2, dist));
+                    Crowd._members[2].Add(new CrowdDuck(dist * 30 - 30 + 3, num - 20f, -70f, facing, 2, dist));
                 }
-                Crowd._members[2].Sort((IComparer<CrowdDuck>)Crowd.helperChairDistanceSorter);
+                Crowd._members[2].Sort(helperChairDistanceSorter);
                 Crowd._members.Add(new List<CrowdDuck>());
                 List<int> list4 = new List<int>();
                 for (int index = 0; index < 45; ++index)
@@ -226,9 +226,9 @@ namespace DuckGame
                 foreach (int dist in list4)
                 {
                     int facing = dist < 9 ? 0 : (dist < 16 ? 1 : 2);
-                    Crowd._members[3].Add(new CrowdDuck((float)(dist * 30 - 30 + 3), num - 31f, -90f, facing, 3, dist));
+                    Crowd._members[3].Add(new CrowdDuck(dist * 30 - 30 + 3, num - 31f, -90f, facing, 3, dist));
                 }
-                Crowd._members[3].Sort((IComparer<CrowdDuck>)Crowd.helperChairDistanceSorter);
+                Crowd._members[3].Sort(helperChairDistanceSorter);
             }
             if (Level.current is RockScoreboard)
             {
@@ -237,7 +237,7 @@ namespace DuckGame
                     foreach (CrowdDuck crowdDuck in member)
                     {
                         crowdDuck.ClearActions();
-                        Level.Add((Thing)crowdDuck);
+                        Level.Add(crowdDuck);
                     }
                 }
             }
@@ -268,7 +268,7 @@ namespace DuckGame
                     profileList.Add(profile);
                 }
             }
-            float num5 = num1 / (float)num4;
+            float num5 = num1 / num4;
             foreach (List<CrowdDuck> member in Crowd._members)
             {
                 foreach (CrowdDuck crowdDuck in member)
@@ -304,7 +304,7 @@ namespace DuckGame
             if (Crowd.extraFans > 0 && (double)Rando.Float(1f) > 0.5)
             {
                 --Crowd.extraFans;
-                return (FanNum)null;
+                return null;
             }
             List<FanNum> fanNumList = new List<FanNum>();
             foreach (KeyValuePair<Profile, FanNum> fan in Crowd.fanList)
@@ -313,7 +313,7 @@ namespace DuckGame
                     fanNumList.Add(fan.Value);
             }
             if (fanNumList.Count == 0)
-                return (FanNum)null;
+                return null;
             FanNum fanNum;
             while (true)
             {
@@ -323,7 +323,7 @@ namespace DuckGame
                     if (fanNumList.Count == 1)
                         goto label_14;
                 }
-                while ((double)Math.Min(fanNum.loyalFans, 100) / 100.0 * 0.5 + (double)Rando.Float(0.5f) >= (double)Rando.Float(1f));
+                while (Math.Min(fanNum.loyalFans, 100) / 100.0 * 0.5 + (double)Rando.Float(0.5f) >= (double)Rando.Float(1f));
                 fanNumList.Remove(fanNum);
             }
         label_14:
@@ -371,7 +371,7 @@ namespace DuckGame
                     str = "LETS ROCK";
                 else if (Rando.Int(1000000) == 1)
                     str = "www.wonthelp.info";
-                Profile p = (Profile)null;
+                Profile p = null;
                 if ((double)Rando.Float(1f) > 0.5)
                 {
                     List<Team> winning = Teams.winning;
@@ -429,7 +429,7 @@ namespace DuckGame
                     crowdDuckListList.Add(crowdDuckList);
             }
             if (crowdDuckListList.Count <= 0)
-                return (List<CrowdDuck>)null;
+                return null;
             List<CrowdDuck> range = crowdDuckListList[Rando.Int(crowdDuckListList.Count - 1)];
             if (range.Count > num)
                 range = range.GetRange(Rando.Int(range.Count - num), num);
@@ -441,7 +441,7 @@ namespace DuckGame
             if (Crowd._core._newMood == Crowd._core._mood)
                 return;
             Crowd._core._moodWait -= 0.15f;
-            if ((double)Crowd._core._moodWait >= 0.0)
+            if (_core._moodWait >= 0.0)
                 return;
             Crowd._core._mood = Crowd._core._newMood;
             Crowd._core._moodWait = 1f;

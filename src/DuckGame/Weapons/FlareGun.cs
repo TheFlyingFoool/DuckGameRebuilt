@@ -14,7 +14,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 2;
-            this._ammoType = (AmmoType)new AT9mm();
+            this._ammoType = new AT9mm();
             this._ammoType.combustable = true;
             this.wideBarrel = true;
             this._type = "gun";
@@ -53,11 +53,11 @@ namespace DuckGame
                     return;
                 Vec2 vec2 = this.Offset(this.barrelOffset);
                 Flare t = new Flare(vec2.x, vec2.y, this);
-                this.Fondle((Thing)t);
+                this.Fondle(t);
                 Vec2 vec = Maths.AngleToVec(this.barrelAngle + Rando.Float(-0.2f, 0.2f));
                 t.hSpeed = vec.x * 14f;
                 t.vSpeed = vec.y * 14f;
-                Level.Add((Thing)t);
+                Level.Add(t);
             }
             else
                 this.DoAmmoClick();

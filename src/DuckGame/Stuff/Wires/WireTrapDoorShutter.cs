@@ -19,7 +19,7 @@ namespace DuckGame
             if (this._sprite == null || this._button == null)
                 return;
             this._sprite.frame = (int)this._button.length - 1 + (int)this._button.color * 4;
-            this._colSize = new Vec2((float)(7 + 16 * (int)this._button.length), 7f);
+            this._colSize = new Vec2(7 + 16 * (int)this._button.length, 7f);
             this.UpdateOpenState();
         }
 
@@ -31,7 +31,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-3f, -3f);
             this.center = new Vec2(3f, 3f);
             this._sprite = new SpriteMap("wireTrapDoorArm", 71, 7);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
         }
 
         public override void Initialize()
@@ -72,7 +72,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.graphic.flipH = this.offDir < (sbyte)0;
+            this.graphic.flipH = this.offDir < 0;
             base.Draw();
         }
     }

@@ -47,9 +47,9 @@ namespace DuckGame
             if (data != null && data.texture != null)
             {
                 this._sprite = new SpriteMap((Tex2D)data.texture, 16, 16);
-                this.horizontalHeight = (float)data.horizontalHeight;
-                this.verticalWidth = (float)data.verticalWidth;
-                this.verticalWidthThick = (float)data.verticalWidthThick;
+                this.horizontalHeight = data.horizontalHeight;
+                this.verticalWidth = data.verticalWidth;
+                this.verticalWidthThick = data.verticalWidthThick;
                 this._hasLeftNub = data.leftNubber;
                 this._hasRightNub = data.rightNubber;
             }
@@ -60,16 +60,16 @@ namespace DuckGame
                 this.verticalWidth = 14f;
                 this.horizontalHeight = 16f;
             }
-            if ((double)this.horizontalHeight == 0.0)
+            if (horizontalHeight == 0.0)
                 this.horizontalHeight = 16f;
-            if ((double)this.verticalWidth == 0.0)
+            if (verticalWidth == 0.0)
                 this.verticalWidth = 14f;
-            if ((double)this.verticalWidthThick == 0.0)
+            if (verticalWidthThick == 0.0)
                 this.verticalWidthThick = 16f;
             this._sprite.frame = num;
             this._tileset = "CUSTOM0" + (this.customIndex + 1).ToString();
             this._currentTileset = Custom.data[CustomTileset._customType][this.customIndex];
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.UpdateNubbers();
         }
 
@@ -86,9 +86,9 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            EditorGroupMenu contextMenu = new EditorGroupMenu((IContextListener)null, true);
-            contextMenu.AddItem((ContextMenu)new ContextFile("style", (IContextListener)null, new FieldBinding((object)this, "customTileset0" + (this.customIndex + 1).ToString()), ContextFileType.Block));
-            return (ContextMenu)contextMenu;
+            EditorGroupMenu contextMenu = new EditorGroupMenu(null, true);
+            contextMenu.AddItem(new ContextFile("style", null, new FieldBinding(this, "customTileset0" + (this.customIndex + 1).ToString()), ContextFileType.Block));
+            return contextMenu;
         }
     }
 }

@@ -34,15 +34,15 @@ namespace DuckGame
         public static bool enteredMain = false;
         public static string steamInitializeError = "";
         public static int steamBuildID = 0;
-        private const uint WM_CLOSE = 16;
+        //private const uint WM_CLOSE = 16;
         public static bool isLinux = false;
-        public static string wineVersion = (string)null;
+        public static string wineVersion = null;
         private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>()
     {
-      (Func<string>) (() => "Date: " + DateTime.UtcNow.ToString((IFormatProvider) DateTimeFormatInfo.InvariantInfo)),
-      (Func<string>) (() => "Version: " + DG.version),
-      (Func<string>) (() => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")"),
-      (Func<string>) (() => "Command Line: " + Program.commandLine)
+       () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
+       () => "Version: " + DG.version,
+       () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
+       () => "Command Line: " + Program.commandLine
     };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static bool crashed = false;
@@ -57,7 +57,7 @@ namespace DuckGame
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
-            if (((IEnumerable<string>)args).Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !((IEnumerable<string>)args).Contains<string>("-nolinux"))
+            if (args.Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !args.Contains<string>("-nolinux"))
             {
                 Program.wineVersion = WindowsPlatformStartup.wineVersion;
                 Program.isLinux = true;
@@ -83,7 +83,7 @@ namespace DuckGame
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
             if (!Program.enteredMain)
-                return (Assembly)null;
+                return null;
             if (args.Name.StartsWith("Steam,"))
                 return Assembly.GetAssembly(typeof(Steam));
             if (!Program._attemptingResolve)
@@ -92,16 +92,16 @@ namespace DuckGame
                 if (Program.enteredMain)
                 {
                     Program._attemptingResolve = true;
-                    Assembly assembly = (Assembly)null;
+                    Assembly assembly = null;
                     try
                     {
                         assembly = Program.ModResolve(sender, args);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                     Program._attemptingResolve = false;
-                    if (assembly != (Assembly)null)
+                    if (assembly != null)
                         return assembly;
                     flag = true;
                 }
@@ -117,7 +117,7 @@ namespace DuckGame
                     Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Application.ExecutablePath + "\"");
                 }
             }
-            return (Assembly)null;
+            return null;
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
@@ -143,11 +143,11 @@ namespace DuckGame
                 if (args[index] == "+connect_lobby")
                 {
                     ++index;
-                    if (((IEnumerable<string>)args).Count<string>() > index)
+                    if (args.Count<string>() > index)
                     {
                         try
                         {
-                            DuckGame.Main.connectID = Convert.ToUInt64(args[index], (IFormatProvider)CultureInfo.InvariantCulture);
+                            DuckGame.Main.connectID = Convert.ToUInt64(args[index], CultureInfo.InvariantCulture);
                         }
                         catch (Exception ex)
                         {
@@ -158,7 +158,7 @@ namespace DuckGame
                 else if (args[index] == "+password")
                 {
                     ++index;
-                    if (((IEnumerable<string>)args).Count<string>() > index)
+                    if (args.Count<string>() > index)
                         MonoMain.lobbyPassword = args[index];
                 }
                 else if (args[index] == "-debug")
@@ -235,7 +235,7 @@ namespace DuckGame
                 else if (args[index] == "-command")
                 {
                     ++index;
-                    if (index < ((IEnumerable<string>)args).Count<string>())
+                    if (index < args.Count<string>())
                         DevConsole.startupCommands.Add(args[index]);
                 }
                 else
@@ -348,7 +348,7 @@ namespace DuckGame
                             int num2 = 0;
                             foreach (FileAttributes fileAttributes in Enum.GetValues(typeof(FileAttributes)))
                             {
-                                if ((attributes & fileAttributes) > (FileAttributes)0)
+                                if ((attributes & fileAttributes) > 0)
                                 {
                                     if (num2 > 0)
                                         str2 += ",";
@@ -403,8 +403,8 @@ namespace DuckGame
                 {
                     for (int index = 0; index < 5; ++index)
                     {
-                        Send.ImmediateUnreliableBroadcast((NetMessage)new NMClientCrashed());
-                        Send.ImmediateUnreliableBroadcast((NetMessage)new NMClientCrashed());
+                        Send.ImmediateUnreliableBroadcast(new NMClientCrashed());
+                        Send.ImmediateUnreliableBroadcast(new NMClientCrashed());
                         Steam.Update();
                         Thread.Sleep(16);
                     }
@@ -420,13 +420,13 @@ namespace DuckGame
             {
                 try
                 {
-                    str1 = MonoMain.GetExceptionString((object)pException);
+                    str1 = MonoMain.GetExceptionString(pException);
                 }
                 catch (Exception ex1)
                 {
                     try
                     {
-                        str1 = Program.GetExceptionStringMinimal((object)pException);
+                        str1 = Program.GetExceptionStringMinimal(pException);
                     }
                     catch (Exception ex2)
                     {
@@ -474,7 +474,7 @@ namespace DuckGame
                 string str2 = "";
                 bool flag2 = false;
                 Assembly pAssembly = Program.crashAssembly;
-                ModConfiguration pModConfig = (ModConfiguration)null;
+                ModConfiguration pModConfig = null;
                 try
                 {
                     if (pException is ModException)
@@ -493,9 +493,9 @@ namespace DuckGame
                         {
                             foreach (Mod allMod in (IEnumerable<Mod>)ModLoader.allMods)
                             {
-                                if (!(allMod is CoreMod) && allMod.configuration != null && allMod.configuration.assembly != (Assembly)null && allMod.configuration.assembly != Assembly.GetExecutingAssembly())
+                                if (!(allMod is CoreMod) && allMod.configuration != null && allMod.configuration.assembly != null && allMod.configuration.assembly != Assembly.GetExecutingAssembly())
                                 {
-                                    bool flag3 = Program.crashAssembly == (Assembly)null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == Program.crashAssembly;
+                                    bool flag3 = Program.crashAssembly == null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == Program.crashAssembly;
                                     if (!flag3)
                                     {
                                         foreach (System.Type type in allMod.configuration.assembly.GetTypes())
@@ -538,7 +538,7 @@ namespace DuckGame
                 {
                 }
                 num = 4;
-                if (pAssembly == (Assembly)null)
+                if (pAssembly == null)
                     pAssembly = Program.crashAssembly;
                 try
                 {

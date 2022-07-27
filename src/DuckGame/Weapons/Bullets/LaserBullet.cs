@@ -34,18 +34,18 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._tracer || (double)this._bulletDistance <= 0.100000001490116)
+            if (this._tracer || _bulletDistance <= 0.100000001490116)
                 return;
             if (this.gravityAffected)
             {
                 if (this.prev.Count < 1)
                     return;
-                int num = (int)Math.Ceiling(((double)this.drawdist - (double)this.startpoint) / 8.0);
+                int num = (int)Math.Ceiling((drawdist - (double)this.startpoint) / 8.0);
                 Vec2 p2 = this.prev.Last<Vec2>();
                 for (int index = 0; index < num; ++index)
                 {
-                    Vec2 pointOnArc = this.GetPointOnArc((float)(index * 8));
-                    DuckGame.Graphics.DrawTexturedLine((Tex2D)this._beem, pointOnArc, p2, this.color * (float)(1.0 - (double)index / (double)num) * this.alpha, this.ammo.bulletThickness, (Depth)0.9f);
+                    Vec2 pointOnArc = this.GetPointOnArc(index * 8);
+                    DuckGame.Graphics.DrawTexturedLine((Tex2D)this._beem, pointOnArc, p2, this.color * (float)(1.0 - index / (double)num) * this.alpha, this.ammo.bulletThickness, (Depth)0.9f);
                     if (pointOnArc == this.prev.First<Vec2>())
                         break;
                     p2 = pointOnArc;
@@ -95,8 +95,8 @@ namespace DuckGame
             t.isLocal = this.isLocal;
             t.connection = this.connection;
             this.reboundCalled = true;
-            Level.current.AddThing((Thing)t);
-            Level.current.AddThing((Thing)new LaserRebound(pos.x, pos.y));
+            Level.current.AddThing(t);
+            Level.current.AddThing(new LaserRebound(pos.x, pos.y));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace DuckGame
         public SnowBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 7
             };
@@ -52,49 +52,69 @@ namespace DuckGame
             this._parallax.AddZone(14, 0.4f, speed);
             this._parallax.AddZone(15, 0.3f, speed);
             Vec2 vec2 = new Vec2(0.0f, -12f);
-            Sprite s1 = new Sprite("background/bigBerg1_reflection");
-            s1.depth = - 0.9f;
-            s1.position = new Vec2(-30f, 113f) + vec2;
+            Sprite s1 = new Sprite("background/bigBerg1_reflection")
+            {
+                depth = -0.9f,
+                position = new Vec2(-30f, 113f) + vec2
+            };
             this._parallax.AddZoneSprite(s1, 12, 0.0f, 0.0f, true);
-            Sprite s2 = new Sprite("background/bigBerg1");
-            s2.depth = - 0.8f;
-            s2.position = new Vec2(-31f, 50f) + vec2;
+            Sprite s2 = new Sprite("background/bigBerg1")
+            {
+                depth = -0.8f,
+                position = new Vec2(-31f, 50f) + vec2
+            };
             this._parallax.AddZoneSprite(s2, 12, 0.0f, 0.0f, true);
-            Sprite s3 = new Sprite("background/bigBerg2_reflection");
-            s3.depth = - 0.9f;
-            s3.position = new Vec2(210f, 108f) + vec2;
+            Sprite s3 = new Sprite("background/bigBerg2_reflection")
+            {
+                depth = -0.9f,
+                position = new Vec2(210f, 108f) + vec2
+            };
             this._parallax.AddZoneSprite(s3, 12, 0.0f, 0.0f, true);
-            Sprite s4 = new Sprite("background/bigBerg2");
-            s4.depth = - 0.8f;
-            s4.position = new Vec2(211f, 52f) + vec2;
+            Sprite s4 = new Sprite("background/bigBerg2")
+            {
+                depth = -0.8f,
+                position = new Vec2(211f, 52f) + vec2
+            };
             this._parallax.AddZoneSprite(s4, 12, 0.0f, 0.0f, true);
-            Sprite s5 = new Sprite("background/berg1_reflection");
-            s5.depth = - 0.9f;
-            s5.position = new Vec2(119f, 131f) + vec2;
+            Sprite s5 = new Sprite("background/berg1_reflection")
+            {
+                depth = -0.9f,
+                position = new Vec2(119f, 131f) + vec2
+            };
             this._parallax.AddZoneSprite(s5, 13, 0.0f, 0.0f, true);
-            Sprite s6 = new Sprite("background/berg1");
-            s6.depth = - 0.8f;
-            s6.position = new Vec2(121f, 114f) + vec2;
+            Sprite s6 = new Sprite("background/berg1")
+            {
+                depth = -0.8f,
+                position = new Vec2(121f, 114f) + vec2
+            };
             this._parallax.AddZoneSprite(s6, 13, 0.0f, 0.0f, true);
             vec2 = new Vec2(-30f, -20f);
-            Sprite s7 = new Sprite("background/berg2_reflection");
-            s7.depth = - 0.9f;
-            s7.position = new Vec2(69f, 153f) + vec2;
+            Sprite s7 = new Sprite("background/berg2_reflection")
+            {
+                depth = -0.9f,
+                position = new Vec2(69f, 153f) + vec2
+            };
             this._parallax.AddZoneSprite(s7, 14, 0.0f, 0.0f, true);
-            Sprite s8 = new Sprite("background/berg2");
-            s8.depth = - 0.8f;
-            s8.position = new Vec2(71f, 154f) + vec2;
+            Sprite s8 = new Sprite("background/berg2")
+            {
+                depth = -0.8f,
+                position = new Vec2(71f, 154f) + vec2
+            };
             this._parallax.AddZoneSprite(s8, 14, 0.0f, 0.0f, true);
             vec2 = new Vec2(200f, 2f);
-            Sprite s9 = new Sprite("background/berg3_reflection");
-            s9.depth = - 0.9f;
-            s9.position = new Vec2(70f, 153f) + vec2;
+            Sprite s9 = new Sprite("background/berg3_reflection")
+            {
+                depth = -0.9f,
+                position = new Vec2(70f, 153f) + vec2
+            };
             this._parallax.AddZoneSprite(s9, 15, 0.0f, 0.0f, true);
-            Sprite s10 = new Sprite("background/berg3");
-            s10.depth = - 0.8f;
-            s10.position = new Vec2(71f, 154f) + vec2;
+            Sprite s10 = new Sprite("background/berg3")
+            {
+                depth = -0.8f,
+                position = new Vec2(71f, 154f) + vec2
+            };
             this._parallax.AddZoneSprite(s10, 15, 0.0f, 0.0f, true);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
             if (this.level == null)
                 return;
             this.level.cold = true;
@@ -102,6 +122,6 @@ namespace DuckGame
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

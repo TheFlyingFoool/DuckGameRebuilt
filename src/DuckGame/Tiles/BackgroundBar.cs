@@ -13,7 +13,7 @@ namespace DuckGame
         public BackgroundBar(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("barback", 16, 16, true);
+            this.graphic = new SpriteMap("barback", 16, 16, true);
             this._opacityFromGraphic = true;
             this.center = new Vec2(8f, 8f);
             this.collisionSize = new Vec2(16f, 16f);

@@ -26,9 +26,9 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.profile == null || this.persona < (byte)0 || (int)this.persona >= Persona.all.Count<DuckPersona>())
+            if (this.profile == null || this.persona < 0 || persona >= Persona.all.Count<DuckPersona>())
                 return;
-            DuckNetwork.RequestPersona(this.profile, Persona.all.ElementAt<DuckPersona>((int)this.persona));
+            DuckNetwork.RequestPersona(this.profile, Persona.all.ElementAt<DuckPersona>(persona));
         }
     }
 }

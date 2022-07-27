@@ -20,8 +20,10 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._owner = owner;
-            this.graphic = new Sprite("controlWave");
-            this.graphic.flipH = this.offDir < (sbyte)0;
+            this.graphic = new Sprite("controlWave")
+            {
+                flipH = this.offDir < 0
+            };
             this.center = new Vec2(8f, 8f);
             this.xscale = this.yscale = 0.2f;
             this.angle = dir;
@@ -34,8 +36,8 @@ namespace DuckGame
             {
                 this.xscale = this.yscale = Maths.CountUp(this.yscale, 0.05f);
                 this._fade -= 0.05f;
-                if ((double)this._fade < 0.0)
-                    Level.Remove((Thing)this);
+                if (_fade < 0.0)
+                    Level.Remove(this);
                 this.alpha = Maths.NormalizeSection(this._fade, 0.2f, 0.3f);
                 Vec2 p2 = Vec2.Zero;
                 if (this._owner.controlledDuck == null && !this._isNotControlRay)
@@ -70,12 +72,12 @@ namespace DuckGame
                     }
                     this._isNotControlRay = true;
                 }
-                this.position = this.position + p2 * 2.6f;
+                this.position += p2 * 2.6f;
             }
             else
             {
                 this.xscale = this.yscale = 1f;
-                this.position = this.position + new Vec2((float)Math.Cos((double)this.angle), (float)-Math.Sin((double)this.angle)) * 2.6f;
+                this.position += new Vec2((float)Math.Cos((double)this.angle), (float)-Math.Sin((double)this.angle)) * 2.6f;
             }
         }
     }

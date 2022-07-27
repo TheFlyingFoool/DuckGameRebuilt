@@ -47,7 +47,7 @@ namespace DuckGame
             BitBuffer bitBuffer = new BitBuffer();
             bitBuffer.Write(13826924961947138L);
             bitBuffer.Write(this._tokens.Count);
-            TokenSerializer.instance = (TokenSerializer)null;
+            TokenSerializer.instance = null;
             for (int index = 0; index < this._tokens.Count; ++index)
                 bitBuffer.Write(this._tokens[index]);
             bitBuffer.Write(pBuffer, true);

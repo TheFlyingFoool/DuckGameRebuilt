@@ -25,7 +25,7 @@ namespace DuckGame
             this._sprite.AddAnimation("idle", 0.4f, true, 0, 1, 2, 3, 4, 5, 6, 7);
             this._sprite.AddAnimation("walk", 0.2f, true, 8, 9, 10, 11, 12, 13, 14, 15);
             this._sprite.SetAnimation("walk");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._collisionSize = new Vec2(8f, 22f);
             this._collisionOffset = new Vec2(-4f, -7f);
             this.center = new Vec2(16f, 16f);
@@ -41,17 +41,17 @@ namespace DuckGame
             try
             {
                 this.wait -= 0.004f;
-                if ((double)this.wait >= 0.0)
+                if (wait >= 0.0)
                     return;
                 this.wait = 1f;
                 Duck t = new Duck(this.x, this.y, Profiles.DefaultPlayer1)
                 {
                     ai = new DuckAI()
                 };
-                t.mindControl = (InputProfile)t.ai;
+                t.mindControl = t.ai;
                 t.derpMindControl = false;
-                (Level.current.camera as FollowCam).Add((Thing)t);
-                Level.Add((Thing)t);
+                (Level.current.camera as FollowCam).Add(t);
+                Level.Add(t);
             }
             catch (Exception)
             {

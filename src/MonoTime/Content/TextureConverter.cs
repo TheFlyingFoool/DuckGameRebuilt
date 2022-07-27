@@ -31,16 +31,16 @@ namespace DuckGame
             {
                 float width1 = TextureConverter._maxDimensions.x;
                 float height1 = TextureConverter._maxDimensions.y;
-                float num = Math.Min(width1 / (float)bitmap.Width, height1 / (float)bitmap.Height);
-                if ((double)width1 < (double)bitmap.Width || (double)height1 < (double)bitmap.Height)
+                float num = Math.Min(width1 / bitmap.Width, height1 / bitmap.Height);
+                if ((double)width1 < bitmap.Width || (double)height1 < bitmap.Height)
                 {
                     TextureConverter.lastLoadResultedInResize = true;
-                    if ((double)bitmap.Width * (double)num < (double)width1)
-                        width1 = (float)bitmap.Width * num;
-                    if ((double)bitmap.Height * (double)num < (double)height1)
-                        height1 = (float)bitmap.Height * num;
+                    if (bitmap.Width * (double)num < (double)width1)
+                        width1 = bitmap.Width * num;
+                    if (bitmap.Height * (double)num < (double)height1)
+                        height1 = bitmap.Height * num;
                     Bitmap bitmap1 = new Bitmap((int)width1, (int)height1);
-                    System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage((Image)bitmap1);
+                    System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bitmap1);
                     graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     graphics.CompositingQuality = CompositingQuality.HighQuality;
                     graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -49,7 +49,7 @@ namespace DuckGame
                     int width2 = bitmap.Width;
                     int height2 = bitmap.Height;
                     System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, (int)width1, (int)height1);
-                    graphics.DrawImage((Image)bitmap, destRect, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel, imageAttr);
+                    graphics.DrawImage(bitmap, destRect, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel, imageAttr);
                     bitmap.Dispose();
                     graphics.Dispose();
                     bitmap = bitmap1;
@@ -71,19 +71,21 @@ namespace DuckGame
                     byte num3 = *numPtr;
                     *numPtr = numPtr[2];
                     numPtr[2] = num3;
-                    float num4 = (float)numPtr[3] / (float)byte.MaxValue;
+                    float num4 = numPtr[3] / (float)byte.MaxValue;
                     for (int index = 0; index < 3; ++index)
-                        numPtr[index] = (byte)((double)numPtr[index] * (double)num4);
+                        numPtr[index] = (byte)(numPtr[index] * (double)num4);
                 }
                 ++num2;
                 ++scan0;
             }
             int[] destination = new int[bitmapdata.Width * bitmapdata.Height];
             Marshal.Copy(bitmapdata.Scan0, destination, 0, destination.Length);
-            PNGData pngData = new PNGData();
-            pngData.data = destination;
-            pngData.width = bitmapdata.Width;
-            pngData.height = bitmapdata.Height;
+            PNGData pngData = new PNGData
+            {
+                data = destination,
+                width = bitmapdata.Width,
+                height = bitmapdata.Height
+            };
             bitmap.UnlockBits(bitmapdata);
             return pngData;
         }

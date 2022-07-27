@@ -16,7 +16,7 @@ namespace DuckGame
         public override AIState Update(Duck duck, DuckAI ai)
         {
             this._wait -= 0.016f;
-            return (double)this._wait <= 0.0 ? (AIState)null : (AIState)this;
+            return _wait <= 0.0 ? null : (AIState)this;
         }
     }
 }

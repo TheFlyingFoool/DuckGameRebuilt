@@ -22,15 +22,15 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-8f, -8f);
             this._canFlip = false;
             this._visibleInGame = false;
-            this.wide = new EditorProperty<int>(320, (Thing)this, 60f, 1920f, 1f);
-            this.high = new EditorProperty<int>(320, (Thing)this, 60f, 1920f, 1f);
+            this.wide = new EditorProperty<int>(320, this, 60f, 1920f, 1f);
+            this.high = new EditorProperty<int>(320, this, 60f, 1920f, 1f);
         }
 
         public override void Draw()
         {
             base.Draw();
-            float num1 = (float)this.wide.value;
-            float num2 = (float)this.high.value;
+            float num1 = wide.value;
+            float num2 = high.value;
             Graphics.DrawRect(this.position + new Vec2((float)(-(double)num1 / 2.0), (float)(-(double)num2 / 2.0)), this.position + new Vec2(num1 / 2f, num2 / 2f), Color.Blue * 0.5f, (Depth)1f, false);
         }
     }

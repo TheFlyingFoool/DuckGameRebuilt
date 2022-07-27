@@ -56,8 +56,8 @@ namespace DuckGame
         {
             this.sequence.order = this.Order.value;
             base.Initialize();
-            this.autofire = (EditorProperty<float>)((float)this.AutoFire.value * Maths.IncFrameTimer());
-            this.speediness = (EditorProperty<float>)((float)this.FireSpeed.value * Maths.IncFrameTimer());
+            this.autofire = (EditorProperty<float>)(AutoFire.value * Maths.IncFrameTimer());
+            this.speediness = (EditorProperty<float>)(FireSpeed.value * Maths.IncFrameTimer());
         }
 
         public override void UpdateFire()
@@ -69,9 +69,9 @@ namespace DuckGame
             if (holdObject.ammoType != null)
                 num = holdObject.ammoType.range;
             Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0.0f));
-            if ((double)this._waitFire <= 0.0)
+            if (_waitFire <= 0.0)
             {
-                foreach (Duck duck in Level.current.things[typeof(Duck)].Where<Thing>((Func<Thing, bool>)(d => !(d is TargetDuck))))
+                foreach (Duck duck in Level.current.things[typeof(Duck)].Where<Thing>(d => !(d is TargetDuck)))
                 {
                     if (Collision.Line(this.holdObject.position + new Vec2(0.0f, -5f), vec2 + new Vec2(0.0f, -5f), duck.rectangle) || Collision.Line(this.holdObject.position + new Vec2(0.0f, 5f), vec2 + new Vec2(0.0f, 5f), duck.rectangle))
                     {
@@ -95,19 +95,19 @@ namespace DuckGame
                 }
             }
             this._holdAction = false;
-            if ((double)this._waitFire < 0.0)
+            if (_waitFire < 0.0)
                 return;
             this._waitFire -= Maths.IncFrameTimer();
-            if ((double)this._waitFire > 0.0)
+            if (_waitFire > 0.0)
                 return;
             holdObject.PressAction();
             this._holdAction = true;
-            this._reloadAdd = (float)this.ReloadSpeed.value * Maths.IncFrameTimer();
+            this._reloadAdd = ReloadSpeed.value * Maths.IncFrameTimer();
         }
 
         public override void Draw()
         {
-            if (this.holdObject is Gun && (this.holdObject as Gun).ammoType != null && (double)this._waitFire < 1.0 && (double)this._waitFire > 0.0)
+            if (this.holdObject is Gun && (this.holdObject as Gun).ammoType != null && _waitFire < 1.0 && _waitFire > 0.0)
             {
                 float num = this._waitFire * this._waitFire;
                 Vec2 barrelPosition = (this.holdObject as Gun).barrelPosition;
@@ -115,8 +115,8 @@ namespace DuckGame
                 Vec2 p1_2 = barrelPosition + new Vec2(0.0f, num * 64f);
                 float amount = (float)(1.0 - (double)Math.Min(this._waitFire, 0.08f) / 0.0799999982118607);
                 Color color = Lerp.ColorSmooth(Color.White, Color.Red, amount);
-                Graphics.DrawLine(p1_1, p1_1 + new Vec2((this.holdObject as Gun).ammoType.range * (float)this.offDir, 0.0f), color * Math.Max((float)(1.0 - (double)this._waitFire - 0.5), 0.0f), 1f + amount, (Depth)0.99f);
-                Graphics.DrawLine(p1_2, p1_2 + new Vec2((this.holdObject as Gun).ammoType.range * (float)this.offDir, 0.0f), color * Math.Max((float)(1.0 - (double)this._waitFire - 0.5), 0.0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_1, p1_1 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0.0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0.0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_2, p1_2 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0.0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0.0f), 1f + amount, (Depth)0.99f);
             }
             base.Draw();
         }

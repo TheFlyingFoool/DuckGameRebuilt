@@ -29,7 +29,7 @@ namespace DuckGame
         {
             this._device = d != null ? d : pro.inputProfile.lastActiveDevice;
             if (this._device != null && this._device.productName == null && this._device.productGUID == null)
-                this._device = (InputDevice)null;
+                this._device = null;
             this._index = pro.networkIndex;
             this._profile = pro;
             this._inputProfile = pro.inputProfile;
@@ -46,7 +46,7 @@ namespace DuckGame
                 this._serializedData.Write(true);
                 this._serializedData.Write(this._index);
                 this._serializedData.Write(this._device.inputDeviceType);
-                MultiMap<string, int> multiMap = (MultiMap<string, int>)null;
+                MultiMap<string, int> multiMap = null;
                 if (this._device != null)
                     multiMap = this._inputProfile.GetMappings(this._device.GetType());
                 if (multiMap != null)
@@ -75,7 +75,7 @@ namespace DuckGame
                         foreach (KeyValuePair<int, string> graphic in deviceInputMapping.graphicMap)
                         {
                             KeyValuePair<int, string> pair = graphic;
-                            Sprite sprite = Input.buttonStyles.FirstOrDefault<Sprite>((Func<Sprite, bool>)(x => x.texture != null && x.texture.textureName == pair.Value));
+                            Sprite sprite = Input.buttonStyles.FirstOrDefault<Sprite>(x => x.texture != null && x.texture.textureName == pair.Value);
                             byte val2 = 0;
                             if (sprite != null)
                                 val2 = (byte)Input.buttonStyles.IndexOf(sprite);
@@ -102,25 +102,27 @@ namespace DuckGame
             {
                 this._index = msg.ReadByte();
                 byte num1 = msg.ReadByte();
-                DeviceInputMapping deviceInputMapping = new DeviceInputMapping();
-                deviceInputMapping.inputOverrideType = (int)num1;
+                DeviceInputMapping deviceInputMapping = new DeviceInputMapping
+                {
+                    inputOverrideType = num1
+                };
                 switch (num1)
                 {
                     case 0:
-                        deviceInputMapping.deviceOverride = (InputDevice)new Keyboard("", 0);
+                        deviceInputMapping.deviceOverride = new Keyboard("", 0);
                         break;
                     case 1:
-                        deviceInputMapping.deviceOverride = (InputDevice)new XInputPad(0);
+                        deviceInputMapping.deviceOverride = new XInputPad(0);
                         break;
                     default:
-                        deviceInputMapping.deviceOverride = (InputDevice)new DInputPad(0);
+                        deviceInputMapping.deviceOverride = new DInputPad(0);
                         break;
                 }
                 deviceInputMapping.deviceOverride.overrideMap = deviceInputMapping;
                 if (msg.ReadBool())
                 {
                     byte num2 = msg.ReadByte();
-                    for (int index = 0; index < (int)num2; ++index)
+                    for (int index = 0; index < num2; ++index)
                     {
                         byte key = msg.ReadByte();
                         int pIndex = msg.ReadInt();
@@ -129,10 +131,10 @@ namespace DuckGame
                     if (msg.ReadBool())
                     {
                         byte num3 = msg.ReadByte();
-                        for (int index1 = 0; index1 < (int)num3; ++index1)
+                        for (int index1 = 0; index1 < num3; ++index1)
                         {
                             int key = msg.ReadInt();
-                            int index2 = (int)msg.ReadByte();
+                            int index2 = msg.ReadByte();
                             deviceInputMapping.graphicMap[key] = Input.buttonStyles[index2].texture.textureName;
                         }
                     }
@@ -144,10 +146,10 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this._index < (byte)0 || this._index > (byte)3 || !this._valid)
+            if (this._index < 0 || this._index > 3 || !this._valid)
                 return;
-            Profile profile = DuckNetwork.profiles[(int)this._index];
-            profile.inputMappingOverrides.RemoveAll((Predicate<DeviceInputMapping>)(x => x.inputOverrideType == this._mapping.inputOverrideType));
+            Profile profile = DuckNetwork.profiles[_index];
+            profile.inputMappingOverrides.RemoveAll(x => x.inputOverrideType == this._mapping.inputOverrideType);
             profile.inputMappingOverrides.Add(this._mapping);
             foreach (KeyValuePair<string, int> keyValuePair in this._mapping.map)
                 profile.inputProfile.Map(this._mapping.deviceOverride, keyValuePair.Key, keyValuePair.Value, true);

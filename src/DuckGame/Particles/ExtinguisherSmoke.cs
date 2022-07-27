@@ -56,10 +56,10 @@ namespace DuckGame
             this._orbiter.AddAnimation("idle", 0.1f, true, num2);
             this._orbiter.AddAnimation("puff", Rando.Float(0.15f, 0.25f), false, num2, 1 + num2, 2 + num2, 3 + num2);
             this._sprite2 = new SpriteMap("tinySmokeTestBack", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             if (Network.isActive && !network)
-                GhostManager.context.particleManager.AddLocalParticle((PhysicsParticle)this);
+                GhostManager.context.particleManager.AddLocalParticle(this);
             this.isLocal = !network;
             this._orbitInc += 0.2f;
             this._sprite.SetAnimation("idle");
@@ -82,7 +82,7 @@ namespace DuckGame
             if (Network.isActive && !this.didRemove && this.isLocal && GhostManager.context != null)
             {
                 this.didRemove = true;
-                GhostManager.context.particleManager.RemoveParticle((PhysicsParticle)this);
+                GhostManager.context.particleManager.RemoveParticle(this);
             }
             base.Removed();
         }
@@ -97,7 +97,7 @@ namespace DuckGame
             this._moveWave2.Update();
             this._orbitInc += this._rotSpeed;
             this._distPulse += this._distPulseSpeed;
-            if ((double)this._life < 0.300000011920929)
+            if (_life < 0.300000011920929)
                 this.xscale = this.yscale = Maths.LerpTowards(this.xscale, 0.1f, 0.015f);
             else if (this._grounded)
                 this.xscale = this.yscale = Maths.LerpTowards(this.xscale, this._fullScale, 0.01f);
@@ -115,27 +115,27 @@ namespace DuckGame
                 {
                     this._groundedTime += 0.01f;
                     ExtinguisherSmoke extinguisherSmoke = Level.CheckCircle<ExtinguisherSmoke>(new Vec2(this.x, this.y + 4f), 6f);
-                    if (extinguisherSmoke != null && (double)this._groundedTime < (double)extinguisherSmoke._groundedTime - 0.100000001490116)
+                    if (extinguisherSmoke != null && _groundedTime < extinguisherSmoke._groundedTime - 0.100000001490116)
                         extinguisherSmoke.y -= 0.1f;
                 }
-                if ((double)this._life < 0.0 && this._sprite.currentAnimation != "puff")
+                if (_life < 0.0 && this._sprite.currentAnimation != "puff")
                     this._sprite.SetAnimation("puff");
                 if (this._sprite.currentAnimation == "puff" && this._sprite.finished)
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
                 base.Update();
             }
         }
 
         public override void Draw()
         {
-            float num1 = (float)Math.Sin((double)this._distPulse);
-            float num2 = (float)-(Math.Sin((double)this._orbitInc) * (double)num1) * this.s1;
-            float num3 = (float)Math.Cos((double)this._orbitInc) * num1 * this.s1;
+            float num1 = (float)Math.Sin(_distPulse);
+            float num2 = (float)-(Math.Sin(_orbitInc) * (double)num1) * this.s1;
+            float num3 = (float)Math.Cos(_orbitInc) * num1 * this.s1;
             this._sprite.imageIndex = this._sprite.imageIndex;
             this._sprite.depth = this.depth;
             this._sprite.scale = new Vec2(this.s1);
             this._sprite.center = this.center;
-            Graphics.Draw((Sprite)this._sprite, this.x + num2, this.y + num3);
+            Graphics.Draw(_sprite, this.x + num2, this.y + num3);
             this._sprite2.imageIndex = this._sprite.imageIndex;
             this._sprite2.angle = this._sprite.angle;
             this._sprite2.depth = - 0.5f;
@@ -144,20 +144,20 @@ namespace DuckGame
             float num4 = 0.6f - Rando.Float(0.2f);
             float num5 = 0.4f;
             this._sprite2.color = new Color(num5, num5, num5);
-            Graphics.Draw((Sprite)this._sprite2, this.x + num2, this.y + num3);
+            Graphics.Draw(_sprite2, this.x + num2, this.y + num3);
             this._orbiter.imageIndex = this._sprite.imageIndex;
             this._orbiter.color = this._sprite.color;
             this._orbiter.depth = this.depth;
             this._orbiter.scale = new Vec2(this.s2);
             this._orbiter.center = this.center;
-            Graphics.Draw((Sprite)this._orbiter, this.x - num2, this.y - num3);
+            Graphics.Draw(_orbiter, this.x - num2, this.y - num3);
             this._sprite2.imageIndex = this._orbiter.imageIndex;
             this._sprite2.angle = this._orbiter.angle;
             this._sprite2.depth = - 0.5f;
             this._sprite2.scale = this._orbiter.scale;
             this._sprite2.center = this.center;
             this._sprite2.color = new Color(num5, num5, num5);
-            Graphics.Draw((Sprite)this._sprite2, this.x - num2, this.y - num3);
+            Graphics.Draw(_sprite2, this.x - num2, this.y - num3);
         }
     }
 }

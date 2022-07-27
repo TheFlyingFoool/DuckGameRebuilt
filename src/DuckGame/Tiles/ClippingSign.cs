@@ -18,9 +18,9 @@ namespace DuckGame
         public ClippingSign(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.style = new EditorProperty<int>(0, (Thing)this, max: 2f, increment: 1f);
+            this.style = new EditorProperty<int>(0, this, max: 2f, increment: 1f);
             this._sprite = new SpriteMap("noClippingSign", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 24f);
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -8f);

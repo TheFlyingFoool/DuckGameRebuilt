@@ -15,8 +15,10 @@ namespace DuckGame
         public WeaponInfoBox(float xpos, float ypos, Gun gun)
           : base(xpos, ypos)
         {
-            this._font = new BitmapFont("duckFont", 8);
-            this._font.scale = new Vec2(0.5f, 0.5f);
+            this._font = new BitmapFont("duckFont", 8)
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             this.layer = Layer.HUD;
             this._image = gun.GetEditorImage(0, 0, true);
             this._image.depth = (Depth)1f;

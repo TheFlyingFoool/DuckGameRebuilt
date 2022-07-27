@@ -23,7 +23,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("mysteryGun", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 16f);
             this.collisionSize = new Vec2(10f, 10f);
             this.collisionOffset = new Vec2(-5f, -5f);
@@ -42,16 +42,16 @@ namespace DuckGame
             Random generator = Rando.generator;
             Rando.generator = random;
             List<TypeProbPair> typeProbPairList = Utils.Shuffle<TypeProbPair>(contains);
-            System.Type type = (System.Type)null;
+            System.Type type = null;
             float num = 0.0f;
             foreach (TypeProbPair typeProbPair in typeProbPairList)
             {
-                if ((double)Rando.Float(1f) > 1.0 - (double)typeProbPair.probability)
+                if ((double)Rando.Float(1f) > 1.0 - typeProbPair.probability)
                 {
                     type = typeProbPair.type;
                     break;
                 }
-                if ((double)typeProbPair.probability > (double)num)
+                if (typeProbPair.probability > (double)num)
                 {
                     num = typeProbPair.probability;
                     type = typeProbPair.type;
@@ -73,32 +73,32 @@ namespace DuckGame
 
         private void ReplaceSelfWithThing()
         {
-            if (this.containedType == (System.Type)null)
+            if (this.containedType == null)
                 this.PreparePossibilities();
             System.Type containedType = this.containedType;
-            if (containedType != (System.Type)null)
+            if (containedType != null)
             {
                 this._addedThing = Editor.CreateObject(containedType) as Thing;
                 this._addedThing.position = this.position;
                 Level.Add(this._addedThing);
             }
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public List<TypeProbPair> possible => this.contains;
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding radioBinding = new FieldBinding((object)this, "contains");
+            FieldBinding radioBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
             contextMenu.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), radioBinding);
-            return (ContextMenu)contextMenu;
+            return contextMenu;
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", (object)MysteryGun.SerializeTypeProb(this.contains));
+            binaryClassChunk.AddProperty("contains", MysteryGun.SerializeTypeProb(this.contains));
             return binaryClassChunk;
         }
 
@@ -156,10 +156,10 @@ namespace DuckGame
             float num = 0.0f;
             foreach (TypeProbPair contain in this.contains)
             {
-                if ((double)contain.probability > 0.0)
+                if (contain.probability > 0.0)
                 {
                     Color white = Color.White;
-                    Color color = (double)contain.probability != 0.0 ? ((double)contain.probability >= 0.300000011920929 ? ((double)contain.probability >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                    Color color = contain.probability != 0.0 ? (contain.probability >= 0.300000011920929 ? (contain.probability >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                     string text = contain.type.Name + ": " + contain.probability.ToString("0.000");
                     Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text, scale: 0.5f) / 2.0), (float)-(16.0 + (double)num)), color, (Depth)0.9f, scale: 0.5f);
                     num += 4f;

@@ -15,7 +15,7 @@ namespace DuckGame
         {
             this.wideBarrel = true;
             this.ammo = 99;
-            this._ammoType = (AmmoType)new ATShrapnel();
+            this._ammoType = new ATShrapnel();
             this._ammoType.range = 140f;
             this._ammoType.rangeVariation = 40f;
             this._ammoType.accuracy = 0.01f;
@@ -44,13 +44,15 @@ namespace DuckGame
                 int num = 0;
                 for (int index = 0; index < 14; ++index)
                 {
-                    MusketSmoke musketSmoke = new MusketSmoke(this.barrelPosition.x - 16f + Rando.Float(32f), this.barrelPosition.y - 16f + Rando.Float(32f));
-                    musketSmoke.depth = (Depth)(float)(0.899999976158142 + (double)index * (1.0 / 1000.0));
+                    MusketSmoke musketSmoke = new MusketSmoke(this.barrelPosition.x - 16f + Rando.Float(32f), this.barrelPosition.y - 16f + Rando.Float(32f))
+                    {
+                        depth = (Depth)(float)(0.899999976158142 + index * (1.0 / 1000.0))
+                    };
                     if (num < 6)
                         musketSmoke.move -= this.barrelVector * Rando.Float(0.1f);
                     if (num > 5 && num < 10)
                         musketSmoke.fly += this.barrelVector * (2f + Rando.Float(7.8f));
-                    Level.Add((Thing)musketSmoke);
+                    Level.Add(musketSmoke);
                     ++num;
                 }
                 this._tampInc = 0.0f;

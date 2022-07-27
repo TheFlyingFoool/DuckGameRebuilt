@@ -14,7 +14,7 @@ namespace DuckGame
     {
         public static List<T> Shuffle<T>(List<T> list)
         {
-            List<T> objList = new List<T>((IEnumerable<T>)list);
+            List<T> objList = new List<T>(list);
             for (int index1 = 0; index1 < objList.Count - 1; ++index1)
             {
                 int index2 = index1 + Rando.Int(objList.Count - 1 - index1);

@@ -13,38 +13,38 @@ namespace DuckGame
         {
             get
             {
-                this._value = (ushort)0;
+                this._value = 0;
                 PhysicsObject thing = this._thing as PhysicsObject;
                 if (thing.solid)
-                    this._value |= (ushort)128;
+                    this._value |= 128;
                 if (thing.enablePhysics)
-                    this._value |= (ushort)16;
+                    this._value |= 16;
                 if (thing.active)
-                    this._value |= (ushort)8;
+                    this._value |= 8;
                 if (thing.visible)
-                    this._value |= (ushort)4;
+                    this._value |= 4;
                 if (thing.grounded)
-                    this._value |= (ushort)64;
+                    this._value |= 64;
                 if (thing.onFire)
-                    this._value |= (ushort)32;
+                    this._value |= 32;
                 if (thing._destroyed)
-                    this._value |= (ushort)2;
+                    this._value |= 2;
                 if (thing.isSpawned)
-                    this._value |= (ushort)1;
+                    this._value |= 1;
                 return this._value;
             }
             set
             {
                 this._value = value;
                 PhysicsObject thing = this._thing as PhysicsObject;
-                thing.solid = ((uint)this._value & 128U) > 0U;
-                thing.enablePhysics = ((uint)this._value & 16U) > 0U;
-                thing.active = ((uint)this._value & 8U) > 0U;
-                thing.visible = ((uint)this._value & 4U) > 0U;
-                thing.grounded = ((uint)this._value & 64U) > 0U;
-                thing.onFire = ((uint)this._value & 32U) > 0U;
-                thing._destroyed = ((uint)this._value & 2U) > 0U;
-                thing.isSpawned = ((uint)this._value & 1U) > 0U;
+                thing.solid = (_value & 128U) > 0U;
+                thing.enablePhysics = (_value & 16U) > 0U;
+                thing.active = (_value & 8U) > 0U;
+                thing.visible = (_value & 4U) > 0U;
+                thing.grounded = (_value & 64U) > 0U;
+                thing.onFire = (_value & 32U) > 0U;
+                thing._destroyed = (_value & 2U) > 0U;
+                thing.isSpawned = (_value & 1U) > 0U;
             }
         }
 

@@ -40,7 +40,7 @@ namespace DuckGame
                 return;
             Material material = DuckGame.Graphics.material;
             DuckGame.Graphics.material = this._screenMaterial;
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._overlaySprite;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._overlaySprite;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.LinearClamp;
             this._targetSprite.depth = (Depth)0.9f;
             DuckGame.Graphics.Draw(this._targetSprite, this.x - 92f, this.y - 33f);

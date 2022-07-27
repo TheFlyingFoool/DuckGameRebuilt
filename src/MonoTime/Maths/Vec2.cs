@@ -122,7 +122,7 @@ namespace DuckGame
 
         public static float Distance(Vec2 value1, Vec2 value2)
         {
-            double num1 = (double)value1.x - (double)value2.x;
+            double num1 = value1.x - (double)value2.x;
             float num2 = value1.y - value2.y;
             return (float)Math.Sqrt(num1 * num1 + (double)num2 * (double)num2);
         }
@@ -136,7 +136,7 @@ namespace DuckGame
 
         public static float DistanceSquared(Vec2 value1, Vec2 value2)
         {
-            double num1 = (double)value1.x - (double)value2.x;
+            double num1 = value1.x - (double)value2.x;
             float num2 = value1.y - value2.y;
             return (float)(num1 * num1 + (double)num2 * (double)num2);
         }
@@ -176,17 +176,17 @@ namespace DuckGame
             result.y = value1.y * num;
         }
 
-        public static float Dot(Vec2 value1, Vec2 value2) => (float)((double)value1.x * (double)value2.x + (double)value1.y * (double)value2.y);
+        public static float Dot(Vec2 value1, Vec2 value2) => (float)(value1.x * (double)value2.x + value1.y * (double)value2.y);
 
-        public static void Dot(ref Vec2 value1, ref Vec2 value2, out float result) => result = (float)((double)value1.x * (double)value2.x + (double)value1.y * (double)value2.y);
+        public static void Dot(ref Vec2 value1, ref Vec2 value2, out float result) => result = (float)(value1.x * (double)value2.x + value1.y * (double)value2.y);
 
         public override bool Equals(object obj) => obj is Vec2 other && this.Equals(other);
 
-        public bool Equals(Vec2 other) => (double)this.x == (double)other.x && (double)this.y == (double)other.y;
+        public bool Equals(Vec2 other) => x == (double)other.x && y == (double)other.y;
 
         public static Vec2 Reflect(Vec2 vector, Vec2 normal)
         {
-            float num = (float)(2.0 * ((double)vector.x * (double)normal.x + (double)vector.y * (double)normal.y));
+            float num = (float)(2.0 * (vector.x * (double)normal.x + vector.y * (double)normal.y));
             Vec2 vec2;
             vec2.x = vector.x - normal.x * num;
             vec2.y = vector.y - normal.y * num;
@@ -195,7 +195,7 @@ namespace DuckGame
 
         public static void Reflect(ref Vec2 vector, ref Vec2 normal, out Vec2 result)
         {
-            float num = (float)(2.0 * ((double)vector.x * (double)normal.x + (double)vector.y * (double)normal.y));
+            float num = (float)(2.0 * (vector.x * (double)normal.x + vector.y * (double)normal.y));
             result.x = vector.x - normal.x * num;
             result.y = vector.y - normal.y * num;
         }
@@ -226,28 +226,28 @@ namespace DuckGame
             result.y = MathHelper.Hermite(value1.y, tangent1.y, value2.y, tangent2.y, amount);
         }
 
-        public float Length() => (float)Math.Sqrt((double)this.x * (double)this.x + (double)this.y * (double)this.y);
+        public float Length() => (float)Math.Sqrt(x * (double)this.x + y * (double)this.y);
 
-        public float LengthSquared() => (float)((double)this.x * (double)this.x + (double)this.y * (double)this.y);
+        public float LengthSquared() => (float)(x * (double)this.x + y * (double)this.y);
 
         public static Vec2 Lerp(Vec2 value1, Vec2 value2, float amount) => DuckGame.Lerp.Vec2Smooth(value1, value2, amount);
 
         public static void Lerp(ref Vec2 value1, ref Vec2 value2, float amount, out Vec2 result) => result = new Vec2(MathHelper.Lerp(value1.x, value2.x, amount), MathHelper.Lerp(value1.y, value2.y, amount));
 
-        public static Vec2 Max(Vec2 value1, Vec2 value2) => new Vec2((double)value1.x > (double)value2.x ? value1.x : value2.x, (double)value1.y > (double)value2.y ? value1.y : value2.y);
+        public static Vec2 Max(Vec2 value1, Vec2 value2) => new Vec2(value1.x > (double)value2.x ? value1.x : value2.x, value1.y > (double)value2.y ? value1.y : value2.y);
 
         public static void Max(ref Vec2 value1, ref Vec2 value2, out Vec2 result)
         {
-            result.x = (double)value1.x > (double)value2.x ? value1.x : value2.x;
-            result.y = (double)value1.y > (double)value2.y ? value1.y : value2.y;
+            result.x = value1.x > (double)value2.x ? value1.x : value2.x;
+            result.y = value1.y > (double)value2.y ? value1.y : value2.y;
         }
 
-        public static Vec2 Min(Vec2 value1, Vec2 value2) => new Vec2((double)value1.x < (double)value2.x ? value1.x : value2.x, (double)value1.y < (double)value2.y ? value1.y : value2.y);
+        public static Vec2 Min(Vec2 value1, Vec2 value2) => new Vec2(value1.x < (double)value2.x ? value1.x : value2.x, value1.y < (double)value2.y ? value1.y : value2.y);
 
         public static void Min(ref Vec2 value1, ref Vec2 value2, out Vec2 result)
         {
-            result.x = (double)value1.x < (double)value2.x ? value1.x : value2.x;
-            result.y = (double)value1.y < (double)value2.y ? value1.y : value2.y;
+            result.x = value1.x < (double)value2.x ? value1.x : value2.x;
+            result.y = value1.y < (double)value2.y ? value1.y : value2.y;
         }
 
         public static Vec2 Multiply(Vec2 value1, Vec2 value2)
@@ -291,7 +291,7 @@ namespace DuckGame
 
         public void Normalize()
         {
-            float num1 = (float)Math.Sqrt((double)this.x * (double)this.x + (double)this.y * (double)this.y);
+            float num1 = (float)Math.Sqrt(x * (double)this.x + y * (double)this.y);
             if ((double)num1 == 0.0)
                 return;
             float num2 = 1f / num1;
@@ -303,7 +303,7 @@ namespace DuckGame
         {
             get
             {
-                float num1 = (float)Math.Sqrt((double)this.x * (double)this.x + (double)this.y * (double)this.y);
+                float num1 = (float)Math.Sqrt(x * (double)this.x + y * (double)this.y);
                 if ((double)num1 == 0.0)
                     return Vec2.Zero;
                 float num2 = 1f / num1;
@@ -313,7 +313,7 @@ namespace DuckGame
 
         public static Vec2 Normalize(Vec2 value)
         {
-            float num1 = (float)Math.Sqrt((double)value.x * (double)value.x + (double)value.y * (double)value.y);
+            float num1 = (float)Math.Sqrt(value.x * (double)value.x + value.y * (double)value.y);
             if ((double)num1 != 0.0)
             {
                 float num2 = 1f / num1;
@@ -325,7 +325,7 @@ namespace DuckGame
 
         public static void Normalize(ref Vec2 value, out Vec2 result)
         {
-            float num1 = (float)Math.Sqrt((double)value.x * (double)value.x + (double)value.y * (double)value.y);
+            float num1 = (float)Math.Sqrt(value.x * (double)value.x + value.y * (double)value.y);
             if ((double)num1 != 0.0)
             {
                 float num2 = 1f / num1;
@@ -359,7 +359,7 @@ namespace DuckGame
             return position;
         }
 
-        public static void Transform(ref Vec2 position, ref Matrix matrix, out Vec2 result) => result = new Vec2((float)((double)position.x * (double)matrix.M11 + (double)position.y * (double)matrix.M21) + matrix.M41, (float)((double)position.x * (double)matrix.M12 + (double)position.y * (double)matrix.M22) + matrix.M42);
+        public static void Transform(ref Vec2 position, ref Matrix matrix, out Vec2 result) => result = new Vec2((float)(position.x * (double)matrix.M11 + position.y * (double)matrix.M21) + matrix.M41, (float)(position.x * (double)matrix.M12 + position.y * (double)matrix.M22) + matrix.M42);
 
         public static Vec2 Transform(Vec2 position, Quaternion quat)
         {
@@ -392,8 +392,8 @@ namespace DuckGame
             {
                 Vec2 source = sourceArray[sourceIndex + index];
                 Vec2 destination = destinationArray[destinationIndex + index];
-                destination.x = (float)((double)source.x * (double)matrix.M11 + (double)source.y * (double)matrix.M21) + matrix.M41;
-                destination.y = (float)((double)source.x * (double)matrix.M12 + (double)source.y * (double)matrix.M22) + matrix.M42;
+                destination.x = (float)(source.x * (double)matrix.M11 + source.y * (double)matrix.M21) + matrix.M41;
+                destination.y = (float)(source.x * (double)matrix.M12 + source.y * (double)matrix.M22) + matrix.M42;
                 destinationArray[destinationIndex + index] = destination;
             }
         }
@@ -404,12 +404,12 @@ namespace DuckGame
             return normal;
         }
 
-        public static void TransformNormal(ref Vec2 normal, ref Matrix matrix, out Vec2 result) => result = new Vec2((float)((double)normal.x * (double)matrix.M11 + (double)normal.y * (double)matrix.M21), (float)((double)normal.x * (double)matrix.M12 + (double)normal.y * (double)matrix.M22));
+        public static void TransformNormal(ref Vec2 normal, ref Matrix matrix, out Vec2 result) => result = new Vec2((float)(normal.x * (double)matrix.M11 + normal.y * (double)matrix.M21), (float)(normal.x * (double)matrix.M12 + normal.y * (double)matrix.M22));
 
         public override string ToString()
         {
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            return string.Format((IFormatProvider)currentCulture, "{{x:{0} y:{1}}}", (object)this.x.ToString((IFormatProvider)currentCulture), (object)this.y.ToString((IFormatProvider)currentCulture));
+            return string.Format(currentCulture, "{{x:{0} y:{1}}}", this.x.ToString(currentCulture), this.y.ToString(currentCulture));
         }
 
         public static Vec2 operator -(Vec2 value)
@@ -419,9 +419,9 @@ namespace DuckGame
             return value;
         }
 
-        public static bool operator ==(Vec2 value1, Vec2 value2) => (double)value1.x == (double)value2.x && (double)value1.y == (double)value2.y;
+        public static bool operator ==(Vec2 value1, Vec2 value2) => value1.x == (double)value2.x && value1.y == (double)value2.y;
 
-        public static bool operator !=(Vec2 value1, Vec2 value2) => (double)value1.x != (double)value2.x || (double)value1.y != (double)value2.y;
+        public static bool operator !=(Vec2 value1, Vec2 value2) => value1.x != (double)value2.x || value1.y != (double)value2.y;
 
         public static Vec2 operator +(Vec2 value1, Vec2 value2)
         {
@@ -477,13 +477,15 @@ namespace DuckGame
         {
             float num1 = (float)Math.Cos((double)radians);
             float num2 = (float)Math.Sin((double)radians);
-            Vec2 vec2 = new Vec2();
-            vec2.x = this.x - pivot.x;
-            vec2.y = this.y - pivot.y;
+            Vec2 vec2 = new Vec2
+            {
+                x = this.x - pivot.x,
+                y = this.y - pivot.y
+            };
             return new Vec2()
             {
-                x = (float)((double)vec2.x * (double)num1 - (double)vec2.y * (double)num2) + pivot.x,
-                y = (float)((double)vec2.x * (double)num2 + (double)vec2.y * (double)num1) + pivot.y
+                x = (float)(vec2.x * (double)num1 - vec2.y * (double)num2) + pivot.x,
+                y = (float)(vec2.x * (double)num2 + vec2.y * (double)num1) + pivot.y
             };
         }
 

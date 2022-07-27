@@ -64,7 +64,7 @@ namespace DuckGame
                     this._endPoint = Vec2.Zero;
                     for (int index = 0; index < 32; ++index)
                     {
-                        Thing thing = (Thing)Level.CheckLine<Block>(this.position + new Vec2((float)(4 + index * 16), 0.0f), this.position + new Vec2((float)((index + 1) * 16 - 6), 0.0f));
+                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(4 + index * 16, 0.0f), this.position + new Vec2((index + 1) * 16 - 6, 0.0f));
                         if (thing != null)
                         {
                             this._endPoint = new Vec2(thing.left - 2f, this.y);
@@ -85,7 +85,7 @@ namespace DuckGame
                     for (int index = 0; index < num; ++index)
                     {
                         this._beam.cutWidth = index != num - 1 ? 0 : 16 - (int)((double)x % 16.0);
-                        Graphics.Draw((Sprite)this._beam, this.x + (float)(index * 16), this.y);
+                        Graphics.Draw(_beam, this.x + index * 16, this.y);
                     }
                     this.collisionOffset = new Vec2(-1f, -4f);
                     this.collisionSize = new Vec2(x, 8f);

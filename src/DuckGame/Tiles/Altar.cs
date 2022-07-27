@@ -48,8 +48,8 @@ namespace DuckGame
         public Altar(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this.wide = new EditorProperty<int>(1, (Thing)this, 1f, 3f, 1f);
-            this.graphic = (Sprite)new SpriteMap("altar", 48, 16);
+            this.wide = new EditorProperty<int>(1, this, 1f, 3f, 1f);
+            this.graphic = new SpriteMap("altar", 48, 16);
             this.hugWalls = WallHug.Floor;
             this.UpdateSize();
             this.thickness = 0.0f;
@@ -66,9 +66,9 @@ namespace DuckGame
         public override void Terminate()
         {
             if (this.leftPlat != null)
-                Level.Remove((Thing)this.leftPlat);
+                Level.Remove(leftPlat);
             if (this.rightPlat != null)
-                Level.Remove((Thing)this.rightPlat);
+                Level.Remove(rightPlat);
             base.Terminate();
         }
     }

@@ -37,10 +37,10 @@ namespace DuckGame
             else
             {
                 Graphics.fade = 0.0f;
-                Level.current = !MonoMain.startInEditor ? (Level)new TitleScreen() : (Level)Main.editor;
+                Level.current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
             }
             this._wait -= 3f / 500f;
-            if ((double)this._wait >= 0.0 && !Input.Pressed("START") && !Input.Pressed("SELECT"))
+            if (_wait >= 0.0 && !Input.Pressed("START") && !Input.Pressed("SELECT"))
                 return;
             this._fading = true;
         }

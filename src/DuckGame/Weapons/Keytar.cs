@@ -69,12 +69,12 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";
             this._sprite = new SpriteMap("keytar", 23, 8);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(12f, 3f);
             this.collisionOffset = new Vec2(-8f, -1f);
             this.collisionSize = new Vec2(16f, 7f);
@@ -87,7 +87,7 @@ namespace DuckGame
             this._keybed = new SpriteMap("keytarKeybed", 13, 4);
             this._settingStrip = new SpriteMap("keytarSettingStrip", 9, 1);
             this.thickness = 1f;
-            this.color = new EditorProperty<int>(-1, (Thing)this, -1f, 3f, 1f);
+            this.color = new EditorProperty<int>(-1, this, -1f, 3f, 1f);
             this.collideSounds.Add("rockHitGround");
             this._canRaise = false;
             this.ignoreHands = true;
@@ -103,7 +103,7 @@ namespace DuckGame
                 this.colorVariation = (byte)Rando.Int(3);
                 if (Rando.Int(100) != 0 || Level.current is Editor)
                     return;
-                this.colorVariation = (byte)4;
+                this.colorVariation = 4;
             }
             else
                 this.colorVariation = (byte)this.color.value;
@@ -125,7 +125,7 @@ namespace DuckGame
         {
             get
             {
-                int currentNote = (int)Math.Round((double)this.handPitch * 13.0);
+                int currentNote = (int)Math.Round(handPitch * 13.0);
                 if (currentNote < 0)
                     currentNote = 0;
                 if (currentNote > 12)
@@ -154,7 +154,7 @@ namespace DuckGame
                 this._ruined = true;
             else if (bullet.isLocal && this.owner == null)
             {
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
                 this._ruined = true;
             }
             return base.Hit(bullet, hitPos);
@@ -169,14 +169,14 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((int)this.colorVariation != (int)this._prevColorVariation)
-                this._keybed = new SpriteMap(this.colorVariation == (byte)4 ? "keytarKeybedBlue" : "keytarKeybed", 13, 4);
+            if (colorVariation != _prevColorVariation)
+                this._keybed = new SpriteMap(this.colorVariation == 4 ? "keytarKeybedBlue" : "keytarKeybed", 13, 4);
             this._prevColorVariation = this.colorVariation;
             if (!this._prevRuined && this._ruined)
             {
                 SFX.Play("smallElectronicBreak", 0.8f, Rando.Float(-0.1f, 0.1f));
                 for (int index = 0; index < 8; ++index)
-                    Level.Add((Thing)Spark.New(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                    Level.Add(Spark.New(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 if (this.isServerForObject && Rando.Int(5) == 0)
                     this.brokenKey = (byte)(1 + Rando.Int(12));
             }
@@ -190,17 +190,17 @@ namespace DuckGame
                     if (owner.inputProfile.Pressed("STRAFE"))
                     {
                         ++this.preset;
-                        if ((int)this.preset >= this.presets.Length)
-                            this.preset = (sbyte)0;
+                        if (preset >= this.presets.Length)
+                            this.preset = 0;
                     }
                     this.handPitch = owner.inputProfile.leftTrigger;
                     this.bender = owner.inputProfile.rightTrigger;
                     if (owner.inputProfile.hasMotionAxis)
                         this.handPitch += owner.inputProfile.motionAxis;
-                    int num = Keyboard.CurrentNote(owner.inputProfile, (Thing)this);
+                    int num = Keyboard.CurrentNote(owner.inputProfile, this);
                     if (num >= 0)
                     {
-                        this.notePitch = (float)((double)num / 13.0 + 0.00999999977648258);
+                        this.notePitch = (float)(num / 13.0 + 0.00999999977648258);
                         this.handPitch = this.notePitch;
                     }
                     else
@@ -217,18 +217,18 @@ namespace DuckGame
                 if (this.noteSound != null && owner._hovering)
                 {
                     this.noteSound.Stop();
-                    this.noteSound = (Sound)null;
+                    this.noteSound = null;
                 }
                 int num1 = this.currentNote;
-                if ((int)this.preset == this.presets.Length - 1)
-                    num1 = (int)Math.Round((double)this.currentNote / 2.0);
-                if ((double)this.notePitch == 0.0 || (num1 != this.prevNote || this.noteSound != null && (double)this.noteSound.Pitch + 1.0 != (double)this.bender / 12.0) && !owner._hovering)
+                if (preset == this.presets.Length - 1)
+                    num1 = (int)Math.Round(currentNote / 2.0);
+                if (notePitch == 0.0 || (num1 != this.prevNote || this.noteSound != null && (double)this.noteSound.Pitch + 1.0 != (double)this.bender / 12.0) && !owner._hovering)
                 {
-                    if ((double)this.notePitch != 0.0)
+                    if (notePitch != 0.0)
                     {
                         if (this.noteSound == null || num1 != this.prevNote)
                         {
-                            bool flag = this.brokenKey != (byte)0 && num1 == (int)this.brokenKey - 1;
+                            bool flag = this.brokenKey != 0 && num1 == brokenKey - 1;
                             float vol = 1f;
                             if (this._ruined)
                             {
@@ -243,7 +243,7 @@ namespace DuckGame
                             }
                             if (this.noteSound != null)
                                 this._prevSounds.Add(this.noteSound);
-                            this.noteSound = SFX.Play(this.presets[(int)this.preset] + "-" + (num1 < 10 ? "0" : "") + Change.ToString((object)num1), vol, -1f);
+                            this.noteSound = SFX.Play(this.presets[preset] + "-" + (num1 < 10 ? "0" : "") + Change.ToString(num1), vol, -1f);
                             this.playPitch = this.notePitch;
                             this.prevNote = num1;
                             if (this._ruined)
@@ -255,7 +255,7 @@ namespace DuckGame
                                     this._benderOffset += 0.1f + Rando.Float(0.2f);
                             }
                             if (!this._ruined)
-                                Level.Add((Thing)new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
+                                Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
                             this.noteSound.Pitch = (float)((double)this.bender / 12.0 - 1.0);
@@ -265,14 +265,14 @@ namespace DuckGame
                         if (this.noteSound != null)
                         {
                             this._prevSounds.Add(this.noteSound);
-                            this.noteSound = (Sound)null;
+                            this.noteSound = null;
                         }
                         this.prevNote = -1;
                     }
                 }
-                this.handOffset = new Vec2((float)(5.0 + (1.0 - (double)this.handPitch) * 2.0), (float)((1.0 - (double)this.handPitch) * 4.0 - 2.0));
-                this.handAngle = (float)((this.duckMoving ? 0.0 : 1.0 - (double)this.handPitch) * 0.200000002980232 + 0.200000002980232 + ((double)this.notePitch > 0.0 ? 0.0500000007450581 : 0.0)) * (float)this.offDir;
-                this._holdOffset = new Vec2((float)((double)this.handPitch * 1.0 - 4.0), (float)(-(double)this.handPitch * 1.0 + 3.0 - (this.duckMoving ? 3.0 : 0.0) + (this.duck._hovering ? 2.0 : 0.0)));
+                this.handOffset = new Vec2((float)(5.0 + (1.0 - handPitch) * 2.0), (float)((1.0 - handPitch) * 4.0 - 2.0));
+                this.handAngle = (float)((this.duckMoving ? 0.0 : 1.0 - handPitch) * 0.200000002980232 + 0.200000002980232 + (notePitch > 0.0 ? 0.0500000007450581 : 0.0)) * offDir;
+                this._holdOffset = new Vec2((float)(handPitch * 1.0 - 4.0), (float)(-(double)this.handPitch * 1.0 + 3.0 - (this.duckMoving ? 3.0 : 0.0) + (this.duck._hovering ? 2.0 : 0.0)));
                 this.collisionOffset = new Vec2(-1f, -7f);
                 this.collisionSize = new Vec2(2f, 16f);
             }
@@ -283,7 +283,7 @@ namespace DuckGame
                 if (this.noteSound != null)
                 {
                     this._prevSounds.Add(this.noteSound);
-                    this.noteSound = (Sound)null;
+                    this.noteSound = null;
                 }
             }
             for (int index = 0; index < this._prevSounds.Count; ++index)
@@ -297,7 +297,7 @@ namespace DuckGame
                 else
                     this._prevSounds[index].Volume = Lerp.Float(this._prevSounds[index].Volume, 0.0f, 0.15f);
             }
-            if ((int)this.preset != (int)this._prevPreset)
+            if (preset != _prevPreset)
                 SFX.Play("click");
             this._prevPreset = this.preset;
             this.prevNotePitch = this.notePitch;
@@ -318,7 +318,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._sprite.frame = (this._ruined ? 1 : 0) + (int)this.colorVariation * 2;
+            this._sprite.frame = (this._ruined ? 1 : 0) + colorVariation * 2;
             if (this.duck != null && !this.raised)
             {
                 SpriteMap fingerPositionSprite = this.duck.profile.persona.fingerPositionSprite;
@@ -328,7 +328,7 @@ namespace DuckGame
                     if (this.noteSound == null)
                     {
                         fingerPositionSprite.frame = 5;
-                        x = (float)(int)(2.0 + ((double)this.currentNote / 12.0 * 8.0 - 4.0));
+                        x = (int)(2.0 + (currentNote / 12.0 * 8.0 - 4.0));
                     }
                     else
                     {
@@ -336,27 +336,27 @@ namespace DuckGame
                         x = 2f;
                     }
                     fingerPositionSprite.depth = this.depth + 4;
-                    fingerPositionSprite.flipH = this.offDir <= (sbyte)0;
+                    fingerPositionSprite.flipH = this.offDir <= 0;
                     fingerPositionSprite.angle = this.angle;
                     Vec2 vec2 = this.Offset(new Vec2(x, -3f));
-                    DuckGame.Graphics.Draw((Sprite)fingerPositionSprite, vec2.x, vec2.y);
+                    DuckGame.Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
                 }
                 fingerPositionSprite.frame = 19;
                 Vec2 vec2_1 = this.Offset(new Vec2(-8f, (float)(-(double)this.bender * 1.0)));
-                DuckGame.Graphics.Draw((Sprite)fingerPositionSprite, vec2_1.x, vec2_1.y);
+                DuckGame.Graphics.Draw(fingerPositionSprite, vec2_1.x, vec2_1.y);
             }
             this._keybed.depth = this.depth + 2;
-            this._keybed.flipH = this.offDir <= (sbyte)0;
+            this._keybed.flipH = this.offDir <= 0;
             this._keybed.angle = this.angle;
-            this._keybed.frame = (double)this.notePitch != 0.0 ? this.currentNote + 1 : 0;
+            this._keybed.frame = notePitch != 0.0 ? this.currentNote + 1 : 0;
             Vec2 vec2_2 = this.Offset(new Vec2(-5f, -2f));
-            DuckGame.Graphics.Draw((Sprite)this._keybed, vec2_2.x, vec2_2.y);
+            DuckGame.Graphics.Draw(_keybed, vec2_2.x, vec2_2.y);
             this._settingStrip.depth = this.depth + 2;
-            this._settingStrip.flipH = this.offDir <= (sbyte)0;
+            this._settingStrip.flipH = this.offDir <= 0;
             this._settingStrip.angle = this.angle;
-            this._settingStrip.frame = (int)this.preset;
+            this._settingStrip.frame = preset;
             Vec2 vec2_3 = this.Offset(new Vec2(-1f, 3f));
-            DuckGame.Graphics.Draw((Sprite)this._settingStrip, vec2_3.x, vec2_3.y);
+            DuckGame.Graphics.Draw(_settingStrip, vec2_3.x, vec2_3.y);
             base.Draw();
         }
     }

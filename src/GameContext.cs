@@ -49,7 +49,7 @@ namespace DuckGame
             c.position += offset;
             if (c != null)
                 Level.current.camera = c;
-            RenderTarget2D t = (RenderTarget2D)null;
+            RenderTarget2D t = null;
             if (target != null)
             {
                 t = Graphics.GetRenderTarget();

@@ -44,19 +44,19 @@ namespace DuckGame
         {
             get
             {
-                List<Team> all = new List<Team>((IEnumerable<Team>)this.teams);
+                List<Team> all = new List<Team>(teams);
                 if (!Network.isActive)
                 {
-                    all.AddRange((IEnumerable<Team>)this.extraTeams);
+                    all.AddRange(extraTeams);
                 }
                 else
                 {
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
                         if (profile == DuckNetwork.localProfile)
-                            all.AddRange((IEnumerable<Team>)this.extraTeams);
+                            all.AddRange(extraTeams);
                         else
-                            all.AddRange((IEnumerable<Team>)profile.customTeams);
+                            all.AddRange(profile.customTeams);
                     }
                 }
                 return all;
@@ -65,12 +65,14 @@ namespace DuckGame
 
         public List<Team> folders => this._folders;
 
-        public List<Team> allStock => new List<Team>((IEnumerable<Team>)this.teams);
+        public List<Team> allStock => new List<Team>(teams);
 
         public void Initialize()
         {
-            this.hats = new SpriteMap("hatCollection", 32, 32);
-            this.hats.center = new Vec2(16f, 16f);
+            this.hats = new SpriteMap("hatCollection", 32, 32)
+            {
+                center = new Vec2(16f, 16f)
+            };
             this.teams = new List<Team>()
       {
         new Team("Player 1", "hats/noHat", true)

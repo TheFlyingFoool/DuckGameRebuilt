@@ -15,7 +15,7 @@ namespace DuckGame
         public UndergroundSkyBackground(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 1
             };
@@ -49,18 +49,20 @@ namespace DuckGame
             this._parallax.AddZone(8, distance, speed);
             this._parallax.AddZone(9, distance, speed);
             this._parallax.AddZone(10, distance, speed);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
             this._parallax.x -= 340f;
             this._parallax.restrictBottom = false;
             this._parallax.depth = - 0.9f;
-            this._parallax.layer = new Layer("PARALLAX3", 115, new Camera(0.0f, 0.0f, 320f, 200f));
-            this._parallax.layer.aspectReliesOnGameLayer = true;
-            this._parallax.layer.allowTallAspect = true;
+            this._parallax.layer = new Layer("PARALLAX3", 115, new Camera(0.0f, 0.0f, 320f, 200f))
+            {
+                aspectReliesOnGameLayer = true,
+                allowTallAspect = true
+            };
             this.overrideBaseScissorCall = true;
             Layer.Add(this._parallax.layer);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

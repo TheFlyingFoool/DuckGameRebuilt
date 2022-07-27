@@ -329,7 +329,7 @@ namespace DuckGame
 			scale.x = xs * (float)Math.Sqrt((double)(this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13));
 			scale.y = ys * (float)Math.Sqrt((double)(this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23));
 			scale.z = zs * (float)Math.Sqrt((double)(this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
-			if ((double)scale.x == 0.0 || (double)scale.y == 0.0 || (double)scale.z == 0.0)
+			if (scale.x == 0.0 || scale.y == 0.0 || scale.z == 0.0)
 			{
 				rotation = Quaternion.Identity;
 				return false;

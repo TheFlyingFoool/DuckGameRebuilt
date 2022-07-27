@@ -30,7 +30,7 @@ namespace DuckGame
             {
                 this._startCalled = true;
                 DuckNetwork.Disconnect();
-                Send.Message((NetMessage)new NMDisconnect(DuckNetError.ControlledDisconnect), NetMessagePriority.ReliableOrdered);
+                Send.Message(new NMDisconnect(DuckNetError.ControlledDisconnect), NetMessagePriority.ReliableOrdered);
                 ConnectionStatusUI.Hide();
             }
             base.Initialize();
@@ -39,7 +39,7 @@ namespace DuckGame
         public override void Update()
         {
             this.wait -= Maths.IncFrameTimer();
-            if ((double)this.wait < 0.0)
+            if (wait < 0.0)
             {
                 if (!this._didDisconnect)
                 {
@@ -50,11 +50,11 @@ namespace DuckGame
                 if (this._disconnected)
                 {
                     if (this.joinAddress != 0UL)
-                        Level.current = (Level)new JoinServer(this.joinAddress);
+                        Level.current = new JoinServer(this.joinAddress);
                     else
                         Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
                     if ((double)Graphics.fade <= 0.0)
-                        Level.current = (Level)new TitleScreen();
+                        Level.current = new TitleScreen();
                 }
             }
             base.Update();
@@ -65,12 +65,12 @@ namespace DuckGame
         public override void Draw()
         {
             this._dots += 0.01f;
-            if ((double)this._dots > 1.0)
+            if (_dots > 1.0)
                 this._dots = 0.0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {
-                if ((double)this._dots * 4.0 > (double)(index + 1))
+                if (_dots * 4.0 > index + 1)
                     str += ".";
             }
             string text = "Disconnecting";

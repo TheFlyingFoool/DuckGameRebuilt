@@ -24,8 +24,10 @@ namespace DuckGame
             this.weight = 5f;
             this.bulletThickness = 1f;
             this.bulletColor = Color.White;
-            this.sprite = new Sprite("pellet");
-            this.sprite.center = new Vec2(1f, 1f);
+            this.sprite = new Sprite("pellet")
+            {
+                center = new Vec2(1f, 1f)
+            };
             this.bulletType = typeof(PelletBullet);
             this.flawlessPipeTravel = true;
         }

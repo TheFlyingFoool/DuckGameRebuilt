@@ -36,7 +36,7 @@ namespace DuckGame
             set
             {
                 this._netProfileIndex = value;
-                this._profile = Profiles.all.ElementAt<Profile>((int)this._netProfileIndex);
+                this._profile = Profiles.all.ElementAt<Profile>(_netProfileIndex);
                 this.RefreshProfile(this._profile);
             }
         }
@@ -45,7 +45,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("scoreRock", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -6f);
             this.collisionSize = new Vec2(16f, 13f);
@@ -86,7 +86,7 @@ namespace DuckGame
                 return;
             this._sprite = new SpriteMap((Tex2D)profile.team.rockTexture, 24, 24);
             this.center = new Vec2(12f, 12f);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._customRock = true;
             this.collisionOffset = new Vec2(-8f, -1f);
             this.collisionSize = new Vec2(16f, 13f);
@@ -127,7 +127,7 @@ namespace DuckGame
             hat.depth = this.depth + 1;
             hat.center = new Vec2(16f, 16f);
             Vec2 vec2 = this.position - this._profile.team.hatOffset;
-            Graphics.Draw((Sprite)hat, vec2.x, vec2.y - 5f);
+            Graphics.Draw(hat, vec2.x, vec2.y - 5f);
         }
     }
 }

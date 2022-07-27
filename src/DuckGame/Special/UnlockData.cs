@@ -175,7 +175,7 @@ namespace DuckGame
                 if (unlockedParent.parent == null || unlockedParent.parent.unlocked)
                     return unlockedParent;
             }
-            return (UnlockData)null;
+            return null;
         }
     }
 }

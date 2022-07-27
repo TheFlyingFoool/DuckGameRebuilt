@@ -23,7 +23,7 @@ namespace DuckGame
             this.y += this.vSpeed;
             this.alpha -= 0.06f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 

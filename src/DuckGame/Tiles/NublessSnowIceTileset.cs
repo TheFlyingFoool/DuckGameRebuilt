@@ -22,9 +22,11 @@ namespace DuckGame
             this._impactThreshold = -1f;
             this.willHeat = true;
             this._tileset = "snowTileset";
-            this._sprite = new SpriteMap("nublessIceTileset", 16, 16);
-            this._sprite.frame = 40;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("nublessIceTileset", 16, 16)
+            {
+                frame = 40
+            };
+            this.graphic = _sprite;
             this._hasNubs = false;
             this.meltedTileset = "nublessSnow";
             this.frozenTileset = "nublessIceTileset";

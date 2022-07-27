@@ -16,7 +16,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("grave", 15, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 8f);
             this.collisionOffset = new Vec2(-7f, -8f);
             this.collisionSize = new Vec2(15f, 15f);

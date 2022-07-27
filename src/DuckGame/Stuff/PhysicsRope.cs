@@ -40,11 +40,13 @@ namespace DuckGame
         public PhysicsRope(float xpos, float ypos, PhysicsRope next = null)
           : base(xpos, ypos)
         {
-            this._vine = (Sprite)new SpriteMap("vine", 16, 16);
+            this._vine = new SpriteMap("vine", 16, 16);
             this.graphic = this._vine;
             this.center = new Vec2(8f, 8f);
-            this._vineEnd = new Sprite("vineStretchEnd");
-            this._vineEnd.center = new Vec2(8f, 0.0f);
+            this._vineEnd = new Sprite("vineStretchEnd")
+            {
+                center = new Vec2(8f, 0.0f)
+            };
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
             this.graphic = this._vine;
@@ -59,13 +61,13 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             this.position.y -= 8f;
-            this._length = (float)this.length.value / 6.5f;
-            this._divisions = (int)((double)this.length.value * 16.0 / 8.0);
-            this._lenDiv = this._length / (float)this._divisions;
+            this._length = length.value / 6.5f;
+            this._divisions = (int)(length.value * 16.0 / 8.0);
+            this._lenDiv = this._length / _divisions;
             for (int index = 0; index <= this._divisions; ++index)
             {
-                this._nodes.Add(new PhysicsRopeSection(this.x + this._lenDiv * (float)index, this.y, this));
-                Level.Add((Thing)this._nodes[this._nodes.Count - 1]);
+                this._nodes.Add(new PhysicsRopeSection(this.x + this._lenDiv * index, this.y, this));
+                Level.Add(this._nodes[this._nodes.Count - 1]);
             }
         }
 
@@ -76,7 +78,7 @@ namespace DuckGame
             base.Terminate();
         }
 
-        public virtual Vine GetSection(float x, float y, int div) => new Vine(x, y, (float)div);
+        public virtual Vine GetSection(float x, float y, int div) => new Vine(x, y, div);
 
         public Vine LatchOn(PhysicsRopeSection section, Duck d)
         {
@@ -92,9 +94,9 @@ namespace DuckGame
                         Vec2 vec2 = new Vec2(this.x, this.y + 8f);
                         this._lowestVine = this.GetSection(vec2.x, vec2.y, num * 8);
                         this._lowestVine.length.value = num / 2;
-                        this._lowestVine.owner = (Thing)d;
+                        this._lowestVine.owner = d;
                         this._lowestVine.sectionIndex = index;
-                        Level.Add((Thing)this._lowestVine);
+                        Level.Add(_lowestVine);
                         if (lowestVine1 != null)
                         {
                             lowestVine1._rope.attach2 = this._lowestVine.owner;
@@ -119,9 +121,9 @@ namespace DuckGame
                         vec2_1 = this._lowestVine._rope.attach1Point;
                     this._lowestVine = this.GetSection(vec2_1.x, vec2_1.y, num1 * 8);
                     this._lowestVine.length.value = num1 / 2;
-                    this._lowestVine.owner = (Thing)d;
+                    this._lowestVine.owner = d;
                     this._lowestVine.sectionIndex = index;
-                    Level.Add((Thing)this._lowestVine);
+                    Level.Add(_lowestVine);
                     if (lowestVine != null)
                     {
                         this._lowestVine._rope.attach2 = lowestVine.owner;
@@ -138,7 +140,7 @@ namespace DuckGame
                     return this._lowestVine;
                 }
             }
-            return (Vine)null;
+            return null;
         }
 
         public Vine highestVine
@@ -146,7 +148,7 @@ namespace DuckGame
             get
             {
                 if (this._lowestVine == null || this._lowestVine.removeFromLevel)
-                    return (Vine)null;
+                    return null;
                 Vine highestVine = this._lowestVine;
                 while (highestVine.prevVine != null)
                     highestVine = highestVine.prevVine;
@@ -166,7 +168,7 @@ namespace DuckGame
             else
             {
                 this._lowestVineSection = 0;
-                this._lowestVine = (Vine)null;
+                this._lowestVine = null;
             }
         }
 
@@ -177,7 +179,7 @@ namespace DuckGame
                 int num = 0;
                 foreach (Transform node in this._nodes)
                 {
-                    node.position = this.position + new Vec2(0.0f, (float)(num * 8));
+                    node.position = this.position + new Vec2(0.0f, num * 8);
                     ++num;
                 }
                 this._create = false;
@@ -197,9 +199,9 @@ namespace DuckGame
             for (int index = 1; index <= this._divisions; ++index)
             {
                 float x = this._nodes[index].position.x;
-                this._nodes[index].calcPos.x += (float)(0.999000012874603 * (double)this._nodes[index].calcPos.x - 0.999000012874603 * (double)this._nodes[index].tempPos.x) + this._nodes[index].accel.x;
+                this._nodes[index].calcPos.x += (float)(0.999000012874603 * _nodes[index].calcPos.x - 0.999000012874603 * _nodes[index].tempPos.x) + this._nodes[index].accel.x;
                 float y = this._nodes[index].position.y;
-                this._nodes[index].calcPos.y += (float)(0.999000012874603 * (double)this._nodes[index].calcPos.y - 0.999000012874603 * (double)this._nodes[index].tempPos.y) + this._nodes[index].accel.y;
+                this._nodes[index].calcPos.y += (float)(0.999000012874603 * _nodes[index].calcPos.y - 0.999000012874603 * _nodes[index].tempPos.y) + this._nodes[index].accel.y;
                 this._nodes[index].tempPos.x = x;
                 this._nodes[index].tempPos.y = y;
             }
@@ -207,10 +209,10 @@ namespace DuckGame
             {
                 for (int index2 = 1; index2 <= this._divisions; ++index2)
                 {
-                    float num1 = (float)(((double)this._nodes[index2].calcPos.x - (double)this._nodes[index2 - 1].calcPos.x) / 100.0);
-                    float num2 = (float)(((double)this._nodes[index2].calcPos.y - (double)this._nodes[index2 - 1].calcPos.y) / 100.0);
+                    float num1 = (float)((_nodes[index2].calcPos.x - (double)this._nodes[index2 - 1].calcPos.x) / 100.0);
+                    float num2 = (float)((_nodes[index2].calcPos.y - (double)this._nodes[index2 - 1].calcPos.y) / 100.0);
                     float num3 = (float)Math.Sqrt((double)num1 * (double)num1 + (double)num2 * (double)num2);
-                    float num4 = (float)(((double)num3 - (double)this._lenDiv) * 50.0);
+                    float num4 = (float)(((double)num3 - _lenDiv) * 50.0);
                     this._nodes[index2].calcPos.x -= num1 / num3 * num4;
                     this._nodes[index2].calcPos.y -= num2 / num3 * num4;
                     this._nodes[index2 - 1].calcPos.x += num1 / num3 * num4;
@@ -218,8 +220,8 @@ namespace DuckGame
                 }
             }
             Vine highestVine = this.highestVine;
-            List<VineSection> vineSectionList = (List<VineSection>)null;
-            VineSection vineSection = (VineSection)null;
+            List<VineSection> vineSectionList = null;
+            VineSection vineSection = null;
             int index3 = 0;
             if (highestVine != null)
             {
@@ -236,14 +238,14 @@ namespace DuckGame
                     if (index4 >= vineSection.lowestSection)
                     {
                         ++index3;
-                        vineSection = index3 >= vineSectionList.Count ? (VineSection)null : vineSectionList[index3];
+                        vineSection = index3 >= vineSectionList.Count ? null : vineSectionList[index3];
                         num5 = 0;
                     }
                     if (vineSection != null && index4 < vineSection.lowestSection)
                     {
                         Vec2 vec2 = vineSection.pos2 - vineSection.pos1;
                         vec2.Normalize();
-                        this._nodes[index4].position = vineSection.pos1 + vec2 * (float)num5 * 8f;
+                        this._nodes[index4].position = vineSection.pos1 + vec2 * num5 * 8f;
                         this._nodes[index4].calcPos = this._nodes[index4].position;
                     }
                 }
@@ -282,9 +284,9 @@ namespace DuckGame
                 }
                 this._nodes[index4].UpdatePhysics();
             }
-            if ((double)this.soundWait > 0.0)
+            if (soundWait > 0.0)
                 this.soundWait -= 0.01f;
-            if (!(this.chain & flag1) || (double)this.soundWait > 0.0)
+            if (!(this.chain & flag1) || soundWait > 0.0)
                 return;
             this.soundWait = 0.1f;
             if (!flag1)
@@ -314,7 +316,7 @@ namespace DuckGame
                 this.graphic.center = new Vec2(8f, 8f);
                 this.graphic.depth = this.depth;
                 for (int index = 0; index < (int)this.length; ++index)
-                    Graphics.Draw(this.graphic, this.x, this.y + (float)(index * 16));
+                    Graphics.Draw(this.graphic, this.x, this.y + index * 16);
             }
             else
             {

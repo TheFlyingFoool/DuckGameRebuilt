@@ -37,19 +37,19 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 100;
-            this._ammoType = (AmmoType)new ATDart();
+            this._ammoType = new ATDart();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.5f;
             this.wideBarrel = true;
             this.barrelInsertOffset = new Vec2(0.0f, 0.0f);
             this._type = "gun";
             this._sprite = new SpriteMap("dartchain", 38, 18);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(14f, 9f);
             this.collisionOffset = new Vec2(-8f, -3f);
             this.collisionSize = new Vec2(24f, 10f);
             this._burned = new SpriteMap("dartchain_burned", 38, 18);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._tip = new SpriteMap("dartchain_tip", 38, 18);
             this._barrelOffsetTL = new Vec2(38f, 8f);
             this._fireSound = "pistolFire";
@@ -69,22 +69,26 @@ namespace DuckGame
         public override void Initialize()
         {
             base.Initialize();
-            this._bullets = new ChaingunBullet(this.x, this.y, true);
-            this._bullets.parentThing = (Thing)this;
+            this._bullets = new ChaingunBullet(this.x, this.y, true)
+            {
+                parentThing = this
+            };
             this._topBullet = this._bullets;
             float num = 0.1f;
-            ChaingunBullet chaingunBullet1 = (ChaingunBullet)null;
+            ChaingunBullet chaingunBullet1 = null;
             for (int index = 0; index < 9; ++index)
             {
-                ChaingunBullet chaingunBullet2 = new ChaingunBullet(this.x, this.y, true);
-                chaingunBullet2.parentThing = (Thing)this._bullets;
+                ChaingunBullet chaingunBullet2 = new ChaingunBullet(this.x, this.y, true)
+                {
+                    parentThing = _bullets
+                };
                 this._bullets = chaingunBullet2;
                 chaingunBullet2.waveAdd = num;
                 num += 0.4f;
                 if (index == 0)
-                    this._topBullet.childThing = (Thing)chaingunBullet2;
+                    this._topBullet.childThing = chaingunBullet2;
                 else
-                    chaingunBullet1.childThing = (Thing)chaingunBullet2;
+                    chaingunBullet1.childThing = chaingunBullet2;
                 chaingunBullet1 = chaingunBullet2;
             }
         }
@@ -113,7 +117,7 @@ namespace DuckGame
                 this._spinUp.Volume = 1f;
                 this._spinUp.Play();
             }
-            if ((double)this._spin < 1.0)
+            if (_spin < 1.0)
             {
                 this._spin += 0.04f;
             }
@@ -131,7 +135,7 @@ namespace DuckGame
             this._spinning = false;
             this._spinUp.Volume = 0.0f;
             this._spinUp.Stop();
-            if ((double)this._spin <= 0.899999976158142)
+            if (_spin <= 0.899999976158142)
                 return;
             this._spinDown.Volume = 1f;
             this._spinDown.Play();
@@ -142,22 +146,22 @@ namespace DuckGame
             if (!this.onFire)
                 return;
             this._burnWait -= 0.01f;
-            if ((double)this._burnWait < 0.0)
+            if (_burnWait < 0.0)
             {
-                Level.Add((Thing)SmallFire.New(22f, 0.0f, 0.0f, 0.0f, stick: ((MaterialThing)this), canMultiply: false, firedFrom: ((Thing)this)));
+                Level.Add(SmallFire.New(22f, 0.0f, 0.0f, 0.0f, stick: this, canMultiply: false, firedFrom: this));
                 this._burnWait = 1f;
             }
-            if ((double)this.burnt >= 1.0)
+            if (burnt >= 1.0)
                 return;
             this.burnt += 1f / 1000f;
         }
 
         public override void Update()
         {
-            if (!this.burntOut && (double)this.burnt >= 1.0)
+            if (!this.burntOut && burnt >= 1.0)
             {
                 Vec2 vec2 = this.Offset(new Vec2(10f, 0.0f));
-                Level.Add((Thing)SmallSmoke.New(vec2.x, vec2.y));
+                Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                 this._onFire = false;
                 this.flammable = 0.0f;
                 this.burntOut = true;
@@ -165,37 +169,37 @@ namespace DuckGame
             if (this._topBullet != null)
             {
                 this._topBullet.DoUpdate();
-                int num = (int)((double)this.ammo / (double)this.bulletsTillRemove);
+                int num = (int)(ammo / (double)this.bulletsTillRemove);
                 if (num < this.numHanging)
                 {
                     this._topBullet = this._topBullet.childThing as ChaingunBullet;
                     if (this._topBullet != null)
-                        this._topBullet.parentThing = (Thing)this;
+                        this._topBullet.parentThing = this;
                 }
                 this.numHanging = num;
             }
             if (this.isServerForObject)
             {
                 FluidPuddle litBy = Level.CheckPoint<FluidPuddle>(this.barrelPosition.x, this.barrelPosition.y);
-                if (litBy != null && (double)litBy.data.heat > 0.5)
-                    this.OnBurn(this.barrelPosition, (Thing)litBy);
+                if (litBy != null && litBy.data.heat > 0.5)
+                    this.OnBurn(this.barrelPosition, litBy);
             }
             this._fireWait = (float)(0.649999976158142 + (double)Maths.NormalizeSection(this._barrelHeat, 5f, 9f) * 3.0) + Rando.Float(0.25f);
-            if ((double)this._barrelHeat > 10.0)
+            if (_barrelHeat > 10.0)
                 this._barrelHeat = 10f;
             this._barrelHeat -= 0.005f;
-            if ((double)this._barrelHeat < 0.0)
+            if (_barrelHeat < 0.0)
                 this._barrelHeat = 0.0f;
             if (!this.burntOut)
             {
                 this._sprite.speed = this._spin;
                 this._tip.speed = this._spin;
-                if ((double)this._spin > 0.0)
+                if (_spin > 0.0)
                     this._spin -= 0.01f;
                 else
                     this._spin = 0.0f;
                 this.spinAmount += this._spin;
-                this.barrelInsertOffset = new Vec2(0.0f, (float)(2.0 + Math.Sin((double)this.spinAmount / 9.0 * 3.14000010490417) * 2.0));
+                this.barrelInsertOffset = new Vec2(0.0f, (float)(2.0 + Math.Sin(spinAmount / 9.0 * 3.14000010490417) * 2.0));
             }
             base.Update();
             if (this._topBullet == null)
@@ -208,7 +212,7 @@ namespace DuckGame
 
         public override void Fire()
         {
-            if ((double)this.burnt >= 1.0 || this.burntOut)
+            if (burnt >= 1.0 || this.burntOut)
                 SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
             else
                 base.Fire();
@@ -229,7 +233,7 @@ namespace DuckGame
             Material material = Graphics.material;
             if (this.burntOut)
             {
-                this.graphic = (Sprite)this._burned;
+                this.graphic = _burned;
                 base.Draw();
             }
             else
@@ -239,9 +243,9 @@ namespace DuckGame
                 this._tip.flipH = this.graphic.flipH;
                 this._tip.center = this.graphic.center;
                 this._tip.depth = this.depth + 1;
-                this._tip.alpha = Math.Min((float)((double)this._barrelHeat * 1.5 / 10.0), 1f);
+                this._tip.alpha = Math.Min((float)(_barrelHeat * 1.5 / 10.0), 1f);
                 this._tip.angle = this.angle;
-                Graphics.Draw((Sprite)this._tip, this.x, this.y);
+                Graphics.Draw(_tip, this.x, this.y);
                 Graphics.material = material;
             }
             if (this._topBullet == null)

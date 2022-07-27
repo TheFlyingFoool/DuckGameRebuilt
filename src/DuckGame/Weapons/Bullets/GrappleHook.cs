@@ -35,7 +35,7 @@ namespace DuckGame
             this.depth = this._owner.depth - 1;
             this.hSpeed = 0.0f;
             this.vSpeed = 0.0f;
-            this.graphic.flipH = (double)this._owner.offDir < 0.0;
+            this.graphic.flipH = _owner.offDir < 0.0;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
@@ -50,7 +50,7 @@ namespace DuckGame
             if (!this._inGun || this._owner == null)
                 return;
             this._inGun = false;
-            this.hSpeed = (float)this._owner.offDir * 6f;
+            this.hSpeed = _owner.offDir * 6f;
             this.vSpeed = -8f;
         }
 

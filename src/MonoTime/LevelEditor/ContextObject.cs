@@ -58,7 +58,7 @@ namespace DuckGame
             this._framesSinceSelected = 0;
             if (this.scrollButtonDirection != 0)
             {
-                this._owner.Selected((ContextMenu)this);
+                this._owner.Selected(this);
             }
             else
             {
@@ -73,7 +73,7 @@ namespace DuckGame
                         current.CloseMenu();
                     if (this._thing.forceEditorGrid != 0)
                     {
-                        current.cellSize = (float)this._thing.forceEditorGrid;
+                        current.cellSize = _thing.forceEditorGrid;
                         ContextObject.lastForceGrid = (int)current.cellSize;
                     }
                     else if (ContextObject.lastForceGrid != 0)
@@ -87,7 +87,7 @@ namespace DuckGame
                 {
                     if (this._owner == null)
                         return;
-                    this._owner.Selected((ContextMenu)this);
+                    this._owner.Selected(this);
                 }
             }
         }

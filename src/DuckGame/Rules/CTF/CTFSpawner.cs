@@ -17,7 +17,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("ctf/spawner", 16, 4);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 2f);
             this.collisionOffset = new Vec2(-8f, -2f);
             this.collisionSize = new Vec2(16f, 4f);
@@ -35,9 +35,9 @@ namespace DuckGame
         {
             this.spawnTime = 4f;
             if (this._present != null && this._present.removeFromLevel)
-                this._present = (CTFPresent)null;
-            CTFPresent ctfPresent1 = (CTFPresent)null;
-            CTFPresent ctfPresent2 = (CTFPresent)null;
+                this._present = null;
+            CTFPresent ctfPresent1 = null;
+            CTFPresent ctfPresent2 = null;
             foreach (CTFPresent ctfPresent3 in Level.CheckCircleAll<CTFPresent>(this.position, 16f))
             {
                 if (ctfPresent3 != this._present)
@@ -49,8 +49,8 @@ namespace DuckGame
             {
                 if (ctfPresent2.duck != null)
                     ctfPresent2.duck.ThrowItem();
-                Level.Remove((Thing)ctfPresent2);
-                Level.Add((Thing)SmallSmoke.New(ctfPresent2.x, ctfPresent2.y));
+                Level.Remove(ctfPresent2);
+                Level.Add(SmallSmoke.New(ctfPresent2.x, ctfPresent2.y));
                 CTF.CaptureFlag((bool)this.team);
                 SFX.Play("equip");
             }
@@ -68,14 +68,16 @@ namespace DuckGame
             if (this._present != null)
                 return;
             this._spawnWait = 0.0f;
-            this._present = new CTFPresent(this.x, this.y, (bool)this.team);
-            this._present.x = this.x;
+            this._present = new CTFPresent(this.x, this.y, (bool)this.team)
+            {
+                x = this.x
+            };
             this._present.y = (float)((double)this.top + ((double)this._present.y - (double)this._present.bottom) - 6.0);
             this._present.vSpeed = -2f;
-            Level.Add((Thing)this._present);
+            Level.Add(_present);
             if (!this._seated)
                 return;
-            this.SetHoverItem((Holdable)this._present);
+            this.SetHoverItem(_present);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace DuckGame
                 if (this.deviceOverride != null)
                     return this.deviceOverride;
                 if (this.deviceName == "XBOX GAMEPAD")
-                    return (InputDevice)Input.GetDevice<XInputPad>();
+                    return Input.GetDevice<XInputPad>();
                 foreach (InputDevice inputDevice in Input.GetInputDevices())
                 {
                     if (inputDevice.productName == this.deviceName && inputDevice.productGUID == this.deviceGUID)
@@ -40,14 +40,14 @@ namespace DuckGame
             }
         }
 
-        public List<InputDevice> devices => this.deviceName == "XBOX GAMEPAD" ? Input.GetInputDevices().Where<InputDevice>((Func<InputDevice, bool>)(x => x is XInputPad)).ToList<InputDevice>() : Input.GetInputDevices().Where<InputDevice>((Func<InputDevice, bool>)(x => x.productName == this.deviceName && x.productGUID == this.deviceGUID)).ToList<InputDevice>();
+        public List<InputDevice> devices => this.deviceName == "XBOX GAMEPAD" ? Input.GetInputDevices().Where<InputDevice>(x => x is XInputPad).ToList<InputDevice>() : Input.GetInputDevices().Where<InputDevice>(x => x.productName == this.deviceName && x.productGUID == this.deviceGUID).ToList<InputDevice>();
 
         public Sprite GetSprite(int mapping)
         {
-            string str = (string)null;
+            string str;
             if (!this.graphicMap.TryGetValue(mapping, out str))
-                return (Sprite)null;
-            Sprite sprite1 = (Sprite)null;
+                return null;
+            Sprite sprite1;
             if (this._spriteMap.TryGetValue(str, out sprite1))
                 return sprite1;
             Sprite sprite2 = new Sprite(str);
@@ -59,7 +59,7 @@ namespace DuckGame
 
         public string GetMappingString(string trigger)
         {
-            int key = 0;
+            int key;
             if (!this.map.TryGetValue(trigger, out key))
                 return "";
             Dictionary<int, string> triggerNames = this.device.GetTriggerNames();
@@ -74,9 +74,9 @@ namespace DuckGame
                 return false;
             foreach (KeyValuePair<string, int> keyValuePair in this.map)
             {
-                int num1 = -1;
-                int num2 = -1;
+                int num1;
                 this.map.TryGetValue(keyValuePair.Key, out num1);
+                int num2;
                 compare.map.TryGetValue(keyValuePair.Key, out num2);
                 if (num1 != num2)
                     return false;
@@ -85,9 +85,9 @@ namespace DuckGame
                 return false;
             foreach (KeyValuePair<int, string> graphic in this.graphicMap)
             {
-                string str1 = "";
-                string str2 = "";
+                string str1;
                 this.graphicMap.TryGetValue(graphic.Key, out str1);
+                string str2;
                 compare.graphicMap.TryGetValue(graphic.Key, out str2);
                 if (str1 != str2)
                     return false;
@@ -97,9 +97,11 @@ namespace DuckGame
 
         public DeviceInputMapping Clone()
         {
-            DeviceInputMapping deviceInputMapping = new DeviceInputMapping();
-            deviceInputMapping.deviceName = this.deviceName;
-            deviceInputMapping.deviceGUID = this.deviceGUID;
+            DeviceInputMapping deviceInputMapping = new DeviceInputMapping
+            {
+                deviceName = this.deviceName,
+                deviceGUID = this.deviceGUID
+            };
             foreach (KeyValuePair<string, int> keyValuePair in this.map)
                 deviceInputMapping.MapInput(keyValuePair.Key, keyValuePair.Value);
             foreach (KeyValuePair<int, string> graphic in this.graphicMap)
@@ -114,7 +116,7 @@ namespace DuckGame
             if (allowDupes)
                 return;
             int pIndex = this.map[trigger];
-            string pTrigger = (string)null;
+            string pTrigger = null;
             foreach (KeyValuePair<string, int> keyValuePair in this.map)
             {
                 if (keyValuePair.Key != trigger && keyValuePair.Value == padButton && (Triggers.IsUITrigger(trigger) == Triggers.IsUITrigger(keyValuePair.Key) || Triggers.IsBasicMovement(trigger) && Triggers.IsBasicMovement(keyValuePair.Key)))

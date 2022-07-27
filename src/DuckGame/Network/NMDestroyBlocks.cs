@@ -24,7 +24,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (!(Level.current is GameLevel) || (int)DuckNetwork.levelIndex != (int)this._levelIndex)
+            if (!(Level.current is GameLevel) || DuckNetwork.levelIndex != _levelIndex)
                 return;
             foreach (BlockGroup blockGroup in Level.current.things[typeof(BlockGroup)])
             {
@@ -32,7 +32,7 @@ namespace DuckGame
                 foreach (ushort block1 in this.blocks)
                 {
                     ushort u = block1;
-                    Block block2 = blockGroup.blocks.FirstOrDefault<Block>((Func<Block, bool>)(x => x is AutoBlock && (int)(x as AutoBlock).blockIndex == (int)u));
+                    Block block2 = blockGroup.blocks.FirstOrDefault<Block>(x => x is AutoBlock && (x as AutoBlock).blockIndex == u);
                     if (block2 != null)
                     {
                         block2.shouldWreck = true;
@@ -67,7 +67,7 @@ namespace DuckGame
             base.OnDeserialize(d);
             this._levelIndex = d.ReadByte();
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
                 this.blocks.Add(d.ReadUShort());
         }
     }

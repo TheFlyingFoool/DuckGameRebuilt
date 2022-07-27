@@ -23,7 +23,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 99;
-            this._ammoType = (AmmoType)new ATPortal(this);
+            this._ammoType = new ATPortal(this);
             this._ammoType.range = 600f;
             this._ammoType.accuracy = 1f;
             this._ammoType.rebound = false;
@@ -42,8 +42,10 @@ namespace DuckGame
             this._fireWait = 0.0f;
             this._kickForce = 0.5f;
             this._holdOffset = new Vec2(0.0f, 0.0f);
-            this._flare = new SpriteMap("laserFlare", 16, 16);
-            this._flare.center = new Vec2(0.0f, 8f);
+            this._flare = new SpriteMap("laserFlare", 16, 16)
+            {
+                center = new Vec2(0.0f, 8f)
+            };
         }
     }
 }

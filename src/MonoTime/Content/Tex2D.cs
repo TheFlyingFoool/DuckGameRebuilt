@@ -24,7 +24,7 @@ namespace DuckGame
             }
         }
 
-        public override object nativeObject => (object)this._base;
+        public override object nativeObject => _base;
 
         public override int width => this._base == null ? -1 : this._base.Width;
 
@@ -34,16 +34,16 @@ namespace DuckGame
           : base(texName, curTexIndex)
         {
             this._base = tex;
-            this._frameWidth = (float)tex.Width;
-            this._frameHeight = (float)tex.Height;
+            this._frameWidth = tex.Width;
+            this._frameHeight = tex.Height;
         }
 
         public Tex2D(int width, int height)
-          : base("__internal", (short)0)
+          : base("__internal", 0)
         {
             this._base = new Texture2D(DuckGame.Graphics.device, width, height, false, SurfaceFormat.Color);
-            this._frameWidth = (float)width;
-            this._frameHeight = (float)height;
+            this._frameWidth = width;
+            this._frameHeight = height;
             Content.AssignTextureIndex(this);
         }
 
@@ -57,7 +57,7 @@ namespace DuckGame
         public override Color[] GetData()
         {
             if (this._base == null)
-                return (Color[])null;
+                return null;
             Color[] data = new Color[this._base.Width * this._base.Height];
             this._base.GetData<Color>(data);
             return data;
@@ -84,9 +84,9 @@ namespace DuckGame
             if (!DuckGame.Graphics.disposingObjects)
             {
                 lock (DuckGame.Graphics.objectsToDispose)
-                    DuckGame.Graphics.objectsToDispose.Add((GraphicsResource)this._base);
+                    DuckGame.Graphics.objectsToDispose.Add(_base);
             }
-            this._base = (Texture2D)null;
+            this._base = null;
         }
 
         public static implicit operator Texture2D(Tex2D tex) => tex._base;

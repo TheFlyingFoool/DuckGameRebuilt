@@ -15,7 +15,7 @@ namespace DuckGame
         private bool _hoverOk;
 
         public NotifyDialogue()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -73,7 +73,7 @@ namespace DuckGame
             Vec2 vec2_4 = new Vec2(num1 - 40f, 40f);
             Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f);
             Vec2 vec2_6 = new Vec2(120f, 40f);
-            this._hoverOk = (double)Mouse.x > (double)vec2_3.x && (double)Mouse.x < (double)vec2_3.x + (double)vec2_4.x && (double)Mouse.y > (double)vec2_3.y && (double)Mouse.y < (double)vec2_3.y + (double)vec2_4.y;
+            this._hoverOk = (double)Mouse.x > vec2_3.x && (double)Mouse.x < vec2_3.x + (double)vec2_4.x && (double)Mouse.y > vec2_3.y && (double)Mouse.y < vec2_3.y + (double)vec2_4.y;
             if (!Editor.tookInput && Input.Pressed("MENULEFT"))
                 --this._selectedIndex;
             else if (!Editor.tookInput && Input.Pressed("MENURIGHT"))
@@ -113,7 +113,7 @@ namespace DuckGame
             Vec2 p1_2 = p1_1 + new Vec2(18f, 28f);
             Vec2 vec2 = new Vec2(num1 - 36f, 40f);
             Graphics.DrawRect(p1_2, p1_2 + vec2, this._hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
-            this._font.Draw("OK", (float)((double)p1_2.x + (double)vec2.x / 2.0 - (double)this._font.GetWidth("OK") / 2.0), p1_2.y + 12f, Color.White, this.depth + 3);
+            this._font.Draw("OK", (float)(p1_2.x + vec2.x / 2.0 - (double)this._font.GetWidth("OK") / 2.0), p1_2.y + 12f, Color.White, this.depth + 3);
             Graphics.DrawString(this._text, p1_1 + new Vec2(5f, 5f), Color.White, this.depth + 2);
         }
     }

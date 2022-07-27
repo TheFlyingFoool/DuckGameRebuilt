@@ -21,9 +21,9 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this._ball = new WeightBall(this.x, this.y, (PhysicsObject)this, (ChokeCollar)this, true);
-            this.ReturnItemToWorld((Thing)this._ball);
-            Level.Add((Thing)this._ball);
+            this._ball = new WeightBall(this.x, this.y, this, this, true);
+            this.ReturnItemToWorld(_ball);
+            Level.Add(_ball);
         }
     }
 }

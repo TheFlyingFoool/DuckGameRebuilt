@@ -82,7 +82,7 @@ namespace DuckGame
         protected static DXMLNode ReadNode(string text, ref int index)
         {
             if (text == null || text.Length <= index)
-                return (DXMLNode)null;
+                return null;
             if (text[index] == '<' || TextParser.ReadNext('<', text, ref index) != null)
             {
                 string s = TextParser.ReadTo('>', text, ref index);
@@ -140,7 +140,7 @@ namespace DuckGame
                     dxmlNode.Add(node);
                 }
             }
-            return (DXMLNode)null;
+            return null;
         }
 
         public void Add(DXMLNode node) => this._elements.Add(node);
@@ -157,7 +157,7 @@ namespace DuckGame
                 if (element.Name == varName)
                     dxmlNodeList.Add(element);
             }
-            return (IEnumerable<DXMLNode>)dxmlNodeList;
+            return dxmlNodeList;
         }
 
         public DXMLNode Element(string varName)
@@ -168,7 +168,7 @@ namespace DuckGame
                 if (element.Name == varName)
                     return element;
             }
-            return (DXMLNode)null;
+            return null;
         }
 
         public IEnumerable<DXMLAttribute> Attributes(string varName)
@@ -179,7 +179,7 @@ namespace DuckGame
                 if (attribute.Name == varName)
                     dxmlAttributeList.Add(attribute);
             }
-            return (IEnumerable<DXMLAttribute>)dxmlAttributeList;
+            return dxmlAttributeList;
         }
 
         public IEnumerable<DXMLAttribute> Attributes() => this._attributes.AsEnumerable<DXMLAttribute>();

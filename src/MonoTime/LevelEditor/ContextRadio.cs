@@ -11,7 +11,7 @@ namespace DuckGame
     {
         private SpriteMap _radioButton;
         private FieldBinding _field;
-        private object _index = (object)0;
+        private object _index = 0;
         private bool _selected;
 
         public ContextRadio(
@@ -53,7 +53,7 @@ namespace DuckGame
             {
                 if (this._owner == null)
                     return;
-                this._owner.Selected((ContextMenu)this);
+                this._owner.Selected(this);
             }
         }
 
@@ -90,7 +90,7 @@ namespace DuckGame
             else
                 Graphics.DrawString(this._text, this.position + new Vec2(4f, 5f), color, (Depth)0.85f);
             this._radioButton.depth = (Depth)0.9f;
-            this._radioButton.x = (float)((double)this.x + (double)this.itemSize.x - 16.0);
+            this._radioButton.x = (float)((double)this.x + itemSize.x - 16.0);
             this._radioButton.y = this.y;
             this._radioButton.frame = this._selected ? 1 : 0;
             this._radioButton.color = color;

@@ -142,7 +142,7 @@ namespace DuckGame
             };
             foreach (KeyValuePair<int, Touch> touch in TouchScreen._touches)
                 averageOfTouches.data.touchXY += touch.Value.data.touchXY;
-            averageOfTouches.data.touchXY /= (float)TouchScreen._touches.Count;
+            averageOfTouches.data.touchXY /= _touches.Count;
             return averageOfTouches;
         }
 
@@ -178,13 +178,13 @@ namespace DuckGame
                         TouchScreen.System_MapTouch(new TSData(0)
                         {
                             fingerId = 0,
-                            touchXY = new Vec2(Mouse.xConsole - TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin((double)TouchScreen._spoofFinger1Waver), (float)Math.Cos((double)TouchScreen._spoofFinger1Waver * 2.0)) * 2f
+                            touchXY = new Vec2(Mouse.xConsole - TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger1Waver), (float)Math.Cos(_spoofFinger1Waver * 2.0)) * 2f
                         });
                     if (Mouse.right == InputState.Down)
                         TouchScreen.System_MapTouch(new TSData(0)
                         {
                             fingerId = 1,
-                            touchXY = new Vec2(Mouse.xConsole + TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin((double)TouchScreen._spoofFinger2Waver * 1.5), (float)Math.Cos((double)TouchScreen._spoofFinger2Waver * 0.300000011920929)) * 3f
+                            touchXY = new Vec2(Mouse.xConsole + TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger2Waver * 1.5), (float)Math.Cos(_spoofFinger2Waver * 0.300000011920929)) * 3f
                         });
                     if (Mouse.middle == InputState.Down)
                         TouchScreen.System_MapTouch(new TSData(0)
@@ -193,7 +193,7 @@ namespace DuckGame
                             touchXY = new Vec2(Mouse.xConsole, Mouse.yConsole)
                         });
                     TouchScreen._spoofFingerDistance += Mouse.scroll * 0.1f;
-                    if ((double)TouchScreen._spoofFingerDistance < 0.0)
+                    if (_spoofFingerDistance < 0.0)
                         TouchScreen._spoofFingerDistance = 0.0f;
                 }
                 TouchScreen._updated = true;
@@ -216,8 +216,8 @@ namespace DuckGame
           Camera customCam)
         {
             Vec2 customCamera = new Vec2();
-            float num1 = touchXY.x / (float)Graphics.viewport.Width;
-            float num2 = touchXY.y / (float)Graphics.viewport.Height;
+            float num1 = touchXY.x / Graphics.viewport.Width;
+            float num2 = touchXY.y / Graphics.viewport.Height;
             customCamera.x = num1 * customCam.width;
             customCamera.y = num2 * customCam.height;
             return customCamera;

@@ -38,7 +38,7 @@ namespace DuckGame
             get => this._position.x;
             set
             {
-                if ((double)this._position.x == (double)value)
+                if (_position.x == (double)value)
                     return;
                 this._position.x = value;
                 this._dirty = true;
@@ -50,7 +50,7 @@ namespace DuckGame
             get => this._position.y;
             set
             {
-                if ((double)this._position.y == (double)value)
+                if (_position.y == (double)value)
                     return;
                 this._position.y = value;
                 this._dirty = true;
@@ -124,7 +124,7 @@ namespace DuckGame
             get => this._size.x;
             set
             {
-                if ((double)this._size.x == (double)value)
+                if (_size.x == (double)value)
                     return;
                 this._size.x = value;
                 this._dirty = true;
@@ -136,7 +136,7 @@ namespace DuckGame
             get => this._size.y;
             set
             {
-                if ((double)this._size.y == (double)value)
+                if (_size.y == (double)value)
                     return;
                 this._size.y = value;
                 this._dirty = true;
@@ -227,18 +227,18 @@ namespace DuckGame
             if (!this._dirty)
             {
                 viewport = DuckGame.Graphics.viewport;
-                if ((double)viewport.Width == (double)this._viewSize.x)
+                if (viewport.Width == (double)this._viewSize.x)
                 {
                     viewport = DuckGame.Graphics.viewport;
-                    if ((double)viewport.Height == (double)this._viewSize.y)
+                    if (viewport.Height == (double)this._viewSize.y)
                         goto label_4;
                 }
             }
             this._rectangle = new Rectangle(this.left - 16f, this.top - 16f, this.size.x + 32f, this.size.y + 32f);
             viewport = DuckGame.Graphics.viewport;
-            double width1 = (double)viewport.Width;
+            double width1 = viewport.Width;
             viewport = DuckGame.Graphics.viewport;
-            double height1 = (double)viewport.Height;
+            double height1 = viewport.Height;
             this._viewSize = new Vec2((float)width1, (float)height1);
             Vec2 position = this.position;
             float width2 = this.width;

@@ -23,7 +23,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("frame", (object)(this.graphic as SpriteMap).frame));
+            dxmlNode.Add(new DXMLNode("frame", (graphic as SpriteMap).frame));
             return dxmlNode;
         }
 
@@ -36,6 +36,6 @@ namespace DuckGame
             return true;
         }
 
-        public override ContextMenu GetContextMenu() => (ContextMenu)null;
+        public override ContextMenu GetContextMenu() => null;
     }
 }

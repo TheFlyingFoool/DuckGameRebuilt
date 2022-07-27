@@ -457,8 +457,8 @@ namespace DuckGame
 			{
 				return -1;
 			}
-			List<int> val = null;
-			map.TryGetValue(trigger, out val);
+            List<int> val;
+            map.TryGetValue(trigger, out val);
 			if (val != null && val.Count > 0)
 			{
 				return val[0];
@@ -480,8 +480,8 @@ namespace DuckGame
 					Dictionary<int, string> mappings = pair.Key.GetTriggerNames();
 					if (mappings != null)
 					{
-						string name = null;
-						if (mappings.TryGetValue(mapping, out name))
+                        string name;
+                        if (mappings.TryGetValue(mapping, out name))
 						{
 							return name;
 						}
@@ -626,13 +626,15 @@ namespace DuckGame
 
 		public InputProfile Clone()
 		{
-			InputProfile clone = new InputProfile("");
-			clone._name = this.name;
-			clone._state = this._state;
-			clone._prevState = this._prevState;
-			clone.dindex = this.dindex;
-			clone.swapBack = this.swapBack;
-			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in this._mappings)
+            InputProfile clone = new InputProfile("")
+            {
+                _name = this.name,
+                _state = this._state,
+                _prevState = this._prevState,
+                dindex = this.dindex,
+                swapBack = this.swapBack
+            };
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in this._mappings)
 			{
 				clone._mappings[kvp.Key] = new MultiMap<string, int>();
 				foreach (KeyValuePair<string, List<int>> pair in kvp.Value)
@@ -793,8 +795,8 @@ namespace DuckGame
 						}
 						if (pad != null)
 						{
-							List<int> mappings = null;
-							if (!map.Value.TryGetValue("LTRIGGER", out mappings) || mappings.Count <= 0)
+                            List<int> mappings;
+                            if (!map.Value.TryGetValue("LTRIGGER", out mappings) || mappings.Count <= 0)
 							{
 								return pad.leftTrigger;
 							}
@@ -837,8 +839,8 @@ namespace DuckGame
 						}
 						if (pad != null)
 						{
-							List<int> mappings = null;
-							if (!map.Value.TryGetValue("RTRIGGER", out mappings) || mappings.Count <= 0)
+                            List<int> mappings;
+                            if (!map.Value.TryGetValue("RTRIGGER", out mappings) || mappings.Count <= 0)
 							{
 								return pad.rightTrigger;
 							}
@@ -881,8 +883,8 @@ namespace DuckGame
 						}
 						if (pad != null)
 						{
-							List<int> mappings = null;
-							if (!map.Value.TryGetValue("LSTICK", out mappings) || mappings.Count <= 0)
+                            List<int> mappings;
+                            if (!map.Value.TryGetValue("LSTICK", out mappings) || mappings.Count <= 0)
 							{
 								return pad.leftStick;
 							}
@@ -947,8 +949,8 @@ namespace DuckGame
 						}
 						if (pad != null)
 						{
-							List<int> mappings = null;
-							if (!map.Value.TryGetValue("RSTICK", out mappings) || mappings.Count <= 0)
+                            List<int> mappings;
+                            if (!map.Value.TryGetValue("RSTICK", out mappings) || mappings.Count <= 0)
 							{
 								return pad.rightStick;
 							}

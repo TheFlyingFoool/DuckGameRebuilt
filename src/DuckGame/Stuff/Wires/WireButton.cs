@@ -29,7 +29,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("wireButton", 16, 19);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 11f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -65,7 +65,7 @@ namespace DuckGame
                 else if (this.orientation.value == 3)
                     this.orientation.value = 1;
             }
-            this.angleDegrees = (float)this.orientation.value * 90f;
+            this.angleDegrees = orientation.value * 90f;
             if (!(Level.current is Editor))
             {
                 if (this.orientation.value == 0)
@@ -76,14 +76,14 @@ namespace DuckGame
                     this._top = new WireButtonTop(this.x, this.y + 9f, this, this.orientation.value);
                 else if (this.orientation.value == 3)
                     this._top = new WireButtonTop(this.x - 9f, this.y, this, this.orientation.value);
-                Level.Add((Thing)this._top);
+                Level.Add(_top);
             }
             base.Initialize();
         }
 
         public override void Terminate()
         {
-            Level.Remove((Thing)this._top);
+            Level.Remove(_top);
             base.Terminate();
         }
 
@@ -112,7 +112,7 @@ namespace DuckGame
         {
             if (!this._initializedFrame)
             {
-                if (Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>((Func<PhysicsObject, bool>)(x => !(x is TeamHat))) != null)
+                if (Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat)) != null)
                     this._sprite.frame = 1;
                 this._initializedFrame = true;
             }
@@ -122,7 +122,7 @@ namespace DuckGame
                     Level.CheckRect<WireTileset>(this.topLeft + new Vec2(2f, 2f), this.bottomRight + new Vec2(-2f, -2f))?.Emit(type: 1);
                 if (this._sprite.frame == 1)
                 {
-                    PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>((Func<PhysicsObject, bool>)(x => !(x is TeamHat)));
+                    PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
                     if (physicsObject == null)
                     {
                         SFX.Play("click");
@@ -133,11 +133,11 @@ namespace DuckGame
             }
             else if (this._sprite.frame == 1)
             {
-                PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>((Func<PhysicsObject, bool>)(x => !(x is TeamHat)));
+                PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
                 if (physicsObject == null)
                 {
                     this.releaseHold += Maths.IncFrameTimer();
-                    if ((double)this.releaseHold > (double)this.holdTime.value)
+                    if (releaseHold > (double)this.holdTime.value)
                     {
                         SFX.Play("click");
                         this._sprite.frame = 0;
@@ -156,12 +156,12 @@ namespace DuckGame
         {
             if (Level.current is Editor)
             {
-                this.angleDegrees = (float)this.orientation.value * 90f;
+                this.angleDegrees = orientation.value * 90f;
                 if (this.flipHorizontal)
                     this.angleDegrees -= 180f;
             }
             else
-                this.angleDegrees = (float)this.orientation.value * 90f;
+                this.angleDegrees = orientation.value * 90f;
             base.Draw();
         }
     }

@@ -37,7 +37,7 @@ namespace DuckGame
         {
             if (this._items.ContainsKey(group))
                 return this._items[group];
-            return this._globalItems.Count > 0 ? this._globalItems : (List<T2>)null;
+            return this._globalItems.Count > 0 ? this._globalItems : null;
         }
     }
 }

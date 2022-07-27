@@ -30,9 +30,9 @@ namespace DuckGame
           Thing firedFrom = null)
         {
             angle *= -1f;
-            Bullet t = (Bullet)new PortalBullet(position.x, position.y, (AmmoType)this, angle, (Thing)this._ownerGun, this.rebound, thick: this.bulletThickness);
+            Bullet t = new PortalBullet(position.x, position.y, this, angle, _ownerGun, this.rebound, thick: this.bulletThickness);
             t.firedFrom = firedFrom;
-            Level.current.AddThing((Thing)t);
+            Level.current.AddThing(t);
             return t;
         }
     }

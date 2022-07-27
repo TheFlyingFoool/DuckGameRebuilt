@@ -334,7 +334,7 @@ namespace DuckGame
       'Ё',
       'ё'
         };
-        private static int[] _characterMap = new int[(int)ushort.MaxValue];
+        private static int[] _characterMap = new int[ushort.MaxValue];
         private const int kTilesPerRow = 16;
         private int _tileSize = 8;
         public int fallbackIndex;
@@ -351,7 +351,7 @@ namespace DuckGame
         public Vec2 spriteScale = new Vec2(1f, 1f);
         public Color colorOverride;
 
-        public float height => (float)this._texture.height * this.scale.y;
+        public float height => _texture.height * this.scale.y;
 
         public InputProfile inputProfile
         {
@@ -374,13 +374,13 @@ namespace DuckGame
             this._tileSize = size;
             if (!BitmapFont._mapInitialized)
             {
-                for (int index1 = 0; index1 < (int)ushort.MaxValue; ++index1)
+                for (int index1 = 0; index1 < ushort.MaxValue; ++index1)
                 {
                     char ch = (char)index1;
                     BitmapFont._characterMap[index1] = 91;
                     for (int index2 = 0; index2 < BitmapFont._characters.Length; ++index2)
                     {
-                        if ((int)BitmapFont._characters[index2] == (int)ch)
+                        if (BitmapFont._characters[index2] == ch)
                         {
                             BitmapFont._characterMap[index1] = index2;
                             break;
@@ -395,12 +395,12 @@ namespace DuckGame
         public Sprite ParseSprite(string text, InputProfile input)
         {
             if (!this.allowBigSprites && text.StartsWith("_!"))
-                return (Sprite)null;
+                return null;
             ++this._letterIndex;
             string str = "";
             for (; this._letterIndex != text.Length && text[this._letterIndex] != ' ' && text[this._letterIndex] != '@'; ++this._letterIndex)
                 str += text[this._letterIndex].ToString();
-            Sprite sprite = (Sprite)null;
+            Sprite sprite = null;
             if (input != null)
             {
                 sprite = input.GetTriggerImage(str);
@@ -457,7 +457,7 @@ namespace DuckGame
                     {
                         if (sprite.texture != null)
                         {
-                            num += !thinButtons || flag1 ? (float)((double)sprite.width * (double)sprite.scale.x + 1.0) : 6f;
+                            num += !thinButtons || flag1 ? (float)(sprite.width * (double)sprite.scale.x + 1.0) : 6f;
                             flag1 = true;
                         }
                         flag2 = true;
@@ -480,7 +480,7 @@ namespace DuckGame
                     num = 0.0f;
                 }
                 if (!flag2)
-                    num += (float)this._tileSize * this.scale.x;
+                    num += _tileSize * this.scale.x;
             }
             if ((double)num > (double)width)
                 width = num;
@@ -555,27 +555,27 @@ namespace DuckGame
                             {
                                 Vec2 scale = sprite1.scale;
                                 Sprite sprite2 = sprite1;
-                                sprite2.scale = sprite2.scale * this.spriteScale;
-                                float num3 = (float)((int)((double)this._texture.height * (double)this.spriteScale.y / 2.0) - (int)((double)sprite1.height * (double)this.spriteScale.y / 2.0));
+                                sprite2.scale *= this.spriteScale;
+                                float num3 = (int)(_texture.height * (double)this.spriteScale.y / 2.0) - (int)(sprite1.height * (double)this.spriteScale.y / 2.0);
                                 if (sprite1.moji)
                                 {
                                     if (sprite1.height == 28)
                                     {
                                         Sprite sprite3 = sprite1;
-                                        sprite3.scale = sprite3.scale * (0.25f * this.scale);
+                                        sprite3.scale *= (0.25f * this.scale);
                                         num3 += 10f * this.scale.y;
                                     }
                                     else
                                     {
                                         Sprite sprite4 = sprite1;
-                                        sprite4.scale = sprite4.scale * (0.25f * this.scale);
+                                        sprite4.scale *= (0.25f * this.scale);
                                         num3 += 3f * this.scale.y;
                                     }
                                 }
                                 if (colorSymbols)
                                     sprite1.color = c;
                                 Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num3, deep);
-                                num2 += (float)((double)sprite1.width * (double)sprite1.scale.x + 1.0);
+                                num2 += (float)(sprite1.width * (double)sprite1.scale.x + 1.0);
                                 sprite1.scale = scale;
                                 sprite1.color = Color.White;
                             }
@@ -616,9 +616,9 @@ namespace DuckGame
                             if (!this.enforceWidthByWord)
                                 break;
                         }
-                        if ((double)num2 + (double)source.Count<char>() * ((double)this._tileSize * (double)this.scale.x) > (double)this.maxWidth)
+                        if ((double)num2 + source.Count<char>() * (_tileSize * (double)this.scale.x) > maxWidth)
                         {
-                            num1 += (float)this._texture.height * this.scale.y;
+                            num1 += _texture.height * this.scale.y;
                             num2 = 0.0f;
                             if (this.singleLine)
                                 break;
@@ -626,7 +626,7 @@ namespace DuckGame
                     }
                     if (text[this._letterIndex] == '\n')
                     {
-                        num1 += (float)this._texture.height * this.scale.y;
+                        num1 += _texture.height * this.scale.y;
                         num2 = 0.0f;
                     }
                     else
@@ -637,10 +637,10 @@ namespace DuckGame
                         if (index >= 'ぁ')
                         {
                             g = FancyBitmapFont._kanjiSprite;
-                            num4 = (int)FancyBitmapFont._kanjiMap[(int)index];
+                            num4 = FancyBitmapFont._kanjiMap[index];
                         }
                         else
-                            num4 = BitmapFont._characterMap[(int)text[this._letterIndex]];
+                            num4 = BitmapFont._characterMap[text[this._letterIndex]];
                         if (this.fallbackIndex != 0 && num4 >= this.fallbackIndex)
                         {
                             if (this._fallbackFont == null)
@@ -651,8 +651,8 @@ namespace DuckGame
                         g.scale = this.scale;
                         g.color = c;
                         g.alpha = this.alpha;
-                        Graphics.Draw((Sprite)g, xpos + num2, ypos + num1 + (float)this.characterYOffset, deep);
-                        num2 += (float)this._tileSize * this.scale.x;
+                        Graphics.Draw(g, xpos + num2, ypos + num1 + characterYOffset, deep);
+                        num2 += _tileSize * this.scale.x;
                     }
                 }
             }

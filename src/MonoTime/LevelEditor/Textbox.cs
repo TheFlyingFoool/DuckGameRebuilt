@@ -53,9 +53,11 @@ namespace DuckGame
           int maxLines = 2147483647,
           string emptyText = "")
         {
-            this._font = new FancyBitmapFont("smallFont");
-            this._font.scale = new Vec2(scale);
-            this._font.maxWidth = (int)width;
+            this._font = new FancyBitmapFont("smallFont")
+            {
+                scale = new Vec2(scale),
+                maxWidth = (int)width
+            };
             this._position = new Vec2(x, y);
             this._size = new Vec2(width, height);
             this._maxLines = maxLines;
@@ -110,13 +112,13 @@ namespace DuckGame
         {
             this._inFocus = true;
             Keyboard.keyString = "";
-            Editor.PushFocus((object)this);
+            Editor.PushFocus(this);
         }
 
         public void Update()
         {
             bool flag = false;
-            if ((double)Mouse.x > (double)this._position.x && (double)Mouse.y > (double)this._position.y && (double)Mouse.x < (double)this._position.x + (double)this._size.x && (double)Mouse.y < (double)this._position.y + (double)this._size.y)
+            if ((double)Mouse.x > _position.x && (double)Mouse.y > _position.y && (double)Mouse.x < _position.x + (double)this._size.x && (double)Mouse.y < _position.y + (double)this._size.y)
             {
                 flag = true;
                 Editor.hoverTextBox = true;
@@ -129,7 +131,7 @@ namespace DuckGame
                     }
                     this._inFocus = true;
                     Keyboard.keyString = "";
-                    Editor.PushFocus((object)this);
+                    Editor.PushFocus(this);
                 }
             }
             Vec2 position = this._position;
@@ -142,7 +144,7 @@ namespace DuckGame
                 {
                     if (Keyboard.Pressed(Keys.V))
                     {
-                        Thread thread = new Thread((ThreadStart)(() => this.ReadClipboardText()));
+                        Thread thread = new Thread(() => this.ReadClipboardText());
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();
@@ -160,7 +162,7 @@ namespace DuckGame
                         copyText = this._font._highlightStart >= this._font._highlightEnd ? this.text.Substring(this._font._highlightEnd, this._font._highlightStart - this._font._highlightEnd) : this.text.Substring(this._font._highlightStart, this._font._highlightEnd - this._font._highlightStart);
                         if (copyText != "")
                         {
-                            Thread thread = new Thread((ThreadStart)(() => Clipboard.SetText(copyText)));
+                            Thread thread = new Thread(() => Clipboard.SetText(copyText));
                             thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
                             thread.Join();
@@ -216,14 +218,14 @@ namespace DuckGame
                 }
                 if (Keyboard.Pressed(Keys.Up))
                 {
-                    this._cursorPosition = this._font.GetCharacterIndex(this._drawText, this._cursorPos.x + 4f * this._font.scale.x, this._cursorPos.y - (float)this._font.characterHeight * this._font.scale.y);
+                    this._cursorPosition = this._font.GetCharacterIndex(this._drawText, this._cursorPos.x + 4f * this._font.scale.x, this._cursorPos.y - _font.characterHeight * this._font.scale.y);
                     this._font._highlightStart = this._cursorPosition;
                     this._font._highlightEnd = this._cursorPosition;
                     this._blink = 0.5f;
                 }
                 if (Keyboard.Pressed(Keys.Down))
                 {
-                    this._cursorPosition = this._font.GetCharacterIndex(this._drawText, this._cursorPos.x + 4f * this._font.scale.x, this._cursorPos.y + (float)this._font.characterHeight * this._font.scale.y);
+                    this._cursorPosition = this._font.GetCharacterIndex(this._drawText, this._cursorPos.x + 4f * this._font.scale.x, this._cursorPos.y + _font.characterHeight * this._font.scale.y);
                     this._font._highlightStart = this._cursorPosition;
                     this._font._highlightEnd = this._cursorPosition;
                     this._blink = 0.5f;
@@ -261,13 +263,13 @@ namespace DuckGame
             this._drawText = this.text;
             if (this.text.Length == 0 && !this._inFocus)
                 this._drawText = this._emptyText;
-            this._blink = (float)(((double)this._blink + 0.0199999995529652) % 1.0);
+            this._blink = (float)((_blink + 0.0199999995529652) % 1.0);
         }
 
         public void Draw()
         {
             this._font.Draw(this._drawText, this._position, this.text.Length == 0 ? Colors.Silver * 0.8f : Color.White, this.depth);
-            if (!this._inFocus || (double)this._blink < 0.5)
+            if (!this._inFocus || _blink < 0.5)
                 return;
             Vec2 cursorPos = this._cursorPos;
             cursorPos.x += 1f * this._font.scale.x;

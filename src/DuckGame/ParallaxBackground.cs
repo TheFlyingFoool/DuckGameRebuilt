@@ -89,12 +89,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.scissor.width != 0.0)
+            if (scissor.width != 0.0)
                 this.layer.scissor = this.scissor;
-            if ((double)this.position.y > 0.0)
+            if (position.y > 0.0)
                 this.position.y = 0.0f;
-            if (this.restrictBottom && (double)this.position.y + (double)this._sprite.texture.height < (double)Layer.Parallax.camera.bottom)
-                this.position.y = Layer.Parallax.camera.bottom - (float)this._sprite.texture.height;
+            if (this.restrictBottom && position.y + (double)this._sprite.texture.height < (double)Layer.Parallax.camera.bottom)
+                this.position.y = Layer.Parallax.camera.bottom - _sprite.texture.height;
             for (int index = 0; index < this._hRepeat; ++index)
             {
                 for (int key = 0; key < this.graphic.height / 8; ++key)
@@ -105,7 +105,7 @@ namespace DuckGame
                         if (index == 0)
                             zone.RenderSprites(this.position);
                         if (zone.visible)
-                            DuckGame.Graphics.Draw(this._sprite.texture, this.position + new Vec2(0.0f, this.FUCKINGYOFFSET) + new Vec2((zone.scroll % (float)this.graphic.width - (float)this.graphic.width + (float)(index * this.graphic.width)) * this.scale.x, (float)(key * 8) * this.scale.y), new Rectangle?(new Rectangle(0.0f, (float)(key * 8), (float)this.graphic.width, 8f)), this.color, 0.0f, new Vec2(), new Vec2(this.scale.x, this.scale.y), SpriteEffects.None, this.depth);
+                            DuckGame.Graphics.Draw(this._sprite.texture, this.position + new Vec2(0.0f, this.FUCKINGYOFFSET) + new Vec2((zone.scroll % graphic.width - graphic.width + index * this.graphic.width) * this.scale.x, key * 8 * this.scale.y), new Rectangle?(new Rectangle(0.0f, key * 8, graphic.width, 8f)), this.color, 0.0f, new Vec2(), new Vec2(this.scale.x, this.scale.y), SpriteEffects.None, this.depth);
                     }
                 }
             }

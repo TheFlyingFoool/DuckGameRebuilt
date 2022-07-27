@@ -34,8 +34,10 @@ namespace DuckGame
             this._font = new BitmapFont("biosFontUI", 8, 7);
             this._fancyFont = new FancyBitmapFont("smallFont");
             this._portraitFrame = new Sprite("funeralPic");
-            this._portraitSprite = new SpriteMap("littleMan", 16, 16);
-            this._portraitSprite.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen - 9, -1);
+            this._portraitSprite = new SpriteMap("littleMan", 16, 16)
+            {
+                frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen - 9, -1)
+            };
         }
 
         public override void OnClose()
@@ -44,7 +46,7 @@ namespace DuckGame
             Profiles.Save(Profiles.experienceProfile);
             if (this._link == null)
                 return;
-            MonoMain.pauseMenu = (UIComponent)this._link;
+            MonoMain.pauseMenu = _link;
         }
 
         public override void Open() => base.Open();
@@ -61,7 +63,7 @@ namespace DuckGame
                 if (this.down)
                 {
                     this._downWait -= 0.06f;
-                    if ((double)this._downWait <= 0.0)
+                    if (_downWait <= 0.0)
                     {
                         if (this._doneDown)
                         {
@@ -111,8 +113,8 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2(-53f, -4f);
             this._portraitSprite.depth = this.depth + 2;
             this._portraitFrame.depth = this.depth + 4;
-            Graphics.Draw((Sprite)this._portraitSprite, (float)((double)this.position.x + (double)vec2_3.x + 1.0), (float)((double)this.position.y + (double)vec2_3.y + 1.0), new Rectangle(2f, 0.0f, 12f, 10f));
-            Graphics.Draw(this._portraitFrame, (float)((double)this.position.x + (double)vec2_3.x - 2.0), (float)((double)this.position.y + (double)vec2_3.y - 2.0));
+            Graphics.Draw(_portraitSprite, (float)(position.x + (double)vec2_3.x + 1.0), (float)(position.y + (double)vec2_3.y + 1.0), new Rectangle(2f, 0.0f, 12f, 10f));
+            Graphics.Draw(this._portraitFrame, (float)(position.x + (double)vec2_3.x - 2.0), (float)(position.y + (double)vec2_3.y - 2.0));
             Graphics.DrawRect(this.position + vec2_3, this.position + vec2_3 + new Vec2(13f, 13f), Colors.DGBlue, this.depth + 1);
             this.y -= this.yOffset;
         }

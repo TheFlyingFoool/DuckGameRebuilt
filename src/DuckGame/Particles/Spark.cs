@@ -47,7 +47,7 @@ namespace DuckGame
             this._bounceEfficiency = 0.6f;
             this.depth = (Depth)0.9f;
             this._killSpeed = killSpeed;
-            this._color = new Color(byte.MaxValue, (byte)Rando.Int(180, (int)byte.MaxValue), (byte)0);
+            this._color = new Color(byte.MaxValue, (byte)Rando.Int(180, byte.MaxValue), (byte)0);
             this._width = 0.5f;
         }
 
@@ -55,7 +55,7 @@ namespace DuckGame
         {
             this.alpha -= this._killSpeed;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 

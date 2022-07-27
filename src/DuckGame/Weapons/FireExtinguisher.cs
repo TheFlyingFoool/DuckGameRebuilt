@@ -49,12 +49,14 @@ namespace DuckGame
                 {
                     Vec2 vec = Maths.AngleToVec(this.barrelAngle + Rando.Float(-0.5f, 0.5f));
                     Vec2 vec2 = new Vec2(vec.x * Rando.Float(0.9f, 3f), vec.y * Rando.Float(0.9f, 3f));
-                    ExtinguisherSmoke extinguisherSmoke = new ExtinguisherSmoke(this.barrelPosition.x, this.barrelPosition.y);
-                    extinguisherSmoke.hSpeed = vec2.x;
-                    extinguisherSmoke.vSpeed = vec2.y;
+                    ExtinguisherSmoke extinguisherSmoke = new ExtinguisherSmoke(this.barrelPosition.x, this.barrelPosition.y)
+                    {
+                        hSpeed = vec2.x,
+                        vSpeed = vec2.y
+                    };
                     --this.ammo;
-                    this._guage.frame = 3 - (int)((double)this.ammo / (double)this._maxAmmo * 4.0);
-                    Level.Add((Thing)extinguisherSmoke);
+                    this._guage.frame = 3 - (int)(ammo / (double)this._maxAmmo * 4.0);
+                    Level.Add(extinguisherSmoke);
                 }
                 this._smoke = !this._smoke;
             }
@@ -69,7 +71,7 @@ namespace DuckGame
             this._guage.flipH = this.graphic.flipH;
             this._guage.alpha = this.graphic.alpha;
             this._guage.depth = this.depth + 1;
-            this.Draw((Sprite)this._guage, new Vec2(-6f, -8f));
+            this.Draw(_guage, new Vec2(-6f, -8f));
         }
 
         public override void OnPressAction() => this._firing = true;

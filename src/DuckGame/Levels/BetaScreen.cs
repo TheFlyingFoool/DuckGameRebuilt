@@ -41,10 +41,10 @@ namespace DuckGame
             else
             {
                 Graphics.fade = 0.0f;
-                Level.current = (Level)new TitleScreen();
+                Level.current = new TitleScreen();
             }
             this._wait -= 0.02f;
-            if (DG.buildExpired || !this._drmSuccess || (double)this._wait >= 0.0 || !Input.Pressed("START"))
+            if (DG.buildExpired || !this._drmSuccess || _wait >= 0.0 || !Input.Pressed("START"))
                 return;
             this._fading = true;
         }

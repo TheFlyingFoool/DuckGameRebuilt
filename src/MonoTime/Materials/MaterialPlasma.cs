@@ -44,8 +44,8 @@ namespace DuckGame
             this._effect.effect.Parameters["gradientOffset2"].SetValue(this.gradientOffset2);
             this._effect.effect.Parameters["color1"].SetValue((Vector4)this.color1.ToVector4());
             this._effect.effect.Parameters["color2"].SetValue((Vector4)this.color2.ToVector4());
-            DuckGame.Graphics.device.Textures[1] = (Texture)this._gradient;
-            DuckGame.Graphics.device.Textures[2] = (Texture)this._plasma2;
+            DuckGame.Graphics.device.Textures[1] = _gradient;
+            DuckGame.Graphics.device.Textures[2] = _plasma2;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             DuckGame.Graphics.device.SamplerStates[0] = SamplerState.PointWrap;
             DuckGame.Graphics.device.SamplerStates[2] = SamplerState.PointWrap;

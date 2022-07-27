@@ -23,13 +23,13 @@ namespace DuckGame
         {
         }
 
-        private static void runForm()
-        {
-        }
+        //private static void runForm()
+        //{
+        //}
 
-        private void endForm()
-        {
-        }
+        //private void endForm()
+        //{
+        //}
 
         protected override void SetVisibleCore(bool value)
         {

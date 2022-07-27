@@ -60,14 +60,14 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if ((int)this._levelIndex != (int)DuckNetwork.levelIndex)
+            if (_levelIndex != DuckNetwork.levelIndex)
                 return;
             if (this._fireEvents.Count > 0 && this._fireEvents[0].typeInstance != null)
                 this._fireEvents[0].typeInstance.MakeNetEffect(this.position, true);
             foreach (NMFireBullet fireEvent in this._fireEvents)
             {
                 fireEvent.connection = this.connection;
-                fireEvent.DoActivate(this.position, (int)this.owner < DuckNetwork.profiles.Count ? DuckNetwork.profiles[(int)this.owner] : (Profile)null);
+                fireEvent.DoActivate(this.position, owner < DuckNetwork.profiles.Count ? DuckNetwork.profiles[owner] : null);
             }
             if (this.gun == null)
                 return;
@@ -115,7 +115,7 @@ namespace DuckGame
             base.OnDeserialize(d);
             this._levelIndex = d.ReadByte();
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
             {
                 NMFireBullet nmFireBullet = new NMFireBullet();
                 BitBuffer msg = d.ReadBitBuffer();

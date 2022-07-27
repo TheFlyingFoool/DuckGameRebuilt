@@ -19,7 +19,7 @@ namespace DuckGame
         public static void Initialize()
         {
             System.Type newsType = typeof(NewsStory);
-            foreach (System.Type type in ((IEnumerable<System.Type>)Assembly.GetAssembly(typeof(NewsStory)).GetTypes()).Where<System.Type>((Func<System.Type, bool>)(t => newsType.IsAssignableFrom(t))))
+            foreach (System.Type type in Assembly.GetAssembly(typeof(NewsStory)).GetTypes().Where<System.Type>(t => newsType.IsAssignableFrom(t)))
                 News._availableStories.Add(Activator.CreateInstance(type) as NewsStory);
         }
 
@@ -35,19 +35,19 @@ namespace DuckGame
             }
             News.FilterBest(stories, NewsSection.MatchComments, 1);
             News.FilterBest(stories, NewsSection.PlayerComments, 2);
-            stories.Sort((Comparison<NewsStory>)((a, b) =>
+            stories.Sort((a, b) =>
            {
                if (a.section == b.section)
                    return 0;
                return a.section >= b.section ? 1 : -1;
-           }));
+           });
             return stories;
         }
 
         public static void FilterBest(List<NewsStory> stories, NewsSection section, int numToPick)
         {
-            List<NewsStory> list = stories.Where<NewsStory>((Func<NewsStory, bool>)(x => x.section == section)).ToList<NewsStory>();
-            list.OrderBy<NewsStory, float>((Func<NewsStory, float>)(x => x.weight * x.importance));
+            List<NewsStory> list = stories.Where<NewsStory>(x => x.section == section).ToList<NewsStory>();
+            list.OrderBy<NewsStory, float>(x => x.weight * x.importance);
             int num = 0;
             foreach (NewsStory newsStory in list)
             {

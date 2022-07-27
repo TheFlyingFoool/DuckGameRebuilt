@@ -38,7 +38,7 @@ namespace DuckGame
 
         public virtual void Execute()
         {
-            this._delegate.Method.Invoke(this._delegate.Target, (object[])null);
+            this._delegate.Method.Invoke(this._delegate.Target, null);
             this.Finished = true;
         }
 

@@ -18,7 +18,7 @@ namespace DuckGame
         {
             get
             {
-                TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)((double)this._time * 1000.0));
+                TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)(_time * 1000.0));
                 return this._maxTime.TotalSeconds == 0.0 || timeSpan < this._maxTime ? timeSpan : this._maxTime;
             }
         }

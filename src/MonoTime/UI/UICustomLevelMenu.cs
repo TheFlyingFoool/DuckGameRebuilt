@@ -13,7 +13,7 @@ namespace DuckGame
           : base("CUSTOM LEVELS", action, step: 0, c: c)
         {
             this._useBaseActivationLogic = true;
-            this.controlString = (string)null;
+            this.controlString = null;
         }
 
         public override void Update()

@@ -28,7 +28,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.customIndex = 0;
-            this.graphic = (Sprite)new SpriteMap("arcadeBackground", 16, 16, true);
+            this.graphic = new SpriteMap("arcadeBackground", 16, 16, true);
             this._opacityFromGraphic = true;
             this.center = new Vec2(8f, 8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -44,9 +44,9 @@ namespace DuckGame
             if (this.graphic is SpriteMap)
                 num = this._frame;
             if (data != null && data.texture != null)
-                this.graphic = (Sprite)new SpriteMap((Tex2D)data.texture, 16, 16);
+                this.graphic = new SpriteMap((Tex2D)data.texture, 16, 16);
             else
-                this.graphic = (Sprite)new SpriteMap("blueprintTileset", 16, 16);
+                this.graphic = new SpriteMap("blueprintTileset", 16, 16);
             (this.graphic as SpriteMap).frame = num;
             this._currentTileset = Custom.data[CustomBackground._customType][this.customIndex];
         }

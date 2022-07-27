@@ -15,7 +15,7 @@ namespace DuckGame
         protected string _textureName;
         protected float _frameWidth;
         protected float _frameHeight;
-        protected int _currentObjectIndex = (int)Thing.GetGlobalIndex();
+        protected int _currentObjectIndex = Thing.GetGlobalIndex();
 
         public bool IsDisposed { get; private set; }
 

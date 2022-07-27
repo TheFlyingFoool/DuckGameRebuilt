@@ -67,7 +67,7 @@ namespace DuckGame
         public static Sprite PrepareSprite(User u)
         {
             byte[] avatarMedium = u.avatarMedium;
-            Sprite sprite = (Sprite)null;
+            Sprite sprite = null;
             if (avatarMedium != null && avatarMedium.Length == 16384)
             {
                 Texture2D tex = new Texture2D(DuckGame.Graphics.device, 64, 64);
@@ -80,7 +80,7 @@ namespace DuckGame
 
         public static Sprite GetAvatar(User u)
         {
-            Sprite avatar = (Sprite)null;
+            Sprite avatar;
             if (!UIInviteMenu.avatars.TryGetValue(u.id, out avatar))
                 avatar = UIInviteMenu.PrepareSprite(u);
             return avatar;
@@ -102,16 +102,16 @@ namespace DuckGame
         {
             if (Steam.IsInitialized())
             {
-                int num = Steam.friends.OrderBy<User, int>((Func<User, int>)(u => UIInviteMenu._sortDictionary[(int)u.state])).Count<User>();
+                int num = Steam.friends.OrderBy<User, int>(u => UIInviteMenu._sortDictionary[(int)u.state]).Count<User>();
                 if (num > this._maxShow)
                     num = this._maxShow;
                 this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
                 this._moreArrow = new Sprite("moreArrow");
                 this._moreArrow.CenterOrigin();
-                this._box = new UIBox(0.0f, 0.0f, 100f, (float)(14 * num + 8), isVisible: false);
+                this._box = new UIBox(0.0f, 0.0f, 100f, 14 * num + 8, isVisible: false);
                 this._noAvatar = new Sprite("noAvatar");
                 this._noAvatar.CenterOrigin();
-                this.Add((UIComponent)this._box, true);
+                this.Add(_box, true);
             }
             this._menuAction = act;
         }
@@ -124,7 +124,7 @@ namespace DuckGame
             this._users.Clear();
             if (Steam.IsInitialized())
             {
-                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy<User, int>((Func<User, int>)(u => UIInviteMenu._sortDictionary[(int)u.state]));
+                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy<User, int>(u => UIInviteMenu._sortDictionary[(int)u.state]);
                 int num = source1.Count<User>();
                 for (int index = 0; index < num; ++index)
                 {
@@ -145,7 +145,7 @@ namespace DuckGame
                             inMyLobby = info.inLobby
                         });
                 }
-                this._users = this._users.OrderBy<UIInviteUser, UIInviteUser>((Func<UIInviteUser, UIInviteUser>)(h => h), (IComparer<UIInviteUser>)new CompareUsers()).ToList<UIInviteUser>();
+                this._users = this._users.OrderBy<UIInviteUser, UIInviteUser>(h => h, new CompareUsers()).ToList<UIInviteUser>();
             }
             base.Open();
         }
@@ -194,7 +194,7 @@ namespace DuckGame
             int num1 = this._users.Count;
             if (num1 > this._maxShow)
                 num1 = this._maxShow;
-            float num2 = (float)(14 * num1 - 12);
+            float num2 = 14 * num1 - 12;
             float num3 = 0.0f;
             bool flag = false;
             for (int viewTop = this._viewTop; viewTop < this._viewTop + this._maxShow && viewTop < this._users.Count; ++viewTop)

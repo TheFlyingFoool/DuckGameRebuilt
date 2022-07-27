@@ -38,7 +38,7 @@ namespace DuckGame
                 if (Tasker.IsMainThread)
                     promise.Execute();
                 else
-                    Tasker._promises.Enqueue((Promise)promise);
+                    Tasker._promises.Enqueue(promise);
                 return promise;
             }
         }

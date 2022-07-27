@@ -39,38 +39,38 @@ namespace DuckGame
 
         public void RenderSprites(Vec2 position)
         {
-            float num = (float)(0.400000005960464 + (double)this._ypos * 0.00999999977648258);
+            float num = (float)(0.400000005960464 + _ypos * 0.00999999977648258);
             foreach (Sprite sprite1 in this._sprites)
             {
                 Sprite sprite2 = sprite1;
-                sprite2.position = sprite2.position + position;
+                sprite2.position += position;
                 sprite1.position.x += this.scroll;
-                if ((double)sprite1.position.x < -200.0 * (double)this.wrapMul)
+                if (sprite1.position.x < -200.0 * wrapMul)
                     sprite1.position.x += 500f * this.wrapMul;
-                if ((double)sprite1.position.x > 450.0 * (double)this.wrapMul)
+                if (sprite1.position.x > 450.0 * wrapMul)
                     sprite1.position.x -= 500f * this.wrapMul;
                 sprite1.depth = (Depth)num;
                 Graphics.Draw(sprite1, sprite1.x, sprite1.y);
                 num += 1f / 1000f;
                 sprite1.position.x -= this.scroll;
                 Sprite sprite3 = sprite1;
-                sprite3.position = sprite3.position - position;
+                sprite3.position -= position;
             }
             foreach (Thing thing1 in this._things)
             {
                 Thing thing2 = thing1;
-                thing2.position = thing2.position + position;
+                thing2.position += position;
                 thing1.position.x += this.scroll;
-                if ((double)thing1.position.x < -200.0)
+                if (thing1.position.x < -200.0)
                     thing1.position.x += 500f;
-                if ((double)thing1.position.x > 450.0)
+                if (thing1.position.x > 450.0)
                     thing1.position.x -= 500f;
                 thing1.depth = (Depth)num;
                 thing1.Update();
                 thing1.Draw();
                 thing1.position.x -= this.scroll;
                 Thing thing3 = thing1;
-                thing3.position = thing3.position - position;
+                thing3.position -= position;
             }
         }
 

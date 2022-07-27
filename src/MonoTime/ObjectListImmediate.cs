@@ -19,7 +19,7 @@ namespace DuckGame
         public List<Thing> ToList()
         {
             List<Thing> list = new List<Thing>();
-            list.AddRange((IEnumerable<Thing>)this._bigList);
+            list.AddRange(_bigList);
             return list;
         }
 
@@ -63,8 +63,8 @@ namespace DuckGame
 
         public bool Contains(Thing obj) => this._bigList.Contains(obj);
 
-        public IEnumerator<Thing> GetEnumerator() => (IEnumerator<Thing>)this._bigList.GetEnumerator();
+        public IEnumerator<Thing> GetEnumerator() => this._bigList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 }

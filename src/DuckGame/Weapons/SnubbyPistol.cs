@@ -21,7 +21,7 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + this._angleOffset * (float)this.offDir;
+            get => base.angle + this._angleOffset * offDir;
             set => this._angle = value;
         }
 
@@ -29,14 +29,14 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 6;
-            this._ammoType = (AmmoType)new AT9mm();
+            this._ammoType = new AT9mm();
             this._ammoType.range = 130f;
             this._ammoType.rangeVariation = 10f;
             this._ammoType.accuracy = 0.95f;
             this._ammoType.penetration = 0.4f;
             this._type = "gun";
             this._sprite = new SpriteMap("snubby", 14, 10);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 4f);
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 9f);
@@ -70,7 +70,7 @@ namespace DuckGame
         {
             this._angleOffset = (float)(-(double)this._loadBurst * 0.300000011920929);
             this._loadBurst = Lerp.FloatSmooth(this._loadBurst, 0.0f, 0.18f);
-            if ((double)this._loadBurst < 0.100000001490116)
+            if (_loadBurst < 0.100000001490116)
                 this._loadBurst = 0.0f;
             base.Update();
         }

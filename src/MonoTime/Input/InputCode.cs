@@ -25,7 +25,7 @@ namespace DuckGame
 
         public InputCode.InputCodeProfileStatus GetStatus(InputProfile p)
         {
-            InputCode.InputCodeProfileStatus status = (InputCode.InputCodeProfileStatus)null;
+            InputCodeProfileStatus status;
             if (!this.status.TryGetValue(p.name, out status))
             {
                 status = new InputCode.InputCodeProfileStatus();
@@ -55,7 +55,7 @@ namespace DuckGame
                 return status.lastResult;
             status.lastUpdateFrame = Graphics.frame;
             status.breakTimer -= this.breakSpeed;
-            if ((double)status.breakTimer <= 0.0)
+            if (status.breakTimer <= 0.0)
                 status.Break();
             string trigger1 = this.triggers[status.currentIndex];
             int num = 0;
@@ -68,7 +68,7 @@ namespace DuckGame
             }
             else
                 num = 1 << Network.synchronizedTriggers.Count - Network.synchronizedTriggers.IndexOf(trigger1);
-            if ((int)p.state == num)
+            if (p.state == num)
             {
                 if (!status.release)
                 {
@@ -83,7 +83,7 @@ namespace DuckGame
                         status.breakTimer = 1f;
                 }
             }
-            else if (p.state == (ushort)0)
+            else if (p.state == 0)
             {
                 if (status.release)
                     status.Progress();
@@ -96,11 +96,13 @@ namespace DuckGame
 
         public static implicit operator InputCode(string s)
         {
-            InputCode inputCode = (InputCode)null;
+            InputCode inputCode;
             if (!InputCode._codes.TryGetValue(s, out inputCode))
             {
-                inputCode = new InputCode();
-                inputCode.triggers = new List<string>((IEnumerable<string>)s.Split('|'));
+                inputCode = new InputCode
+                {
+                    triggers = new List<string>(s.Split('|'))
+                };
                 InputCode._codes[s] = inputCode;
             }
             return inputCode;

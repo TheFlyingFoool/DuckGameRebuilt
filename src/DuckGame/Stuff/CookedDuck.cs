@@ -52,16 +52,16 @@ namespace DuckGame
         {
             if (bullet.isLocal)
             {
-                this.OnDestroy((DestroyType)new DTShot(bullet));
-                this.velocity = this.velocity + bullet.travelDirNormalized * 0.7f;
+                this.OnDestroy(new DTShot(bullet));
+                this.velocity += bullet.travelDirNormalized * 0.7f;
                 this.vSpeed -= 0.5f;
             }
             SFX.Play("smallSplat", Rando.Float(0.8f, 1f), Rando.Float(-0.2f, 0.2f));
-            Level.Add((Thing)new WetEnterEffect(hitPos.x, hitPos.y, -bullet.travelDirNormalized, (Thing)this));
+            Level.Add(new WetEnterEffect(hitPos.x, hitPos.y, -bullet.travelDirNormalized, this));
             return base.Hit(bullet, hitPos);
         }
 
-        public override void ExitHit(Bullet bullet, Vec2 exitPos) => Level.Add((Thing)new WetPierceEffect(exitPos.x, exitPos.y, bullet.travelDirNormalized, (Thing)this));
+        public override void ExitHit(Bullet bullet, Vec2 exitPos) => Level.Add(new WetPierceEffect(exitPos.x, exitPos.y, bullet.travelDirNormalized, this));
 
         public override void Update()
         {
@@ -72,18 +72,18 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if ((double)this._hotAlpha <= 0.0)
+            if (_hotAlpha <= 0.0)
                 return;
             if (this._timeHot <= 0)
                 this._hotAlpha -= 0.01f;
             float num = 0.0f;
-            if (this.offDir < (sbyte)0)
+            if (this.offDir < 0)
                 num = -2f;
             for (int index = 0; index < 3; ++index)
             {
                 this._flavourLines[index].depth = this.depth;
                 this._flavourLines[index].color = Color.White * this._hotAlpha;
-                Graphics.Draw((Sprite)this._flavourLines[index], this.x - 4f + (float)(index * 4) + num, this.y - 3f);
+                Graphics.Draw(this._flavourLines[index], this.x - 4f + index * 4 + num, this.y - 3f);
             }
         }
     }

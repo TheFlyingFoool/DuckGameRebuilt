@@ -62,7 +62,7 @@ namespace DuckGame
             this._busy = false;
             this._hate = false;
             this._letterNumber = 0;
-            this._letter = (string)null;
+            this._letter = null;
             this._lastLoyalty = this._loyalty;
         }
 
@@ -111,7 +111,7 @@ namespace DuckGame
                 if (this.loyal)
                     this.newLoyal = false;
                 else
-                    this.loyalty = (Profile)null;
+                    this.loyalty = null;
             }
         }
 
@@ -143,11 +143,11 @@ namespace DuckGame
             int totalFans = Crowd.totalFans;
             int _max = 3;
             if (dist <= 20)
-                _max += (int)((double)totalFans * 0.0799999982118607);
+                _max += (int)(totalFans * 0.0799999982118607);
             if (dist > 20)
-                _max = 2 + (int)((double)totalFans * 0.0199999995529652);
+                _max = 2 + (int)(totalFans * 0.0199999995529652);
             if (dist > 30)
-                _max = 1 + (int)((double)totalFans * 0.00999999977648258);
+                _max = 1 + (int)(totalFans * 0.00999999977648258);
             if (Crowd.totalFans < 1)
                 _max = 0;
             ++Crowd.fansUsed;
@@ -165,7 +165,7 @@ namespace DuckGame
                 if (empty == -1)
                 {
                     FanNum fan = Crowd.GetFan();
-                    Profile profile = (Profile)null;
+                    Profile profile = null;
                     if (fan != null)
                     {
                         profile = fan.profile;
@@ -201,12 +201,12 @@ namespace DuckGame
             }
             spriteMap.SetAnimation("idle");
             this._sprite = spriteMap;
-            this.graphic = (Sprite)this._sprite;
-            this.collisionSize = new Vec2((float)this._sprite.width, (float)this._sprite.height);
-            this.collisionOffset = new Vec2((float)-(this._sprite.w / 2), (float)-(this._sprite.h / 2));
-            this.center = new Vec2(0.0f, (float)spriteMap.h);
-            this.collisionOffset = new Vec2(this.collisionOffset.x, (float)-this._sprite.h);
-            this.depth = (Depth)(float)(0.300000011920929 - (double)row * 0.0500000007450581);
+            this.graphic = _sprite;
+            this.collisionSize = new Vec2(_sprite.width, _sprite.height);
+            this.collisionOffset = new Vec2(-(this._sprite.w / 2), -(this._sprite.h / 2));
+            this.center = new Vec2(0.0f, spriteMap.h);
+            this.collisionOffset = new Vec2(this.collisionOffset.x, -this._sprite.h);
+            this.depth = (Depth)(float)(0.300000011920929 - row * 0.0500000007450581);
             this.layer = Layer.Background;
             this._letterSign = new Sprite("letterSign");
             this._letterSign.CenterOrigin();
@@ -214,13 +214,13 @@ namespace DuckGame
             this._font = new BitmapFont("biosFont", 8);
             this._loveSign = new Sprite("loveSign");
             this._loveSign.CenterOrigin();
-            this._loveSign.depth = (Depth)(float)(0.319999992847443 - (double)row * 0.0500000007450581);
+            this._loveSign.depth = (Depth)(float)(0.319999992847443 - row * 0.0500000007450581);
             this._sucksSign = new Sprite("sucksSign");
             this._sucksSign.CenterOrigin();
-            this._sucksSign.depth = (Depth)(float)(0.319999992847443 - (double)row * 0.0500000007450581);
+            this._sucksSign.depth = (Depth)(float)(0.319999992847443 - row * 0.0500000007450581);
             this._suckSign = new Sprite("suckSign");
             this._suckSign.CenterOrigin();
-            this._suckSign.depth = (Depth)(float)(0.319999992847443 - (double)row * 0.0500000007450581);
+            this._suckSign.depth = (Depth)(float)(0.319999992847443 - row * 0.0500000007450581);
         }
 
         public override void Initialize() => base.Initialize();
@@ -235,20 +235,20 @@ namespace DuckGame
                 this._sprite.SetAnimation("cheer");
             else if (this._mood == Mood.Extatic)
                 this._sprite.SetAnimation("scream");
-            if ((double)this._hatThrowTime > 0.0)
+            if (_hatThrowTime > 0.0)
             {
                 this._hatThrowTime -= 0.01f;
             }
             else
             {
-                if ((double)this._hatThrowTime <= -0.5)
+                if (_hatThrowTime <= -0.5)
                     return;
                 this._lastLoyalty = this._loyalty;
                 if (this._lastLoyalty == null)
                     SFX.Play("cutOffQuack2", 0.9f, Rando.Float(-0.1f, 0.1f));
                 else
                     SFX.Play("cutOffQuack", 0.9f, Rando.Float(-0.1f, 0.1f));
-                Level.Add((Thing)SmallSmoke.New(this.x + 6f, this.y - 35f));
+                Level.Add(SmallSmoke.New(this.x + 6f, this.y - 35f));
                 this._hatThrowTime = -1f;
             }
         }
@@ -260,7 +260,7 @@ namespace DuckGame
             this._sprite.texture = this._originalSprite.texture;
             if (!this._empty && this._letter != null)
             {
-                float num = (float)(Math.Sin((double)this._letterSway + (double)this._letterNumber * 0.100000001490116) * 2.0 + 4.0);
+                float num = (float)(Math.Sin(_letterSway + _letterNumber * 0.100000001490116) * 2.0 + 4.0);
                 this._letterSway += 0.1f;
                 if (this._letter.Length == 1)
                 {
@@ -325,7 +325,7 @@ namespace DuckGame
                 if (this.loyal)
                     g.frame = flag ? 1 : 0;
                 g.CenterOrigin();
-                Graphics.Draw((Sprite)g, (float)((double)this.x - (double)vec2.x + 8.0) + num, (float)((double)this.y - (double)vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
+                Graphics.Draw(g, (float)((double)this.x - vec2.x + 8.0) + num, (float)((double)this.y - vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
                 g.frame = 0;
                 g.flipH = false;
             }

@@ -23,12 +23,12 @@ namespace DuckGame
 
         public override string ToString() => "Tick: " + this.tick.ToString() + " FA: " + this._framesApplied.ToString() + " Mask: " + this.mask.ToString();
 
-        public Thing owner => this.properties.Count <= 0 ? (Thing)null : this.properties[0].binding.owner as Thing;
+        public Thing owner => this.properties.Count <= 0 ? null : this.properties[0].binding.owner as Thing;
 
         public BufferedGhostState()
         {
             for (int index = 0; index < NetworkConnection.packetsEvery; ++index)
-                this.inputStates.Add((ushort)0);
+                this.inputStates.Add(0);
         }
 
         ~BufferedGhostState()

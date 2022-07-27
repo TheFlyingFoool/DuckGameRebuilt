@@ -23,7 +23,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._lighting;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._lighting;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             this.SetValue("xpos", this._hat.position.x - 32f);
             this.SetValue("ypos", this._hat.position.y - 32f);

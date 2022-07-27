@@ -12,7 +12,7 @@ namespace DuckGame
 {
     public class Sprite : Transform, ICloneable<Sprite>, ICloneable
     {
-        private int _globalIndex = (int)Thing.GetGlobalIndex();
+        private int _globalIndex = Thing.GetGlobalIndex();
         protected Tex2D _texture;
         protected RenderTarget2D _renderTexture;
         protected bool _flipH;
@@ -64,7 +64,7 @@ namespace DuckGame
             set => this._color = value;
         }
 
-        public void CenterOrigin() => this.center = new Vec2((float)Math.Round((double)this.width / 2.0), (float)Math.Round((double)this.height / 2.0));
+        public void CenterOrigin() => this.center = new Vec2((float)Math.Round(width / 2.0), (float)Math.Round(height / 2.0));
 
         public Sprite()
         {
@@ -78,7 +78,7 @@ namespace DuckGame
 
         public Sprite(RenderTarget2D tex, float x = 0.0f, float y = 0.0f)
         {
-            this._texture = (Tex2D)tex;
+            this._texture = tex;
             this._renderTexture = tex;
             this.position = new Vec2(x, y);
         }
@@ -113,16 +113,18 @@ namespace DuckGame
 
         public virtual Sprite Clone()
         {
-            Sprite sprite = new Sprite(this._texture);
-            sprite.flipH = this._flipH;
-            sprite.flipV = this._flipV;
-            sprite.position = this.position;
-            sprite.scale = this.scale;
-            sprite.center = this.center;
-            sprite.depth = this.depth;
-            sprite.alpha = this.alpha;
-            sprite.angle = this.angle;
-            sprite.color = this.color;
+            Sprite sprite = new Sprite(this._texture)
+            {
+                flipH = this._flipH,
+                flipV = this._flipV,
+                position = this.position,
+                scale = this.scale,
+                center = this.center,
+                depth = this.depth,
+                alpha = this.alpha,
+                angle = this.angle,
+                color = this.color
+            };
             return sprite;
         }
 
@@ -130,6 +132,6 @@ namespace DuckGame
         {
         }
 
-        object ICloneable.Clone() => (object)this.Clone();
+        object ICloneable.Clone() => this.Clone();
     }
 }

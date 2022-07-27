@@ -17,7 +17,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("key", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 8f);
@@ -34,7 +34,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._sprite.flipH = this.offDir < (sbyte)0;
+            this._sprite.flipH = this.offDir < 0;
             if (this.owner != null)
                 Level.CheckLine<Door>(this.position + new Vec2(-10f, 0.0f), this.position + new Vec2(10f, 0.0f))?.UnlockDoor(this);
             base.Update();

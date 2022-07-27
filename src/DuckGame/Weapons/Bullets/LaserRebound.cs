@@ -24,7 +24,7 @@ namespace DuckGame
             this.alpha -= 0.07f;
             if ((double)this.alpha > 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

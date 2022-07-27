@@ -29,7 +29,7 @@ namespace DuckGame
         public bool isPushingUp;
 
         public ContextToolbarItem(ContextMenu owner)
-          : base((IContextListener)owner)
+          : base(owner)
         {
             this.toolBarToolTip = "";
         }
@@ -41,7 +41,7 @@ namespace DuckGame
         {
             this.Closed();
             this._unsavedChangesDialogue.Open("UNSAVED CHANGES", pDescription: ("Your current level has unsaved\nchanges! Are you sure you want to\n" + pDescription + "?"));
-            Editor.lockInput = (ContextMenu)this._unsavedChangesDialogue;
+            Editor.lockInput = _unsavedChangesDialogue;
             this._unsavedChangesDialogue.result = false;
             this._unsavedChangesDialogue.contextString = pContext;
             this._unsavedChangesDialogue.confirmItem = pConfirmItem;
@@ -92,7 +92,7 @@ namespace DuckGame
                         Editor current = Level.current as Editor;
                         current.ClearEverything();
                         current.saveName = "";
-                        current.AddObject((Thing)new ImportMachine(0.0f, 0.0f));
+                        current.AddObject(new ImportMachine(0.0f, 0.0f));
                         current.CloseMenu();
                         this._unsavedChangesDialogue.result = false;
                     }
@@ -167,8 +167,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._unsavedChangesDialogue = new MessageDialogue((ContextMenu)this);
-            Level.Add((Thing)this._unsavedChangesDialogue);
+            this._unsavedChangesDialogue = new MessageDialogue(this);
+            Level.Add(_unsavedChangesDialogue);
             this._newButton = new ToolbarButton(this, 0, "NEW LEVEL");
             this._saveButton = new ToolbarButton(this, 2, "SAVE LEVEL");
             this._loadButton = new ToolbarButton(this, 1, "LOAD LEVEL");
@@ -313,12 +313,12 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            Level.current.RemoveThing((Thing)this._newButton);
-            Level.current.RemoveThing((Thing)this._saveButton);
-            Level.current.RemoveThing((Thing)this._loadButton);
-            Level.current.RemoveThing((Thing)this._playButton);
-            Level.current.RemoveThing((Thing)this._gridButton);
-            Level.current.RemoveThing((Thing)this._quitButton);
+            Level.current.RemoveThing(_newButton);
+            Level.current.RemoveThing(_saveButton);
+            Level.current.RemoveThing(_loadButton);
+            Level.current.RemoveThing(_playButton);
+            Level.current.RemoveThing(_gridButton);
+            Level.current.RemoveThing(_quitButton);
             this.Closed();
             base.Terminate();
         }
@@ -328,35 +328,37 @@ namespace DuckGame
         public void ButtonPressed(ToolbarButton button)
         {
             SFX.Play("highClick", 0.3f, 0.2f);
-            ContextMenu contextMenu1 = (ContextMenu)null;
+            ContextMenu contextMenu1 = null;
             Vec2 vec2 = new Vec2(2f, 21f);
             if (button == this._newButton)
             {
                 this.Closed();
-                this._newMenu = new ContextMenu((IContextListener)this, hasToproot: true, topRoot: button.position);
-                this._newMenu.x = this.position.x - vec2.x;
-                this._newMenu.y = this.position.y + vec2.y;
-                this._newMenu.root = true;
-                this._newMenu.depth = this.depth + 10;
+                this._newMenu = new ContextMenu(this, hasToproot: true, topRoot: button.position)
+                {
+                    x = this.position.x - vec2.x,
+                    y = this.position.y + vec2.y,
+                    root = true,
+                    depth = this.depth + 10
+                };
                 this.Selected();
-                this._newMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._newMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "NEW"
                 });
-                this._newMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._newMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "NEW ONLINE"
                 });
-                ContextMenu contextMenu2 = new ContextMenu((IContextListener)this);
+                ContextMenu contextMenu2 = new ContextMenu(this);
                 contextMenu2.itemSize.x = 60f;
                 contextMenu2.text = "SPECIAL";
-                contextMenu2.AddItem(new ContextMenu((IContextListener)this)
+                contextMenu2.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 90f
@@ -364,34 +366,36 @@ namespace DuckGame
                     text = "NEW ARCADE MACHINE"
                 });
                 this._newMenu.AddItem(contextMenu2);
-                this._newMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._newMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "CANCEL"
                 });
-                Level.Add((Thing)this._newMenu);
+                Level.Add(_newMenu);
                 this._newMenu.opened = true;
                 contextMenu1 = this._newMenu;
             }
             if (button == this._saveButton)
             {
                 this.Closed();
-                this._saveMenu = new ContextMenu((IContextListener)this, hasToproot: true, topRoot: button.position);
-                this._saveMenu.x = this.position.x - vec2.x;
-                this._saveMenu.y = this.position.y + vec2.y;
-                this._saveMenu.root = true;
-                this._saveMenu.depth = this.depth + 10;
+                this._saveMenu = new ContextMenu(this, hasToproot: true, topRoot: button.position)
+                {
+                    x = this.position.x - vec2.x,
+                    y = this.position.y + vec2.y,
+                    root = true,
+                    depth = this.depth + 10
+                };
                 this.Selected();
-                this._saveMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._saveMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 40f
           },
                     text = "SAVE"
                 });
-                this._saveMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._saveMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 40f
@@ -399,48 +403,50 @@ namespace DuckGame
                     text = "SAVE AS"
                 });
                 if (Steam.IsInitialized())
-                    this._saveMenu.AddItem(new ContextMenu((IContextListener)this)
+                    this._saveMenu.AddItem(new ContextMenu(this)
                     {
                         itemSize = {
               x = 40f
             },
                         text = "@STEAMICON@ PUBLISH"
                     });
-                Level.Add((Thing)this._saveMenu);
+                Level.Add(_saveMenu);
                 this._saveMenu.opened = true;
                 contextMenu1 = this._saveMenu;
             }
             if (button == this._gridButton)
             {
                 this.Closed();
-                this._gridMenu = new ContextMenu((IContextListener)this, hasToproot: true, topRoot: button.position);
-                this._gridMenu.x = this.position.x - vec2.x;
-                this._gridMenu.y = this.position.y + vec2.y;
-                this._gridMenu.root = true;
-                this._gridMenu.depth = this.depth + 10;
+                this._gridMenu = new ContextMenu(this, hasToproot: true, topRoot: button.position)
+                {
+                    x = this.position.x - vec2.x,
+                    y = this.position.y + vec2.y,
+                    root = true,
+                    depth = this.depth + 10
+                };
                 this.Selected();
-                this._gridMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._gridMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "8x8"
                 });
-                this._gridMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._gridMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "16x16"
                 });
-                this._gridMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._gridMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "32x32"
                 });
-                Level.Add((Thing)this._gridMenu);
+                Level.Add(_gridMenu);
                 this._gridMenu.opened = true;
                 contextMenu1 = this._gridMenu;
             }
@@ -448,38 +454,40 @@ namespace DuckGame
             {
                 this._doLoad = true;
                 if (Editor.hasUnsavedChanges)
-                    this.ShowUnsavedChangesDialogue("LOAD", "load a new level", (ContextMenu)null);
+                    this.ShowUnsavedChangesDialogue("LOAD", "load a new level", null);
             }
             if (button == this._playButton)
                 (Level.current as Editor).Play();
             if (button == this._quitButton)
             {
                 this.Closed();
-                this._quitMenu = new ContextMenu((IContextListener)this, hasToproot: true, topRoot: button.position);
-                this._quitMenu.x = this.position.x - vec2.x;
-                this._quitMenu.y = this.position.y + vec2.y;
-                this._quitMenu.root = true;
-                this._quitMenu.depth = this.depth + 10;
+                this._quitMenu = new ContextMenu(this, hasToproot: true, topRoot: button.position)
+                {
+                    x = this.position.x - vec2.x,
+                    y = this.position.y + vec2.y,
+                    root = true,
+                    depth = this.depth + 10
+                };
                 this.Selected();
-                this._quitMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._quitMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "QUIT"
                 });
-                this._quitMenu.AddItem(new ContextMenu((IContextListener)this)
+                this._quitMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
             x = 60f
           },
                     text = "CANCEL"
                 });
-                Level.Add((Thing)this._quitMenu);
+                Level.Add(_quitMenu);
                 this._quitMenu.opened = true;
                 contextMenu1 = this._quitMenu;
             }
-            if (contextMenu1 == null || (double)contextMenu1.y + (double)contextMenu1.menuSize.y <= (double)this.layer.camera.height - 4.0)
+            if (contextMenu1 == null || (double)contextMenu1.y + contextMenu1.menuSize.y <= (double)this.layer.camera.height - 4.0)
                 return;
             this.isPushingUp = true;
             float y = contextMenu1.y;
@@ -500,28 +508,28 @@ namespace DuckGame
         {
             if (this._newMenu != null)
             {
-                Level.Remove((Thing)this._newMenu);
-                this._newMenu = (ContextMenu)null;
+                Level.Remove(_newMenu);
+                this._newMenu = null;
             }
             if (this._saveMenu != null)
             {
-                Level.Remove((Thing)this._saveMenu);
-                this._saveMenu = (ContextMenu)null;
+                Level.Remove(_saveMenu);
+                this._saveMenu = null;
             }
             if (this._gridMenu != null)
             {
-                Level.Remove((Thing)this._gridMenu);
-                this._gridMenu = (ContextMenu)null;
+                Level.Remove(_gridMenu);
+                this._gridMenu = null;
             }
             if (this._quitMenu != null)
             {
-                Level.Remove((Thing)this._quitMenu);
-                this._quitMenu = (ContextMenu)null;
+                Level.Remove(_quitMenu);
+                this._quitMenu = null;
             }
             if (this._uploadMenu != null)
             {
-                Level.Remove((Thing)this._uploadMenu);
-                this._uploadMenu = (ContextMenu)null;
+                Level.Remove(_uploadMenu);
+                this._uploadMenu = null;
             }
             this.toolBarToolTip = "";
         }

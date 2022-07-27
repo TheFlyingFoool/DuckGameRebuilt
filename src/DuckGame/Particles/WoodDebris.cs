@@ -27,7 +27,7 @@ namespace DuckGame
             WoodDebris._lastActiveObject = (WoodDebris._lastActiveObject + 1) % WoodDebris.kMaxObjects;
             woodDebris.ResetProperties();
             woodDebris.Init(xpos, ypos);
-            woodDebris._sprite.globalIndex = (int)Thing.GetGlobalIndex();
+            woodDebris._sprite.globalIndex = Thing.GetGlobalIndex();
             woodDebris.globalIndex = Thing.GetGlobalIndex();
             return woodDebris;
         }
@@ -36,7 +36,7 @@ namespace DuckGame
           : base(0.0f, 0.0f)
         {
             this._sprite = new SpriteMap("woodDebris", 8, 8);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(4f, 4f);
         }
 

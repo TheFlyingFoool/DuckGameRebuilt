@@ -23,7 +23,7 @@ namespace DuckGame
             this._scoreCard.CenterOrigin();
             this.collisionOffset = new Vec2(-8f, -6f);
             this.collisionSize = new Vec2(16f, 13f);
-            this.center = new Vec2((float)(this._scoreCard.w / 2), (float)(this._scoreCard.h / 2));
+            this.center = new Vec2(this._scoreCard.w / 2, this._scoreCard.h / 2);
             this._stick = rock;
             this.depth = - 0.1f;
         }
@@ -45,7 +45,7 @@ namespace DuckGame
             }
             else
             {
-                string text = Change.ToString((object)this._team.score);
+                string text = Change.ToString(_team.score);
                 this._font.Draw(text, this.x - this._font.GetWidth(text) / 2f, this.y - 2f, Color.DarkSlateGray, this._scoreCard.depth + 1);
             }
         }

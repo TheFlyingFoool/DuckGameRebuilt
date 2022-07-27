@@ -29,7 +29,7 @@ namespace DuckGame
         public override void Update()
         {
             this._hit = Maths.LerpTowards(this._hit, 0.0f, 0.1f);
-            if (Level.CheckPoint<Duck>(this.x, this.y + 10f) == null || (double)this._hit >= 0.00999999977648258)
+            if (Level.CheckPoint<Duck>(this.x, this.y + 10f) == null || _hit >= 0.00999999977648258)
                 return;
             this._hit = 1f;
         }
@@ -37,7 +37,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Graphics.Draw(this._button, this.x, (float)((double)this.y + 2.0 - (double)this._hit * 4.0));
+            Graphics.Draw(this._button, this.x, (float)((double)this.y + 2.0 - _hit * 4.0));
         }
     }
 }

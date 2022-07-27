@@ -53,10 +53,10 @@ namespace DuckGame
 
         public LoopingSound(string sound, float startVolume = 0.0f, float startPitch = 0.0f, string multiSound = null)
         {
-            this._effect = (double)startVolume <= 0.0 ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : (Sound)SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
+            this._effect = (double)startVolume <= 0.0 ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
             if (this._effect != null)
                 return;
-            this._effect = (Sound)new InvalidSound(sound, startVolume, startPitch, 0.0f, true);
+            this._effect = new InvalidSound(sound, startVolume, startPitch, 0.0f, true);
         }
 
         ~LoopingSound()
@@ -66,7 +66,7 @@ namespace DuckGame
             if (this._effect == null)
                 return;
             this._effect.Kill();
-            this._effect = (Sound)null;
+            this._effect = null;
         }
 
         public void Kill()
@@ -86,7 +86,7 @@ namespace DuckGame
         public void Update()
         {
             if (this._effect != null && this._effect.IsDisposed)
-                this._effect = (Sound)null;
+                this._effect = null;
             else if (this._effect == null || this._startLevel != null && Level.current != this._startLevel)
             {
                 if (this._effect == null)

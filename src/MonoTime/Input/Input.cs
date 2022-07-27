@@ -645,7 +645,7 @@ namespace DuckGame
 
         public static Sprite GetTriggerSprite(string trigger)
         {
-            Sprite triggerSprite = (Sprite)null;
+            Sprite triggerSprite;
             DuckGame.Input._triggerImageMap.TryGetValue(trigger, out triggerSprite);
             return triggerSprite;
         }
@@ -685,8 +685,8 @@ namespace DuckGame
             if (p != null && p.linkedProfile != null)
                 return DuckGame.Input.GetDefaultMapping(productName, productGUID, presets, makeClone, p.linkedProfile);
             List<DeviceInputMapping> source = DuckGame.Input._defaultInputMapping;
-            if (p != null && p.inputMappingOverrides.FirstOrDefault<DeviceInputMapping>((Func<DeviceInputMapping, bool>)(x => x.deviceGUID == productGUID && x.deviceName == productName)) == null)
-                p = (Profile)null;
+            if (p != null && p.inputMappingOverrides.FirstOrDefault<DeviceInputMapping>(x => x.deviceGUID == productGUID && x.deviceName == productName) == null)
+                p = null;
             if (presets)
                 source = DuckGame.Input.defaultInputMappingPresets;
             if (p != null)
@@ -697,8 +697,8 @@ namespace DuckGame
                     return defaultMapping;
             }
             if (p != null)
-                return (DeviceInputMapping)null;
-            DeviceInputMapping defaultMapping1 = source.FirstOrDefault<DeviceInputMapping>((Func<DeviceInputMapping, bool>)(x => x.deviceName == "GENERIC GAMEPAD"));
+                return null;
+            DeviceInputMapping defaultMapping1 = source.FirstOrDefault<DeviceInputMapping>(x => x.deviceName == "GENERIC GAMEPAD");
             if (!makeClone)
                 return defaultMapping1;
             if (defaultMapping1 == null)
@@ -771,8 +771,8 @@ namespace DuckGame
             List<DeviceInputMapping> source = DuckGame.Input._defaultInputMapping;
             if (overrideProfile != null)
                 source = overrideProfile.inputMappingOverrides;
-            DeviceInputMapping deviceInputMapping1 = source.FirstOrDefault<DeviceInputMapping>((Func<DeviceInputMapping, bool>)(x => x.deviceName == mapping.deviceName && x.deviceGUID == mapping.deviceGUID));
-            DeviceInputMapping deviceInputMapping2 = DuckGame.Input.defaultInputMappingPresets.FirstOrDefault<DeviceInputMapping>((Func<DeviceInputMapping, bool>)(x => x.deviceName == mapping.deviceName && x.deviceGUID == mapping.deviceGUID));
+            DeviceInputMapping deviceInputMapping1 = source.FirstOrDefault<DeviceInputMapping>(x => x.deviceName == mapping.deviceName && x.deviceGUID == mapping.deviceGUID);
+            DeviceInputMapping deviceInputMapping2 = DuckGame.Input.defaultInputMappingPresets.FirstOrDefault<DeviceInputMapping>(x => x.deviceName == mapping.deviceName && x.deviceGUID == mapping.deviceGUID);
             if (deviceInputMapping1 != null)
             {
                 DevConsole.Log(DCSection.General, "SetDefaultMapping() Found existing map for (" + mapping.deviceName + ")...");
@@ -788,7 +788,7 @@ namespace DuckGame
             }
             else
             {
-                DeviceInputMapping compare = DuckGame.Input._defaultInputMapping.FirstOrDefault<DeviceInputMapping>((Func<DeviceInputMapping, bool>)(x => x.deviceName == mapping.deviceName && x.deviceGUID == mapping.deviceGUID));
+                DeviceInputMapping compare = DuckGame.Input._defaultInputMapping.FirstOrDefault<DeviceInputMapping>(x => x.deviceName == mapping.deviceName && x.deviceGUID == mapping.deviceGUID);
                 if (compare != null)
                 {
                     if (!mapping.IsEqual(compare))
@@ -802,7 +802,7 @@ namespace DuckGame
                 else
                 {
                     DevConsole.Log(DCSection.General, "Found default settings for (" + mapping.deviceName + ")...");
-                    if (DuckGame.Input._defaultInputMapping.FirstOrDefault<DeviceInputMapping>((Func<DeviceInputMapping, bool>)(x => x.deviceName == "GENERIC GAMEPAD")).IsEqual(mapping))
+                    if (DuckGame.Input._defaultInputMapping.FirstOrDefault<DeviceInputMapping>(x => x.deviceName == "GENERIC GAMEPAD").IsEqual(mapping))
                         return;
                     source.Add(mapping);
                 }
@@ -877,11 +877,11 @@ namespace DuckGame
                         if (deviceInputMapping != null)
                         {
                             foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
-                                p.Map((InputDevice)device, keyValuePair.Key, keyValuePair.Value);
+                                p.Map(device, keyValuePair.Key, keyValuePair.Value);
                         }
                     }
                     else
-                        p.Map((InputDevice)device, "", 0);
+                        p.Map(device, "", 0);
                 }
                 if (p == InputProfile.defaultProfiles[Options.Data.keyboard1PlayerIndex])
                 {
@@ -889,7 +889,7 @@ namespace DuckGame
                     if (deviceInputMapping == null)
                         return;
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
-                        p.Map((InputDevice)DuckGame.Input.GetDevice<Keyboard>(), keyValuePair.Key, keyValuePair.Value);
+                        p.Map(DuckGame.Input.GetDevice<Keyboard>(), keyValuePair.Key, keyValuePair.Value);
                 }
                 else
                 {
@@ -899,7 +899,7 @@ namespace DuckGame
                     if (deviceInputMapping == null)
                         return;
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
-                        p.Map((InputDevice)DuckGame.Input.GetDevice<Keyboard>(1), keyValuePair.Key, keyValuePair.Value);
+                        p.Map(DuckGame.Input.GetDevice<Keyboard>(1), keyValuePair.Key, keyValuePair.Value);
                 }
             }
         }
@@ -933,9 +933,11 @@ namespace DuckGame
             DuckGame.Input._triggerImageMap.Add("TICKET", new Sprite("arcade/ticket"));
             DuckGame.Input._triggerImageMap.Add("CHECK", new Sprite("checkIcon"));
             Dictionary<string, Sprite> triggerImageMap = DuckGame.Input._triggerImageMap;
-            Sprite sprite1 = new Sprite("checkIcon");
-            sprite1.scale = new Vec2(0.5f, 0.5f);
-            sprite1.centery = -1f;
+            Sprite sprite1 = new Sprite("checkIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                centery = -1f
+            };
             triggerImageMap.Add("CHECKSMALL", sprite1);
             DuckGame.Input._triggerImageMap.Add("SPEEDCLOCK", new Sprite("speedrunClock"));
             DuckGame.Input._triggerImageMap.Add("STARGOODY", new Sprite("challenge/star"));
@@ -943,91 +945,113 @@ namespace DuckGame
             DuckGame.Input._triggerImageMap.Add("LAPGOODY", new Sprite("challenge/goal"));
             DuckGame.Input._triggerImageMap.Add("EDITORCURRENCY", new Sprite("editorCurrency"));
             DuckGame.Input._triggerImageMap.Add("LWING", new Sprite("arcade/titleWing"));
-            Sprite sprite2 = new Sprite("arcade/titleWing");
-            sprite2.flipH = true;
-            sprite2.centerx = (float)sprite2.width;
+            Sprite sprite2 = new Sprite("arcade/titleWing")
+            {
+                flipH = true
+            };
+            sprite2.centerx = sprite2.width;
             DuckGame.Input._triggerImageMap.Add("RWING", sprite2);
-            Sprite sprite3 = new Sprite("arcade/titleWing");
-            sprite3.color = new Color(96, 119, 124);
+            Sprite sprite3 = new Sprite("arcade/titleWing")
+            {
+                color = new Color(96, 119, 124)
+            };
             ++sprite3.centery;
             DuckGame.Input._triggerImageMap.Add("LWINGGRAY", sprite3);
-            Sprite sprite4 = new Sprite("arcade/titleWing");
-            sprite4.flipH = true;
-            sprite4.centerx = (float)sprite4.width;
+            Sprite sprite4 = new Sprite("arcade/titleWing")
+            {
+                flipH = true
+            };
+            sprite4.centerx = sprite4.width;
             ++sprite4.centery;
             sprite4.color = new Color(96, 119, 124);
             DuckGame.Input._triggerImageMap.Add("RWINGGRAY", sprite4);
             DuckGame.Input._triggerImageMap.Add("WRENCH", new Sprite("titleWrench"));
             DuckGame.Input._triggerImageMap.Add("SCREWDRIVER", new Sprite("titleScrewdriver"));
-            DuckGame.Input._triggerImageMap.Add("BASELINE", (Sprite)new SpriteMap("challengeTrophyIcons", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("BASELINE", new SpriteMap("challengeTrophyIcons", 16, 16)
             {
                 frame = 0
             });
-            DuckGame.Input._triggerImageMap.Add("BRONZE", (Sprite)new SpriteMap("challengeTrophyIcons", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("BRONZE", new SpriteMap("challengeTrophyIcons", 16, 16)
             {
                 frame = 1
             });
-            DuckGame.Input._triggerImageMap.Add("SILVER", (Sprite)new SpriteMap("challengeTrophyIcons", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("SILVER", new SpriteMap("challengeTrophyIcons", 16, 16)
             {
                 frame = 2
             });
-            DuckGame.Input._triggerImageMap.Add("GOLD", (Sprite)new SpriteMap("challengeTrophyIcons", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("GOLD", new SpriteMap("challengeTrophyIcons", 16, 16)
             {
                 frame = 3
             });
-            DuckGame.Input._triggerImageMap.Add("PLATINUM", (Sprite)new SpriteMap("challengeTrophyIcons", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("PLATINUM", new SpriteMap("challengeTrophyIcons", 16, 16)
             {
                 frame = 4
             });
-            DuckGame.Input._triggerImageMap.Add("DEVELOPER", (Sprite)new SpriteMap("challengeTrophyIcons", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("DEVELOPER", new SpriteMap("challengeTrophyIcons", 16, 16)
             {
                 frame = 5
             });
-            DuckGame.Input._triggerImageMap.Add("ONLINEBAD", (Sprite)new SpriteMap("onlineStatusIcons", 7, 7)
+            DuckGame.Input._triggerImageMap.Add("ONLINEBAD", new SpriteMap("onlineStatusIcons", 7, 7)
             {
                 frame = 0
             });
-            DuckGame.Input._triggerImageMap.Add("ONLINENEUTRAL", (Sprite)new SpriteMap("onlineStatusIcons", 7, 7)
+            DuckGame.Input._triggerImageMap.Add("ONLINENEUTRAL", new SpriteMap("onlineStatusIcons", 7, 7)
             {
                 frame = 1
             });
-            DuckGame.Input._triggerImageMap.Add("ONLINEGOOD", (Sprite)new SpriteMap("onlineStatusIcons", 7, 7)
+            DuckGame.Input._triggerImageMap.Add("ONLINEGOOD", new SpriteMap("onlineStatusIcons", 7, 7)
             {
                 frame = 2
             });
-            Sprite sprite5 = new Sprite("crownIcon");
-            sprite5.scale = new Vec2(0.5f, 0.5f);
+            Sprite sprite5 = new Sprite("crownIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             sprite5.centery -= 6f;
             DuckGame.Input._triggerImageMap.Add("HOSTCROWN", sprite5);
             Sprite sprite6 = new Sprite("subPlus");
             DuckGame.Input._triggerImageMap.Add("SUBPLUS", sprite6);
-            Sprite sprite7 = new Sprite("steamIcon");
-            sprite7.scale = new Vec2(0.25f, 0.25f);
+            Sprite sprite7 = new Sprite("steamIcon")
+            {
+                scale = new Vec2(0.25f, 0.25f)
+            };
             sprite7.centery -= 48f;
             DuckGame.Input._triggerImageMap.Add("STEAMICON", sprite7);
-            Sprite sprite8 = new Sprite("steamIcon");
-            sprite8.scale = new Vec2(0.5f, 0.5f);
+            Sprite sprite8 = new Sprite("steamIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             sprite8.centery -= 16f;
             DuckGame.Input._triggerImageMap.Add("STEAMICONMED", sprite8);
-            Sprite sprite9 = new Sprite("accessIcon");
-            sprite9.scale = new Vec2(0.5f, 0.5f);
+            Sprite sprite9 = new Sprite("accessIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             sprite9.centery -= 8f;
             DuckGame.Input._triggerImageMap.Add("ACCESSICON", sprite9);
-            Sprite sprite10 = new Sprite("vanillaIcon");
-            sprite10.scale = new Vec2(0.5f, 0.5f);
+            Sprite sprite10 = new Sprite("vanillaIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             sprite10.centery -= 8f;
             DuckGame.Input._triggerImageMap.Add("VANILLAICON", sprite10);
             Sprite sprite11 = new Sprite("spectatorIcon");
             DuckGame.Input._triggerImageMap.Add("SPECTATOR", sprite11);
-            Sprite sprite12 = new Sprite("spectatorIcon");
-            sprite12.scale = new Vec2(2f);
+            Sprite sprite12 = new Sprite("spectatorIcon")
+            {
+                scale = new Vec2(2f)
+            };
             DuckGame.Input._triggerImageMap.Add("SPECTATORBIG", sprite12);
-            Sprite sprite13 = new Sprite("discordIcon");
-            sprite13.scale = new Vec2(0.25f, 0.25f);
+            Sprite sprite13 = new Sprite("discordIcon")
+            {
+                scale = new Vec2(0.25f, 0.25f)
+            };
             sprite13.centery -= 48f;
             DuckGame.Input._triggerImageMap.Add("DISCORDICON", sprite13);
-            Sprite sprite14 = new Sprite("singleDuck");
-            sprite14.scale = new Vec2(1f, 1f);
+            Sprite sprite14 = new Sprite("singleDuck")
+            {
+                scale = new Vec2(1f, 1f)
+            };
             DuckGame.Input._triggerImageMap.Add("_!DUCKSPAWN", sprite14);
             Sprite sprite15 = new Sprite("skipSpin");
             DuckGame.Input._triggerImageMap.Add("SKIPSPIN", sprite15);
@@ -1045,232 +1069,298 @@ namespace DuckGame
             DuckGame.Input._triggerImageMap.Add("netdrop", sprite21);
             Sprite sprite22 = new Sprite("blacklistX");
             DuckGame.Input._triggerImageMap.Add("blacklist", sprite22);
-            DuckGame.Input._triggerImageMap.Add("SIGNALDEAD", (Sprite)new SpriteMap("signal", 8, 5)
+            DuckGame.Input._triggerImageMap.Add("SIGNALDEAD", new SpriteMap("signal", 8, 5)
             {
                 frame = 0
             });
-            DuckGame.Input._triggerImageMap.Add("SIGNALBAD", (Sprite)new SpriteMap("signal", 8, 5)
+            DuckGame.Input._triggerImageMap.Add("SIGNALBAD", new SpriteMap("signal", 8, 5)
             {
                 frame = 1
             });
-            DuckGame.Input._triggerImageMap.Add("SIGNALNORMAL", (Sprite)new SpriteMap("signal", 8, 5)
+            DuckGame.Input._triggerImageMap.Add("SIGNALNORMAL", new SpriteMap("signal", 8, 5)
             {
                 frame = 2
             });
-            DuckGame.Input._triggerImageMap.Add("SIGNALGOOD", (Sprite)new SpriteMap("signal", 8, 5)
+            DuckGame.Input._triggerImageMap.Add("SIGNALGOOD", new SpriteMap("signal", 8, 5)
             {
                 frame = 3
             });
-            DuckGame.Input._triggerImageMap.Add("PLUSKEY", (Sprite)new KeyImage('+'));
+            DuckGame.Input._triggerImageMap.Add("PLUSKEY", new KeyImage('+'));
             DuckGame.Input._triggerImageMap.Add("ENTERKEY", new Sprite("buttons/keyboard/enter"));
             DuckGame.Input._triggerImageMap.Add("ESCAPEKEY", new Sprite("buttons/keyboard/escape"));
             DuckGame.Input._triggerImageMap.Add("ICONGRADIENT", new Sprite("iconGradient"));
-            SpriteMap spriteMap1 = new SpriteMap("chanceIcon", 10, 9);
-            spriteMap1.frame = 0;
-            spriteMap1.centery = 1f;
-            DuckGame.Input._triggerImageMap.Add("CHANCEICON", (Sprite)spriteMap1);
+            SpriteMap spriteMap1 = new SpriteMap("chanceIcon", 10, 9)
+            {
+                frame = 0,
+                centery = 1f
+            };
+            DuckGame.Input._triggerImageMap.Add("CHANCEICON", spriteMap1);
             SpriteMap spriteMap2 = new SpriteMap("iconEight", 8, 8);
-            DuckGame.Input._triggerImageMap.Add("ICONEIGHT", (Sprite)spriteMap2);
-            DuckGame.Input._triggerImageMap.Add("LEFTMOUSE", (Sprite)new SpriteMap("buttons/mouse", 12, 15)
+            DuckGame.Input._triggerImageMap.Add("ICONEIGHT", spriteMap2);
+            DuckGame.Input._triggerImageMap.Add("LEFTMOUSE", new SpriteMap("buttons/mouse", 12, 15)
             {
                 frame = 0
             });
-            DuckGame.Input._triggerImageMap.Add("MIDDLEMOUSE", (Sprite)new SpriteMap("buttons/mouse", 12, 15)
+            DuckGame.Input._triggerImageMap.Add("MIDDLEMOUSE", new SpriteMap("buttons/mouse", 12, 15)
             {
                 frame = 1
             });
-            DuckGame.Input._triggerImageMap.Add("RIGHTMOUSE", (Sprite)new SpriteMap("buttons/mouse", 12, 15)
+            DuckGame.Input._triggerImageMap.Add("RIGHTMOUSE", new SpriteMap("buttons/mouse", 12, 15)
             {
                 frame = 2
             });
-            DuckGame.Input._triggerImageMap.Add("LOADICON", (Sprite)new SpriteMap("iconSheet", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("LOADICON", new SpriteMap("iconSheet", 16, 16)
             {
                 frame = 1
             });
-            DuckGame.Input._triggerImageMap.Add("SAVEICON", (Sprite)new SpriteMap("iconSheet", 16, 16)
+            DuckGame.Input._triggerImageMap.Add("SAVEICON", new SpriteMap("iconSheet", 16, 16)
             {
                 frame = 2
             });
-            SpriteMap spriteMap3 = new SpriteMap("iconSheet", 16, 16);
-            spriteMap3.scale = new Vec2(0.5f, 0.5f);
-            spriteMap3.centery = -6f;
-            spriteMap3.frame = 1;
-            DuckGame.Input._triggerImageMap.Add("LOADICONTINY", (Sprite)spriteMap3);
-            DuckGame.Input._triggerImageMap.Add("LOCKEDFOLDERICON", (Sprite)new SpriteMap("iconSheet", 16, 16)
+            SpriteMap spriteMap3 = new SpriteMap("iconSheet", 16, 16)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                centery = -6f,
+                frame = 1
+            };
+            DuckGame.Input._triggerImageMap.Add("LOADICONTINY", spriteMap3);
+            DuckGame.Input._triggerImageMap.Add("LOCKEDFOLDERICON", new SpriteMap("iconSheet", 16, 16)
             {
                 frame = 14
             });
-            DuckGame.Input._triggerImageMap.Add("FOLDERICON", (Sprite)new SpriteMap("tinyIcons", 8, 8)
+            DuckGame.Input._triggerImageMap.Add("FOLDERICON", new SpriteMap("tinyIcons", 8, 8)
             {
                 frame = 2
             });
-            DuckGame.Input._triggerImageMap.Add("FOLDERDELETEICON", (Sprite)new SpriteMap("tinyIcons", 8, 8)
+            DuckGame.Input._triggerImageMap.Add("FOLDERDELETEICON", new SpriteMap("tinyIcons", 8, 8)
             {
                 frame = 8
             });
-            DuckGame.Input._triggerImageMap.Add("SELECTICON", (Sprite)new SpriteMap("tinyIcons", 8, 8)
+            DuckGame.Input._triggerImageMap.Add("SELECTICON", new SpriteMap("tinyIcons", 8, 8)
             {
                 frame = 3
             });
-            DuckGame.Input._triggerImageMap.Add("DELETEFLAG_OFF", (Sprite)new SpriteMap("deleteFlag", 8, 8)
+            DuckGame.Input._triggerImageMap.Add("DELETEFLAG_OFF", new SpriteMap("deleteFlag", 8, 8)
             {
                 frame = 0
             });
-            DuckGame.Input._triggerImageMap.Add("DELETEFLAG_ON", (Sprite)new SpriteMap("deleteFlag", 8, 8)
+            DuckGame.Input._triggerImageMap.Add("DELETEFLAG_ON", new SpriteMap("deleteFlag", 8, 8)
             {
                 frame = 1
             });
-            Sprite sprite23 = new Sprite("muteIcon");
-            sprite23.scale = new Vec2(0.5f, 0.5f);
+            Sprite sprite23 = new Sprite("muteIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             sprite23.centery -= 6f;
             DuckGame.Input._triggerImageMap.Add("MUTEICON", sprite23);
-            Sprite sprite24 = new Sprite("blockIcon");
-            sprite24.scale = new Vec2(0.5f, 0.5f);
+            Sprite sprite24 = new Sprite("blockIcon")
+            {
+                scale = new Vec2(0.5f, 0.5f)
+            };
             sprite24.centery -= 6f;
             DuckGame.Input._triggerImageMap.Add("BLOCKICON", sprite24);
-            Sprite sprite25 = new Sprite("blockIcon");
-            sprite25.scale = new Vec2(0.25f, 0.25f);
+            Sprite sprite25 = new Sprite("blockIcon")
+            {
+                scale = new Vec2(0.25f, 0.25f)
+            };
             sprite25.centery -= 9f;
             DuckGame.Input._triggerImageMap.Add("BLOCKICONSMALL", sprite25);
-            SpriteMap spriteMap4 = new SpriteMap("iconSheet", 16, 16);
-            spriteMap4.scale = new Vec2(0.5f, 0.5f);
-            spriteMap4.centery = -6f;
-            spriteMap4.frame = 2;
-            DuckGame.Input._triggerImageMap.Add("SAVEICONTINY", (Sprite)spriteMap4);
-            SpriteMap spriteMap5 = new SpriteMap("iconSheet", 16, 16);
-            spriteMap5.scale = new Vec2(0.5f, 0.5f);
-            spriteMap5.centery = -6f;
-            spriteMap5.frame = 0;
-            DuckGame.Input._triggerImageMap.Add("NEWICONTINY", (Sprite)spriteMap5);
-            DuckGame.Input._triggerImageMap.Add("RAINBOWTINY", (Sprite)new SpriteMap("tinyIcons", 8, 8)
+            SpriteMap spriteMap4 = new SpriteMap("iconSheet", 16, 16)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                centery = -6f,
+                frame = 2
+            };
+            DuckGame.Input._triggerImageMap.Add("SAVEICONTINY", spriteMap4);
+            SpriteMap spriteMap5 = new SpriteMap("iconSheet", 16, 16)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                centery = -6f,
+                frame = 0
+            };
+            DuckGame.Input._triggerImageMap.Add("NEWICONTINY", spriteMap5);
+            DuckGame.Input._triggerImageMap.Add("RAINBOWTINY", new SpriteMap("tinyIcons", 8, 8)
             {
                 frame = 6
             });
-            SpriteMap spriteMap6 = new SpriteMap("moji", 11, 11);
-            spriteMap6.scale = new Vec2(2f, 2f);
-            spriteMap6.centery = 0.0f;
-            spriteMap6.frame = 0;
-            DuckGame.Input._triggerImageMap.Add("happyface", (Sprite)spriteMap6);
-            SpriteMap spriteMap7 = new SpriteMap("moji", 11, 11);
-            spriteMap7.scale = new Vec2(2f, 2f);
-            spriteMap7.centery = 0.0f;
-            spriteMap7.frame = 1;
-            DuckGame.Input._triggerImageMap.Add("sadface", (Sprite)spriteMap7);
-            SpriteMap spriteMap8 = new SpriteMap("moji", 11, 11);
-            spriteMap8.scale = new Vec2(2f, 2f);
-            spriteMap8.centery = 0.0f;
-            spriteMap8.frame = 2;
-            DuckGame.Input._triggerImageMap.Add("puffyface", (Sprite)spriteMap8);
-            SpriteMap spriteMap9 = new SpriteMap("moji", 11, 11);
-            spriteMap9.scale = new Vec2(2f, 2f);
-            spriteMap9.centery = 0.0f;
-            spriteMap9.frame = 3;
-            DuckGame.Input._triggerImageMap.Add("angryface", (Sprite)spriteMap9);
-            SpriteMap spriteMap10 = new SpriteMap("moji", 11, 11);
-            spriteMap10.scale = new Vec2(2f, 2f);
-            spriteMap10.centery = 0.0f;
-            spriteMap10.frame = 4;
-            DuckGame.Input._triggerImageMap.Add("yayface", (Sprite)spriteMap10);
-            SpriteMap spriteMap11 = new SpriteMap("shrug", 78, 24);
-            spriteMap11.scale = new Vec2(1f, 1f);
-            spriteMap11.centery = -1f;
-            DuckGame.Input._triggerImageMap.Add("shrug", (Sprite)spriteMap11);
-            SpriteMap spriteMap12 = new SpriteMap("moji", 11, 11);
-            spriteMap12.scale = new Vec2(2f, 2f);
-            spriteMap12.centery = 0.0f;
-            spriteMap12.frame = 5;
-            DuckGame.Input._triggerImageMap.Add("wowface", (Sprite)spriteMap12);
-            SpriteMap spriteMap13 = new SpriteMap("moji", 11, 11);
-            spriteMap13.scale = new Vec2(2f, 2f);
-            spriteMap13.centery = 0.0f;
-            spriteMap13.frame = 6;
-            DuckGame.Input._triggerImageMap.Add("wtfface", (Sprite)spriteMap13);
-            SpriteMap spriteMap14 = new SpriteMap("moji", 11, 11);
-            spriteMap14.scale = new Vec2(2f, 2f);
-            spriteMap14.centery = 0.0f;
-            spriteMap14.frame = 7;
-            DuckGame.Input._triggerImageMap.Add("straightface", (Sprite)spriteMap14);
-            SpriteMap spriteMap15 = new SpriteMap("moji", 11, 11);
-            spriteMap15.scale = new Vec2(2f, 2f);
-            spriteMap15.centery = 0.0f;
-            spriteMap15.frame = 8;
-            DuckGame.Input._triggerImageMap.Add("oiface", (Sprite)spriteMap15);
-            SpriteMap spriteMap16 = new SpriteMap("moji", 11, 11);
-            spriteMap16.scale = new Vec2(2f, 2f);
-            spriteMap16.centery = 0.0f;
-            spriteMap16.frame = 9;
-            DuckGame.Input._triggerImageMap.Add("blankface", (Sprite)spriteMap16);
-            SpriteMap spriteMap17 = new SpriteMap("moji", 11, 11);
-            spriteMap17.scale = new Vec2(2f, 2f);
-            spriteMap17.centery = 0.0f;
-            spriteMap17.frame = 10;
-            DuckGame.Input._triggerImageMap.Add("sweatface", (Sprite)spriteMap17);
-            SpriteMap spriteMap18 = new SpriteMap("moji", 11, 11);
-            spriteMap18.scale = new Vec2(2f, 2f);
-            spriteMap18.centery = 0.0f;
-            spriteMap18.frame = 11;
-            DuckGame.Input._triggerImageMap.Add("cryface", (Sprite)spriteMap18);
-            Sprite sprite26 = new Sprite("cookedDuck");
-            sprite26.scale = new Vec2(2f, 2f);
-            sprite26.centery = 2f;
+            SpriteMap spriteMap6 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 0
+            };
+            DuckGame.Input._triggerImageMap.Add("happyface", spriteMap6);
+            SpriteMap spriteMap7 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 1
+            };
+            DuckGame.Input._triggerImageMap.Add("sadface", spriteMap7);
+            SpriteMap spriteMap8 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 2
+            };
+            DuckGame.Input._triggerImageMap.Add("puffyface", spriteMap8);
+            SpriteMap spriteMap9 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 3
+            };
+            DuckGame.Input._triggerImageMap.Add("angryface", spriteMap9);
+            SpriteMap spriteMap10 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 4
+            };
+            DuckGame.Input._triggerImageMap.Add("yayface", spriteMap10);
+            SpriteMap spriteMap11 = new SpriteMap("shrug", 78, 24)
+            {
+                scale = new Vec2(1f, 1f),
+                centery = -1f
+            };
+            DuckGame.Input._triggerImageMap.Add("shrug", spriteMap11);
+            SpriteMap spriteMap12 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 5
+            };
+            DuckGame.Input._triggerImageMap.Add("wowface", spriteMap12);
+            SpriteMap spriteMap13 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 6
+            };
+            DuckGame.Input._triggerImageMap.Add("wtfface", spriteMap13);
+            SpriteMap spriteMap14 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 7
+            };
+            DuckGame.Input._triggerImageMap.Add("straightface", spriteMap14);
+            SpriteMap spriteMap15 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 8
+            };
+            DuckGame.Input._triggerImageMap.Add("oiface", spriteMap15);
+            SpriteMap spriteMap16 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 9
+            };
+            DuckGame.Input._triggerImageMap.Add("blankface", spriteMap16);
+            SpriteMap spriteMap17 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 10
+            };
+            DuckGame.Input._triggerImageMap.Add("sweatface", spriteMap17);
+            SpriteMap spriteMap18 = new SpriteMap("moji", 11, 11)
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f,
+                frame = 11
+            };
+            DuckGame.Input._triggerImageMap.Add("cryface", spriteMap18);
+            Sprite sprite26 = new Sprite("cookedDuck")
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 2f
+            };
             DuckGame.Input._triggerImageMap.Add("cooked", sprite26);
-            Sprite sprite27 = new Sprite("grave");
-            sprite27.scale = new Vec2(2f, 2f);
-            sprite27.centery = 0.0f;
+            Sprite sprite27 = new Sprite("grave")
+            {
+                scale = new Vec2(2f, 2f),
+                centery = 0.0f
+            };
             DuckGame.Input._triggerImageMap.Add("rip", sprite27);
-            SpriteMap spriteMap19 = new SpriteMap("searchicon", 16, 16);
-            spriteMap19.scale = new Vec2(0.5f, 0.5f);
-            spriteMap19.centery = -6f;
-            spriteMap19.centerx = -4f;
-            DuckGame.Input._triggerImageMap.Add("searchicon", (Sprite)spriteMap19);
-            Sprite sprite28 = new Sprite("filterOn", 16f, 16f);
-            sprite28.scale = new Vec2(0.5f, 0.5f);
-            sprite28.center = new Vec2(0.0f, -9f);
+            SpriteMap spriteMap19 = new SpriteMap("searchicon", 16, 16)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                centery = -6f,
+                centerx = -4f
+            };
+            DuckGame.Input._triggerImageMap.Add("searchicon", spriteMap19);
+            Sprite sprite28 = new Sprite("filterOn", 16f, 16f)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                center = new Vec2(0.0f, -9f)
+            };
             DuckGame.Input._triggerImageMap.Add("languageFilterOn", sprite28);
-            Sprite sprite29 = new Sprite("filterOff", 16f, 16f);
-            sprite29.scale = new Vec2(0.5f, 0.5f);
-            sprite29.center = new Vec2(0.0f, -9f);
+            Sprite sprite29 = new Sprite("filterOff", 16f, 16f)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                center = new Vec2(0.0f, -9f)
+            };
             DuckGame.Input._triggerImageMap.Add("languageFilterOff", sprite29);
-            SpriteMap spriteMap20 = new SpriteMap("searchiconwhite", 16, 16);
-            spriteMap20.scale = new Vec2(0.5f, 0.5f);
-            spriteMap20.centery = -6f;
-            spriteMap20.centerx = -4f;
-            DuckGame.Input._triggerImageMap.Add("searchiconwhite", (Sprite)spriteMap20);
-            SpriteMap spriteMap21 = new SpriteMap("searchiconwhite", 16, 16);
-            spriteMap21.scale = new Vec2(1f, 1f);
-            spriteMap21.centery = -6f;
-            spriteMap21.centerx = -4f;
-            DuckGame.Input._triggerImageMap.Add("searchiconwhitebig", (Sprite)spriteMap21);
-            SpriteMap spriteMap22 = new SpriteMap("cloudIcon", 16, 16);
-            spriteMap22.scale = new Vec2(1f, 1f);
-            spriteMap22.centery = 0.0f;
-            spriteMap22.centerx = 0.0f;
-            DuckGame.Input._triggerImageMap.Add("cloudicon", (Sprite)spriteMap22);
-            SpriteMap spriteMap23 = new SpriteMap("exBox", 10, 10);
-            spriteMap23.frame = 0;
-            spriteMap23.scale = new Vec2(0.5f, 0.5f);
+            SpriteMap spriteMap20 = new SpriteMap("searchiconwhite", 16, 16)
+            {
+                scale = new Vec2(0.5f, 0.5f),
+                centery = -6f,
+                centerx = -4f
+            };
+            DuckGame.Input._triggerImageMap.Add("searchiconwhite", spriteMap20);
+            SpriteMap spriteMap21 = new SpriteMap("searchiconwhite", 16, 16)
+            {
+                scale = new Vec2(1f, 1f),
+                centery = -6f,
+                centerx = -4f
+            };
+            DuckGame.Input._triggerImageMap.Add("searchiconwhitebig", spriteMap21);
+            SpriteMap spriteMap22 = new SpriteMap("cloudIcon", 16, 16)
+            {
+                scale = new Vec2(1f, 1f),
+                centery = 0.0f,
+                centerx = 0.0f
+            };
+            DuckGame.Input._triggerImageMap.Add("cloudicon", spriteMap22);
+            SpriteMap spriteMap23 = new SpriteMap("exBox", 10, 10)
+            {
+                frame = 0,
+                scale = new Vec2(0.5f, 0.5f)
+            };
             spriteMap23.centery -= 6f;
-            DuckGame.Input._triggerImageMap.Add("ITEMBOX", (Sprite)spriteMap23);
-            SpriteMap spriteMap24 = new SpriteMap("exBox", 10, 10);
-            spriteMap24.frame = 1;
-            spriteMap24.scale = new Vec2(0.5f, 0.5f);
+            DuckGame.Input._triggerImageMap.Add("ITEMBOX", spriteMap23);
+            SpriteMap spriteMap24 = new SpriteMap("exBox", 10, 10)
+            {
+                frame = 1,
+                scale = new Vec2(0.5f, 0.5f)
+            };
             spriteMap24.centery -= 6f;
-            DuckGame.Input._triggerImageMap.Add("USERONLINE", (Sprite)spriteMap24);
-            SpriteMap spriteMap25 = new SpriteMap("exBox", 10, 10);
-            spriteMap25.frame = 2;
-            spriteMap25.scale = new Vec2(0.5f, 0.5f);
+            DuckGame.Input._triggerImageMap.Add("USERONLINE", spriteMap24);
+            SpriteMap spriteMap25 = new SpriteMap("exBox", 10, 10)
+            {
+                frame = 2,
+                scale = new Vec2(0.5f, 0.5f)
+            };
             spriteMap25.centery -= 6f;
-            DuckGame.Input._triggerImageMap.Add("USERAWAY", (Sprite)spriteMap25);
-            SpriteMap spriteMap26 = new SpriteMap("exBox", 10, 10);
-            spriteMap26.frame = 3;
-            spriteMap26.scale = new Vec2(0.5f, 0.5f);
+            DuckGame.Input._triggerImageMap.Add("USERAWAY", spriteMap25);
+            SpriteMap spriteMap26 = new SpriteMap("exBox", 10, 10)
+            {
+                frame = 3,
+                scale = new Vec2(0.5f, 0.5f)
+            };
             spriteMap26.centery -= 6f;
-            DuckGame.Input._triggerImageMap.Add("USERBUSY", (Sprite)spriteMap26);
-            SpriteMap spriteMap27 = new SpriteMap("exBox", 10, 10);
-            spriteMap27.frame = 4;
-            spriteMap27.scale = new Vec2(0.5f, 0.5f);
+            DuckGame.Input._triggerImageMap.Add("USERBUSY", spriteMap26);
+            SpriteMap spriteMap27 = new SpriteMap("exBox", 10, 10)
+            {
+                frame = 4,
+                scale = new Vec2(0.5f, 0.5f)
+            };
             spriteMap27.centery -= 6f;
-            DuckGame.Input._triggerImageMap.Add("USEROFFLINE", (Sprite)spriteMap27);
+            DuckGame.Input._triggerImageMap.Add("USEROFFLINE", spriteMap27);
             DuckGame.Input._triggerImageMap.Add("KBDSHIFT", new Sprite("buttons/keyboard/shift"));
             DuckGame.Input._triggerImageMap.Add("KBDARROWS", new Sprite("buttons/keyboard/arrows"));
             DuckGame.Input._buttonStyles.Add(new Sprite("buttons/xbox/oButton"));
@@ -1325,21 +1415,21 @@ namespace DuckGame
             {
                 InputProfile inputProfile = InputProfile.Add("MPPlayer" + (index + 1).ToString());
                 inputProfile.mpIndex = index;
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "LEFT", 4);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "RIGHT", 8);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "UP", 1);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "DOWN", 2);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "JUMP", 4096);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "SHOOT", 16384);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "GRAB", 32768);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "QUACK", 8192);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "START", 16);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "STRAFE", 256);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "RAGDOLL", 512);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "LTRIGGER", 8388608);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "RTRIGGER", 4194304);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "SELECT", 4096);
-                inputProfile.Map((InputDevice)DuckGame.Input.GetDevice<GenericController>(index), "CANCEL", 8192);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "LEFT", 4);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "RIGHT", 8);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "UP", 1);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "DOWN", 2);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "JUMP", 4096);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "SHOOT", 16384);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "GRAB", 32768);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "QUACK", 8192);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "START", 16);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "STRAFE", 256);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "RAGDOLL", 512);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "LTRIGGER", 8388608);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "RTRIGGER", 4194304);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "SELECT", 4096);
+                inputProfile.Map(DuckGame.Input.GetDevice<GenericController>(index), "CANCEL", 8192);
                 if (index == 0)
                     InputProfile.active = inputProfile;
             }
@@ -1353,22 +1443,22 @@ namespace DuckGame
             DevConsole.Log(DCSection.General, "Initializing Input...");
             foreach (DeviceInputMapping inputMappingPreset in DuckGame.Input._defaultInputMappingPresets)
                 DuckGame.Input._defaultInputMapping.Add(inputMappingPreset.Clone());
-            InputDevice device = (InputDevice)new Keyboard("KEYBOARD P1", 0);
+            InputDevice device = new Keyboard("KEYBOARD P1", 0);
             DuckGame.Input._devices.Add(device);
-            InputDevice inputDevice1 = (InputDevice)new Keyboard("KEYBOARD P2", 1);
+            InputDevice inputDevice1 = new Keyboard("KEYBOARD P2", 1);
             DuckGame.Input._devices.Add(inputDevice1);
-            InputDevice inputDevice2 = (InputDevice)new Mouse();
+            InputDevice inputDevice2 = new Mouse();
             DuckGame.Input._devices.Add(inputDevice2);
-            InputDevice inputDevice3 = (InputDevice)new XInputPad(0);
+            InputDevice inputDevice3 = new XInputPad(0);
             DuckGame.Input._devices.Add(inputDevice3);
             (inputDevice3 as XInputPad).InitializeState();
-            InputDevice inputDevice4 = (InputDevice)new XInputPad(1);
+            InputDevice inputDevice4 = new XInputPad(1);
             DuckGame.Input._devices.Add(inputDevice4);
             (inputDevice4 as XInputPad).InitializeState();
-            InputDevice inputDevice5 = (InputDevice)new XInputPad(2);
+            InputDevice inputDevice5 = new XInputPad(2);
             DuckGame.Input._devices.Add(inputDevice5);
             (inputDevice5 as XInputPad).InitializeState();
-            InputDevice inputDevice6 = (InputDevice)new XInputPad(3);
+            InputDevice inputDevice6 = new XInputPad(3);
             DuckGame.Input._devices.Add(inputDevice6);
             (inputDevice6 as XInputPad).InitializeState();
             GenericController genericController1 = new GenericController(0);
@@ -1389,22 +1479,22 @@ namespace DuckGame
             DuckGame.Input._gamePads.Add(genericController8);
             InputProfile.Default = new InputProfile("Default");
             DuckGame.Input.InitializeDInputAsync();
-            DuckGame.Input._devices.Add((InputDevice)genericController1);
-            DuckGame.Input._devices.Add((InputDevice)genericController2);
-            DuckGame.Input._devices.Add((InputDevice)genericController3);
-            DuckGame.Input._devices.Add((InputDevice)genericController4);
-            DuckGame.Input._devices.Add((InputDevice)genericController5);
-            DuckGame.Input._devices.Add((InputDevice)genericController6);
-            DuckGame.Input._devices.Add((InputDevice)genericController7);
-            DuckGame.Input._devices.Add((InputDevice)genericController8);
+            DuckGame.Input._devices.Add(genericController1);
+            DuckGame.Input._devices.Add(genericController2);
+            DuckGame.Input._devices.Add(genericController3);
+            DuckGame.Input._devices.Add(genericController4);
+            DuckGame.Input._devices.Add(genericController5);
+            DuckGame.Input._devices.Add(genericController6);
+            DuckGame.Input._devices.Add(genericController7);
+            DuckGame.Input._devices.Add(genericController8);
             InputProfile.Default.Map(device, "LEFT", 37);
             InputProfile.Default.Map(device, "RIGHT", 39);
             InputProfile.Default.Map(device, "UP", 38);
             InputProfile.Default.Map(device, "DOWN", 40);
-            InputProfile.Default.Map((InputDevice)DuckGame.Input.GetDevice<XInputPad>(), "LEFT", 4);
-            InputProfile.Default.Map((InputDevice)DuckGame.Input.GetDevice<XInputPad>(), "RIGHT", 8);
-            InputProfile.Default.Map((InputDevice)DuckGame.Input.GetDevice<XInputPad>(), "UP", 1);
-            InputProfile.Default.Map((InputDevice)DuckGame.Input.GetDevice<XInputPad>(), "DOWN", 2);
+            InputProfile.Default.Map(DuckGame.Input.GetDevice<XInputPad>(), "LEFT", 4);
+            InputProfile.Default.Map(DuckGame.Input.GetDevice<XInputPad>(), "RIGHT", 8);
+            InputProfile.Default.Map(DuckGame.Input.GetDevice<XInputPad>(), "UP", 1);
+            InputProfile.Default.Map(DuckGame.Input.GetDevice<XInputPad>(), "DOWN", 2);
             DuckGame.Input._profiles[InputProfile.Default.name] = InputProfile.Default;
             DuckGame.Input.EnumerateGamepads();
             DuckGame.Input.InitDefaultProfiles();
@@ -1449,7 +1539,7 @@ namespace DuckGame
                 DevConsole.Log(DCSection.General, "DInput Initialization failed with exception: " + DuckGame.Input._dinputInitException.Message);
                 DevConsole.Log(DCSection.General, "DInput has been disabled.");
                 DuckGame.Input._dinputEnabled = false;
-                DuckGame.Input._dinputInitException = (Exception)null;
+                DuckGame.Input._dinputInitException = null;
             }
             else
             {
@@ -1464,7 +1554,7 @@ namespace DuckGame
                             return;
                         }
                         DevConsole.Log(DCSection.General, "Starting DInput Async Init...");
-                        Task.Run((Action)(() =>
+                        Task.Run(() =>
                        {
                            try
                            {
@@ -1474,24 +1564,24 @@ namespace DuckGame
                            {
                                DuckGame.Input._dinputInitException = ex;
                            }
-                       }));
+                       });
                         return;
                     case 0:
-                        InputDevice inputDevice1 = (InputDevice)new DInputPad(0);
+                        InputDevice inputDevice1 = new DInputPad(0);
                         DuckGame.Input._devices.Add(inputDevice1);
-                        InputDevice inputDevice2 = (InputDevice)new DInputPad(1);
+                        InputDevice inputDevice2 = new DInputPad(1);
                         DuckGame.Input._devices.Add(inputDevice2);
-                        InputDevice inputDevice3 = (InputDevice)new DInputPad(2);
+                        InputDevice inputDevice3 = new DInputPad(2);
                         DuckGame.Input._devices.Add(inputDevice3);
-                        InputDevice inputDevice4 = (InputDevice)new DInputPad(3);
+                        InputDevice inputDevice4 = new DInputPad(3);
                         DuckGame.Input._devices.Add(inputDevice4);
-                        InputDevice inputDevice5 = (InputDevice)new DInputPad(4);
+                        InputDevice inputDevice5 = new DInputPad(4);
                         DuckGame.Input._devices.Add(inputDevice5);
-                        InputDevice inputDevice6 = (InputDevice)new DInputPad(5);
+                        InputDevice inputDevice6 = new DInputPad(5);
                         DuckGame.Input._devices.Add(inputDevice6);
-                        InputDevice inputDevice7 = (InputDevice)new DInputPad(6);
+                        InputDevice inputDevice7 = new DInputPad(6);
                         DuckGame.Input._devices.Add(inputDevice7);
-                        InputDevice inputDevice8 = (InputDevice)new DInputPad(7);
+                        InputDevice inputDevice8 = new DInputPad(7);
                         DuckGame.Input._devices.Add(inputDevice8);
                         if (DuckGame.Input._dinputInitTimesCalled < 60)
                             DuckGame.Input._suppressInputChangeMessages = 300;
@@ -1530,14 +1620,14 @@ namespace DuckGame
                 if (device.name == name)
                     return device;
             }
-            return (InputDevice)null;
+            return null;
         }
 
         private static void CheckDInputChanges()
         {
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
             {
-                InputDevice device = (InputDevice)gamePad.device;
+                InputDevice device = gamePad.device;
                 if (device is DInputPad)
                 {
                     DInputPad dinputPad = device as DInputPad;
@@ -1554,7 +1644,7 @@ namespace DuckGame
                         DuckGame.Input._changePluggedIn = false;
                         DuckGame.Input._changeName = gamePad.device.productName;
                         DuckGame.Input._padConnectionChange = true;
-                        gamePad.device = (AnalogGamePad)null;
+                        gamePad.device = null;
                     }
                     dinputPad.prevIsConnected = dinputPad.isConnected;
                 }
@@ -1571,14 +1661,14 @@ namespace DuckGame
                 return;
             DuckGame.Input.enumeratingGamepads = true;
             --DuckGame.Input.timesToEnumerateGamepads;
-            Task.Run((Action)(() => DInput.Thread_EnumGamepads()));
+            Task.Run(() => DInput.Thread_EnumGamepads());
         }
 
         public static void EnumerateGamepads()
         {
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
             {
-                InputDevice device1 = (InputDevice)gamePad.device;
+                InputDevice device1 = gamePad.device;
                 if (!(device1 is XInputPad) || !DInput.ForceDirectInputMode())
                 {
                     if (device1 is DInputPad && DuckGame.Input._dinputEnabled)
@@ -1593,7 +1683,7 @@ namespace DuckGame
                                 DuckGame.Input._changeName = gamePad.device.productName;
                                 DuckGame.Input._padConnectionChange = true;
                                 if (!dinputPad.isConnected)
-                                    gamePad.device = (AnalogGamePad)null;
+                                    gamePad.device = null;
                             }
                             dinputPad.prevIsConnected = dinputPad.isConnected;
                         }
@@ -1606,7 +1696,7 @@ namespace DuckGame
                         DuckGame.Input._changeName = device1.productName;
                         DuckGame.Input._padConnectionChange = true;
                         DuckGame.Input._gamepadsChanged = true;
-                        gamePad.device = (AnalogGamePad)null;
+                        gamePad.device = null;
                     }
                     if (gamePad.device == null)
                     {
@@ -1674,7 +1764,7 @@ namespace DuckGame
                 foreach (InputDevice device in DuckGame.Input._devices)
                 {
                     if (device is GenericController)
-                        (device as GenericController).device = (AnalogGamePad)null;
+                        (device as GenericController).device = null;
                     DuckGame.Input.devicesChanged = true;
                 }
                 DuckGame.Input._prevForceMode = DInput.ForceDirectInputMode();
@@ -1743,7 +1833,7 @@ namespace DuckGame
         {
             if (DuckGame.Input._gamepadThread != null)
                 DuckGame.Input._gamepadThread.Abort();
-            DuckGame.Input._gamepadThread = (Thread)null;
+            DuckGame.Input._gamepadThread = null;
             InputSystem.Terminate();
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             if (state.IsConnected)

@@ -28,7 +28,7 @@ namespace DuckGame
             if (this.length + 3 >= this.size)
             {
                 VertexPositionColor[] vertexPositionColorArray = new VertexPositionColor[this.size * 2];
-                this.vertices.CopyTo((Array)vertexPositionColorArray, 0);
+                this.vertices.CopyTo(vertexPositionColorArray, 0);
                 this.vertices = vertexPositionColorArray;
                 this.size *= 2;
             }
@@ -52,7 +52,7 @@ namespace DuckGame
             if (this.length + 3 >= this.size)
             {
                 VertexPositionColor[] vertexPositionColorArray = new VertexPositionColor[this.size * 2];
-                this.vertices.CopyTo((Array)vertexPositionColorArray, 0);
+                this.vertices.CopyTo(vertexPositionColorArray, 0);
                 this.vertices = vertexPositionColorArray;
                 this.size *= 2;
             }

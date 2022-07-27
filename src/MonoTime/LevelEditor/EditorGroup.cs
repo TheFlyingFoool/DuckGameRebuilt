@@ -42,7 +42,7 @@ namespace DuckGame
 
         public EditorGroup(System.Type filter = null, HashSet<System.Type> types = null)
         {
-            this.rootGroup = filter == (System.Type)null;
+            this.rootGroup = filter == null;
             this.Initialize(filter, types);
         }
 
@@ -81,31 +81,35 @@ namespace DuckGame
             else
             {
                 string[] groupName = group.Split('|');
-                EditorGroup editorGroup = this.SubGroups.FirstOrDefault<EditorGroup>((Func<EditorGroup, bool>)(x => x.Name == groupName[0]));
+                EditorGroup editorGroup = this.SubGroups.FirstOrDefault<EditorGroup>(x => x.Name == groupName[0]);
                 if (editorGroup == null)
                 {
-                    editorGroup = new EditorGroup();
-                    editorGroup.Name = groupName[0];
+                    editorGroup = new EditorGroup
+                    {
+                        Name = groupName[0]
+                    };
                     this.SubGroups.Add(editorGroup);
                 }
                 string str = group;
-                string group1 = ((IEnumerable<string>)groupName).Count<string>() <= 1 ? str.Remove(0, groupName[0].Length) : str.Remove(0, groupName[0].Length + 1);
+                string group1 = groupName.Count<string>() <= 1 ? str.Remove(0, groupName[0].Length) : str.Remove(0, groupName[0].Length + 1);
                 editorGroup.AddType(t, group1);
             }
         }
 
         private void Sort()
         {
-            this.SubGroups.Sort((Comparison<EditorGroup>)((x, y) => string.Compare(x.Name, y.Name)));
-            this.Things.Sort((Comparison<Thing>)((x, y) => string.Compare(x.editorName, y.editorName)));
+            this.SubGroups.Sort((x, y) => string.Compare(x.Name, y.Name));
+            this.Things.Sort((x, y) => string.Compare(x.editorName, y.editorName));
             foreach (EditorGroup subGroup in this.SubGroups)
                 subGroup.Sort();
             int index1 = 12;
             if (this.SubGroups.Count <= index1 || !this.rootGroup)
                 return;
-            EditorGroup editorGroup = new EditorGroup();
-            editorGroup.Name = "More...";
-            editorGroup.autopinGroup = true;
+            EditorGroup editorGroup = new EditorGroup
+            {
+                Name = "More...",
+                autopinGroup = true
+            };
             int num = this.SubGroups.Count - index1;
             for (int index2 = 0; index2 < num; ++index2)
             {
@@ -119,13 +123,13 @@ namespace DuckGame
         {
             List<System.Type> typeList = new List<System.Type>();
             if (types == null)
-                typeList.AddRange((IEnumerable<System.Type>)Editor.ThingTypes);
+                typeList.AddRange(Editor.ThingTypes);
             else
-                typeList.AddRange((IEnumerable<System.Type>)types);
+                typeList.AddRange(types);
             for (int index = 0; index < typeList.Count; ++index)
             {
                 System.Type type = typeList[index];
-                if (!(filter != (System.Type)null) || !(type != filter) || Editor.AllBaseTypes[type].Contains(filter))
+                if (!(filter != null) || !(type != filter) || Editor.AllBaseTypes[type].Contains(filter))
                 {
                     object[] customAttributes = type.GetCustomAttributes(typeof(EditorGroupAttribute), false);
                     if (customAttributes.Length != 0)

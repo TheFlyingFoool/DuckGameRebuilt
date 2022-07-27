@@ -10,7 +10,7 @@ namespace DuckGame
     public class RoundStartEvent : Event
     {
         public RoundStartEvent()
-          : base((Profile)null, (Profile)null)
+          : base(null, null)
         {
         }
     }

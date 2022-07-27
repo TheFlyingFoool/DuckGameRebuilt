@@ -71,9 +71,9 @@ namespace DuckGame
 
         public static System.Type NetTypeToTypeIndex(byte pNetType)
         {
-            if (pNetType >= (byte)254)
-                return (System.Type)null;
-            return PhysicsParticle._netParticleTypes.ContainsKey(pNetType) ? PhysicsParticle._netParticleTypes.Get(pNetType) : (System.Type)null;
+            if (pNetType >= 254)
+                return null;
+            return PhysicsParticle._netParticleTypes.ContainsKey(pNetType) ? PhysicsParticle._netParticleTypes.Get(pNetType) : null;
         }
 
         public virtual void NetSerialize(BitBuffer b)
@@ -82,7 +82,7 @@ namespace DuckGame
             b.Write((short)this.y);
         }
 
-        public virtual void NetDeserialize(BitBuffer d) => this.netLerpPosition = new Vec2((float)d.ReadShort(), (float)d.ReadShort());
+        public virtual void NetDeserialize(BitBuffer d) => this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
 
         public override void ResetProperties()
         {
@@ -99,7 +99,7 @@ namespace DuckGame
             this.globalIndex = Thing.GetGlobalIndex();
             this.gotMessage = false;
             this.isLocal = true;
-            this.netIndex = (ushort)0;
+            this.netIndex = 0;
             this.updateOrder = byte.MaxValue;
             this.netRemove = false;
             base.ResetProperties();
@@ -116,29 +116,29 @@ namespace DuckGame
                 else
                     this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
             }
-            else if (Network.isActive && ((double)this.y < (double)Level.current.highestPoint - 200.0 || (double)this.y > (double)Level.current.lowestPoint + 200.0))
+            else if (Network.isActive && ((double)this.y < Level.current.highestPoint - 200.0 || (double)this.y > Level.current.lowestPoint + 200.0))
             {
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             }
             else
             {
                 this._hit = false;
                 this._touchedFloor = false;
                 ++this._framesAlive;
-                if (!this.onlyDieWhenGrounded || this._grounded || (double)this._framesAlive > 400.0)
+                if (!this.onlyDieWhenGrounded || this._grounded || _framesAlive > 400.0)
                 {
                     this._life -= 0.005f;
-                    if ((double)this._life < 0.0)
+                    if (_life < 0.0)
                     {
                         this.alpha -= 0.1f;
                         if ((double)this.alpha < 0.0)
-                            Level.Remove((Thing)this);
+                            Level.Remove(this);
                     }
                 }
                 if (this._foreverGrounded)
                 {
                     this._grounded = true;
-                    if ((double)Rando.Float(250f) < 1.0 - (double)this._sticky)
+                    if ((double)Rando.Float(250f) < 1.0 - _sticky)
                     {
                         this._foreverGrounded = false;
                         this._grounded = false;
@@ -151,18 +151,18 @@ namespace DuckGame
                         this.hSpeed -= this._airFriction;
                     if ((double)this.hSpeed < 0.0)
                         this.hSpeed += this._airFriction;
-                    if ((double)this.hSpeed < (double)this._airFriction && (double)this.hSpeed > -(double)this._airFriction)
+                    if ((double)this.hSpeed < _airFriction && (double)this.hSpeed > -(double)this._airFriction)
                         this.hSpeed = 0.0f;
                     if ((double)this.vSpeed < 4.0)
                         this.vSpeed += 0.1f * this._gravMult;
                     if (float.IsNaN(this.hSpeed))
                         this.hSpeed = 0.0f;
-                    this._spinAngle -= (float)(10 * Math.Sign(this.hSpeed));
-                    Thing thing = (Thing)Level.CheckPoint<Block>(this.x + this.hSpeed, this.y + this.vSpeed);
-                    if (thing != null && (double)this._framesAlive < 2.0)
+                    this._spinAngle -= 10 * Math.Sign(this.hSpeed);
+                    Thing thing = Level.CheckPoint<Block>(this.x + this.hSpeed, this.y + this.vSpeed);
+                    if (thing != null && _framesAlive < 2.0)
                         this._waitForNoCollide = true;
                     if (thing != null && this._waitForNoCollide)
-                        thing = (Thing)null;
+                        thing = null;
                     else if (thing == null && this._waitForNoCollide)
                         this._waitForNoCollide = false;
                     if (thing != null)
@@ -172,7 +172,7 @@ namespace DuckGame
                             SFX.Play(this._bounceSound, 0.5f, Rando.Float(0.2f) - 0.1f);
                         if ((double)this.vSpeed > 0.0 && (double)thing.top > (double)this.y)
                         {
-                            this.vSpeed = (float)-((double)this.vSpeed * (double)this._bounceEfficiency);
+                            this.vSpeed = (float)-((double)this.vSpeed * _bounceEfficiency);
                             this._hit = true;
                             if ((double)Math.Abs(this.vSpeed) < 0.5)
                             {
@@ -182,14 +182,14 @@ namespace DuckGame
                         }
                         else if ((double)this.vSpeed < 0.0 && (double)thing.bottom < (double)this.y)
                         {
-                            this.vSpeed = (float)-((double)this.vSpeed * (double)this._bounceEfficiency);
+                            this.vSpeed = (float)-((double)this.vSpeed * _bounceEfficiency);
                             this._hit = true;
                         }
                         if ((double)this.hSpeed > 0.0 && (double)thing.left > (double)this.x)
                         {
-                            this.hSpeed = (float)-((double)this.hSpeed * (double)this._bounceEfficiency);
+                            this.hSpeed = (float)-((double)this.hSpeed * _bounceEfficiency);
                             this._hit = true;
-                            if ((double)this._sticky > 0.0 && (double)Rando.Float(1f) < (double)this._sticky)
+                            if (_sticky > 0.0 && (double)Rando.Float(1f) < _sticky)
                             {
                                 this.hSpeed = 0.0f;
                                 this.vSpeed = 0.0f;
@@ -199,9 +199,9 @@ namespace DuckGame
                         }
                         else if ((double)this.hSpeed < 0.0 && (double)thing.right < (double)this.x)
                         {
-                            this.hSpeed = (float)-((double)this.hSpeed * (double)this._bounceEfficiency);
+                            this.hSpeed = (float)-((double)this.hSpeed * _bounceEfficiency);
                             this._hit = true;
-                            if ((double)this._sticky > 0.0 && (double)Rando.Float(1f) < (double)this._sticky)
+                            if (_sticky > 0.0 && (double)Rando.Float(1f) < _sticky)
                             {
                                 this.hSpeed = 0.0f;
                                 this.vSpeed = 0.0f;
@@ -218,9 +218,9 @@ namespace DuckGame
                         this.y += this.vSpeed;
                     }
                 }
-                if ((double)this._spinAngle > 360.0)
+                if (_spinAngle > 360.0)
                     this._spinAngle -= 360f;
-                if ((double)this._spinAngle >= 0.0)
+                if (_spinAngle >= 0.0)
                     return;
                 this._spinAngle += 360f;
             }

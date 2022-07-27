@@ -46,15 +46,15 @@ namespace DuckGame
                     if (num < this.maxPlaceable)
                         ++num;
                     else
-                        Level.current.RemoveThing((Thing)t);
+                        Level.current.RemoveThing(t);
                 }
                 SnowGenerator.initGen = false;
             }
             this.snowWait -= Maths.IncFrameTimer();
-            if ((double)this.snowWait <= 0.0)
+            if (snowWait <= 0.0)
             {
                 this.snowWait = Rando.Float(2f, 4f);
-                Level.Add((Thing)new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), new Vec2(0.0f, 0.0f)));
+                Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), new Vec2(0.0f, 0.0f)));
             }
             base.Update();
         }

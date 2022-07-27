@@ -15,7 +15,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 30;
-            this._ammoType = (AmmoType)new ATHighCalMachinegun();
+            this._ammoType = new ATHighCalMachinegun();
             this._type = "gun";
             this.graphic = new Sprite("ak47");
             this.center = new Vec2(16f, 15f);

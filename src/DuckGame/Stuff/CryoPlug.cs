@@ -19,7 +19,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("survival/cryoPlug", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this._collisionSize = new Vec2(12f, 12f);
             this._collisionOffset = new Vec2(-6f, -6f);
@@ -29,11 +29,11 @@ namespace DuckGame
 
         public void AttachTo(Thing t)
         {
-            this._rope = new Rope(this.x, this.y, t, (Thing)this);
-            Level.Add((Thing)this._rope);
+            this._rope = new Rope(this.x, this.y, t, this);
+            Level.Add(_rope);
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._rope);
+        public override void Terminate() => Level.Remove(_rope);
 
         public override void Update()
         {

@@ -14,7 +14,7 @@ namespace DuckGame
     public class UIFlagSelection : UIMenu
     {
         //private static List<Sprite> _flagSprites = (List<Sprite>)null;
-        private static List<string> _flagFiles = (List<string>)null;
+        private static List<string> _flagFiles = null;
         private int _flagSelection;
         private UIMenu _openOnClose;
         private static Dictionary<int, Sprite> _sprites = new Dictionary<int, Sprite>();
@@ -26,27 +26,27 @@ namespace DuckGame
           : base("FLAG SELECT", xpos, ypos, 214f, 142f, "@CANCEL@BACK @SELECT@SELECT")
         {
             UIBox component = new UIBox(isVisible: false);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            component.Add((UIComponent)new UIText(" ", Color.White), true);
-            this.Add((UIComponent)component, true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            component.Add(new UIText(" ", Color.White), true);
+            this.Add(component, true);
             this._flagSelection = Global.data.flag;
             this._openOnClose = openOnClose;
         }
 
         public static Sprite GetFlag(int idx, bool smallVersion = false)
         {
-            Sprite flag = (Sprite)null;
+            Sprite flag = null;
             if (smallVersion && UIFlagSelection._sprites.TryGetValue(idx, out flag))
                 return flag;
             try
@@ -147,7 +147,7 @@ namespace DuckGame
             {
                 int num7 = index % 16;
                 int num8 = index / 16;
-                DuckGame.Graphics.Draw(UIFlagSelection._flagTexture, new Vec2(num5 + num3, num6 + num4), new Rectangle?(new Rectangle((float)(num7 * 61), (float)(num8 * 41), 61f, 41f)), num2 == this._flagSelection ? Color.White : Color.White * 0.7f, 0.0f, Vec2.Zero, new Vec2(0.14f, 0.14f), SpriteEffects.None, (Depth)0.9f);
+                DuckGame.Graphics.Draw(UIFlagSelection._flagTexture, new Vec2(num5 + num3, num6 + num4), new Rectangle?(new Rectangle(num7 * 61, num8 * 41, 61f, 41f)), num2 == this._flagSelection ? Color.White : Color.White * 0.7f, 0.0f, Vec2.Zero, new Vec2(0.14f, 0.14f), SpriteEffects.None, (Depth)0.9f);
                 num3 += 9f;
                 ++num1;
                 ++num2;

@@ -38,17 +38,17 @@ namespace DuckGame
         {
         }
 
-        public float Dot(Vec4 value) => (float)((double)this.normal.x * (double)value.x + (double)this.normal.y * (double)value.y + (double)this.normal.z * (double)value.z + (double)this.d * (double)value.w);
+        public float Dot(Vec4 value) => (float)(normal.x * (double)value.x + normal.y * (double)value.y + normal.z * (double)value.z + d * (double)value.w);
 
-        public void Dot(ref Vec4 value, out float result) => result = (float)((double)this.normal.x * (double)value.x + (double)this.normal.y * (double)value.y + (double)this.normal.z * (double)value.z + (double)this.d * (double)value.w);
+        public void Dot(ref Vec4 value, out float result) => result = (float)(normal.x * (double)value.x + normal.y * (double)value.y + normal.z * (double)value.z + d * (double)value.w);
 
-        public float DotCoordinate(Vec3 value) => (float)((double)this.normal.x * (double)value.x + (double)this.normal.y * (double)value.y + (double)this.normal.z * (double)value.z) + this.d;
+        public float DotCoordinate(Vec3 value) => (float)(normal.x * (double)value.x + normal.y * (double)value.y + normal.z * (double)value.z) + this.d;
 
-        public void DotCoordinate(ref Vec3 value, out float result) => result = (float)((double)this.normal.x * (double)value.x + (double)this.normal.y * (double)value.y + (double)this.normal.z * (double)value.z) + this.d;
+        public void DotCoordinate(ref Vec3 value, out float result) => result = (float)(normal.x * (double)value.x + normal.y * (double)value.y + normal.z * (double)value.z) + this.d;
 
-        public float DotNormal(Vec3 value) => (float)((double)this.normal.x * (double)value.x + (double)this.normal.y * (double)value.y + (double)this.normal.z * (double)value.z);
+        public float DotNormal(Vec3 value) => (float)(normal.x * (double)value.x + normal.y * (double)value.y + normal.z * (double)value.z);
 
-        public void DotNormal(ref Vec3 value, out float result) => result = (float)((double)this.normal.x * (double)value.x + (double)this.normal.y * (double)value.y + (double)this.normal.z * (double)value.z);
+        public void DotNormal(ref Vec3 value, out float result) => result = (float)(normal.x * (double)value.x + normal.y * (double)value.y + normal.z * (double)value.z);
 
         public static void Transform(ref Plane plane, ref Quaternion rotation, out Plane result) => throw new NotImplementedException();
 
@@ -62,7 +62,7 @@ namespace DuckGame
         {
             Vec3 normal = this.normal;
             this.normal = Vec3.Normalize(this.normal);
-            this.d *= (float)Math.Sqrt((double)this.normal.x * (double)this.normal.x + (double)this.normal.y * (double)this.normal.y + (double)this.normal.z * (double)this.normal.z) / (float)Math.Sqrt((double)normal.x * (double)normal.x + (double)normal.y * (double)normal.y + (double)normal.z * (double)normal.z);
+            this.d *= (float)Math.Sqrt(this.normal.x * (double)this.normal.x + this.normal.y * (double)this.normal.y + this.normal.z * (double)this.normal.z) / (float)Math.Sqrt(normal.x * (double)normal.x + normal.y * (double)normal.y + normal.z * (double)normal.z);
         }
 
         public static Plane Normalize(Plane value)
@@ -75,7 +75,7 @@ namespace DuckGame
         public static void Normalize(ref Plane value, out Plane result)
         {
             result.normal = Vec3.Normalize(value.normal);
-            float num = (float)Math.Sqrt((double)result.normal.x * (double)result.normal.x + (double)result.normal.y * (double)result.normal.y + (double)result.normal.z * (double)result.normal.z) / (float)Math.Sqrt((double)value.normal.x * (double)value.normal.x + (double)value.normal.y * (double)value.normal.y + (double)value.normal.z * (double)value.normal.z);
+            float num = (float)Math.Sqrt(result.normal.x * (double)result.normal.x + result.normal.y * (double)result.normal.y + result.normal.z * (double)result.normal.z) / (float)Math.Sqrt(value.normal.x * (double)value.normal.x + value.normal.y * (double)value.normal.y + value.normal.z * (double)value.normal.z);
             result.d = value.d * num;
         }
 
@@ -85,10 +85,10 @@ namespace DuckGame
 
         public override bool Equals(object other) => other is Plane other1 && this.Equals(other1);
 
-        public bool Equals(Plane other) => this.normal == other.normal && (double)this.d == (double)other.d;
+        public bool Equals(Plane other) => this.normal == other.normal && d == (double)other.d;
 
         public override int GetHashCode() => this.normal.GetHashCode() ^ this.d.GetHashCode();
 
-        public override string ToString() => string.Format("{{Normal:{0} D:{1}}}", (object)this.normal, (object)this.d);
+        public override string ToString() => string.Format("{{Normal:{0} D:{1}}}", normal, d);
     }
 }

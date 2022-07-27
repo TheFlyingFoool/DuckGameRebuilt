@@ -15,7 +15,7 @@ namespace DuckGame
         public CustomParallax(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 6
             };
@@ -41,18 +41,18 @@ namespace DuckGame
                 this._parallax = new ParallaxBackground(data.texture);
                 for (int yPos = 0; yPos < 40; ++yPos)
                     this._parallax.AddZone(yPos, 0.0f, 0.0f, true);
-                Level.Add((Thing)this._parallax);
+                Level.Add(_parallax);
             }
             else
             {
                 this._parallax = new ParallaxBackground("background/office", 0.0f, 0.0f, 3);
-                Level.Add((Thing)this._parallax);
+                Level.Add(_parallax);
             }
         }
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
 
         public static string customParallax
         {
@@ -66,9 +66,9 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            EditorGroupMenu contextMenu = new EditorGroupMenu((IContextListener)null, true);
-            contextMenu.AddItem((ContextMenu)new ContextFile("style", (IContextListener)null, new FieldBinding((object)this, "customParallax"), ContextFileType.Parallax));
-            return (ContextMenu)contextMenu;
+            EditorGroupMenu contextMenu = new EditorGroupMenu(null, true);
+            contextMenu.AddItem(new ContextFile("style", null, new FieldBinding(this, "customParallax"), ContextFileType.Parallax));
+            return contextMenu;
         }
     }
 }

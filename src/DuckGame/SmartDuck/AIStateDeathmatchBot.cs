@@ -14,16 +14,16 @@ namespace DuckGame
             if (Network.InLobby() && !duck.pickedHat)
             {
                 duck.pickedHat = true;
-                this._state.Push((AIState)new AIStatePickHat());
-                return (AIState)this;
+                this._state.Push(new AIStatePickHat());
+                return this;
             }
             if (duck.holdObject == null || !(duck.holdObject is Gun))
             {
-                this._state.Push((AIState)new AIStateFindGun());
-                return (AIState)this;
+                this._state.Push(new AIStateFindGun());
+                return this;
             }
-            this._state.Push((AIState)new AIStateFindTarget());
-            return (AIState)this;
+            this._state.Push(new AIStateFindTarget());
+            return this;
         }
     }
 }

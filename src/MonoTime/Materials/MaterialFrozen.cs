@@ -27,13 +27,13 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("width", texture.frameWidth / ((float)texture.width * 0.75f));
-                this.SetValue("height", texture.frameHeight / ((float)texture.height * 0.75f));
+                this.SetValue("width", texture.frameWidth / (texture.width * 0.75f));
+                this.SetValue("height", texture.frameHeight / (texture.height * 0.75f));
                 this.SetValue("xpos", this._thing.x);
                 this.SetValue("ypos", this._thing.y);
                 this.SetValue("intensity", this.intensity);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture)(Texture2D)this._frozenTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._frozenTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
                 pass.Apply();

@@ -18,7 +18,7 @@ namespace DuckGame
         public StarGoody(float xpos, float ypos)
           : base(xpos, ypos, new Sprite("challenge/star"))
         {
-            this.valid = new EditorProperty<bool>(true, (Thing)this);
+            this.valid = new EditorProperty<bool>(true, this);
         }
     }
 }

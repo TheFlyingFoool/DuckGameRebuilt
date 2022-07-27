@@ -41,9 +41,9 @@ namespace DuckGame
             base.Initialize();
             if (Level.current is Editor)
                 return;
-            this._ball = new WeightBall(this.x, this.y, (PhysicsObject)this, this, this.mace.value);
-            this.ReturnItemToWorld((Thing)this._ball);
-            Level.Add((Thing)this._ball);
+            this._ball = new WeightBall(this.x, this.y, this, this, this.mace.value);
+            this.ReturnItemToWorld(_ball);
+            Level.Add(_ball);
         }
 
         public override void Update()
@@ -56,24 +56,24 @@ namespace DuckGame
                 this.center = new Vec2(8f, 8f);
                 this.solid = false;
                 this._sprite.flipH = this._equippedDuck._sprite.flipH;
-                this.graphic = (Sprite)this._sprite;
+                this.graphic = _sprite;
                 this._ball.SetAttach(this.owner as PhysicsObject);
             }
             else
             {
                 this.collisionOffset = new Vec2(-4f, -2f);
                 this.collisionSize = new Vec2(8f, 4f);
-                this.center = new Vec2((float)(this._pickupSprite.w / 2), (float)(this._pickupSprite.h / 2));
+                this.center = new Vec2(this._pickupSprite.w / 2, this._pickupSprite.h / 2);
                 this.solid = true;
                 this._sprite.frame = 0;
                 this._sprite.flipH = false;
                 this.graphic = this._pickupSprite;
-                this._ball.SetAttach((PhysicsObject)this);
+                this._ball.SetAttach(this);
             }
             if (this.destroyed)
                 this.alpha -= 0.05f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
     }

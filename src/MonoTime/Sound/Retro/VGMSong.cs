@@ -71,8 +71,8 @@ namespace DuckGame
             this._intBuffer = new int[this._buffer.Length / 2];
             this._instance.BufferNeeded += new EventHandler<EventArgs>(this.StreamVGM);
             this.OpenVGMFile(file);
-            this._chip.Initialize((double)(int)this._VGMHead.lngHzYM2612, 44100);
-            this._psg.Initialize((double)this._VGMHead.lngHzPSG);
+            this._chip.Initialize((int)this._VGMHead.lngHzYM2612, 44100);
+            this._psg.Initialize(_VGMHead.lngHzPSG);
         }
 
         public void Terminate() => this._instance.Dispose();
@@ -114,39 +114,39 @@ namespace DuckGame
                 if (field.FieldType == typeof(uint))
                 {
                     uint num = hFile.ReadUInt32();
-                    field.SetValue((object)vgmHeader, (object)num);
+                    field.SetValue(vgmHeader, num);
                 }
                 else if (field.FieldType == typeof(ushort))
                 {
                     ushort num = hFile.ReadUInt16();
-                    field.SetValue((object)vgmHeader, (object)num);
+                    field.SetValue(vgmHeader, num);
                 }
                 else if (field.FieldType == typeof(char))
                 {
                     char ch = hFile.ReadChar();
-                    field.SetValue((object)vgmHeader, (object)ch);
+                    field.SetValue(vgmHeader, ch);
                 }
                 else if (field.FieldType == typeof(byte))
                 {
                     byte num = hFile.ReadByte();
-                    field.SetValue((object)vgmHeader, (object)num);
+                    field.SetValue(vgmHeader, num);
                 }
             }
             if (vgmHeader.lngVersion < 257U)
                 vgmHeader.lngRate = 0U;
             if (vgmHeader.lngVersion < 272U)
             {
-                vgmHeader.shtPSG_Feedback = (ushort)0;
-                vgmHeader.bytPSG_SRWidth = (byte)0;
+                vgmHeader.shtPSG_Feedback = 0;
+                vgmHeader.bytPSG_SRWidth = 0;
                 vgmHeader.lngHzYM2612 = vgmHeader.lngHzYM2413;
                 vgmHeader.lngHzYM2151 = vgmHeader.lngHzYM2413;
             }
             if (vgmHeader.lngHzPSG != 0U)
             {
-                if (vgmHeader.shtPSG_Feedback == (ushort)0)
-                    vgmHeader.shtPSG_Feedback = (ushort)9;
-                if (vgmHeader.bytPSG_SRWidth == (byte)0)
-                    vgmHeader.bytPSG_SRWidth = (byte)16;
+                if (vgmHeader.shtPSG_Feedback == 0)
+                    vgmHeader.shtPSG_Feedback = 9;
+                if (vgmHeader.bytPSG_SRWidth == 0)
+                    vgmHeader.bytPSG_SRWidth = 16;
             }
             return vgmHeader;
         }
@@ -163,12 +163,12 @@ namespace DuckGame
                 input.Read(buffer, 0, 4);
                 num1 = BitConverter.ToUInt32(buffer, 0);
                 input.Position = 0L;
-                this._vgmReader = new BinaryReader((Stream)new GZipStream((Stream)input, CompressionMode.Decompress));
+                this._vgmReader = new BinaryReader(new GZipStream(input, CompressionMode.Decompress));
             }
             else
             {
                 num1 = (uint)input.Length;
-                this._vgmReader = new BinaryReader((Stream)input);
+                this._vgmReader = new BinaryReader(input);
             }
             if (this._vgmReader.ReadUInt32() != 544040790U)
                 return false;
@@ -178,7 +178,7 @@ namespace DuckGame
             {
                 this._vgmReader.Close();
                 input = System.IO.File.Open(fileName, FileMode.Open);
-                this._vgmReader = new BinaryReader((Stream)new GZipStream((Stream)input, CompressionMode.Decompress));
+                this._vgmReader = new BinaryReader(new GZipStream(input, CompressionMode.Decompress));
             }
             else
                 this._vgmReader.BaseStream.Seek(0L, SeekOrigin.Begin);
@@ -192,15 +192,15 @@ namespace DuckGame
             }
             this._VGMDataOffset = count;
             this._vgmReader.ReadBytes(count);
-            this._VGMData = this._vgmReader.ReadBytes((int)((long)num1 - (long)count));
-            this._vgmReader = new BinaryReader((Stream)new MemoryStream(this._VGMData));
-            if ((byte)this._vgmReader.PeekChar() == (byte)103)
+            this._VGMData = this._vgmReader.ReadBytes((int)(num1 - count));
+            this._vgmReader = new BinaryReader(new MemoryStream(this._VGMData));
+            if ((byte)this._vgmReader.PeekChar() == 103)
             {
-                int num2 = (int)this._vgmReader.ReadByte();
-                if ((byte)this._vgmReader.PeekChar() == (byte)102)
+                int num2 = this._vgmReader.ReadByte();
+                if ((byte)this._vgmReader.PeekChar() == 102)
                 {
-                    int num3 = (int)this._vgmReader.ReadByte();
-                    int num4 = (int)this._vgmReader.ReadByte();
+                    int num3 = this._vgmReader.ReadByte();
+                    int num4 = this._vgmReader.ReadByte();
                     this._DACData = this._vgmReader.ReadBytes((int)this._vgmReader.ReadUInt32());
                 }
             }
@@ -212,9 +212,9 @@ namespace DuckGame
         {
             if (this._iSaidStop)
                 return;
-            if (this._lastCommand == (byte)102 && !this._looped)
+            if (this._lastCommand == 102 && !this._looped)
             {
-                this._lastCommand = (byte)0;
+                this._lastCommand = 0;
                 this._instance.Volume = 0.0f;
                 this._iSaidStop = true;
                 this.Stop();
@@ -236,19 +236,19 @@ namespace DuckGame
                         switch (num3)
                         {
                             case 79:
-                                int num4 = (int)this._vgmReader.ReadByte();
+                                int num4 = this._vgmReader.ReadByte();
                                 break;
                             case 80:
-                                this._psg.Write((int)this._vgmReader.ReadByte());
+                                this._psg.Write(this._vgmReader.ReadByte());
                                 break;
                             case 82:
-                                this._chip.WritePort0((int)this._vgmReader.ReadByte(), (int)this._vgmReader.ReadByte());
+                                this._chip.WritePort0(this._vgmReader.ReadByte(), this._vgmReader.ReadByte());
                                 break;
                             case 83:
-                                this._chip.WritePort1((int)this._vgmReader.ReadByte(), (int)this._vgmReader.ReadByte());
+                                this._chip.WritePort1(this._vgmReader.ReadByte(), this._vgmReader.ReadByte());
                                 break;
                             case 97:
-                                this._wait = (int)this._vgmReader.ReadUInt16();
+                                this._wait = this._vgmReader.ReadUInt16();
                                 if (this._wait != 0)
                                 {
                                     flag2 = true;
@@ -272,30 +272,30 @@ namespace DuckGame
                                 }
                                 if (this._VGMHead.lngLoopOffset != 0U)
                                 {
-                                    this._vgmReader.BaseStream.Seek((long)this._VGMHead.lngLoopOffset - (long)this._VGMDataOffset, SeekOrigin.Begin);
+                                    this._vgmReader.BaseStream.Seek(_VGMHead.lngLoopOffset - _VGMDataOffset, SeekOrigin.Begin);
                                     break;
                                 }
                                 this._vgmReader.BaseStream.Seek(0L, SeekOrigin.Begin);
                                 break;
                             case 103:
-                                int num5 = (int)this._vgmReader.ReadByte();
-                                int num6 = (int)this._vgmReader.ReadByte();
-                                this._vgmReader.BaseStream.Position += (long)this._vgmReader.ReadUInt32();
+                                int num5 = this._vgmReader.ReadByte();
+                                int num6 = this._vgmReader.ReadByte();
+                                this._vgmReader.BaseStream.Position += this._vgmReader.ReadUInt32();
                                 break;
                             case 224:
                                 this._DACOffset = (int)this._vgmReader.ReadUInt32();
                                 break;
                         }
-                        if (num3 >= (byte)112 && num3 <= (byte)127)
+                        if (num3 >= 112 && num3 <= 127)
                         {
-                            this._wait = ((int)num3 & 15) + 1;
+                            this._wait = (num3 & 15) + 1;
                             if (this._wait != 0)
                                 flag2 = true;
                         }
-                        else if (num3 >= (byte)128 && num3 <= (byte)143)
+                        else if (num3 >= 128 && num3 <= 143)
                         {
-                            this._wait = (int)num3 & 15;
-                            this._chip.WritePort0(42, (int)this._DACData[this._DACOffset]);
+                            this._wait = num3 & 15;
+                            this._chip.WritePort0(42, this._DACData[this._DACOffset]);
                             ++this._DACOffset;
                             if (this._wait != 0)
                                 flag2 = true;
@@ -308,7 +308,7 @@ namespace DuckGame
                         flag2 = true;
                         if (this._wait > 0)
                         {
-                            for (this._waitInc += this._playbackSpeed; this._wait > 0 && (double)this._waitInc >= 1.0; --this._wait)
+                            for (this._waitInc += this._playbackSpeed; this._wait > 0 && _waitInc >= 1.0; --this._wait)
                                 --this._waitInc;
                         }
                     }
@@ -322,8 +322,8 @@ namespace DuckGame
                             this._psg.Update(buffer, 1);
                             short num9 = (short)buffer[0];
                             short num10 = (short)buffer[1];
-                            this._intBuffer[num1 * 2] = Maths.Clamp(((int)num7 + (int)num9) * 2, (int)short.MinValue, (int)short.MaxValue);
-                            this._intBuffer[num1 * 2 + 1] = Maths.Clamp(((int)num8 + (int)num10) * 2, (int)short.MinValue, (int)short.MaxValue);
+                            this._intBuffer[num1 * 2] = Maths.Clamp((num7 + num9) * 2, short.MinValue, short.MaxValue);
+                            this._intBuffer[num1 * 2 + 1] = Maths.Clamp((num8 + num10) * 2, short.MinValue, short.MaxValue);
                             ++num1;
                             if (num1 == num2)
                                 break;
@@ -335,11 +335,11 @@ namespace DuckGame
                 for (int index = 0; index < this._intBuffer.Length; ++index)
                 {
                     short num11 = (short)this._intBuffer[index];
-                    this._buffer[index * 2] = (byte)((uint)num11 & (uint)byte.MaxValue);
-                    this._buffer[index * 2 + 1] = (byte)((int)num11 >> 8 & (int)byte.MaxValue);
+                    this._buffer[index * 2] = (byte)((uint)num11 & byte.MaxValue);
+                    this._buffer[index * 2 + 1] = (byte)(num11 >> 8 & byte.MaxValue);
                 }
                 int num12 = num1 * 2;
-                if ((double)num12 / 4.0 - (double)(int)((double)num12 / 4.0) > 0.0)
+                if (num12 / 4.0 - (int)(num12 / 4.0) > 0.0)
                     num12 -= 2;
                 this._instance.SubmitBuffer(this._buffer, 0, num12);
                 this._instance.SubmitBuffer(this._buffer, num12, num12);

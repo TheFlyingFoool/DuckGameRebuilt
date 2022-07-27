@@ -29,7 +29,7 @@ namespace DuckGame
                 bitBuffer.Write(data, length: length);
             lock (NCNetDebug._socketData)
             {
-                List<NCBasicPacket> ncBasicPacketList = (List<NCBasicPacket>)null;
+                List<NCBasicPacket> ncBasicPacketList = null;
                 if (!NCNetDebug._socketData.TryGetValue(connection as IPEndPoint, out ncBasicPacketList))
                     NCNetDebug._socketData[connection as IPEndPoint] = ncBasicPacketList = new List<NCBasicPacket>();
                 ncBasicPacketList.Add(new NCBasicPacket()
@@ -40,7 +40,7 @@ namespace DuckGame
                 this.bytesThisFrame += length + 8;
                 int bytesThisFrame = this.bytesThisFrame;
             }
-            return (NCError)null;
+            return null;
         }
 
         protected override void ReceivePackets(Queue<NCBasicPacket> packets)
@@ -49,7 +49,7 @@ namespace DuckGame
             {
                 lock (NCNetDebug._socketData)
                 {
-                    List<NCBasicPacket> ncBasicPacketList = (List<NCBasicPacket>)null;
+                    List<NCBasicPacket> ncBasicPacketList = null;
                     if (!NCNetDebug._socketData.TryGetValue(this.localEndPoint, out ncBasicPacketList))
                         return;
                     foreach (NCBasicPacket ncBasicPacket in ncBasicPacketList)

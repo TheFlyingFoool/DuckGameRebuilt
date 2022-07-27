@@ -37,22 +37,22 @@ namespace DuckGame
         {
             if (this.sounded)
                 return;
-            Level.Add((Thing)SmallSmoke.New(this.x, this.y + 2f));
-            Level.Add((Thing)SmallSmoke.New(this.x, this.y - 16f));
+            Level.Add(SmallSmoke.New(this.x, this.y + 2f));
+            Level.Add(SmallSmoke.New(this.x, this.y - 16f));
             SFX.Play("doorBreak");
             for (int index = 0; index < 8; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
                 woodDebris.hSpeed = ((double)Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f);
                 woodDebris.vSpeed = -Rando.Float(1f);
-                Level.Add((Thing)woodDebris);
+                Level.Add(woodDebris);
             }
             this.sounded = true;
         }
 
         private void RefreshSprite()
         {
-            this.graphic = (Sprite)new SpriteMap(this._secondaryFrame ? "flimsyDoorDamaged" : "doorFucked", 32, 32);
+            this.graphic = new SpriteMap(this._secondaryFrame ? "flimsyDoorDamaged" : "doorFucked", 32, 32);
             this._wasSecondaryFrame = this._secondaryFrame;
         }
 
@@ -65,7 +65,7 @@ namespace DuckGame
             this.angleDegrees = this._throwSpin;
             this.center = new Vec2(16f, 16f);
             this._throwSpin %= 360f;
-            this._throwSpin = this.offDir <= (sbyte)0 ? Lerp.Float(this._throwSpin, -90f, 12f) : Lerp.Float(this._throwSpin, 90f, 12f);
+            this._throwSpin = this.offDir <= 0 ? Lerp.Float(this._throwSpin, -90f, 12f) : Lerp.Float(this._throwSpin, 90f, 12f);
             base.Update();
         }
     }

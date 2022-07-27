@@ -19,9 +19,11 @@ namespace DuckGame
 
         public override void PopShell(float x, float y, int dir)
         {
-            PistolShell pistolShell = new PistolShell(x, y);
-            pistolShell.hSpeed = (float)dir * (1.5f + Rando.Float(1f));
-            Level.Add((Thing)pistolShell);
+            PistolShell pistolShell = new PistolShell(x, y)
+            {
+                hSpeed = dir * (1.5f + Rando.Float(1f))
+            };
+            Level.Add(pistolShell);
         }
     }
 }

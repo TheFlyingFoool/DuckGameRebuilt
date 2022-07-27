@@ -31,12 +31,12 @@ namespace DuckGame
             get
             {
                 List<ResultData> teams = Results.teams;
-                teams.Sort((Comparison<ResultData>)((a, b) =>
+                teams.Sort((a, b) =>
                {
                    if (a.score == b.score)
                        return 0;
                    return a.score >= b.score ? -1 : 1;
-               }));
+               });
                 return teams[0];
             }
         }
@@ -46,12 +46,12 @@ namespace DuckGame
             get
             {
                 List<ResultData> teams = Results.teams;
-                teams.Sort((Comparison<ResultData>)((a, b) =>
+                teams.Sort((a, b) =>
                {
                    if (a.score == b.score)
                        return 0;
                    return a.score >= b.score ? -1 : 1;
-               }));
+               });
                 return teams[1];
             }
         }
@@ -61,12 +61,12 @@ namespace DuckGame
             get
             {
                 List<ResultData> teams = Results.teams;
-                teams.Sort((Comparison<ResultData>)((a, b) =>
+                teams.Sort((a, b) =>
                {
                    if (a.score == b.score)
                        return 0;
                    return a.score <= b.score ? -1 : 1;
-               }));
+               });
                 return teams[0];
             }
         }

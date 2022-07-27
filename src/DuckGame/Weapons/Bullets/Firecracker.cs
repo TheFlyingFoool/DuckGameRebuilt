@@ -28,14 +28,14 @@ namespace DuckGame
             this.isLocal = true;
             if (!Network.isActive)
                 return;
-            GhostManager.context.particleManager.AddLocalParticle((PhysicsParticle)this);
+            GhostManager.context.particleManager.AddLocalParticle(this);
         }
 
         public Firecracker(float xpos, float ypos, bool network)
           : this(xpos, ypos)
         {
             if (Network.isActive && !network)
-                GhostManager.context.particleManager.AddLocalParticle((PhysicsParticle)this);
+                GhostManager.context.particleManager.AddLocalParticle(this);
             this.isLocal = !network;
         }
 
@@ -48,7 +48,7 @@ namespace DuckGame
 
         public override void NetDeserialize(BitBuffer d)
         {
-            this.netLerpPosition = new Vec2((float)d.ReadShort(), (float)d.ReadShort());
+            this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
             this._spinAngle = d.ReadFloat();
         }
 
@@ -59,12 +59,12 @@ namespace DuckGame
                 this.didRemove = true;
                 if (this.isLocal && GhostManager.context != null)
                 {
-                    GhostManager.context.particleManager.RemoveParticle((PhysicsParticle)this);
+                    GhostManager.context.particleManager.RemoveParticle(this);
                 }
                 else
                 {
                     this.position = this.netLerpPosition;
-                    Level.Add((Thing)SmallSmoke.New(this.x, this.y));
+                    Level.Add(SmallSmoke.New(this.x, this.y));
                 }
             }
             base.Removed();
@@ -73,7 +73,7 @@ namespace DuckGame
         public override void Update()
         {
             if ((bool)this._sparkTimer)
-                Level.Add((Thing)Spark.New(this.x, this.y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+                Level.Add(Spark.New(this.x, this.y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
             this._life = 1f;
             this.angleDegrees = this._spinAngle;
             base.Update();
@@ -83,20 +83,24 @@ namespace DuckGame
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 8; ++index)
             {
-                float num = (float)((double)index * 45.0 - 5.0) + Rando.Float(10f);
-                ATShrapnel type = new ATShrapnel();
-                type.range = 8f + Rando.Float(3f);
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 6.0), (AmmoType)type, num);
-                bullet.firedFrom = (Thing)this;
-                Level.Add((Thing)bullet);
+                float num = (float)(index * 45.0 - 5.0) + Rando.Float(10f);
+                ATShrapnel type = new ATShrapnel
+                {
+                    range = 8f + Rando.Float(3f)
+                };
+                Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 6.0), type, num)
+                {
+                    firedFrom = this
+                };
+                Level.Add(bullet);
                 varBullets.Add(bullet);
             }
             if (Network.isActive)
-                Send.Message((NetMessage)new NMFireGun((Gun)null, varBullets, (byte)0, false), NetMessagePriority.ReliableOrdered);
-            Level.Add((Thing)SmallSmoke.New(this.x, this.y));
+                Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
+            Level.Add(SmallSmoke.New(this.x, this.y));
             if ((double)Rando.Float(1f) < 0.100000001490116)
-                Level.Add((Thing)SmallFire.New(this.x, this.y, 0.0f, 0.0f, firedFrom: ((Thing)this)));
-            Level.Remove((Thing)this);
+                Level.Add(SmallFire.New(this.x, this.y, 0.0f, 0.0f, firedFrom: this));
+            Level.Remove(this);
         }
     }
 }

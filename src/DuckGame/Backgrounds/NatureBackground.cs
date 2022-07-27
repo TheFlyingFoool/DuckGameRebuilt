@@ -15,7 +15,7 @@ namespace DuckGame
         public NatureBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 0
             };
@@ -36,25 +36,35 @@ namespace DuckGame
             Level.current.backgroundColor = this.backgroundColor;
             this._parallax = new ParallaxBackground("background/forest5", 0.0f, 0.0f, 3);
             float speed1 = 0.4f;
-            Sprite s1 = new Sprite("background/cloud1");
-            s1.depth = - 0.9f;
-            s1.position = new Vec2(50f, 60f);
+            Sprite s1 = new Sprite("background/cloud1")
+            {
+                depth = -0.9f,
+                position = new Vec2(50f, 60f)
+            };
             this._parallax.AddZoneSprite(s1, 6, 0.72f, speed1, true);
-            Sprite s2 = new Sprite("background/cloud4");
-            s2.depth = - 0.9f;
-            s2.position = new Vec2(200f, 95f);
+            Sprite s2 = new Sprite("background/cloud4")
+            {
+                depth = -0.9f,
+                position = new Vec2(200f, 95f)
+            };
             this._parallax.AddZoneSprite(s2, 5, 0.72f, speed1, true);
-            Sprite s3 = new Sprite("background/cloud2");
-            s3.depth = - 0.9f;
-            s3.position = new Vec2(170f, 72f);
+            Sprite s3 = new Sprite("background/cloud2")
+            {
+                depth = -0.9f,
+                position = new Vec2(170f, 72f)
+            };
             this._parallax.AddZoneSprite(s3, 8, 0.82f, speed1, true);
-            Sprite s4 = new Sprite("background/cloud5");
-            s4.depth = - 0.9f;
-            s4.position = new Vec2(30f, 45f);
+            Sprite s4 = new Sprite("background/cloud5")
+            {
+                depth = -0.9f,
+                position = new Vec2(30f, 45f)
+            };
             this._parallax.AddZoneSprite(s4, 4, 0.82f, speed1, true);
-            Sprite s5 = new Sprite("background/cloud3");
-            s5.depth = - 0.9f;
-            s5.position = new Vec2(150f, 30f);
+            Sprite s5 = new Sprite("background/cloud3")
+            {
+                depth = -0.9f,
+                position = new Vec2(150f, 30f)
+            };
             this._parallax.AddZoneSprite(s5, 7, 0.91f, speed1, true);
             int num = 1;
             float speed2 = 0.1f;
@@ -81,11 +91,11 @@ namespace DuckGame
             this._parallax.AddZone(27 + num, 0.35f, speed1);
             this._parallax.AddZone(28 + num, 0.3f, speed1);
             this._parallax.AddZone(29 + num, 0.25f, speed1);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

@@ -45,7 +45,7 @@ namespace DuckGame
             this._autoOffset = false;
             this.thickness = 0.1f;
             this._sprite = new SpriteMap("hats/burgers", 32, 32);
-            this._pickupSprite = (Sprite)new SpriteMap("hats/burgers", 32, 32);
+            this._pickupSprite = new SpriteMap("hats/burgers", 32, 32);
             this._equippedDepth = 6;
         }
 
@@ -63,8 +63,8 @@ namespace DuckGame
         {
             if (this._equippedDuck != null && !this.destroyed)
             {
-                this.center = new Vec2((float)(this._sprite.w / 2), (float)(this._sprite.h / 2));
-                this.graphic = (Sprite)this._sprite;
+                this.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
+                this.graphic = _sprite;
                 this.solid = false;
                 this.visible = false;
             }
@@ -72,7 +72,7 @@ namespace DuckGame
             {
                 this._sprite.frame = 0;
                 if (!this._hasUnequippedCenter)
-                    this.center = new Vec2((float)(this._pickupSprite.w / 2), (float)(this._pickupSprite.h / 2));
+                    this.center = new Vec2(this._pickupSprite.w / 2, this._pickupSprite.h / 2);
                 this.graphic = this._pickupSprite;
                 this.solid = true;
                 this._sprite.flipH = false;
@@ -81,7 +81,7 @@ namespace DuckGame
             if (this.destroyed)
                 this.alpha -= 0.05f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
             if (this._equippedDuck != null && this._equippedDuck._trapped != null)
             {

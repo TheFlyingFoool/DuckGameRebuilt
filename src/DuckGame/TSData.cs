@@ -19,11 +19,11 @@ namespace DuckGame
         public TSData(int initValue)
         {
             this.fingerId = initValue;
-            this.touchXY.x = this.touchXY.y = (float)initValue;
+            this.touchXY.x = this.touchXY.y = initValue;
             this.diameterX = initValue;
             this.diameterY = initValue;
             this.rotationAngle = initValue;
-            this.msTimeElapsed = (long)initValue;
+            this.msTimeElapsed = initValue;
         }
     }
 }

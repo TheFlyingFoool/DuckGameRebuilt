@@ -25,7 +25,7 @@ namespace DuckGame
             this.ammo = 9;
             this._type = "gun";
             this._sprite = new SpriteMap("romanCandle", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -4f);
             this.collisionSize = new Vec2(16f, 6f);
@@ -48,7 +48,7 @@ namespace DuckGame
                 return;
             Vec2 vec2_1 = this.Offset(new Vec2(-6f, -4f));
             if (this._lit && (bool)this._timer)
-                Level.Add((Thing)Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+                Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
             if (this._lit && this._litTimer != null && (bool)this._litTimer && this._litStartTimer != null && (bool)this._litStartTimer)
             {
                 if (this._sprite.frame == 0)
@@ -63,16 +63,16 @@ namespace DuckGame
                 if (this.isServerForObject)
                 {
                     Vec2 vec2_2 = this.Offset(this.barrelOffset);
-                    CandleBall t = new CandleBall(vec2_2.x, vec2_2.y, (FlareGun)this, 4);
-                    this.Fondle((Thing)t);
+                    CandleBall t = new CandleBall(vec2_2.x, vec2_2.y, this, 4);
+                    this.Fondle(t);
                     Vec2 vec = Maths.AngleToVec(this.barrelAngle + Rando.Float(-0.1f, 0.1f));
                     t.hSpeed = vec.x * 14f;
                     t.vSpeed = vec.y * 14f;
-                    Level.Add((Thing)t);
+                    Level.Add(t);
                 }
                 if (this.owner == null)
                 {
-                    this.hSpeed -= (float)this._flip * Rando.Float(1f, 5f);
+                    this.hSpeed -= _flip * Rando.Float(1f, 5f);
                     this.vSpeed -= Rando.Float(1f, 7f);
                     this._flip = this._flip <= 0 ? 1 : -1;
                 }
@@ -85,12 +85,12 @@ namespace DuckGame
                 if (this._burnSound != null)
                 {
                     this._burnSound.Stop();
-                    this._burnSound = (Sound)null;
+                    this._burnSound = null;
                 }
             }
             base.Update();
             if (this.owner != null)
-                this._flip = (int)this.owner.offDir;
+                this._flip = owner.offDir;
             else
                 this.graphic.flipH = this._flip < 0;
         }

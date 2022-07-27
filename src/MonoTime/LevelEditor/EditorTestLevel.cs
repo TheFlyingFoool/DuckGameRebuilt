@@ -24,7 +24,7 @@ namespace DuckGame
         {
             if (!this._quitTesting || Level.current is ChallengeLevel)
                 return;
-            Level.current = (Level)this._editor;
+            Level.current = _editor;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace DuckGame
         {
             this._font = new BitmapFont("biosFont", 8);
             this.change = c;
-            this.anchor = (Anchor)(Thing)d;
+            this.anchor = (Anchor)d;
             this.anchor.offset = new Vec2(-0.0f, -24f);
             this._profile = d.profile;
         }
@@ -45,9 +45,9 @@ namespace DuckGame
         public override void Update()
         {
             this._wait -= 0.01f;
-            if ((double)this._wait >= 0.0)
+            if (_wait >= 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw()

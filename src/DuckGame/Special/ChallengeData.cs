@@ -166,7 +166,7 @@ namespace DuckGame
             this.SerializeField(element, "prefix");
             this.SerializeField(element, "prevchal");
             foreach (ChallengeTrophy trophy in this._trophies)
-                element.AddProperty("trophy", (object)trophy.Serialize());
+                element.AddProperty("trophy", trophy.Serialize());
             return element;
         }
 

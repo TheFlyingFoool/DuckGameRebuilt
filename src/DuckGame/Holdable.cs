@@ -89,7 +89,7 @@ namespace DuckGame
             set
             {
                 double num = (double)Math.Abs(value.x);
-                if ((double)value.x <= -9000.0)
+                if (value.x <= -9000.0)
                     return;
                 if (this.hoverSpawner == null || this._lastReceivedPosition != value || (double)(this._lastReceivedPosition - this.position).length > 25.0)
                     this.position = value;
@@ -121,7 +121,7 @@ namespace DuckGame
 
         public bool hasTrigger => this._hasTrigger;
 
-        public Vec2 holdOffset => new Vec2(this._holdOffset.x * (float)this.offDir, this._holdOffset.y);
+        public Vec2 holdOffset => new Vec2(this._holdOffset.x * offDir, this._holdOffset.y);
 
         public override Vec2 center
         {
@@ -132,7 +132,7 @@ namespace DuckGame
         public override Vec2 OffsetLocal(Vec2 pos)
         {
             Vec2 vec2 = pos * this.scale - this._extraOffset;
-            if (this.offDir < (sbyte)0)
+            if (this.offDir < 0)
                 vec2.x *= -1f;
             vec2 = vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f));
             return vec2;
@@ -197,7 +197,7 @@ namespace DuckGame
         /// </summary>
         /// <param name="pTaped">The taped gun responsible. Make sure you check gun1 and gun2 to make sure it's the combination you're expecting (two swords = long sword for example)</param>
         /// <returns></returns>
-        public virtual Holdable BecomeTapedMonster(TapedGun pTaped) => (Holdable)null;
+        public virtual Holdable BecomeTapedMonster(TapedGun pTaped) => null;
 
         public virtual void Thrown() => this.angle = 0.0f;
 
@@ -205,18 +205,18 @@ namespace DuckGame
         {
             if (!(this.owner is Duck owner))
                 return;
-            if (this.offDir > (sbyte)0)
+            if (this.offDir > 0)
             {
                 Block block = Level.CheckLine<Block>(new Vec2(owner.x, this.y), new Vec2(this.right, this.y));
-                if (block is Door && ((double)(block as Door)._jam == 1.0 || (double)(block as Door)._jam == -1.0))
-                    block = (Block)null;
+                if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
+                    block = null;
                 owner.holdObstructed = block != null;
             }
             else
             {
                 Block block = Level.CheckLine<Block>(new Vec2(this.left, this.y), new Vec2(owner.x, this.y));
-                if (block is Door && ((double)(block as Door)._jam == 1.0 || (double)(block as Door)._jam == -1.0))
-                    block = (Block)null;
+                if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
+                    block = null;
                 owner.holdObstructed = block != null;
             }
         }
@@ -256,7 +256,7 @@ namespace DuckGame
             if (Network.isActive && this.isServerForObject && this is Gun)
             {
                 if (flag1 || (this as Gun).firedBullets.Count > 0 || this._fireActivated)
-                    Send.Message((NetMessage)new NMFireGun(this as Gun, (this as Gun).firedBullets, (this as Gun).bulletFireIndex, !this._fireActivated && !flag1 && flag2, this.duck != null ? this.duck.netProfileIndex : (byte)4, !flag1 && !flag2), NetMessagePriority.Urgent);
+                    Send.Message(new NMFireGun(this as Gun, (this as Gun).firedBullets, (this as Gun).bulletFireIndex, !this._fireActivated && !flag1 && flag2, this.duck != null ? this.duck.netProfileIndex : (byte)4, !flag1 && !flag2), NetMessagePriority.Urgent);
                 (this as Gun).firedBullets.Clear();
             }
             this._fireActivated = false;
@@ -269,11 +269,11 @@ namespace DuckGame
                 if (this.tape != null)
                 {
                     if (this.tape.gun1 == this && this.tape.gun2 != this)
-                        return (Thing)this.tape.gun2;
+                        return tape.gun2;
                     if (this.tape.gun2 == this && this.tape.gun1 != this)
-                        return (Thing)this.tape.gun1;
+                        return tape.gun1;
                 }
-                return (Thing)null;
+                return null;
             }
         }
 
@@ -316,21 +316,21 @@ namespace DuckGame
 
         public virtual void UpdateMaterial()
         {
-            if (this.material == null && (double)this.burnt >= (double)this.charThreshold)
+            if (this.material == null && burnt >= (double)this.charThreshold)
             {
-                this.material = (Material)new MaterialCharred();
+                this.material = new MaterialCharred();
                 SFX.Play("flameExplode");
                 for (int index = 0; index < 3; ++index)
-                    Level.Add((Thing)SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                    Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
             }
-            else if (this.material == null && (double)this.heat > 0.100000001490116 && this.physicsMaterial == PhysicsMaterial.Metal)
-                this.material = (Material)new MaterialRedHot((Thing)this);
-            else if (this.material == null && (double)this.heat < -0.100000001490116)
-                this.material = (Material)new MaterialFrozen((Thing)this);
+            else if (this.material == null && heat > 0.100000001490116 && this.physicsMaterial == PhysicsMaterial.Metal)
+                this.material = new MaterialRedHot(this);
+            else if (this.material == null && heat < -0.100000001490116)
+                this.material = new MaterialFrozen(this);
             if (this.material is MaterialRedHot)
             {
-                if ((double)this.heat < 0.100000001490116)
-                    this.material = (Material)null;
+                if (heat < 0.100000001490116)
+                    this.material = null;
                 else
                     (this.material as MaterialRedHot).intensity = Math.Min(this.heat - 0.1f, 1f);
             }
@@ -338,8 +338,8 @@ namespace DuckGame
             {
                 if (!(this.material is MaterialFrozen))
                     return;
-                if ((double)this.heat > -0.100000001490116)
-                    this.material = (Material)null;
+                if (heat > -0.100000001490116)
+                    this.material = null;
                 else
                     (this.material as MaterialFrozen).intensity = Math.Min(Math.Abs(this.heat) - 0.1f, 1f);
             }
@@ -357,7 +357,7 @@ namespace DuckGame
                 }
                 Thing thing = this.owner;
                 if (this.owner is Duck && (this.owner as Duck)._trapped != null)
-                    thing = (Thing)(this.owner as Duck)._trapped;
+                    thing = (this.owner as Duck)._trapped;
                 if (this.duck == null || this.duck.holdObject == this || this is Equipment)
                     this.depth = thing.depth + (this._equippedDuck != null ? this._equippedDepth : 9);
                 if ((this.duck == null || this.duck.holdObject == this) && !(thing is TapedGun))

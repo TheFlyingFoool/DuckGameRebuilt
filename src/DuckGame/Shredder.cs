@@ -96,24 +96,24 @@ namespace DuckGame
         public static void Update()
         {
             XInputPad device = Input.GetDevice<XInputPad>();
-            if ((double)Shredder._noteWait <= 0.0)
+            if (_noteWait <= 0.0)
             {
                 if (device.MapDown(16384, false))
                 {
                     Shredder._currentNote = Shredder.GetNextNote(Shredder._currentNote, Shredder._basicScale);
-                    SFX.Play("guitar/guitar-" + Change.ToString((object)Shredder._currentNote));
+                    SFX.Play("guitar/guitar-" + Change.ToString(_currentNote));
                     Shredder._noteWait = 1f;
                 }
                 if (device.MapDown(32768, false))
                 {
                     Shredder._currentNote = Shredder._currentNote = (int)Shredder._basicScale[0];
-                    SFX.Play("guitar/guitar-" + Change.ToString((object)Shredder._currentNote));
+                    SFX.Play("guitar/guitar-" + Change.ToString(_currentNote));
                     Shredder._noteWait = 1f;
                 }
                 if (device.MapDown(8192, false))
                 {
                     Shredder._currentNote = Shredder.GetPrevNote(Shredder._currentNote, Shredder._basicScale);
-                    SFX.Play("guitar/guitar-" + Change.ToString((object)Shredder._currentNote));
+                    SFX.Play("guitar/guitar-" + Change.ToString(_currentNote));
                     Shredder._noteWait = 1f;
                 }
             }

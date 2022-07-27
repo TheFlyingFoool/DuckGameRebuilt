@@ -117,7 +117,7 @@ namespace DuckGame
         /// <summary>
         /// Updates the intensity of a RumbleEvent based on the time remaining in the falloff portion of the full duration.
         /// </summary>
-        public void FallOffLinear() => this.intensityCurrent = (float)(1.0 - ((double)this.timeElapsed - (double)this.timeDuration) / (double)this.timeFalloff) * this.intensityInitial;
+        public void FallOffLinear() => this.intensityCurrent = (float)(1.0 - (timeElapsed - (double)this.timeDuration) / timeFalloff) * this.intensityInitial;
 
         /// <summary>
         /// Updates the elapsed time and updates the intensity for any falloff. Returns false if the rumble is completed and should be cleaned up by RumbleManager
@@ -126,9 +126,9 @@ namespace DuckGame
         public bool Update()
         {
             this.timeElapsed += 0.016f;
-            if ((double)this.timeElapsed >= (double)this.timeDuration + (double)this.timeFalloff)
+            if (timeElapsed >= timeDuration + (double)this.timeFalloff)
                 return false;
-            if ((double)this.timeElapsed > (double)this.timeDuration)
+            if (timeElapsed > (double)this.timeDuration)
                 this.FallOffLinear();
             return true;
         }

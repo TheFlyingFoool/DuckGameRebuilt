@@ -27,8 +27,8 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            Level.Add((Thing)new SunLight(this.x, this.y - 1f, new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue), 100f));
-            Level.Remove((Thing)this);
+            Level.Add(new SunLight(this.x, this.y - 1f, new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue), 100f));
+            Level.Remove(this);
         }
     }
 }

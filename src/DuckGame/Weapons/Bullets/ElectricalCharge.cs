@@ -18,7 +18,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.offDir = (sbyte)off;
-            this._travelVec = new Vec2((float)this.offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
+            this._travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
             this.owner = own;
         }
 
@@ -27,12 +27,12 @@ namespace DuckGame
             if (this._prevPositions.Count == 0)
                 this._prevPositions.Insert(0, this.position);
             Vec2 position1 = this.position;
-            this.position = this.position + this._travelVec;
-            this._travelVec = new Vec2((float)this.offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
+            this.position += this._travelVec;
+            this._travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
             this._prevPositions.Insert(0, this.position);
             this.alpha -= 0.1f;
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             Vec2 position2 = this.position;
             foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(position1, position2))
             {

@@ -13,7 +13,7 @@ namespace DuckGame
     {
         private SpriteMap _sprite;
         public StateBinding _containedThingBinding = new StateBinding(nameof(_containedThing));
-        public StateBinding _actionBinding = (StateBinding)new WireMountFlagBinding();
+        public StateBinding _actionBinding = new WireMountFlagBinding();
         public Thing _containedThing;
         public EditorProperty<bool> infinite = new EditorProperty<bool>(false);
         private System.Type _contains;
@@ -25,7 +25,7 @@ namespace DuckGame
             get => this._contains;
             set
             {
-                if (this._contains != value && value != (System.Type)null)
+                if (this._contains != value && value != null)
                 {
                     this._containedThing = Editor.CreateObject(value) as Thing;
                     if (this._containedThing != null && this._containedThing is Gun)
@@ -47,7 +47,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("wireMount", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -62,8 +62,8 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", (object)Editor.SerializeTypeName(this.contains));
-            binaryClassChunk.AddProperty("newFlipType", (object)this.newFlipType);
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("newFlipType", newFlipType);
             return binaryClassChunk;
         }
 
@@ -78,7 +78,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", this.contains != (System.Type)null ? (object)this.contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -93,24 +93,24 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding radioBinding = new FieldBinding((object)this, "contains");
+            FieldBinding radioBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
             contextMenu.InitializeGroups(new EditorGroup(typeof(PhysicsObject)), radioBinding);
-            return (ContextMenu)contextMenu;
+            return contextMenu;
         }
 
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 str = this.contains.Name;
-            return this.contains == (System.Type)null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
+            return this.contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
         }
 
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
                 text = this.contains.Name;
             Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
         }
@@ -119,7 +119,7 @@ namespace DuckGame
         {
             if (!(Level.current is Editor) && this._containedThing != null)
             {
-                this._containedThing.owner = (Thing)this;
+                this._containedThing.owner = this;
                 Level.Add(this._containedThing);
             }
             base.Initialize();
@@ -129,10 +129,10 @@ namespace DuckGame
         {
             if (this._containedThing != null)
             {
-                this._containedThing.owner = (Thing)this;
+                this._containedThing.owner = this;
                 if (this._containedThing.removeFromLevel)
                 {
-                    this._containedThing = (Thing)null;
+                    this._containedThing = null;
                 }
                 else
                 {
@@ -149,7 +149,7 @@ namespace DuckGame
                         Gun containedThing1 = this._containedThing as Gun;
                         Vec2 vec2 = -containedThing1.barrelVector * (containedThing1.kick * 5f);
                         Thing containedThing2 = this._containedThing;
-                        containedThing2.position = containedThing2.position + vec2;
+                        containedThing2.position += vec2;
                     }
                 }
             }
@@ -178,10 +178,10 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+            Thing.Fondle(this, DuckNetwork.localConnection);
             if (!(this._containedThing is Holdable containedThing))
                 return;
-            Thing.Fondle((Thing)containedThing, DuckNetwork.localConnection);
+            Thing.Fondle(containedThing, DuckNetwork.localConnection);
             switch (type)
             {
                 case 0:

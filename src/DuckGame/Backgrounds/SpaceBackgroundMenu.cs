@@ -15,7 +15,7 @@ namespace DuckGame
         public SpaceBackgroundMenu(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 1
             };
@@ -48,9 +48,9 @@ namespace DuckGame
             this._parallax.AddZone(29, 0.78f, speed, this._moving);
             this._extraYOffset = 16f;
             this._parallax.FUCKINGYOFFSET = 8f;
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

@@ -20,7 +20,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 9;
-            this._ammoType = (AmmoType)new AT9mm();
+            this._ammoType = new AT9mm();
             this._type = "gun";
             this.graphic = new Sprite("demoBlaster");
             this.center = new Vec2(18f, 8f);
@@ -41,9 +41,9 @@ namespace DuckGame
             this.isFatal = false;
         }
 
-        public override void Initialize() => Level.Add((Thing)this._stream);
+        public override void Initialize() => Level.Add(_stream);
 
-        public override void Terminate() => Level.Remove((Thing)this._stream);
+        public override void Terminate() => Level.Remove(_stream);
 
         public override void Update()
         {

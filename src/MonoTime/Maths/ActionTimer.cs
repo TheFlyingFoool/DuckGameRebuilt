@@ -22,7 +22,7 @@ namespace DuckGame
             this._inc = inc;
             this._max = max;
             this._reset = reset;
-            AutoUpdatables.Add((IAutoUpdate)this);
+            AutoUpdatables.Add(this);
         }
 
         public void Update()
@@ -30,7 +30,7 @@ namespace DuckGame
             if (this._reset)
                 this._hit = false;
             this._val += this._inc;
-            if ((double)this._val < (double)this._max)
+            if (_val < (double)this._max)
                 return;
             this._val = 0.0f;
             this._hit = true;

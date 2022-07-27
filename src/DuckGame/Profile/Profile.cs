@@ -137,9 +137,9 @@ namespace DuckGame
             }
         }
 
-        public Team networkDefaultTeam => (int)this._networkIndex < DG.MaxPlayers ? Teams.all[(int)this._networkIndex] : Teams.all[Rando.Int(7)];
+        public Team networkDefaultTeam => _networkIndex < DG.MaxPlayers ? Teams.all[_networkIndex] : Teams.all[Rando.Int(7)];
 
-        public DuckPersona networkDefaultPersona => (int)this._networkIndex < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>((int)this._networkIndex) : Persona.Duck1;
+        public DuckPersona networkDefaultPersona => _networkIndex < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>(_networkIndex) : Persona.Duck1;
 
         public Dictionary<string, ChallengeSaveData> challengeData => this._challengeData;
 
@@ -149,10 +149,12 @@ namespace DuckGame
             if (this._challengeData.TryGetValue(guid, out saveData1))
                 return saveData1;
             if (canBeNull)
-                return (ChallengeSaveData)null;
-            ChallengeSaveData saveData2 = new ChallengeSaveData();
-            saveData2.profileID = this.id;
-            saveData2.challenge = guid;
+                return null;
+            ChallengeSaveData saveData2 = new ChallengeSaveData
+            {
+                profileID = this.id,
+                challenge = guid
+            };
             this._challengeData.Add(guid, saveData2);
             return saveData2;
         }
@@ -236,24 +238,24 @@ namespace DuckGame
 
         public bool spectator => this.slotType == SlotType.Spectator;
 
-        public ushort customTeamIndexOffset => (ushort)(Teams.kCustomOffset + (int)this.fixedGhostIndex * Teams.kCustomSpread);
+        public ushort customTeamIndexOffset => (ushort)(Teams.kCustomOffset + fixedGhostIndex * Teams.kCustomSpread);
 
         public int IndexOfCustomTeam(Team pTeam)
         {
             int num = this.customTeams.IndexOf(pTeam);
-            return num >= 0 ? (int)this.customTeamIndexOffset + num : num;
+            return num >= 0 ? customTeamIndexOffset + num : num;
         }
 
         public Team GetCustomTeam(ushort pIndex)
         {
             if (this.connection == DuckNetwork.localConnection)
-                return Teams.core.extraTeams.Count > (int)pIndex && pIndex >= (ushort)0 ? Teams.core.extraTeams[(int)pIndex] : (Team)null;
-            while (this.customTeams.Count <= (int)pIndex)
+                return Teams.core.extraTeams.Count > pIndex && pIndex >= 0 ? Teams.core.extraTeams[pIndex] : null;
+            while (this.customTeams.Count <= pIndex)
                 this.customTeams.Add(new Team("CUSTOM", "hats/cluehat")
                 {
                     owner = this
                 });
-            return this.customTeams[(int)pIndex];
+            return this.customTeams[pIndex];
         }
 
         public bool ParentalControlsActive
@@ -273,7 +275,7 @@ namespace DuckGame
                 {
                     if (furniturePosition != null)
                     {
-                        Furniture furniture = RoomEditor.GetFurniture((int)furniturePosition.id);
+                        Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
                         if (furniture != null && furniture.type == FurnitureType.Font && furniture.font != null)
                         {
                             font = furniture.font;
@@ -291,7 +293,7 @@ namespace DuckGame
             {
                 if (this._linkedProfile != null)
                     return this._linkedProfile._furniturePositions;
-                this._internalFurniturePositions.RemoveAll((Predicate<FurniturePosition>)(x => x == null));
+                this._internalFurniturePositions.RemoveAll(x => x == null);
                 return this._internalFurniturePositions;
             }
             set
@@ -317,7 +319,7 @@ namespace DuckGame
                     furniturePositionData.Write(furniturePosition.x);
                     furniturePositionData.Write(furniturePosition.y);
                     furniturePositionData.Write(furniturePosition.variation);
-                    furniturePositionData.WritePacked((int)furniturePosition.id, 15);
+                    furniturePositionData.WritePacked(furniturePosition.id, 15);
                     furniturePositionData.WritePacked(furniturePosition.flip ? 1 : 0, 1);
                 }
                 return furniturePositionData;
@@ -336,17 +338,19 @@ namespace DuckGame
                         int num = 0;
                         while (value.position != value.lengthInBytes)
                         {
-                            FurniturePosition furniturePosition = new FurniturePosition();
-                            furniturePosition.x = value.ReadByte();
-                            furniturePosition.y = value.ReadByte();
-                            furniturePosition.variation = value.ReadByte();
-                            furniturePosition.id = value.ReadBits<ushort>(15);
-                            furniturePosition.flip = value.ReadBits<byte>(1) > (byte)0;
-                            Furniture furniture = RoomEditor.GetFurniture((int)furniturePosition.id);
+                            FurniturePosition furniturePosition = new FurniturePosition
+                            {
+                                x = value.ReadByte(),
+                                y = value.ReadByte(),
+                                variation = value.ReadByte(),
+                                id = value.ReadBits<ushort>(15),
+                                flip = value.ReadBits<byte>(1) > 0
+                            };
+                            Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
                             if (furniture != null)
                             {
                                 furniturePosition.furniMapping = furniture;
-                                if (furniture.type == FurnitureType.Font || furniture.type == FurnitureType.Theme || furniturePosition.y < (byte)80 && (int)furniturePosition.x < RoomEditor.roomSize + 20)
+                                if (furniture.type == FurnitureType.Font || furniture.type == FurnitureType.Theme || furniturePosition.y < 80 && furniturePosition.x < RoomEditor.roomSize + 20)
                                 {
                                     this._furniturePositions.Add(furniturePosition);
                                     if (furniture.name == "PERIMETER DEFENCE")
@@ -356,9 +360,9 @@ namespace DuckGame
                         }
                         if (num <= 1)
                             return;
-                        this._furniturePositions.RemoveAll((Predicate<FurniturePosition>)(x => x.furniMapping.name == "PERIMETER DEFENCE"));
+                        this._furniturePositions.RemoveAll(x => x.furniMapping.name == "PERIMETER DEFENCE");
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         DevConsole.Log(DCSection.General, "Failed to load furniture position data.");
                         this._furniturePositions.Clear();
@@ -372,7 +376,7 @@ namespace DuckGame
             int furnituresPlaced = 0;
             foreach (FurniturePosition furniturePosition in this._furniturePositions)
             {
-                if ((int)furniturePosition.id == idx)
+                if (furniturePosition.id == idx)
                     ++furnituresPlaced;
             }
             return furnituresPlaced;
@@ -383,7 +387,7 @@ namespace DuckGame
             int furnituresPlaced = 0;
             foreach (FurniturePosition furniturePosition in this._furniturePositions)
             {
-                Furniture furniture = RoomEditor.GetFurniture((int)furniturePosition.id);
+                Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
                 if (furniture != null && furniture.type != FurnitureType.Theme && furniture.type != FurnitureType.Font)
                     ++furnituresPlaced;
             }
@@ -413,7 +417,7 @@ namespace DuckGame
                 else
                 {
                     this._furnitures.Clear();
-                    this._availableList = (List<Furniture>)null;
+                    this._availableList = null;
                     try
                     {
                         while (value.position != value.lengthInBytes)
@@ -422,7 +426,7 @@ namespace DuckGame
                             this._furnitures[value.ReadInt()] = value.ReadInt();
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         DevConsole.Log(DCSection.General, "Failed to load furniture ownership data.");
                     }
@@ -450,7 +454,6 @@ namespace DuckGame
 
         public int GetNumFurnitures(int idx)
         {
-            int num = 0;
             Furniture furniture = RoomEditor.GetFurniture(idx);
             if (furniture != null && Profiles.experienceProfile != null)
             {
@@ -459,6 +462,7 @@ namespace DuckGame
                 if (furniture.name == "EGG" || furniture.name == "PHOTO")
                     return Profiles.experienceProfile.numLittleMen + 1;
             }
+            int num;
             this._furnitures.TryGetValue(idx, out num);
             return furniture.name == "PERIMETER DEFENCE" && num > 1 ? 1 : num;
         }
@@ -466,7 +470,7 @@ namespace DuckGame
         public void SetNumFurnitures(int idx, int num)
         {
             this._furnitures[idx] = num;
-            this._availableList = (List<Furniture>)null;
+            this._availableList = null;
         }
 
         public int GetTotalFurnitures()
@@ -506,7 +510,7 @@ namespace DuckGame
                     if (allFurni.alwaysHave)
                         this._availableList.Add(allFurni);
                 }
-                this._availableList.Sort((Comparison<Furniture>)((x, y) => Profile.AvailFurniSortKey(x).CompareTo(Profile.AvailFurniSortKey(y))));
+                this._availableList.Sort((x, y) => Profile.AvailFurniSortKey(x).CompareTo(Profile.AvailFurniSortKey(y)));
             }
             return this._availableList;
         }
@@ -618,7 +622,7 @@ namespace DuckGame
             {
                 string nameUi = this.name;
                 if (this.muteName)
-                    nameUi = "Player " + ((int)this.networkIndex + 1).ToString();
+                    nameUi = "Player " + (networkIndex + 1).ToString();
                 return nameUi;
             }
         }
@@ -667,7 +671,7 @@ namespace DuckGame
 
         public static Random GetLongGenerator(ulong id)
         {
-            Random longGenerator = new Random(Math.Abs((int)(id % (ulong)int.MaxValue)));
+            Random longGenerator = new Random(Math.Abs((int)(id % int.MaxValue)));
             for (int index = 0; index < (int)(id % 252UL); ++index)
                 Rando.Int(100);
             return longGenerator;
@@ -679,7 +683,7 @@ namespace DuckGame
             {
                 if (Steam.user == null)
                     return new Random(90210);
-                Random steamGenerator = new Random(Math.Abs((int)(Steam.user.id % (ulong)int.MaxValue)));
+                Random steamGenerator = new Random(Math.Abs((int)(Steam.user.id % int.MaxValue)));
                 for (int index = 0; index < (int)(Steam.user.id % 252UL); ++index)
                     Rando.Int(100);
                 return steamGenerator;
@@ -691,7 +695,7 @@ namespace DuckGame
             if (seed == 0UL && Profiles.experienceProfile != null)
                 seed = Profiles.experienceProfile.steamID;
             Sprite s = new Sprite();
-            DuckGame.Graphics.AddRenderTask((Action)(() => s.texture = Profile.GetEggTexture(index, seed)));
+            DuckGame.Graphics.AddRenderTask(() => s.texture = Profile.GetEggTexture(index, seed));
             return s;
         }
 
@@ -746,7 +750,7 @@ namespace DuckGame
                 Profile._allowedColors.Add(new Color(229, 245, 181));
             DuckGame.Graphics.SetRenderTarget(t);
             DuckGame.Graphics.Clear(Color.Black);
-            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
+            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             //int num1 = 0;
             int num2 = 8 + Rando.Int(12);
             Rando.Int(100);
@@ -769,7 +773,7 @@ namespace DuckGame
             bool flag5 = Rando.Int(300) == 1;
             MTSpriteBatch screen = DuckGame.Graphics.screen;
             DuckGame.Graphics.screen = Profile._batch;
-            Profile._batch.Draw(Profile._egg.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle((float)(num3 * 16), 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._egg.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num3 * 16, 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
             if (flag3)
             {
                 if (flag5)
@@ -782,12 +786,12 @@ namespace DuckGame
                     DuckGame.Graphics.DrawString(character.ToString() ?? "", new Vec2(4f, 6f), new Color(60, 60, 60, 200), (Depth)0.9f);
                 }
                 else
-                    Profile._batch.Draw(Profile._eggSymbols.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle((float)(num2 * 16), 0.0f, 16f, 16f)), new Color(60, 60, 60, 200), 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 0.9f);
+                    Profile._batch.Draw(Profile._eggSymbols.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num2 * 16, 0.0f, 16f, 16f)), new Color(60, 60, 60, 200), 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 0.9f);
             }
-            Profile._batch.Draw(Profile._eggOuter.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle((float)(num3 * 16), 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._eggOuter.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num3 * 16, 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
             Profile._batch.End();
             DuckGame.Graphics.screen = screen;
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
             Color[] data = t.GetData();
             float num4 = 0.09999999f;
             Color color1 = Profile.PickColor();
@@ -800,34 +804,34 @@ namespace DuckGame
             {
                 for (int index3 = 0; index3 < t.width; ++index3)
                 {
-                    float num7 = (float)(index3 + 32) * 0.75f;
+                    float num7 = (index3 + 32) * 0.75f;
                     int num8 = index2 + 32;
-                    float num9 = (float)(((double)Noise.Generate((float)(((double)num5 + (double)num7) * ((double)num4 * 1.0)), (float)(((double)num6 + (double)num8) * ((double)num4 * 1.0))) + 1.0) / 2.0 * (flag1 ? 1.0 : 0.0));
-                    float num10 = (float)(((double)Noise.Generate(num5 + (float)(((double)num7 + 100.0) * ((double)num4 * 2.0)), (float)(((double)num6 + (double)num8 + 100.0) * ((double)num4 * 2.0))) + 1.0) / 2.0 * (flag2 ? 1.0 : 0.0));
+                    float num9 = (float)(((double)Noise.Generate((float)(((double)num5 + (double)num7) * ((double)num4 * 1.0)), (float)(((double)num6 + num8) * ((double)num4 * 1.0))) + 1.0) / 2.0 * (flag1 ? 1.0 : 0.0));
+                    float num10 = (float)(((double)Noise.Generate(num5 + (float)(((double)num7 + 100.0) * ((double)num4 * 2.0)), (float)(((double)num6 + num8 + 100.0) * ((double)num4 * 2.0))) + 1.0) / 2.0 * (flag2 ? 1.0 : 0.0));
                     float num11 = (double)num9 >= 0.5 ? 1f : 0.0f;
                     float num12 = (double)num10 >= 0.5 ? 1f : 0.0f;
                     Color color4 = data[index3 + index2 * t.width];
                     float num13 = 1f;
                     if ((double)num12 > 0.0)
                         num13 = 0.9f;
-                    if (color4.r == (byte)0)
+                    if (color4.r == 0)
                         data[index3 + index2 * t.width] = new Color(0, 0, 0, 0);
-                    else if (color4.r < (byte)110)
+                    else if (color4.r < 110)
                     {
                         if (flag4)
                         {
-                            data[index3 + index2 * t.width] = new Color((byte)((double)color3.r * 0.600000023841858), (byte)((double)color3.g * 0.600000023841858), (byte)((double)color3.b * 0.600000023841858));
+                            data[index3 + index2 * t.width] = new Color((byte)(color3.r * 0.600000023841858), (byte)(color3.g * 0.600000023841858), (byte)(color3.b * 0.600000023841858));
                         }
                         else
                         {
                             float num14 = (double)num13 != 1.0 ? 1f : 0.9f;
                             if ((double)num11 > 0.0)
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * 0.600000023841858 * (double)num14), (byte)((double)color1.g * 0.600000023841858 * (double)num14), (byte)((double)color1.b * 0.600000023841858 * (double)num14));
+                                data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.600000023841858 * (double)num14), (byte)(color1.g * 0.600000023841858 * (double)num14), (byte)(color1.b * 0.600000023841858 * (double)num14));
                             else
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * 0.600000023841858 * (double)num14), (byte)((double)color2.g * 0.600000023841858 * (double)num14), (byte)((double)color2.b * 0.600000023841858 * (double)num14));
+                                data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.600000023841858 * (double)num14), (byte)(color2.g * 0.600000023841858 * (double)num14), (byte)(color2.b * 0.600000023841858 * (double)num14));
                         }
                     }
-                    else if (color4.r < (byte)120)
+                    else if (color4.r < 120)
                     {
                         if (flag4)
                         {
@@ -837,31 +841,31 @@ namespace DuckGame
                         {
                             float num15 = (double)num13 != 1.0 ? 1f : 0.9f;
                             if ((double)num11 > 0.0)
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * (double)num15), (byte)((double)color1.g * (double)num15), (byte)((double)color1.b * (double)num15));
+                                data[index3 + index2 * t.width] = new Color((byte)(color1.r * (double)num15), (byte)(color1.g * (double)num15), (byte)(color1.b * (double)num15));
                             else
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * (double)num15), (byte)((double)color2.g * (double)num15), (byte)((double)color2.b * (double)num15));
+                                data[index3 + index2 * t.width] = new Color((byte)(color2.r * (double)num15), (byte)(color2.g * (double)num15), (byte)(color2.b * (double)num15));
                         }
                     }
                     else if (color4.r < byte.MaxValue)
                     {
                         if ((double)num11 > 0.0)
-                            data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * 0.600000023841858 * (double)num13), (byte)((double)color2.g * 0.600000023841858 * (double)num13), (byte)((double)color2.b * 0.600000023841858 * (double)num13));
+                            data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.600000023841858 * (double)num13), (byte)(color2.g * 0.600000023841858 * (double)num13), (byte)(color2.b * 0.600000023841858 * (double)num13));
                         else
-                            data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * 0.600000023841858 * (double)num13), (byte)((double)color1.g * 0.600000023841858 * (double)num13), (byte)((double)color1.b * 0.600000023841858 * (double)num13));
+                            data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.600000023841858 * (double)num13), (byte)(color1.g * 0.600000023841858 * (double)num13), (byte)(color1.b * 0.600000023841858 * (double)num13));
                     }
                     else if ((double)num11 > 0.0)
-                        data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * (double)num13), (byte)((double)color2.g * (double)num13), (byte)((double)color2.b * (double)num13));
+                        data[index3 + index2 * t.width] = new Color((byte)(color2.r * (double)num13), (byte)(color2.g * (double)num13), (byte)(color2.b * (double)num13));
                     else
-                        data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * (double)num13), (byte)((double)color1.g * (double)num13), (byte)((double)color1.b * (double)num13));
+                        data[index3 + index2 * t.width] = new Color((byte)(color1.r * (double)num13), (byte)(color1.g * (double)num13), (byte)(color1.b * (double)num13));
                 }
             }
             t.SetData(data);
             DuckGame.Graphics.SetRenderTarget(t);
-            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
-            Profile._batch.Draw(Profile._eggShine.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle((float)(num3 * 16), 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.Draw(Profile._eggBorder.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle((float)(num3 * 16), 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+            Profile._batch.Draw(Profile._eggShine.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num3 * 16, 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._eggBorder.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num3 * 16, 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
             Profile._batch.End();
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
             Rando.generator = generator;
             Tex2D eggTexture = new Tex2D(t.width, t.height);
             eggTexture.SetData(t.GetData());
@@ -874,13 +878,13 @@ namespace DuckGame
             if (seed == 0UL && Profiles.experienceProfile != null)
                 seed = Profiles.experienceProfile.steamID;
             Sprite s = new Sprite();
-            DuckGame.Graphics.AddRenderTask((Action)(() => Profile.GetPainting(index, seed, s)));
+            DuckGame.Graphics.AddRenderTask(() => Profile.GetPainting(index, seed, s));
             return s;
         }
 
         public static void GetPainting(int index, ulong seed, Sprite spr)
         {
-            Tex2D t = (Tex2D)new RenderTarget2D(19, 12, false, RenderTargetUsage.PreserveContents);
+            Tex2D t = new RenderTarget2D(19, 12, false, RenderTargetUsage.PreserveContents);
             if (Profile._easel == null)
             {
                 Profile._batch = new MTSpriteBatch(DuckGame.Graphics.device);
@@ -929,7 +933,7 @@ namespace DuckGame
                 Profile._allowedColors.Add(new Color(229, 245, 181));
             DuckGame.Graphics.SetRenderTarget(t as RenderTarget2D);
             DuckGame.Graphics.Clear(Color.Black);
-            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
+            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             int num2 = 8 + Rando.Int(12);
             Rando.Int(100);
             Rando.Int(15);
@@ -937,10 +941,10 @@ namespace DuckGame
             MTSpriteBatch screen = DuckGame.Graphics.screen;
             DuckGame.Graphics.screen = Profile._batch;
             Profile._batch.Draw(Profile._easel.texture, new Vec2(0.0f, 0.0f), new Rectangle?(), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.Draw(Profile._easelSymbols.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle((float)(num2 * 19), 0.0f, 19f, 12f)), new Color(60, 60, 60, 200), 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 0.9f);
+            Profile._batch.Draw(Profile._easelSymbols.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num2 * 19, 0.0f, 19f, 12f)), new Color(60, 60, 60, 200), 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 0.9f);
             Profile._batch.End();
             DuckGame.Graphics.screen = screen;
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
             Color[] data = t.GetData();
             float num3 = 0.09999999f;
             Color color1 = Profile.PickColor();
@@ -953,34 +957,34 @@ namespace DuckGame
             {
                 for (int index3 = 0; index3 < t.width; ++index3)
                 {
-                    float num6 = (float)(index3 + 32) * 0.75f;
+                    float num6 = (index3 + 32) * 0.75f;
                     int num7 = index2 + 32;
-                    float num8 = (float)(((double)Noise.Generate((float)(((double)num4 + (double)num6) * ((double)num3 * 1.0)), (float)(((double)num5 + (double)num7) * ((double)num3 * 1.0))) + 1.0) / 2.0 * (flag1 ? 1.0 : 0.0));
-                    float num9 = (float)(((double)Noise.Generate(num4 + (float)(((double)num6 + 100.0) * ((double)num3 * 2.0)), (float)(((double)num5 + (double)num7 + 100.0) * ((double)num3 * 2.0))) + 1.0) / 2.0 * (flag2 ? 1.0 : 0.0));
+                    float num8 = (float)(((double)Noise.Generate((float)(((double)num4 + (double)num6) * ((double)num3 * 1.0)), (float)(((double)num5 + num7) * ((double)num3 * 1.0))) + 1.0) / 2.0 * (flag1 ? 1.0 : 0.0));
+                    float num9 = (float)(((double)Noise.Generate(num4 + (float)(((double)num6 + 100.0) * ((double)num3 * 2.0)), (float)(((double)num5 + num7 + 100.0) * ((double)num3 * 2.0))) + 1.0) / 2.0 * (flag2 ? 1.0 : 0.0));
                     float num10 = (double)num8 >= 0.5 ? 1f : 0.0f;
                     float num11 = (double)num9 >= 0.5 ? 1f : 0.0f;
                     Color color4 = data[index3 + index2 * t.width];
                     float num12 = 1f;
                     if ((double)num11 > 0.0)
                         num12 = 0.9f;
-                    if (color4.r == (byte)0)
+                    if (color4.r == 0)
                         data[index3 + index2 * t.width] = new Color(0, 0, 0, 0);
-                    else if (color4.r < (byte)110)
+                    else if (color4.r < 110)
                     {
                         if (flag3)
                         {
-                            data[index3 + index2 * t.width] = new Color((byte)((double)color3.r * 0.600000023841858), (byte)((double)color3.g * 0.600000023841858), (byte)((double)color3.b * 0.600000023841858));
+                            data[index3 + index2 * t.width] = new Color((byte)(color3.r * 0.600000023841858), (byte)(color3.g * 0.600000023841858), (byte)(color3.b * 0.600000023841858));
                         }
                         else
                         {
                             float num13 = (double)num12 != 1.0 ? 1f : 0.9f;
                             if ((double)num10 > 0.0)
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * 0.600000023841858 * (double)num13), (byte)((double)color1.g * 0.600000023841858 * (double)num13), (byte)((double)color1.b * 0.600000023841858 * (double)num13));
+                                data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.600000023841858 * (double)num13), (byte)(color1.g * 0.600000023841858 * (double)num13), (byte)(color1.b * 0.600000023841858 * (double)num13));
                             else
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * 0.600000023841858 * (double)num13), (byte)((double)color2.g * 0.600000023841858 * (double)num13), (byte)((double)color2.b * 0.600000023841858 * (double)num13));
+                                data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.600000023841858 * (double)num13), (byte)(color2.g * 0.600000023841858 * (double)num13), (byte)(color2.b * 0.600000023841858 * (double)num13));
                         }
                     }
-                    else if (color4.r < (byte)120)
+                    else if (color4.r < 120)
                     {
                         if (flag3)
                         {
@@ -990,22 +994,22 @@ namespace DuckGame
                         {
                             float num14 = (double)num12 != 1.0 ? 1f : 0.9f;
                             if ((double)num10 > 0.0)
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * (double)num14), (byte)((double)color1.g * (double)num14), (byte)((double)color1.b * (double)num14));
+                                data[index3 + index2 * t.width] = new Color((byte)(color1.r * (double)num14), (byte)(color1.g * (double)num14), (byte)(color1.b * (double)num14));
                             else
-                                data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * (double)num14), (byte)((double)color2.g * (double)num14), (byte)((double)color2.b * (double)num14));
+                                data[index3 + index2 * t.width] = new Color((byte)(color2.r * (double)num14), (byte)(color2.g * (double)num14), (byte)(color2.b * (double)num14));
                         }
                     }
                     else if (color4.r < byte.MaxValue)
                     {
                         if ((double)num10 > 0.0)
-                            data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * 0.600000023841858 * (double)num12), (byte)((double)color2.g * 0.600000023841858 * (double)num12), (byte)((double)color2.b * 0.600000023841858 * (double)num12));
+                            data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.600000023841858 * (double)num12), (byte)(color2.g * 0.600000023841858 * (double)num12), (byte)(color2.b * 0.600000023841858 * (double)num12));
                         else
-                            data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * 0.600000023841858 * (double)num12), (byte)((double)color1.g * 0.600000023841858 * (double)num12), (byte)((double)color1.b * 0.600000023841858 * (double)num12));
+                            data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.600000023841858 * (double)num12), (byte)(color1.g * 0.600000023841858 * (double)num12), (byte)(color1.b * 0.600000023841858 * (double)num12));
                     }
                     else if ((double)num10 > 0.0)
-                        data[index3 + index2 * t.width] = new Color((byte)((double)color2.r * (double)num12), (byte)((double)color2.g * (double)num12), (byte)((double)color2.b * (double)num12));
+                        data[index3 + index2 * t.width] = new Color((byte)(color2.r * (double)num12), (byte)(color2.g * (double)num12), (byte)(color2.b * (double)num12));
                     else
-                        data[index3 + index2 * t.width] = new Color((byte)((double)color1.r * (double)num12), (byte)((double)color1.g * (double)num12), (byte)((double)color1.b * (double)num12));
+                        data[index3 + index2 * t.width] = new Color((byte)(color1.r * (double)num12), (byte)(color1.g * (double)num12), (byte)(color1.b * (double)num12));
                 }
             }
             t.SetData(data);
@@ -1140,12 +1144,12 @@ namespace DuckGame
                 if (!flag2)
                     break;
             }
-            return (byte)((int)(byte)((int)(byte)((uint)(byte)((int)(byte)((uint)(byte)((int)(byte)((uint)(byte)((int)(byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | ((double)Options.Data.rumbleIntensity > 0.0 ? 1 : 0));
+            return (byte)((byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | ((double)Options.Data.rumbleIntensity > 0.0 ? 1 : 0));
         }
 
-        public bool switchStatus => ((uint)this.flippers & 1U) > 0U;
+        public bool switchStatus => (flippers & 1U) > 0U;
 
-        public bool GetLightStatus(int index) => ((int)this.flippers >> index + 1 & 1) != 0;
+        public bool GetLightStatus(int index) => (flippers >> index + 1 & 1) != 0;
 
         public float funslider
         {
@@ -1216,7 +1220,7 @@ namespace DuckGame
                     }
                     return this._junkStats;
                 }
-                this._junkStats = (ProfileStats)null;
+                this._junkStats = null;
                 return this._linkedProfile != null ? this._linkedProfile.stats : this._stats;
             }
             set
@@ -1243,7 +1247,7 @@ namespace DuckGame
             DXMLNode node = this.stats.Serialize();
             this.prevStats = new ProfileStats();
             this.prevStats.Deserialize(node);
-            this._endOfRoundStats = (ProfileStats)null;
+            this._endOfRoundStats = null;
         }
 
         public static int totalFansThisGame
@@ -1264,7 +1268,7 @@ namespace DuckGame
         {
             get
             {
-                this._endOfRoundStats = (DataClass)this.stats - (DataClass)this.prevStats as ProfileStats;
+                this._endOfRoundStats = stats - prevStats as ProfileStats;
                 return this._endOfRoundStats;
             }
             set => this._endOfRoundStats = value;
@@ -1437,9 +1441,9 @@ namespace DuckGame
             {
                 if (this.slotType == SlotType.Spectator)
                 {
-                    sbyte index = this.netData.Get<sbyte>("spectatorPersona", (sbyte)-1);
-                    if (index >= (sbyte)0 && index < (sbyte)8)
-                        return Persona.all.ElementAt<DuckPersona>((int)index);
+                    sbyte index = this.netData.Get<sbyte>("spectatorPersona", -1);
+                    if (index >= 0 && index < 8)
+                        return Persona.all.ElementAt<DuckPersona>(index);
                 }
                 if (this._persona == null)
                     this._persona = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? Persona.Duck1 : Persona.Duck4) : Persona.Duck3) : Persona.Duck2) : Persona.Duck1;
@@ -1489,7 +1493,7 @@ namespace DuckGame
                     if (this._team == null)
                         return;
                     this._team.Leave(this, false);
-                    this._team = (Team)null;
+                    this._team = null;
                     this.requestedColor = -1;
                 }
             }

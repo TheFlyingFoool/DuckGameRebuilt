@@ -18,7 +18,7 @@ namespace DuckGame
         public BackgroundJets(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("levelJetIdle", 32, 13);
+            this.graphic = new SpriteMap("levelJetIdle", 32, 13);
             this._leftJet = new SpriteMap("jet", 16, 16);
             this._leftJet.AddAnimation("idle", 0.4f, true, 0, 1, 2);
             this._leftJet.SetAnimation("idle");
@@ -46,8 +46,8 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Graphics.Draw((Sprite)this._leftJet, this.x - 8f, this.y + 5f);
-            Graphics.Draw((Sprite)this._rightJet, this.x + 8f, this.y + 5f);
+            Graphics.Draw(_leftJet, this.x - 8f, this.y + 5f);
+            Graphics.Draw(_rightJet, this.x + 8f, this.y + 5f);
         }
     }
 }

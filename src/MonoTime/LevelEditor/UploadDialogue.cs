@@ -16,7 +16,7 @@ namespace DuckGame
         //private int _uploadIndex;
 
         public UploadDialogue()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -66,7 +66,7 @@ namespace DuckGame
             Vec2 vec2_4 = new Vec2(120f, 40f);
             Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f);
             Vec2 vec2_6 = new Vec2(120f, 40f);
-            this._hoverOk = (double)Mouse.x > (double)vec2_3.x && (double)Mouse.x < (double)vec2_3.x + (double)vec2_4.x && (double)Mouse.y > (double)vec2_3.y && (double)Mouse.y < (double)vec2_3.y + (double)vec2_4.y;
+            this._hoverOk = (double)Mouse.x > vec2_3.x && (double)Mouse.x < vec2_3.x + (double)vec2_4.x && (double)Mouse.y > vec2_3.y && (double)Mouse.y < vec2_3.y + (double)vec2_4.y;
             if (!Editor.tookInput && Input.Pressed("MENULEFT"))
                 --this._selectedIndex;
             else if (!Editor.tookInput && Input.Pressed("MENURIGHT"))
@@ -96,12 +96,12 @@ namespace DuckGame
             Vec2 p1_2 = p1_1 + new Vec2(14f, 38f);
             Vec2 vec2 = new Vec2(270f, 16f);
             TransferProgress uploadProgress = this._item.GetUploadProgress();
-            float x = (float)uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
+            float x = uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
             Graphics.DrawRect(p1_2, p1_2 + vec2 * new Vec2(x, 1f), this._hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             if (uploadProgress.bytesTotal == 0UL)
                 this._font.Draw("Waiting...", p1_2.x, p1_2.y - 12f, Color.White, this.depth + 3);
             else
-                this._font.Draw("Uploading " + uploadProgress.bytesDownloaded.ToString() + "/" + uploadProgress.bytesTotal.ToString() + "B", p1_2.x, (float)((double)p1_2.y - 12.0), Color.White, this.depth + 3);
+                this._font.Draw("Uploading " + uploadProgress.bytesDownloaded.ToString() + "/" + uploadProgress.bytesTotal.ToString() + "B", p1_2.x, (float)(p1_2.y - 12.0), Color.White, this.depth + 3);
         }
     }
 }

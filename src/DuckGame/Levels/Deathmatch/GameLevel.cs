@@ -37,9 +37,9 @@ namespace DuckGame
         public void SkipMatch()
         {
             if (Network.isActive && Network.isServer)
-                Send.Message((NetMessage)new NMSkipLevel());
+                Send.Message(new NMSkipLevel());
             if (this._mode == null)
-                this._mode = (GameMode)new DM();
+                this._mode = new DM();
             this._mode.SkipMatch();
         }
 
@@ -47,9 +47,11 @@ namespace DuckGame
           : base(lev)
         {
             this.levelInputString = lev;
-            this._followCam = new FollowCam();
-            this._followCam.lerpMult = 1.2f;
-            this.camera = (Camera)this._followCam;
+            this._followCam = new FollowCam
+            {
+                lerpMult = 1.2f
+            };
+            this.camera = _followCam;
             this._validityTest = validityTest;
             if (Network.isActive)
                 this._readyForTransition = false;
@@ -84,7 +86,7 @@ namespace DuckGame
             if (this._randomLevel != null)
             {
                 GhostManager.context.ResetGhostIndex(this.networkIndex);
-                this._randomLevel.LoadParts(0.0f, 0.0f, (Level)this, this.seed);
+                this._randomLevel.LoadParts(0.0f, 0.0f, this, this.seed);
                 List<SpawnPoint> source1 = new List<SpawnPoint>();
                 foreach (SpawnPoint spawnPoint in this.things[typeof(SpawnPoint)])
                     source1.Add(spawnPoint);
@@ -97,20 +99,20 @@ namespace DuckGame
                     }
                     else
                     {
-                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending<SpawnPoint, int>((Func<SpawnPoint, int>)(x =>
+                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending<SpawnPoint, int>(x =>
                        {
                            int val2 = 9999999;
                            foreach (Transform transform in chosenSpawns)
-                               val2 = (int)Math.Min((transform.position - x.position).length, (float)val2);
+                               val2 = (int)Math.Min((transform.position - x.position).length, val2);
                            return val2;
-                       }));
+                       });
                         chosenSpawns.Add(source2.First<SpawnPoint>());
                     }
                 }
                 foreach (SpawnPoint spawnPoint in source1)
                 {
                     if (!chosenSpawns.Contains(spawnPoint))
-                        Level.Remove((Thing)spawnPoint);
+                        Level.Remove(spawnPoint);
                 }
                 foreach (Thing thing in this.things)
                 {
@@ -120,14 +122,16 @@ namespace DuckGame
                         thing.ghostType = Editor.IDToType[thing.GetType()];
                     }
                 }
-                PyramidBackground pyramidBackground = new PyramidBackground(0.0f, 0.0f);
-                pyramidBackground.visible = false;
-                Level.Add((Thing)pyramidBackground);
+                PyramidBackground pyramidBackground = new PyramidBackground(0.0f, 0.0f)
+                {
+                    visible = false
+                };
+                Level.Add(pyramidBackground);
                 base.Initialize();
             }
             this.things.RefreshState();
             if (this._mode == null)
-                this._mode = (GameMode)new DM(this._validityTest, this._editorTestMode);
+                this._mode = new DM(this._validityTest, this._editorTestMode);
             this._mode.DoInitialize();
             if (!Network.isServer)
                 return;
@@ -135,7 +139,7 @@ namespace DuckGame
             {
                 prepareSpawn.localSpawnVisible = false;
                 prepareSpawn.immobilized = true;
-                Level.Add((Thing)prepareSpawn);
+                Level.Add(prepareSpawn);
             }
         }
 
@@ -155,13 +159,13 @@ namespace DuckGame
             int num = 0;
             foreach (Duck t in this.things[typeof(Duck)])
             {
-                this.followCam.Add((Thing)t);
-                if ((double)t.x < (double)vec2_1.x)
+                this.followCam.Add(t);
+                if ((double)t.x < vec2_1.x)
                     vec2_1 = t.position;
                 zero += t.position;
                 ++num;
             }
-            Vec2 vec2_2 = zero / (float)num;
+            Vec2 vec2_2 = zero / num;
             this.followCam.Adjust();
         }
 
@@ -175,14 +179,14 @@ namespace DuckGame
             foreach (Duck t in this.things[typeof(Duck)])
             {
                 t.localSpawnVisible = false;
-                this.followCam.Add((Thing)t);
-                if ((double)t.x < (double)vec2_1.x)
+                this.followCam.Add(t);
+                if ((double)t.x < vec2_1.x)
                     vec2_1 = t.position;
                 zero += t.position;
                 ++num;
                 duckList.Add(t);
             }
-            Vec2 vec2_2 = zero / (float)num;
+            Vec2 vec2_2 = zero / num;
             GameLevel._numberOfDucksSpawned = num;
             if (GameLevel._numberOfDucksSpawned > 4)
                 TeamSelect2.eightPlayersActive = true;
@@ -194,7 +198,7 @@ namespace DuckGame
         protected override void OnAllClientsReady()
         {
             if (Network.isServer)
-                Send.Message((NetMessage)new NMBeginLevel());
+                Send.Message(new NMBeginLevel());
             base.OnAllClientsReady();
         }
 
@@ -234,7 +238,7 @@ namespace DuckGame
         {
             get
             {
-                string displayName = (string)null;
+                string displayName = null;
                 if (this.data.workshopData != null && this.data.workshopData.name != null && this.data.workshopData.name != "")
                     displayName = this.data.workshopData.name;
                 else if (this.data.GetPath() != "" && this.data.GetPath() != null)
@@ -253,16 +257,16 @@ namespace DuckGame
                 if (this._showInfo && !GameMode.started || MonoMain.pauseMenu != null)
                 {
                     this._infoSlide = Lerp.Float(this._infoSlide, 1f, 0.06f);
-                    if ((double)this._infoSlide > 0.949999988079071)
+                    if (_infoSlide > 0.949999988079071)
                     {
                         this._infoWait += Maths.IncFrameTimer();
-                        if ((double)this._infoWait > 2.5)
+                        if (_infoWait > 2.5)
                             this._showInfo = false;
                     }
                 }
                 else
                     this._infoSlide = Lerp.Float(this._infoSlide, 0.0f, 0.1f);
-                if ((double)this._infoSlide > 0.0)
+                if (_infoSlide > 0.0)
                 {
                     float x = 10f;
                     string text1 = this.displayName;
@@ -271,7 +275,7 @@ namespace DuckGame
                     else if (text1 == null)
                         text1 = "CUSTOM LEVEL";
                     float stringWidth1 = Graphics.GetStringWidth(text1);
-                    float num1 = (float)(((double)stringWidth1 + (double)x + 12.0) * (1.0 - (double)this._infoSlide));
+                    float num1 = (float)(((double)stringWidth1 + (double)x + 12.0) * (1.0 - _infoSlide));
                     Vec2 p1 = new Vec2(-num1, x - 1f);
                     Vec2 p2 = new Vec2((float)((double)x + (double)stringWidth1 + 4.0), x + 10f);
                     Graphics.DrawRect(p1, p2 + new Vec2(-num1, 0.0f), new Color(13, 130, 211), (Depth)0.95f);
@@ -281,7 +285,7 @@ namespace DuckGame
                     {
                         string text2 = "BY " + this.data.workshopData.author;
                         float stringWidth2 = Graphics.GetStringWidth(text2);
-                        float num2 = (float)(((double)stringWidth2 + (double)x + 12.0) * (1.0 - (double)this._infoSlide));
+                        float num2 = (float)(((double)stringWidth2 + (double)x + 12.0) * (1.0 - _infoSlide));
                         p1 = new Vec2((float)((double)Layer.HUD.width - (double)stringWidth2 - (double)x - 5.0) + num2, (float)((double)Layer.HUD.height - (double)x - 10.0));
                         p2 = new Vec2(Layer.HUD.width + num2, (float)((double)Layer.HUD.height - (double)x + 1.0));
                         Graphics.DrawRect(p1, p2, new Color(138, 38, 190), (Depth)0.95f);

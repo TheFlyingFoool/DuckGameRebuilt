@@ -19,7 +19,7 @@ namespace DuckGame
         protected bool _jumpMod;
         protected Vec2 _offset;
         protected bool _autoOffset = true;
-        private Vec2 _colSize = Vec2.Zero;
+        //private Vec2 _colSize = Vec2.Zero;
         private float _equipmentHealth = 1f;
         public float autoEquipTime;
         public bool _prevEquipped;
@@ -29,7 +29,7 @@ namespace DuckGame
         protected float _equippedThickness = 0.1f;
         private bool _appliedEquippedCollision;
         private Vec2 _unequippedCollisionSize;
-        private Vec2 _unequippedCollisionOffset;
+        //private Vec2 _unequippedCollisionOffset;
 
         public Duck netEquippedDuck
         {
@@ -88,7 +88,7 @@ namespace DuckGame
                 case DTImpact _:
                     SFX.Play("smallDestroy", 0.8f, Rando.Float(-0.1f, 0.1f));
                     for (int index = 0; index < 3; ++index)
-                        Level.Add((Thing)SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                        Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
                     break;
             }
             return true;
@@ -115,22 +115,22 @@ namespace DuckGame
             }
             this.offDir = this.owner.offDir;
             this.position = duckBone.position;
-            this.angle = this.offDir > (sbyte)0 ? -duckBone.orientation : duckBone.orientation;
+            this.angle = this.offDir > 0 ? -duckBone.orientation : duckBone.orientation;
             Vec2 wearOffset = this._wearOffset;
             if (this is TeamHat)
                 wearOffset -= (this as TeamHat).hatOffset;
-            this.position = this.position + new Vec2(wearOffset.x * (float)this.offDir, wearOffset.y).Rotate(this.angle, Vec2.Zero);
+            this.position += new Vec2(wearOffset.x * offDir, wearOffset.y).Rotate(this.angle, Vec2.Zero);
         }
 
         public override void Update()
         {
-            if ((double)this.autoEquipTime > 0.0)
+            if (autoEquipTime > 0.0)
                 this.autoEquipTime -= 0.016f;
             else
                 this.autoEquipTime = 0.0f;
             if (this.isServerForObject)
             {
-                if ((double)this._equipmentHealth <= 0.0 && this._equippedDuck != null && this.duck != null)
+                if (_equipmentHealth <= 0.0 && this._equippedDuck != null && this.duck != null)
                 {
                     this.duck.KnockOffEquipment(this);
                     if (Network.isActive)
@@ -143,12 +143,12 @@ namespace DuckGame
             {
                 this.alpha -= 0.1f;
                 if ((double)this.alpha < 0.0)
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
             }
             if (this.localEquipIndex < this.equipIndex)
             {
                 for (int index = 0; index < 2; ++index)
-                    Level.Add((Thing)SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                    Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
                 SFX.Play("equip", 0.8f);
                 this.localEquipIndex = this.equipIndex;
             }
@@ -171,7 +171,7 @@ namespace DuckGame
                 if (!this._appliedEquippedCollision)
                 {
                     this._unequippedCollisionSize = this._collisionSize;
-                    this._unequippedCollisionOffset = this._collisionOffset;
+                    //this._unequippedCollisionOffset = this._collisionOffset;
                 }
                 this.collisionSize = this._equippedCollisionSize;
                 this.collisionOffset = this._equippedCollisionOffset;
@@ -191,7 +191,7 @@ namespace DuckGame
         {
             if (this._equippedDuck == null)
             {
-                this.owner = (Thing)d;
+                this.owner = d;
                 this.solid = false;
                 this._equippedDuck = d;
             }
@@ -202,9 +202,9 @@ namespace DuckGame
         {
             if (this._equippedDuck != null)
             {
-                this.owner = (Thing)null;
+                this.owner = null;
                 this.solid = true;
-                this._equippedDuck = (Duck)null;
+                this._equippedDuck = null;
             }
             this.UpdateEquippedCollision();
         }
@@ -260,14 +260,14 @@ namespace DuckGame
             if (bullet.isLocal)
             {
                 this.duck.KnockOffEquipment(this, b: bullet);
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             }
             if (bullet.isLocal && Network.isActive)
                 NetSoundEffect.Play("equipmentTing");
             bullet.hitArmor = true;
-            Level.Add((Thing)MetalRebound.New(hitPos.x, hitPos.y, (double)bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
+            Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
             for (int index = 0; index < 6; ++index)
-                Level.Add((Thing)Spark.New(this.x, this.y, bullet.travelDirNormalized));
+                Level.Add(Spark.New(this.x, this.y, bullet.travelDirNormalized));
             return base.Hit(bullet, hitPos);
         }
     }

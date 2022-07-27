@@ -28,31 +28,30 @@ namespace DuckGame
             this.levelIndex = pLevelIndex;
         }
 
-        public override bool Update() => (int)Level.current.networkIndex >= this.levelIndex || Math.Abs((int)Level.current.networkIndex - this.levelIndex) > 100;
+        public override bool Update() => Level.current.networkIndex >= this.levelIndex || Math.Abs(Level.current.networkIndex - this.levelIndex) > 100;
 
         public override void Activate()
         {
-            if (!(Level.current is GameLevel) || (int)Level.current.networkIndex != this.levelIndex)
+            if (!(Level.current is GameLevel) || Level.current.networkIndex != this.levelIndex)
                 return;
             List<LevelData> allLevels = Content.GetAllLevels(this.level);
-            LevelData levelData1 = (LevelData)null;
             foreach (LevelData levelData2 in allLevels)
             {
                 if ((int)levelData2.GetChecksum() == (int)this.checksum)
                 {
-                    levelData1 = levelData2;
+                    LevelData levelData1 = levelData2;
                     break;
                 }
             }
-            LevelData levelData3 = (LevelData)null;
+            LevelData levelData3 = null;
             (Level.current as XMLLevel)._level = this.level;
             if (levelData3 == null)
             {
                 ++DuckNetwork.core.levelTransferSession;
-                DuckNetwork.core.compressedLevelData = (MemoryStream)null;
+                DuckNetwork.core.compressedLevelData = null;
                 DuckNetwork.core.levelTransferSize = 0;
                 DuckNetwork.core.levelTransferProgress = 0;
-                Send.Message((NetMessage)new NMClientNeedsLevelData(Level.current.networkIndex, DuckNetwork.core.levelTransferSession), this.connection);
+                Send.Message(new NMClientNeedsLevelData(Level.current.networkIndex, DuckNetwork.core.levelTransferSession), this.connection);
             }
             else
             {

@@ -25,7 +25,7 @@ namespace DuckGame
         internal static void InitializeBag(System.Type type)
         {
             PropertyBag propertyBag = new PropertyBag();
-            foreach (BaggedPropertyAttribute propertyAttribute in DG.Reverse<BaggedPropertyAttribute>(((IEnumerable<object>)type.GetCustomAttributes(typeof(BaggedPropertyAttribute), true)).Select<object, BaggedPropertyAttribute>((Func<object, BaggedPropertyAttribute>)(attrib => (BaggedPropertyAttribute)attrib)).ToList<BaggedPropertyAttribute>().ToArray()))
+            foreach (BaggedPropertyAttribute propertyAttribute in DG.Reverse<BaggedPropertyAttribute>(type.GetCustomAttributes(typeof(BaggedPropertyAttribute), true).Select<object, BaggedPropertyAttribute>(attrib => (BaggedPropertyAttribute)attrib).ToList<BaggedPropertyAttribute>().ToArray()))
                 propertyBag.Set<object>(propertyAttribute.Property, propertyAttribute.Value);
             ContentProperties._propertyBags[type] = propertyBag;
         }
@@ -46,7 +46,7 @@ namespace DuckGame
         public static IReadOnlyPropertyBag GetBag(System.Type t)
         {
             PropertyBag propertyBag;
-            return ContentProperties._propertyBags.TryGetValue(t, out propertyBag) ? (IReadOnlyPropertyBag)propertyBag : (IReadOnlyPropertyBag)ContentProperties._emptyBag;
+            return ContentProperties._propertyBags.TryGetValue(t, out propertyBag) ? propertyBag : ContentProperties._emptyBag;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace DuckGame
                 return false;
             }
 
-            public System.Type TypeOf(string property) => (System.Type)null;
+            public System.Type TypeOf(string property) => null;
         }
     }
 }

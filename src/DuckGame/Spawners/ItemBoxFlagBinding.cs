@@ -13,15 +13,15 @@ namespace DuckGame
         {
             get
             {
-                this._value = (ushort)0;
+                this._value = 0;
                 if ((this._thing as ItemBox)._hit)
-                    this._value = (ushort)1;
+                    this._value = 1;
                 return this._value;
             }
             set
             {
                 this._value = value;
-                (this._thing as ItemBox)._hit = ((uint)this._value & 1U) > 0U;
+                (this._thing as ItemBox)._hit = (_value & 1U) > 0U;
             }
         }
 

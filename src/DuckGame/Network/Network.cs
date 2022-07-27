@@ -99,7 +99,7 @@ namespace DuckGame
             GhostManager.context.Clear();
             DevConsole.Log(DCSection.GhostMan, "|DGYELLOW|ContextSwitch (" + DuckNetwork.levelIndex.ToString() + "->" + pLevelIndex.ToString() + ")");
             DuckNetwork.levelIndex = pLevelIndex;
-            if (pLevelIndex == (byte)0)
+            if (pLevelIndex == 0)
                 GhostManager.context.ResetGhostIndex(pLevelIndex);
             foreach (Profile profile in Profiles.active)
             {
@@ -116,7 +116,7 @@ namespace DuckGame
         {
             if (!(Network.activeNetwork._lastReceivedTime < pTime))
                 return;
-            Network.activeNetwork._synchronizedTime = pTime + (int)(ushort)((double)Network.host.manager.ping / 2.0 / (double)Maths.IncFrameTimer());
+            Network.activeNetwork._synchronizedTime = pTime + (ushort)((double)Network.host.manager.ping / 2.0 / (double)Maths.IncFrameTimer());
             Network.activeNetwork._lastReceivedTime = pTime;
         }
 
@@ -155,7 +155,7 @@ namespace DuckGame
                     if (connection.isHost)
                         return connection;
                 }
-                return (NetworkConnection)null;
+                return null;
             }
         }
 
@@ -278,7 +278,7 @@ namespace DuckGame
                 NetMessage pMessage1 = pMessage;
                 if (flag)
                 {
-                    pMessage1 = Activator.CreateInstance(pMessage.GetType(), (object[])null) as NetMessage;
+                    pMessage1 = Activator.CreateInstance(pMessage.GetType(), null) as NetMessage;
                     pMessage1.priority = pMessage.priority;
                     pMessage1.SetSerializedData(pMessage.serializedData);
                 }
@@ -325,7 +325,7 @@ namespace DuckGame
                     NetMessage netMessage = msg;
                     if (flag)
                     {
-                        netMessage = Activator.CreateInstance(msg.GetType(), (object[])null) as NetMessage;
+                        netMessage = Activator.CreateInstance(msg.GetType(), null) as NetMessage;
                         netMessage.priority = msg.priority;
                         netMessage.SetSerializedData(msg.serializedData);
                         msg.CopyTo(netMessage);
@@ -349,7 +349,7 @@ namespace DuckGame
                     NetMessage msg1 = msg;
                     if (flag)
                     {
-                        msg1 = Activator.CreateInstance(msg.GetType(), (object[])null) as NetMessage;
+                        msg1 = Activator.CreateInstance(msg.GetType(), null) as NetMessage;
                         msg1.priority = msg.priority;
                         msg1.SetSerializedData(msg.serializedData);
                     }
@@ -409,7 +409,7 @@ namespace DuckGame
             Network.activeNetwork.DoInitialize();
         }
 
-        public static long gameDataHash => (long)(Network.messageTypeHash + Editor.thingTypesHash);
+        public static long gameDataHash => Network.messageTypeHash + Editor.thingTypesHash;
 
         public static void InitializeMessageTypes()
         {
@@ -445,7 +445,7 @@ namespace DuckGame
                 if (!Network._allMessageTypesToID.ContainsKey(type))
                 {
                     ConstructorInfo constructor = type.GetConstructor(System.Type.EmptyTypes);
-                    if (constructor == (ConstructorInfo)null)
+                    if (constructor == null)
                     {
                         string message = "NetMessage (" + type.Name + ") has no empty constructor! All NetMessages must allow 'new " + type.Name + "()'";
                         if (MonoMain.modDebugging)
@@ -487,11 +487,11 @@ namespace DuckGame
 
         public void DoInitialize()
         {
-            this._core = (NCNetworkImplementation)new NCSteam(Network.activeNetwork, this._networkIndex);
+            this._core = new NCSteam(Network.activeNetwork, this._networkIndex);
             if (NetworkDebugger.enabled)
-                this._lanCore = (NCNetworkImplementation)new NCNetDebug(Network.activeNetwork, this._networkIndex);
+                this._lanCore = new NCNetDebug(Network.activeNetwork, this._networkIndex);
             else
-                this._lanCore = (NCNetworkImplementation)new NCBasic(Network.activeNetwork, this._networkIndex);
+                this._lanCore = new NCBasic(Network.activeNetwork, this._networkIndex);
         }
 
         public static void Terminate() => Network.activeNetwork.core.Terminate();
@@ -512,7 +512,7 @@ namespace DuckGame
         public void DoPreUpdate()
         {
             this._currentTick += 1U;
-            this._synchronizedTime = this._synchronizedTime + 1;
+            this._synchronizedTime++;
             this._tickSync += 1;
             this.core.Update();
             DuckNetwork.Update();

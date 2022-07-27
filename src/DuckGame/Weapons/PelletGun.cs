@@ -30,7 +30,7 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle - Math.Max(this._aimAngle, -0.2f) * (float)this.offDir;
+            get => base.angle - Math.Max(this._aimAngle, -0.2f) * offDir;
             set => base.angle = value;
         }
 
@@ -38,10 +38,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 2;
-            this._ammoType = (AmmoType)new ATPellet();
+            this._ammoType = new ATPellet();
             this._type = "gun";
             this._sprite = new SpriteMap("pelletGun", 31, 7);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(15f, 2f);
             this.collisionOffset = new Vec2(-8f, -2f);
             this.collisionSize = new Vec2(16f, 5f);
@@ -67,7 +67,7 @@ namespace DuckGame
             {
                 this._fireSound = "pelletgunBad";
                 if (!(this.ammoType is ATFailedPellet))
-                    this._ammoType = (AmmoType)new ATFailedPellet();
+                    this._ammoType = new ATFailedPellet();
                 this.springVel += (this.Offset(new Vec2(0.0f, -8f)) - this.springPos) * 0.15f;
                 this.springVel *= 0.9f;
                 this.springPos += this.springVel;
@@ -80,7 +80,7 @@ namespace DuckGame
                 this._aimAngle = Lerp.Float(this._aimAngle, this._rising ? 0.4f : 0.0f, 0.05f);
                 this._aimWait = 0;
             }
-            if (this._rising && (double)this._aimAngle > 0.344999998807907)
+            if (this._rising && _aimAngle > 0.344999998807907)
                 this.OnReleaseAction();
             if (this.held)
                 this.center = new Vec2(11f, 2f);
@@ -114,7 +114,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 1)
                 {
-                    if ((double)this._angleOffset < 0.159999996423721)
+                    if (_angleOffset < 0.159999996423721)
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.11f);
                     else
                         ++this._loadState;
@@ -122,7 +122,7 @@ namespace DuckGame
                 else if (this._loadState == 2)
                 {
                     this.handOffset.x += 0.31f;
-                    if ((double)this.handOffset.x > 4.0)
+                    if (handOffset.x > 4.0)
                     {
                         ++this._loadState;
                         this.ammo = 2;
@@ -139,7 +139,7 @@ namespace DuckGame
                 else if (this._loadState == 3)
                 {
                     this.handOffset.x -= 0.2f;
-                    if ((double)this.handOffset.x <= 0.0)
+                    if (handOffset.x <= 0.0)
                     {
                         ++this._loadState;
                         this.handOffset.x = 0.0f;
@@ -154,7 +154,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 4)
                 {
-                    if ((double)this._angleOffset > 0.0299999993294477)
+                    if (_angleOffset > 0.0299999993294477)
                     {
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.09f);
                     }
@@ -201,8 +201,8 @@ namespace DuckGame
         {
             base.OnPressAction();
             for (int index = 0; index < 4; ++index)
-                Level.Add((Thing)SmallSmoke.New(this.barrelPosition.x + (float)this.offDir * 4f, this.barrelPosition.y));
-            Level.Add((Thing)SmallSmoke.New(this.position.x, this.position.y));
+                Level.Add(SmallSmoke.New(this.barrelPosition.x + offDir * 4f, this.barrelPosition.y));
+            Level.Add(SmallSmoke.New(this.position.x, this.position.y));
         }
 
         public override void OnReleaseAction()
@@ -235,26 +235,26 @@ namespace DuckGame
             if (this.owner != null && this.owner.graphic != null && (this.duck == null || !(this.duck.holdObject is TapedGun)))
                 this._sprite.flipH = this.owner.graphic.flipH;
             else
-                this._sprite.flipH = this.offDir <= (sbyte)0;
-            if (this.offDir > (sbyte)0)
+                this._sprite.flipH = this.offDir <= 0;
+            if (this.offDir > 0)
                 this._sprite.angle = this.angle - this._angleOffset - this._angleOffset2;
             else
                 this._sprite.angle = this.angle + this._angleOffset + this._angleOffset2;
             Vec2 vec2 = this.Offset(this._posOffset);
-            Graphics.Draw((Sprite)this._sprite, vec2.x, vec2.y);
+            Graphics.Draw(_sprite, vec2.x, vec2.y);
             this._sprite.frame = 1;
-            if (this.offDir > (sbyte)0)
+            if (this.offDir > 0)
                 this._sprite.angle = this.angle + this._angleOffset * 3f - this._angleOffset2;
             else
                 this._sprite.angle = this.angle - this._angleOffset * 3f + this._angleOffset2;
-            Graphics.Draw((Sprite)this._sprite, vec2.x, vec2.y);
+            Graphics.Draw(_sprite, vec2.x, vec2.y);
             if (this.firesTillFail > 0)
                 return;
             this._spring.depth = this.depth - 5;
             this._spring.center = new Vec2(4f, 7f);
             this._spring.angleDegrees = Maths.PointDirection(this.position + this._posOffset, this.springPos) - 90f;
-            this._spring.yscale = (float)(((double)this.position.y + (double)this._posOffset.y - (double)this.springPos.y) / 8.0);
-            this._spring.flipH = this.offDir < (sbyte)0;
+            this._spring.yscale = (float)((position.y + (double)this._posOffset.y - springPos.y) / 8.0);
+            this._spring.flipH = this.offDir < 0;
             if ((double)this._spring.yscale > 1.20000004768372)
                 this._spring.yscale = 1.2f;
             if ((double)this._spring.yscale < -1.20000004768372)

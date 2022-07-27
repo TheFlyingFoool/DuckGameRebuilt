@@ -25,7 +25,7 @@ namespace DuckGame
         public override void Activate()
         {
             if (this.duck != null && this.thing != null && this.duck.profile != null)
-                PurpleBlock.StoreItem(this.duck.profile, (Thing)this.thing);
+                PurpleBlock.StoreItem(this.duck.profile, thing);
             base.Activate();
         }
     }

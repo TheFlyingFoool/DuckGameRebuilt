@@ -21,7 +21,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("dart", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-4f, -2f);
             this.collisionSize = new Vec2(9f, 4f);
@@ -36,24 +36,26 @@ namespace DuckGame
             this.angle = fireAngle;
             if (owner == null)
                 return;
-            owner.clip.Add((MaterialThing)this);
-            this.clip.Add((MaterialThing)owner);
+            owner.clip.Add(this);
+            this.clip.Add(owner);
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this._stuck && (double)this._stickTime > 0.980000019073486)
+            if (this._stuck && _stickTime > 0.980000019073486)
                 return false;
             if (type is DTFade)
             {
-                DartShell dartShell = new DartShell(this.x, this.y, Rando.Float(0.1f) * -this._sprite.flipMultH, this._sprite.flipH);
-                dartShell.angle = this.angle;
-                Level.Add((Thing)dartShell);
+                DartShell dartShell = new DartShell(this.x, this.y, Rando.Float(0.1f) * -this._sprite.flipMultH, this._sprite.flipH)
+                {
+                    angle = this.angle
+                };
+                Level.Add(dartShell);
                 dartShell.hSpeed = (float)((0.5 + (double)Rando.Float(0.3f)) * -(double)this._sprite.flipMultH);
-                Level.Remove((Thing)this);
+                Level.Remove(this);
                 return true;
             }
-            if (this._stuck && (double)this._stickTime > 0.400000005960464)
+            if (this._stuck && _stickTime > 0.400000005960464)
                 this._stickTime = 0.4f;
             return false;
         }
@@ -177,7 +179,7 @@ namespace DuckGame
                 return;
             this.burning = true;
             this.onFire = true;
-            Level.Add((Thing)SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: ((MaterialThing)this), firedFrom: ((Thing)this)));
+            Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
             SFX.Play("ignite", Rando.Float(0.9f, 1f), Rando.Float(-0.2f, 0.2f));
         }
 
@@ -200,9 +202,9 @@ namespace DuckGame
                 this._stickTime -= 0.005f;
                 this.gravMultiplier = 0.0f;
             }
-            if ((double)this._stickTime > 0.0 || this.destroyed)
+            if (_stickTime > 0.0 || this.destroyed)
                 return;
-            this.Destroy((DestroyType)new DTFade());
+            this.Destroy(new DTFade());
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DuckGame
         private static Map<string, int> _soundHashmap = new Map<string, int>();
         private static Dictionary<string, MultiSoundUpdater> _multiSounds = new Dictionary<string, MultiSoundUpdater>();
         private static List<Sound> _soundPool = new List<Sound>();
-        private const int kMaxSounds = 32;
+        //private const int kMaxSounds = 32;
         private static List<Sound> _playedThisFrame = new List<Sound>();
         public static Windows_Audio _audio;
         public static bool NoSoundcard = false;
@@ -33,7 +33,7 @@ namespace DuckGame
             get
             {
                 if (Program.isLinux)
-                    return (Speech)null;
+                    return null;
                 if (SFX._speech == null)
                 {
                     SFX._speech = new Speech();
@@ -189,17 +189,17 @@ namespace DuckGame
           bool louderForMe)
         {
             if (!SFX.enabled)
-                return (Sound)new InvalidSound(sound, vol, pitch, pan, looped);
+                return new InvalidSound(sound, vol, pitch, pan, looped);
             if (Network.isActive)
-                Send.Message((NetMessage)new NMSoundEffect(sound, louderForMe ? vol * 0.7f : vol, pitch));
+                Send.Message(new NMSoundEffect(sound, louderForMe ? vol * 0.7f : vol, pitch));
             return SFX.Play(sound, vol, pitch, pan, looped);
         }
 
         public static Sound Play(string sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
         {
             if (!SFX.enabled || SFX.skip)
-                return (Sound)new InvalidSound(sound, vol, pitch, pan, looped);
-            Sound sound1 = SFX._playedThisFrame.FirstOrDefault<Sound>((Func<Sound, bool>)(x => x.name == sound));
+                return new InvalidSound(sound, vol, pitch, pan, looped);
+            Sound sound1 = SFX._playedThisFrame.FirstOrDefault<Sound>(x => x.name == sound);
             if (sound1 == null)
             {
                 try
@@ -221,13 +221,13 @@ namespace DuckGame
 
         public static Sound Play(int sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
         {
-            string key = (string)null;
+            string key;
             return SFX._soundHashmap.TryGetKey(sound, out key) ? SFX.Play(key, vol, pitch, pan, looped) : new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0.0f, 0.0f, 0.0f, false);
         }
 
         public static int SoundHash(string pSound)
         {
-            int num = 0;
+            int num;
             SFX._soundHashmap.TryGetValue(pSound, out num);
             return num;
         }
@@ -236,7 +236,7 @@ namespace DuckGame
         {
             if (SFX.NoSoundcard)
                 return false;
-            SoundEffect pEffect = (SoundEffect)null;
+            SoundEffect pEffect;
             if (!SFX._sounds.TryGetValue(sound, out pEffect))
             {
                 if (!sound.Contains(":"))
@@ -253,11 +253,11 @@ namespace DuckGame
             try
             {
                 float vol1 = Math.Min(1f, Math.Max(0.0f, vol));
-                return SFX.HasSound(sound) ? new Sound(sound, vol1, pitch, pan, looped) : (Sound)new InvalidSound(sound, vol1, pitch, pan, looped);
+                return SFX.HasSound(sound) ? new Sound(sound, vol1, pitch, pan, looped) : new InvalidSound(sound, vol1, pitch, pan, looped);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (Sound)new InvalidSound(sound, 0.0f, pitch, pan, looped);
+                return new InvalidSound(sound, 0.0f, pitch, pan, looped);
             }
         }
 
@@ -319,13 +319,13 @@ namespace DuckGame
             int num = path.IndexOf("Content/Audio/", 0);
             string fileName = path.Substring(num + 8);
             fileName = fileName.Substring(0, fileName.Length - 4);
-            MonoMain.lazyLoadActions.Enqueue((Action)(() =>
+            MonoMain.lazyLoadActions.Enqueue(() =>
            {
                SoundEffect pEffect = Content.Load<SoundEffect>(fileName);
                if (pEffect == null)
                    return;
                SFX.RegisterSound(fileName.Substring(fileName.IndexOf("/SFX/") + 5), pEffect);
-           }));
+           });
             ++MonoMain.lazyLoadyBits;
         }
     }

@@ -26,9 +26,11 @@ namespace DuckGame
 
         public override void Activate()
         {
-            DeathBeam deathBeam = new DeathBeam(this.position, this.target);
-            deathBeam.isLocal = false;
-            Level.Add((Thing)deathBeam);
+            DeathBeam deathBeam = new DeathBeam(this.position, this.target)
+            {
+                isLocal = false
+            };
+            Level.Add(deathBeam);
             if (this.laser != null)
                 this.laser.PostFireLogic();
             base.Activate();

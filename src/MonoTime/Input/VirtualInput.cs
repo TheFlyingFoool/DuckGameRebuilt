@@ -60,7 +60,7 @@ namespace DuckGame
         {
         }
 
-        private bool GetState(int mapping, bool prev = false) => ((prev ? (int)this._prevState : (int)this._state) & 1 << this._availableTriggers.Count - mapping) != 0;
+        private bool GetState(int mapping, bool prev = false) => ((prev ? _prevState : _state) & 1 << this._availableTriggers.Count - mapping) != 0;
 
         public void SetState(ushort val, bool flagPrev = true)
         {
@@ -91,7 +91,7 @@ namespace DuckGame
         public override bool MapDown(int mapping, bool any = false)
         {
             if (any)
-                return this._state > (ushort)0;
+                return this._state > 0;
             return this.GetState(mapping);
         }
     }

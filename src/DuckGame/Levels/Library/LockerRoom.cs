@@ -46,48 +46,48 @@ namespace DuckGame
             this.backgroundColor = Color.Black;
             this._confirmGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
             this._confirmMenu = new UIMenu("RESET STATS?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionCloseMenu(this._confirmGroup)), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._confirmGroup, this._clearStats)), true);
+            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(this._confirmGroup)), true);
+            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._confirmGroup, this._clearStats)), true);
             this._confirmMenu.Close();
-            this._confirmGroup.Add((UIComponent)this._confirmMenu, false);
+            this._confirmGroup.Add(_confirmMenu, false);
             this._confirmGroup.Close();
-            Level.Add((Thing)this._confirmGroup);
+            Level.Add(_confirmGroup);
             Profile profile = this._profile;
             this._stats.Add(new LockerStat("", Color.Red));
-            this._stats.Add(new LockerStat("QUACKS: " + Change.ToString((object)profile.stats.quacks), Color.Orange));
+            this._stats.Add(new LockerStat("QUACKS: " + Change.ToString(profile.stats.quacks), Color.Orange));
             this._stats.Add(new LockerStat("", Color.Red));
-            this._stats.Add(new LockerStat("FANS: " + Change.ToString((object)profile.stats.GetFans()), Color.Lime));
+            this._stats.Add(new LockerStat("FANS: " + Change.ToString(profile.stats.GetFans()), Color.Lime));
             int fans = profile.stats.GetFans();
             int num1 = 0;
             if (fans > 0)
-                num1 = (int)Math.Round((double)profile.stats.loyalFans / (double)profile.stats.GetFans() * 100.0);
-            this._stats.Add(new LockerStat("FAN LOYALTY: " + Change.ToString((object)num1) + "%", Color.Lime));
+                num1 = (int)Math.Round(profile.stats.loyalFans / (double)profile.stats.GetFans() * 100.0);
+            this._stats.Add(new LockerStat("FAN LOYALTY: " + Change.ToString(num1) + "%", Color.Lime));
             this._stats.Add(new LockerStat("", Color.Red));
-            this._stats.Add(new LockerStat("KILLS: " + Change.ToString((object)profile.stats.kills), Color.GreenYellow));
-            this._stats.Add(new LockerStat("DEATHS: " + Change.ToString((object)profile.stats.timesKilled), Color.Red));
-            this._stats.Add(new LockerStat("SUICIDES: " + Change.ToString((object)profile.stats.suicides), Color.Red));
+            this._stats.Add(new LockerStat("KILLS: " + Change.ToString(profile.stats.kills), Color.GreenYellow));
+            this._stats.Add(new LockerStat("DEATHS: " + Change.ToString(profile.stats.timesKilled), Color.Red));
+            this._stats.Add(new LockerStat("SUICIDES: " + Change.ToString(profile.stats.suicides), Color.Red));
             this._stats.Add(new LockerStat("", Color.Red));
-            this._stats.Add(new LockerStat("ROUNDS WON: " + Change.ToString((object)profile.stats.matchesWon), Color.GreenYellow));
-            this._stats.Add(new LockerStat("ROUNDS LOST: " + Change.ToString((object)(profile.stats.timesSpawned - profile.stats.matchesWon)), Color.Red));
-            this._stats.Add(new LockerStat("GAMES WON: " + Change.ToString((object)profile.stats.trophiesWon), Color.GreenYellow));
-            this._stats.Add(new LockerStat("GAMES LOST: " + Change.ToString((object)(profile.stats.gamesPlayed - profile.stats.trophiesWon)), Color.Red));
+            this._stats.Add(new LockerStat("ROUNDS WON: " + Change.ToString(profile.stats.matchesWon), Color.GreenYellow));
+            this._stats.Add(new LockerStat("ROUNDS LOST: " + Change.ToString(profile.stats.timesSpawned - profile.stats.matchesWon), Color.Red));
+            this._stats.Add(new LockerStat("GAMES WON: " + Change.ToString(profile.stats.trophiesWon), Color.GreenYellow));
+            this._stats.Add(new LockerStat("GAMES LOST: " + Change.ToString(profile.stats.gamesPlayed - profile.stats.trophiesWon), Color.Red));
             float num2 = 0.0f;
             if (profile.stats.bulletsFired > 0)
-                num2 = (float)profile.stats.bulletsThatHit / (float)profile.stats.bulletsFired;
-            this._stats.Add(new LockerStat("ACCURACY: " + Change.ToString((object)(int)Math.Round((double)num2 * 100.0)) + "%", (double)num2 > 0.600000023841858 ? Color.Green : Color.Red));
+                num2 = profile.stats.bulletsThatHit / (float)profile.stats.bulletsFired;
+            this._stats.Add(new LockerStat("ACCURACY: " + Change.ToString((int)Math.Round((double)num2 * 100.0)) + "%", (double)num2 > 0.600000023841858 ? Color.Green : Color.Red));
             this._stats.Add(new LockerStat("TRICK SHOT KILLS: " + profile.stats.trickShots.ToString(), Color.Green));
             this._stats.Add(new LockerStat("", Color.Red));
-            this._stats.Add(new LockerStat("MINES STEPPED ON: " + Change.ToString((object)profile.stats.minesSteppedOn), Color.Orange));
-            this._stats.Add(new LockerStat("PRESENTS OPENED: " + Change.ToString((object)profile.stats.presentsOpened), Color.Orange));
+            this._stats.Add(new LockerStat("MINES STEPPED ON: " + Change.ToString(profile.stats.minesSteppedOn), Color.Orange));
+            this._stats.Add(new LockerStat("PRESENTS OPENED: " + Change.ToString(profile.stats.presentsOpened), Color.Orange));
             this._stats.Add(new LockerStat("", Color.Red));
             this._stats.Add(new LockerStat("SPIRITUALITY", Color.White));
-            this._stats.Add(new LockerStat("FUNERALS: " + Change.ToString((object)profile.stats.funeralsPerformed), Color.Orange));
-            this._stats.Add(new LockerStat("CONVERSIONS: " + Change.ToString((object)profile.stats.conversions), Color.Orange));
+            this._stats.Add(new LockerStat("FUNERALS: " + Change.ToString(profile.stats.funeralsPerformed), Color.Orange));
+            this._stats.Add(new LockerStat("CONVERSIONS: " + Change.ToString(profile.stats.conversions), Color.Orange));
             this._stats.Add(new LockerStat("", Color.Red));
             this._stats.Add(new LockerStat("TIME SPENT", Color.White));
             this._stats.Add(new LockerStat("IN NET: " + TimeSpan.FromSeconds((double)profile.stats.timeInNet).ToString("hh\\:mm\\:ss"), Color.Orange));
             this._stats.Add(new LockerStat("ON FIRE: " + TimeSpan.FromSeconds((double)profile.stats.timeOnFire).ToString("hh\\:mm\\:ss"), Color.Orange));
-            this._stats.Add(new LockerStat("BRAINWASHED: " + TimeSpan.FromSeconds((double)profile.stats.timesMindControlled).ToString("hh\\:mm\\:ss"), Color.Orange));
+            this._stats.Add(new LockerStat("BRAINWASHED: " + TimeSpan.FromSeconds(profile.stats.timesMindControlled).ToString("hh\\:mm\\:ss"), Color.Orange));
             this._stats.Add(new LockerStat("MOUTH OPEN: " + TimeSpan.FromSeconds((double)profile.stats.timeWithMouthOpen).ToString("hh\\:mm\\:ss"), Color.Orange));
             base.Initialize();
         }
@@ -98,7 +98,7 @@ namespace DuckGame
             if (this._desiredScreen != this._screen)
             {
                 this._fade = Lerp.Float(this._fade, 0.0f, 0.06f);
-                if ((double)this._fade <= 0.0)
+                if (_fade <= 0.0)
                 {
                     this._screen = this._desiredScreen;
                     if (this._screen == LockerScreen.Stats)
@@ -124,7 +124,7 @@ namespace DuckGame
                     else if (this._screen == LockerScreen.Exit)
                     {
                         Graphics.fade = 0.0f;
-                        Level.current = (Level)new DoorRoom(this._profile);
+                        Level.current = new DoorRoom(this._profile);
                     }
                 }
             }
@@ -170,13 +170,13 @@ namespace DuckGame
                     if (InputProfile.active.Down("MENUUP"))
                     {
                         this._statScroll -= 0.02f;
-                        if ((double)this._statScroll < 0.0)
+                        if (_statScroll < 0.0)
                             this._statScroll = 0.0f;
                     }
                     if (InputProfile.active.Down("MENUDOWN"))
                     {
                         this._statScroll += 0.02f;
-                        if ((double)this._statScroll > 1.0)
+                        if (_statScroll > 1.0)
                             this._statScroll = 1f;
                     }
                     if (InputProfile.active.Pressed("CANCEL"))
@@ -189,7 +189,7 @@ namespace DuckGame
                         this._clearStats.value = false;
                         this._profile.stats = new ProfileStats();
                         Profiles.Save(this._profile);
-                        Level.current = (Level)new LockerRoom(this._profile);
+                        Level.current = new LockerRoom(this._profile);
                     }
                     if (InputProfile.active.Pressed("MENU2"))
                     {
@@ -225,7 +225,7 @@ namespace DuckGame
                         this._boardHighlight.depth = (Depth)0.5f;
                         this._boardHighlight.alpha = (float)(0.5 + (double)this._pulse.normalized * 0.5) * this._fade;
                         this._boardHighlight.xscale = this._boardHighlight.yscale = (float)(1.0 + (double)this._pulse.normalized * 0.100000001490116);
-                        Graphics.Draw(this._boardHighlight, (float)(75 + this._boardHighlight.w / 2), (float)(60 + this._boardHighlight.h / 2));
+                        Graphics.Draw(this._boardHighlight, 75 + this._boardHighlight.w / 2, 60 + this._boardHighlight.h / 2);
                         text = "STATISTICS";
                     }
                     else if (this._selection == LockerSelection.Trophies)
@@ -233,7 +233,7 @@ namespace DuckGame
                         this._trophiesHighlight.depth = (Depth)0.5f;
                         this._trophiesHighlight.alpha = (float)(0.5 + (double)this._pulse.normalized * 0.5) * this._fade;
                         this._trophiesHighlight.xscale = this._trophiesHighlight.yscale = (float)(1.0 + (double)this._pulse.normalized * 0.100000001490116);
-                        Graphics.Draw(this._trophiesHighlight, (float)(161 + this._trophiesHighlight.w / 2), (float)(53 + this._trophiesHighlight.h / 2));
+                        Graphics.Draw(this._trophiesHighlight, 161 + this._trophiesHighlight.w / 2, 53 + this._trophiesHighlight.h / 2);
                         text = "TROPHIES";
                     }
                     vec2 = new Vec2(160f, 140f);
@@ -244,7 +244,7 @@ namespace DuckGame
                     int num = 0;
                     foreach (LockerStat stat in this._stats)
                     {
-                        Vec2 vec2 = new Vec2(160f, (float)(18 + num * 10) - this._statScroll * (float)(this._stats.Count * 10 - 150));
+                        Vec2 vec2 = new Vec2(160f, 18 + num * 10 - this._statScroll * (this._stats.Count * 10 - 150));
                         string name = stat.name;
                         Graphics.DrawString(name, vec2 + new Vec2((float)(-(double)Graphics.GetStringWidth(name) / 2.0), 0.0f), stat.color * this._fade, (Depth)0.5f);
                         ++num;

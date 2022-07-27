@@ -35,7 +35,7 @@ namespace DuckGame
         public override void Update()
         {
             this._wait -= 0.008f;
-            if ((double)this._wait >= 0.0)
+            if (_wait >= 0.0)
                 return;
             if (!this._playedMusic)
             {
@@ -43,12 +43,12 @@ namespace DuckGame
                 this._playedMusic = true;
             }
             this._moveWait -= 0.015f;
-            if ((double)this._moveWait >= 0.0)
+            if (_moveWait >= 0.0)
                 return;
             this._shiftText += 3.5f;
-            if ((double)this._shiftText <= 300.0)
+            if (_shiftText <= 300.0)
                 return;
-            Level.current = (Level)new CorptronLogo();
+            Level.current = new CorptronLogo();
         }
 
         public override void PostDrawLayer(Layer layer)

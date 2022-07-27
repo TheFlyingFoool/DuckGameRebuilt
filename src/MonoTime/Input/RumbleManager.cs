@@ -40,7 +40,7 @@ namespace DuckGame
         /// </summary>
         public static void AddRumbleEvent(RumbleEvent rumbleEvent)
         {
-            if ((double)rumbleEvent.intensityInitial <= 0.0)
+            if (rumbleEvent.intensityInitial <= 0.0)
                 return;
             RumbleManager.ListRumbleEvents.Add(rumbleEvent);
         }
@@ -71,13 +71,13 @@ namespace DuckGame
         public static void ClearRumbles(RumbleType? rumbleType)
         {
             if (rumbleType.HasValue)
-                RumbleManager.ListRumbleEvents.RemoveAll((Predicate<RumbleEvent>)(rumble =>
+                RumbleManager.ListRumbleEvents.RemoveAll(rumble =>
                {
                    int type = (int)rumble.type;
                    RumbleType? nullable = rumbleType;
                    int valueOrDefault = (int)nullable.GetValueOrDefault();
                    return type == valueOrDefault & nullable.HasValue;
-               }));
+               });
             else
                 RumbleManager.ListRumbleEvents.Clear();
         }

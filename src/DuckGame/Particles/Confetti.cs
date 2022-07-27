@@ -77,15 +77,15 @@ namespace DuckGame
             this.hSpeed *= 0.95f;
             this.vSpeed *= 0.96f;
             this.life -= 0.03f;
-            if ((double)this.life <= 0.0)
+            if (life <= 0.0)
             {
                 this.sinMult += 0.02f;
-                if ((double)this.sinMult > 1.0)
+                if (sinMult > 1.0)
                     this.sinMult = 1f;
                 if (!this._grounded && (double)Math.Abs(this.hSpeed) < 0.200000002980232)
                 {
                     this.sin += 0.2f;
-                    this.x += (float)(Math.Sin((double)this.sin) * 0.5) * this.sinMult;
+                    this.x += (float)(Math.Sin(sin) * 0.5) * this.sinMult;
                 }
             }
             base.Update();
@@ -95,7 +95,7 @@ namespace DuckGame
         {
             if (this._stringConfetti)
             {
-                Vec2 p2 = this.position + this.velocity.normalized * (this.velocity.length * (float)(3.0 + (double)this.sinMult * 3.0));
+                Vec2 p2 = this.position + this.velocity.normalized * (this.velocity.length * (float)(3.0 + sinMult * 3.0));
                 Vec2 position;
                 Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, this._color * this.alpha, this._width, this.depth);
             }

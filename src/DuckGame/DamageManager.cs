@@ -31,13 +31,15 @@ namespace DuckGame
                 DamageManager._targets.Add(new RenderTarget2D(16, 16, true));
                 DamageManager._damageMaps.Add(new DamageMap());
             }
-            DamageManager._blendState = new BlendState();
-            DamageManager._blendState.ColorSourceBlend = Blend.Zero;
-            DamageManager._blendState.ColorDestinationBlend = Blend.SourceColor;
-            DamageManager._blendState.ColorBlendFunction = BlendFunction.Add;
-            DamageManager._blendState.AlphaSourceBlend = Blend.Zero;
-            DamageManager._blendState.AlphaDestinationBlend = Blend.SourceColor;
-            DamageManager._blendState.AlphaBlendFunction = BlendFunction.Add;
+            DamageManager._blendState = new BlendState
+            {
+                ColorSourceBlend = Blend.Zero,
+                ColorDestinationBlend = Blend.SourceColor,
+                ColorBlendFunction = BlendFunction.Add,
+                AlphaSourceBlend = Blend.Zero,
+                AlphaDestinationBlend = Blend.SourceColor,
+                AlphaBlendFunction = BlendFunction.Add
+            };
             DamageManager._subtractiveBlend = new BlendState()
             {
                 ColorSourceBlend = Blend.SourceAlpha,
@@ -111,9 +113,11 @@ namespace DuckGame
                 else
                 {
                     DamageManager._hits.RemoveAt(index);
-                    float num = (float)hit.thing.graphic.width / (float)hit.thing.graphic.width;
-                    Camera camera = new Camera(0.0f, 0.0f, (float)hit.thing.graphic.width, (float)hit.thing.graphic.height);
-                    camera.position = new Vec2(hit.thing.x - hit.thing.centerx * num, hit.thing.y - hit.thing.centery * num);
+                    float num = hit.thing.graphic.width / (float)hit.thing.graphic.width;
+                    Camera camera = new Camera(0.0f, 0.0f, hit.thing.graphic.width, hit.thing.graphic.height)
+                    {
+                        position = new Vec2(hit.thing.x - hit.thing.centerx * num, hit.thing.y - hit.thing.centery * num)
+                    };
                     DuckGame.Graphics.SetRenderTarget(hit.thing.graphic.renderTexture);
                     DepthStencilState depthStencilState = new DepthStencilState()
                     {
@@ -123,7 +127,7 @@ namespace DuckGame
                         ReferenceStencil = 1,
                         DepthBufferEnable = false
                     };
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, DamageManager._blendState, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
+                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, DamageManager._blendState, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
                     foreach (Vec2 point in hit.points)
                     {
                         DamageManager._bulletHoles.depth = (Depth)1f;
@@ -133,7 +137,7 @@ namespace DuckGame
                         DamageManager._bulletHoles.Draw();
                     }
                     DuckGame.Graphics.screen.End();
-                    DuckGame.Graphics.device.SetRenderTarget((Microsoft.Xna.Framework.Graphics.RenderTarget2D)null);
+                    DuckGame.Graphics.device.SetRenderTarget(null);
                     --targetsPerFrame;
                 }
             }

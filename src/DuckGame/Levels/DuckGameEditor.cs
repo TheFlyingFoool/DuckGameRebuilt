@@ -18,7 +18,7 @@ namespace DuckGame
                 genType = LevGenType.SinglePlayer;
             else if (!Editor._currentLevelData.proceduralData.enableSingle && Editor._currentLevelData.proceduralData.enableMulti)
                 genType = LevGenType.Deathmatch;
-            if (this._levelThings.Exists((Predicate<Thing>)(x => x is ChallengeMode)))
+            if (this._levelThings.Exists(x => x is ChallengeMode))
             {
                 foreach (Profile prof in Profiles.active)
                 {
@@ -26,16 +26,16 @@ namespace DuckGame
                         prof.team.Leave(prof);
                 }
                 Profiles.experienceProfile.team = Teams.Player1;
-                Level.current = (Level)new ChallengeLevel(name);
+                Level.current = new ChallengeLevel(name);
             }
-            else if (this._levelThings.Exists((Predicate<Thing>)(x => x is ImportMachine)))
-                Level.current = (Level)new ArcadeLevel(DuckFile.contentDirectory + "Levels/arcade_machine_preview.lev")
+            else if (this._levelThings.Exists(x => x is ImportMachine))
+                Level.current = new ArcadeLevel(DuckFile.contentDirectory + "Levels/arcade_machine_preview.lev")
                 {
                     genType = LevGenType.CustomArcadeMachine,
                     customMachine = name,
-                    editor = (Editor)this
+                    editor = this
                 };
-            else if (this._levelThings.Exists((Predicate<Thing>)(x => x is ArcadeMode)))
+            else if (this._levelThings.Exists(x => x is ArcadeMode))
             {
                 foreach (Profile prof in Profiles.active)
                 {
@@ -43,9 +43,9 @@ namespace DuckGame
                         prof.team.Leave(prof);
                 }
                 Profiles.experienceProfile.team = Teams.Player1;
-                Level.current = (Level)new ArcadeLevel(name)
+                Level.current = new ArcadeLevel(name)
                 {
-                    editor = (Editor)this
+                    editor = this
                 };
             }
             else
@@ -63,9 +63,9 @@ namespace DuckGame
                 Profiles.DefaultPlayer6.team = Teams.Player6;
                 Profiles.DefaultPlayer7.team = Teams.Player7;
                 Profiles.DefaultPlayer8.team = Teams.Player8;
-                Level.current = (Level)new DuckGameTestArea((Editor)this, name, this._procSeed, this._centerTile, genType);
+                Level.current = new DuckGameTestArea(this, name, this._procSeed, this._centerTile, genType);
             }
-            Level.current.AddThing((Thing)new EditorTestLevel((Editor)this));
+            Level.current.AddThing(new EditorTestLevel(this));
         }
 
         public override void Update() => base.Update();

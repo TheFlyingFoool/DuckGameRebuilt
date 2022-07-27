@@ -29,7 +29,7 @@ namespace DuckGame
                 this.font = t.activeProfiles[0].font;
                 this.multi = false;
             }
-            this.data = (object)t;
+            this.data = t;
             this.score = t.score;
         }
     }

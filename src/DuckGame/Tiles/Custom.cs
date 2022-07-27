@@ -146,7 +146,7 @@ namespace DuckGame
                 for (int index = 0; index < keyValuePair.Value.Length; ++index)
                 {
                     keyValuePair.Value[index] = "";
-                    Custom.previewData[keyValuePair.Key][index] = (CustomTileDataChunk)null;
+                    Custom.previewData[keyValuePair.Key][index] = null;
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace DuckGame
                     {
                         DuckFile.CreatePath(str);
                         FileStream fileStream = System.IO.File.Create(str);
-                        tData.texture.SaveAsPng((Stream)fileStream, tData.texture.Width, tData.texture.Height);
+                        tData.texture.SaveAsPng(fileStream, tData.texture.Width, tData.texture.Height);
                         fileStream.Close();
                     }
                 }
@@ -220,7 +220,7 @@ namespace DuckGame
                             for (int index3 = 0; index3 < 16; ++index3)
                             {
                                 int index4 = index1 != 1 ? num1 + index3 + (num2 + index2) * texture2D.Width : num2 + index2 + (num1 + index3) * texture2D.Width;
-                                if (index1 == 3 || index1 == 4 ? data[index4].a > (byte)0 : data[index4].r == (byte)0 && data[index4].g == byte.MaxValue && data[index4].b == (byte)0 && data[index4].a == byte.MaxValue)
+                                if (index1 == 3 || index1 == 4 ? data[index4].a > 0 : data[index4].r == 0 && data[index4].g == byte.MaxValue && data[index4].b == 0 && data[index4].a == byte.MaxValue)
                                 {
                                     if (num4 == -1)
                                         num4 = index3;
@@ -257,7 +257,7 @@ namespace DuckGame
                 }
                 catch (Exception)
                 {
-                    texture2D = (Texture2D)null;
+                    texture2D = null;
                 }
                 customTileData.texture = texture2D;
                 customTileData.path = path;
@@ -268,7 +268,7 @@ namespace DuckGame
 
         public static CustomTileData GetData(int index, CustomType type)
         {
-            CustomTileData data = (CustomTileData)null;
+            CustomTileData data;
             if (!Custom._customTilesetData[type].TryGetValue(Custom.data[type][index], out data))
                 data = Custom.LoadTileData(Custom.data[type][index], type);
             return data;

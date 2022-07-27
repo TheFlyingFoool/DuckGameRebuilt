@@ -33,7 +33,7 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             this._id = id;
-            BitmapFont f = (BitmapFont)null;
+            BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
             UIDivider component1 = new UIDivider(true, 0.0f);
@@ -43,19 +43,21 @@ namespace DuckGame
                 if (tiny)
                     component2.SetFont(f);
                 component2.align = UIAlign.Left;
-                component1.leftSection.Add((UIComponent)component2, true);
+                component1.leftSection.Add(component2, true);
             }
-            this._passwordItem = new UIStringEntry(false, "", Color.White);
-            this._passwordItem.align = UIAlign.Right;
-            component1.rightSection.Add((UIComponent)this._passwordItem, true);
-            this.rightSection.Add((UIComponent)component1, true);
+            this._passwordItem = new UIStringEntry(false, "", Color.White)
+            {
+                align = UIAlign.Right
+            };
+            component1.rightSection.Add(_passwordItem, true);
+            this.rightSection.Add(component1, true);
             if (tiny)
                 this._arrow = new UIImage("littleContextArrowRight");
             else
                 this._arrow = new UIImage("contextArrowRight");
             this._arrow.align = UIAlign.Right;
             this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            this.leftSection.Add(_arrow, true);
             this._field = field;
             this._filterBinding = filterBinding;
             this.controlString = "@CANCEL@BACK @WASD@ADJUST";
@@ -67,7 +69,7 @@ namespace DuckGame
             {
                 if (this.open && this._id == "name" && Profiles.active.Count > 0)
                 {
-                    this._field.value = (object)TeamSelect2.DefaultGameName();
+                    this._field.value = TeamSelect2.DefaultGameName();
                     this._passwordItem.text = (string)this._field.value;
                 }
                 else
@@ -81,10 +83,10 @@ namespace DuckGame
         public void InitializeEntryMenu(UIComponent pGroup, UIMenu pReturn)
         {
             this._enterStringMenu = !(this._id == "port") ? new UIStringEntryMenu(false, "SET " + this._text, this._field) : new UIStringEntryMenu(false, "SET " + this._text, this._field, 6, true, 1337, 55535);
-            this._enterStringMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._enterStringMenu, (UIComponent)pReturn));
+            this._enterStringMenu.SetBackFunction(new UIMenuActionOpenMenu(_enterStringMenu, pReturn));
             this._enterStringMenu.Close();
-            pGroup.Add((UIComponent)this._enterStringMenu, false);
-            this._activateFunction = new UIMenuActionOpenMenu((UIComponent)pReturn, (UIComponent)this._enterStringMenu);
+            pGroup.Add(_enterStringMenu, false);
+            this._activateFunction = new UIMenuActionOpenMenu(pReturn, _enterStringMenu);
         }
 
         public override void Activate(string trigger)

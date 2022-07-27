@@ -24,7 +24,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = this._ammoMax;
-            this._ammoType = (AmmoType)new ATShotgun();
+            this._ammoType = new ATShotgun();
             this._ammoType.range = 140f;
             this.wideBarrel = true;
             this._type = "gun";
@@ -38,10 +38,14 @@ namespace DuckGame
             this._fireRumble = RumbleIntensity.Kick;
             this._numBulletsPerFire = 7;
             this._manualLoad = true;
-            this._loaderSprite = new SpriteMap("combatShotgunLoader", 16, 16);
-            this._loaderSprite.center = new Vec2(8f, 8f);
-            this._ammoSprite = new SpriteMap("combatShotgunAmmo", 16, 16);
-            this._ammoSprite.center = new Vec2(8f, 8f);
+            this._loaderSprite = new SpriteMap("combatShotgunLoader", 16, 16)
+            {
+                center = new Vec2(8f, 8f)
+            };
+            this._ammoSprite = new SpriteMap("combatShotgunAmmo", 16, 16)
+            {
+                center = new Vec2(8f, 8f)
+            };
             this.handOffset = new Vec2(0.0f, 1f);
             this._holdOffset = new Vec2(4f, 0.0f);
             this.editorTooltip = "So many shells, what convenience!";
@@ -56,14 +60,14 @@ namespace DuckGame
                 this._loadProgress = 1f;
                 this._loadWait = 0.0f;
             }
-            if ((double)this._loadWait > 0.0)
+            if (_loadWait > 0.0)
                 return;
-            if ((double)this._loadProgress == 0.0)
+            if (_loadProgress == 0.0)
                 SFX.Play("shotgunLoad");
-            if ((double)this._loadProgress == 0.5)
+            if (_loadProgress == 0.5)
                 this.Reload();
             this._loadWait = 0.0f;
-            if ((double)this._loadProgress < 1.0)
+            if (_loadProgress < 1.0)
             {
                 this._loadProgress += 0.1f;
             }
@@ -77,7 +81,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if ((double)this._loadProgress >= 1.0)
+            if (_loadProgress >= 1.0)
             {
                 base.OnPressAction();
                 this._loadProgress = 0.0f;
@@ -85,7 +89,7 @@ namespace DuckGame
             }
             else
             {
-                if ((double)this._loadWait != 1.0)
+                if (_loadWait != 1.0)
                     return;
                 this._loadWait = 0.0f;
             }
@@ -95,9 +99,9 @@ namespace DuckGame
         {
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -1f);
-            float num = (float)Math.Sin((double)this._loadProgress * 3.14000010490417) * 3f;
-            this.Draw((Sprite)this._loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
-            this.Draw((Sprite)this._ammoSprite, new Vec2(-3f, -2f), 2);
+            float num = (float)Math.Sin(_loadProgress * 3.14000010490417) * 3f;
+            this.Draw(_loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
+            this.Draw(_ammoSprite, new Vec2(-3f, -2f), 2);
         }
     }
 }

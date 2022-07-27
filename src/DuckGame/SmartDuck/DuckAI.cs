@@ -59,7 +59,7 @@ namespace DuckGame
         public DuckAI(InputProfile manualQuacker = null)
           : base()
         {
-            this._state.Push((AIState)new AIStateDeathmatchBot());
+            this._state.Push(new AIStateDeathmatchBot());
             this._manualQuack = manualQuacker;
         }
 

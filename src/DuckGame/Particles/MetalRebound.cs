@@ -34,7 +34,7 @@ namespace DuckGame
           : base()
         {
             this._sprite = new SpriteMap("metalRebound", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
         }
 
         private void Init(float xpos, float ypos, int offDir)
@@ -52,7 +52,7 @@ namespace DuckGame
             this.alpha -= 0.1f;
             if ((double)this.alpha >= 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace DuckGame
             set
             {
                 if (this._device != null)
-                    this._device.genericController = (GenericController)null;
+                    this._device.genericController = null;
                 this._device = value;
                 if (this._device == null)
                     return;
@@ -34,9 +34,9 @@ namespace DuckGame
             }
         }
 
-        public override Dictionary<int, string> GetTriggerNames() => this._device != null ? this._device.GetTriggerNames() : (Dictionary<int, string>)null;
+        public override Dictionary<int, string> GetTriggerNames() => this._device != null ? this._device.GetTriggerNames() : null;
 
-        public override Sprite GetMapImage(int map) => this._device != null ? this._device.GetMapImage(map) : (Sprite)null;
+        public override Sprite GetMapImage(int map) => this._device != null ? this._device.GetMapImage(map) : null;
 
         public override string productName
         {

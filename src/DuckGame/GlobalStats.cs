@@ -87,7 +87,7 @@ namespace DuckGame
                 {
                     StatBinding statBinding = new StatBinding();
                     statBinding.BindName(field.Name);
-                    field.SetValue((object)this, (object)statBinding);
+                    field.SetValue(this, statBinding);
                 }
             }
         }

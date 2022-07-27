@@ -82,7 +82,7 @@ namespace DuckGame
         {
             if (this._killed || this._single == null || this._instances.Contains(who))
                 return;
-            if (this._playCount == 0 && SFX.PoolSound((Sound)this))
+            if (this._playCount == 0 && SFX.PoolSound(this))
             {
                 this._single.Volume = this._volume * SFX.volume;
                 this._single.Play();
@@ -113,7 +113,7 @@ namespace DuckGame
                 this._multi.Volume = 0.0f;
                 this._multi.Stop();
                 this._pooled = false;
-                SFX.UnpoolSound((Sound)this);
+                SFX.UnpoolSound(this);
                 this._state = SoundState.Stopped;
             }
             this._instances.Remove(who);
@@ -139,8 +139,8 @@ namespace DuckGame
             foreach (MultiSound instance in this._instances)
                 num1 += instance.Volume;
             int count = this._instances.Count;
-            float num2 = num1 / (count > 0 ? (float)count : 1f);
-            this._volume = Lerp.Float(this._volume, (float)((double)num2 * 0.699999988079071 + (double)Maths.Clamp(this._instances.Count, 0, 4) / 4.0 * (double)num2 * 0.300000011920929), 0.05f);
+            float num2 = num1 / (count > 0 ? count : 1f);
+            this._volume = Lerp.Float(this._volume, (float)((double)num2 * 0.699999988079071 + Maths.Clamp(this._instances.Count, 0, 4) / 4.0 * (double)num2 * 0.300000011920929), 0.05f);
             if (this._state != SoundState.Playing)
                 return;
             if (this._playCount > 1)

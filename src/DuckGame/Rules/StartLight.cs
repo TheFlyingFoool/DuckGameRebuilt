@@ -15,8 +15,8 @@ namespace DuckGame
           : base()
         {
             this._sprite = new SpriteMap("trafficLight", 42, 23);
-            this.center = new Vec2((float)(this._sprite.w / 2), (float)(this._sprite.h / 2));
-            this.graphic = (Sprite)this._sprite;
+            this.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
+            this.graphic = _sprite;
             this.layer = Layer.HUD;
             this.x = Layer.HUD.camera.width / 2f;
             this.y = 20f;

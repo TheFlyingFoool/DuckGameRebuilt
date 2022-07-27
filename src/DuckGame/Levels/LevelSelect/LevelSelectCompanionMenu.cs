@@ -25,7 +25,7 @@ namespace DuckGame
         {
             if (!LevelSelect._skipCompanionOpening)
             {
-                this._levelSelector = new LevelSelect(returnMenu: ((UIMenu)this));
+                this._levelSelector = new LevelSelect(returnMenu: this);
                 this._levelSelector.Initialize();
                 Editor.selectingLevel = true;
                 this._justOpened = true;
@@ -47,7 +47,7 @@ namespace DuckGame
                     {
                         Editor.selectingLevel = false;
                         this._levelSelector.Terminate();
-                        new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._returnMenu).Activate();
+                        new UIMenuActionOpenMenu(this, _returnMenu).Activate();
                         return;
                     }
                 }

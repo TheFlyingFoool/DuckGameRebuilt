@@ -14,7 +14,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 30;
-            this._ammoType = (AmmoType)new ATReboundLaser();
+            this._ammoType = new ATReboundLaser();
             this._ammoType.barrelAngleDegrees = 45f;
             this._type = "gun";
             this.graphic = new Sprite("laserRifle");

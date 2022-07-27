@@ -23,13 +23,13 @@ namespace DuckGame
 
         public virtual object value
         {
-            get => !(this._field != (FieldInfo)null) ? this._property.GetValue(this._thing, (object[])null) : this._field.GetValue(this._thing);
+            get => !(this._field != null) ? this._property.GetValue(this._thing, null) : this._field.GetValue(this._thing);
             set
             {
-                if (this._field != (FieldInfo)null)
+                if (this._field != null)
                     this._field.SetValue(this._thing, value);
                 else
-                    this._property.SetValue(this._thing, value, (object[])null);
+                    this._property.SetValue(this._thing, value, null);
             }
         }
 
@@ -43,7 +43,7 @@ namespace DuckGame
         {
             this._thing = thing;
             this._field = thing.GetType().GetField(field);
-            if (this._field == (FieldInfo)null)
+            if (this._field == null)
                 this._property = thing.GetType().GetProperty(field);
             this._min = min;
             this._max = max;
@@ -53,9 +53,9 @@ namespace DuckGame
 
         public FieldBinding(System.Type thing, string field, float min = 0.0f, float max = 1f, float increment = 0.1f)
         {
-            this._thing = (object)thing;
+            this._thing = thing;
             this._field = thing.GetField(field);
-            if (this._field == (FieldInfo)null)
+            if (this._field == null)
                 this._property = thing.GetProperty(field);
             this._min = min;
             this._max = max;
@@ -68,7 +68,7 @@ namespace DuckGame
             if (this.value == null || !this.value.GetType().IsEnum)
                 return;
             this._min = 0.0f;
-            this._max = (float)(Enum.GetValues(this.value.GetType()).Length - 1);
+            this._max = Enum.GetValues(this.value.GetType()).Length - 1;
         }
     }
 }

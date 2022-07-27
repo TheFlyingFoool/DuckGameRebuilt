@@ -26,14 +26,16 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._quackLoader = new SpriteMap("quackLoader", 31, 31);
-            this._quackLoader.speed = 0.2f;
+            this._quackLoader = new SpriteMap("quackLoader", 31, 31)
+            {
+                speed = 0.2f
+            };
             this._quackLoader.CenterOrigin();
             this._quackLoader.scale = new Vec2(0.5f, 0.5f);
             this._font = new FancyBitmapFont("smallFont");
             Layer.HUD.camera.width *= 2f;
             Layer.HUD.camera.height *= 2f;
-            this.groups.Add(new WorkshopBrowser.Group("Subscribed", WorkshopQueryFilterOrder.RankedByVote, Steam.user.id, (string)null, new string[1]
+            this.groups.Add(new WorkshopBrowser.Group("Subscribed", WorkshopQueryFilterOrder.RankedByVote, Steam.user.id, null, new string[1]
             {
         "Mod"
             }));
@@ -41,11 +43,11 @@ namespace DuckGame
             {
         "Mod"
             }));
-            this.groups.Add(new WorkshopBrowser.Group("Mods", WorkshopQueryFilterOrder.RankedByVote, 0UL, (string)null, new string[1]
+            this.groups.Add(new WorkshopBrowser.Group("Mods", WorkshopQueryFilterOrder.RankedByVote, 0UL, null, new string[1]
             {
         "Mod"
             }));
-            this.groups.Add(new WorkshopBrowser.Group("Maps", WorkshopQueryFilterOrder.RankedByVote, 0UL, (string)null, new string[1]
+            this.groups.Add(new WorkshopBrowser.Group("Maps", WorkshopQueryFilterOrder.RankedByVote, 0UL, null, new string[1]
             {
         "Map"
             }));
@@ -81,7 +83,7 @@ namespace DuckGame
             if (Input.Pressed("SELECT"))
                 this._openedItem = this.groups[this._selectedGroup].items[this._selectedItem];
             if (Input.Pressed("CANCEL"))
-                this._openedItem = (WorkshopBrowser.Item)null;
+                this._openedItem = null;
             base.Update();
         }
 
@@ -94,7 +96,7 @@ namespace DuckGame
                     this._font.scale = new Vec2(1f, 1f);
                     this._font.Draw(this._openedItem.name, new Vec2(16f, 16f), Color.White, (Depth)0.5f);
                     if (this._openedItem.preview != null)
-                        DuckGame.Graphics.Draw(this._openedItem.preview, 16f, 32f, (float)(256.0 / (double)this._openedItem.preview.height * 0.5), (float)(256.0 / (double)this._openedItem.preview.height * 0.5), (Depth)0.5f);
+                        DuckGame.Graphics.Draw(this._openedItem.preview, 16f, 32f, (float)(256.0 / _openedItem.preview.height * 0.5), (float)(256.0 / _openedItem.preview.height * 0.5), (Depth)0.5f);
                     this._font.maxWidth = 300;
                     this._font.Draw(this._openedItem.description, new Vec2(16f, 170f), Color.White, (Depth)0.5f);
                     this._font.maxWidth = 0;
@@ -124,18 +126,18 @@ namespace DuckGame
                             }
                             if (obj.preview != null)
                             {
-                                float num5 = 256f / (float)obj.preview.height;
-                                float x = (float)(obj.preview.width / 2 - obj.preview.height / 2);
-                                DuckGame.Graphics.Draw(obj.preview, vec2_2 + vec2_3, new Rectangle?(new Rectangle(x, 0.0f, (float)obj.preview.height, (float)obj.preview.height)), Color.White, 0.0f, Vec2.Zero, new Vec2(num5 * num3, num5 * num3), SpriteEffects.None, (Depth)num4);
+                                float num5 = 256f / obj.preview.height;
+                                float x = obj.preview.width / 2 - obj.preview.height / 2;
+                                DuckGame.Graphics.Draw(obj.preview, vec2_2 + vec2_3, new Rectangle?(new Rectangle(x, 0.0f, obj.preview.height, obj.preview.height)), Color.White, 0.0f, Vec2.Zero, new Vec2(num5 * num3, num5 * num3), SpriteEffects.None, (Depth)num4);
                             }
                             else
-                                DuckGame.Graphics.Draw((Sprite)this._quackLoader, vec2_2.x + vec2_1.x / 2f, vec2_2.y + vec2_1.y / 2f);
+                                DuckGame.Graphics.Draw(_quackLoader, vec2_2.x + vec2_1.x / 2f, vec2_2.y + vec2_1.y / 2f);
                             this._font.scale = new Vec2(0.5f, 0.5f);
                             string text = obj.name.Reduced(21);
                             this._font.Draw(text, vec2_2 + vec2_3 + new Vec2(2f, 2f), Color.White, (Depth)(num4 + 0.1f));
                             DuckGame.Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(1f, 1f), vec2_2 + vec2_3 + new Vec2(this._font.GetWidth(text) + 6f, 8f), Color.Black * 0.7f, (Depth)(num4 + 0.05f));
                             vec2_2.x += vec2_1.x;
-                            if ((double)vec2_2.x + (double)vec2_1.x <= (double)Layer.HUD.width)
+                            if (vec2_2.x + (double)vec2_1.x <= (double)Layer.HUD.width)
                                 ++num2;
                             else
                                 break;
@@ -173,7 +175,7 @@ namespace DuckGame
 
             public static WorkshopBrowser.Item Get(ulong pID)
             {
-                WorkshopBrowser.Item obj = (WorkshopBrowser.Item)null;
+                Item obj;
                 if (!WorkshopBrowser.Item._items.TryGetValue(pID, out obj))
                     obj = WorkshopBrowser.Item._items[pID] = new WorkshopBrowser.Item();
                 return obj;
@@ -203,7 +205,7 @@ namespace DuckGame
             {
                 this.name = pName;
                 this.orderMode = pOrder;
-                this.tags = ((IEnumerable<string>)pTags).ToList<string>();
+                this.tags = pTags.ToList<string>();
                 this.searchText = pSearchText;
                 this.userID = pUserID;
                 this.OpenPage(0);
@@ -213,11 +215,11 @@ namespace DuckGame
             {
                 if (this.userID != 0UL)
                 {
-                    this._currentQuery = (WorkshopQueryUGC)Steam.CreateQueryUser(this.userID, WorkshopList.Subscribed, WorkshopType.Items, WorkshopSortOrder.SubscriptionDateDesc);
+                    this._currentQuery = Steam.CreateQueryUser(this.userID, WorkshopList.Subscribed, WorkshopType.Items, WorkshopSortOrder.SubscriptionDateDesc);
                 }
                 else
                 {
-                    this._currentQuery = (WorkshopQueryUGC)Steam.CreateQueryAll(this.orderMode, WorkshopType.Items);
+                    this._currentQuery = Steam.CreateQueryAll(this.orderMode, WorkshopType.Items);
                     (this._currentQuery as WorkshopQueryAll).searchText = this.searchText;
                 }
                 foreach (string tag in this.tags)
@@ -247,11 +249,11 @@ namespace DuckGame
                         }
                     }
                     if (!string.IsNullOrEmpty(previewUrl))
-                        new Task((Action)(() =>
+                        new Task(() =>
                        {
                            using (WebClient webClient = new WebClient())
-                               item._previewData = ContentPack.LoadPNGDataFromStream((Stream)new MemoryStream(webClient.DownloadData(new Uri(previewUrl))));
-                       })).Start();
+                               item._previewData = ContentPack.LoadPNGDataFromStream(new MemoryStream(webClient.DownloadData(new Uri(previewUrl))));
+                       }).Start();
                 }
                 item.details = result.details;
                 this.items.Add(item);

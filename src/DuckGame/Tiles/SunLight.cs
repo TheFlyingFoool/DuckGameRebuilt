@@ -137,7 +137,7 @@ namespace DuckGame
             {
                 this.affectors.Clear();
                 this.geo = MTSpriteBatch.CreateGeometryItem();
-                this.lightColor.a = (byte)0;
+                this.lightColor.a = 0;
                 Vec2 start = this.start;
                 float num = 0.25f;
                 Vec2 vec2_1 = new Vec2(3000f, 5000f);
@@ -148,7 +148,7 @@ namespace DuckGame
                     Vec2 hitPos = Vec2.Zero;
                     Block key = Level.CheckRay<Block>(vec2_2, vec2_2 + vec2_1, out hitPos);
                     if (key is Window)
-                        key = (Block)null;
+                        key = null;
                     if (key == null)
                     {
                         this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(9f, 0.0f), vec2_2 + vec2_1, this.lightColor, this.lightColor, this.lightColor);
@@ -166,7 +166,7 @@ namespace DuckGame
                             this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(12f, 0.0f), hitPos + new Vec2(8f, 0.0f), this.lightColor, this.lightColor, this.lightColor);
                             this.geo.AddTriangle(vec2_2, hitPos, hitPos + new Vec2(12f, 0.0f), this.lightColor, this.lightColor, this.lightColor);
                         }
-                        this.affectors.Add((Thing)key);
+                        this.affectors.Add(key);
                         if (key is Door)
                         {
                             this._doorList.Add(key as Door);

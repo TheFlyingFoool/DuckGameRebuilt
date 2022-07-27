@@ -30,7 +30,7 @@ namespace DuckGame
 
         public static bool processing => Cloud._operations.Count > 0;
 
-        public static float progress => Cloud._totalOperations != 0 && Cloud._operations.Count != 0 ? Math.Max((float)(1.0 - (double)Cloud._operations.Count / (double)Cloud._totalOperations), 0.0f) : 1f;
+        public static float progress => Cloud._totalOperations != 0 && Cloud._operations.Count != 0 ? Math.Max((float)(1.0 - _operations.Count / (double)Cloud._totalOperations), 0.0f) : 1f;
 
         public static void Initialize()
         {
@@ -153,7 +153,7 @@ namespace DuckGame
                 byte[] data = Steam.FileRead(pFile.cloudPath);
                 if (data == null)
                     return;
-                DuckFile.TryFileOperation((Action)(() =>
+                DuckFile.TryFileOperation(() =>
                {
                    DuckFile.TryClearAttributes(pFile.localPath);
                    if (System.IO.File.Exists(pFile.localPath))
@@ -163,7 +163,7 @@ namespace DuckGame
                    fileStream.Write(data, 0, data.Length);
                    fileStream.Close();
                    pFile.localDate = DateTime.Now;
-               }), "ReplaceLocalFileWithCloudFile(" + pFile.localPath + ")");
+               }, "ReplaceLocalFileWithCloudFile(" + pFile.localPath + ")");
             }
         }
 
@@ -171,7 +171,7 @@ namespace DuckGame
         {
             using (FileStream fileStream = new FileStream(pFile, FileMode.Create))
             {
-                using (ZipArchive zipArchive = new ZipArchive((Stream)fileStream, ZipArchiveMode.Create, true))
+                using (ZipArchive zipArchive = new ZipArchive(fileStream, ZipArchiveMode.Create, true))
                 {
                     int count = Steam.FileGetCount();
                     for (int file = 0; file < count; ++file)
@@ -195,9 +195,9 @@ namespace DuckGame
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "Cloud.DeleteAllCloudData(" + pNewDataOnly.ToString() + ")");
             Cloud.UICloudProcess uiCloudProcess = new Cloud.UICloudProcess("DELETING CLOUD", MonoMain.pauseMenu);
-            Level.Add((Thing)uiCloudProcess);
+            Level.Add(uiCloudProcess);
             uiCloudProcess.Open();
-            MonoMain.pauseMenu = (UIComponent)uiCloudProcess;
+            MonoMain.pauseMenu = uiCloudProcess;
             int count = Steam.FileGetCount();
             for (int file = 0; file < count; ++file)
             {
@@ -227,7 +227,7 @@ namespace DuckGame
                 CloudFile cloudFile = CloudFile.Get(Steam.FileGetName(file));
                 if (cloudFile != null)
                 {
-                    Cloud.CloudOperation cloudOperation = (Cloud.CloudOperation)null;
+                    Cloud.CloudOperation cloudOperation = null;
                     if (MonoMain.recoversave && cloudFile.cloudPath.StartsWith("nq500000_"))
                         cloudOperation = new Cloud.CloudOperation()
                         {
@@ -269,9 +269,9 @@ namespace DuckGame
               : base(pProcessName, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 180f, 50f)
             {
                 if (pOpenOnClose != null)
-                    this._openOnClose = (UIComponent)pOpenOnClose.rootMenu;
+                    this._openOnClose = pOpenOnClose.rootMenu;
                 this._box = new UIBox(0.0f, 0.0f, high: 26f, isVisible: false);
-                this.Add((UIComponent)this._box, true);
+                this.Add(_box, true);
             }
 
             public override void Close()

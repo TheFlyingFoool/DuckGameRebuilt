@@ -17,7 +17,7 @@ namespace DuckGame
 
         public override System.Type type => typeof(int);
 
-        public override object GetNetValue() => (object)CompressedVec2Binding.GetCompressedVec2(this.getTyped<Vec2>(), this._range);
+        public override object GetNetValue() => CompressedVec2Binding.GetCompressedVec2(this.getTyped<Vec2>(), this._range);
 
         public static int GetCompressedVec2(Vec2 val, int range = 2147483647)
         {
@@ -27,26 +27,26 @@ namespace DuckGame
                 val.y = 0.0f;
             if (range != int.MaxValue)
             {
-                float num = (float)((int)short.MaxValue / range);
-                val.x = Maths.Clamp(val.x, (float)-range, (float)range) * num;
-                val.y = Maths.Clamp(val.y, (float)-range, (float)range) * num;
+                float num = short.MaxValue / range;
+                val.x = Maths.Clamp(val.x, -range, range) * num;
+                val.y = Maths.Clamp(val.y, -range, range) * num;
             }
-            return (int)((long)(ushort)Maths.Clamp((int)Math.Round((double)val.x), (int)short.MinValue, (int)short.MaxValue) << 16 | (long)(ushort)Maths.Clamp((int)Math.Round((double)val.y), (int)short.MinValue, (int)short.MaxValue));
+            return (int)((long)(ushort)Maths.Clamp((int)Math.Round(val.x), short.MinValue, short.MaxValue) << 16 | (ushort)Maths.Clamp((int)Math.Round(val.y), short.MinValue, short.MaxValue));
         }
 
         public override int intValue => CompressedVec2Binding.GetCompressedVec2((Vec2)this.classValue, this._range);
 
-        public override object ReadNetValue(object val) => (object)CompressedVec2Binding.GetUncompressedVec2((int)val, this._range);
+        public override object ReadNetValue(object val) => CompressedVec2Binding.GetUncompressedVec2((int)val, this._range);
 
-        public override object ReadNetValue(BitBuffer pData) => (object)CompressedVec2Binding.GetUncompressedVec2((int)pData.ReadBits(this.type, this.bits), this._range);
+        public override object ReadNetValue(BitBuffer pData) => CompressedVec2Binding.GetUncompressedVec2((int)pData.ReadBits(this.type, this.bits), this._range);
 
         public static Vec2 GetUncompressedVec2(int val, int range = 2147483647)
         {
             int num1 = val;
-            Vec2 uncompressedVec2 = new Vec2((float)(short)(num1 >> 16 & (int)ushort.MaxValue), (float)(short)(num1 & (int)ushort.MaxValue));
+            Vec2 uncompressedVec2 = new Vec2((short)(num1 >> 16 & ushort.MaxValue), (short)(num1 & ushort.MaxValue));
             if (range != int.MaxValue)
             {
-                float num2 = (float)((int)short.MaxValue / range);
+                float num2 = short.MaxValue / range;
                 uncompressedVec2.x /= num2;
                 uncompressedVec2.y /= num2;
             }

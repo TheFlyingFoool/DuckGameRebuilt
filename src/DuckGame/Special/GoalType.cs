@@ -38,7 +38,7 @@ namespace DuckGame
 
         public void UpdateTrackedObjects()
         {
-            if (!(this.contains != (System.Type)null))
+            if (!(this.contains != null))
                 return;
             foreach (Thing thing in this.level.things[this.contains])
                 this._trackedObjects.Add(thing);
@@ -85,7 +85,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.contains != (System.Type)null)
+            if (this.contains != null)
             {
                 this.UpdateTrackedObjects();
                 for (int index = 0; index < this._trackedObjects.Count; ++index)
@@ -127,7 +127,7 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", (object)Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
             return binaryClassChunk;
         }
 
@@ -140,14 +140,14 @@ namespace DuckGame
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding pBinding = new FieldBinding((object)this, "contains");
+            FieldBinding pBinding = new FieldBinding(this, "contains");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            EditorGroupMenu editorGroupMenu = new EditorGroupMenu((IContextListener)contextMenu);
+            EditorGroupMenu editorGroupMenu = new EditorGroupMenu(contextMenu);
             editorGroupMenu.InitializeTypelist(typeof(PhysicsObject), pBinding);
             editorGroupMenu.text = "Destroy";
             editorGroupMenu.tooltip = "Type of object that player needs to destroy (Counts as a 'Target' in challenge settings.)";
-            contextMenu.AddItem((ContextMenu)editorGroupMenu);
-            return (ContextMenu)contextMenu;
+            contextMenu.AddItem(editorGroupMenu);
+            return contextMenu;
         }
 
         public enum Special

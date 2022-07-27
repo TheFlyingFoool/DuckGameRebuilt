@@ -16,7 +16,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 1;
-            this._ammoType = (AmmoType)new ATShrapnel();
+            this._ammoType = new ATShrapnel();
             this._ammoType.range = 70f;
             this._ammoType.accuracy = 0.5f;
             this._ammoType.penetration = 0.4f;
@@ -35,10 +35,10 @@ namespace DuckGame
 
         public static void ExplodeEffect(Vec2 position)
         {
-            Level.Add((Thing)SmallSmoke.New(position.x, position.y));
-            Level.Add((Thing)SmallSmoke.New(position.x, position.y));
+            Level.Add(SmallSmoke.New(position.x, position.y));
+            Level.Add(SmallSmoke.New(position.x, position.y));
             for (int index = 0; index < 8; ++index)
-                Level.Add((Thing)Spark.New(position.x + Rando.Float(-3f, 3f), position.y + Rando.Float(-3f, 3f), new Vec2(Rando.Float(-3f, 3f), -Rando.Float(-3f, 3f)), 0.05f));
+                Level.Add(Spark.New(position.x + Rando.Float(-3f, 3f), position.y + Rando.Float(-3f, 3f), new Vec2(Rando.Float(-3f, 3f), -Rando.Float(-3f, 3f)), 0.05f));
             SFX.Play("shotgun", pitch: 0.3f);
         }
 
@@ -50,10 +50,10 @@ namespace DuckGame
                 this.ApplyKick();
                 DuelingPistol.ExplodeEffect(this.position);
                 if (Network.isActive)
-                    Send.Message((NetMessage)new NMPistolExplode(this.position));
+                    Send.Message(new NMPistolExplode(this.position));
                 if (this.duck != null)
                     this.duck.Swear();
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             }
             else
                 base.OnPressAction();

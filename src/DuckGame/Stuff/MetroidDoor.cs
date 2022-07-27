@@ -35,7 +35,7 @@ namespace DuckGame
                     {
                         duck.x -= 10f;
                         MonoMain.transitionDirection = TransitionDirection.Left;
-                        MonoMain.transitionLevel = (Level)new TitleScreen(true, this._arcadeProfile);
+                        MonoMain.transitionLevel = new TitleScreen(true, this._arcadeProfile);
                     }
                 }
             }

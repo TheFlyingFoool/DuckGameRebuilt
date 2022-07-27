@@ -15,7 +15,7 @@ namespace DuckGame
     {
         public StateBinding _swingBinding = new StateBinding(true, nameof(_swing));
         public StateBinding _holdBinding = new StateBinding(true, nameof(_hold));
-        public StateBinding _stanceBinding = (StateBinding)new SwordFlagBinding();
+        public StateBinding _stanceBinding = new SwordFlagBinding();
         public StateBinding _pullBackBinding = new StateBinding(true, nameof(_pullBack));
         public StateBinding _throwSpinBinding = new StateBinding(true, nameof(_throwSpin));
         public StateBinding _addOffsetXBinding = new StateBinding(nameof(_addOffsetX));
@@ -70,7 +70,7 @@ namespace DuckGame
 
         public override float angle
         {
-            get => this._drawing ? this._angle : base.angle + (this._swing + this._hold) * (float)this.offDir;
+            get => this._drawing ? this._angle : base.angle + (this._swing + this._hold) * offDir;
             set => this._angle = value;
         }
 
@@ -92,7 +92,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";
@@ -127,7 +127,7 @@ namespace DuckGame
         public override void UpdateTapedPositioning(TapedGun pTaped)
         {
             if (pTaped.gun1 != null && pTaped.gun2 != null)
-                this.angleDegrees = pTaped.angleDegrees - (float)(90 * (int)this.offDir);
+                this.angleDegrees = pTaped.angleDegrees - 90 * offDir;
             if (this.tapedCompatriot is Gun)
             {
                 (this.tapedCompatriot as Gun).addVerticalTapeOffset = false;
@@ -152,7 +152,7 @@ namespace DuckGame
             }
         }
 
-        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? (Holdable)new TapedSword(this.x, this.y) : (Holdable)null;
+        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(this.x, this.y) : (Holdable)null;
 
         public override void CheckIfHoldObstructed()
         {
@@ -194,7 +194,7 @@ namespace DuckGame
                     spark._color = (this as OldEnergyScimi).swordColor;
                     spark._width = 1f;
                 }
-                Level.Add((Thing)spark);
+                Level.Add(spark);
                 barrelPosition += normalized * 4f;
             }
             if (this.duck != null)
@@ -207,16 +207,16 @@ namespace DuckGame
         {
             if (this.duck == null)
                 return false;
-            if (this.blocked == (byte)0)
+            if (this.blocked == 0)
             {
                 this.duck.AddCoolness(1);
             }
             else
             {
                 ++this.blocked;
-                if (this.blocked > (byte)4)
+                if (this.blocked > 4)
                 {
-                    this.blocked = (byte)1;
+                    this.blocked = 1;
                     this.duck.AddCoolness(1);
                 }
             }
@@ -234,7 +234,7 @@ namespace DuckGame
                 case Block _:
                 label_3:
                     this.Shing();
-                    this._framesSinceThrown = (byte)25;
+                    this._framesSinceThrown = 25;
                     break;
                 case IPlatform _:
                     if (from != ImpactedFrom.Bottom || (double)this.vSpeed <= 0.0)
@@ -302,22 +302,22 @@ namespace DuckGame
             }
         }
 
-        public virtual DestroyType destroyType => (DestroyType)new DTImpale((Thing)this);
+        public virtual DestroyType destroyType => new DTImpale(this);
 
         protected virtual void UpdateJabPullback()
         {
             this._swing = MathHelper.Lerp(this._swing, 1.75f, 0.4f);
-            if ((double)this._swing > 1.54999995231628)
+            if (_swing > 1.54999995231628)
             {
                 this._swing = 1.55f;
                 this._shing = false;
                 this._swung = false;
             }
             this._addOffsetX = MathHelper.Lerp(this._addOffsetX, -12f, 0.45f);
-            if ((double)this._addOffsetX < -12.0)
+            if (_addOffsetX < -12.0)
                 this._addOffsetX = -12f;
             this._addOffsetY = MathHelper.Lerp(this._addOffsetY, -4f, 0.35f);
-            if ((double)this._addOffsetX >= -3.0)
+            if (_addOffsetX >= -3.0)
                 return;
             this._addOffsetY = -3f;
         }
@@ -325,17 +325,17 @@ namespace DuckGame
         protected virtual void UpdateSlamPullback()
         {
             this._swing = MathHelper.Lerp(this._swing, 3.14f, 0.8f);
-            if ((double)this._swing > 3.09999990463257 && this._unslam == 0)
+            if (_swing > 3.09999990463257 && this._unslam == 0)
             {
                 this._swing = 3.14f;
                 this._shing = false;
                 this._swung = true;
             }
             this._addOffsetX = MathHelper.Lerp(this._addOffsetX, -5f, 0.45f);
-            if ((double)this._addOffsetX < -4.59999990463257)
+            if (_addOffsetX < -4.59999990463257)
                 this._addOffsetX = -5f;
             this._addOffsetY = MathHelper.Lerp(this._addOffsetY, -6f, 0.35f);
-            if ((double)this._addOffsetX >= -5.5)
+            if (_addOffsetX >= -5.5)
                 return;
             this._addOffsetY = -6f;
         }
@@ -357,7 +357,7 @@ namespace DuckGame
                             if (flag && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == this.prevOwner)
                                 flag = false;
                             int num = 16;
-                            if (flag || (int)this.tape._framesSinceThrown > num)
+                            if (flag || tape._framesSinceThrown > num)
                             {
                                 materialThing.Destroy(this.destroyType);
                                 if (Recorder.currentRecording != null)
@@ -366,9 +366,9 @@ namespace DuckGame
                         }
                     }
                 }
-                if (this._prevOffdir != (int)this.offDir)
+                if (this._prevOffdir != offDir)
                     this.ResetTrailHistory();
-                this._prevOffdir = (int)this.offDir;
+                this._prevOffdir = offDir;
                 this._prevPos = this.position;
                 this._prevAngle = this.angleDegrees;
             }
@@ -394,12 +394,12 @@ namespace DuckGame
                         this._hold = -0.4f;
                     this._wasLifted = true;
                     this.center = this.centerHeld;
-                    this._framesSinceThrown = (byte)0;
+                    this._framesSinceThrown = 0;
                     this._volatile = false;
                 }
                 else
                 {
-                    if (this._framesSinceThrown == (byte)1)
+                    if (this._framesSinceThrown == 1)
                     {
                         this._throwSpin = Maths.RadToDeg(this.angle) - 90f;
                         this._hold = 0.0f;
@@ -443,15 +443,15 @@ namespace DuckGame
                         this._throwSpin %= 360f;
                         if (flag2)
                             this._throwSpin = (double)Math.Abs(this._throwSpin - 90f) >= (double)Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0.0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
-                        else if ((double)this._throwSpin > 90.0 && (double)this._throwSpin < 270.0)
+                        else if (_throwSpin > 90.0 && _throwSpin < 270.0)
                         {
                             this._throwSpin = Lerp.Float(this._throwSpin, 180f, 14f);
                         }
                         else
                         {
-                            if ((double)this._throwSpin > 180.0)
+                            if (_throwSpin > 180.0)
                                 this._throwSpin -= 360f;
-                            else if ((double)this._throwSpin < -180.0)
+                            else if (_throwSpin < -180.0)
                                 this._throwSpin += 360f;
                             this._throwSpin = Lerp.Float(this._throwSpin, 0.0f, 14f);
                         }
@@ -469,7 +469,7 @@ namespace DuckGame
                                 sword.Shing();
                                 flag3 = true;
                                 this._hitWait = 4;
-                                sword.owner.hSpeed += (float)this.offDir * 1f;
+                                sword.owner.hSpeed += offDir * 1f;
                                 --sword.owner.vSpeed;
                                 this.hSpeed = (float)(-(double)this.hSpeed * 0.600000023841858);
                             }
@@ -484,8 +484,8 @@ namespace DuckGame
                                 if (chainsaw.owner != null && chainsaw.throttle && Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, chainsaw.barrelStartPos, chainsaw.barrelPosition))
                                 {
                                     this.Shing();
-                                    chainsaw.Shing((Thing)this);
-                                    chainsaw.owner.hSpeed += (float)this.offDir * 1f;
+                                    chainsaw.Shing(this);
+                                    chainsaw.owner.hSpeed += offDir * 1f;
                                     --chainsaw.owner.vSpeed;
                                     flag3 = true;
                                     this.hSpeed = (float)(-(double)this.hSpeed * 0.600000023841858);
@@ -496,8 +496,8 @@ namespace DuckGame
                             }
                             if (!flag3)
                             {
-                                Helmet helmet = Level.CheckLine<Helmet>(this.barrelStartPos, this.barrelPosition, (Thing)null);
-                                if (helmet != null && helmet.equippedDuck != null && (helmet.owner != this.prevOwner || (int)this._framesSinceThrown > num))
+                                Helmet helmet = Level.CheckLine<Helmet>(this.barrelStartPos, this.barrelPosition, null);
+                                if (helmet != null && helmet.equippedDuck != null && (helmet.owner != this.prevOwner || _framesSinceThrown > num))
                                 {
                                     this.hSpeed = (float)(-(double)this.hSpeed * 0.600000023841858);
                                     this.Shing();
@@ -506,8 +506,8 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    ChestPlate chestPlate = Level.CheckLine<ChestPlate>(this.barrelStartPos, this.barrelPosition, (Thing)null);
-                                    if (chestPlate != null && chestPlate.equippedDuck != null && (chestPlate.owner != this.prevOwner || (int)this._framesSinceThrown > num))
+                                    ChestPlate chestPlate = Level.CheckLine<ChestPlate>(this.barrelStartPos, this.barrelPosition, null);
+                                    if (chestPlate != null && chestPlate.equippedDuck != null && (chestPlate.owner != this.prevOwner || _framesSinceThrown > num))
                                     {
                                         this.hSpeed = (float)(-(double)this.hSpeed * 0.600000023841858);
                                         this.Shing();
@@ -526,7 +526,7 @@ namespace DuckGame
                                     bool flag4 = materialThing != this.prevOwner;
                                     if (flag4 && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == this.prevOwner)
                                         flag4 = false;
-                                    if (flag4 || (int)this._framesSinceThrown > num)
+                                    if (flag4 || _framesSinceThrown > num)
                                     {
                                         materialThing.Destroy(this.destroyType);
                                         if (Recorder.currentRecording != null)
@@ -547,7 +547,7 @@ namespace DuckGame
                             bool flag = materialThing != this.prevOwner;
                             if (flag && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == this.prevOwner)
                                 flag = false;
-                            if (flag || (int)this._framesSinceThrown > num)
+                            if (flag || _framesSinceThrown > num)
                             {
                                 materialThing.Destroy(this.destroyType);
                                 if (Recorder.currentRecording != null)
@@ -603,13 +603,13 @@ namespace DuckGame
                         if (this._jabStance)
                         {
                             this._addOffsetX = MathHelper.Lerp(this._addOffsetX, 3f, 0.4f);
-                            if ((double)this._addOffsetX > 2.0 && !this.action)
+                            if (_addOffsetX > 2.0 && !this.action)
                                 this._swinging = false;
                         }
                         else if (this.raised)
                         {
                             this._swing = MathHelper.Lerp(this._swing, -2.8f, 0.2f);
-                            if ((double)this._swing < -2.40000009536743 && !this.action)
+                            if (_swing < -2.40000009536743 && !this.action)
                             {
                                 this._swinging = false;
                                 this._swing = 1.8f;
@@ -618,7 +618,7 @@ namespace DuckGame
                         else
                         {
                             this._swing = MathHelper.Lerp(this._swing, 2.1f, 0.4f);
-                            if ((double)this._swing > 1.79999995231628 && !this.action)
+                            if (_swing > 1.79999995231628 && !this.action)
                             {
                                 this._swinging = false;
                                 this._swing = 1.8f;
@@ -627,27 +627,27 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (this._wasLifted && !this._swinging && (!this._swingPress || this._shing || this._jabStance && (double)this._addOffsetX < 1.0 || !this._jabStance && (double)this._swing < 1.60000002384186))
+                        if (this._wasLifted && !this._swinging && (!this._swingPress || this._shing || this._jabStance && _addOffsetX < 1.0 || !this._jabStance && _swing < 1.60000002384186))
                         {
                             if (this._jabStance)
                                 this.UpdateJabPullback();
                             else if (this._slamStance)
                                 this.UpdateSlamPullback();
-                            else if ((double)this._afterSwingWait < (double)this._afterSwingCounter)
+                            else if (_afterSwingWait < (double)this._afterSwingCounter)
                             {
                                 float amount = 0.36f;
                                 if (this is OldEnergyScimi && (this.duck == null || !this.duck.grounded || !this.duck.crouch))
                                     amount = 0.36f;
                                 this._swing = MathHelper.Lerp(this._swing, -0.22f, amount);
                                 this._addOffsetX = MathHelper.Lerp(this._addOffsetX, 1f, 0.2f);
-                                if ((double)this._addOffsetX > 0.0)
+                                if (_addOffsetX > 0.0)
                                     this._addOffsetX = 0.0f;
                                 this._addOffsetY = MathHelper.Lerp(this._addOffsetY, 1f, 0.2f);
-                                if ((double)this._addOffsetY > 0.0)
+                                if (_addOffsetY > 0.0)
                                     this._addOffsetY = 0.0f;
                             }
                         }
-                        if (((double)this._swing < 0.0 || this._jabStance) && (double)this._swing < 0.0 && this._enforceJabSwing)
+                        if ((_swing < 0.0 || this._jabStance) && _swing < 0.0 && this._enforceJabSwing)
                         {
                             this._swing = 0.0f;
                             this._shing = false;
@@ -665,7 +665,7 @@ namespace DuckGame
                         this._jabStance = false;
                         if (this.duck.crouch)
                         {
-                            if (!this._pullBack && !this._swinging && this.duck.inputProfile.Down(this.offDir > (sbyte)0 ? "LEFT" : "RIGHT"))
+                            if (!this._pullBack && !this._swinging && this.duck.inputProfile.Down(this.offDir > 0 ? "LEFT" : "RIGHT"))
                                 this._jabStance = true;
                             this._crouchStance = true;
                         }
@@ -688,10 +688,10 @@ namespace DuckGame
                     Level.CheckRect<Icicles>(this.barrelStartPos, this.barrelPosition)?.Hurt(100f);
                     if (!(this is OldEnergyScimi) && block != null && !this._slamStance)
                     {
-                        if (this.offDir < (sbyte)0 && (double)block.x > (double)this.x)
-                            block = (Block)null;
-                        else if (this.offDir > (sbyte)0 && (double)block.x < (double)this.x)
-                            block = (Block)null;
+                        if (this.offDir < 0 && (double)block.x > (double)this.x)
+                            block = null;
+                        else if (this.offDir > 0 && (double)block.x < (double)this.x)
+                            block = null;
                     }
                     bool flag = false;
                     if (block != null && this._clashWithWalls)
@@ -705,25 +705,25 @@ namespace DuckGame
                             this._unslam = 20;
                         }
                         if (block is Window)
-                            block.Destroy((DestroyType)new DTImpact((Thing)this));
+                            block.Destroy(new DTImpact(this));
                     }
                     else if (!this._jabStance && !this._slamStance && this.isServerForObject)
                     {
-                        Thing ignore = (Thing)null;
+                        Thing ignore = null;
                         if (this.duck != null)
-                            ignore = (Thing)this.duck.GetEquipment(typeof(Helmet));
+                            ignore = this.duck.GetEquipment(typeof(Helmet));
                         Vec2 vec2_1 = this.barrelPosition + this.barrelVector * 3f;
-                        QuadLaserBullet quadLaserBullet = Level.CheckRect<QuadLaserBullet>(new Vec2((double)this.position.x < (double)vec2_1.x ? this.position.x : vec2_1.x, (double)this.position.y < (double)vec2_1.y ? this.position.y : vec2_1.y), new Vec2((double)this.position.x > (double)vec2_1.x ? this.position.x : vec2_1.x, (double)this.position.y > (double)vec2_1.y ? this.position.y : vec2_1.y));
+                        QuadLaserBullet quadLaserBullet = Level.CheckRect<QuadLaserBullet>(new Vec2(position.x < (double)vec2_1.x ? this.position.x : vec2_1.x, position.y < (double)vec2_1.y ? this.position.y : vec2_1.y), new Vec2(position.x > (double)vec2_1.x ? this.position.x : vec2_1.x, position.y > (double)vec2_1.y ? this.position.y : vec2_1.y));
                         if (quadLaserBullet != null)
                         {
                             this.Shing();
-                            this.Fondle((Thing)quadLaserBullet);
+                            this.Fondle(quadLaserBullet);
                             quadLaserBullet.safeFrames = 8;
                             quadLaserBullet.safeDuck = this.duck;
                             Vec2 vec2_2 = quadLaserBullet.travel;
                             float length = vec2_2.length;
                             float num = 1.5f;
-                            vec2_2 = this.offDir <= (sbyte)0 ? new Vec2(-length * num, 0.0f) : new Vec2(length * num, 0.0f);
+                            vec2_2 = this.offDir <= 0 ? new Vec2(-length * num, 0.0f) : new Vec2(length * num, 0.0f);
                             quadLaserBullet.travel = vec2_2;
                             this.QuadLaserHit(quadLaserBullet);
                         }
@@ -733,7 +733,7 @@ namespace DuckGame
                             if (helmet != null && helmet.equippedDuck != null && helmet.owner != null)
                             {
                                 this.Shing();
-                                helmet.owner.hSpeed += (float)this.offDir * 3f;
+                                helmet.owner.hSpeed += offDir * 3f;
                                 helmet.owner.vSpeed -= 2f;
                                 if (helmet.duck != null)
                                     helmet.duck.crippleTimer = 1f;
@@ -743,12 +743,12 @@ namespace DuckGame
                             else
                             {
                                 if (this.duck != null)
-                                    ignore = (Thing)this.duck.GetEquipment(typeof(ChestPlate));
+                                    ignore = this.duck.GetEquipment(typeof(ChestPlate));
                                 ChestPlate chestPlate = Level.CheckLine<ChestPlate>(this.barrelStartPos, this.barrelPosition, ignore);
                                 if (chestPlate != null && chestPlate.equippedDuck != null && chestPlate.owner != null)
                                 {
                                     this.Shing();
-                                    chestPlate.owner.hSpeed += (float)this.offDir * 3f;
+                                    chestPlate.owner.hSpeed += offDir * 3f;
                                     chestPlate.owner.vSpeed -= 2f;
                                     if (chestPlate.duck != null)
                                         chestPlate.duck.crippleTimer = 1f;
@@ -768,27 +768,27 @@ namespace DuckGame
                                 sword.Shing();
                                 if (this is OldEnergyScimi)
                                 {
-                                    sword.owner.hSpeed += (float)this.offDir * 5f;
+                                    sword.owner.hSpeed += offDir * 5f;
                                     sword.owner.vSpeed -= 4f;
-                                    this.duck.hSpeed += (float)-this.offDir * 5f;
+                                    this.duck.hSpeed += -this.offDir * 5f;
                                     this.duck.vSpeed -= 4f;
                                     if (this.isServerForObject)
                                     {
                                         EnergyScimitarBlast energyScimitarBlast1 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0.0f, -16f), new Vec2(0.0f, -2000f));
-                                        Level.Add((Thing)energyScimitarBlast1);
+                                        Level.Add(energyScimitarBlast1);
                                         if (Network.isActive)
-                                            Send.Message((NetMessage)new NMEnergyScimitarBlast(energyScimitarBlast1.position, energyScimitarBlast1._target));
+                                            Send.Message(new NMEnergyScimitarBlast(energyScimitarBlast1.position, energyScimitarBlast1._target));
                                         EnergyScimitarBlast energyScimitarBlast2 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0.0f, 16f), new Vec2(0.0f, 2000f));
-                                        Level.Add((Thing)energyScimitarBlast2);
+                                        Level.Add(energyScimitarBlast2);
                                         if (Network.isActive)
-                                            Send.Message((NetMessage)new NMEnergyScimitarBlast(energyScimitarBlast2.position, energyScimitarBlast2._target));
+                                            Send.Message(new NMEnergyScimitarBlast(energyScimitarBlast2.position, energyScimitarBlast2._target));
                                     }
                                 }
                                 else
                                 {
-                                    sword.owner.hSpeed += (float)this.offDir * 3f;
+                                    sword.owner.hSpeed += offDir * 3f;
                                     sword.owner.vSpeed -= 2f;
-                                    this.duck.hSpeed += (float)-this.offDir * 3f;
+                                    this.duck.hSpeed += -this.offDir * 3f;
                                     this.duck.vSpeed -= 2f;
                                 }
                                 if (sword.duck != null && this.duck != null)
@@ -823,7 +823,7 @@ namespace DuckGame
                     {
                         if (amAduck != this.duck && amAduck is MaterialThing t)
                         {
-                            if ((double)t.vSpeed > 0.5 && (double)t.bottom < (double)this.position.y - 8.0 && (double)t.left < (double)this.barrelPosition.x && (double)t.right > (double)this.barrelPosition.x)
+                            if ((double)t.vSpeed > 0.5 && (double)t.bottom < position.y - 8.0 && (double)t.left < barrelPosition.x && (double)t.right > barrelPosition.x)
                             {
                                 if (t is Duck duck && !duck.destroyed)
                                 {
@@ -832,7 +832,7 @@ namespace DuckGame
                                 }
                                 t.Destroy(this.destroyType);
                             }
-                            else if (!this._jabStance && !t.destroyed && (this.offDir > (sbyte)0 && (double)t.x > (double)this.duck.x || this.offDir < (sbyte)0 && (double)t.x < (double)this.duck.x))
+                            else if (!this._jabStance && !t.destroyed && (this.offDir > 0 && (double)t.x > (double)this.duck.x || this.offDir < 0 && (double)t.x < (double)this.duck.x))
                             {
                                 if (t is Duck)
                                     (t as Duck).crippleTimer = 1f;
@@ -845,8 +845,8 @@ namespace DuckGame
                                     }
                                     t.Destroy(this.destroyType);
                                 }
-                                this.Fondle((Thing)t);
-                                t.hSpeed = (float)this.offDir * 3f;
+                                this.Fondle(t);
+                                t.hSpeed = offDir * 3f;
                                 t.vSpeed = -2f;
                             }
                         }
@@ -876,7 +876,7 @@ namespace DuckGame
         {
             if (this._lastHistoryPos != Vec2.Zero)
             {
-                this._lastAngles[this._lastIndex] = (float)(((double)angle + (double)this._lastHistoryAngle) / 2.0);
+                this._lastAngles[this._lastIndex] = (float)(((double)angle + _lastHistoryAngle) / 2.0);
                 this._lastPositions[this._lastIndex] = (position + this._lastHistoryPos) / 2f;
                 this._lastIndex = (this._lastIndex + 1) % 8;
                 ++this._lastSize;
@@ -902,7 +902,7 @@ namespace DuckGame
             if ((double)this._swordSwing.speed > 0.0)
             {
                 if (this.duck != null)
-                    this._swordSwing.flipH = this.duck.offDir <= (sbyte)0;
+                    this._swordSwing.flipH = this.duck.offDir <= 0;
                 this._swordSwing.alpha = 0.4f;
                 this._swordSwing.position = this.position;
                 this._swordSwing.depth = this.depth + 1;
@@ -911,7 +911,7 @@ namespace DuckGame
             Vec2 position = this.position;
             Depth depth = this.depth;
             this.graphic.color = Color.White;
-            if (this.owner == null && (double)this.velocity.length > 1.0 || (double)this._swing != 0.0 || this.tape != null && this.bayonetLethal)
+            if (this.owner == null && (double)this.velocity.length > 1.0 || _swing != 0.0 || this.tape != null && this.bayonetLethal)
             {
                 float alpha = this.alpha;
                 this.alpha = 1f;
@@ -927,7 +927,7 @@ namespace DuckGame
                         int index = this.historyIndex(idx);
                         this._angle = this._lastAngles[index];
                         this.position = this._lastPositions[index];
-                        this.depth = this.depth - 2;
+                        this.depth -= 2;
                         this.alpha -= 0.15f;
                         this.graphic.color = Color.Red;
                     }
@@ -952,7 +952,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this._crouchStance && this._jabStance && !this._swinging || !this._crouchStance && !this._swinging && (double)this._swing < 0.100000001490116)
+            if (this._crouchStance && this._jabStance && !this._swinging || !this._crouchStance && !this._swinging && _swing < 0.100000001490116)
             {
                 if (this._jabStance && !this._allowJabMotion)
                     return;

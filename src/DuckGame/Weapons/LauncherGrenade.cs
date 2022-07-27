@@ -62,8 +62,8 @@ namespace DuckGame
             {
                 --this._numTrail;
                 this._fadeVal -= 0.1f;
-                if ((double)this._fadeVal <= 0.0)
-                    Level.Remove((Thing)this);
+                if (_fadeVal <= 0.0)
+                    Level.Remove(this);
             }
             this._prevPosition.x = this.position.x;
             this._prevPosition.y = this.position.y;
@@ -75,7 +75,7 @@ namespace DuckGame
                 return;
             if (with is PhysicsObject)
                 this._isVolatile = -1f;
-            if ((double)this._startWait <= 0.0 && !this._fade && ((double)this.totalImpactPower > 2.0 && ((double)this._isVolatile <= 0.0 || !(with is Block)) || this._blowUp))
+            if (_startWait <= 0.0 && !this._fade && ((double)this.totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || this._blowUp))
             {
                 int num1 = 0;
                 for (int index = 0; index < 1; ++index)
@@ -83,19 +83,21 @@ namespace DuckGame
                     ExplosionPart explosionPart = new ExplosionPart(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
                     explosionPart.xscale *= 0.7f;
                     explosionPart.yscale *= 0.7f;
-                    Level.Add((Thing)explosionPart);
+                    Level.Add(explosionPart);
                     ++num1;
                 }
                 SFX.Play("explode");
                 RumbleManager.AddRumbleEvent(this.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
                 for (int index = 0; index < 12; ++index)
                 {
-                    float num2 = (float)((double)index * 30.0 - 10.0) + Rando.Float(20f);
-                    ATShrapnel type = new ATShrapnel();
-                    type.range = 25f + Rando.Float(10f);
-                    Level.Add((Thing)new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num2)) * 8.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num2)) * 8.0), (AmmoType)type, num2)
+                    float num2 = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                    ATShrapnel type = new ATShrapnel
                     {
-                        firedFrom = (Thing)this
+                        range = 25f + Rando.Float(10f)
+                    };
+                    Level.Add(new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num2)) * 8.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num2)) * 8.0), type, num2)
+                    {
+                        firedFrom = this
                     });
                 }
                 this._fade = true;
@@ -121,7 +123,7 @@ namespace DuckGame
             {
                 if (index < this._numTrail)
                 {
-                    float num = (float)((1.0 - (double)index / 16.0) * (double)this._fadeVal * 0.800000011920929);
+                    float num = (float)((1.0 - index / 16.0) * _fadeVal * 0.800000011920929);
                     Graphics.DrawLine(new Vec2(this._trail[index - 1].x, this._trail[index - 1].y), new Vec2(this._trail[index].x, this._trail[index].y), Color.White * num);
                 }
             }

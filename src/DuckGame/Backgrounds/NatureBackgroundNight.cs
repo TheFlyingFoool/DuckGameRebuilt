@@ -14,7 +14,7 @@ namespace DuckGame
         public NatureBackgroundNight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 0
             };
@@ -55,11 +55,11 @@ namespace DuckGame
             this._parallax.AddZone(27, 0.35f, speed);
             this._parallax.AddZone(28, 0.3f, speed);
             this._parallax.AddZone(29, 0.25f, speed);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

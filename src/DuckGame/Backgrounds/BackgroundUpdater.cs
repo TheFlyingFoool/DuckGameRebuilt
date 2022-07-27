@@ -32,7 +32,7 @@ namespace DuckGame
         {
             this._parallax.scissor = this.scissor;
             this._parallax.visible = vis;
-            if ((double)this.scissor.width == 0.0)
+            if (scissor.width == 0.0)
                 return;
             this._parallax.layer.scissor = this.scissor;
         }
@@ -50,22 +50,22 @@ namespace DuckGame
             Matrix matrix = Level.current.camera.getMatrix();
             int x = 0;
             int y = 0;
-            float num = (float)Graphics.width / Resolution.size.x;
+            float num = Graphics.width / Resolution.size.x;
             foreach (RockWall rockWall in Level.current.things[typeof(RockWall)])
             {
                 if (y == 0)
                     y = (int)Resolution.size.x;
                 Vec2 vec2 = Vec2.Transform(rockWall.position, matrix) * num;
-                if (!rockWall.flipHorizontal && (double)vec2.x > (double)x)
+                if (!rockWall.flipHorizontal && vec2.x > (double)x)
                     x = (int)vec2.x;
-                else if (rockWall.flipHorizontal && (double)vec2.x < (double)y)
+                else if (rockWall.flipHorizontal && vec2.x < (double)y)
                     y = (int)vec2.x;
             }
             if (y != 0)
                 y -= x;
             if (y == 0)
                 y = (int)Resolution.size.x;
-            return new Vec2((float)x, (float)y);
+            return new Vec2(x, y);
         }
 
         public override void Update()
@@ -74,13 +74,13 @@ namespace DuckGame
             {
                 Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
                 if (wallScissor != Vec2.Zero)
-                    this.scissor = new Rectangle((float)(int)wallScissor.x, 0.0f, (float)(int)wallScissor.y, (float)Resolution.current.y);
+                    this.scissor = new Rectangle((int)wallScissor.x, 0.0f, (int)wallScissor.y, Resolution.current.y);
             }
             if (!this._update)
                 return;
             if (!this._skipMovement)
             {
-                float num = Level.current.camera.width * 4f / (float)Graphics.width;
+                float num = Level.current.camera.width * 4f / Graphics.width;
                 if (this._yParallax)
                 {
                     this._parallax.y = (float)(-((double)Level.current.camera.centerY / 12.0) - 5.0) + this._yOffset;
@@ -93,11 +93,11 @@ namespace DuckGame
                 this._parallax.xmove = (this._lastCameraX - Level.current.camera.centerX) / num;
             }
             this._lastCameraX = Level.current.camera.centerX;
-            if ((double)this.scissor.width != 0.0)
+            if (scissor.width != 0.0)
                 this._parallax.scissor = this.scissor;
             base.Update();
         }
 
-        public override ContextMenu GetContextMenu() => (ContextMenu)null;
+        public override ContextMenu GetContextMenu() => null;
     }
 }

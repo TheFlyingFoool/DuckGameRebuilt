@@ -72,13 +72,13 @@ namespace DuckGame
         {
             if (!this.complexSync)
                 return;
-            AmmoType.ComplexDiffData complexDiffData = (AmmoType.ComplexDiffData)null;
+            ComplexDiffData complexDiffData;
             if (!AmmoType._complexDiff.TryGetValue(this.GetType(), out complexDiffData))
                 AmmoType._complexDiff[this.GetType()] = complexDiffData = new AmmoType.ComplexDiffData(this.GetType());
             foreach (ClassMember binding in complexDiffData.bindings)
             {
-                object objB = binding.GetValue((object)this);
-                if (!object.Equals(binding.GetValue((object)complexDiffData.original), objB))
+                object objB = binding.GetValue(this);
+                if (!object.Equals(binding.GetValue(complexDiffData.original), objB))
                 {
                     pBuffer.Write(true);
                     pBuffer.Write(objB);
@@ -92,13 +92,13 @@ namespace DuckGame
         {
             if (!this.complexSync)
                 return;
-            AmmoType.ComplexDiffData complexDiffData = (AmmoType.ComplexDiffData)null;
+            ComplexDiffData complexDiffData;
             if (!AmmoType._complexDiff.TryGetValue(this.GetType(), out complexDiffData))
                 AmmoType._complexDiff[this.GetType()] = complexDiffData = new AmmoType.ComplexDiffData(this.GetType());
             foreach (ClassMember binding in complexDiffData.bindings)
             {
                 if (pBuffer.ReadBool())
-                    binding.SetValue((object)this, pBuffer.Read(binding.type));
+                    binding.SetValue(this, pBuffer.Read(binding.type));
             }
         }
 
@@ -129,7 +129,7 @@ namespace DuckGame
             if (this.bulletType == typeof(Bullet))
                 bullet = new Bullet(x, y, this, angle, owner, this.rebound, distance, tracer, network);
             else
-                bullet = Activator.CreateInstance(this.bulletType, (object)x, (object)y, (object)this, (object)angle, (object)owner, (object)this.rebound, (object)distance, (object)tracer, (object)network) as Bullet;
+                bullet = Activator.CreateInstance(this.bulletType, x, y, this, angle, owner, rebound, distance, tracer, network) as Bullet;
             bullet.firedFrom = firedFrom;
             bullet.color = this.bulletColor;
             return bullet;
@@ -142,7 +142,7 @@ namespace DuckGame
           Thing firedFrom = null)
         {
             Bullet bullet = this.GetBullet(position.x, position.y, owner, angle, firedFrom);
-            Level.current.AddThing((Thing)bullet);
+            Level.current.AddThing(bullet);
             return bullet;
         }
 

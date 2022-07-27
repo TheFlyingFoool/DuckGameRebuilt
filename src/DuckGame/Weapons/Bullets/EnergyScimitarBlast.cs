@@ -23,17 +23,17 @@ namespace DuckGame
             SFX.Play("laserBlast");
             Vec2 normalized1 = this._target.Rotate(Maths.DegToRad(-90f), Vec2.Zero).normalized;
             Vec2 normalized2 = this._target.Rotate(Maths.DegToRad(90f), Vec2.Zero).normalized;
-            Level.Add((Thing)new LaserLine(this.position, this._target, normalized1, 4f, Color.White, 1f));
-            Level.Add((Thing)new LaserLine(this.position, this._target, normalized2, 4f, Color.White, 1f));
-            Level.Add((Thing)new LaserLine(this.position, this._target, normalized1, 2.5f, Color.White, 2f));
-            Level.Add((Thing)new LaserLine(this.position, this._target, normalized2, 2.5f, Color.White, 2f));
+            Level.Add(new LaserLine(this.position, this._target, normalized1, 4f, Color.White, 1f));
+            Level.Add(new LaserLine(this.position, this._target, normalized2, 4f, Color.White, 1f));
+            Level.Add(new LaserLine(this.position, this._target, normalized1, 2.5f, Color.White, 2f));
+            Level.Add(new LaserLine(this.position, this._target, normalized2, 2.5f, Color.White, 2f));
             if (this.isLocal)
             {
                 int num = 0;
                 Vec2 vec2 = this.position + normalized1 * 16f;
                 for (int index = 0; index < 5; ++index)
                 {
-                    Vec2 p1 = vec2 + normalized2 * 8f * (float)index;
+                    Vec2 p1 = vec2 + normalized2 * 8f * index;
                     foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(p1, p1 + this._target))
                     {
                         if (materialThing is IAmADuck && !materialThing.destroyed && !(materialThing is TargetDuck))
@@ -45,7 +45,7 @@ namespace DuckGame
                             if (materialThing is Duck && !(materialThing as Duck).dead)
                                 ++num;
                         }
-                        materialThing.Destroy((DestroyType)new DTIncinerate((Thing)this));
+                        materialThing.Destroy(new DTIncinerate(this));
                     }
                 }
                 Global.data.energyScimitarBlastKills += num;
@@ -58,22 +58,21 @@ namespace DuckGame
         public override void Update()
         {
             this._blast = Maths.CountDown(this._blast, 0.1f);
-            if ((double)this._blast >= 0.0)
+            if (_blast >= 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw()
         {
             double num1 = (double)Maths.NormalizeSection(this._blast, 0.0f, 0.2f);
             double num2 = (double)Maths.NormalizeSection(this._blast, 0.6f, 1f);
-            double blast = (double)this._blast;
             Vec2 normalized1 = this._target.Rotate(Maths.DegToRad(-90f), Vec2.Zero).normalized;
             Vec2 normalized2 = this._target.Rotate(Maths.DegToRad(90f), Vec2.Zero).normalized;
             Vec2 vec2 = this.position + normalized1 * 16f;
             for (int index = 0; index < 5; ++index)
             {
-                Vec2 p1 = vec2 + normalized2 * 8f * (float)index;
+                Vec2 p1 = vec2 + normalized2 * 8f * index;
                 Graphics.DrawLine(p1, p1 + this._target, Color.LightBlue * (this._blast * 0.5f), 2f, (Depth)0.9f);
             }
         }

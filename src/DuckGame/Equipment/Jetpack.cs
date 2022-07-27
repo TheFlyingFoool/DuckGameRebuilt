@@ -23,7 +23,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("jetpack", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-5f, -5f);
             this.collisionSize = new Vec2(11f, 12f);
@@ -42,7 +42,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this._sprite.frame = (int)((double)this._heat * 7.0);
+            this._sprite.frame = (int)(_heat * 7.0);
             if (this._equippedDuck != null)
             {
                 float num1 = 0.0f;
@@ -50,7 +50,7 @@ namespace DuckGame
                 this.angle = 0.0f;
                 if (this._equippedDuck.sliding && this._equippedDuck._trapped == null)
                 {
-                    if (this._equippedDuck.offDir > (sbyte)0)
+                    if (this._equippedDuck.offDir > 0)
                         this.angle = -1.570796f;
                     else
                         this.angle = 1.570796f;
@@ -62,13 +62,13 @@ namespace DuckGame
                 this.collisionOffset = new Vec2(0.0f, -9999f);
                 this.collisionSize = new Vec2(0.0f, 0.0f);
                 this.solid = false;
-                PhysicsObject physicsObject1 = (PhysicsObject)this._equippedDuck;
+                PhysicsObject physicsObject1 = _equippedDuck;
                 if (this._equippedDuck._trapped != null)
-                    physicsObject1 = (PhysicsObject)this._equippedDuck._trapped;
+                    physicsObject1 = _equippedDuck._trapped;
                 else if (this._equippedDuck.ragdoll != null && this._equippedDuck.ragdoll.part1 != null)
-                    physicsObject1 = (PhysicsObject)this._equippedDuck.ragdoll.part1;
+                    physicsObject1 = _equippedDuck.ragdoll.part1;
                 this._sprite.flipH = this._equippedDuck._sprite.flipH;
-                if (this._on && (double)this._heat < 1.0)
+                if (this._on && _heat < 1.0)
                 {
                     if (this._equippedDuck._trapped == null && this._equippedDuck.crouch)
                         this._equippedDuck.sliding = true;
@@ -81,7 +81,7 @@ namespace DuckGame
                         float angle = this.angle;
                         this.angle = physicsObject1.angle;
                         Vec2 vec2_1 = this.Offset(new Vec2(0.0f, 8f));
-                        Level.Add((Thing)new JetpackSmoke(vec2_1.x, vec2_1.y));
+                        Level.Add(new JetpackSmoke(vec2_1.x, vec2_1.y));
                         this.angle = angle;
                         Vec2 vec2_2 = physicsObject1.velocity;
                         if ((double)vec2_2.length < 7.0)
@@ -111,7 +111,7 @@ namespace DuckGame
                             if ((double)vec2_3.length < 0.100000001490116)
                                 vec2_3 = new Vec2((float)Math.Cos((double)num2), (float)-Math.Sin((double)num2));
                             PhysicsObject physicsObject2 = physicsObject1;
-                            physicsObject2.velocity = physicsObject2.velocity + vec2_3 * 1.5f;
+                            physicsObject2.velocity += vec2_3 * 1.5f;
                             if (ragdollPart.doll != null && ragdollPart.doll.part1 != null && ragdollPart.doll.part2 != null && ragdollPart.doll.part3 != null)
                             {
                                 ragdollPart.doll.part1.extraGravMultiplier = 0.4f;
@@ -122,7 +122,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Level.Add((Thing)new JetpackSmoke(this.x, this.y + 8f + num1));
+                        Level.Add(new JetpackSmoke(this.x, this.y + 8f + num1));
                         if ((double)this.angle > 0.0)
                         {
                             if ((double)physicsObject1.hSpeed < 6.0)
@@ -137,11 +137,11 @@ namespace DuckGame
                             physicsObject1.vSpeed -= 0.38f;
                     }
                 }
-                if ((double)this._heat >= 1.0)
+                if (_heat >= 1.0)
                     this._on = false;
                 if (!physicsObject1.grounded)
                     return;
-                if ((double)this._heat > 0.0)
+                if (_heat > 0.0)
                     this._heat -= 0.25f;
                 else
                     this._heat = 0.0f;

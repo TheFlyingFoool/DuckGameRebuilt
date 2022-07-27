@@ -107,7 +107,7 @@ namespace DuckGame
             UIModManagement.SHFileOperation(ref fileop);
         }
 
-        private void DeleteMod() => this.ShowYesNo(this._editModMenu, (UIMenuActionCallFunction.Function)(() =>
+        private void DeleteMod() => this.ShowYesNo(this._editModMenu, () =>
        {
            this._awaitingChanges = true;
            if (this._selectedMod.configuration.workshopID == 0UL)
@@ -119,17 +119,17 @@ namespace DuckGame
            this._yesNoMenu.Close();
            this._editModMenu.Close();
            this.Open();
-       }));
+       });
 
         private void ShowYesNo(UIMenu goBackTo, UIMenuActionCallFunction.Function onYes)
         {
-            this._yesNoNo.menuAction = (UIMenuAction)new UIMenuActionCallFunction((UIMenuActionCallFunction.Function)(() =>
+            this._yesNoNo.menuAction = new UIMenuActionCallFunction(() =>
           {
               this._yesNoMenu.Close();
               goBackTo.Open();
-          }));
-            this._yesNoYes.menuAction = (UIMenuAction)new UIMenuActionCallFunction(onYes);
-            new UIMenuActionOpenMenu((UIComponent)this._editModMenu, (UIComponent)this._yesNoMenu).Activate();
+          });
+            this._yesNoYes.menuAction = new UIMenuActionCallFunction(onYes);
+            new UIMenuActionOpenMenu(_editModMenu, _yesNoMenu).Activate();
         }
 
         private void UploadMod()
@@ -195,56 +195,70 @@ namespace DuckGame
             this._openOnClose = openOnClose;
             this._moreArrow = new Sprite("moreArrow");
             this._moreArrow.CenterOrigin();
-            this._steamIcon = new Sprite("steamIconSmall");
-            this._steamIcon.scale = new Vec2(1f) / 2f;
-            this._localIcon = new SpriteMap("iconSheet", 16, 16);
-            this._localIcon.scale = new Vec2(1f) / 2f;
+            this._steamIcon = new Sprite("steamIconSmall")
+            {
+                scale = new Vec2(1f) / 2f
+            };
+            this._localIcon = new SpriteMap("iconSheet", 16, 16)
+            {
+                scale = new Vec2(1f) / 2f
+            };
             this._localIcon.SetFrameWithoutReset(1);
             this._modErrorIcon = new Sprite("modloadError");
-            this._newIcon = new SpriteMap("presents", 16, 16);
-            this._newIcon.scale = new Vec2(2f);
+            this._newIcon = new SpriteMap("presents", 16, 16)
+            {
+                scale = new Vec2(2f)
+            };
             this._newIcon.SetFrameWithoutReset(0);
-            this._settingsIcon = new SpriteMap("settingsWrench", 16, 16);
-            this._settingsIcon.scale = new Vec2(2f);
-            this._noImage = new Sprite("notexture");
-            this._noImage.scale = new Vec2(2f);
+            this._settingsIcon = new SpriteMap("settingsWrench", 16, 16)
+            {
+                scale = new Vec2(2f)
+            };
+            this._noImage = new Sprite("notexture")
+            {
+                scale = new Vec2(2f)
+            };
             this._cursor = new SpriteMap("cursors", 16, 16);
-            this._mods = (IList<Mod>)ModLoader.allMods.Where<Mod>((Func<Mod, bool>)(a => !(a is CoreMod))).ToList<Mod>();
-            this._mods.Insert(0, (Mod)new UIModManagement.UI_ModSettings());
-            this._mods.Add((Mod)null);
+            this._mods = ModLoader.allMods.Where<Mod>(a => !(a is CoreMod)).ToList<Mod>();
+            this._mods.Insert(0, new UIModManagement.UI_ModSettings());
+            this._mods.Add(null);
             this._maxModsToShow = 8;
-            this._box = new UIBox(0.0f, 0.0f, high: ((float)(this._maxModsToShow * 36)), isVisible: false);
-            this.Add((UIComponent)this._box, true);
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this._fancyFont.maxWidth = (int)this.width - 60;
-            this._fancyFont.maxRows = 2;
+            this._box = new UIBox(0.0f, 0.0f, high: this._maxModsToShow * 36, isVisible: false);
+            this.Add(_box, true);
+            this._fancyFont = new FancyBitmapFont("smallFont")
+            {
+                maxWidth = (int)this.width - 60,
+                maxRows = 2
+            };
             this.scrollBarOffset = 0;
             this._editModMenu = new UIMenu("<mod name>", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@SELECT@SELECT");
-            this._editModMenu.Add((UIComponent)(this._disableOrEnableItem = new UIMenuItem("DISABLE", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.EnableDisableMod)))), true);
-            this._deleteOrUnsubItem = new UIMenuItem("DELETE", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.DeleteMod)));
-            this._uploadItem = new UIMenuItem("UPLOAD", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.UploadMod)));
-            this._visitItem = new UIMenuItem("VISIT PAGE", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.VisitModPage)));
-            this._editModMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-            this._editModMenu.Add((UIComponent)new UIMenuItem("BACK", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._editModMenu, (UIComponent)this)), true);
+            this._editModMenu.Add(this._disableOrEnableItem = new UIMenuItem("DISABLE", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.EnableDisableMod))), true);
+            this._deleteOrUnsubItem = new UIMenuItem("DELETE", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.DeleteMod)));
+            this._uploadItem = new UIMenuItem("UPLOAD", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.UploadMod)));
+            this._visitItem = new UIMenuItem("VISIT PAGE", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.VisitModPage)));
+            this._editModMenu.Add(new UIText(" ", Color.White), true);
+            this._editModMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_editModMenu, this)), true);
             this._editModMenu.Close();
             this._yesNoMenu = new UIMenu("ARE YOU SURE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
-            this._yesNoMenu.Add((UIComponent)(this._yesNoYes = new UIMenuItem("YES")), true);
-            this._yesNoMenu.Add((UIComponent)(this._yesNoNo = new UIMenuItem("NO")), true);
+            this._yesNoMenu.Add(this._yesNoYes = new UIMenuItem("YES"), true);
+            this._yesNoMenu.Add(this._yesNoNo = new UIMenuItem("NO"), true);
             this._yesNoMenu.Close();
-            this._updateTextBox = new Textbox(0.0f, 0.0f, 0.0f, 0.0f);
-            this._updateTextBox.depth = (Depth)0.9f;
-            this._updateTextBox.maxLength = 5000;
+            this._updateTextBox = new Textbox(0.0f, 0.0f, 0.0f, 0.0f)
+            {
+                depth = (Depth)0.9f,
+                maxLength = 5000
+            };
             this._modSettingsMenu = new UIMenu("@WRENCH@MOD SETTINGS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@WASD@ADJUST @CANCEL@EXIT");
-            this._modSettingsMenu.Add((UIComponent)new UIText("If CRASH DISABLE is ON,", Colors.DGBlue), true);
-            this._modSettingsMenu.Add((UIComponent)new UIText("a mod will automatically be", Colors.DGBlue), true);
-            this._modSettingsMenu.Add((UIComponent)new UIText(" disabled if it causes", Colors.DGBlue), true);
-            this._modSettingsMenu.Add((UIComponent)new UIText("the game to crash.", Colors.DGBlue), true);
-            this._modSettingsMenu.Add((UIComponent)new UIText(" ", Colors.DGBlue), true);
-            this._modSettingsMenu.Add((UIComponent)new UIMenuItemToggle("CRASH DISABLE", field: new FieldBinding((object)Options.Data, "disableModOnCrash")), true);
-            this._modSettingsMenu.Add((UIComponent)new UIMenuItemToggle("LOAD FAILURE DISABLE", field: new FieldBinding((object)Options.Data, "disableModOnLoadFailure")), true);
-            this._modSettingsMenu.Add((UIComponent)new UIMenuItemToggle("SHOW NETWORK WARNING", field: new FieldBinding((object)Options.Data, "showNetworkModWarning")), true);
-            this._modSettingsMenu.Add((UIComponent)new UIText(" ", Colors.DGBlue), true);
-            this._modSettingsMenu.Add((UIComponent)new UIMenuItem("BACK", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._modSettingsMenu, (UIComponent)this), backButton: true), true);
+            this._modSettingsMenu.Add(new UIText("If CRASH DISABLE is ON,", Colors.DGBlue), true);
+            this._modSettingsMenu.Add(new UIText("a mod will automatically be", Colors.DGBlue), true);
+            this._modSettingsMenu.Add(new UIText(" disabled if it causes", Colors.DGBlue), true);
+            this._modSettingsMenu.Add(new UIText("the game to crash.", Colors.DGBlue), true);
+            this._modSettingsMenu.Add(new UIText(" ", Colors.DGBlue), true);
+            this._modSettingsMenu.Add(new UIMenuItemToggle("CRASH DISABLE", field: new FieldBinding(Options.Data, "disableModOnCrash")), true);
+            this._modSettingsMenu.Add(new UIMenuItemToggle("LOAD FAILURE DISABLE", field: new FieldBinding(Options.Data, "disableModOnLoadFailure")), true);
+            this._modSettingsMenu.Add(new UIMenuItemToggle("SHOW NETWORK WARNING", field: new FieldBinding(Options.Data, "showNetworkModWarning")), true);
+            this._modSettingsMenu.Add(new UIText(" ", Colors.DGBlue), true);
+            this._modSettingsMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_modSettingsMenu, this), backButton: true), true);
             this._modSettingsMenu.Close();
         }
 
@@ -253,7 +267,7 @@ namespace DuckGame
             if (this._uploadDialog == null)
             {
                 this._uploadDialog = new SteamUploadDialog();
-                Level.Add((Thing)this._uploadDialog);
+                Level.Add(_uploadDialog);
                 Level.current.things.RefreshState();
             }
             this._pressWait = 30;
@@ -280,7 +294,7 @@ namespace DuckGame
                 {
                     this._controlString = "@CANCEL@BACK";
                     if (Input.Pressed("QUACK"))
-                        this.showingError = (string)null;
+                        this.showingError = null;
                     base.Update();
                 }
                 else
@@ -365,7 +379,7 @@ namespace DuckGame
                                 Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + this._transferItem.id.ToString());
                                 Directory.Delete(DuckFile.workshopDirectory + this._transferItem.id.ToString() + "/", true);
                                 this._transferItem.ResetProcessing();
-                                this._transferItem = (WorkshopItem)null;
+                                this._transferItem = null;
                                 this._transferring = false;
                             }
                             base.Update();
@@ -381,7 +395,7 @@ namespace DuckGame
                             this._hoverIndex = -1;
                             for (int index = 0; index < this._maxModsToShow && this._scrollItemOffset + index < this._mods.Count; ++index)
                             {
-                                if (new Rectangle((float)(int)(this._box.x - this._box.halfWidth), (float)(int)(this._box.y - this._box.halfHeight + (float)(36 * index)), (float)((int)this._box.width - 14), 36f).Contains(Mouse.position))
+                                if (new Rectangle((int)(this._box.x - this._box.halfWidth), (int)(this._box.y - this._box.halfHeight + 36 * index), (int)this._box.width - 14, 36f).Contains(Mouse.position))
                                 {
                                     this._hoverIndex = this._scrollItemOffset + index;
                                     break;
@@ -395,7 +409,7 @@ namespace DuckGame
                                 Editor.hoverTextBox = false;
                                 this._updateTextBox.position = new Vec2((float)((double)this._box.x - (double)this._box.halfWidth + 16.0), (float)((double)this._box.y - (double)this._box.halfHeight + 48.0));
                                 this._updateTextBox.size = new Vec2(this._box.width - 32f, this._box.height - 80f);
-                                this._updateTextBox._maxLines = (int)((double)this._updateTextBox.size.y / (double)this._fancyFont.characterHeight);
+                                this._updateTextBox._maxLines = (int)(_updateTextBox.size.y / (double)this._fancyFont.characterHeight);
                                 this._updateTextBox.Update();
                                 float stringWidth = Graphics.GetStringWidth(this._updateButtonText, scale: 2f);
                                 float height = Graphics.GetStringHeight(this._updateButtonText) * 2f;
@@ -408,9 +422,9 @@ namespace DuckGame
                                 else if (Keyboard.Pressed(Keys.Escape))
                                 {
                                     this._needsUpdateNotes = false;
-                                    this._transferItem = (WorkshopItem)null;
+                                    this._transferItem = null;
                                     this._updateTextBox.LoseFocus();
-                                    new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._editModMenu).Activate();
+                                    new UIMenuActionOpenMenu(this, _editModMenu).Activate();
                                     return;
                                 }
                             }
@@ -437,7 +451,7 @@ namespace DuckGame
                                         this._selectedMod.configuration.Enable();
                                     else
                                         this._selectedMod.configuration.Disable();
-                                    this._selectedMod.configuration.error = (string)null;
+                                    this._selectedMod.configuration.error = null;
                                     this.modsChanged = true;
                                     SFX.Play("rockHitGround", 0.8f);
                                 }
@@ -470,34 +484,34 @@ namespace DuckGame
                                         {
                                             SFX.Play("rockHitGround", 0.8f);
                                             this._modSettingsMenu.dirty = true;
-                                            new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._modSettingsMenu).Activate();
+                                            new UIMenuActionOpenMenu(this, _modSettingsMenu).Activate();
                                             return;
                                         }
                                         this._editModMenu.title = this._selectedMod.configuration.loaded ? "|YELLOW|" + this._selectedMod.configuration.displayName : "|YELLOW|" + this._selectedMod.configuration.name;
-                                        this._editModMenu.Remove((UIComponent)this._deleteOrUnsubItem);
-                                        this._editModMenu.Remove((UIComponent)this._uploadItem);
-                                        this._editModMenu.Remove((UIComponent)this._visitItem);
+                                        this._editModMenu.Remove(_deleteOrUnsubItem);
+                                        this._editModMenu.Remove(_uploadItem);
+                                        this._editModMenu.Remove(_visitItem);
                                         if (!this._selectedMod.configuration.isWorkshop && this._selectedMod.configuration.loaded)
                                         {
                                             this._uploadItem.text = this._selectedMod.configuration.workshopID == 0UL ? "UPLOAD" : "UPDATE";
-                                            this._editModMenu.Insert((UIComponent)this._uploadItem, 1, true);
+                                            this._editModMenu.Insert(_uploadItem, 1, true);
                                         }
                                         if (!this._selectedMod.configuration.isWorkshop && !this._selectedMod.configuration.loaded)
                                         {
                                             this._deleteOrUnsubItem.text = "DELETE";
-                                            this._editModMenu.Insert((UIComponent)this._deleteOrUnsubItem, 1, true);
+                                            this._editModMenu.Insert(_deleteOrUnsubItem, 1, true);
                                         }
                                         else if (this._selectedMod.configuration.isWorkshop)
                                         {
                                             this._deleteOrUnsubItem.text = "UNSUBSCRIBE";
-                                            this._editModMenu.Insert((UIComponent)this._deleteOrUnsubItem, 1, true);
+                                            this._editModMenu.Insert(_deleteOrUnsubItem, 1, true);
                                         }
                                         if (this._selectedMod.configuration.isWorkshop)
-                                            this._editModMenu.Insert((UIComponent)this._visitItem, 1, true);
+                                            this._editModMenu.Insert(_visitItem, 1, true);
                                         this._disableOrEnableItem.text = this._selectedMod.configuration.disabled ? "ENABLE" : "DISABLE";
                                         this._editModMenu.dirty = true;
                                         SFX.Play("rockHitGround", 0.8f);
-                                        new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._editModMenu).Activate();
+                                        new UIMenuActionOpenMenu(this, _editModMenu).Activate();
                                         return;
                                     }
                                     Steam.OverlayOpenURL("http://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
@@ -505,7 +519,7 @@ namespace DuckGame
                             }
                         }
                         else
-                            this._selectedMod = (Mod)null;
+                            this._selectedMod = null;
                         if (this._gamepadMode)
                         {
                             this._draggingScrollbar = false;
@@ -557,7 +571,7 @@ namespace DuckGame
                                     this.scrollBarOffset = this.scrollBarScrollableHeight;
                                 else if (this.scrollBarOffset < 0)
                                     this.scrollBarOffset = 0;
-                                this._scrollItemOffset = (int)((double)(this._mods.Count - this._maxModsToShow) * (double)((float)this.scrollBarOffset / (float)this.scrollBarScrollableHeight));
+                                this._scrollItemOffset = (int)((this._mods.Count - this._maxModsToShow) * (double)(scrollBarOffset / (float)this.scrollBarScrollableHeight));
                             }
                             if (Input.Pressed("ANY"))
                             {
@@ -575,7 +589,7 @@ namespace DuckGame
                             this._scrollItemOffset += this._hoverIndex - (this._scrollItemOffset + this._maxModsToShow) + 1;
                         else if (this._hoverIndex >= 0 && this._hoverIndex < this._scrollItemOffset)
                             this._scrollItemOffset -= this._scrollItemOffset - this._hoverIndex;
-                        this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0.0f, (float)this.scrollBarScrollableHeight, (float)this._scrollItemOffset / (float)(this._mods.Count - this._maxModsToShow));
+                        this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0.0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(this._mods.Count - this._maxModsToShow));
                         if (!Editor.hoverTextBox && !UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                         {
                             if (this.modsChanged)
@@ -584,7 +598,7 @@ namespace DuckGame
                                 MonoMain.pauseMenu = DuckNetwork.OpenModsRestartWindow(this._openOnClose);
                             }
                             else
-                                new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._openOnClose).Activate();
+                                new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                             this.modsChanged = false;
                             return;
                         }
@@ -599,7 +613,7 @@ namespace DuckGame
             }
         }
 
-        private Rectangle ScrollBarBox() => new Rectangle((float)((double)this._box.x + (double)this._box.halfWidth - 12.0 + 1.0), (float)((double)this._box.y - (double)this._box.halfHeight + 1.0) + (float)this.scrollBarOffset, 10f, 32f);
+        private Rectangle ScrollBarBox() => new Rectangle((float)((double)this._box.x + (double)this._box.halfWidth - 12.0 + 1.0), (float)((double)this._box.y - (double)this._box.halfHeight + 1.0) + scrollBarOffset, 10f, 32f);
 
         public override void Draw()
         {
@@ -665,7 +679,7 @@ namespace DuckGame
                         if (index2 < this._mods.Count)
                         {
                             float x = this._box.x - this._box.halfWidth;
-                            float y = this._box.y - this._box.halfHeight + (float)(36 * index1);
+                            float y = this._box.y - this._box.halfHeight + 36 * index1;
                             if (this._transferItem == null && this._hoverIndex == index2)
                                 Graphics.DrawRect(new Vec2(x, y), new Vec2((float)((double)x + (double)this._box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.45f);
                             else if ((index2 & 1) != 0)
@@ -675,7 +689,7 @@ namespace DuckGame
                             {
                                 if (mod is UIModManagement.UI_ModSettings)
                                 {
-                                    Graphics.Draw((Sprite)this._settingsIcon, x + 2f, y + 1f, (Depth)0.5f);
+                                    Graphics.Draw(_settingsIcon, x + 2f, y + 1f, (Depth)0.5f);
                                     this._fancyFont.scale = new Vec2(1.5f);
                                     this._fancyFont.Draw("Mod Settings", new Vec2(x + 36f, y + 11f), Color.White, (Depth)0.5f);
                                     this._fancyFont.scale = new Vec2(1f);
@@ -686,7 +700,7 @@ namespace DuckGame
                                     if (previewTexture != null && this._noImage.texture != previewTexture)
                                     {
                                         this._noImage.texture = previewTexture;
-                                        this._noImage.scale = new Vec2(32f / (float)previewTexture.width);
+                                        this._noImage.scale = new Vec2(32f / previewTexture.width);
                                     }
                                     Graphics.DrawRect(new Vec2(x + 2f, y + 2f), new Vec2((float)((double)x + 36.0 - 2.0), (float)((double)y + 36.0 - 2.0)), Color.Gray, (Depth)0.44f, false, 2f);
                                     Graphics.Draw(this._noImage, x + 2f, y + 2f, (Depth)0.5f);
@@ -714,30 +728,30 @@ namespace DuckGame
                                     else if (mod.configuration.modType == ModConfiguration.Type.HatPack)
                                         str2 += "|DGPURPLE| (Hat Pack)";
                                     this._fancyFont.Draw(str2 + (mod.configuration.disabled ? "|DGRED| (Disabled)" : "|DGGREEN| (Enabled)"), new Vec2((float)((double)x + 36.0 + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
-                                    Graphics.Draw(!mod.configuration.isWorkshop ? (Sprite)this._localIcon : this._steamIcon, x + 36f, y + 2.5f, (Depth)0.5f);
+                                    Graphics.Draw(!mod.configuration.isWorkshop ? _localIcon : this._steamIcon, x + 36f, y + 2.5f, (Depth)0.5f);
                                     if (mod.configuration.error != null && (mod.configuration.disabled || mod is ErrorMod))
                                     {
                                         string str3 = mod.configuration.error;
                                         if (str3.Length > 150)
                                             str3 = str3.Substring(0, 150);
-                                        this._fancyFont.Draw(mod.configuration.error.StartsWith("!") ? "|DGYELLOW|" + str3.Substring(1, str3.Length - 1) : "|DGRED|Failed with error: " + str3, new Vec2(x + 36f, y + 6f + (float)this._fancyFont.characterHeight), Color.White, (Depth)0.5f);
+                                        this._fancyFont.Draw(mod.configuration.error.StartsWith("!") ? "|DGYELLOW|" + str3.Substring(1, str3.Length - 1) : "|DGRED|Failed with error: " + str3, new Vec2(x + 36f, y + 6f + _fancyFont.characterHeight), Color.White, (Depth)0.5f);
                                     }
                                     else if (!mod.configuration.loaded)
                                     {
                                         if (mod.configuration.disabled)
-                                            this._fancyFont.Draw("Mod is disabled.", new Vec2(x + 36f, y + 6f + (float)this._fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
+                                            this._fancyFont.Draw("Mod is disabled.", new Vec2(x + 36f, y + 6f + _fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
                                         else
-                                            this._fancyFont.Draw("|DGGREEN|Mod will be enabled on next restart.", new Vec2(x + 36f, y + 6f + (float)this._fancyFont.characterHeight), Color.Orange, (Depth)0.5f);
+                                            this._fancyFont.Draw("|DGGREEN|Mod will be enabled on next restart.", new Vec2(x + 36f, y + 6f + _fancyFont.characterHeight), Color.Orange, (Depth)0.5f);
                                     }
                                     else if (mod.configuration.disabled)
-                                        this._fancyFont.Draw("|DGRED|Mod will be disabled on next restart.", new Vec2(x + 36f, y + 6f + (float)this._fancyFont.characterHeight), Color.Orange, (Depth)0.5f);
+                                        this._fancyFont.Draw("|DGRED|Mod will be disabled on next restart.", new Vec2(x + 36f, y + 6f + _fancyFont.characterHeight), Color.Orange, (Depth)0.5f);
                                     else
-                                        this._fancyFont.Draw(mod.configuration.description, new Vec2(x + 36f, y + 6f + (float)this._fancyFont.characterHeight), Color.White, (Depth)0.5f);
+                                        this._fancyFont.Draw(mod.configuration.description, new Vec2(x + 36f, y + 6f + _fancyFont.characterHeight), Color.White, (Depth)0.5f);
                                 }
                             }
                             else
                             {
-                                Graphics.Draw((Sprite)this._newIcon, x + 2f, y + 1f, (Depth)0.5f);
+                                Graphics.Draw(_newIcon, x + 2f, y + 1f, (Depth)0.5f);
                                 this._fancyFont.scale = new Vec2(1.5f);
                                 this._fancyFont.Draw("Get " + (this._mods.Count == 1 ? "some" : "more") + " mods!", new Vec2(x + 36f, y + 11f), Color.White, (Depth)0.5f);
                                 this._fancyFont.scale = new Vec2(1f);
@@ -779,7 +793,7 @@ namespace DuckGame
                             }
                             if (uploadProgress.bytesTotal != 0UL)
                             {
-                                float amount = (float)uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
+                                float amount = uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
                                 str = str + " (" + ((int)((double)amount * 100.0)).ToString() + "%)";
                                 Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, this._box.width - 16f, 16f), Color.LightGray, (Depth)0.8f);
                                 Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, Lerp.FloatSmooth(0.0f, this._box.width - 16f, amount), 16f), Color.Green, (Depth)0.8f);

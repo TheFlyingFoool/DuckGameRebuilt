@@ -37,11 +37,13 @@ namespace DuckGame
             this._occluders.Add(new LightOccluder(this.position + new Vec2(10f, 2f), this.position + new Vec2(10f, -8f), new Color(1f, 0.7f, 0.7f)));
             this._occluders.Add(new LightOccluder(this.position + new Vec2(-8f, -7f), this.position + new Vec2(10f, -7f), new Color(1f, 0.7f, 0.7f)));
             this._light = new PointLight(this.x + 1f, this.y - 6f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 190), 130f, this._occluders);
-            Level.Add((Thing)this._light);
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("arcadeLight"));
-            this._shade.center = this.center;
-            this._shade.layer = Layer.Foreground;
-            Level.Add((Thing)this._shade);
+            Level.Add(_light);
+            this._shade = new SpriteThing(this.x, this.y, new Sprite("arcadeLight"))
+            {
+                center = this.center,
+                layer = Layer.Foreground
+            };
+            Level.Add(_shade);
         }
 
         public override void Update()

@@ -15,7 +15,7 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + (this._swing + this._hold) * (float)this.offDir;
+            get => base.angle + (this._swing + this._hold) * offDir;
             set => this._angle = value;
         }
 
@@ -23,7 +23,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";

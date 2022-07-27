@@ -27,9 +27,11 @@ namespace DuckGame
 
         public override void PopShell(float x, float y, int dir)
         {
-            PistolShell pistolShell = new PistolShell(x, y);
-            pistolShell.hSpeed = (float)dir * (1.5f + Rando.Float(1f));
-            Level.Add((Thing)pistolShell);
+            PistolShell pistolShell = new PistolShell(x, y)
+            {
+                hSpeed = dir * (1.5f + Rando.Float(1f))
+            };
+            Level.Add(pistolShell);
         }
 
         public override void OnHit(bool destroyed, Bullet b)
@@ -40,7 +42,7 @@ namespace DuckGame
             {
                 RumbleManager.AddRumbleEvent(b.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
                 new ATMissileShrapnel().MakeNetEffect(b.position, false);
-                Random random = (Random)null;
+                Random random = null;
                 if (Network.isActive && b.isLocal)
                 {
                     random = Rando.generator;
@@ -49,25 +51,29 @@ namespace DuckGame
                 List<Bullet> varBullets = new List<Bullet>();
                 for (int index = 0; index < 12; ++index)
                 {
-                    float num = (float)((double)index * 30.0 - 10.0) + Rando.Float(20f);
-                    ATMissileShrapnel type = new ATMissileShrapnel();
-                    type.range = 15f + Rando.Float(5f);
+                    float num = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                    ATMissileShrapnel type = new ATMissileShrapnel
+                    {
+                        range = 15f + Rando.Float(5f)
+                    };
                     Vec2 vec2 = new Vec2((float)Math.Cos((double)Maths.DegToRad(num)), (float)Math.Sin((double)Maths.DegToRad(num)));
-                    Bullet bullet = new Bullet(b.x + vec2.x * 8f, b.y - vec2.y * 8f, (AmmoType)type, num);
-                    bullet.firedFrom = (Thing)b;
+                    Bullet bullet = new Bullet(b.x + vec2.x * 8f, b.y - vec2.y * 8f, type, num)
+                    {
+                        firedFrom = b
+                    };
                     varBullets.Add(bullet);
-                    Level.Add((Thing)bullet);
-                    Level.Add((Thing)Spark.New(b.x + Rando.Float(-8f, 8f), b.y + Rando.Float(-8f, 8f), vec2 + new Vec2(Rando.Float(-0.1f, 0.1f), Rando.Float(-0.1f, 0.1f))));
-                    Level.Add((Thing)SmallSmoke.New(b.x + vec2.x * 8f + Rando.Float(-8f, 8f), b.y + vec2.y * 8f + Rando.Float(-8f, 8f)));
+                    Level.Add(bullet);
+                    Level.Add(Spark.New(b.x + Rando.Float(-8f, 8f), b.y + Rando.Float(-8f, 8f), vec2 + new Vec2(Rando.Float(-0.1f, 0.1f), Rando.Float(-0.1f, 0.1f))));
+                    Level.Add(SmallSmoke.New(b.x + vec2.x * 8f + Rando.Float(-8f, 8f), b.y + vec2.y * 8f + Rando.Float(-8f, 8f)));
                 }
                 if (Network.isActive && b.isLocal)
                 {
-                    Send.Message((NetMessage)new NMFireGun((Gun)null, varBullets, (byte)0, false), NetMessagePriority.ReliableOrdered);
+                    Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
                     varBullets.Clear();
                 }
                 if (Network.isActive && b.isLocal)
                     Rando.generator = random;
-                ATMissile.DestroyRadius(b.position, 50f, (Thing)b);
+                ATMissile.DestroyRadius(b.position, 50f, b);
             }
             base.OnHit(destroyed, b);
         }
@@ -76,16 +82,16 @@ namespace DuckGame
         {
             foreach (Window window in Level.CheckCircleAll<Window>(pPosition, pRadius - 20f))
             {
-                Thing.Fondle((Thing)window, DuckNetwork.localConnection);
-                if (Level.CheckLine<Block>(pPosition, window.position, (Thing)window) == null)
-                    window.Destroy((DestroyType)new DTImpact(pBullet));
+                Thing.Fondle(window, DuckNetwork.localConnection);
+                if (Level.CheckLine<Block>(pPosition, window.position, window) == null)
+                    window.Destroy(new DTImpact(pBullet));
             }
             foreach (PhysicsObject t in Level.CheckCircleAll<PhysicsObject>(pPosition, pRadius + 30f))
             {
                 if (pBullet.isLocal && pBullet.owner == null)
-                    Thing.Fondle((Thing)t, DuckNetwork.localConnection);
+                    Thing.Fondle(t, DuckNetwork.localConnection);
                 if ((double)(t.position - pPosition).length < 30.0)
-                    t.Destroy((DestroyType)new DTImpact(pBullet));
+                    t.Destroy(new DTImpact(pBullet));
                 t.sleeping = false;
                 t.vSpeed = -2f;
             }
@@ -107,8 +113,8 @@ namespace DuckGame
                                 varBlocks.Add((block as AutoBlock).blockIndex);
                                 if (pExplode && num % 10 == 0)
                                 {
-                                    Level.Add((Thing)new ExplosionPart(block.x, block.y));
-                                    Level.Add((Thing)SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
+                                    Level.Add(new ExplosionPart(block.x, block.y));
+                                    Level.Add(SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
                                 }
                                 ++num;
                             }
@@ -129,8 +135,8 @@ namespace DuckGame
                         {
                             if (num % 10 == 0)
                             {
-                                Level.Add((Thing)new ExplosionPart(block.x, block.y));
-                                Level.Add((Thing)SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
+                                Level.Add(new ExplosionPart(block.x, block.y));
+                                Level.Add(SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
                             }
                             ++num;
                             continue;
@@ -138,15 +144,15 @@ namespace DuckGame
                         continue;
                     case Door _:
                     case VerticalDoor _:
-                        Level.Remove((Thing)block);
-                        block.Destroy((DestroyType)new DTRocketExplosion((Thing)null));
+                        Level.Remove(block);
+                        block.Destroy(new DTRocketExplosion(null));
                         continue;
                     default:
                         continue;
                 }
             }
             if (Network.isActive && (pBullet.isLocal || pBullet.isServerForObject) && varBlocks.Count > 0)
-                Send.Message((NetMessage)new NMDestroyBlocks(varBlocks));
+                Send.Message(new NMDestroyBlocks(varBlocks));
             foreach (ILight light in Level.current.things[typeof(ILight)])
                 light.Refresh();
             return varBlocks.Count;

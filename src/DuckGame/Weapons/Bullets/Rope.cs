@@ -100,9 +100,9 @@ namespace DuckGame
         {
             this._belongsTo = belongsTo;
             if (attach1Val == null)
-                attach1Val = (Thing)this;
+                attach1Val = this;
             if (attach2Val == null)
-                attach2Val = (Thing)this;
+                attach2Val = this;
             this._attach1 = attach1Val;
             this._attach2 = attach2Val;
             this._pos1 = attach1Val.position;
@@ -110,8 +110,10 @@ namespace DuckGame
             this._thing = thing;
             if (vine)
             {
-                this._vine = new Sprite(nameof(vine));
-                this._vine.center = new Vec2(8f, 0.0f);
+                this._vine = new Sprite(nameof(vine))
+                {
+                    center = new Vec2(8f, 0.0f)
+                };
             }
             if (tex != null)
                 this._vine = tex;
@@ -123,7 +125,7 @@ namespace DuckGame
         {
             this._terminated = true;
             this.visible = false;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             if (this._attach1 is Rope attach1 && !attach1._terminated)
                 attach1.RemoveRope();
             if (!(this._attach2 is Rope attach2) || attach2._terminated)
@@ -135,14 +137,14 @@ namespace DuckGame
         {
             if (this._attach2 is Rope attach2 && !attach2._terminated)
                 attach2.TerminateLaterRopesRecurse();
-            this._attach2 = (Thing)null;
+            this._attach2 = null;
         }
 
         public void TerminateLaterRopesRecurse()
         {
             this._terminated = true;
             this.visible = false;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             if (!(this._attach2 is Rope attach2) || attach2._terminated)
                 return;
             attach2.TerminateLaterRopesRecurse();
@@ -164,7 +166,7 @@ namespace DuckGame
             }
             else
             {
-                float deg = (double)this.cornerVector.x <= 0.0 ? attach2_1.linkDirectionNormalized + 90f : attach2_1.linkDirectionNormalized - 90f;
+                float deg = cornerVector.x <= 0.0 ? attach2_1.linkDirectionNormalized + 90f : attach2_1.linkDirectionNormalized - 90f;
                 this.breakVector = Maths.AngleToVec(Maths.DegToRad(deg));
                 if (Math.Acos((double)Vec2.Dot(this.breakVector, this.cornerVector)) > Math.PI / 2.0)
                     this.breakVector = Maths.AngleToVec(Maths.DegToRad(deg + 180f));
@@ -176,9 +178,8 @@ namespace DuckGame
                 return;
             this._attach2 = attach2_1.attach2;
             this._properLength += attach2_1.properLength;
-            Level.Remove((Thing)attach2_1);
+            Level.Remove(attach2_1);
             this.cornerVector = attach2_1.cornerVector;
-            Rope attach2_2 = this._attach2 as Rope;
         }
 
         public void AddLength(float length)
@@ -194,7 +195,7 @@ namespace DuckGame
                 Vec2 vec2 = this.position - attach2.position;
                 vec2.Normalize();
                 Harpoon harpoon = attach2;
-                harpoon.position = harpoon.position - vec2 * length;
+                harpoon.position -= vec2 * length;
             }
         }
 
@@ -287,14 +288,16 @@ namespace DuckGame
                             {
                                 vec2_4 = this.attach2Point - this.attach1Point;
                                 this.linkVector = vec2_4.normalized;
-                                Rope rope = new Rope(blockCorner.corner.x, blockCorner.corner.y, (Thing)null, this._attach2, vine: this._isVine, tex: this._vine);
-                                rope.cornerVector = this.cornerVector;
-                                vec2_4 = new Vec2((double)vec2_3.x > 0.0 ? 1f : -1f, (double)vec2_3.y > 0.0 ? 1f : -1f);
+                                Rope rope = new Rope(blockCorner.corner.x, blockCorner.corner.y, null, this._attach2, vine: this._isVine, tex: this._vine)
+                                {
+                                    cornerVector = this.cornerVector
+                                };
+                                vec2_4 = new Vec2(vec2_3.x > 0.0 ? 1f : -1f, vec2_3.y > 0.0 ? 1f : -1f);
                                 this.cornerVector = vec2_4.normalized;
                                 rope._corner = blockCorner;
                                 rope._belongsTo = this._belongsTo;
-                                this._attach2 = (Thing)rope;
-                                Level.Add((Thing)rope);
+                                this._attach2 = rope;
+                                Level.Add(rope);
                                 this.properLength -= rope.length;
                                 rope.properLength = rope.length;
                                 rope.pull = this;
@@ -343,7 +346,7 @@ namespace DuckGame
                 int num4 = (int)Math.Ceiling(length1 / num3);
                 for (int index = 0; index < num4; ++index)
                 {
-                    float a = 6.283185f / (float)num4 * (float)index;
+                    float a = 6.283185f / num4 * index;
                     float num5 = (float)((1.0 - (double)num1) * 16.0);
                     Vec2 p2 = vec2_3 + vec2_2 * ((float)Math.Sin((double)a) * num5);
                     if (index == num4 - 1)
@@ -355,7 +358,7 @@ namespace DuckGame
                     if (index == num4 - 1)
                     {
                         this._vine.yscale = 1f;
-                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0.0f, 0.0f, 16f, (float)(int)((double)length2 % (double)num2)));
+                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0.0f, 0.0f, 16f, (int)((double)length2 % (double)num2)));
                     }
                     else
                     {
@@ -364,7 +367,7 @@ namespace DuckGame
                     }
                     p1 = p2;
                     vec2_3 += normalized * num2;
-                    float num6 = a + 6.283185f / (float)num4;
+                    float num6 = a + 6.283185f / num4;
                 }
             }
             else if ((double)num1 < 0.949999988079071 && (double)num1 > 0.0)

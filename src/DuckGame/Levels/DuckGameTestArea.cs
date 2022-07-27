@@ -57,34 +57,34 @@ namespace DuckGame
             this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             this._testMode = new UIMenu("TEST MODE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             UIDivider component = new UIDivider(true, 0.8f);
-            component.leftSection.Add((UIComponent)new UIMenuItem("RESTART", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._restart), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("OPTIONS", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)Options.optionsMenu), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("TEST MODE", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)this._testMode), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIText("", Color.White), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("|DGRED|QUIT", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit), UIAlign.Left), true);
-            component.rightSection.Add((UIComponent)new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add((UIComponent)component, true);
+            component.leftSection.Add(new UIMenuItem("RESTART", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._restart), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("TEST MODE", new UIMenuActionOpenMenu(_pauseMenu, _testMode), UIAlign.Left), true);
+            component.leftSection.Add(new UIText("", Color.White), true);
+            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit), UIAlign.Left), true);
+            component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            this._pauseMenu.Add(component, true);
             this._pauseMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._pauseMenu, false);
+            this._pauseGroup.Add(_pauseMenu, false);
             Options.AddMenus(this._pauseGroup);
             Options.openOnClose = this._pauseMenu;
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._confirmMenu, (UIComponent)this._pauseMenu), UIAlign.Left, backButton: true), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
+            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
             this._confirmMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._confirmMenu, false);
-            this._testMode.Add((UIComponent)new UIMenuItemNumber("PLAYERS", field: new FieldBinding((object)this, "numPlayers", 2f, 8f, 1f)), true);
-            this._testMode.Add((UIComponent)new UIMenuItem("START", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._startTestMode)), true);
-            this._testMode.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._testMode, (UIComponent)this._pauseMenu));
+            this._pauseGroup.Add(_confirmMenu, false);
+            this._testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, 8f, 1f)), true);
+            this._testMode.Add(new UIMenuItem("START", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._startTestMode)), true);
+            this._testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
             this._testMode.Close();
-            this._pauseGroup.Add((UIComponent)this._testMode, false);
+            this._pauseGroup.Add(_testMode, false);
             this._pauseGroup.isPauseMenu = true;
             this._pauseGroup.Close();
             this._pauseGroup.Update();
             this._pauseGroup.Update();
-            Level.Add((Thing)this._pauseGroup);
+            Level.Add(_pauseGroup);
             if (this._level == "RANDOM")
             {
-                LevelGenerator.MakeLevel(this._center, this._center.left && this._center.right, this._seed, this._genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0.0f, 0.0f, (Level)this, this._seed);
+                LevelGenerator.MakeLevel(this._center, this._center.left && this._center.right, this._seed, this._genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0.0f, 0.0f, this, this._seed);
                 List<SpawnPoint> source1 = new List<SpawnPoint>();
                 foreach (SpawnPoint spawnPoint in this.things[typeof(SpawnPoint)])
                     source1.Add(spawnPoint);
@@ -97,24 +97,26 @@ namespace DuckGame
                     }
                     else
                     {
-                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending<SpawnPoint, int>((Func<SpawnPoint, int>)(x =>
+                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending<SpawnPoint, int>(x =>
                        {
                            int val2 = 9999999;
                            foreach (Transform transform in chosenSpawns)
-                               val2 = (int)Math.Min((transform.position - x.position).length, (float)val2);
+                               val2 = (int)Math.Min((transform.position - x.position).length, val2);
                            return val2;
-                       }));
+                       });
                         chosenSpawns.Add(source2.First<SpawnPoint>());
                     }
                 }
                 foreach (SpawnPoint spawnPoint in source1)
                 {
                     if (!chosenSpawns.Contains(spawnPoint))
-                        Level.Remove((Thing)spawnPoint);
+                        Level.Remove(spawnPoint);
                 }
-                PyramidBackground pyramidBackground = new PyramidBackground(0.0f, 0.0f);
-                pyramidBackground.visible = false;
-                Level.Add((Thing)pyramidBackground);
+                PyramidBackground pyramidBackground = new PyramidBackground(0.0f, 0.0f)
+                {
+                    visible = false
+                };
+                Level.Add(pyramidBackground);
             }
             else
             {
@@ -150,10 +152,10 @@ namespace DuckGame
                 Profiles.defaultProfiles[index].UpdatePersona();
                 Input.ApplyDefaultMapping(Profiles.defaultProfiles[index].inputProfile, Profiles.defaultProfiles[index]);
             }
-            foreach (Duck spawnPlayer in new Deathmatch((Level)this).SpawnPlayers(false))
+            foreach (Duck spawnPlayer in new Deathmatch(this).SpawnPlayers(false))
             {
-                Level.Add((Thing)spawnPlayer);
-                this.followCam.Add((Thing)spawnPlayer);
+                Level.Add(spawnPlayer);
+                this.followCam.Add(spawnPlayer);
             }
         }
 
@@ -184,7 +186,7 @@ namespace DuckGame
             if (this._startTestMode.value)
             {
                 foreach (Profile profile in Profiles.active)
-                    profile.team = (Team)null;
+                    profile.team = null;
                 if (this.numPlayers > 7)
                 {
                     Profiles.DefaultPlayer8.team = Teams.Player8;
@@ -229,25 +231,25 @@ namespace DuckGame
                 }
                 if (this.numPlayers > 0)
                     Profiles.experienceProfile.team = Teams.Player1;
-                EditorTestLevel t = (EditorTestLevel)null;
+                EditorTestLevel t = null;
                 if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
                     t = this.things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                Level.current = (Level)new GameLevel(this._levelValue, editorTestMode: true);
+                Level.current = new GameLevel(this._levelValue, editorTestMode: true);
                 if (t == null)
                     return;
-                Level.current.AddThing((Thing)t);
+                Level.current.AddThing(t);
             }
             else if (this._restart.value)
             {
                 this.transitionSpeedMultiplier = 2f;
-                EditorTestLevel t = (EditorTestLevel)null;
+                EditorTestLevel t = null;
                 if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
                     t = this.things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                Level.current = (Level)new DuckGameTestArea(this._editor, this._levelValue, this._seed, this._center, this._genType);
+                Level.current = new DuckGameTestArea(this._editor, this._levelValue, this._seed, this._center, this._genType);
                 Level.current.transitionSpeedMultiplier = 2f;
                 if (t == null)
                     return;
-                Level.current.AddThing((Thing)t);
+                Level.current.AddThing(t);
             }
             else
             {
@@ -277,7 +279,7 @@ namespace DuckGame
                 }
                 this.PauseLogic();
                 if (this._quit.value)
-                    Level.current = (Level)this._editor;
+                    Level.current = _editor;
                 base.Update();
             }
         }

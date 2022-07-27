@@ -17,32 +17,32 @@ namespace Microsoft.Xna.Framework.Input
         private static IntPtr prevWndProc;
         private static InputSystem.WndProc hookProcDelegate;
         private static IntPtr hIMC;
-        private const int GWL_WNDPROC = -4;
-        private const int WM_KEYDOWN = 256;
-        private const int WM_KEYUP = 257;
-        private const int WM_CHAR = 258;
-        private const int WM_IME_CHAR = 646;
-        private const int WM_IME_SETCONTEXT = 641;
-        private const int WM_INPUTLANGCHANGE = 81;
-        private const int WM_GETDLGCODE = 135;
-        private const int WM_IME_COMPOSITION = 271;
-        private const int DLGC_WANTALLKEYS = 4;
-        private const int WM_MOUSEMOVE = 512;
-        private const int WM_LBUTTONDOWN = 513;
-        private const int WM_LBUTTONUP = 514;
-        private const int WM_LBUTTONDBLCLK = 515;
-        private const int WM_RBUTTONDOWN = 516;
-        private const int WM_RBUTTONUP = 517;
-        private const int WM_RBUTTONDBLCLK = 518;
-        private const int WM_MBUTTONDOWN = 519;
-        private const int WM_MBUTTONUP = 520;
-        private const int WM_MBUTTONDBLCLK = 521;
-        private const int WM_ACTIVATEAPP = 28;
-        private const int WM_MOUSEWHEEL = 522;
-        private const int WM_XBUTTONDOWN = 523;
-        private const int WM_XBUTTONUP = 524;
-        private const int WM_XBUTTONDBLCLK = 525;
-        private const int WM_MOUSEHOVER = 673;
+        //private const int GWL_WNDPROC = -4;
+        //private const int WM_KEYDOWN = 256;
+        //private const int WM_KEYUP = 257;
+        //private const int WM_CHAR = 258;
+        //private const int WM_IME_CHAR = 646;
+        //private const int WM_IME_SETCONTEXT = 641;
+        //private const int WM_INPUTLANGCHANGE = 81;
+        //private const int WM_GETDLGCODE = 135;
+        //private const int WM_IME_COMPOSITION = 271;
+        //private const int DLGC_WANTALLKEYS = 4;
+        //private const int WM_MOUSEMOVE = 512;
+        //private const int WM_LBUTTONDOWN = 513;
+        //private const int WM_LBUTTONUP = 514;
+        //private const int WM_LBUTTONDBLCLK = 515;
+        //private const int WM_RBUTTONDOWN = 516;
+        //private const int WM_RBUTTONUP = 517;
+        //private const int WM_RBUTTONDBLCLK = 518;
+        //private const int WM_MBUTTONDOWN = 519;
+        //private const int WM_MBUTTONUP = 520;
+        //private const int WM_MBUTTONDBLCLK = 521;
+        //private const int WM_ACTIVATEAPP = 28;
+        //private const int WM_MOUSEWHEEL = 522;
+        //private const int WM_XBUTTONDOWN = 523;
+        //private const int WM_XBUTTONUP = 524;
+        //private const int WM_XBUTTONDBLCLK = 525;
+        //private const int WM_MOUSEHOVER = 673;
         private static IntPtr hWND;
 
         /// <summary>Event raised when a character has been entered.</summary>
@@ -175,14 +175,14 @@ namespace Microsoft.Xna.Framework.Input
                     case 256:
                         if (InputSystem.KeyDown != null)
                         {
-                            InputSystem.KeyDown((object)null, new KeyEventArgs((Keys)(int)wParam));
+                            InputSystem.KeyDown(null, new KeyEventArgs((Keys)(int)wParam));
                             break;
                         }
                         break;
                     case 257:
                         if (InputSystem.KeyUp != null)
                         {
-                            InputSystem.KeyUp((object)null, new KeyEventArgs((Keys)(int)wParam));
+                            InputSystem.KeyUp(null, new KeyEventArgs((Keys)(int)wParam));
                             break;
                         }
                         break;
@@ -201,7 +201,7 @@ namespace Microsoft.Xna.Framework.Input
                     case 646:
                         if (InputSystem.IMECharEntered != null)
                         {
-                            InputSystem.IMECharEntered((object)null, new CharacterEventArgs((char)(int)wParam, lParam.ToInt32()));
+                            InputSystem.IMECharEntered(null, new CharacterEventArgs((char)(int)wParam, lParam.ToInt32()));
                             break;
                         }
                         break;

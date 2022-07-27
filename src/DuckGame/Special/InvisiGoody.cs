@@ -27,7 +27,7 @@ namespace DuckGame
 
         public void UpdateHeight()
         {
-            float num = (float)this.size.value;
+            float num = size.value;
             this.center = new Vec2(8f, 8f);
             this.collisionSize = new Vec2(num * 16f);
             this.collisionOffset = new Vec2((float)(-((double)num * 16.0) / 2.0));
@@ -39,9 +39,9 @@ namespace DuckGame
         {
             this._visibleInGame = false;
             this.sequence.isValid = false;
-            this.size = new EditorProperty<int>(1, (Thing)this, 1f, 16f, 1f);
-            this.valid = new EditorProperty<bool>(false, (Thing)this);
-            this.sound = new EditorProperty<bool>(false, (Thing)this);
+            this.size = new EditorProperty<int>(1, this, 1f, 16f, 1f);
+            this.valid = new EditorProperty<bool>(false, this);
+            this.sound = new EditorProperty<bool>(false, this);
         }
     }
 }

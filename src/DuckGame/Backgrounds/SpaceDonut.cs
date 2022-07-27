@@ -19,8 +19,10 @@ namespace DuckGame
         public SpaceDonut(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            Sprite sprite = new Sprite("background/donut");
-            sprite.depth = - 0.9f;
+            Sprite sprite = new Sprite("background/donut")
+            {
+                depth = -0.9f
+            };
             this.graphic = sprite;
             this._donuroid = new SpriteMap("background/donuroids", 32, 32);
             this._donuroid.CenterOrigin();
@@ -32,10 +34,10 @@ namespace DuckGame
             for (int index = 0; index < 20; ++index)
             {
                 this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, 6f), vec2_2.y + Rando.Float(-18f, 18f), this._donuroid, Rando.Int(0, 7), (Depth)1f, 1f));
-                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)((double)vec2_2.y + (double)Rando.Float(-10f, 0.0f) - 10.0), this._donuroid, Rando.Int(0, 7), this.depth - 20, 0.5f));
-                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)((double)vec2_2.y + (double)Rando.Float(10f, 0.0f) - 10.0), this._donuroid, Rando.Int(0, 7), this.depth - 20, 0.5f));
-                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)((double)vec2_2.y + (double)Rando.Float(-10f, 0.0f) - 20.0), this._donuroid, Rando.Int(0, 7), this.depth - 30, 0.25f));
-                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)((double)vec2_2.y + (double)Rando.Float(10f, 0.0f) - 20.0), this._donuroid, Rando.Int(0, 7), this.depth - 30, 0.25f));
+                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)(vec2_2.y + (double)Rando.Float(-10f, 0.0f) - 10.0), this._donuroid, Rando.Int(0, 7), this.depth - 20, 0.5f));
+                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)(vec2_2.y + (double)Rando.Float(10f, 0.0f) - 10.0), this._donuroid, Rando.Int(0, 7), this.depth - 20, 0.5f));
+                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)(vec2_2.y + (double)Rando.Float(-10f, 0.0f) - 20.0), this._donuroid, Rando.Int(0, 7), this.depth - 30, 0.25f));
+                this._roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)(vec2_2.y + (double)Rando.Float(10f, 0.0f) - 20.0), this._donuroid, Rando.Int(0, 7), this.depth - 30, 0.25f));
                 vec2_2 += vec2_1;
                 vec2_1.y += 1.4f;
             }
@@ -45,7 +47,7 @@ namespace DuckGame
         public override void Draw()
         {
             this.sinInc += 0.02f;
-            Graphics.Draw(this.graphic, this.x, this.y + (float)Math.Sin((double)this.sinInc) * 2f, (Depth)0.9f);
+            Graphics.Draw(this.graphic, this.x, this.y + (float)Math.Sin(sinInc) * 2f, (Depth)0.9f);
             foreach (Donuroid roid in this._roids)
                 roid.Draw(this.position);
         }

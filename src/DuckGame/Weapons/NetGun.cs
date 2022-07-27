@@ -22,7 +22,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._ammoType.penetration = -1f;
@@ -38,8 +38,10 @@ namespace DuckGame
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Kick;
             this._netGunGuage = new SpriteMap("netGunGuage", 8, 8);
-            this._barrelSteam = new SpriteMap("steamPuff", 16, 16);
-            this._barrelSteam.center = new Vec2(0.0f, 14f);
+            this._barrelSteam = new SpriteMap("steamPuff", 16, 16)
+            {
+                center = new Vec2(0.0f, 14f)
+            };
             this._barrelSteam.AddAnimation("puff", 0.4f, false, 0, 1, 2, 3, 4, 5, 6, 7);
             this._barrelSteam.SetAnimation("puff");
             this._barrelSteam.speed = 0.0f;
@@ -65,9 +67,9 @@ namespace DuckGame
             if ((double)this._barrelSteam.speed > 0.0)
             {
                 this._barrelSteam.alpha = 0.6f;
-                this.Draw((Sprite)this._barrelSteam, new Vec2(9f, 1f));
+                this.Draw(_barrelSteam, new Vec2(9f, 1f));
             }
-            this.Draw((Sprite)this._netGunGuage, new Vec2(-4f, -4f));
+            this.Draw(_netGunGuage, new Vec2(-4f, -4f));
         }
 
         public override void OnPressAction()
@@ -85,13 +87,13 @@ namespace DuckGame
                 if (this.receivingPress)
                     return;
                 Net t = new Net(vec2.x, vec2.y - 2f, this.duck);
-                Level.Add((Thing)t);
-                this.Fondle((Thing)t);
+                Level.Add(t);
+                this.Fondle(t);
                 if (this.owner != null)
                     t.responsibleProfile = this.owner.responsibleProfile;
                 t.clip.Add(this.owner as MaterialThing);
                 t.hSpeed = this.barrelVector.x * 10f;
-                t.vSpeed = (float)((double)this.barrelVector.y * 7.0 - 1.5);
+                t.vSpeed = (float)(barrelVector.y * 7.0 - 1.5);
             }
             else
                 this.DoAmmoClick();

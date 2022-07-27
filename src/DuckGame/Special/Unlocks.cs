@@ -55,14 +55,14 @@ namespace DuckGame
                 else if (unlock.priceTier == UnlockPrice.Ridiculous)
                     ++num14;
             }
-            int num15 = (int)Math.Round((double)num9 * 0.100000001490116);
-            int num16 = (int)Math.Round((double)num9 * 0.300000011920929);
-            int num17 = (int)Math.Round((double)num9 * 0.400000005960464);
-            int num18 = (int)Math.Round((double)num9 * 0.200000002980232);
-            int num19 = (int)Math.Round((double)num15 / (double)num11);
-            int num20 = (int)Math.Round((double)num16 / (double)num12);
-            int num21 = (int)Math.Round((double)num17 / (double)num13);
-            int num22 = (int)Math.Round((double)num18 / (double)num14);
+            int num15 = (int)Math.Round(num9 * 0.100000001490116);
+            int num16 = (int)Math.Round(num9 * 0.300000011920929);
+            int num17 = (int)Math.Round(num9 * 0.400000005960464);
+            int num18 = (int)Math.Round(num9 * 0.200000002980232);
+            int num19 = (int)Math.Round(num15 / (double)num11);
+            int num20 = (int)Math.Round(num16 / (double)num12);
+            int num21 = (int)Math.Round(num17 / (double)num13);
+            int num22 = (int)Math.Round(num18 / (double)num14);
             while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 > num9)
                 --num22;
             while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 < num9)
@@ -92,17 +92,17 @@ namespace DuckGame
             return false;
         }
 
-        public static List<UnlockData> unlocks => new List<UnlockData>((IEnumerable<UnlockData>)Unlocks._unlocks);
+        public static List<UnlockData> unlocks => new List<UnlockData>(_unlocks);
 
-        public static List<UnlockData> allUnlocks => new List<UnlockData>((IEnumerable<UnlockData>)Unlocks._allUnlocks);
+        public static List<UnlockData> allUnlocks => new List<UnlockData>(_allUnlocks);
 
         public static List<UnlockData> GetTreeLayer(int layer)
         {
             if (layer == 0)
-                return new List<UnlockData>((IEnumerable<UnlockData>)Unlocks._unlocks);
+                return new List<UnlockData>(_unlocks);
             int num = 0;
             List<UnlockData> collection = new List<UnlockData>();
-            List<UnlockData> unlockDataList = new List<UnlockData>((IEnumerable<UnlockData>)Unlocks._unlocks);
+            List<UnlockData> unlockDataList = new List<UnlockData>(_unlocks);
             for (int index = 0; index < unlockDataList.Count; ++index)
             {
                 if (unlockDataList[index].children.Count > 0)
@@ -117,19 +117,19 @@ namespace DuckGame
                 {
                     if (num == layer - 1)
                         return collection;
-                    unlockDataList = new List<UnlockData>((IEnumerable<UnlockData>)collection);
+                    unlockDataList = new List<UnlockData>(collection);
                     collection.Clear();
                     ++num;
                     index = -1;
                 }
             }
-            return (List<UnlockData>)null;
+            return null;
         }
 
         public static List<UnlockData> GetUnlocks(UnlockType type)
         {
             if (type == UnlockType.Any)
-                return new List<UnlockData>((IEnumerable<UnlockData>)Unlocks._allUnlocks);
+                return new List<UnlockData>(_allUnlocks);
             List<UnlockData> unlocks = new List<UnlockData>();
             foreach (UnlockData allUnlock in Unlocks._allUnlocks)
             {
@@ -146,7 +146,7 @@ namespace DuckGame
                 if (allUnlock.id == id)
                     return allUnlock;
             }
-            return (UnlockData)null;
+            return null;
         }
 
         public static void Initialize()

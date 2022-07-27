@@ -44,7 +44,7 @@ namespace DuckGame
         public void RemoveThing(MaterialThing thing)
         {
             this._things.Remove(thing);
-            thing.island = (CollisionIsland)null;
+            thing.island = null;
             if (thing != this.owner)
                 return;
             this.KillIsland();

@@ -34,7 +34,7 @@ namespace DuckGame
         {
             if (Network.isActive)
             {
-                Level.current = (Level)new DisconnectFromGame(this._lobbyID);
+                Level.current = new DisconnectFromGame(this._lobbyID);
             }
             else
             {
@@ -77,7 +77,7 @@ namespace DuckGame
             if (this._timeout++ > 1200UL)
             {
                 Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Connection timeout!"));
-                Level.current = (Level)new ConnectionError("|RED|CONNECTION FAILED!");
+                Level.current = new ConnectionError("|RED|CONNECTION FAILED!");
                 this._timeout = 0UL;
             }
             base.Update();
@@ -88,20 +88,20 @@ namespace DuckGame
             if (!this._startedJoining)
                 return;
             if (error != null)
-                Level.current = (Level)new ConnectionError(error.message);
+                Level.current = new ConnectionError(error.message);
             else
-                Level.current = (Level)new ConnectionError("|RED|CONNECTION FAILED!");
+                Level.current = new ConnectionError("|RED|CONNECTION FAILED!");
         }
 
         public override void Draw()
         {
             this._dots += 0.01f;
-            if ((double)this._dots > 1.0)
+            if (_dots > 1.0)
                 this._dots = 0.0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {
-                if ((double)this._dots * 4.0 > (double)(index + 1))
+                if (_dots * 4.0 > index + 1)
                     str += ".";
             }
             string text = "Connecting";

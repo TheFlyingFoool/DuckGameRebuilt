@@ -40,7 +40,7 @@ namespace DuckGame
         private int _samplesDecoded;
         private int _totalSamplesToDecode;
         private int _decodedSamplePosition;
-        private const int kDecoderChunkSize = 176400;
+        //private const int kDecoderChunkSize = 176400;
 
         public SoundState state => this._instance == null || !this._valid || this._iSaidStop ? SoundState.Stopped : this._instance.State;
 
@@ -70,7 +70,7 @@ namespace DuckGame
             set => this._shouldLoop = value;
         }
 
-        public TimeSpan position => this._activeSong != null && this._valid && this._totalSamplesToDecode > 0 && this._decodedSamplePosition < this._totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)((double)(this._decodedSamplePosition / this._totalSamplesToDecode) / 44100.0) * 500) : new TimeSpan();
+        public TimeSpan position => this._activeSong != null && this._valid && this._totalSamplesToDecode > 0 && this._decodedSamplePosition < this._totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)(this._decodedSamplePosition / this._totalSamplesToDecode / 44100.0) * 500) : new TimeSpan();
 
         public void Terminate()
         {
@@ -81,7 +81,7 @@ namespace DuckGame
                 if (this._decoderThread != null)
                     this._decoderThread.Abort();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             this._killDecodingThread = true;
@@ -97,10 +97,12 @@ namespace DuckGame
                 this._buffer = new byte[this._instance.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(500.0))];
                 this._floatBuffer = new float[this._buffer.Length / 2];
                 this._instance.BufferNeeded += new EventHandler<EventArgs>(this.Thread_Stream);
-                this._decoderThread = new Thread(new ThreadStart(this.Thread_Decoder));
-                this._decoderThread.CurrentCulture = CultureInfo.InvariantCulture;
-                this._decoderThread.Priority = ThreadPriority.BelowNormal;
-                this._decoderThread.IsBackground = true;
+                this._decoderThread = new Thread(new ThreadStart(this.Thread_Decoder))
+                {
+                    CurrentCulture = CultureInfo.InvariantCulture,
+                    Priority = ThreadPriority.BelowNormal,
+                    IsBackground = true
+                };
                 this._decoderThread.Start();
             }
             catch
@@ -200,7 +202,7 @@ namespace DuckGame
                     {
                         num = 0.0f;
                     }
-                    this._activeSong = new VorbisReader((Stream)ogg, false);
+                    this._activeSong = new VorbisReader(ogg, false);
                     this._replaygainModifier = Math.Max(0.0f, Math.Min(1f, (float)((double)(100f * (float)Math.Pow(10.0, (double)num / 20.0)) / 100.0 * 1.89999997615814)));
                     this.Thread_Decoder_LoadNewSong();
                     this.Thread_Decoder_DecodeChunk();
@@ -210,7 +212,7 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.General, "OggPlayer.SetOgg failed with exception:");
                 DevConsole.Log(DCSection.General, ex.Message);
-                this._activeSong = (VorbisReader)null;
+                this._activeSong = null;
             }
         }
 
@@ -281,9 +283,9 @@ namespace DuckGame
                     this.Thread_Decoder_LoadNewSong();
                     if ((double)this.volume == 0.0 || !this._valid || this._decoderSong == null)
                     {
-                        for (int index = 0; index < ((IEnumerable<byte>)this._buffer).Count<byte>(); ++index)
-                            this._buffer[index] = (byte)0;
-                        this._instance.SubmitBuffer(this._buffer, 0, ((IEnumerable<byte>)this._buffer).Count<byte>());
+                        for (int index = 0; index < _buffer.Count<byte>(); ++index)
+                            this._buffer[index] = 0;
+                        this._instance.SubmitBuffer(this._buffer, 0, _buffer.Count<byte>());
                         return;
                     }
                     do
@@ -292,7 +294,7 @@ namespace DuckGame
                     length = Math.Min(this._totalSamplesToDecode - this._decodedSamplePosition, this._floatBuffer.Length);
                     if (length > 0)
                     {
-                        Array.Copy((Array)this._decodedData, this._decodedSamplePosition, (Array)this._floatBuffer, 0, length);
+                        Array.Copy(_decodedData, this._decodedSamplePosition, _floatBuffer, 0, length);
                         this._decodedSamplePosition += length;
                     }
                     if (length == 0)
@@ -300,7 +302,7 @@ namespace DuckGame
                         if (this._shouldLoop)
                         {
                             this._decodedSamplePosition = 0;
-                            Array.Copy((Array)this._decodedData, this._decodedSamplePosition, (Array)this._floatBuffer, 0, this._floatBuffer.Length);
+                            Array.Copy(_decodedData, this._decodedSamplePosition, _floatBuffer, 0, this._floatBuffer.Length);
                             this._decodedSamplePosition += this._floatBuffer.Length;
                             length = this._floatBuffer.Length;
                         }
@@ -320,9 +322,9 @@ namespace DuckGame
                     return;
                 for (int index = 0; index < length; ++index)
                 {
-                    short num = (short)Math.Max(Math.Min((float)short.MaxValue * this._floatBuffer[index], (float)short.MaxValue), (float)short.MinValue);
-                    this._buffer[index * 2] = (byte)((uint)num & (uint)byte.MaxValue);
-                    this._buffer[index * 2 + 1] = (byte)((int)num >> 8 & (int)byte.MaxValue);
+                    short num = (short)Math.Max(Math.Min(short.MaxValue * this._floatBuffer[index], short.MaxValue), short.MinValue);
+                    this._buffer[index * 2] = (byte)((uint)num & byte.MaxValue);
+                    this._buffer[index * 2 + 1] = (byte)(num >> 8 & byte.MaxValue);
                 }
                 this._instance.SubmitBuffer(this._buffer, 0, length * 2);
             }

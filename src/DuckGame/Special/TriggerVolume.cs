@@ -27,18 +27,20 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2((float)(int)this.Wide, (float)(int)this.High);
-            this.collisionOffset = new Vec2((float)-((int)this.Wide / 2), (float)-((int)this.High / 2));
+            this.collisionSize = new Vec2((int)this.Wide, (int)this.High);
+            this.collisionOffset = new Vec2(-((int)this.Wide / 2), -((int)this.High / 2));
         }
 
         public TriggerVolume(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.sequence = new SequenceItem((Thing)this);
-            this.sequence.type = SequenceItemType.Goody;
+            this.sequence = new SequenceItem(this)
+            {
+                type = SequenceItemType.Goody
+            };
             this.enablePhysics = false;
             this._impactThreshold = 1E-06f;
-            this.graphic = (Sprite)new SpriteMap("challenge/goody", 16, 16);
+            this.graphic = new SpriteMap("challenge/goody", 16, 16);
             this.center = new Vec2(8f, 8f);
             (this.graphic as SpriteMap).frame = 3;
             this.collisionOffset = new Vec2(-4f, -4f);
@@ -114,8 +116,8 @@ namespace DuckGame
                     this.sequence.order = Rando.Int(256);
                 this.sequence.waitTillOrder = true;
                 this.center = new Vec2(8f, 8f);
-                this.collisionSize = new Vec2((float)(int)this.Wide, (float)(int)this.High);
-                this.collisionOffset = new Vec2((float)-((int)this.Wide / 2), (float)-((int)this.High / 2));
+                this.collisionSize = new Vec2((int)this.Wide, (int)this.High);
+                this.collisionOffset = new Vec2(-((int)this.Wide / 2), -((int)this.High / 2));
             }
             if (!(Level.current is Editor) && this.sequence.waitTillOrder && this.sequence.order != 0)
             {
@@ -142,8 +144,8 @@ namespace DuckGame
             base.Draw();
             if (Editor.editorDraw)
                 return;
-            float num1 = (float)this.Wide.value;
-            float num2 = (float)this.High.value;
+            float num1 = Wide.value;
+            float num2 = High.value;
             Graphics.DrawRect(this.position + new Vec2((float)(-(double)num1 / 2.0), (float)(-(double)num2 / 2.0)), this.position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
         }
     }

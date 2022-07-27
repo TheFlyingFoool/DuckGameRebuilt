@@ -21,7 +21,7 @@ namespace DuckGame
             this._sprite.AddAnimation("convey", 0.1f, true, 0, 1, 2, 3, 4, 5, 6, 7);
             this._sprite.frame = Rando.Int(0, 7);
             this._sprite.SetAnimation("convey");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(7f, 5f);
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 8f);

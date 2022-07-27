@@ -40,19 +40,19 @@ namespace DuckGame
 
         public void Jump(int frames)
         {
-            this._jumpFrames = (float)frames;
+            this._jumpFrames = frames;
             this._ai.Press("JUMP");
         }
 
         public void Quack(int frames)
         {
-            this._quackFrames = (float)frames;
+            this._quackFrames = frames;
             this._ai.Press("QUACK");
         }
 
         public void Slide(int frames)
         {
-            this._slideFrames = (float)frames;
+            this._slideFrames = frames;
             this._ai.Press("DOWN");
         }
 
@@ -67,32 +67,32 @@ namespace DuckGame
         {
             if (Mouse.right == InputState.Pressed)
             {
-                this._path.followObject = (Thing)duck;
+                this._path.followObject = duck;
                 this._path.SetTarget(Mouse.positionScreen);
                 this._path.Refresh();
             }
             this._ai = ai;
-            this._path.followObject = (Thing)duck;
-            if ((double)this._jumpFrames == 1.0)
+            this._path.followObject = duck;
+            if (_jumpFrames == 1.0)
             {
                 this._jumpFrames = 0.0f;
                 this._ai.Release("JUMP");
             }
-            else if ((double)this._jumpFrames > 0.0)
+            else if (_jumpFrames > 0.0)
                 --this._jumpFrames;
-            if ((double)this._slideFrames == 1.0)
+            if (_slideFrames == 1.0)
             {
                 this._slideFrames = 0.0f;
                 this._ai.Release("DOWN");
             }
-            else if ((double)this._slideFrames > 0.0)
+            else if (_slideFrames > 0.0)
                 --this._slideFrames;
-            if ((double)this._quackFrames == 1.0)
+            if (_quackFrames == 1.0)
             {
                 this._quackFrames = 0.0f;
                 this._ai.Release("QUACK");
             }
-            else if ((double)this._quackFrames > 0.0)
+            else if (_quackFrames > 0.0)
                 --this._quackFrames;
             ai.Release("LEFT");
             ai.Release("RIGHT");
@@ -110,7 +110,7 @@ namespace DuckGame
             }
             if (this._path.path == null)
                 return;
-            if ((double)vec2.y < (double)duck.y && (double)Math.Abs(vec2.y) > 64.0 && this._path.path.Count > 1)
+            if (vec2.y < (double)duck.y && (double)Math.Abs(vec2.y) > 64.0 && this._path.path.Count > 1)
             {
                 this._path.Refresh();
                 if (this._path.path == null)
@@ -143,15 +143,15 @@ namespace DuckGame
             if (this._path.path == null)
                 return;
             float num1 = 1f;
-            if ((double)this._path.target.position.y == (double)this.target.y)
+            if (_path.target.position.y == (double)this.target.y)
                 num1 = 0.0f;
-            if ((double)vec2.x < ((double)duck.hSpeed * 3.0 - 2.0) * (double)num1)
+            if (vec2.x < ((double)duck.hSpeed * 3.0 - 2.0) * (double)num1)
             {
                 if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(-32f, 0.0f)) != null)
                     this.Slide(30);
                 this.RunLeft();
             }
-            else if ((double)vec2.x > ((double)duck.hSpeed * 3.0 + 2.0) * (double)num1)
+            else if (vec2.x > ((double)duck.hSpeed * 3.0 + 2.0) * (double)num1)
             {
                 if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(32f, 0.0f)) != null)
                     this.Slide(30);
@@ -162,7 +162,7 @@ namespace DuckGame
                 this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.x), 0.0f, 48f) / 48.0 * 16.0));
                 this._tryJump = 5;
             }
-            if ((double)vec2.y <= -4.0 && duck.grounded)
+            if (vec2.y <= -4.0 && duck.grounded)
             {
                 this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.y), 0.0f, 48f) / 48.0 * 16.0));
                 this._tryJump = 5;
@@ -172,7 +172,7 @@ namespace DuckGame
             float num2 = 8f;
             if ((double)Math.Abs(this._path.peek.owner.y - target.y) < 8.0)
                 num2 = 200f;
-            if ((double)Math.Abs(vec2.x) >= 4.0 || (double)Math.Abs(vec2.y) >= (double)num2 || !PathNode.LineIsClear(duck.position - new Vec2(0.0f, 8f), target) || (double)this._path.peek.link.position.y < (double)duck.y - 8.0 && !duck.grounded || !duck.grounded)
+            if ((double)Math.Abs(vec2.x) >= 4.0 || (double)Math.Abs(vec2.y) >= (double)num2 || !PathNode.LineIsClear(duck.position - new Vec2(0.0f, 8f), target) || _path.peek.link.position.y < (double)duck.y - 8.0 && !duck.grounded || !duck.grounded)
                 return;
             this._path.AtTarget();
             this._ai.canRefresh = true;

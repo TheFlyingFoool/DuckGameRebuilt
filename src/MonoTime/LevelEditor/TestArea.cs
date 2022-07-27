@@ -27,7 +27,7 @@ namespace DuckGame
         {
             if (this._level == "RANDOM")
             {
-                LevelGenerator.MakeLevel(allowSymmetry: (this._center.left && this._center.right), seed: this._seed).LoadParts(0.0f, 0.0f, (Level)this, this._seed);
+                LevelGenerator.MakeLevel(allowSymmetry: (this._center.left && this._center.right), seed: this._seed).LoadParts(0.0f, 0.0f, this, this._seed);
             }
             else
             {

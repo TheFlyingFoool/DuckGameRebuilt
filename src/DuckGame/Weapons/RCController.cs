@@ -27,12 +27,12 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 99;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";
             this._sprite = new SpriteMap("rcController", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 16f);
             this.collisionOffset = new Vec2(-6f, -4f);
             this.collisionSize = new Vec2(12f, 9f);
@@ -52,31 +52,33 @@ namespace DuckGame
         {
             if (this._car == null && !(Level.current is Editor) && this.isServerForObject)
             {
-                this._car = new RCCar(this.x, this.y);
-                this._car._controller = this;
-                Level.Add((Thing)this._car);
+                this._car = new RCCar(this.x, this.y)
+                {
+                    _controller = this
+                };
+                Level.Add(_car);
             }
             ++this._inc;
             if (this._inc > 14 && this._car != null)
             {
                 this._inc = 0;
                 if (this._car.receivingSignal && !this._car.destroyed)
-                    Level.Add((Thing)new RCControlBolt(this.x, this.y, this._car));
+                    Level.Add(new RCControlBolt(this.x, this.y, this._car));
             }
             if (this.lockedOwner != this.owner)
                 this.Release(this.lockedOwner);
             if (this.isServerForObject)
             {
-                if (this._burning && (double)this._burnLife > 0.0)
+                if (this._burning && _burnLife > 0.0)
                 {
                     this._burnWait -= 0.01f;
-                    if ((double)this._burnWait < 0.0)
+                    if (_burnWait < 0.0)
                     {
-                        Level.Add((Thing)SmallFire.New(8f, 0.0f, 0.0f, 0.0f, stick: ((MaterialThing)this), canMultiply: false, firedFrom: ((Thing)this)));
+                        Level.Add(SmallFire.New(8f, 0.0f, 0.0f, 0.0f, stick: this, canMultiply: false, firedFrom: this));
                         this._burnWait = 1f;
                     }
                     this._burnLife -= 1f / 500f;
-                    if ((double)this._burnLife <= 0.0)
+                    if (_burnLife <= 0.0)
                         this._sprite.frame = 1;
                 }
                 if (this.owner is Duck owner)
@@ -84,13 +86,13 @@ namespace DuckGame
                     if (this._pressed && this._car != null)
                     {
                         if (this._car.owner == null)
-                            this.Fondle((Thing)this._car);
+                            this.Fondle(_car);
                         this._car.moveLeft = owner.inputProfile.Down("LEFT");
                         this._car.moveRight = owner.inputProfile.Down("RIGHT");
                         this._car.jump = owner.inputProfile.Pressed("JUMP");
                         if (owner.inputProfile.Pressed("GRAB"))
                         {
-                            this.Fondle((Thing)this._car);
+                            this.Fondle(_car);
                             this._car.Destroy();
                         }
                     }
@@ -127,7 +129,7 @@ namespace DuckGame
             this._car.receivingSignal = true;
             if (!(Level.current.camera is FollowCam camera))
                 return;
-            camera.Add((Thing)this._car);
+            camera.Add(_car);
         }
 
         private void Release(Thing pOwner)
@@ -140,13 +142,13 @@ namespace DuckGame
                 duck.remoteControl = false;
             }
             this._pressed = false;
-            this.lockedOwner = (Thing)null;
+            this.lockedOwner = null;
             if (this._car == null)
                 return;
             this._car.receivingSignal = false;
             if (!(Level.current.camera is FollowCam camera))
                 return;
-            camera.Remove((Thing)this._car);
+            camera.Remove(_car);
         }
 
         public override void OnReleaseAction() => this.Release(this.owner);

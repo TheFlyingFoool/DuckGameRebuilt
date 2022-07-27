@@ -45,14 +45,14 @@ namespace DuckGame
             Mod mod;
             if (ModLoader._modAssemblyNames.TryGetValue(args.Name, out mod))
                 return mod.configuration.assembly;
-            return args.Name.StartsWith("Steam,") ? ((IEnumerable<Assembly>)AppDomain.CurrentDomain.GetAssemblies()).FirstOrDefault<Assembly>((Func<Assembly, bool>)(x => x.FullName.StartsWith("Steam,") || x.FullName.StartsWith("Steam.Debug,"))) : (Assembly)null;
+            return args.Name.StartsWith("Steam,") ? AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault<Assembly>(x => x.FullName.StartsWith("Steam,") || x.FullName.StartsWith("Steam.Debug,")) : null;
         }
 
         public static void PreInitializeMods()
         {
             if (!MonoMain.moddingEnabled)
                 return;
-            ModLoader.AddMod((Mod)(CoreMod.coreMod = new CoreMod()));
+            ModLoader.AddMod(CoreMod.coreMod = new CoreMod());
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ManagedContent.ResolveModAssembly);
             DuckFile.CreatePath(DuckFile.modsDirectory);
             DuckFile.CreatePath(DuckFile.globalModsDirectory);
@@ -64,7 +64,7 @@ namespace DuckGame
             MonoMain.loadMessage = "Loading Mods";
             if (MonoMain.moddingEnabled)
                 ModLoader.LoadMods(DuckFile.modsDirectory);
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction((Action)(() =>
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
            {
                ModLoader.InitializeAssemblyArray();
                ManagedContent.InitializeContentSet<Thing>(ManagedContent.Things);
@@ -72,7 +72,7 @@ namespace DuckGame
                ManagedContent.InitializeContentSet<DeathCrateSetting>(ManagedContent.DeathCrateSettings);
                ManagedContent.InitializeContentSet<DestroyType>(ManagedContent.DestroyTypes);
                ContentProperties.InitializeBags(ManagedContent.Things.Types);
-           })));
+           }));
         }
     }
 }

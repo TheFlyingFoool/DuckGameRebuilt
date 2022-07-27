@@ -37,7 +37,7 @@ namespace DuckGame
         {
             base.OnDeserialize(d);
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
                 this.profiles.Add(d.ReadProfile());
         }
 
@@ -50,12 +50,14 @@ namespace DuckGame
                 Profile p = this.theRealWinnerHere != null ? this.theRealWinnerHere : profile;
                 if (profile.duck != null)
                 {
-                    PlusOne plusOne = new PlusOne(0.0f, 0.0f, p, testMode: true);
-                    plusOne._duck = profile.duck;
-                    plusOne.anchor = (Anchor)(Thing)profile.duck;
+                    PlusOne plusOne = new PlusOne(0.0f, 0.0f, p, testMode: true)
+                    {
+                        _duck = profile.duck,
+                        anchor = (Anchor)profile.duck
+                    };
                     plusOne.anchor.offset = new Vec2(0.0f, -16f);
                     plusOne.depth = (Depth)0.95f;
-                    Level.Add((Thing)plusOne);
+                    Level.Add(plusOne);
                 }
             }
             if (this is NMPlusOne)

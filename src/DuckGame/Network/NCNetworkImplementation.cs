@@ -86,7 +86,7 @@ namespace DuckGame
         {
             get
             {
-                List<NetworkConnection> sessionConnections = new List<NetworkConnection>((IEnumerable<NetworkConnection>)this.connections);
+                List<NetworkConnection> sessionConnections = new List<NetworkConnection>(connections);
                 if (DuckNetwork.localConnection.status != ConnectionStatus.Disconnected)
                     sessionConnections.Add(DuckNetwork.localConnection);
                 return sessionConnections;
@@ -119,7 +119,7 @@ namespace DuckGame
             this._networkIndex = networkIndex;
             this._ghostManager = new GhostManager();
             if (NetworkDebugger.enabled)
-                this._dataLayer = (DataLayer)new DataLayerDebug(this);
+                this._dataLayer = new DataLayerDebug(this);
             else
                 this._dataLayer = new DataLayer(this);
         }
@@ -162,10 +162,12 @@ namespace DuckGame
             this._isServer = true;
             this._isServerP2P = true;
             this._killThread = false;
-            this._networkThread = new Thread(new ThreadStart(this.SpinThread));
-            this._networkThread.CurrentCulture = CultureInfo.InvariantCulture;
-            this._networkThread.Priority = ThreadPriority.Normal;
-            this._networkThread.IsBackground = true;
+            this._networkThread = new Thread(new ThreadStart(this.SpinThread))
+            {
+                CurrentCulture = CultureInfo.InvariantCulture,
+                Priority = ThreadPriority.Normal,
+                IsBackground = true
+            };
             this._networkThread.Start();
             Network.MakeActive();
         }
@@ -176,15 +178,17 @@ namespace DuckGame
             this._isServer = false;
             this._isServerP2P = false;
             this._killThread = false;
-            this._networkThread = new Thread(new ThreadStart(this.SpinThread));
-            this._networkThread.CurrentCulture = CultureInfo.InvariantCulture;
-            this._networkThread.Priority = ThreadPriority.Normal;
-            this._networkThread.IsBackground = true;
+            this._networkThread = new Thread(new ThreadStart(this.SpinThread))
+            {
+                CurrentCulture = CultureInfo.InvariantCulture,
+                Priority = ThreadPriority.Normal,
+                IsBackground = true
+            };
             this._networkThread.Start();
             Network.MakeActive();
         }
 
-        private static uint SwapEndianness(ulong x) => (uint)((ulong)((((long)x & (long)byte.MaxValue) << 24) + (((long)x & 65280L) << 8)) + ((x & 16711680UL) >> 8) + ((x & 4278190080UL) >> 24));
+        //private static uint SwapEndianness(ulong x) => (uint)((ulong)((((long)x & (long)byte.MaxValue) << 24) + (((long)x & 65280L) << 8)) + ((x & 16711680UL) >> 8) + ((x & 4278190080UL) >> 24));
 
         public void Thread_Loop()
         {
@@ -225,18 +229,18 @@ namespace DuckGame
                 if (context == null)
                 {
                     DevConsole.Log(DCSection.NetCore, "@errorConnection attempt with" + str + "failed (INVALID)@error", this._networkIndex);
-                    return (NetworkConnection)null;
+                    return null;
                 }
             }
             if (context == null)
             {
                 DevConsole.Log(DCSection.NetCore, "@error Null connection attempt, this shouldn't happen!@error", this._networkIndex);
-                return (NetworkConnection)null;
+                return null;
             }
             if (DuckNetwork.localConnection.status != ConnectionStatus.Connected)
             {
                 DevConsole.Log(DCSection.NetCore, "@error Connection ignored due to full disconnect in progress.@error");
-                return (NetworkConnection)null;
+                return null;
             }
             NetworkConnection orAddConnection = this.GetOrAddConnection(context);
             if (orAddConnection.status != ConnectionStatus.Connected && !orAddConnection.banned && Network.isServer && orAddConnection.data is User && Options.Data.blockedPlayers.Contains((orAddConnection.data as User).id))
@@ -247,11 +251,11 @@ namespace DuckGame
             if (orAddConnection.banned)
             {
                 DevConsole.Log(DCSection.NetCore, "@error Connection ignored due to ban.@error");
-                return (NetworkConnection)null;
+                return null;
             }
             orAddConnection.recentlyReceivedPackets.Clear();
             orAddConnection.recentlyReceivedPacketsArray = new ushort[NetworkConnection.kMaxRecentlyReceivedPackets];
-            orAddConnection.recentlyReceivedPacketsArrayIndex = (byte)0;
+            orAddConnection.recentlyReceivedPacketsArrayIndex = 0;
             if (orAddConnection.status != ConnectionStatus.Disconnected && orAddConnection.status != ConnectionStatus.Disconnecting)
             {
                 DevConsole.Log(DCSection.NetCore, "@error Connection attempt skipped (Already Connected)@error", orAddConnection, this._networkIndex);
@@ -268,7 +272,7 @@ namespace DuckGame
             return orAddConnection;
         }
 
-        protected virtual object GetConnectionObject(string identifier) => (object)null;
+        protected virtual object GetConnectionObject(string identifier) => null;
 
         protected void OnAttemptConnection(object context)
         {
@@ -276,7 +280,7 @@ namespace DuckGame
 
         public void SendPeerInfo(object context) => this.OnSendPeerInfo(context);
 
-        public virtual NCError OnSendPeerInfo(object context) => (NCError)null;
+        public virtual NCError OnSendPeerInfo(object context) => null;
 
         public void PushNewConnection(NetworkConnection c)
         {
@@ -290,7 +294,7 @@ namespace DuckGame
         protected NetworkConnection GetOrAddConnection(object context)
         {
             string id = this.GetConnectionIdentifier(context);
-            NetworkConnection c = this.allConnections.FirstOrDefault<NetworkConnection>((Func<NetworkConnection, bool>)(x => x.identifier == id));
+            NetworkConnection c = this.allConnections.FirstOrDefault<NetworkConnection>(x => x.identifier == id);
             if (c == null)
             {
                 c = new NetworkConnection(context);
@@ -302,7 +306,7 @@ namespace DuckGame
         protected NetworkConnection GetConnection(object context)
         {
             string id = this.GetConnectionIdentifier(context);
-            return this.allConnections.FirstOrDefault<NetworkConnection>((Func<NetworkConnection, bool>)(x => x.identifier == id));
+            return this.allConnections.FirstOrDefault<NetworkConnection>(x => x.identifier == id);
         }
 
         public void DisconnectClient(NetworkConnection connection, DuckNetErrorInfo error, bool kicked = false)
@@ -325,7 +329,7 @@ namespace DuckGame
                 if (Level.current != null)
                     Level.current.OnDisconnect(connection);
                 DuckNetwork.OnDisconnect(connection, reason, kicked || error != null && (error.error == DuckNetError.Kicked || error.error == DuckNetError.Banned));
-                NCNetworkImplementation.currentError = (DuckNetErrorInfo)null;
+                NCNetworkImplementation.currentError = null;
                 if (connection.data == null)
                     DevConsole.Log(DCSection.NetCore, "@disconnect You (LOCAL) are disconnecting...|DGRED|(" + reason + ")", this._networkIndex);
                 else
@@ -386,7 +390,7 @@ namespace DuckGame
                 if (this._timeThread != null)
                     this._timeThread.Abort();
             }
-            this._networkThread = (Thread)null;
+            this._networkThread = null;
             this.KillConnection();
             this._pendingPackets.Clear();
             this._pendingMessages.Clear();
@@ -399,10 +403,10 @@ namespace DuckGame
             if (Level.current != null)
                 Level.current.OnSessionEnded(error);
             else
-                Level.current = error == null ? (Level)new ConnectionError("|RED|Disconnected from game.") : (Level)new ConnectionError(error.message);
+                Level.current = error == null ? new ConnectionError("|RED|Disconnected from game.") : (Level)new ConnectionError(error.message);
             if (UIMatchmakerMark2.instance != null)
                 UIMatchmakerMark2.instance.Hook_OnSessionEnded(error);
-            NCNetworkImplementation.currentMainDisconnectError = (DuckNetErrorInfo)null;
+            NCNetworkImplementation.currentMainDisconnectError = null;
             this._hardDisconnectTimeout = -1;
             lock (this._connectionHistory)
             {
@@ -473,7 +477,7 @@ namespace DuckGame
             }
             else
             {
-                NetworkPacket networkPacket = new NetworkPacket(new BitBuffer(data), connection, (ushort)0);
+                NetworkPacket networkPacket = new NetworkPacket(new BitBuffer(data), connection, 0);
                 if (NetworkDebugger.enabled)
                     NetworkDebugger.LogReceive(NetworkDebugger.GetID(this._networkIndex), networkPacket.connection.identifier);
                 try
@@ -484,10 +488,10 @@ namespace DuckGame
                     lock (networkPacket.connection.acksReceived)
                     {
                         networkPacket.connection.acksReceived.Add(num1);
-                        for (ushort index = 0; index < (ushort)16; ++index)
+                        for (ushort index = 0; index < 16; ++index)
                         {
-                            if (((int)num2 & (int)networkPacket.connection.kAckOffsets[(int)index]) != 0)
-                                networkPacket.connection.acksReceived.Add((ushort)((uint)num1 - ((uint)index + 1U)));
+                            if ((num2 & networkPacket.connection.kAckOffsets[index]) != 0)
+                                networkPacket.connection.acksReceived.Add((ushort)(num1 - (index + 1U)));
                         }
                     }
                     bool flag = networkPacket.data.ReadBool();
@@ -589,10 +593,10 @@ namespace DuckGame
                     DevConsole.Log(threadPendingMessage.text, threadPendingMessage.color, index: this._networkIndex);
                 this._threadPendingMessages.Clear();
             }
-            List<NetworkPacket> networkPacketList = (List<NetworkPacket>)null;
+            List<NetworkPacket> networkPacketList = null;
             lock (this._pendingPackets)
             {
-                networkPacketList = new List<NetworkPacket>((IEnumerable<NetworkPacket>)this._pendingPackets);
+                networkPacketList = new List<NetworkPacket>(_pendingPackets);
                 this._pendingPackets.Clear();
             }
             if (networkPacketList.Count > 1)
@@ -601,7 +605,7 @@ namespace DuckGame
                 {
                     NetworkPacket networkPacket1 = networkPacketList[index - 1];
                     NetworkPacket networkPacket2 = networkPacketList[index];
-                    if ((int)networkPacket2.order < (int)networkPacket1.order)
+                    if (networkPacket2.order < networkPacket1.order)
                     {
                         networkPacketList[index] = networkPacket1;
                         networkPacketList[index - 1] = networkPacket2;
@@ -626,7 +630,7 @@ namespace DuckGame
                         {
                             packet.Unpack();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             DevConsole.Log(DCSection.NetCore, "|DGRED|Message unpack failure, possible corruption");
                             Program.LogLine("Message unpack failure, possible corruption.");
@@ -651,7 +655,7 @@ namespace DuckGame
                         }
                         else if (packet.connection.status != ConnectionStatus.Connecting)
                             DevConsole.Log(DCSection.NetCore, "Dropping packet, invalid session (" + packet.sessionID.ToString() + " vs " + packet.connection.sessionID.ToString() + ")");
-                        NetworkConnection.context = (NetworkConnection)null;
+                        NetworkConnection.context = null;
                     }
                 }
                 else
@@ -661,7 +665,7 @@ namespace DuckGame
             foreach (NetworkConnection sessionConnection in this.sessionConnections)
             {
                 (NetworkConnection.context = sessionConnection).Update();
-                NetworkConnection.context = (NetworkConnection)null;
+                NetworkConnection.context = null;
             }
             this._ghostManager.UpdateSynchronizedEvents();
         }
@@ -676,7 +680,7 @@ namespace DuckGame
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.ping;
-                return num / (float)connections.Count;
+                return num / connections.Count;
             }
         }
 
@@ -690,7 +694,7 @@ namespace DuckGame
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.pingPeak;
-                return num / (float)connections.Count;
+                return num / connections.Count;
             }
         }
 
@@ -702,7 +706,7 @@ namespace DuckGame
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.jitter;
-                return num / (float)connections.Count;
+                return num / connections.Count;
             }
         }
 
@@ -714,7 +718,7 @@ namespace DuckGame
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.jitterPeak;
-                return num / (float)connections.Count;
+                return num / connections.Count;
             }
         }
 
@@ -746,7 +750,7 @@ namespace DuckGame
                     num1 += networkConnection.manager.losses;
                     num2 += networkConnection.manager.sent;
                 }
-                return num1 == 0 ? 0 : (int)Math.Round((double)(num1 / connections.Count) / (double)(num2 / connections.Count) * 100.0);
+                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (double)(num2 / connections.Count) * 100.0);
             }
         }
 
@@ -772,7 +776,7 @@ namespace DuckGame
                     ConnectionStatusUI.core.tempShow = 2;
                 if (networkConnection.profile == null || !networkConnection.banned)
                     networkConnection.PostUpdate(this.frame);
-                NetworkConnection.context = (NetworkConnection)null;
+                NetworkConnection.context = null;
                 ++num;
             }
             if (DuckNetwork.localProfile == null)
@@ -817,7 +821,7 @@ namespace DuckGame
             if (this._networkThread != null && this._networkThread.IsAlive)
             {
                 this._networkThread.Abort();
-                this._networkThread = (Thread)null;
+                this._networkThread = null;
             }
             DevConsole.Log(DCSection.NetCore, "|DGRED|@error -----------Network termination Complete-----------@error");
         }

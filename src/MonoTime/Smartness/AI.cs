@@ -30,7 +30,7 @@ namespace DuckGame
             {
                 case Door _:
                 case Window _:
-                    return (Thing)null;
+                    return null;
                 default:
                     return b;
             }
@@ -52,7 +52,7 @@ namespace DuckGame
                     if (to != null)
                     {
                         AIPath path = pathNode.GetPath(to);
-                        if (path != null && (double)path.length < (double)num)
+                        if (path != null && path.length < (double)num)
                         {
                             num = path.length;
                             obj = (T)(object)thing;
@@ -69,16 +69,16 @@ namespace DuckGame
         {
             PathNode pathNode = AI.NearestNode(position);
             if (pathNode == null)
-                return (Thing)null;
+                return null;
             float num = 99999.9f;
-            Thing thing1 = (Thing)null;
+            Thing thing1 = null;
             foreach (Thing thing2 in things)
             {
                 PathNode to = AI.NearestNode(thing2.position, thing2);
                 if (to != null)
                 {
                     AIPath path = pathNode.GetPath(to);
-                    if (path != null && path.nodes.Count > 0 && (double)path.length < (double)num && AI.CanReach(path.nodes.Last<PathNode>(), thing2))
+                    if (path != null && path.nodes.Count > 0 && path.length < (double)num && AI.CanReach(path.nodes.Last<PathNode>(), thing2))
                     {
                         num = path.length;
                         thing1 = thing2;
@@ -91,15 +91,15 @@ namespace DuckGame
         public static PathNode NearestNode(Vec2 pos, Thing ignore = null)
         {
             List<Thing> list = Level.current.things[typeof(PathNode)].ToList<Thing>();
-            list.Sort((Comparison<Thing>)((a, b) =>
+            list.Sort((a, b) =>
            {
                Vec2 vec2 = a.position - pos;
                double lengthSq1 = (double)vec2.lengthSq;
                vec2 = b.position - pos;
                double lengthSq2 = (double)vec2.lengthSq;
                return lengthSq1 >= lengthSq2 ? 1 : -1;
-           }));
-            PathNode pathNode = (PathNode)null;
+           });
+            PathNode pathNode = null;
             foreach (Thing thing in list)
             {
                 if (PathNode.LineIsClear(pos, thing.position, ignore))
@@ -113,7 +113,7 @@ namespace DuckGame
 
         private static Thing GetHighest(List<IPlatform> things)
         {
-            Thing highest = (Thing)null;
+            Thing highest = null;
             foreach (IPlatform thing1 in things)
             {
                 if (!(thing1 is PhysicsObject))
@@ -128,7 +128,7 @@ namespace DuckGame
 
         private static Thing GetHighestNotGlass(List<IPlatform> things)
         {
-            Thing highestNotGlass = (Thing)null;
+            Thing highestNotGlass = null;
             foreach (IPlatform thing1 in things)
             {
                 switch (thing1)
@@ -164,12 +164,12 @@ namespace DuckGame
             PathNode.CalculateNode(start, start, end);
             while (pathNodeList2.Count != 0)
             {
-                PathNode parent = (PathNode)null;
+                PathNode parent = null;
                 foreach (PathNode pathNode in pathNodeList2)
                 {
                     if (parent == null)
                         parent = pathNode;
-                    else if ((double)pathNode.cost + (double)pathNode.heuristic < (double)parent.cost + (double)parent.heuristic)
+                    else if (pathNode.cost + (double)pathNode.heuristic < parent.cost + (double)parent.heuristic)
                         parent = pathNode;
                 }
                 if (parent != null)
@@ -199,7 +199,7 @@ namespace DuckGame
                             else
                             {
                                 float cost = PathNode.CalculateCost(link2, parent);
-                                if ((double)cost < (double)link2.cost)
+                                if ((double)cost < link2.cost)
                                 {
                                     link2.cost = cost;
                                     link2.parent = parent;

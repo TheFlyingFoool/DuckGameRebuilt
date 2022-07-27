@@ -17,7 +17,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("slag", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -41,14 +41,14 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && this.owner == null)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             if (this.isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 if (this.duck != null)
                     this.duck.ThrowItem();
-                this.Destroy((DestroyType)new DTShot(bullet));
-                Level.Remove((Thing)this);
-                Level.Add((Thing)new GrenadeExplosion(this.x, this.y));
+                this.Destroy(new DTShot(bullet));
+                Level.Remove(this);
+                Level.Add(new GrenadeExplosion(this.x, this.y));
             }
             return base.Hit(bullet, hitPos);
         }

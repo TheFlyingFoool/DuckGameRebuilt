@@ -74,7 +74,7 @@ namespace DuckGame
         private int _roundsPlayed;
         private BitmapFont _bigFont;
         private int _currentDay;
-        private List<Tex2D> _eggs = new List<Tex2D>();
+        //private List<Tex2D> _eggs = new List<Tex2D>();
         //private static bool _firstOpen;
         private int _originalXP;
         private int _totalXP;
@@ -261,7 +261,7 @@ namespace DuckGame
             this._frames.Add(new Sprite("levWindow_lev6"));
             this._frames[this._frames.Count - 1].CenterOrigin();
             this._barFront = new Sprite("online/barFront");
-            this._barFront.center = new Vec2((float)this._barFront.w, 0.0f);
+            this._barFront.center = new Vec2(_barFront.w, 0.0f);
             this._addXPBar = new Sprite("online/xpAddBar");
             this._addXPBar.CenterOrigin();
             this._bigFont = new BitmapFont("intermissionFont", 24, 23);
@@ -307,7 +307,7 @@ namespace DuckGame
             if (Profiles.experienceProfile != null)
             {
                 this._xpValue = Profiles.experienceProfile.xp;
-                this._newXPValue = this._oldXPValue = (float)this._xpValue;
+                this._newXPValue = this._oldXPValue = _xpValue;
                 if (this._xpValue >= DuckNetwork.GetLevel(9999).xpRequired)
                 {
                     this._desiredLevel = this._currentLevel = DuckNetwork.GetLevel(9999).num;
@@ -323,20 +323,20 @@ namespace DuckGame
                 if (this._desiredLevel >= 3)
                 {
                     this._gachaValue = (this._xpValue - DuckNetwork.GetLevel(3).xpRequired) % this.gachaNeed;
-                    this._newGachaValue = (float)this._gachaValue;
-                    this._oldGachaValue = (float)this._gachaValue;
+                    this._newGachaValue = _gachaValue;
+                    this._oldGachaValue = _gachaValue;
                 }
                 if (this._desiredLevel >= 4)
                 {
                     this._sandwichValue = (this._xpValue - DuckNetwork.GetLevel(4).xpRequired) % this.sandwichNeed;
-                    this._newSandwichValue = (float)this._sandwichValue;
-                    this._oldSandwichValue = (float)this._sandwichValue;
+                    this._newSandwichValue = _sandwichValue;
+                    this._oldSandwichValue = _sandwichValue;
                 }
                 if (this._desiredLevel >= 7)
                 {
                     this._milkValue = (this._xpValue - DuckNetwork.GetLevel(7).xpRequired) % this.milkNeed;
-                    this._newMilkValue = (float)this._milkValue;
-                    this._oldMilkValue = (float)this._milkValue;
+                    this._newMilkValue = _milkValue;
+                    this._oldMilkValue = _milkValue;
                 }
             }
             this._newGrowthLevel = Profiles.experienceProfile.littleManLevel;
@@ -350,7 +350,7 @@ namespace DuckGame
             SFX.Play("pause");
             this._totalXP = DuckNetwork.GetTotalXPEarned();
             this._originalXP = this._xpValue;
-            if (Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) <= 0)
+            if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) <= 0)
                 return;
             HUD.CloseAllCorners();
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@SKIP XP");
@@ -372,25 +372,25 @@ namespace DuckGame
             DuckNetwork._xpEarned.Clear();
             Profiles.experienceProfile.xp = this._xpValue;
             Profiles.Save(Profiles.experienceProfile);
-            UIMenu uiMenu = (UIMenu)null;
+            UIMenu uiMenu = null;
             Graphics.fadeAdd = 0.0f;
             Graphics.flashAdd = 0.0f;
             if (Unlockables.HasPendingUnlocks())
-                uiMenu = (UIMenu)new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                uiMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
             if (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0)
             {
                 UIGachaBoxNew.skipping = this.skipping;
                 UIGachaBoxNew uiGachaBoxNew = new UIGachaBoxNew(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, rare: true, openOnClose: uiMenu);
                 if (!this.skipping)
-                    uiMenu = (UIMenu)uiGachaBoxNew;
+                    uiMenu = uiGachaBoxNew;
             }
             Global.Save();
             Profiles.Save(Profiles.experienceProfile);
             if (this._gotEgg && Profiles.experienceProfile.numLittleMen > 8)
-                uiMenu = (UIMenu)new UIFuneral(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, link: ((UIMenu)new UIWillBox(UIGachaBox.GetRandomFurniture(Rarity.SuperRare, 1, 0.3f)[0], Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, link: uiMenu)));
+                uiMenu = new UIFuneral(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, link: new UIWillBox(UIGachaBox.GetRandomFurniture(Rarity.SuperRare, 1, 0.3f)[0], Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, link: uiMenu));
             if (uiMenu == null)
                 return;
-            MonoMain.pauseMenu = (UIComponent)uiMenu;
+            MonoMain.pauseMenu = uiMenu;
         }
 
         public static int LittleManFrame(int idx, int curLev, ulong seed = 0, bool bottomBar = false)
@@ -401,7 +401,7 @@ namespace DuckGame
                 curLev = 7;
             int num1 = curLev - 3;
             if (curLev < 0)
-                num1 = 2 + new Random((int)((long)seed + (long)idx)).Next(0, 2);
+                num1 = 2 + new Random((int)((long)seed + idx)).Next(0, 2);
             Random generator = Rando.generator;
             Rando.generator = Profile.GetLongGenerator(seed);
             for (int index = 0; index < idx * 4; ++index)
@@ -514,9 +514,9 @@ namespace DuckGame
                 UILevelBox._confirmMenu.DoUpdate();
             while (this.littleEggs.Count < Math.Min(Profiles.experienceProfile.numLittleMen, 8))
                 this.littleEggs.Add(Profile.GetEggSprite(Math.Max(0, Profiles.experienceProfile.numLittleMen - 9) + this.littleEggs.Count));
-            if ((Input.Pressed("SELECT") || !FurniShopScreen.open && Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0) && this._finned)
+            if ((Input.Pressed("SELECT") || !FurniShopScreen.open && Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0) && this._finned)
             {
-                if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (!this.skipping || this._finned))
+                if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (!this.skipping || this._finned))
                 {
                     SFX.skip = false;
                     SFX.Play("dacBang");
@@ -552,13 +552,13 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = (UIMenu)new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                         UILevelBox._confirmMenu.depth = (Depth)0.98f;
                         this._attemptingGive = true;
                     }
                     if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = (UIMenu)null;
+                        UILevelBox._confirmMenu = null;
                         this._attemptingGive = false;
                         FurniShopScreen.giveYoYo = false;
                     }
@@ -569,13 +569,13 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = (UIMenu)new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                         UILevelBox._confirmMenu.depth = (Depth)0.98f;
                         this._attemptingGive = true;
                     }
                     if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = (UIMenu)null;
+                        UILevelBox._confirmMenu = null;
                         this._attemptingGive = false;
                         FurniShopScreen.giveVooDoo = false;
                     }
@@ -586,13 +586,13 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = (UIMenu)new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                         UILevelBox._confirmMenu.depth = (Depth)0.98f;
                         this._attemptingGive = true;
                     }
                     if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = (UIMenu)null;
+                        UILevelBox._confirmMenu = null;
                         this._attemptingGive = false;
                         FurniShopScreen.givePerimeterDefence = false;
                     }
@@ -603,11 +603,11 @@ namespace DuckGame
                     {
                         this._menuBool.value = false;
                         UILevelBox._confirmMenu = new UIMenu(Vincent.type == DayType.PawnDay ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: (Vincent.type == DayType.PawnDay ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT"));
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIText(FurniShopScreen.attemptBuy.name, Color.Green), true);
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIMenuItem(Vincent.type == DayType.PawnDay ? "SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)" : "BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean((UIComponent)UILevelBox._confirmMenu, this._menuBool)), true);
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIMenuItem("CANCEL", (UIMenuAction)new UIMenuActionCloseMenu((UIComponent)UILevelBox._confirmMenu), c: Colors.MenuOption, backButton: true), true);
+                        UILevelBox._confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green), true);
+                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White), true);
+                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White), true);
+                        UILevelBox._confirmMenu.Add(new UIMenuItem(Vincent.type == DayType.PawnDay ? "SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)" : "BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._menuBool)), true);
+                        UILevelBox._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_confirmMenu), c: Colors.MenuOption, backButton: true), true);
                         UILevelBox._confirmMenu.depth = (Depth)0.98f;
                         UILevelBox._confirmMenu.DoInitialize();
                         UILevelBox._confirmMenu.Close();
@@ -621,12 +621,12 @@ namespace DuckGame
                         if (this._menuBool.value)
                         {
                             this._attemptingBuy = false;
-                            UILevelBox._confirmMenu = (UIMenu)null;
+                            UILevelBox._confirmMenu = null;
                             SFX.Play("ching");
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 Profiles.experienceProfile.littleManBucks += FurniShopScreen.attemptBuy.cost;
-                                Profiles.experienceProfile.SetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index) - 1);
+                                Profiles.experienceProfile.SetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index) - 1);
                                 using (IEnumerator<Profile> enumerator = Profiles.all.GetEnumerator())
                                 {
                                 label_52:
@@ -636,10 +636,10 @@ namespace DuckGame
                                         FurniturePosition furniturePosition1;
                                         do
                                         {
-                                            furniturePosition1 = (FurniturePosition)null;
+                                            furniturePosition1 = null;
                                             foreach (FurniturePosition furniturePosition2 in current.furniturePositions)
                                             {
-                                                if (current.GetNumFurnituresPlaced((int)furniturePosition2.id) > Profiles.experienceProfile.GetNumFurnitures((int)furniturePosition2.id))
+                                                if (current.GetNumFurnituresPlaced(furniturePosition2.id) > Profiles.experienceProfile.GetNumFurnitures(furniturePosition2.id))
                                                 {
                                                     furniturePosition1 = furniturePosition2;
                                                     break;
@@ -658,7 +658,7 @@ namespace DuckGame
                             {
                                 Profiles.experienceProfile.littleManBucks -= FurniShopScreen.attemptBuy.cost;
                                 if (FurniShopScreen.attemptBuy.furnitureData != null)
-                                    Profiles.experienceProfile.SetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index) + 1);
+                                    Profiles.experienceProfile.SetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index) + 1);
                                 else if (FurniShopScreen.attemptBuy.teamData != null)
                                     Global.boughtHats.Add(FurniShopScreen.attemptBuy.teamData.name);
                             }
@@ -669,18 +669,18 @@ namespace DuckGame
                                 Vincent.Clear();
                                 this._state = UILevelBoxState.UpdateTime;
                             }
-                            FurniShopScreen.attemptBuy = (VincentProduct)null;
+                            FurniShopScreen.attemptBuy = null;
                         }
                         else
                         {
                             this._attemptingBuy = false;
-                            UILevelBox._confirmMenu = (UIMenu)null;
+                            UILevelBox._confirmMenu = null;
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 Vincent.Clear();
                                 Vincent.Add("|CONCERNED|HAVING SECOND THOUGHTS ABOUT SELLING THAT, HUH?");
                             }
-                            FurniShopScreen.attemptBuy = (VincentProduct)null;
+                            FurniShopScreen.attemptBuy = null;
                             this.skipUpdate = true;
                         }
                     }
@@ -690,10 +690,12 @@ namespace DuckGame
                     if (!this._attemptingVincentClose && Input.Pressed("CANCEL") && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
                     {
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean((UIComponent)UILevelBox._confirmMenu, this._menuBool)), true);
-                        UILevelBox._confirmMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionCloseMenu((UIComponent)UILevelBox._confirmMenu), backButton: true), true);
+                        UILevelBox._confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT")
+                        {
+                            depth = (Depth)0.98f
+                        };
+                        UILevelBox._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._menuBool)), true);
+                        UILevelBox._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
                         UILevelBox._confirmMenu.DoInitialize();
                         UILevelBox._confirmMenu.Close();
                         for (int index = 0; index < 10; ++index)
@@ -713,7 +715,7 @@ namespace DuckGame
                         else
                         {
                             this._attemptingVincentClose = false;
-                            UILevelBox._confirmMenu = (UIMenu)null;
+                            UILevelBox._confirmMenu = null;
                         }
                     }
                 }
@@ -730,7 +732,7 @@ namespace DuckGame
                 this.UpdateParts();
                 this.doubleUpdating = false;
             }
-            if (Input.Pressed("START") && !this._littleManLeave && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !FurniShopScreen.open)
+            if (Input.Pressed("START") && !this._littleManLeave && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !FurniShopScreen.open)
                 this.skipping = true;
             if (!this.doubleUpdating && this.skipping)
             {
@@ -752,19 +754,19 @@ namespace DuckGame
                     SFX.Play("dacBang");
                 }
             }
-            if ((double)this._genericWait > 0.0)
+            if (_genericWait > 0.0)
             {
                 this._genericWait -= Maths.IncFrameTimer();
             }
             else
             {
-                this._overrideSlide = (string)null;
+                this._overrideSlide = null;
                 if (this._desiredLevel != this._currentLevel || this._newGrowthLevel != Profiles.experienceProfile.littleManLevel)
                 {
                     if (!this._didSlide)
                     {
                         this._levelSlideWait += 0.08f;
-                        if ((double)this._levelSlideWait < 1.0)
+                        if (_levelSlideWait < 1.0)
                             return;
                         int num = this._currentLevel;
                         if (Profiles.experienceProfile.numLittleMen > 0)
@@ -789,7 +791,7 @@ namespace DuckGame
                         if (this._unSlide)
                         {
                             this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 0.0f, 0.45f);
-                            if ((double)this._intermissionSlide > 0.00999999977648258)
+                            if (_intermissionSlide > 0.00999999977648258)
                                 return;
                             this.playedSound = false;
                             this._unSlide = false;
@@ -799,10 +801,10 @@ namespace DuckGame
                             return;
                         }
                         this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 1f, 0.21f, 1.05f);
-                        if ((double)this._intermissionSlide < 1.0)
+                        if (_intermissionSlide < 1.0)
                             return;
                         this._slideWait += 0.08f;
-                        if ((double)this._slideWait < 1.0)
+                        if (_slideWait < 1.0)
                             return;
                         this._unSlide = true;
                         this._slideWait = 0.0f;
@@ -823,18 +825,18 @@ namespace DuckGame
                         num1 = Profiles.experienceProfile.littleManLevel;
                     if (this._currentLevel == 3)
                     {
-                        this._oldGachaValue = (float)this._gachaValue;
-                        this._newGachaValue = (float)this._gachaValue + (this._newXPValue - (float)this._xpValue);
+                        this._oldGachaValue = _gachaValue;
+                        this._newGachaValue = _gachaValue + (this._newXPValue - _xpValue);
                     }
                     if (this._currentLevel == 4)
                     {
-                        this._oldSandwichValue = (float)this._sandwichValue;
-                        this._newSandwichValue = (float)this._sandwichValue + (this._newXPValue - (float)this._xpValue);
+                        this._oldSandwichValue = _sandwichValue;
+                        this._newSandwichValue = _sandwichValue + (this._newXPValue - _xpValue);
                     }
                     if (this._currentLevel >= 7)
                     {
-                        this._oldMilkValue = (float)this._milkValue;
-                        this._newMilkValue = (float)this._milkValue + (this._newXPValue - (float)this._xpValue);
+                        this._oldMilkValue = _milkValue;
+                        this._newMilkValue = _milkValue + (this._newXPValue - _xpValue);
                     }
                     int currentLevel = this._currentLevel;
                     if (num1 >= 7)
@@ -856,7 +858,7 @@ namespace DuckGame
                 else
                 {
                     this._talkWait += 0.2f;
-                    if ((double)this._talkWait >= 1.0)
+                    if (_talkWait >= 1.0)
                     {
                         this._talkWait = 0.0f;
                         if (this._feedLine.Length > 0)
@@ -877,7 +879,7 @@ namespace DuckGame
                     {
                         this._alwaysClose = true;
                         this._finishTalkWait += 0.1f;
-                        if ((double)this._finishTalkWait > 6.0 && !this.eggTalk)
+                        if (_finishTalkWait > 6.0 && !this.eggTalk)
                         {
                             this._talking = false;
                             this._talkLine = "";
@@ -887,12 +889,12 @@ namespace DuckGame
                     if (this._talkLine.Length > 0 && this._talkLine[this._talkLine.Length - 1] == '.')
                         this._alwaysClose = true;
                     this._talk += !this.close ? 0.2f : -0.2f;
-                    if ((double)this._talk > 2.0)
+                    if (_talk > 2.0)
                     {
                         this._talk = 2f;
                         this.close = true;
                     }
-                    if ((double)this._talk < 0.0)
+                    if (_talk < 0.0)
                     {
                         this._talk = 0.0f;
                         if (!this._alwaysClose)
@@ -917,20 +919,20 @@ namespace DuckGame
                         Graphics.fadeAdd = 1f;
                     }
                     this._littleManStartWait += 0.02f;
-                    if ((double)this._littleManStartWait < 1.0)
+                    if (_littleManStartWait < 1.0)
                         return;
                     if (this._driveAway)
                     {
                         this._sound.lerpVolume = 1f;
                         this._taxiDrive = Lerp.Float(this._taxiDrive, 1f, 0.03f);
-                        if ((double)this._taxiDrive < 1.0)
+                        if (_taxiDrive < 1.0)
                             return;
                         SFX.Play("doorOpen");
                         this._driveAway = false;
                         this._genericWait = 0.5f;
                         this._sound.volume = this._sound.lerpVolume = 0.0f;
                     }
-                    else if ((double)this._taxiDrive > 0.0)
+                    else if (_taxiDrive > 0.0)
                     {
                         if (!this._inTaxi)
                         {
@@ -942,7 +944,7 @@ namespace DuckGame
                         {
                             this._sound.lerpVolume = 1f;
                             this._taxiDrive = Lerp.Float(this._taxiDrive, 2f, 0.03f);
-                            if ((double)this._taxiDrive < 2.0)
+                            if (_taxiDrive < 2.0)
                                 return;
                             this._sound.lerpVolume = 0.0f;
                             ++Profiles.experienceProfile.numLittleMen;
@@ -981,7 +983,7 @@ namespace DuckGame
                     {
                         if (this._talking)
                             return;
-                        UILevelBox._confirmMenu = (UIMenu)new UIPresentBox(Profiles.experienceProfile.numLittleMen != 0 ? (Profiles.experienceProfile.numLittleMen != 1 ? (Profiles.experienceProfile.numLittleMen != 2 ? (Profiles.experienceProfile.numLittleMen != 3 ? (Profiles.experienceProfile.numLittleMen != 4 ? (Profiles.experienceProfile.numLittleMen != 5 ? (Profiles.experienceProfile.numLittleMen != 6 ? (Profiles.experienceProfile.numLittleMen != 7 ? UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f)[0] : RoomEditor.GetFurniture("JUKEBOX")) : RoomEditor.GetFurniture("EASEL")) : RoomEditor.GetFurniture("JUNK")) : RoomEditor.GetFurniture("WINE")) : RoomEditor.GetFurniture("GIFT BASKET")) : RoomEditor.GetFurniture("PLATE")) : RoomEditor.GetFurniture("PHOTO")) : RoomEditor.GetFurniture("EGG"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                        UILevelBox._confirmMenu = new UIPresentBox(Profiles.experienceProfile.numLittleMen != 0 ? (Profiles.experienceProfile.numLittleMen != 1 ? (Profiles.experienceProfile.numLittleMen != 2 ? (Profiles.experienceProfile.numLittleMen != 3 ? (Profiles.experienceProfile.numLittleMen != 4 ? (Profiles.experienceProfile.numLittleMen != 5 ? (Profiles.experienceProfile.numLittleMen != 6 ? (Profiles.experienceProfile.numLittleMen != 7 ? UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f)[0] : RoomEditor.GetFurniture("JUKEBOX")) : RoomEditor.GetFurniture("EASEL")) : RoomEditor.GetFurniture("JUNK")) : RoomEditor.GetFurniture("WINE")) : RoomEditor.GetFurniture("GIFT BASKET")) : RoomEditor.GetFurniture("PLATE")) : RoomEditor.GetFurniture("PHOTO")) : RoomEditor.GetFurniture("EGG"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                         UILevelBox._confirmMenu.depth = (Depth)0.98f;
                         UILevelBox._confirmMenu.DoInitialize();
                         UILevelBox._confirmMenu.Open();
@@ -1000,24 +1002,24 @@ namespace DuckGame
                         heart.position += heart.velocity;
                         heart.alpha -= 0.02f;
                     }
-                    this._hearts.RemoveAll((Predicate<LittleHeart>)(t => (double)t.alpha <= 0.0));
+                    this._hearts.RemoveAll(t => t.alpha <= 0.0);
                     this._coinLerp2 = Lerp.Float(this._coinLerp2, 1f, 0.08f);
                     this._stampWobble = Lerp.Float(this._stampWobble, 0.0f, 0.08f);
-                    if (this._stampCard || (double)this._stampCardLerp > 0.00999999977648258)
+                    if (this._stampCard || _stampCardLerp > 0.00999999977648258)
                     {
                         if (!this._showCard)
                         {
                             if (!this._sandwichShift)
                             {
                                 this._sandwichLerp = Lerp.Float(this._sandwichLerp, 1f, 0.12f);
-                                if ((double)this._sandwichLerp >= 1.0)
+                                if (_sandwichLerp >= 1.0)
                                     this._sandwichShift = true;
                             }
                             else if (this._burp)
                             {
                                 this._extraMouthOpen = Lerp.FloatSmooth(this._extraMouthOpen, 0.0f, 0.17f, 1.05f);
                                 this._finalWait += 0.1f;
-                                if ((double)this._finalWait >= 1.0)
+                                if (_finalWait >= 1.0)
                                 {
                                     this._finalWait = 0.0f;
                                     this._finishEat = false;
@@ -1037,7 +1039,7 @@ namespace DuckGame
                             {
                                 this._extraMouthOpen = Lerp.FloatSmooth(this._extraMouthOpen, 0.0f, 0.17f, 1.05f);
                                 this._afterEatWait += 0.08f;
-                                if ((double)this._afterEatWait >= 1.0)
+                                if (_afterEatWait >= 1.0)
                                 {
                                     SFX.Play("healthyEat");
                                     for (int index = 0; index < 8; ++index)
@@ -1052,21 +1054,21 @@ namespace DuckGame
                             else
                             {
                                 this._sandwichLerp = Lerp.Float(this._sandwichLerp, 0.0f, 0.12f);
-                                if ((double)this._sandwichLerp <= 0.0)
+                                if (_sandwichLerp <= 0.0)
                                 {
                                     this._extraMouthOpen = Lerp.FloatSmooth(this._extraMouthOpen, 15f, 0.18f, 1.05f);
-                                    if ((double)this._extraMouthOpen >= 1.0)
+                                    if (_extraMouthOpen >= 1.0)
                                     {
                                         this._openWait += 0.08f;
-                                        if ((double)this._openWait >= 1.0)
+                                        if (_openWait >= 1.0)
                                         {
                                             this._sandwichEat = Lerp.Float(this._sandwichEat, 1f, 0.08f);
-                                            if ((double)this._sandwichEat >= 1.0)
+                                            if (_sandwichEat >= 1.0)
                                             {
-                                                if ((double)this._eatWait == 0.0)
+                                                if (_eatWait == 0.0)
                                                     SFX.Play("swallow");
                                                 this._eatWait += 0.08f;
-                                                if ((double)this._eatWait >= 1.0)
+                                                if (_eatWait >= 1.0)
                                                     this._finishEat = true;
                                             }
                                         }
@@ -1074,12 +1076,12 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if ((double)this._stampCardLerp < 0.990000009536743)
+                        if (_stampCardLerp < 0.990000009536743)
                             return;
                         this._stampWait += 0.2f;
-                        if ((double)this._stampWait < 1.0)
+                        if (_stampWait < 1.0)
                             return;
-                        if ((double)this._stampWait2 == 0.0)
+                        if (_stampWait2 == 0.0)
                         {
                             ++Profiles.experienceProfile.numSandwiches;
                             this._finishingNewStamp = true;
@@ -1087,9 +1089,9 @@ namespace DuckGame
                             SFX.Play("dacBang");
                         }
                         this._stampWait2 += 0.06f;
-                        if ((double)this._stampWait2 < 1.0)
+                        if (_stampWait2 < 1.0)
                             return;
-                        if (Profiles.experienceProfile.numSandwiches > 0 && Profiles.experienceProfile.numSandwiches % 6 == 0 && (double)this._coin2Wait == 0.0)
+                        if (Profiles.experienceProfile.numSandwiches > 0 && Profiles.experienceProfile.numSandwiches % 6 == 0 && _coin2Wait == 0.0)
                         {
                             this._coinLerp2 = 0.0f;
                             this._coin2Wait = 1f;
@@ -1097,7 +1099,7 @@ namespace DuckGame
                             ++UILevelBox.rareGachas;
                         }
                         this._coin2Wait -= 0.08f;
-                        if ((double)this._coin2Wait > 0.0)
+                        if (_coin2Wait > 0.0)
                             return;
                         this._stampCard = false;
                         this._stampWait2 = 0.0f;
@@ -1182,7 +1184,7 @@ namespace DuckGame
                             else if (this._state == UILevelBoxState.Wait)
                             {
                                 this._startWait -= 0.09f;
-                                if ((double)this._startWait < 0.0)
+                                if (_startWait < 0.0)
                                 {
                                     this._startWait = 1f;
                                     this._state = UILevelBoxState.ShowXPBar;
@@ -1209,18 +1211,18 @@ namespace DuckGame
                                 if (this._roundsPlayed > 0)
                                 {
                                     this._updateTimeWait += 0.08f;
-                                    if ((double)this._updateTimeWait >= 1.0)
+                                    if (_updateTimeWait >= 1.0)
                                     {
                                         this._dayTake += 0.8f;
-                                        if ((double)this._dayTake >= 1.0)
+                                        if (_dayTake >= 1.0)
                                         {
                                             this._dayTake = 0.0f;
                                             --this._roundsPlayed;
                                         }
-                                        this._dayProgress = (float)(1.0 - (double)this._roundsPlayed / (double)this._startRoundsPlayed);
+                                        this._dayProgress = (float)(1.0 - _roundsPlayed / (double)this._startRoundsPlayed);
                                         this.time += 0.08f;
                                     }
-                                    if ((double)this.time >= 1.0)
+                                    if (time >= 1.0)
                                     {
                                         --this.time;
                                         this._state = UILevelBoxState.AdvanceDay;
@@ -1261,7 +1263,7 @@ namespace DuckGame
                                             SFX.Play("ching", pitch: 0.2f);
                                         }
                                         this._finishDayWait += 0.04f;
-                                        if ((double)this._finishDayWait >= 1.0)
+                                        if (_finishDayWait >= 1.0)
                                         {
                                             this._state = UILevelBoxState.UpdateTime;
                                             break;
@@ -1281,7 +1283,7 @@ namespace DuckGame
                                         }
                                         this._giveMoneyRise = Lerp.Float(this._giveMoneyRise, 1f, 0.05f);
                                         this._finishDayWait += 0.04f;
-                                        if ((double)this._finishDayWait >= 1.0)
+                                        if (_finishDayWait >= 1.0)
                                         {
                                             this._giveMoneyRise = 1f;
                                             this._giveMoney = 0;
@@ -1298,7 +1300,7 @@ namespace DuckGame
                                         }
                                         this._giveMoneyRise = Lerp.Float(this._giveMoneyRise, 1f, 0.05f);
                                         this._finishDayWait += 0.04f;
-                                        if ((double)this._finishDayWait >= 1.0)
+                                        if (_finishDayWait >= 1.0)
                                         {
                                             this._giveMoneyRise = 1f;
                                             this._giveMoney = 0;
@@ -1327,12 +1329,12 @@ namespace DuckGame
                                         this._fallVel = -0.025f;
                                         this._ranRot = Rando.Float(-0.3f, 0.3f);
                                     }
-                                    if ((double)this._dayFallAway < 1.0)
+                                    if (_dayFallAway < 1.0)
                                     {
                                         this._dayFallAway += this._fallVel;
                                         this._fallVel += 0.005f;
                                     }
-                                    else if ((double)this._dayScroll < 1.0)
+                                    else if (_dayScroll < 1.0)
                                     {
                                         this._dayScroll = Lerp.Float(this._dayScroll, 1f, 0.1f);
                                     }
@@ -1347,7 +1349,7 @@ namespace DuckGame
                                 else
                                 {
                                     this._advanceDayWait += 0.1f;
-                                    if ((double)this._advanceDayWait >= 1.0)
+                                    if (_advanceDayWait >= 1.0)
                                     {
                                         if (!this._markedNewDay)
                                         {
@@ -1365,16 +1367,16 @@ namespace DuckGame
                                         if (this._markedNewDay)
                                         {
                                             this._intermissionWait += 0.15f;
-                                            if ((double)this._intermissionWait >= 1.0)
+                                            if (_intermissionWait >= 1.0)
                                             {
                                                 if (this._unSlide)
                                                 {
                                                     this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 0.0f, 0.42f);
-                                                    if ((double)this._intermissionSlide <= 0.0199999995529652)
+                                                    if (_intermissionSlide <= 0.0199999995529652)
                                                     {
                                                         this._intermissionSlide = 0.0f;
                                                         this._dayStartWait += 0.11f;
-                                                        if ((double)this._dayStartWait >= 1.0)
+                                                        if (_dayStartWait >= 1.0)
                                                         {
                                                             this.AdvanceDay();
                                                             this._state = UILevelBoxState.RunDay;
@@ -1386,7 +1388,7 @@ namespace DuckGame
                                                 else
                                                 {
                                                     this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 1f, 0.2f, 1.05f);
-                                                    if ((double)this._intermissionSlide >= 1.0)
+                                                    if (_intermissionSlide >= 1.0)
                                                     {
                                                         DayType day = this.GetDay(Profiles.experienceProfile.currentDay);
                                                         if (this.IsVinceDay(day) && !Vincent.showingDay)
@@ -1398,7 +1400,7 @@ namespace DuckGame
                                                             this._roundsPlayed = 0;
                                                         }
                                                         this._slideWait += 0.11f;
-                                                        if ((double)this._slideWait >= 1.79999995231628)
+                                                        if (_slideWait >= 1.79999995231628)
                                                             this._unSlide = true;
                                                     }
                                                 }
@@ -1416,7 +1418,7 @@ namespace DuckGame
                                     HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                                     if (this._currentLevel > 3 && (!Global.data.hadTalk || Profiles.experienceProfile.littleManLevel > 2))
                                         HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@TALK");
-                                    if (Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0))
+                                    if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0))
                                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@AUTO TOYS");
                                     this._finned = true;
                                 }
@@ -1434,22 +1436,22 @@ namespace DuckGame
                                 else
                                 {
                                     this._slideXPBar = Lerp.FloatSmooth(this._slideXPBar, 1f, 0.18f, 1.1f);
-                                    if ((double)this._slideXPBar >= 1.0)
+                                    if (_slideXPBar >= 1.0)
                                     {
-                                        this._oldXPValue = (float)this._xpValue;
-                                        this._newXPValue = (float)(this._xpValue + this._currentStat.Value.xp);
+                                        this._oldXPValue = _xpValue;
+                                        this._newXPValue = this._xpValue + this._currentStat.Value.xp;
                                         if (this._currentLevel > 2)
                                         {
-                                            this._oldGachaValue = (float)this._gachaValue;
-                                            this._newGachaValue = (float)(this._gachaValue + this._currentStat.Value.xp);
+                                            this._oldGachaValue = _gachaValue;
+                                            this._newGachaValue = this._gachaValue + this._currentStat.Value.xp;
                                             if (this._currentLevel > 3)
                                             {
-                                                this._oldSandwichValue = (float)this._sandwichValue;
-                                                this._newSandwichValue = (float)(this._sandwichValue + this._currentStat.Value.xp);
+                                                this._oldSandwichValue = _sandwichValue;
+                                                this._newSandwichValue = this._sandwichValue + this._currentStat.Value.xp;
                                                 if (this._currentLevel >= 7)
                                                 {
-                                                    this._oldMilkValue = (float)this._milkValue;
-                                                    this._newMilkValue = (float)(this._milkValue + this._currentStat.Value.xp);
+                                                    this._oldMilkValue = _milkValue;
+                                                    this._newMilkValue = this._milkValue + this._currentStat.Value.xp;
                                                 }
                                             }
                                         }
@@ -1461,7 +1463,7 @@ namespace DuckGame
                             else if (this._state == UILevelBoxState.WaitXPBar)
                             {
                                 this._startWait -= 0.15f;
-                                if ((double)this._startWait < 0.0)
+                                if (_startWait < 0.0)
                                 {
                                     this._startWait = 1f;
                                     this._state = UILevelBoxState.DrainXPBar;
@@ -1470,10 +1472,10 @@ namespace DuckGame
                             else if (this._state == UILevelBoxState.DrainXPBar)
                             {
                                 this._drain -= 0.04f;
-                                if ((double)this._drain > 0.0)
+                                if (_drain > 0.0)
                                 {
                                     this._particleWait -= 0.4f;
-                                    if ((double)this._particleWait < 0.0)
+                                    if (_particleWait < 0.0)
                                     {
                                         float y = 30f;
                                         if (this._currentLevel == 3)
@@ -1520,11 +1522,11 @@ namespace DuckGame
                                     this._gachaValue = (int)Lerp.FloatSmooth(this._oldGachaValue, this._newGachaValue, this._addLerp);
                                     this._sandwichValue = (int)Lerp.FloatSmooth(this._oldSandwichValue, this._newSandwichValue, this._addLerp);
                                     this._milkValue = (int)Lerp.FloatSmooth(this._oldMilkValue, this._newMilkValue, this._addLerp);
-                                    this._xpProgress = (float)(this._xpValue - this._originalXP) / (float)this._totalXP;
+                                    this._xpProgress = (this._xpValue - this._originalXP) / (float)this._totalXP;
                                 }
-                                if ((double)this._drain < 0.0)
+                                if (_drain < 0.0)
                                     this._drain = 0.0f;
-                                if ((double)this._drain <= 0.0 && (double)this._addLerp >= 1.0)
+                                if (_drain <= 0.0 && _addLerp >= 1.0)
                                 {
                                     this._drain = 0.0f;
                                     this._addLerp = 0.0f;
@@ -1534,7 +1536,7 @@ namespace DuckGame
                             else if (this._state == UILevelBoxState.HideXPBar)
                             {
                                 this._slideXPBar = Lerp.FloatSmooth(this._slideXPBar, 0.0f, 0.2f, 1.1f);
-                                if ((double)this._slideXPBar <= 0.0199999995529652)
+                                if (_slideXPBar <= 0.0199999995529652)
                                 {
                                     this._currentStat = new KeyValuePair<string, XPPair>();
                                     this._state = UILevelBoxState.ShowXPBar;
@@ -1562,7 +1564,7 @@ namespace DuckGame
                             }
                         }
                         int count = this._particles.Count;
-                        this._particles.RemoveAll((Predicate<XPPlus>)(part => (double)(part.position - part.target).lengthSq < 64.0));
+                        this._particles.RemoveAll(part => (double)(part.position - part.target).lengthSq < 64.0);
                         if (this._particles.Count != count)
                             this._firstParticleIn = true;
                         if (this._xpValue >= DuckNetwork.GetLevel(this._desiredLevel + 1).xpRequired && this._currentLevel != 20)
@@ -1572,8 +1574,8 @@ namespace DuckGame
                         if (this._gachaValue >= this.gachaNeed)
                         {
                             this._gachaValue -= this.gachaNeed;
-                            this._newGachaValue -= (float)this.gachaNeed;
-                            this._oldGachaValue -= (float)this.gachaNeed;
+                            this._newGachaValue -= gachaNeed;
+                            this._oldGachaValue -= gachaNeed;
                             ++UILevelBox.gachas;
                             this._coinLerp = 0.0f;
                             SFX.Play("ching", pitch: 0.2f);
@@ -1581,8 +1583,8 @@ namespace DuckGame
                         if (this._milkValue >= this.milkNeed)
                         {
                             this._milkValue -= this.milkNeed;
-                            this._newMilkValue -= (float)this.milkNeed;
-                            this._oldMilkValue -= (float)this.milkNeed;
+                            this._newMilkValue -= milkNeed;
+                            this._oldMilkValue -= milkNeed;
                             this._newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
                             if (this._newGrowthLevel > 7)
                                 this._newGrowthLevel = 7;
@@ -1590,8 +1592,8 @@ namespace DuckGame
                         if (this._currentLevel <= 3 || this._sandwichValue < this.sandwichNeed)
                             return;
                         this._sandwichValue -= this.sandwichNeed;
-                        this._newSandwichValue -= (float)this.sandwichNeed;
-                        this._oldSandwichValue -= (float)this.sandwichNeed;
+                        this._newSandwichValue -= sandwichNeed;
+                        this._oldSandwichValue -= sandwichNeed;
                         this._stampCard = true;
                     }
                 }
@@ -1609,7 +1611,7 @@ namespace DuckGame
                 num1 = 63;
             if (this._currentLevel >= 7)
                 num1 = 75;
-            Vec2 vec2_1 = new Vec2(this.x, this.y - (float)num1 * this._slideXPBar);
+            Vec2 vec2_1 = new Vec2(this.x, this.y - num1 * this._slideXPBar);
             int num2 = this._currentLevel;
             if (num2 > 8)
                 num2 = 8;
@@ -1647,7 +1649,7 @@ namespace DuckGame
             this._font.scale = new Vec2(1f, 1f);
             this._lev.depth = this.depth + 2;
             this._lev.frame = this._currentLevel - 1;
-            Graphics.Draw((Sprite)this._lev, this.x - 90f, this.y - 34f + num3);
+            Graphics.Draw(_lev, this.x - 90f, this.y - 34f + num3);
             this._font.DrawOutline(this._currentLevel.ToString()[0].ToString() ?? "", this.position + new Vec2(-84f, num3 - 30f), Color.White, Color.Black, this.depth + 2);
             if (this._currentLevel > 9)
             {
@@ -1669,11 +1671,11 @@ namespace DuckGame
             int num5 = 0;
             if (this._currentLevel > 0)
                 num5 = DuckNetwork.GetLevel(this._currentLevel).xpRequired;
-            int num6 = (int)Math.Round((double)xpRequired1 * ((double)this._xpValue / (double)xpRequired1));
+            int num6 = (int)Math.Round(xpRequired1 * (_xpValue / (double)xpRequired1));
             int xpRequired2 = DuckNetwork.GetLevel(9999).xpRequired;
             if (num6 > xpRequired2)
                 num6 = xpRequired2;
-            float num7 = xpRequired1 - num5 != 0 ? (float)(this._xpValue - num5) / (float)(xpRequired1 - num5) : 1f;
+            float num7 = xpRequired1 - num5 != 0 ? (this._xpValue - num5) / (float)(xpRequired1 - num5) : 1f;
             string str1 = xpRequired1.ToString();
             if (str1.Length > 5)
                 str1 = str1.Substring(0, 3) + "k";
@@ -1709,14 +1711,14 @@ namespace DuckGame
             if ((double)num9 < 13.0)
                 x2 = 13 - (int)num9;
             this._barHeat += Math.Abs(this._lastFill - num7) * 8f;
-            if ((double)this._barHeat > 1.0)
+            if (_barHeat > 1.0)
                 this._barHeat = 1f;
             this._barFront.alpha = this._barHeat;
-            Graphics.Draw(this._barFront, vec2_4.x + num9 + (float)x2, vec2_4.y + num3, new Rectangle((float)x2, 0.0f, (float)(this._barFront.width - x2), 6f));
+            Graphics.Draw(this._barFront, vec2_4.x + num9 + x2, vec2_4.y + num3, new Rectangle(x2, 0.0f, this._barFront.width - x2, 6f));
             this._barHeat = Maths.CountDown(this._barHeat, 0.04f);
             if (this._currentLevel >= 3)
             {
-                float num10 = (float)this._gachaValue / (float)this.gachaNeed;
+                float num10 = _gachaValue / (float)this.gachaNeed;
                 float num11 = 110f;
                 if (this._currentLevel == 3)
                     num11 = 149f;
@@ -1737,11 +1739,11 @@ namespace DuckGame
                 this._duckCoin.frame = 0;
                 this._duckCoin.alpha = (float)(1.0 - (double)Math.Max(this._coinLerp - 0.5f, 0.0f) * 2.0);
                 this._duckCoin.depth = (Depth)0.9f;
-                Graphics.Draw((Sprite)this._duckCoin, (float)((double)vec2_5.x + ((double)num11 - 2.0) + 15.0), (float)((double)vec2_5.y + (double)num3 - 8.0 - (double)this._coinLerp * 18.0));
+                Graphics.Draw(_duckCoin, (float)(vec2_5.x + ((double)num11 - 2.0) + 15.0), (float)(vec2_5.y + (double)num3 - 8.0 - _coinLerp * 18.0));
             }
             if (this._currentLevel >= 4)
             {
-                float num13 = (float)this._sandwichValue / (float)this.sandwichNeed;
+                float num13 = _sandwichValue / (float)this.sandwichNeed;
                 float num14 = 154f;
                 float num15 = num14 * num13;
                 if ((double)num15 < 2.0)
@@ -1762,25 +1764,25 @@ namespace DuckGame
                 if (this._sandwichShift)
                 {
                     num16 -= 20f;
-                    num17 = (float)(-42.0 - (double)this._sandwichEat * 30.0);
+                    num17 = (float)(-42.0 - _sandwichEat * 30.0);
                     val1 = -52f - num17;
                     if (this._currentLevel >= 7)
                         num17 -= 10f;
                 }
                 float x3 = Math.Max(val1, 0.0f);
-                if ((double)x3 < (double)this._sandwich.width)
-                    Graphics.Draw(this._sandwich, (float)((double)vec2_6.x + ((double)num14 - 2.0) + 12.0 + (double)num17 + (double)x3 + 1.0), (float)((double)vec2_6.y + (double)num3 - 16.0) + num16, new Rectangle(x3, 0.0f, (float)this._sandwich.width - x3, (float)this._sandwich.height), (Depth)0.88f);
+                if ((double)x3 < _sandwich.width)
+                    Graphics.Draw(this._sandwich, (float)(vec2_6.x + ((double)num14 - 2.0) + 12.0 + (double)num17 + (double)x3 + 1.0), (float)(vec2_6.y + (double)num3 - 16.0) + num16, new Rectangle(x3, 0.0f, _sandwich.width - x3, _sandwich.height), (Depth)0.88f);
             }
             if (this._currentStat.Key != null)
             {
                 this._addXPBar.depth = this.depth - 20;
                 this._addXPBar.xscale = 1f;
                 Graphics.Draw(this._addXPBar, vec2_1.x, vec2_1.y);
-                this._fancyFont.DrawOutline(this._currentStat.Value.num == 0 ? this._currentStat.Key : this._currentStat.Value.num.ToString() + " " + this._currentStat.Key, vec2_1 + new Vec2((float)(-(this._addXPBar.width / 2) + 4), -2f), Color.White, Color.Black, this.depth - 10);
-                Vec2 p1 = vec2_1 + new Vec2((float)(-(this._addXPBar.width / 2) + 2), -7.5f);
-                Graphics.DrawLine(p1, p1 + new Vec2((float)(this._addXPBar.width - 5) * this._drain, 0.0f), Color.Lime, depth: (this._addXPBar.depth + 2));
-                string text3 = ((int)((double)this._currentStat.Value.xp * (double)this._drain)).ToString() + "|DGBLUE|XP";
-                this._fancyFont.DrawOutline(text3, vec2_1 + new Vec2((float)((double)(this._addXPBar.width / 2) - (double)this._fancyFont.GetWidth(text3) - 4.0), -2f), Colors.DGGreen, Color.Black, this.depth - 10);
+                this._fancyFont.DrawOutline(this._currentStat.Value.num == 0 ? this._currentStat.Key : this._currentStat.Value.num.ToString() + " " + this._currentStat.Key, vec2_1 + new Vec2(-(this._addXPBar.width / 2) + 4, -2f), Color.White, Color.Black, this.depth - 10);
+                Vec2 p1 = vec2_1 + new Vec2(-(this._addXPBar.width / 2) + 2, -7.5f);
+                Graphics.DrawLine(p1, p1 + new Vec2((this._addXPBar.width - 5) * this._drain, 0.0f), Color.Lime, depth: (this._addXPBar.depth + 2));
+                string text3 = ((int)(_currentStat.Value.xp * (double)this._drain)).ToString() + "|DGBLUE|XP";
+                this._fancyFont.DrawOutline(text3, vec2_1 + new Vec2((float)(this._addXPBar.width / 2 - (double)this._fancyFont.GetWidth(text3) - 4.0), -2f), Colors.DGGreen, Color.Black, this.depth - 10);
             }
             foreach (XPPlus particle in this._particles)
             {
@@ -1812,7 +1814,7 @@ namespace DuckGame
                 curLev = 7;
             if (this._currentLevel >= 2)
             {
-                float num20 = (float)Math.Round((double)this._talk) + this._extraMouthOpen;
+                float num20 = (float)Math.Round(_talk) + this._extraMouthOpen;
                 int num21 = 0;
                 if (curLev <= 4)
                     num21 = 1;
@@ -1825,9 +1827,9 @@ namespace DuckGame
                         this._egg.depth = (Depth)0.85f;
                         this._egg.yscale = 1f;
                         int num22 = 8;
-                        Vec2 vec2_7 = new Vec2(this.x + num8, this.y - 29f + num3 + (float)num22 + (float)num21);
-                        Graphics.Draw(this._egg, vec2_7.x, vec2_7.y, new Rectangle(0.0f, (float)(num22 + num21), 16f, (float)(16 - num22 - num21)));
-                        Graphics.Draw(this._egg, this.x + num8, this.y - 29f + num3 - num20, new Rectangle(0.0f, 0.0f, 16f, (float)(num22 + num21)));
+                        Vec2 vec2_7 = new Vec2(this.x + num8, this.y - 29f + num3 + num22 + num21);
+                        Graphics.Draw(this._egg, vec2_7.x, vec2_7.y, new Rectangle(0.0f, num22 + num21, 16f, 16 - num22 - num21));
+                        Graphics.Draw(this._egg, this.x + num8, this.y - 29f + num3 - num20, new Rectangle(0.0f, 0.0f, 16f, num22 + num21));
                         Vec2 center = this._egg.center;
                         this._egg.yscale = num20;
                         this._egg.center = center;
@@ -1838,14 +1840,14 @@ namespace DuckGame
                     this._littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
                     this._littleMan.depth = (Depth)0.85f;
                     this._littleMan.yscale = 1f;
-                    this.littleManPos = new Vec2(this.x + num8, (float)((double)this.y - 29.0 + (double)num3 + 4.0) + (float)num21);
+                    this.littleManPos = new Vec2(this.x + num8, (float)((double)this.y - 29.0 + (double)num3 + 4.0) + num21);
                     if (!this._inTaxi)
                     {
-                        Graphics.Draw((Sprite)this._littleMan, this.littleManPos.x, this.littleManPos.y, new Rectangle(0.0f, (float)(4 + num21), 16f, (float)(12 - num21)));
-                        Graphics.Draw((Sprite)this._littleMan, this.x + num8, this.y - 29f + num3 - num20, new Rectangle(0.0f, 0.0f, 16f, (float)(4 + num21)));
+                        Graphics.Draw(_littleMan, this.littleManPos.x, this.littleManPos.y, new Rectangle(0.0f, 4 + num21, 16f, 12 - num21));
+                        Graphics.Draw(_littleMan, this.x + num8, this.y - 29f + num3 - num20, new Rectangle(0.0f, 0.0f, 16f, 4 + num21));
                         Vec2 center = this._littleMan.center;
                         this._littleMan.yscale = num20;
-                        Graphics.Draw((Sprite)this._littleMan, this.x + num8, (float)((double)this.y - 29.0 + ((double)num3 - (double)num20) + 4.0) + (float)num21, new Rectangle(0.0f, (float)(4 + num21), 16f, 1f));
+                        Graphics.Draw(_littleMan, this.x + num8, (float)((double)this.y - 29.0 + ((double)num3 - (double)num20) + 4.0) + num21, new Rectangle(0.0f, 4 + num21, 16f, 1f));
                         this._littleMan.center = center;
                     }
                 }
@@ -1863,19 +1865,19 @@ namespace DuckGame
                     Graphics.Draw(this._talkBubble, vec2_8.x + 8f, vec2_8.y + y2, new Rectangle(5f, 10f, 1f, 2f));
                     this._talkBubble.xscale = 1f;
                     Graphics.Draw(this._talkBubble, vec2_8.x, vec2_8.y + (y2 - 2f), new Rectangle(0.0f, 8f, 8f, 4f));
-                    Graphics.Draw(this._talkBubble, (float)((double)vec2_8.x + (double)num23 + 8.0), vec2_8.y + (y2 - 2f), new Rectangle(8f, 8f, 4f, 4f));
-                    Graphics.Draw(this._talkBubble, (float)((double)vec2_8.x + (double)num23 + 8.0), vec2_8.y, new Rectangle(8f, 0.0f, 4f, 4f));
+                    Graphics.Draw(this._talkBubble, (float)(vec2_8.x + (double)num23 + 8.0), vec2_8.y + (y2 - 2f), new Rectangle(8f, 8f, 4f, 4f));
+                    Graphics.Draw(this._talkBubble, (float)(vec2_8.x + (double)num23 + 8.0), vec2_8.y, new Rectangle(8f, 0.0f, 4f, 4f));
                     Graphics.DrawRect(vec2_8 + new Vec2(5f, 2f), vec2_8 + new Vec2(num23 + 11f, y2), Color.White, (Depth)0.9f);
                     Graphics.DrawLine(vec2_8 + new Vec2(4.5f, 5f), vec2_8 + new Vec2(4.5f, y2 - 1f), Color.Black, depth: ((Depth)0.9f));
                     Graphics.DrawLine(vec2_8 + new Vec2(11.5f + num23, 4f), vec2_8 + new Vec2(11.5f + num23, y2 - 1f), Color.Black, depth: ((Depth)0.9f));
                     Graphics.DrawString(talkLine, vec2_8 + new Vec2(6f, 2f), Color.Black, (Depth)0.95f);
                 }
             }
-            if ((double)this._stampCardLerp > 0.00999999977648258)
+            if (_stampCardLerp > 0.00999999977648258)
             {
-                float num24 = (float)(-((1.0 - (double)this._stampCardLerp) * 200.0) + Math.Sin((double)this._stampWobbleSin) * (double)this._stampWobble * 4.0);
+                float num24 = (float)(-((1.0 - _stampCardLerp) * 200.0) + Math.Sin(_stampWobbleSin) * _stampWobble * 4.0);
                 Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(1000f, 1000f), Color.Black * 0.5f * this._stampCardLerp, (Depth)0.96f);
-                Graphics.Draw((Sprite)this._sandwichCard, this.x, this.y + num24, (Depth)0.97f);
+                Graphics.Draw(_sandwichCard, this.x, this.y + num24, (Depth)0.97f);
                 Random generator = Rando.generator;
                 Random random = new Random(365023);
                 Rando.generator = random;
@@ -1884,17 +1886,17 @@ namespace DuckGame
                     num25 = 6;
                 for (int index = 0; index < num25; ++index)
                 {
-                    float num26 = (float)(index % 2 * 16);
-                    float num27 = (float)(index / 2 * 16);
+                    float num26 = index % 2 * 16;
+                    float num27 = index / 2 * 16;
                     this._sandwichStamp.angle = Rando.Float(-0.2f, 0.2f);
                     this._sandwichStamp.frame = Rando.Int(3);
-                    Graphics.Draw((Sprite)this._sandwichStamp, this.x + 30f + num26 + Rando.Float(-2f, 2f), this.y - 15f + num27 + Rando.Float(-2f, 2f) + num24, (Depth)0.98f);
+                    Graphics.Draw(_sandwichStamp, this.x + 30f + num26 + Rando.Float(-2f, 2f), this.y - 15f + num27 + Rando.Float(-2f, 2f) + num24, (Depth)0.98f);
                     if (index == 5)
                     {
                         this._duckCoin.frame = 1;
                         this._duckCoin.alpha = (float)(1.0 - (double)Math.Max(this._coinLerp2 - 0.5f, 0.0f) * 2.0);
                         this._duckCoin.depth = (Depth)0.99f;
-                        Graphics.Draw((Sprite)this._duckCoin, this.x + 30f + num26, (float)((double)this.y - 15.0 + (double)num27 + (double)num24 - (double)this._coinLerp2 * 18.0));
+                        Graphics.Draw(_duckCoin, this.x + 30f + num26, (float)((double)this.y - 15.0 + (double)num27 + (double)num24 - _coinLerp2 * 18.0));
                     }
                 }
                 Rando.generator = random;
@@ -1902,18 +1904,18 @@ namespace DuckGame
             if (this._currentLevel >= 7)
             {
                 this._milk.depth = (Depth)0.7f;
-                this._milk.frame = (int)((double)this._milkValue / (double)this.milkNeed * 15.0);
-                Graphics.Draw((Sprite)this._milk, this.x + 26f, this.y - 33f);
+                this._milk.frame = (int)(_milkValue / (double)this.milkNeed * 15.0);
+                Graphics.Draw(_milk, this.x + 26f, this.y - 33f);
                 Vec2 vec2_9 = this.position + new Vec2(-88f, 44f);
                 int num28 = 0;
                 foreach (Sprite littleEgg in this.littleEggs)
                 {
                     littleEgg.depth = (Depth)0.85f;
-                    Graphics.Draw(littleEgg, (float)((double)vec2_9.x + (double)(num28 * 23) - 3.0), vec2_9.y - 3f);
+                    Graphics.Draw(littleEgg, (float)(vec2_9.x + (double)(num28 * 23) - 3.0), vec2_9.y - 3f);
                     this._littleMan.frame = UILevelBox.LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
                     this._littleMan.depth = (Depth)0.9f;
                     this._littleMan.yscale = 1f;
-                    Graphics.Draw((Sprite)this._littleMan, (float)((double)vec2_9.x + (double)(num28 * 23) + 3.0), vec2_9.y + 1f);
+                    Graphics.Draw(_littleMan, (float)(vec2_9.x + (double)(num28 * 23) + 3.0), vec2_9.y + 1f);
                     ++num28;
                 }
             }
@@ -1929,19 +1931,23 @@ namespace DuckGame
                 string text4 = littleManBucks <= 9999 ? str2 + littleManBucks.ToString() : str2 + (littleManBucks / 1000).ToString() + "K";
                 Graphics.DrawRect(vec2_10 + new Vec2(-16f, 9f), vec2_10 + new Vec2(15f, 18f), Color.Black, (Depth)0.89f);
                 this._fancyFont.Draw(text4, vec2_10 + new Vec2(-16f, 9f) + new Vec2(30f - this._fancyFont.GetWidth(text4), 0.0f), Color.White, (Depth)0.9f);
-                if (this._giveMoney > 0 && (double)this._giveMoneyRise < 0.949999988079071)
+                if (this._giveMoney > 0 && _giveMoneyRise < 0.949999988079071)
                 {
                     string text5 = "+" + this._giveMoney.ToString();
                     Color dgGreen = Colors.DGGreen;
                     Color black = Color.Black;
-                    this._fancyFont.DrawOutline(text5, vec2_10 + new Vec2(-16f, 9f) + new Vec2(30f - this._fancyFont.GetWidth(text5), (float)-(10.0 + (double)this._giveMoneyRise * 10.0)), dgGreen, black, (Depth)0.97f);
+                    this._fancyFont.DrawOutline(text5, vec2_10 + new Vec2(-16f, 9f) + new Vec2(30f - this._fancyFont.GetWidth(text5), (float)-(10.0 + _giveMoneyRise * 10.0)), dgGreen, black, (Depth)0.97f);
                 }
-                Vec2 vec2_11 = new Vec2();
-                vec2_11.x = (float)(-Math.Sin((double)this.time * 12.0 * 6.28318548202515 - 3.14159274101257) * 8.0);
-                vec2_11.y = (float)Math.Cos((double)this.time * 12.0 * 6.28318548202515 - 3.14159274101257) * 8f;
-                Vec2 vec2_12 = new Vec2();
-                vec2_12.x = (float)(-Math.Sin((double)this.time * 6.28318548202515 - 3.14159274101257) * 5.0);
-                vec2_12.y = (float)Math.Cos((double)this.time * 6.28318548202515 - 3.14159274101257) * 5f;
+                Vec2 vec2_11 = new Vec2
+                {
+                    x = (float)(-Math.Sin(time * 12.0 * 6.28318548202515 - 3.14159274101257) * 8.0),
+                    y = (float)Math.Cos(time * 12.0 * 6.28318548202515 - 3.14159274101257) * 8f
+                };
+                Vec2 vec2_12 = new Vec2
+                {
+                    x = (float)(-Math.Sin(time * 6.28318548202515 - 3.14159274101257) * 5.0),
+                    y = (float)Math.Cos(time * 6.28318548202515 - 3.14159274101257) * 5f
+                };
                 Graphics.DrawLine(p1_1, p1_1 + vec2_11, Color.Black, depth: ((Depth)0.9f));
                 Graphics.DrawLine(p1_1, p1_1 + vec2_12, Color.Black, 1.5f, (Depth)0.9f);
                 Random random = new Random(0);
@@ -1951,7 +1957,7 @@ namespace DuckGame
                 {
                     double num30 = (double)Rando.Float(1f);
                 }
-                Math.Floor((double)Profiles.experienceProfile.currentDay / 5.0);
+                Math.Floor(Profiles.experienceProfile.currentDay / 5.0);
                 for (int index = 0; index < 5; ++index)
                 {
                     float num31 = 0.0f;
@@ -1959,7 +1965,7 @@ namespace DuckGame
                         num31 += 0.1f;
                     float num32 = Rando.Float(-0.1f, 0.1f);
                     int num33 = (int)(((double)num32 + 0.100000001490116) / 0.200000002980232 * 10.0);
-                    if (this._popDay && index == 0 && (double)this._dayFallAway != 0.0)
+                    if (this._popDay && index == 0 && _dayFallAway != 0.0)
                         this._weekDays.angle = this._ranRot;
                     else if (this._currentLevel < 6)
                         this._weekDays.angle = num32;
@@ -1976,21 +1982,21 @@ namespace DuckGame
                         this._circle.depth = (Depth)(0.85f + num31);
                         this._circle.angle = this._weekDays.angle;
                         if (index == 0 && this._advancedDay)
-                            Graphics.Draw((Sprite)this._circle, this.position.x - 71f + (float)(index * 28) + num35, this.position.y + 33f + num29 + num34, new Rectangle(0.0f, 0.0f, (float)this._circle.width * this._newCircleLerp, (float)this._circle.height));
+                            Graphics.Draw(_circle, this.position.x - 71f + index * 28 + num35, this.position.y + 33f + num29 + num34, new Rectangle(0.0f, 0.0f, _circle.width * this._newCircleLerp, _circle.height));
                         else
-                            Graphics.Draw((Sprite)this._circle, this.position.x - 71f + (float)(index * 28) + num35, this.position.y + 33f + num29 + num34);
+                            Graphics.Draw(_circle, this.position.x - 71f + index * 28 + num35, this.position.y + 33f + num29 + num34);
                     }
                     this._weekDays.depth = (Depth)(0.83f + num31);
                     this._weekDays.frame = (Profiles.experienceProfile.currentDay + index) % 5;
-                    this._weekDays.frame += (int)Math.Floor((double)(Profiles.experienceProfile.currentDay + index) / 20.0) % 4 * 6;
-                    Graphics.Draw((Sprite)this._weekDays, this.position.x - 71f + (float)(index * 28) + num35, this.position.y + 33f + num34 + num29);
+                    this._weekDays.frame += (int)Math.Floor((Profiles.experienceProfile.currentDay + index) / 20.0) % 4 * 6;
+                    Graphics.Draw(_weekDays, this.position.x - 71f + index * 28 + num35, this.position.y + 33f + num34 + num29);
                     DayType day = this.GetDay(Profiles.experienceProfile.currentDay + index);
                     if (day != DayType.Empty)
                     {
                         this._days.depth = (Depth)(0.84f + num31);
                         this._days.frame = (int)day;
                         this._days.angle = this._weekDays.angle;
-                        Graphics.Draw((Sprite)this._days, this.position.x - 71f + (float)(index * 28) + num35, (float)((double)this.position.y + (double)num29 + 33.0) + num34);
+                        Graphics.Draw(_days, this.position.x - 71f + index * 28 + num35, (float)(position.y + (double)num29 + 33.0) + num34);
                     }
                 }
                 Rando.generator = generator;
@@ -2003,23 +2009,23 @@ namespace DuckGame
                 FurniShopScreen.open = true;
                 Vincent.Draw();
             }
-            if ((double)this._taxiDrive > 0.0)
+            if (_taxiDrive > 0.0)
             {
-                Vec2 vec2_13 = new Vec2((float)((double)this.position.x - 200.0 + (double)this._taxiDrive * 210.0), this.position.y - 33f);
+                Vec2 vec2_13 = new Vec2((float)(position.x - 200.0 + _taxiDrive * 210.0), this.position.y - 33f);
                 this._taxi.depth = (Depth)0.97f;
                 Graphics.Draw(this._taxi, vec2_13.x, vec2_13.y);
                 if (this._inTaxi)
                 {
                     this._littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
-                    Graphics.Draw((Sprite)this._littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0.0f, 0.0f, 16f, 6f));
+                    Graphics.Draw(_littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0.0f, 0.0f, 16f, 6f));
                 }
             }
-            if ((double)this._intermissionSlide > 0.00999999977648258)
+            if (_intermissionSlide > 0.00999999977648258)
             {
-                float x4 = (float)((double)this._intermissionSlide * 320.0 - 320.0);
+                float x4 = (float)(_intermissionSlide * 320.0 - 320.0);
                 float y3 = 60f;
                 Graphics.DrawRect(new Vec2(x4, y3), new Vec2(x4 + 320f, y3 + 30f), Color.Black, (Depth)0.98f);
-                float x5 = (float)(320.0 - (double)this._intermissionSlide * 320.0);
+                float x5 = (float)(320.0 - _intermissionSlide * 320.0);
                 float num36 = 60f;
                 Graphics.DrawRect(new Vec2(x5, num36 + 30f), new Vec2(x5 + 320f, num36 + 60f), Color.Black, (Depth)0.98f);
                 string text6 = "ADVANCE DAY";
@@ -2061,7 +2067,7 @@ namespace DuckGame
                 }
                 if (this._overrideSlide != null)
                     text6 = this._overrideSlide;
-                this._bigFont.Draw(text6, new Vec2((float)((double)this._intermissionSlide * (320.0 + (double)Layer.HUD.width / 2.0 - (double)this._bigFont.GetWidth(text6) / 2.0) - 320.0), num36 + 18f), Color.White, (Depth)0.99f);
+                this._bigFont.Draw(text6, new Vec2((float)(_intermissionSlide * (320.0 + (double)Layer.HUD.width / 2.0 - (double)this._bigFont.GetWidth(text6) / 2.0) - 320.0), num36 + 18f), Color.White, (Depth)0.99f);
             }
             this._lastFill = num7;
             if (UILevelBox._confirmMenu == null)

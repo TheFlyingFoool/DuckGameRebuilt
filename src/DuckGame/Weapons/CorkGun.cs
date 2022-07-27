@@ -18,10 +18,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 100000;
-            this._ammoType = (AmmoType)new ATCork();
+            this._ammoType = new ATCork();
             this._type = "gun";
             this._sprite = new SpriteMap("corkGun", 13, 10);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(6f, 4f);
             this.collisionOffset = new Vec2(-6f, -4f);
             this.collisionSize = new Vec2(12f, 8f);
@@ -33,7 +33,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)this.windingVelocity > 1.0)
+            if (windingVelocity > 1.0)
                 this.windingVelocity = 1f;
             this.windingVelocity = Lerp.FloatSmooth(this.windingVelocity, 0.0f, 0.05f);
             if (this.corkObject != null)
@@ -41,10 +41,10 @@ namespace DuckGame
                 double num = (double)this.corkObject.WindUp(this.windingVelocity);
                 if (num < 10.0)
                 {
-                    Level.Remove((Thing)this.corkObject);
+                    Level.Remove(corkObject);
                     this.ammo = 1;
                     this.windingVelocity = 0.0f;
-                    this.corkObject = (CorkObject)null;
+                    this.corkObject = null;
                     this._firedCork = 0;
                     this.scale = new Vec2(1.5f, 1.5f);
                 }

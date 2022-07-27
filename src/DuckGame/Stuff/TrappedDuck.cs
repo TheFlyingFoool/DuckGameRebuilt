@@ -33,10 +33,10 @@ namespace DuckGame
             get => base.visible;
             set
             {
-                if (value && (double)this._trapTime < 0.0)
+                if (value && _trapTime < 0.0)
                 {
                     this._trapTime = 1f;
-                    this.owner = (Thing)null;
+                    this.owner = null;
                 }
                 base.visible = value;
             }
@@ -88,7 +88,7 @@ namespace DuckGame
             {
                 this._duckOwner.hSpeed = this.hSpeed;
                 bool flag = type != null;
-                if (!flag && (double)this.jumpCountdown > 0.00999999977648258)
+                if (!flag && jumpCountdown > 0.00999999977648258)
                     this._duckOwner.vSpeed = Duck.JumpSpeed;
                 else
                     this._duckOwner.vSpeed = flag ? this.vSpeed - 1f : -3f;
@@ -99,39 +99,39 @@ namespace DuckGame
                     SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f));
                     smallSmoke.hSpeed += this.hSpeed * Rando.Float(0.3f, 0.5f);
                     smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                    Level.Add((Thing)smallSmoke);
+                    Level.Add(smallSmoke);
                 }
                 if (this.duck != null)
                 {
                     if (this.held)
                     {
                         if (this.duck.holdObject == this)
-                            this.duck.holdObject = (Holdable)null;
+                            this.duck.holdObject = null;
                     }
                     else if (this.duck.holstered == this)
-                        this.duck.holstered = (Holdable)null;
+                        this.duck.holstered = null;
                 }
                 if (Network.isActive)
                 {
                     if (!flag)
                     {
-                        this._duckOwner.Fondle((Thing)this);
-                        this.authority = this.authority + 30;
+                        this._duckOwner.Fondle(this);
+                        this.authority += 30;
                     }
                     this.active = false;
                     this.visible = false;
-                    this.owner = (Thing)null;
+                    this.owner = null;
                 }
                 else
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
                 if (this._duckOwner.owner == this)
-                    this._duckOwner.owner = (Thing)null;
+                    this._duckOwner.owner = null;
                 if (flag && !this._duckOwner.killingNet)
                 {
                     this._duckOwner.killingNet = true;
                     this._duckOwner.Destroy(type);
                 }
-                this._duckOwner._trapped = (TrappedDuck)null;
+                this._duckOwner._trapped = null;
             }
             return true;
         }
@@ -139,7 +139,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && (this._duckOwner == null || !this._duckOwner.HitArmor(bullet, hitPos)))
-                this.OnDestroy((DestroyType)new DTShot(bullet));
+                this.OnDestroy(new DTShot(bullet));
             return base.Hit(bullet, hitPos);
         }
 
@@ -164,7 +164,7 @@ namespace DuckGame
                     SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f));
                     smallSmoke.hSpeed += this.hSpeed * Rando.Float(0.3f, 0.5f);
                     smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                    Level.Add((Thing)smallSmoke);
+                    Level.Add(smallSmoke);
                 }
             }
             if (this._duckOwner == null)
@@ -172,7 +172,7 @@ namespace DuckGame
             ++this._framesSinceTransfer;
             base.Update();
             if (this.isOffBottomOfLevel)
-                this.OnDestroy((DestroyType)new DTFall());
+                this.OnDestroy(new DTFall());
             this.jumpCountdown -= Maths.IncFrameTimer();
             this._prevVisible = this.visible;
             this._shakeInc += 0.8f;
@@ -206,7 +206,7 @@ namespace DuckGame
                         if (this.owner == null)
                         {
                             if ((double)Math.Abs(this.hSpeed) < 1.0 && this._framesSinceTransfer > 30)
-                                this._duckOwner.Fondle((Thing)this);
+                                this._duckOwner.Fondle(this);
                             this.vSpeed -= Rando.Float(0.8f, 1.1f);
                             if (this._duckOwner.inputProfile.Down("LEFT") && (double)this.hSpeed > -1.0)
                                 this.hSpeed -= Rando.Float(0.6f, 0.8f);
@@ -219,8 +219,8 @@ namespace DuckGame
                     if (this._duckOwner.inputProfile.Released("JUMP") && this._duckOwner.HasEquipment(typeof(Jetpack)))
                         this._duckOwner.GetEquipment(typeof(Jetpack)).ReleaseAction();
                     this._trapTime -= 0.0028f;
-                    if (((double)this._trapTime <= 0.0 || this._duckOwner.dead) && !this.inPipe)
-                        this.OnDestroy((DestroyType)null);
+                    if ((_trapTime <= 0.0 || this._duckOwner.dead) && !this.inPipe)
+                        this.OnDestroy(null);
                 }
                 this._duckOwner.UpdateSkeleton();
                 this.weight = 5f;
@@ -245,17 +245,17 @@ namespace DuckGame
                 this._duckOwner.DrawConnectionIndicators();
             float num1 = 0.0f;
             if (this.owner != null)
-                num1 = (float)(Math.Sin((double)this._shakeInc) * (double)this._shakeMult * 1.0);
+                num1 = (float)(Math.Sin(_shakeInc) * _shakeMult * 1.0);
             if (this._duckOwner.quack > 0)
             {
                 Vec2 tounge = this._duckOwner.tounge;
-                if (!this._duckOwner._spriteQuack.flipH && (double)tounge.x < 0.0)
+                if (!this._duckOwner._spriteQuack.flipH && tounge.x < 0.0)
                     tounge.x = 0.0f;
-                if (this._duckOwner._spriteQuack.flipH && (double)tounge.x > 0.0)
+                if (this._duckOwner._spriteQuack.flipH && tounge.x > 0.0)
                     tounge.x = 0.0f;
-                if ((double)tounge.y < -0.300000011920929)
+                if (tounge.y < -0.300000011920929)
                     tounge.y = -0.3f;
-                if ((double)tounge.y > 0.400000005960464)
+                if (tounge.y > 0.400000005960464)
                     tounge.y = 0.4f;
                 this._stickLerp = Lerp.Vec2Smooth(this._stickLerp, tounge, 0.2f);
                 this._stickSlowLerp = Lerp.Vec2Smooth(this._stickSlowLerp, tounge, 0.1f);
@@ -298,7 +298,7 @@ namespace DuckGame
                 }
             }
             else
-                Graphics.Draw((Sprite)this._duckOwner._sprite, this.x + num1, this.y - 8f);
+                Graphics.Draw(_duckOwner._sprite, this.x + num1, this.y - 8f);
             base.Draw();
         }
     }

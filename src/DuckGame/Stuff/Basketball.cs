@@ -21,7 +21,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("basketBall", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(15f, 15f);
@@ -56,13 +56,13 @@ namespace DuckGame
         public override void Update()
         {
             if (!this.isServerForObject)
-                this._bounceDuck = (Duck)null;
+                this._bounceDuck = null;
             else if (this.owner == null)
             {
                 this._walkFrames = 0;
                 --this._framesInHand;
                 if (this._framesInHand < -60)
-                    this._bounceDuck = (Duck)null;
+                    this._bounceDuck = null;
                 if (this._bounceDuck != null)
                 {
                     float length = (this._bounceDuck.position - this.position).length;
@@ -70,7 +70,7 @@ namespace DuckGame
                         this.hSpeed = this._bounceDuck.hSpeed;
                     if (this._bounceDuck.holdObject == null && (double)this.vSpeed < 1.0 && (double)this._bounceDuck.top + 8.0 > (double)this.y && (double)length < 16.0)
                     {
-                        this._bounceDuck.GiveHoldable((Holdable)this);
+                        this._bounceDuck.GiveHoldable(this);
                         this._framesInHand = 0;
                     }
                 }
@@ -102,7 +102,7 @@ namespace DuckGame
                         this.duck.ThrowItem(false);
                         this._walkFrames = 0;
                     }
-                    this._bounceDuck = (Duck)null;
+                    this._bounceDuck = null;
                     ++this._framesInHand;
                 }
             }

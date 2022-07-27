@@ -21,11 +21,11 @@ namespace DuckGame
         public override void EditorPropertyChanged(object property) => this.UpdateFrame();
 
         public GoodyNew(float xpos, float ypos)
-          : base(xpos, ypos, (Sprite)new SpriteMap("challenge/goody", 16, 16))
+          : base(xpos, ypos, new SpriteMap("challenge/goody", 16, 16))
         {
             this._sprite = this.graphic as SpriteMap;
-            this.Style = new EditorProperty<int>(0, (Thing)this, -1f, 3f, 1f, "RANDOM");
-            this.Style_Group = new EditorProperty<int>(0, (Thing)this, -1f, 4f, 1f, "RANDOM");
+            this.Style = new EditorProperty<int>(0, this, -1f, 3f, 1f, "RANDOM");
+            this.Style_Group = new EditorProperty<int>(0, this, -1f, 4f, 1f, "RANDOM");
             this.Order._tooltip = "All Targets/Goodies with smaller Order numbers must be destroyed/collected before this goody appears.";
             this._editorName = "Goody";
             this._contextMenuFilter.Add("Sequence");

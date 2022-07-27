@@ -18,7 +18,7 @@ namespace DuckGame
             this._sprite.AddAnimation("slip", 0.45f, false, 0, 1, 2, 3);
             this._sprite.SetAnimation("slip");
             this.center = new Vec2(19f, 31f);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._sprite.flipH = flip;
         }
 
@@ -26,7 +26,7 @@ namespace DuckGame
         {
             if (!this._sprite.finished)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw() => base.Draw();

@@ -15,13 +15,13 @@ namespace DuckGame
         public bool depth;
 
         public RenderTarget2D(int width, int height, bool pdepth, RenderTargetUsage usage)
-          : base((Texture2D)new Microsoft.Xna.Framework.Graphics.RenderTarget2D(DuckGame.Graphics.device, MonoMain.hidef ? Math.Min(width, 4096) : Math.Min(width, 2048), MonoMain.hidef ? Math.Min(height, 4096) : Math.Min(height, 2048), false, SurfaceFormat.Color, pdepth ? DepthFormat.Depth24Stencil8 : DepthFormat.None, 0, usage), "__renderTarget")
+          : base(new Microsoft.Xna.Framework.Graphics.RenderTarget2D(DuckGame.Graphics.device, MonoMain.hidef ? Math.Min(width, 4096) : Math.Min(width, 2048), MonoMain.hidef ? Math.Min(height, 4096) : Math.Min(height, 2048), false, SurfaceFormat.Color, pdepth ? DepthFormat.Depth24Stencil8 : DepthFormat.None, 0, usage), "__renderTarget")
         {
             this.depth = pdepth;
         }
 
         public RenderTarget2D(int width, int height, bool pdepth = false)
-          : base((Texture2D)new Microsoft.Xna.Framework.Graphics.RenderTarget2D(DuckGame.Graphics.device, MonoMain.hidef ? Math.Min(width, 4096) : Math.Min(width, 2048), MonoMain.hidef ? Math.Min(height, 4096) : Math.Min(height, 2048), false, SurfaceFormat.Color, pdepth ? DepthFormat.Depth24Stencil8 : DepthFormat.None, 0, RenderTargetUsage.DiscardContents), "__renderTarget")
+          : base(new Microsoft.Xna.Framework.Graphics.RenderTarget2D(DuckGame.Graphics.device, MonoMain.hidef ? Math.Min(width, 4096) : Math.Min(width, 2048), MonoMain.hidef ? Math.Min(height, 4096) : Math.Min(height, 2048), false, SurfaceFormat.Color, pdepth ? DepthFormat.Depth24Stencil8 : DepthFormat.None, 0, RenderTargetUsage.DiscardContents), "__renderTarget")
         {
             this.depth = pdepth;
         }

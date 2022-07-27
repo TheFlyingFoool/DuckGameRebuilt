@@ -22,7 +22,7 @@ namespace DuckGame
         {
             if (this.isServerForObject)
                 this.timer -= Maths.IncFrameTimer();
-            if ((double)this.timer >= 0.0)
+            if (timer >= 0.0)
                 return;
             this.timer = 0.0f;
         }

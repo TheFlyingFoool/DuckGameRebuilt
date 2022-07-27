@@ -15,7 +15,7 @@ namespace DuckGame
 
         public override object classValue
         {
-            get => (object)this.byteValue;
+            get => byteValue;
             set => this.byteValue = (byte)value;
         }
 

@@ -213,7 +213,7 @@ namespace DuckGame
 
         public static Color ParseColor(string color)
         {
-            Color transparent = Color.Transparent;
+            Color transparent;
             if (!Colors._colorMap.TryGetValue(color, out transparent))
             {
                 try
@@ -221,11 +221,11 @@ namespace DuckGame
                     string[] strArray = color.Split(',');
                     if (strArray.Length == 3)
                     {
-                        int r = (int)Convert.ToByte(strArray[0]);
+                        int r = Convert.ToByte(strArray[0]);
                         byte num1 = Convert.ToByte(strArray[1]);
                         byte num2 = Convert.ToByte(strArray[2]);
-                        int g = (int)num1;
-                        int b = (int)num2;
+                        int g = num1;
+                        int b = num2;
                         return new Color((byte)r, (byte)g, (byte)b);
                     }
                 }

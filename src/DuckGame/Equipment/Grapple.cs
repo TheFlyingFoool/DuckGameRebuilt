@@ -13,7 +13,7 @@ namespace DuckGame
     [BaggedProperty("previewPriority", true)]
     public class Grapple : Equipment, ISwing
     {
-        public StateBinding _ropeDataBinding = (StateBinding)new DataBinding(nameof(ropeData));
+        public StateBinding _ropeDataBinding = new DataBinding(nameof(ropeData));
         public BitBuffer ropeData = new BitBuffer();
         protected SpriteMap _sprite;
         public Harpoon _harpoon;
@@ -40,7 +40,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("grappleArm", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
@@ -66,12 +66,14 @@ namespace DuckGame
         public override void Initialize()
         {
             base.Initialize();
-            this._harpoon = new Harpoon((Thing)this);
-            Level.Add((Thing)this._harpoon);
+            this._harpoon = new Harpoon(this);
+            Level.Add(_harpoon);
             this._sightHit = new Sprite("laserSightHit");
             this._sightHit.CenterOrigin();
-            this._ropeSprite = new Sprite("grappleWire");
-            this._ropeSprite.center = new Vec2(8f, 0.0f);
+            this._ropeSprite = new Sprite("grappleWire")
+            {
+                center = new Vec2(8f, 0.0f)
+            };
         }
 
         public Rope GetRopeParent(Thing child)
@@ -81,7 +83,7 @@ namespace DuckGame
                 if (ropeParent.attach2 == child)
                     return ropeParent;
             }
-            return (Rope)null;
+            return null;
         }
 
         public void SerializeRope(Rope r)
@@ -102,31 +104,31 @@ namespace DuckGame
             {
                 if (r == null)
                 {
-                    this._rope = new Rope(0.0f, 0.0f, (Thing)r, (Thing)null, tex: this._ropeSprite, belongsTo: ((Thing)this));
+                    this._rope = new Rope(0.0f, 0.0f, r, null, tex: this._ropeSprite, belongsTo: this);
                     r = this._rope;
                 }
-                r.attach1 = (Thing)r;
-                r._thing = (Thing)null;
-                Level.Add((Thing)r);
+                r.attach1 = r;
+                r._thing = null;
+                Level.Add(r);
                 Vec2 uncompressedVec2 = CompressedVec2Binding.GetUncompressedVec2(this.ropeData.ReadInt());
                 if (r == this._rope)
                 {
-                    r.attach1 = (Thing)r;
+                    r.attach1 = r;
                     if (this.duck != null)
                         r.position = this.duck.position;
                     else
                         r.position = this.position;
-                    r._thing = (Thing)this.duck;
+                    r._thing = duck;
                 }
                 if (r.attach2 == null || !(r.attach2 is Rope) || r.attach2 == r)
                 {
-                    Rope rope = new Rope(uncompressedVec2.x, uncompressedVec2.y, (Thing)r, (Thing)null, tex: this._ropeSprite, belongsTo: ((Thing)this));
-                    r.attach2 = (Thing)rope;
+                    Rope rope = new Rope(uncompressedVec2.x, uncompressedVec2.y, r, null, tex: this._ropeSprite, belongsTo: this);
+                    r.attach2 = rope;
                 }
                 if (r.attach2 != null)
                 {
                     r.attach2.position = uncompressedVec2;
-                    (r.attach2 as Rope).attach1 = (Thing)r;
+                    (r.attach2 as Rope).attach1 = r;
                 }
                 this.DeserializeRope(r.attach2 as Rope);
             }
@@ -141,7 +143,7 @@ namespace DuckGame
                 Rope attach1 = r.attach1 as Rope;
                 attach1.TerminateLaterRopes();
                 this._harpoon.Latch(r.position);
-                attach1.attach2 = (Thing)this._harpoon;
+                attach1.attach2 = _harpoon;
             }
         }
 
@@ -157,13 +159,13 @@ namespace DuckGame
                 this.duck._double = false;
                 if ((double)this.duck.vSpeed < 0.0 && this.duck.framesSinceJump > 3)
                     this.duck.vSpeed *= 1.75f;
-                if ((double)this.duck.vSpeed >= (double)this.duck.jumpSpeed * 0.949999988079071 && (double)Math.Abs(this.duck.vSpeed) + (double)Math.Abs(this.duck.hSpeed) < 2.0)
+                if ((double)this.duck.vSpeed >= duck.jumpSpeed * 0.949999988079071 && (double)Math.Abs(this.duck.vSpeed) + (double)Math.Abs(this.duck.hSpeed) < 2.0)
                 {
                     SFX.Play("jump", 0.5f);
                     this.duck.vSpeed = this.duck.jumpSpeed;
                 }
             }
-            this._rope = (Rope)null;
+            this._rope = null;
             this.frictionMult = 1f;
             this.gravMultiplier = 1f;
         }
@@ -196,7 +198,7 @@ namespace DuckGame
                 float num = type.range = this._grappleLength;
                 type.penetration = 1f;
                 float ang = 45f;
-                if (this.offDir < (sbyte)0)
+                if (this.offDir < 0)
                     ang = 135f;
                 if (this._harpoon.inGun)
                 {
@@ -210,12 +212,12 @@ namespace DuckGame
                             ang = Maths.PointDirection(p1, this._lastHit);
                     }
                     type.penetration = 9f;
-                    Bullet bullet = new Bullet(p1.x, p1.y, (AmmoType)type, ang, this.owner, tracer: true);
+                    Bullet bullet = new Bullet(p1.x, p1.y, type, ang, this.owner, tracer: true);
                     this._wallPoint = bullet.end;
                     this._grappleTravel = bullet.travelDirNormalized;
                     num = (p1 - this._wallPoint).length;
                 }
-                if ((double)num < (double)this._grappleLength - 2.0 && (double)num <= (double)this._grappleDist + 16.0)
+                if ((double)num < _grappleLength - 2.0 && (double)num <= _grappleDist + 16.0)
                 {
                     this._lastHit = this._wallPoint;
                     this._canGrab = true;
@@ -236,8 +238,8 @@ namespace DuckGame
                         {
                             RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));
                             this._harpoon.Fire(this.wallPoint, this.grappelTravel);
-                            this._rope = new Rope(this.barrelPosition.x, this.barrelPosition.y, (Thing)null, (Thing)this._harpoon, (Thing)this.duck, tex: this._ropeSprite, belongsTo: ((Thing)this));
-                            Level.Add((Thing)this._rope);
+                            this._rope = new Rope(this.barrelPosition.x, this.barrelPosition.y, null, _harpoon, duck, tex: this._ropeSprite, belongsTo: this);
+                            Level.Add(_rope);
                         }
                     }
                     else
@@ -267,7 +269,7 @@ namespace DuckGame
                     PhysicsObject prevOwner = this.prevOwner as PhysicsObject;
                     prevOwner.frictionMult = 1f;
                     prevOwner.gravMultiplier = 1f;
-                    this._prevOwner = (Thing)null;
+                    this._prevOwner = null;
                     this.frictionMult = 1f;
                     this.gravMultiplier = 1f;
                     if (this.prevOwner is Duck)
@@ -314,7 +316,7 @@ namespace DuckGame
             if (this.duck != null)
             {
                 this.duck.grappleMul = true;
-                PhysicsObject duck = (PhysicsObject)this.duck;
+                PhysicsObject duck = this.duck;
                 if (this.duck.ragdoll != null)
                 {
                     this.Degrapple();
@@ -330,7 +332,6 @@ namespace DuckGame
             }
             else
             {
-                Vec2 position = this.position;
                 this.position = this._rope.attach2.position + vec2_1 * this._rope.properLength;
                 Vec2 vec2_3 = this.position - this.lastPosition;
                 this.hSpeed = vec2_3.x;
@@ -345,13 +346,13 @@ namespace DuckGame
             else if (this._autoOffset)
             {
                 Vec2 offset = this._offset;
-                if (this._equippedDuck.offDir < (sbyte)0)
+                if (this._equippedDuck.offDir < 0)
                     offset.x *= -1f;
                 Vec2 vec2 = Vec2.Zero;
                 if (this._equippedDuck.holdObject != null)
                 {
                     vec2 = this._equippedDuck.holdObject.handOffset;
-                    vec2.x *= (float)this._equippedDuck.offDir;
+                    vec2.x *= _equippedDuck.offDir;
                 }
                 this.position = this._equippedDuck.armPosition + vec2;
             }

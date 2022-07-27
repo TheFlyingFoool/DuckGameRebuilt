@@ -33,13 +33,15 @@ namespace DuckGame
                 c = Colors.MenuOption;
             this._valueStrings = valStrings;
             UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0.0f : 0.8f);
-            UIText component2 = new UIText(text, c);
-            component2.align = UIAlign.Left;
-            component1.leftSection.Add((UIComponent)component2, true);
+            UIText component2 = new UIText(text, c)
+            {
+                align = UIAlign.Left
+            };
+            component1.leftSection.Add(component2, true);
             this.currentIndex = this._valueStrings.IndexOf(field.value as string);
             if (this.currentIndex < 0)
                 this.currentIndex = 0;
-            this._textItem = (UIText)new UIChangingText(-1f, -1f, field, (FieldBinding)null);
+            this._textItem = new UIChangingText(-1f, -1f, field, null);
             string str = "";
             foreach (string valString in valStrings)
             {
@@ -50,12 +52,14 @@ namespace DuckGame
             this._textItem.minLength = str.Length;
             this._textItem.text = this._valueStrings[this.currentIndex];
             this._textItem.align = UIAlign.Right;
-            component1.rightSection.Add((UIComponent)this._textItem, true);
-            this.rightSection.Add((UIComponent)component1, true);
-            this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            component1.rightSection.Add(_textItem, true);
+            this.rightSection.Add(component1, true);
+            this._arrow = new UIImage("contextArrowRight")
+            {
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
             this._field = field;
             this.currentValue = this._field.value as string;
             this.controlString = "@WASD@ADJUST @SELECT@APPLY";
@@ -69,7 +73,7 @@ namespace DuckGame
             {
                 if (this.selectAction != null)
                     this.selectAction(this.currentValue);
-                this._field.value = (object)this.currentValue;
+                this._field.value = currentValue;
             }
             else
             {

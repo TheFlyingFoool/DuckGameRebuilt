@@ -22,7 +22,7 @@ namespace DuckGame
         public UIBlockManagement(UIMenu openOnClose)
           : base("BLOCKED USERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, 160f)
         {
-            this.Add((UIComponent)new UIBox(0.0f, 0.0f, 100f, 130f, isVisible: false), true);
+            this.Add(new UIBox(0.0f, 0.0f, 100f, 130f, isVisible: false), true);
             this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
             this._downArrow = new Sprite("cloudDown");
             this._downArrow.CenterOrigin();
@@ -120,9 +120,9 @@ namespace DuckGame
                 if (Input.Pressed("CANCEL"))
                 {
                     if (this._openOnClose != null)
-                        new UIMenuActionOpenMenu((UIComponent)this, (UIComponent)this._openOnClose).Activate();
+                        new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     else
-                        new UIMenuActionCloseMenu((UIComponent)this).Activate();
+                        new UIMenuActionCloseMenu(this).Activate();
                 }
             }
             this._opening = false;

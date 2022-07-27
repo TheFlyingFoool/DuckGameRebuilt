@@ -25,7 +25,7 @@ namespace DuckGame
         public NMClientDisconnect(string who, byte pProfile)
         {
             this.whom = who;
-            this.profile = DuckNetwork.profiles[(int)pProfile];
+            this.profile = DuckNetwork.profiles[pProfile];
         }
     }
 }

@@ -20,9 +20,9 @@ namespace DuckGame
 
         public override void MakeNetEffect(Vec2 pos, bool fromNetwork = false)
         {
-            Level.Add((Thing)new ExplosionPart(pos.x + Rando.Float(-2f, 2f), pos.y + Rando.Float(-2f, 2f), false));
+            Level.Add(new ExplosionPart(pos.x + Rando.Float(-2f, 2f), pos.y + Rando.Float(-2f, 2f), false));
             for (int index = 0; index < 4; ++index)
-                Level.Add((Thing)new ExplosionPart(pos.x + Rando.Float(-11f, 11f), pos.y + Rando.Float(-11f, 11f), false));
+                Level.Add(new ExplosionPart(pos.x + Rando.Float(-11f, 11f), pos.y + Rando.Float(-11f, 11f), false));
             if (fromNetwork)
             {
                 foreach (PhysicsObject physicsObject in Level.CheckCircleAll<PhysicsObject>(pos, 70f))

@@ -30,7 +30,7 @@ namespace DuckGame
             this._type = type;
             this.fancy = true;
             if (field == null)
-                this._field = new FieldBinding((object)this, "isChecked");
+                this._field = new FieldBinding(this, "isChecked");
             this.tooltip = valTooltip;
         }
 
@@ -50,7 +50,7 @@ namespace DuckGame
             this.fancy = true;
             if (field != null)
                 return;
-            this._field = new FieldBinding((object)this, "isChecked");
+            this._field = new FieldBinding(this, "isChecked");
         }
 
         public override void Initialize()
@@ -88,7 +88,7 @@ namespace DuckGame
             {
                 if (this._owner == null)
                     return;
-                this._owner.Selected((ContextMenu)this);
+                this._owner.Selected(this);
             }
         }
 
@@ -103,12 +103,12 @@ namespace DuckGame
                 if (this._type == ContextFileType.Level)
                 {
                     LevelData levelData = DuckFile.LoadLevel(path);
-                    this._field.value = levelData == null ? (object)current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5) : (object)levelData.metaData.guid;
+                    this._field.value = levelData == null ? current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5) : (object)levelData.metaData.guid;
                 }
                 else
-                    this._field.value = !current.fileDialog.result.StartsWith("/") ? (object)current.fileDialog.result.Substring(0, current.fileDialog.result.Length - 4) : (object)current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5);
+                    this._field.value = !current.fileDialog.result.StartsWith("/") ? current.fileDialog.result.Substring(0, current.fileDialog.result.Length - 4) : (object)current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5);
                 Editor.hasUnsavedChanges = true;
-                current.fileDialog.result = (string)null;
+                current.fileDialog.result = null;
             }
             if (this.selecting && !current.fileDialog.opened)
                 this.selecting = false;

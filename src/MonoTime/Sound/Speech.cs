@@ -20,7 +20,7 @@ namespace DuckGame
         {
             if (this._speech != null)
                 return;
-            this._speech = (object)new SpeechSynthesizer();
+            this._speech = new SpeechSynthesizer();
             (this._speech as SpeechSynthesizer).SetOutputToDefaultAudioDevice();
             this.ApplyTTSSettings();
         }

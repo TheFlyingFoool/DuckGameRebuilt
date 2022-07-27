@@ -31,7 +31,7 @@ namespace DuckGame
             this._base = new Sprite("turretBase");
             this._base.CenterOrigin();
             this._barrelOffsetTL = new Vec2(12f, 5f);
-            this._ammoType = (AmmoType)new ATDefenceLaser();
+            this._ammoType = new ATDefenceLaser();
             this._fireSound = "phaserSmall";
             this._fireSoundPitch = 0.4f;
             this.weight = 10f;
@@ -46,7 +46,7 @@ namespace DuckGame
                 this.ammo = 99;
                 if (this.isServerForObject && this._target == null)
                 {
-                    Duck associatedDuck = Duck.GetAssociatedDuck((Thing)(this.level.NearestThingFilter<IAmADuck>(this.position, (Predicate<Thing>)(x => (this._friendly == null || Duck.GetAssociatedDuck(x) != this._friendly) && Level.CheckLine<Block>(this.position, x.position) == null && Level.CheckLine<TeamBeam>(this.position, x.position) == null)) as PhysicsObject));
+                    Duck associatedDuck = Duck.GetAssociatedDuck(this.level.NearestThingFilter<IAmADuck>(this.position, x => (this._friendly == null || Duck.GetAssociatedDuck(x) != this._friendly) && Level.CheckLine<Block>(this.position, x.position) == null && Level.CheckLine<TeamBeam>(this.position, x.position) == null) as PhysicsObject);
                     if (associatedDuck != null && !associatedDuck.dead)
                     {
                         this._target = associatedDuck;
@@ -63,35 +63,35 @@ namespace DuckGame
                     else
                     {
                         this.angleDegrees = -Maths.PointDirection(this.position, this._target.cameraPosition);
-                        if (this.offDir < (sbyte)0)
+                        if (this.offDir < 0)
                             this.angleDegrees += 180f;
                         if (this.isServerForObject)
                         {
                             this._charge += Maths.IncFrameTimer();
-                            if ((double)this._charge > 0.200000002980232)
+                            if (_charge > 0.200000002980232)
                             {
-                                this.owner = (Thing)this._friendly;
+                                this.owner = _friendly;
                                 this._charge = 0.0f;
                                 this.Fire();
-                                this.owner = (Thing)null;
+                                this.owner = null;
                                 this.enablePhysics = false;
                             }
-                            Duck associatedDuck = Duck.GetAssociatedDuck((Thing)this._target);
+                            Duck associatedDuck = Duck.GetAssociatedDuck(_target);
                             if (associatedDuck != null && associatedDuck.dead)
                                 this.LoseTarget();
                         }
                     }
                 }
                 else
-                    this.angleDegrees = (float)(10 * (int)this.offDir);
+                    this.angleDegrees = 10 * offDir;
             }
             base.Update();
         }
 
         private void LoseTarget()
         {
-            this._target = (Duck)null;
-            if ((double)this._charge > 0.0)
+            this._target = null;
+            if (_charge > 0.0)
                 SFX.PlaySynchronized("chaingunSpinDown", 0.95f, 0.1f);
             this._charge = 0.0f;
         }
@@ -101,7 +101,7 @@ namespace DuckGame
             Vec2 vec2 = this.position + -this.barrelVector * (this.kick * 4f);
             this.graphic.angleDegrees = this.angleDegrees;
             this.graphic.center = this.center;
-            this.graphic.flipH = this.offDir < (sbyte)0;
+            this.graphic.flipH = this.offDir < 0;
             Graphics.Draw(this.graphic, vec2.x, vec2.y, this.depth);
             this._base.depth = this.depth - 10;
             Graphics.Draw(this._base, this.position.x, this.position.y - 6f);

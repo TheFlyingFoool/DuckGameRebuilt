@@ -45,7 +45,7 @@ namespace DuckGame
                 base.Update();
             else if (this.swingOwner != null)
             {
-                Thing ropeParent = (Thing)this.swingOwner.GetRopeParent((Thing)this);
+                Thing ropeParent = this.swingOwner.GetRopeParent(this);
             }
             if (!(this._owner is Grapple) || !this._inGun)
                 return;
@@ -54,7 +54,7 @@ namespace DuckGame
             this.depth = owner.depth - 1;
             this.hSpeed = 0.0f;
             this.vSpeed = 0.0f;
-            this.graphic.flipH = (double)owner.offDir < 0.0;
+            this.graphic.flipH = owner.offDir < 0.0;
         }
 
         public void Latch(Vec2 point)
@@ -82,9 +82,9 @@ namespace DuckGame
                 return;
             SFX.Play("grappleHook", 0.5f);
             for (int index = 0; index < 6; ++index)
-                Level.Add((Thing)Spark.New(point.x - travel.x * 2f, point.y - travel.y * 2f, travel));
+                Level.Add(Spark.New(point.x - travel.x * 2f, point.y - travel.y * 2f, travel));
             for (int index = 0; index < 1; ++index)
-                Level.Add((Thing)SmallSmoke.New(point.x + Rando.Float(-2f, 2f), point.y + Rando.Float(-2f, 2f)));
+                Level.Add(SmallSmoke.New(point.x + Rando.Float(-2f, 2f), point.y + Rando.Float(-2f, 2f)));
         }
 
         public void Return()

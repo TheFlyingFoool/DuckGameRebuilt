@@ -23,12 +23,12 @@ namespace DuckGame
         public override void Draw()
         {
             this._dots += 0.01f;
-            if ((double)this._dots > 1.0)
+            if (_dots > 1.0)
                 this._dots = 0.0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {
-                if ((double)this._dots * 4.0 > (double)(index + 1))
+                if (_dots * 4.0 > index + 1)
                     str += ".";
             }
             string text = "Connecting";

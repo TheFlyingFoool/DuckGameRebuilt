@@ -32,7 +32,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._tracer || (double)this._bulletDistance <= 0.100000001490116)
+            if (this._tracer || _bulletDistance <= 0.100000001490116)
                 return;
             float length = (this.drawStart - this.drawEnd).length;
             float val = 0.0f;
@@ -63,7 +63,7 @@ namespace DuckGame
             ExplosionPart explosionPart = new ExplosionPart(this.x, this.y);
             explosionPart.xscale *= 0.7f;
             explosionPart.yscale *= 0.7f;
-            Level.Add((Thing)explosionPart);
+            Level.Add(explosionPart);
             SFX.Play("magPop", 0.7f, Rando.Float(-0.5f, -0.3f));
             if (!this.isLocal)
                 return;
@@ -72,23 +72,25 @@ namespace DuckGame
             {
                 if (t != owner)
                 {
-                    Thing.SuperFondle((Thing)t, DuckNetwork.localConnection);
-                    t.Destroy((DestroyType)new DTShot((Bullet)this));
+                    Thing.SuperFondle(t, DuckNetwork.localConnection);
+                    t.Destroy(new DTShot(this));
                 }
             }
         }
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
-            MagBullet t = new MagBullet(pos.x, pos.y, this.ammo, dir, rbound: this.rebound, distance: rng);
-            t._teleporter = this._teleporter;
-            t.firedFrom = this.firedFrom;
-            t.lastReboundSource = this.lastReboundSource;
-            t.connection = this.connection;
-            t.isLocal = this.isLocal;
+            MagBullet t = new MagBullet(pos.x, pos.y, this.ammo, dir, rbound: this.rebound, distance: rng)
+            {
+                _teleporter = this._teleporter,
+                firedFrom = this.firedFrom,
+                lastReboundSource = this.lastReboundSource,
+                connection = this.connection,
+                isLocal = this.isLocal
+            };
             this.reboundCalled = true;
-            Level.current.AddThing((Thing)t);
-            Level.current.AddThing((Thing)new LaserRebound(pos.x, pos.y));
+            Level.current.AddThing(t);
+            Level.current.AddThing(new LaserRebound(pos.x, pos.y));
         }
     }
 }

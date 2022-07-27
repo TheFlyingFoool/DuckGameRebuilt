@@ -36,33 +36,37 @@ namespace DuckGame
                 ExplosionPart explosionPart = new ExplosionPart(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
                 explosionPart.xscale *= 0.7f;
                 explosionPart.yscale *= 0.7f;
-                Level.Add((Thing)explosionPart);
+                Level.Add(explosionPart);
             }
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(this.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
             foreach (MaterialThing materialThing in Level.CheckCircleAll<TV>(this.position, 20f))
-                materialThing.Destroy((DestroyType)new DTImpact((Thing)this));
+                materialThing.Destroy(new DTImpact(this));
             List<Bullet> varBullets = new List<Bullet>();
             Vec2 vec2 = this.position - this.travelDirNormalized;
             for (int index = 0; index < 12; ++index)
             {
-                float ang = (float)((double)index * 30.0 - 10.0) + Rando.Float(20f);
-                ATGrenadeLauncherShrapnel type = new ATGrenadeLauncherShrapnel();
-                type.range = 25f + Rando.Float(10f);
-                Bullet bullet = new Bullet(vec2.x, vec2.y, (AmmoType)type, ang);
-                bullet.firedFrom = (Thing)this;
+                float ang = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                ATGrenadeLauncherShrapnel type = new ATGrenadeLauncherShrapnel
+                {
+                    range = 25f + Rando.Float(10f)
+                };
+                Bullet bullet = new Bullet(vec2.x, vec2.y, type, ang)
+                {
+                    firedFrom = this
+                };
                 varBullets.Add(bullet);
-                Level.Add((Thing)bullet);
+                Level.Add(bullet);
             }
             if (Network.isActive && this.isLocal)
             {
-                Send.Message((NetMessage)new NMFireGun((Gun)null, varBullets, (byte)0, false), NetMessagePriority.ReliableOrdered);
+                Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
                 varBullets.Clear();
             }
             foreach (Window ignore in Level.CheckCircleAll<Window>(this.position, 20f))
             {
-                if (Level.CheckLine<Block>(this.position, ignore.position, (Thing)ignore) == null)
-                    ignore.Destroy((DestroyType)new DTImpact((Thing)this));
+                if (Level.CheckLine<Block>(this.position, ignore.position, ignore) == null)
+                    ignore.Destroy(new DTImpact(this));
             }
         }
 
@@ -75,14 +79,14 @@ namespace DuckGame
             bullet.lastReboundSource = this.lastReboundSource;
             bullet.connection = this.connection;
             this.reboundCalled = true;
-            Level.Add((Thing)bullet);
+            Level.Add(bullet);
             SFX.Play("grenadeBounce", 0.8f, Rando.Float(-0.1f, 0.1f));
         }
 
         public override void Update()
         {
             this._isVolatile -= 0.06f;
-            if ((double)this._isVolatile <= 0.0)
+            if (_isVolatile <= 0.0)
                 this.rebound = false;
             base.Update();
         }

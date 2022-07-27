@@ -68,13 +68,13 @@ namespace DuckGame
         {
             base.OnDeserialize(d);
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
                 this._enabledModifiers.Add(d.ReadByte());
         }
 
         public override void Activate()
         {
-            DuckNetwork.SetMatchSettings(this.initialSettings, (int)this.winsPerSet, (int)this.roundsPerIntermission, this.teams, this.wallmode, (int)this.normalPercent, (int)this.randomPercent, (int)this.workshopPercent, (int)this.customPercent, this.customLevels, this._enabledModifiers, this.clientLevels);
+            DuckNetwork.SetMatchSettings(this.initialSettings, winsPerSet, roundsPerIntermission, this.teams, this.wallmode, normalPercent, randomPercent, workshopPercent, customPercent, this.customLevels, this._enabledModifiers, this.clientLevels);
             base.Activate();
         }
     }

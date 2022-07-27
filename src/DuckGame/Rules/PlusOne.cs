@@ -53,24 +53,24 @@ namespace DuckGame
         public override void Update()
         {
             this.pulse = Lerp.FloatSmooth(this.pulse, 0.0f, 0.1f);
-            if ((double)this.pulse < 0.0299999993294477)
+            if (pulse < 0.0299999993294477)
                 this.pulse = 0.0f;
             if (!this._temp)
                 this._wait -= 0.01f;
-            if ((double)this._wait >= 0.0)
+            if (_wait >= 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             if (this._duck == null)
                 return;
-            this._duck.currentPlusOne = (PlusOne)null;
+            this._duck.currentPlusOne = null;
         }
 
         public override void Draw()
         {
-            if (this._profile == null || this._profile.persona == null || this.anchor == (Thing)null)
+            if (this._profile == null || this._profile.persona == null || this.anchor == null)
                 return;
             this.position = this.anchor.position;
-            this._font.scale = new Vec2((float)(1.0 + (double)this.pulse * 0.5));
+            this._font.scale = new Vec2((float)(1.0 + pulse * 0.5));
             this._num = 1;
             string text = "+" + this._num.ToString();
             float xpos = this.x - this._font.GetWidth(text) / 2f;

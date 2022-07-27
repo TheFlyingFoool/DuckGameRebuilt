@@ -59,7 +59,7 @@ namespace DuckGame
                 else
                 {
                     this._downWait -= 0.06f;
-                    if ((double)this._downWait <= 0.0)
+                    if (_downWait <= 0.0)
                     {
                         this._openWait = 1f;
                         this._wrapped = true;
@@ -74,7 +74,7 @@ namespace DuckGame
             else
             {
                 this._openWait -= 0.06f;
-                if ((double)this._openWait <= 0.0 && this._wrapped && !this._flash)
+                if (_openWait <= 0.0 && this._wrapped && !this._flash)
                     this._flash = true;
                 if (this._flash)
                 {

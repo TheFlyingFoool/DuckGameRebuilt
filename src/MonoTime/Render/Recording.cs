@@ -45,7 +45,7 @@ namespace DuckGame
 
         public void Initialize()
         {
-            for (int index = 0; index < ((IEnumerable<RecorderFrame>)this._frames).Count<RecorderFrame>(); ++index)
+            for (int index = 0; index < _frames.Count<RecorderFrame>(); ++index)
                 this._frames[index].Initialize();
         }
 
@@ -60,7 +60,7 @@ namespace DuckGame
 
         public float GetFrameVelocity() => this._frames[this._frame].totalVelocity * 0.06f;
 
-        public float GetFrameCoolness() => (float)this._frames[this._frame].coolness;
+        public float GetFrameCoolness() => _frames[_frame].coolness;
 
         public int GetFrame(int f)
         {
@@ -71,9 +71,9 @@ namespace DuckGame
             return f;
         }
 
-        public float GetFrameAction() => (float)this._frames[this._frame].actions;
+        public float GetFrameAction() => _frames[_frame].actions;
 
-        public float GetFrameBonus() => (float)this._frames[this._frame].bonus;
+        public float GetFrameBonus() => _frames[_frame].bonus;
 
         public float GetFrameTotal()
         {
@@ -100,9 +100,9 @@ namespace DuckGame
                 this._frame = 0;
             }
             this._frames[this._frame].Reset();
-            this._frames[this._frame].actions += (byte)Math.Max((int)this._frames[this.GetFrame(this._frame - 1)].actions - 1, 0);
-            this._frames[this._frame].bonus += (byte)Math.Max((int)this._frames[this.GetFrame(this._frame - 1)].bonus - 1, 0);
-            this._frames[this._frame].coolness += (byte)Math.Max((int)this._frames[this.GetFrame(this._frame - 1)].coolness - 1, 0);
+            this._frames[this._frame].actions += (byte)Math.Max(_frames[GetFrame(_frame - 1)].actions - 1, 0);
+            this._frames[this._frame].bonus += (byte)Math.Max(_frames[GetFrame(_frame - 1)].bonus - 1, 0);
+            this._frames[this._frame].coolness += (byte)Math.Max(_frames[GetFrame(_frame - 1)].coolness - 1, 0);
             this._endFrame = this._frame;
             if (!this._rolledOver)
                 return;
@@ -117,13 +117,13 @@ namespace DuckGame
 
         public void LogVelocity(float velocity) => this._frames[this._frame].totalVelocity += velocity * Highlights.highlightRatingMultiplier;
 
-        public void LogCoolness(int val) => this._frames[this._frame].coolness = Math.Max((byte)((uint)this._frames[this._frame].coolness + (uint)(byte)((double)val * (double)Highlights.highlightRatingMultiplier)), this._frames[this._frame].coolness);
+        public void LogCoolness(int val) => this._frames[this._frame].coolness = Math.Max((byte)(_frames[_frame].coolness + (uint)(byte)(val * (double)Highlights.highlightRatingMultiplier)), this._frames[this._frame].coolness);
 
-        public void LogDeath() => this._frames[this._frame].deaths = Math.Max((byte)((uint)this._frames[this._frame].deaths + (uint)(byte)(1.0 * (double)Highlights.highlightRatingMultiplier)), this._frames[this._frame].deaths);
+        public void LogDeath() => this._frames[this._frame].deaths = Math.Max((byte)(_frames[_frame].deaths + (uint)(byte)(1.0 * Highlights.highlightRatingMultiplier)), this._frames[this._frame].deaths);
 
-        public void LogAction(int num = 1) => this._frames[this._frame].actions = Math.Max((byte)((uint)this._frames[this._frame].actions + (uint)(byte)((double)num * (double)Highlights.highlightRatingMultiplier)), this._frames[this._frame].actions);
+        public void LogAction(int num = 1) => this._frames[this._frame].actions = Math.Max((byte)(_frames[_frame].actions + (uint)(byte)(num * (double)Highlights.highlightRatingMultiplier)), this._frames[this._frame].actions);
 
-        public void LogBonus() => this._frames[this._frame].bonus = Math.Max((byte)((uint)this._frames[this._frame].bonus + (uint)(byte)(1.0 * (double)Highlights.highlightRatingMultiplier)), this._frames[this._frame].bonus);
+        public void LogBonus() => this._frames[this._frame].bonus = Math.Max((byte)(_frames[_frame].bonus + (uint)(byte)(1.0 * Highlights.highlightRatingMultiplier)), this._frames[this._frame].bonus);
 
         public void LogBackgroundColor(Color c) => this._frames[this._frame].backgroundColor = c;
 
@@ -173,7 +173,7 @@ namespace DuckGame
             bool flag = false;
             for (int index2 = 0; index2 < kNumFrames; ++index2)
             {
-                if (this._frames[index1].deaths > (byte)0)
+                if (this._frames[index1].deaths > 0)
                 {
                     flag = true;
                     break;
@@ -189,10 +189,10 @@ namespace DuckGame
                 num1 = 99f;
             f.timeBeforeKill = num1;
             float num2 = (float)((1.0 - (double)Maths.Clamp(f.timeBeforeKill, 0.0f, 3f) / 3.0) * 1.0 + 1.0);
-            f.actions = (float)this._frames[fr].actions * (num2 * 0.03f);
-            f.deaths = (float)this._frames[fr].deaths * num2;
-            f.bonus = (float)this._frames[fr].bonus * (num2 * 0.08f);
-            f.coolness = (float)this._frames[fr].coolness * (num2 * 0.1f);
+            f.actions = _frames[fr].actions * (num2 * 0.03f);
+            f.deaths = _frames[fr].deaths * num2;
+            f.bonus = _frames[fr].bonus * (num2 * 0.08f);
+            f.coolness = _frames[fr].coolness * (num2 * 0.1f);
             f.totalVelocity = this._frames[fr].totalVelocity * (1f / 500f) * num2;
             return f;
         }

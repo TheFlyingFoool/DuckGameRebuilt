@@ -46,7 +46,7 @@ namespace DuckGame
             }
             if (!allowStacking)
                 HUD.CloseCorner(corner);
-            return (CornerDisplay)null;
+            return null;
         }
 
         public static CornerDisplay AddCornerMessage(HUDCorner corner, string text) => HUD.AddCornerMessage(corner, text, false);
@@ -59,9 +59,11 @@ namespace DuckGame
             CornerDisplay cornerDisplay1 = HUD.FindDuplicateActiveCorner(corner, text, allowStacking);
             if (cornerDisplay1 == null)
             {
-                cornerDisplay1 = new CornerDisplay();
-                cornerDisplay1.corner = corner;
-                cornerDisplay1.text = text;
+                cornerDisplay1 = new CornerDisplay
+                {
+                    corner = corner,
+                    text = text
+                };
                 HUD._core._cornerDisplays.Add(cornerDisplay1);
             }
             if (!allowStacking)
@@ -92,11 +94,13 @@ namespace DuckGame
             CornerDisplay cornerDisplay = HUD.FindDuplicateActiveCorner(corner, text, allowStacking);
             if (cornerDisplay == null)
             {
-                cornerDisplay = new CornerDisplay();
-                cornerDisplay.corner = corner;
-                cornerDisplay.text = text;
-                cornerDisplay.isControl = true;
-                cornerDisplay.profile = pro;
+                cornerDisplay = new CornerDisplay
+                {
+                    corner = corner,
+                    text = text,
+                    isControl = true,
+                    profile = pro
+                };
                 HUD._core._cornerDisplays.Add(cornerDisplay);
             }
             return cornerDisplay;
@@ -185,7 +189,7 @@ namespace DuckGame
                 if (inputChangeDisplay.closing)
                 {
                     inputChangeDisplay.slide = Lerp.FloatSmooth(inputChangeDisplay.slide, -0.3f, 0.15f);
-                    if ((double)inputChangeDisplay.slide < -0.150000005960464)
+                    if (inputChangeDisplay.slide < -0.150000005960464)
                     {
                         HUD._core._inputChangeDisplays.RemoveAt(index);
                         --index;
@@ -195,7 +199,7 @@ namespace DuckGame
                 {
                     inputChangeDisplay.life -= Maths.IncFrameTimer();
                     inputChangeDisplay.slide = Lerp.FloatSmooth(inputChangeDisplay.slide, 1f, 0.15f, 1.2f);
-                    if ((double)inputChangeDisplay.life <= 0.0)
+                    if (inputChangeDisplay.life <= 0.0)
                         inputChangeDisplay.closing = true;
                 }
             }
@@ -205,7 +209,7 @@ namespace DuckGame
                 if (playerChangeDisplay.closing)
                 {
                     playerChangeDisplay.slide = Lerp.FloatSmooth(playerChangeDisplay.slide, -0.3f, 0.15f);
-                    if ((double)playerChangeDisplay.slide < -0.150000005960464)
+                    if (playerChangeDisplay.slide < -0.150000005960464)
                     {
                         HUD._core._playerChangeDisplays.RemoveAt(index);
                         --index;
@@ -215,7 +219,7 @@ namespace DuckGame
                 {
                     playerChangeDisplay.life -= Maths.IncFrameTimer();
                     playerChangeDisplay.slide = Lerp.FloatSmooth(playerChangeDisplay.slide, 1f, 0.15f, 1.2f);
-                    if ((double)playerChangeDisplay.life <= 0.0)
+                    if (playerChangeDisplay.life <= 0.0)
                         playerChangeDisplay.closing = true;
                 }
             }
@@ -225,7 +229,7 @@ namespace DuckGame
                 if (d.closing)
                 {
                     d.slide = Lerp.FloatSmooth(d.slide, -0.3f, 0.15f);
-                    if ((double)d.slide < -0.150000005960464)
+                    if (d.slide < -0.150000005960464)
                     {
                         HUD._core._cornerDisplays.RemoveAt(index);
                         --index;
@@ -236,17 +240,17 @@ namespace DuckGame
                     if (d.willDie)
                     {
                         d.life -= Maths.IncFrameTimer();
-                        if ((double)d.life <= 0.0)
+                        if (d.life <= 0.0)
                             d.closing = true;
                     }
-                    if (!HUD._core._cornerDisplays.Exists((Predicate<CornerDisplay>)(v => v.corner == d.corner && v.closing)))
+                    if (!HUD._core._cornerDisplays.Exists(v => v.corner == d.corner && v.closing))
                     {
                         if (d.counter != null)
                         {
                             if (d.addCount != 0)
                             {
                                 d.addCountWait -= 0.05f;
-                                if ((double)d.addCountWait <= 0.0)
+                                if (d.addCountWait <= 0.0)
                                 {
                                     d.addCountWait = 0.05f;
                                     if (d.addCount > 0)
@@ -360,27 +364,27 @@ namespace DuckGame
                 switch (cornerDisplay.corner)
                 {
                     case HUDCorner.TopLeft:
-                        vec2_9 = new Vec2(0.0f, (float)(num6 * 12));
+                        vec2_9 = new Vec2(0.0f, num6 * 12);
                         ++num6;
                         break;
                     case HUDCorner.TopRight:
-                        vec2_9 = new Vec2(Layer.HUD.camera.width, (float)(num7 * 12));
+                        vec2_9 = new Vec2(Layer.HUD.camera.width, num7 * 12);
                         ++num7;
                         break;
                     case HUDCorner.BottomLeft:
-                        vec2_9 = new Vec2(0.0f, Layer.HUD.camera.height - (float)(num8 * 12));
+                        vec2_9 = new Vec2(0.0f, Layer.HUD.camera.height - num8 * 12);
                         ++num8;
                         break;
                     case HUDCorner.BottomRight:
-                        vec2_9 = new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height - (float)(num9 * 12));
+                        vec2_9 = new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height - num9 * 12);
                         ++num9;
                         break;
                     case HUDCorner.BottomMiddle:
-                        vec2_9 = new Vec2(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height - (float)(num10 * 12));
+                        vec2_9 = new Vec2(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height - num10 * 12);
                         ++num10;
                         break;
                     case HUDCorner.TopMiddle:
-                        vec2_9 = new Vec2(Layer.HUD.camera.width / 2f, (float)(num11 * 12));
+                        vec2_9 = new Vec2(Layer.HUD.camera.width / 2f, num11 * 12);
                         ++num11;
                         break;
                 }
@@ -444,8 +448,8 @@ namespace DuckGame
                 }
                 if (cornerDisplay.corner == HUDCorner.BottomMiddle)
                 {
-                    vec2_10.y += (float)(24.0 * (1.0 - (double)cornerDisplay.slide));
-                    vec2_11.y += (float)(24.0 * (1.0 - (double)cornerDisplay.slide));
+                    vec2_10.y += (float)(24.0 * (1.0 - cornerDisplay.slide));
+                    vec2_11.y += (float)(24.0 * (1.0 - cornerDisplay.slide));
                 }
                 float num14 = Layer.HUD.camera.width / 32f;
                 Vec2 vec2_12 = Vec2.Zero;

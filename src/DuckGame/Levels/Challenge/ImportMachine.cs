@@ -28,21 +28,21 @@ namespace DuckGame
         }
 
         public ImportMachine(float xpos, float ypos)
-          : base(xpos, ypos, (ChallengeGroup)null, 0)
+          : base(xpos, ypos, null, 0)
         {
-            this.Underlay_Style = new EditorProperty<bool>(true, (Thing)this);
-            this.Style_Offset_X = new EditorProperty<int>(0, (Thing)this, -16f, 16f, 1f);
-            this.Style_Offset_Y = new EditorProperty<int>(0, (Thing)this, -16f, 16f, 1f);
-            this.Screen_Offset_X = new EditorProperty<int>(0, (Thing)this, -32f, 32f, 1f);
-            this.Screen_Offset_Y = new EditorProperty<int>(0, (Thing)this, -32f, 32f, 1f);
+            this.Underlay_Style = new EditorProperty<bool>(true, this);
+            this.Style_Offset_X = new EditorProperty<int>(0, this, -16f, 16f, 1f);
+            this.Style_Offset_Y = new EditorProperty<int>(0, this, -16f, 16f, 1f);
+            this.Screen_Offset_X = new EditorProperty<int>(0, this, -32f, 32f, 1f);
+            this.Screen_Offset_Y = new EditorProperty<int>(0, this, -32f, 32f, 1f);
             this._contextMenuFilter.Add("lit");
             this._contextMenuFilter.Add("style");
             this._contextMenuFilter.Add("requirement");
             this._contextMenuFilter.Add("respect");
             this._sprite = new SpriteMap("arcade/userMachine", 48, 48);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.depth = - 0.5f;
-            this.center = new Vec2((float)(this._sprite.width / 2 - 1), (float)(this._sprite.h / 2 + 6));
+            this.center = new Vec2(this._sprite.width / 2 - 1, this._sprite.h / 2 + 6);
             this.lit.value = false;
             this.Underlay_Style._tooltip = "If disabled, the Arcade Machine art will be completely replaced by your custom style.";
         }

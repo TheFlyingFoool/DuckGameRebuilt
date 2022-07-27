@@ -15,33 +15,37 @@ namespace DuckGame
         {
             float x = c.x;
             float ypos = c.y - 2f;
-            Level.Add((Thing)new ExplosionPart(x, ypos));
+            Level.Add(new ExplosionPart(x, ypos));
             int num1 = 6;
             if (Graphics.effectsLevel < 2)
                 num1 = 3;
             for (int index = 0; index < num1; ++index)
             {
-                float deg = (float)index * 60f + Rando.Float(-10f, 10f);
+                float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add((Thing)new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
             }
             if (server)
             {
                 for (int index = 0; index < 8; ++index)
                 {
-                    Present present = new Present(c.x, c.y);
-                    present.hSpeed = (float)((double)((float)index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f);
-                    present.vSpeed = Rando.Float(-3f, -11f);
-                    Level.Add((Thing)present);
+                    Present present = new Present(c.x, c.y)
+                    {
+                        hSpeed = (float)((double)(index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f),
+                        vSpeed = Rando.Float(-3f, -11f)
+                    };
+                    Level.Add(present);
                 }
                 for (int index = 0; index < 4; ++index)
                 {
-                    Flower flower = new Flower(c.x, c.y);
-                    flower.hSpeed = (float)((double)((float)index / 3f) * 20.0 - 10.0) * Rando.Float(0.5f, 1f);
-                    flower.vSpeed = Rando.Float(-3f, -11f);
-                    Level.Add((Thing)flower);
+                    Flower flower = new Flower(c.x, c.y)
+                    {
+                        hSpeed = (float)((double)(index / 3f) * 20.0 - 10.0) * Rando.Float(0.5f, 1f),
+                        vSpeed = Rando.Float(-3f, -11f)
+                    };
+                    Level.Add(flower);
                 }
-                Level.Remove((Thing)c);
+                Level.Remove(c);
             }
             Graphics.FlashScreen();
             SFX.Play("harp");

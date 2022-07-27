@@ -56,7 +56,7 @@ namespace DuckGame
             if (!data.ReadBool())
                 return;
             this.customTeamIndex = data.ReadUShort();
-            this.filtered = data.ReadByte() == (byte)1;
+            this.filtered = data.ReadByte() == 1;
             if (this.filtered)
                 return;
             this._data = data.ReadBitBuffer().GetBytes();

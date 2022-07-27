@@ -48,7 +48,7 @@ namespace DuckGame
             {
                 if (this is UIMenu)
                     return this as UIMenu;
-                return this._parent != null ? this._parent.rootMenu : (UIMenu)null;
+                return this._parent != null ? this._parent.rootMenu : null;
             }
         }
 
@@ -70,7 +70,7 @@ namespace DuckGame
             set => this._vertical = value;
         }
 
-        public IList<UIComponent> components => (IList<UIComponent>)this._components;
+        public IList<UIComponent> components => _components;
 
         public bool canFit => this._canFit;
 
@@ -132,7 +132,7 @@ namespace DuckGame
             this.animating = true;
             foreach (UIComponent component in this._components)
             {
-                if (component.anchor == (Thing)this)
+                if (component.anchor == this)
                     component.Open();
             }
             this._initialSizingComplete = false;
@@ -184,11 +184,11 @@ namespace DuckGame
                 this._startPosition = this.position;
                 this.position.y = this.layer.camera.height * 2f;
             }
-            if (this.anchor == (Thing)null)
+            if (this.anchor == null)
             {
                 float to = this._close ? this.layer.camera.height * 2f : this._startPosition.y;
                 this.position.y = Lerp.FloatSmooth(this.position.y, to, 0.2f, 1.05f);
-                bool flag = (double)this.position.y != (double)to;
+                bool flag = position.y != (double)to;
                 if (this.animating != flag)
                     this.animating = flag;
             }
@@ -271,7 +271,7 @@ namespace DuckGame
             component.dirty = true;
             if (!doAnchor)
                 return;
-            component.anchor = (Anchor)(Thing)this;
+            component.anchor = (Anchor)this;
         }
 
         public virtual void Insert(UIComponent component, int position, bool doAnchor = true)
@@ -284,16 +284,16 @@ namespace DuckGame
             component.dirty = true;
             if (!doAnchor)
                 return;
-            component.anchor = (Anchor)(Thing)this;
+            component.anchor = (Anchor)this;
         }
 
         public virtual void Remove(UIComponent component)
         {
             this._components.Remove(component);
             if (component._parent == this)
-                component._parent = (UIComponent)null;
-            if (component.anchor == (Thing)this)
-                component.anchor = (Anchor)null;
+                component._parent = null;
+            if (component.anchor == this)
+                component.anchor = null;
             this._dirty = true;
         }
     }

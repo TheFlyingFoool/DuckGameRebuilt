@@ -21,9 +21,11 @@ namespace DuckGame
             this.editorTooltip = "Your standard water barrel - for carrying delicious, refreshing water. Choose water!";
             this.flammable = 0.3f;
             this._fluid = Fluid.Water;
-            this._toreUp = new SpriteMap("blueBarrelToreUp", 14, 17);
-            this._toreUp.frame = 1;
-            this._toreUp.center = new Vec2(0.0f, -6f);
+            this._toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
+            {
+                frame = 1,
+                center = new Vec2(0.0f, -6f)
+            };
         }
     }
 }

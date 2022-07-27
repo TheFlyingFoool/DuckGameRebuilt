@@ -16,9 +16,9 @@ namespace DuckGame
 
         public static float FramesToTravel(float distance, float acceleration, float startSpeed) => (float)((Math.Sqrt(Math.Pow(2.0 * (double)startSpeed + (double)acceleration, 2.0) + 8.0 * (double)acceleration * (double)distance) - 2.0 * (double)startSpeed - (double)acceleration) / (2.0 * (double)acceleration));
 
-        public static float DistanceTravelled(int frames, float acceleration, float startSpeed) => (float)(0.5 * (double)acceleration * (double)((frames + 1) * frames) + (double)frames * (double)startSpeed);
+        public static float DistanceTravelled(int frames, float acceleration, float startSpeed) => (float)(0.5 * (double)acceleration * ((frames + 1) * frames) + frames * (double)startSpeed);
 
-        public static float TicksToSeconds(int ticks) => (float)ticks / 60f;
+        public static float TicksToSeconds(int ticks) => ticks / 60f;
 
         public static int SecondsToTicks(float secs) => (int)Math.Round((double)secs * 60.0);
 
@@ -26,8 +26,8 @@ namespace DuckGame
 
         public static Vec2 RoundToPixel(Vec2 pos)
         {
-            pos.x = (float)Math.Round((double)pos.x / 1.0) * 1f;
-            pos.y = (float)Math.Round((double)pos.y / 1.0) * 1f;
+            pos.x = (float)Math.Round(pos.x / 1.0) * 1f;
+            pos.y = (float)Math.Round(pos.y / 1.0) * 1f;
             return pos;
         }
 
@@ -69,7 +69,7 @@ namespace DuckGame
             return current;
         }
 
-        public static float Ratio(int val1, int val2) => (double)val2 == 0.0 ? (float)val1 : (float)val1 / (float)val2;
+        public static float Ratio(int val1, int val2) => val2 == 0.0 ? val1 : val1 / (float)val2;
 
         public static float NormalizeSection(float value, float sectionMin, float sectionMax) => Maths.Clamp(Maths.Clamp(value - sectionMin, 0.0f, sectionMax) / (sectionMax - sectionMin), 0.0f, 1f);
 
@@ -105,14 +105,14 @@ namespace DuckGame
             intersection = Vec2.Zero;
             Vec2 vec2_1 = a2 - a1;
             Vec2 vec2_2 = b2 - b1;
-            float num1 = (float)((double)vec2_1.x * (double)vec2_2.y - (double)vec2_1.y * (double)vec2_2.x);
+            float num1 = (float)(vec2_1.x * (double)vec2_2.y - vec2_1.y * (double)vec2_2.x);
             if ((double)num1 == 0.0)
                 return false;
             Vec2 vec2_3 = b1 - a1;
-            float num2 = (float)((double)vec2_3.x * (double)vec2_2.y - (double)vec2_3.y * (double)vec2_2.x) / num1;
+            float num2 = (float)(vec2_3.x * (double)vec2_2.y - vec2_3.y * (double)vec2_2.x) / num1;
             if ((double)num2 < 0.0 || (double)num2 > 1.0)
                 return false;
-            float num3 = (float)((double)vec2_3.x * (double)vec2_1.y - (double)vec2_3.y * (double)vec2_1.x) / num1;
+            float num3 = (float)(vec2_3.x * (double)vec2_1.y - vec2_3.y * (double)vec2_1.x) / num1;
             if ((double)num3 < 0.0 || (double)num3 > 1.0)
                 return false;
             intersection = a1 + num2 * vec2_1;
@@ -123,11 +123,11 @@ namespace DuckGame
 
         public static float RadToDeg(float rad) => rad * 57.29578f;
 
-        public static float PointDirection(Vec2 p1, Vec2 p2) => Maths.RadToDeg((float)Math.Atan2((double)p1.y - (double)p2.y, (double)p2.x - (double)p1.x));
+        public static float PointDirection(Vec2 p1, Vec2 p2) => Maths.RadToDeg((float)Math.Atan2(p1.y - (double)p2.y, p2.x - (double)p1.x));
 
-        public static float PointDirectionRad(Vec2 p1, Vec2 p2) => (float)Math.Atan2((double)p1.y - (double)p2.y, (double)p2.x - (double)p1.x);
+        public static float PointDirectionRad(Vec2 p1, Vec2 p2) => (float)Math.Atan2(p1.y - (double)p2.y, p2.x - (double)p1.x);
 
-        public static float PointDirection2(Vec2 p1, Vec2 p2) => (float)Math.Atan2((double)p2.y, (double)p2.x) - (float)Math.Atan2((double)p1.y, (double)p1.x);
+        public static float PointDirection2(Vec2 p1, Vec2 p2) => (float)Math.Atan2(p2.y, p2.x) - (float)Math.Atan2(p1.y, p1.x);
 
         public static float PointDirection(float x1, float y1, float x2, float y2) => Maths.RadToDeg((float)Math.Atan2((double)y1 - (double)y2, (double)x2 - (double)x1));
 
@@ -141,28 +141,28 @@ namespace DuckGame
 
         public static Vec2 Snap(Vec2 pPosition, float xSnap, float ySnap)
         {
-            pPosition.x = (float)(int)Math.Floor((double)pPosition.x / (double)xSnap) * xSnap;
-            pPosition.y = (float)(int)Math.Floor((double)pPosition.y / (double)ySnap) * ySnap;
+            pPosition.x = (int)Math.Floor(pPosition.x / (double)xSnap) * xSnap;
+            pPosition.y = (int)Math.Floor(pPosition.y / (double)ySnap) * ySnap;
             return pPosition;
         }
 
         public static Vec2 SnapRound(Vec2 pPosition, float xSnap, float ySnap)
         {
-            pPosition.x = (float)(int)Math.Round((double)pPosition.x / (double)xSnap) * xSnap;
-            pPosition.y = (float)(int)Math.Round((double)pPosition.y / (double)ySnap) * ySnap;
+            pPosition.x = (int)Math.Round(pPosition.x / (double)xSnap) * xSnap;
+            pPosition.y = (int)Math.Round(pPosition.y / (double)ySnap) * ySnap;
             return pPosition;
         }
 
         public static float Snap(float pValue, float pSnap)
         {
-            pValue = (float)(int)Math.Floor((double)pValue / (double)pSnap) * pSnap;
+            pValue = (int)Math.Floor((double)pValue / (double)pSnap) * pSnap;
             return pValue;
         }
 
         public static int Hash(string val)
         {
             byte[] dst = new byte[val.Length * 2];
-            Buffer.BlockCopy((Array)val.ToCharArray(), 0, (Array)dst, 0, dst.Length);
+            Buffer.BlockCopy(val.ToCharArray(), 0, dst, 0, dst.Length);
             int length = dst.Length;
             if (length == 0)
                 return 0;
@@ -172,7 +172,7 @@ namespace DuckGame
             int startIndex = 0;
             for (; num3 > 0; --num3)
             {
-                uint num4 = num1 + (uint)BitConverter.ToUInt16(dst, startIndex);
+                uint num4 = num1 + BitConverter.ToUInt16(dst, startIndex);
                 uint num5 = (uint)BitConverter.ToUInt16(dst, startIndex + 2) << 11 ^ num4;
                 uint num6 = num4 << 16 ^ num5;
                 num1 = num6 + (num6 >> 11);
@@ -181,17 +181,17 @@ namespace DuckGame
             switch (num2)
             {
                 case 1:
-                    uint num7 = num1 + (uint)dst[startIndex];
+                    uint num7 = num1 + dst[startIndex];
                     uint num8 = num7 ^ num7 << 10;
                     num1 = num8 + (num8 >> 1);
                     break;
                 case 2:
-                    uint num9 = num1 + (uint)BitConverter.ToUInt16(dst, startIndex);
+                    uint num9 = num1 + BitConverter.ToUInt16(dst, startIndex);
                     uint num10 = num9 ^ num9 << 11;
                     num1 = num10 + (num10 >> 17);
                     break;
                 case 3:
-                    uint num11 = num1 + (uint)BitConverter.ToUInt16(dst, startIndex);
+                    uint num11 = num1 + BitConverter.ToUInt16(dst, startIndex);
                     uint num12 = num11 ^ num11 << 16 ^ (uint)dst[startIndex + 2] << 18;
                     num1 = num12 + (num12 >> 11);
                     break;

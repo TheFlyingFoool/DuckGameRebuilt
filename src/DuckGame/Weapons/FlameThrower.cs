@@ -25,7 +25,7 @@ namespace DuckGame
             this.barrelInsertOffset = new Vec2(0.0f, -2f);
             this.wideBarrel = true;
             this.ammo = this._maxAmmo;
-            this._ammoType = (AmmoType)new AT9mm();
+            this._ammoType = new AT9mm();
             this._ammoType.combustable = true;
             this._type = "gun";
             this.graphic = new Sprite("flamethrower");
@@ -37,15 +37,19 @@ namespace DuckGame
             this._fullAuto = true;
             this._fireWait = 1f;
             this._kickForce = 1f;
-            this._barrelFlame = new SpriteMap("flameBurst", 20, 21);
-            this._barrelFlame.center = new Vec2(0.0f, 17f);
+            this._barrelFlame = new SpriteMap("flameBurst", 20, 21)
+            {
+                center = new Vec2(0.0f, 17f)
+            };
             this._barrelFlame.AddAnimation("idle", 0.4f, true, 0, 1, 2, 3);
             this._barrelFlame.AddAnimation("puff", 0.4f, false, 4, 5, 6, 7);
             this._barrelFlame.AddAnimation("flame", 0.4f, true, 8, 9, 10, 11);
             this._barrelFlame.AddAnimation("puffOut", 0.4f, false, 12, 13, 14, 15);
             this._barrelFlame.SetAnimation("idle");
-            this._can = new SpriteMap("flamethrowerCan", 8, 8);
-            this._can.center = new Vec2(4f, 4f);
+            this._can = new SpriteMap("flamethrowerCan", 8, 8)
+            {
+                center = new Vec2(4f, 4f)
+            };
             this._holdOffset = new Vec2(2f, 0.0f);
             this._barrelAngleOffset = 8f;
             this._editorName = "Flame Thrower";
@@ -73,12 +77,12 @@ namespace DuckGame
             if (this.isServerForObject && this._firing && this._barrelFlame.imageIndex > 5)
             {
                 this._flameWait -= 0.25f;
-                if ((double)this._flameWait > 0.0)
+                if (_flameWait > 0.0)
                     return;
                 Vec2 vec = Maths.AngleToVec(this.barrelAngle + Rando.Float(-0.5f, 0.5f));
                 Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
                 this.ammo -= 2;
-                Level.Add((Thing)SmallFire.New(this.barrelPosition.x, this.barrelPosition.y, vec2.x, vec2.y, firedFrom: ((Thing)this)));
+                Level.Add(SmallFire.New(this.barrelPosition.x, this.barrelPosition.y, vec2.x, vec2.y, firedFrom: this));
                 this._flameWait = 1f;
             }
             else
@@ -89,27 +93,27 @@ namespace DuckGame
         {
             base.Draw();
             Material material = Graphics.material;
-            Graphics.material = (Material)null;
+            Graphics.material = null;
             if ((double)this._barrelFlame.speed > 0.0)
             {
                 this._barrelFlame.alpha = 0.9f;
-                this.Draw((Sprite)this._barrelFlame, new Vec2(11f, 1f));
+                this.Draw(_barrelFlame, new Vec2(11f, 1f));
             }
-            this._can.frame = (int)((1.0 - (double)this.ammo / (double)this._maxAmmo) * 15.0);
-            this.Draw((Sprite)this._can, new Vec2(this.barrelOffset.x - 11f, this.barrelOffset.y + 4f));
+            this._can.frame = (int)((1.0 - ammo / (double)this._maxAmmo) * 15.0);
+            this.Draw(_can, new Vec2(this.barrelOffset.x - 11f, this.barrelOffset.y + 4f));
             Graphics.material = material;
         }
 
         public override void OnPressAction()
         {
-            if ((double)this.heat > 1.0)
+            if (heat > 1.0)
             {
                 for (int index = 0; index < this.ammo / 10 + 3; ++index)
-                    Level.Add((Thing)SmallFire.New(this.x - 6f + Rando.Float(12f), this.y - 8f + Rando.Float(4f), Rando.Float(6f) - 3f, 1f - Rando.Float(4.5f), firedFrom: ((Thing)this)));
+                    Level.Add(SmallFire.New(this.x - 6f + Rando.Float(12f), this.y - 8f + Rando.Float(4f), Rando.Float(6f) - 3f, 1f - Rando.Float(4.5f), firedFrom: this));
                 SFX.Play("explode", pitch: (Rando.Float(0.3f) - 0.3f));
-                Level.Remove((Thing)this);
+                Level.Remove(this);
                 this._sound.Kill();
-                Level.Add((Thing)new ExplosionPart(this.x, this.y));
+                Level.Add(new ExplosionPart(this.x, this.y));
             }
             this._firing = true;
         }

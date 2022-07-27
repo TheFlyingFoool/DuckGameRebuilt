@@ -16,7 +16,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("goneFishin", 32, 32);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 16f);
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -9f);
@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._sprite.frame = this.offDir > (sbyte)0 ? 1 : 0;
+            this._sprite.frame = this.offDir > 0 ? 1 : 0;
             base.Draw();
         }
     }

@@ -24,10 +24,10 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (Level.current == null || this.target == null || !this.target.isServerForObject || this.target.profile == null || (int)this.target.disarmIndex != (int)this.target.profile.networkIndex)
+            if (Level.current == null || this.target == null || !this.target.isServerForObject || this.target.profile == null || target.disarmIndex != target.profile.networkIndex)
                 return;
             if (this.target._disarmWait == 0 && this.target._disarmDisable <= 0)
-                this.target.Disarm((Thing)null);
+                this.target.Disarm(null);
             this.target.vSpeed = this.bump;
             RumbleManager.AddRumbleEvent(this.target.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None));
         }

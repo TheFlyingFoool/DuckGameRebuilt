@@ -14,7 +14,7 @@ namespace DuckGame
     [BaggedProperty("isFatal", false)]
     public class Mine : Gun
     {
-        public StateBinding _mineBinding = (StateBinding)new MineFlagBinding();
+        public StateBinding _mineBinding = new MineFlagBinding();
         private SpriteMap _sprite;
         public bool _pin = true;
         public bool blownUp;
@@ -37,13 +37,13 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 1;
-            this._ammoType = (AmmoType)new ATShrapnel();
+            this._ammoType = new ATShrapnel();
             this._type = "gun";
             this._sprite = new SpriteMap("mine", 18, 16);
             this._sprite.AddAnimation("pickup", 1f, true, new int[1]);
             this._sprite.AddAnimation("idle", 0.05f, true, 1, 2);
             this._sprite.SetAnimation("pickup");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(9f, 8f);
             this.collisionOffset = new Vec2(-5f, -5f);
             this.collisionSize = new Vec2(10f, 9f);
@@ -142,7 +142,7 @@ namespace DuckGame
                 float addWeight = this.addWeight;
                 IEnumerable<PhysicsObject> physicsObjects = Level.CheckLineAll<PhysicsObject>(new Vec2(this.x - 6f, this.y - 3f), new Vec2(this.x + 6f, this.y - 3f));
                 List<Duck> duckList1 = new List<Duck>();
-                Duck duck = (Duck)null;
+                Duck duck = null;
                 bool flag1 = false;
                 bool flag2 = false;
                 foreach (PhysicsObject previousThing in this.previousThings)
@@ -208,15 +208,15 @@ namespace DuckGame
                 }
                 foreach (Duck key in duckList2)
                     this._ducksOnMine.Remove(key);
-                if ((double)addWeight < (double)this._holdingWeight & flag1 && flag2)
+                if ((double)addWeight < _holdingWeight & flag1 && flag2)
                 {
-                    Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                    Thing.Fondle(this, DuckNetwork.localConnection);
                     if (!this._armed)
                         this.Arm();
                     else
                         this._timer = -1f;
                 }
-                if (this._armed && (double)addWeight > (double)this._holdingWeight)
+                if (this._armed && (double)addWeight > _holdingWeight)
                 {
                     if (!this._clicked && duck != null)
                         ++duck.profile.stats.minesSteppedOn;
@@ -225,7 +225,7 @@ namespace DuckGame
                 }
                 this._holdingWeight = addWeight;
             }
-            if ((double)this._timer < 0.0 && this.isServerForObject)
+            if (_timer < 0.0 && this.isServerForObject)
             {
                 this._timer = 1f;
                 this.BlowUp();
@@ -252,30 +252,34 @@ namespace DuckGame
                     t.hSpeed += num2 * vec2.x;
                     t.vSpeed += -5f * num1;
                     t.sleeping = false;
-                    this.Fondle((Thing)t);
+                    this.Fondle(t);
                 }
             }
             float x = this.position.x;
             float y = this.position.y;
             for (int index = 0; index < 20; ++index)
             {
-                float ang = (float)((double)index * 18.0 - 5.0) + Rando.Float(10f);
-                ATShrapnel type = new ATShrapnel();
-                type.range = 60f + Rando.Float(18f);
-                Bullet bullet = new Bullet(x, y, (AmmoType)type, ang);
-                bullet.firedFrom = (Thing)this;
+                float ang = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                ATShrapnel type = new ATShrapnel
+                {
+                    range = 60f + Rando.Float(18f)
+                };
+                Bullet bullet = new Bullet(x, y, type, ang)
+                {
+                    firedFrom = this
+                };
                 this.firedBullets.Add(bullet);
-                Level.Add((Thing)bullet);
+                Level.Add(bullet);
             }
-            this.bulletFireIndex += (byte)20;
+            this.bulletFireIndex += 20;
             if (Network.isActive && this.isServerForObject)
             {
-                Send.Message((NetMessage)new NMFireGun((Gun)this, this.firedBullets, this.bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
                 this.firedBullets.Clear();
             }
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.LogBonus();
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public void MakeBlowUpHappen(Vec2 pos)
@@ -288,15 +292,15 @@ namespace DuckGame
             Graphics.FlashScreen();
             float x = pos.x;
             float y = pos.y;
-            Level.Add((Thing)new ExplosionPart(x, y));
+            Level.Add(new ExplosionPart(x, y));
             int num1 = 6;
             if (Graphics.effectsLevel < 2)
                 num1 = 3;
             for (int index = 0; index < num1; ++index)
             {
-                float deg = (float)index * 60f + Rando.Float(-10f, 10f);
+                float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add((Thing)new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, y - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, y - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
             }
         }
 
@@ -308,9 +312,9 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null && !this.canPickUp && (double)this._timer > 0.0)
+            if (bullet.isLocal && this.owner == null && !this.canPickUp && _timer > 0.0)
             {
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
                 this.BlowUp();
             }
             return false;
@@ -319,7 +323,7 @@ namespace DuckGame
         public override void Draw()
         {
             Material material = Graphics.material;
-            Graphics.material = (Material)null;
+            Graphics.material = null;
             if ((double)this._mineFlash.alpha > 0.00999999977648258)
                 Graphics.Draw(this._mineFlash, this.x, this.y - 3f);
             Graphics.material = material;
@@ -333,7 +337,7 @@ namespace DuckGame
             if (this.owner == null)
             {
                 this._pin = false;
-                if ((double)this.heat > 0.5)
+                if (heat > 0.5)
                     this.BlowUp();
             }
             if (!this._pin)

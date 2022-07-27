@@ -60,7 +60,7 @@ namespace DuckGame
         public string rootFolder => this._rootFolder;
 
         public MonoFileDialog()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -72,13 +72,15 @@ namespace DuckGame
             this._fancyFont = new FancyBitmapFont("smallFont");
             this.itemSize = new Vec2(390f, 16f);
             this._root = true;
-            this._dialog = new TextEntryDialog();
-            this._dialog.filename = true;
-            Level.Add((Thing)this._dialog);
+            this._dialog = new TextEntryDialog
+            {
+                filename = true
+            };
+            Level.Add(_dialog);
             this._deleteDialog = new MessageDialogue();
-            Level.Add((Thing)this._deleteDialog);
+            Level.Add(_deleteDialog);
             this._overwriteDialog = new MessageDialogue();
-            Level.Add((Thing)this._overwriteDialog);
+            Level.Add(_overwriteDialog);
             this.drawControls = false;
         }
 
@@ -99,8 +101,8 @@ namespace DuckGame
                 this._badParallax = new Sprite("badParallax");
             if (this._type == ContextFileType.ArcadeStyle)
                 this._badArcade = new Sprite("badArcade");
-            this._preview = (Tex2D)null;
-            this._previewSprite = (Sprite)null;
+            this._preview = null;
+            this._previewSprite = null;
             float num1 = 350f;
             float num2 = 350f;
             Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
@@ -114,7 +116,7 @@ namespace DuckGame
             if (this.prevDirectory != null)
                 this._currentDirectory = this.prevDirectory;
             this.SetDirectory(this._currentDirectory);
-            Editor.lockInput = (ContextMenu)this;
+            Editor.lockInput = this;
             this.ComputeAvailableStorageSpace();
             SFX.Play("openClick", 0.4f);
             this.opened = true;
@@ -130,7 +132,7 @@ namespace DuckGame
 
         public void Close()
         {
-            Editor.lockInput = (ContextMenu)null;
+            Editor.lockInput = null;
             this.opened = false;
             this.ClearItems();
         }
@@ -159,7 +161,7 @@ namespace DuckGame
             if (this._openedArchive != null)
             {
                 this._openedArchive.Dispose();
-                this._openedArchive = (ZipArchive)null;
+                this._openedArchive = null;
             }
             DevConsole.Log("MonoFileDialog.SetDirectory(" + dir + ")");
             if (!pIsModPath && dir.Contains("Mods") && (dir.Contains(DuckFile.globalModsDirectory) || dir.Contains(DuckFile.modsDirectory)))
@@ -171,7 +173,7 @@ namespace DuckGame
             if (this.modRootPath != null && this.modRootPath == dir)
             {
                 dir = this._rootFolder;
-                this.modRootPath = (string)null;
+                this.modRootPath = null;
                 this.isModPath = false;
             }
             if (dir.Length < this._rootFolder.Length && !pIsModPath)
@@ -198,17 +200,21 @@ namespace DuckGame
             }
             if (this._save)
             {
-                ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                contextMenu.layer = this.layer;
-                contextMenu.text = "@NEWICONTINY@New File...";
-                contextMenu.data = "New File...";
-                contextMenu.itemSize = new Vec2(x, 16f);
+                ContextMenu contextMenu = new ContextMenu(this)
+                {
+                    layer = this.layer,
+                    text = "@NEWICONTINY@New File...",
+                    data = "New File...",
+                    itemSize = new Vec2(x, 16f)
+                };
                 this.AddItem(contextMenu);
             }
             if (this._currentDirectory != this._rootFolder)
             {
-                ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                contextMenu.layer = this.layer;
+                ContextMenu contextMenu = new ContextMenu(this)
+                {
+                    layer = this.layer
+                };
                 bool flag = false;
                 contextMenu.text = "@LOADICON@../";
                 contextMenu.data = "../";
@@ -222,15 +228,17 @@ namespace DuckGame
                 {
                     if (accessibleMod.configuration != null && accessibleMod.configuration.content != null && accessibleMod.configuration.content.levels.Count > 0 && accessibleMod.configuration.contentDirectory.Contains(DuckFile.saveDirectory))
                     {
-                        ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                        contextMenu.layer = this.layer;
-                        contextMenu.fancy = true;
-                        contextMenu.text = "@RAINBOWTINY@|DGBLUE|" + accessibleMod.configuration.name;
-                        contextMenu.data = accessibleMod.configuration.contentDirectory + "/Levels";
-                        contextMenu.itemSize = new Vec2(x, 16f);
-                        contextMenu.mod = accessibleMod;
-                        contextMenu.isModPath = true;
-                        contextMenu.isModRoot = true;
+                        ContextMenu contextMenu = new ContextMenu(this)
+                        {
+                            layer = this.layer,
+                            fancy = true,
+                            text = "@RAINBOWTINY@|DGBLUE|" + accessibleMod.configuration.name,
+                            data = accessibleMod.configuration.contentDirectory + "/Levels",
+                            itemSize = new Vec2(x, 16f),
+                            mod = accessibleMod,
+                            isModPath = true,
+                            isModRoot = true
+                        };
                         this.AddItem(contextMenu);
                     }
                 }
@@ -238,16 +246,18 @@ namespace DuckGame
                 {
                     if (mapPack.mod != null && mapPack.mod.configuration.directory.Contains(DuckFile.saveDirectory))
                     {
-                        ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                        contextMenu.layer = this.layer;
-                        contextMenu.fancy = true;
-                        contextMenu.text = "|DGBLUE|" + mapPack.mod.configuration.name;
-                        contextMenu.data = mapPack.mod.configuration.directory;
-                        contextMenu.itemSize = new Vec2(x, 16f);
-                        contextMenu.mod = mapPack.mod;
-                        contextMenu.isModPath = true;
-                        contextMenu.isModRoot = true;
-                        contextMenu.customIcon = mapPack.mod.configuration.mapPack.icon;
+                        ContextMenu contextMenu = new ContextMenu(this)
+                        {
+                            layer = this.layer,
+                            fancy = true,
+                            text = "|DGBLUE|" + mapPack.mod.configuration.name,
+                            data = mapPack.mod.configuration.directory,
+                            itemSize = new Vec2(x, 16f),
+                            mod = mapPack.mod,
+                            isModPath = true,
+                            isModRoot = true,
+                            customIcon = mapPack.mod.configuration.mapPack.icon
+                        };
                         this.AddItem(contextMenu);
                     }
                 }
@@ -255,13 +265,15 @@ namespace DuckGame
             foreach (string path in directories)
             {
                 string fileName = Path.GetFileName(path);
-                ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                contextMenu.layer = this.layer;
-                contextMenu.fancy = true;
-                contextMenu.text = "@LOADICON@" + fileName;
-                contextMenu.data = !pIsModPath ? fileName : path;
-                contextMenu.isModPath = pIsModPath;
-                contextMenu.itemSize = new Vec2(x, 16f);
+                ContextMenu contextMenu = new ContextMenu(this)
+                {
+                    layer = this.layer,
+                    fancy = true,
+                    text = "@LOADICON@" + fileName,
+                    data = !pIsModPath ? fileName : path,
+                    isModPath = pIsModPath,
+                    itemSize = new Vec2(x, 16f)
+                };
                 this.AddItem(contextMenu);
             }
             int num3 = 0;
@@ -275,10 +287,12 @@ namespace DuckGame
                 {
                     if (fileName.EndsWith(this.TypeExtension()))
                     {
-                        ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                        contextMenu.layer = this.layer;
-                        contextMenu.fancy = true;
-                        contextMenu.text = fileName;
+                        ContextMenu contextMenu = new ContextMenu(this)
+                        {
+                            layer = this.layer,
+                            fancy = true,
+                            text = fileName
+                        };
                         contextMenu.text = fileName.Substring(0, fileName.Length - 4);
                         contextMenu.data = !pIsModPath ? fileName : path;
                         contextMenu.itemSize = new Vec2(x, 16f);
@@ -291,17 +305,19 @@ namespace DuckGame
                     string str1 = path.Replace('\\', '/');
                     string str2 = str1.Substring(0, str1.Length - 4);
                     string str3 = str2.Substring(str2.IndexOf("/levels/", StringComparison.InvariantCultureIgnoreCase) + 8);
-                    ContextCheckBox contextCheckBox = new ContextCheckBox(fileName, (IContextListener)this);
-                    contextCheckBox.layer = this.layer;
-                    contextCheckBox.fancy = true;
-                    contextCheckBox.path = str3;
-                    contextCheckBox.isChecked = Editor.activatedLevels.Contains(str3);
-                    contextCheckBox.itemSize = new Vec2(x, 16f);
-                    this.AddItem((ContextMenu)contextCheckBox);
+                    ContextCheckBox contextCheckBox = new ContextCheckBox(fileName, this)
+                    {
+                        layer = this.layer,
+                        fancy = true,
+                        path = str3,
+                        isChecked = Editor.activatedLevels.Contains(str3),
+                        itemSize = new Vec2(x, 16f)
+                    };
+                    this.AddItem(contextCheckBox);
                 }
                 ++num3;
             }
-            int num4 = (int)Math.Round((double)(this._items.Count - 1 - this._maxItems) * (double)this._scrollPosition);
+            int num4 = (int)Math.Round((this._items.Count - 1 - this._maxItems) * (double)this._scrollPosition);
             int num5 = 0;
             for (int index = 0; index < this._items.Count; ++index)
             {
@@ -312,7 +328,7 @@ namespace DuckGame
                 else
                 {
                     this._items[index].visible = true;
-                    this._items[index].position = new Vec2(this._items[index].position.x, (float)((double)this.y + 3.0 + (double)num5 * ((double)this._items[index].itemSize.y + 1.0)));
+                    this._items[index].position = new Vec2(this._items[index].position.x, (float)((double)this.y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
                     ++num5;
                 }
             }
@@ -327,7 +343,7 @@ namespace DuckGame
             System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, 48, 48);
             Bitmap bitmap = new Bitmap(48, 48);
             bitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-            using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage((Image)bitmap))
+            using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bitmap))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
@@ -341,8 +357,8 @@ namespace DuckGame
                 }
             }
             MemoryStream memoryStream = new MemoryStream();
-            bitmap.Save((Stream)memoryStream, ImageFormat.Png);
-            return (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, (Stream)memoryStream);
+            bitmap.Save(memoryStream, ImageFormat.Png);
+            return (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, memoryStream);
         }
 
         public override void Selected(ContextMenu item)
@@ -354,7 +370,7 @@ namespace DuckGame
             this._framesSinceSelected = 0;
             if (!flag && Editor.inputMode == EditorInput.Touch)
                 return;
-            if ((double)this._percentStorageUsed >= 100.0 && (this._save || item.text == "@NEWICONTINY@New File..."))
+            if (_percentStorageUsed >= 100.0 && (this._save || item.text == "@NEWICONTINY@New File..."))
             {
                 SFX.Play("consoleError");
             }
@@ -364,7 +380,7 @@ namespace DuckGame
                 if (item.text == "@NEWICONTINY@New File...")
                 {
                     this._dialog.Open("Save File As...");
-                    Editor.lockInput = (ContextMenu)this._dialog;
+                    Editor.lockInput = _dialog;
                 }
                 else if (item.data.EndsWith(this.TypeExtension()) && this._type != ContextFileType.All)
                 {
@@ -384,7 +400,7 @@ namespace DuckGame
                         else
                         {
                             this._overwriteDialog.Open("OVERWRITE " + item.data + "?");
-                            Editor.lockInput = (ContextMenu)this._overwriteDialog;
+                            Editor.lockInput = _overwriteDialog;
                             this._doOverwriteDialog = true;
                             this._overwriteDialog.result = false;
                             this._overwriteName = item.data;
@@ -470,9 +486,9 @@ namespace DuckGame
                                 }
                                 catch (Exception)
                                 {
-                                    this._previewPair = (LevelMetaData.PreviewPair)null;
+                                    this._previewPair = null;
                                     flag2 = false;
-                                    this._previewSprite = (Sprite)null;
+                                    this._previewSprite = null;
                                 }
                                 if (this._previewPair != null)
                                     this._preview = (Tex2D)this._previewPair.preview;
@@ -485,7 +501,7 @@ namespace DuckGame
                             }
                             else
                             {
-                                this._prevPreviewPath = (string)null;
+                                this._prevPreviewPath = null;
                                 flag2 = false;
                             }
                             if (flag2)
@@ -495,7 +511,7 @@ namespace DuckGame
                                     this._previewSprite.scale = new Vec2(2f, 2f);
                             }
                             else
-                                this._previewSprite = (Sprite)null;
+                                this._previewSprite = null;
                             this._prevPreviewPath = str2;
                         }
                     }
@@ -504,9 +520,9 @@ namespace DuckGame
                 {
                     this._preview = this._badArcade.texture;
                     this._previewSprite = new Sprite(this._preview);
-                    this._prevPreviewPath = (string)null;
+                    this._prevPreviewPath = null;
                 }
-                Editor.lockInput = (ContextMenu)this;
+                Editor.lockInput = this;
                 base.Update();
                 this._scrollWait = Lerp.Float(this._scrollWait, 0.0f, 0.2f);
                 if (this._dialog.result != null && this._dialog.result != "")
@@ -515,7 +531,7 @@ namespace DuckGame
                     if (files != null && files.Length != 0)
                     {
                         this._overwriteDialog.Open("OVERWRITE " + this._dialog.result + "?");
-                        Editor.lockInput = (ContextMenu)this._overwriteDialog;
+                        Editor.lockInput = _overwriteDialog;
                         this._doOverwriteDialog = true;
                         this._overwriteDialog.result = false;
                         this._overwriteName = this._dialog.result;
@@ -597,7 +613,7 @@ namespace DuckGame
                 if (!this._selectLevels && Input.Pressed("MENU2"))
                 {
                     this._deleteDialog.Open("CONFIRM DELETE");
-                    Editor.lockInput = (ContextMenu)this._deleteDialog;
+                    Editor.lockInput = _deleteDialog;
                     this._doDeleteDialog = true;
                     this._deleteDialog.result = false;
                 }
@@ -608,17 +624,17 @@ namespace DuckGame
                     else if (Input.Pressed("MENURIGHT"))
                         this._selectedIndex += this._maxItems;
                     this._selectedIndex = Maths.Clamp(this._selectedIndex, 0, this._items.Count - 1);
-                    float num1 = 1f / (float)(this._items.Count - this._maxItems);
+                    float num1 = 1f / (this._items.Count - this._maxItems);
                     if ((double)Mouse.scroll != 0.0)
                     {
-                        this._scrollPosition += (float)Math.Sign(Mouse.scroll) * num1;
-                        if ((double)this._scrollPosition > 1.0)
+                        this._scrollPosition += Math.Sign(Mouse.scroll) * num1;
+                        if (_scrollPosition > 1.0)
                             this._scrollPosition = 1f;
-                        if ((double)this._scrollPosition < 0.0)
+                        if (_scrollPosition < 0.0)
                             this._scrollPosition = 0.0f;
                     }
                     bool flag3 = false;
-                    int num2 = (int)Math.Round(((double)(this._items.Count - this._maxItems) - 1.0) * (double)this._scrollPosition);
+                    int num2 = (int)Math.Round((this._items.Count - this._maxItems - 1.0) * _scrollPosition);
                     int num3 = 0;
                     int num4 = 0;
                     for (int index = 0; index < this._items.Count; ++index)
@@ -634,9 +650,9 @@ namespace DuckGame
                     if (Editor.inputMode == EditorInput.Gamepad && !flag3)
                     {
                         if (num4 > num2 + this._maxItems)
-                            this._scrollPosition += (float)(num4 - (num2 + this._maxItems)) * num1;
+                            this._scrollPosition += (num4 - (num2 + this._maxItems)) * num1;
                         else if (num4 < num2)
-                            this._scrollPosition -= (float)(num2 - num4) * num1;
+                            this._scrollPosition -= (num2 - num4) * num1;
                     }
                     for (int index = 0; index < this._items.Count; ++index)
                     {
@@ -650,7 +666,7 @@ namespace DuckGame
                         {
                             ContextMenu contextMenu = this._items[index];
                             this._items[index].visible = true;
-                            this._items[index].position = new Vec2(this._items[index].position.x, (float)((double)this.y + 3.0 + (double)num3 * (double)this._items[index].itemSize.y));
+                            this._items[index].position = new Vec2(this._items[index].position.x, (float)((double)this.y + 3.0 + num3 * (double)this._items[index].itemSize.y));
                             ++num3;
                         }
                     }
@@ -666,8 +682,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 350f;
             float num2 = this._fdHeight + 22f;
-            Vec2 p1_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0 + (double)this.hOffset - 1.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0 - 15.0));
-            Vec2 p2_1 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0 + (double)this.hOffset + 1.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0 - 12.0));
+            Vec2 p1_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0 + hOffset - 1.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0 - 15.0));
+            Vec2 p2_1 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0 + hOffset + 1.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0 - 12.0));
             DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), this.depth, false);
             DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), this.depth - 8);
             DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), this.depth - 4);
@@ -678,10 +694,10 @@ namespace DuckGame
             if (this._scrollBar)
             {
                 this._scrollLerp = Lerp.Float(this._scrollLerp, this._scrollPosition, 0.05f);
-                Vec2 p1_3 = new Vec2(p2_1.x - 14f, (float)((double)this.topRight.y + 7.0 + (240.0 * (double)this._scrollLerp - 4.0)));
-                Vec2 p2_3 = new Vec2(p2_1.x - 5f, (float)((double)this.topRight.y + 11.0 + (240.0 * (double)this._scrollLerp + 8.0)));
+                Vec2 p1_3 = new Vec2(p2_1.x - 14f, (float)(topRight.y + 7.0 + (240.0 * _scrollLerp - 4.0)));
+                Vec2 p2_3 = new Vec2(p2_1.x - 5f, (float)(topRight.y + 11.0 + (240.0 * _scrollLerp + 8.0)));
                 bool flag = false;
-                if ((double)Mouse.x > (double)p1_3.x && (double)Mouse.x < (double)p2_3.x && (double)Mouse.y > (double)p1_3.y && (double)Mouse.y < (double)p2_3.y)
+                if ((double)Mouse.x > p1_3.x && (double)Mouse.x < p2_3.x && (double)Mouse.y > p1_3.y && (double)Mouse.y < p2_3.y)
                 {
                     flag = true;
                     if (Mouse.left == InputState.Pressed)
@@ -691,10 +707,10 @@ namespace DuckGame
                     this.drag = false;
                 if (this.drag)
                 {
-                    this._scrollPosition = (float)(((double)Mouse.y - (double)p1_2.y - 10.0) / ((double)p2_2.y - (double)p1_2.y - 20.0));
-                    if ((double)this._scrollPosition < 0.0)
+                    this._scrollPosition = (float)(((double)Mouse.y - p1_2.y - 10.0) / (p2_2.y - (double)p1_2.y - 20.0));
+                    if (_scrollPosition < 0.0)
                         this._scrollPosition = 0.0f;
-                    if ((double)this._scrollPosition > 1.0)
+                    if (_scrollPosition > 1.0)
                         this._scrollPosition = 1f;
                     this._scrollLerp = this._scrollPosition;
                 }
@@ -715,7 +731,7 @@ namespace DuckGame
             Vec2 p1_4 = new Vec2(p2_1.x + 2f, p1_1.y);
             Vec2 p2_4 = p1_4 + new Vec2(164f, 120f);
             if (this._previewSprite != null && this._previewSprite.texture != null && (this._type == ContextFileType.Block || this._type == ContextFileType.Background || this._type == ContextFileType.Platform || this._type == ContextFileType.Parallax || this._type == ContextFileType.ArcadeStyle || this._type == ContextFileType.ArcadeAnimation))
-                p2_4 = this._type != ContextFileType.Parallax ? p1_4 + new Vec2((float)(this._previewSprite.width + 4), (float)(this._previewSprite.height + 4)) : p1_4 + new Vec2((float)(this._previewSprite.width / 2 + 4), (float)(this._previewSprite.height / 2 + 4));
+                p2_4 = this._type != ContextFileType.Parallax ? p1_4 + new Vec2(this._previewSprite.width + 4, this._previewSprite.height + 4) : p1_4 + new Vec2(this._previewSprite.width / 2 + 4, this._previewSprite.height / 2 + 4);
             DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(70, 70, 70), this.depth, false);
             DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(30, 30, 30), this.depth - 8);
             if (this._previewSprite == null || this._previewSprite.texture == null)
@@ -765,13 +781,13 @@ namespace DuckGame
                     foreach (KeyValuePair<string, int> keyValuePair in this._previewPair.invalid)
                     {
                         string text = "- " + keyValuePair.Key + (keyValuePair.Value > 1 ? " (x" + keyValuePair.Value.ToString() + ")" : "");
-                        this._fancyFont.Draw(text, p1_6.x + 4f, p1_6.y + 4f + (float)num3, Color.White, this.depth + 8);
+                        this._fancyFont.Draw(text, p1_6.x + 4f, p1_6.y + 4f + num3, Color.White, this.depth + 8);
                         if ((double)this._fancyFont.GetWidth(text) > 160.0)
                             num3 += 12;
                         num3 += 12;
                     }
                 }
-                Vec2 p2_6 = p1_6 + new Vec2(166f, (float)(6 + num3));
+                Vec2 p2_6 = p1_6 + new Vec2(166f, 6 + num3);
                 DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(70, 70, 70), this.depth, false);
                 DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(30, 30, 30), this.depth - 8);
             }

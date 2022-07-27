@@ -32,9 +32,9 @@ namespace DuckGame
             this._screen = new SpriteMap("arcade/plug_machine_monitor", 11, 8);
             this._screen.AddAnimation("idle", 0.2f, true, 0, 1, 2);
             this._screen.SetAnimation("idle");
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.depth = - 0.5f;
-            this.center = new Vec2((float)(this._sprite.width / 2), (float)(this._sprite.h / 2));
+            this.center = new Vec2(this._sprite.width / 2, this._sprite.h / 2);
             this._collisionSize = new Vec2(16f, 15f);
             this._collisionOffset = new Vec2(-8f, 2f);
             this._hoverSprite = new Sprite("arcade/plug_hover");
@@ -50,9 +50,9 @@ namespace DuckGame
             if (Level.current is Editor || this.level == null || this.level.bareInitialize)
                 return;
             this._dust = new DustSparkleEffect(this.x - 34f, this.y - 40f, false, false);
-            Level.Add((Thing)this._dust);
+            Level.Add(_dust);
             this._dust.depth = this.depth - 2;
-            this._lighting = (Thing)new ArcadeScreen(this.x, this.y);
+            this._lighting = new ArcadeScreen(this.x, this.y);
             Level.Add(this._lighting);
         }
 
@@ -87,17 +87,17 @@ namespace DuckGame
                 Graphics.Draw(this._duckSprite, this.x + vec2.x, this.y + vec2.y);
                 this._ledStrip.alpha = 1f;
                 this._ledStrip.depth = this.depth + 10;
-                Graphics.Draw((Sprite)this._ledStrip, this.x - 16f, this.y + 9f);
+                Graphics.Draw(_ledStrip, this.x - 16f, this.y + 9f);
                 this._ledStrip.alpha = 0.25f;
                 this._ledStrip.depth = this.depth + 10;
-                Graphics.Draw((Sprite)this._ledStrip, this.x - 16f, this.y + 10f);
+                Graphics.Draw(_ledStrip, this.x - 16f, this.y + 10f);
                 this._screen.depth = this.depth + 5;
-                Graphics.Draw((Sprite)this._screen, this.x - 9f, this.y - 7f);
+                Graphics.Draw(_screen, this.x - 9f, this.y - 7f);
                 this._hoverSprite.alpha = Lerp.Float(this._hoverSprite.alpha, this._hoverFade, 0.05f);
                 if ((double)this._hoverSprite.alpha > 0.00999999977648258)
                 {
                     this._hoverSprite.depth = this.depth + 6;
-                    Graphics.Draw(this._hoverSprite, (float)((double)this.x + (double)vec2.x - 1.0), (float)((double)this.y + (double)vec2.y - 1.0));
+                    Graphics.Draw(this._hoverSprite, (float)((double)this.x + vec2.x - 1.0), (float)((double)this.y + vec2.y - 1.0));
                 }
             }
             base.Draw();

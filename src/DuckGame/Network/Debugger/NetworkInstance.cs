@@ -46,7 +46,7 @@ namespace DuckGame
         {
             get
             {
-                float num = (float)((double)this.rect.width / (double)this.layerCore._console.camera.width * 0.5);
+                float num = (float)(rect.width / (double)this.layerCore._console.camera.width * 0.5);
                 return new Rectangle(this.rect.x * num, this.rect.y * num, this.rect.width * num, this.rect.height * num);
             }
         }
@@ -60,14 +60,14 @@ namespace DuckGame
 
             public void Lock()
             {
-                this.member.SetValue((object)null, this.instance);
+                this.member.SetValue(null, this.instance);
                 if (this.firstLockAction == null)
                     return;
                 this.firstLockAction();
-                this.firstLockAction = (Action)null;
+                this.firstLockAction = null;
             }
 
-            public void Unlock() => this.member.SetValue((object)null, this.originalInstance);
+            public void Unlock() => this.member.SetValue(null, this.originalInstance);
         }
     }
 }

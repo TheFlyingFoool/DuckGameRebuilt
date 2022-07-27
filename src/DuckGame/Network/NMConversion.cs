@@ -26,16 +26,16 @@ namespace DuckGame
         {
             foreach (Duck duck in Level.current.things[typeof(Duck)])
             {
-                if (duck.profile != null && (int)duck.profile.networkIndex == index)
+                if (duck.profile != null && duck.profile.networkIndex == index)
                     return duck;
             }
-            return (Duck)null;
+            return null;
         }
 
         public NMConversion(byte pWho, byte pTo)
         {
-            this.who = this.GetDuck((int)pWho);
-            this.to = this.GetDuck((int)pTo);
+            this.who = this.GetDuck(pWho);
+            this.to = this.GetDuck(pTo);
         }
 
         public override void Activate()

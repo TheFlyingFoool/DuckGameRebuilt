@@ -59,9 +59,9 @@ namespace DuckGame
             base.Update();
         }
 
-        protected override List<Duck> AssignSpawns() => Spawn.SpawnPlayers().OrderBy<Duck, float>((Func<Duck, float>)(sp => sp.x)).ToList<Duck>();
+        protected override List<Duck> AssignSpawns() => Spawn.SpawnPlayers().OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
 
-        protected override Level GetNextLevel() => this._editorTestMode ? (Level)new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
+        protected override Level GetNextLevel() => this._editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
 
         protected override List<Profile> AddPoints()
         {
@@ -98,9 +98,9 @@ namespace DuckGame
             }
             if (source.Count <= 1 && source.Count > 0)
             {
-                source.AddRange((IEnumerable<Team>)collection);
+                source.AddRange(collection);
                 GameMode.lastWinners.Clear();
-                Profile pTheRealWinnerHere = (Profile)null;
+                Profile pTheRealWinnerHere = null;
                 foreach (Team team in source)
                 {
                     foreach (Profile activeProfile in team.activeProfiles)
@@ -114,16 +114,18 @@ namespace DuckGame
                             GameMode.lastWinners.Add(activeProfile);
                             if (p != null)
                             {
-                                PlusOne plusOne = new PlusOne(0.0f, 0.0f, p, testMode: this._editorTestMode);
-                                plusOne.anchor = (Anchor)(Thing)activeProfile.duck;
+                                PlusOne plusOne = new PlusOne(0.0f, 0.0f, p, testMode: this._editorTestMode)
+                                {
+                                    anchor = (Anchor)activeProfile.duck
+                                };
                                 plusOne.anchor.offset = new Vec2(0.0f, -16f);
-                                Level.Add((Thing)plusOne);
+                                Level.Add(plusOne);
                             }
                         }
                     }
                 }
                 if (Network.isActive && Network.isServer)
-                    Send.Message((NetMessage)new NMAssignWin(GameMode.lastWinners, pTheRealWinnerHere));
+                    Send.Message(new NMAssignWin(GameMode.lastWinners, pTheRealWinnerHere));
                 ++source.First<Team>().score;
             }
             return profileList;

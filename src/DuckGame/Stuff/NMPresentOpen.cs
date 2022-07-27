@@ -24,7 +24,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            Present.OpenEffect(this.position, (int)this.frame, true);
+            Present.OpenEffect(this.position, frame, true);
             base.Activate();
         }
     }

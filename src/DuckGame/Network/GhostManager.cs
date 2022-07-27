@@ -76,9 +76,9 @@ namespace DuckGame
 
         public NetIndex16 GetGhostIndex(bool levelInit)
         {
-            int fixedGhostIndex = (int)DuckNetwork.localProfile.fixedGhostIndex;
+            int fixedGhostIndex = DuckNetwork.localProfile.fixedGhostIndex;
             if (levelInit)
-                fixedGhostIndex = (int)DuckNetwork.hostProfile.fixedGhostIndex;
+                fixedGhostIndex = DuckNetwork.hostProfile.fixedGhostIndex;
             NetIndex16 ghostObjectIndex1 = this.ghostObjectIndex;
             while (this._ghostIndexMap.ContainsKey(this.ghostObjectIndex + fixedGhostIndex * GhostManager.kGhostIndexMax))
             {
@@ -101,7 +101,7 @@ namespace DuckGame
 
         public void ResetGhostIndex(byte levelIndex)
         {
-            this.ghostObjectIndex = levelIndex != (byte)0 ? ((int)levelIndex % 2 != 1 ? (NetIndex16)300 : (NetIndex16)(GhostManager.kGhostIndexMax / 2 + 100)) : (DuckNetwork.localProfile == null ? (NetIndex16)(Rando.Int(GhostManager.kGhostIndexMax - 500) + 5) : (NetIndex16)((int)(ushort)(int)DuckNetwork.localProfile.latestGhostIndex + 25));
+            this.ghostObjectIndex = levelIndex != 0 ? (levelIndex % 2 != 1 ? (NetIndex16)300 : (NetIndex16)(GhostManager.kGhostIndexMax / 2 + 100)) : (DuckNetwork.localProfile == null ? (NetIndex16)(Rando.Int(GhostManager.kGhostIndexMax - 500) + 5) : (NetIndex16)((ushort)(int)DuckNetwork.localProfile.latestGhostIndex + 25));
             this.Clear();
         }
 
@@ -148,9 +148,9 @@ namespace DuckGame
 
         public GhostObject GetGhost(NetIndex16 id)
         {
-            GhostObject ghostObject = (GhostObject)null;
+            GhostObject ghostObject = null;
             this._ghostIndexMap.TryGetValue(id, out ghostObject);
-            return ghostObject == null && this.pendingBitBufferGhosts.Count > 0 ? this.pendingBitBufferGhosts.FirstOrDefault<GhostObject>((Func<GhostObject, bool>)(x => x.ghostObjectIndex == id)) : ghostObject;
+            return ghostObject == null && this.pendingBitBufferGhosts.Count > 0 ? this.pendingBitBufferGhosts.FirstOrDefault<GhostObject>(x => x.ghostObjectIndex == id) : ghostObject;
         }
 
         public GhostObject GetGhost(Thing thing) => thing.ghostObject;
@@ -163,15 +163,15 @@ namespace DuckGame
                 {
                     case NMParticles _:
                         NMParticles m1 = m as NMParticles;
-                        if ((int)m1.levelIndex != (int)DuckNetwork.levelIndex)
+                        if (m1.levelIndex != DuckNetwork.levelIndex)
                             break;
-                        this.particleManager.OnMessage((NetMessage)m1);
+                        this.particleManager.OnMessage(m1);
                         break;
                     case NMParticlesRemoved _:
                         NMParticlesRemoved m2 = m as NMParticlesRemoved;
-                        if ((int)m2.levelIndex != (int)DuckNetwork.levelIndex)
+                        if (m2.levelIndex != DuckNetwork.levelIndex)
                             break;
-                        this.particleManager.OnMessage((NetMessage)m2);
+                        this.particleManager.OnMessage(m2);
                         break;
                     case NMProfileNetData _:
                         NMProfileNetData nmProfileNetData = m as NMProfileNetData;
@@ -187,7 +187,7 @@ namespace DuckGame
                         break;
                     case NMRemoveGhosts _:
                         NMRemoveGhosts nmRemoveGhosts = m as NMRemoveGhosts;
-                        if ((int)nmRemoveGhosts.levelIndex != (int)DuckNetwork.levelIndex)
+                        if (nmRemoveGhosts.levelIndex != DuckNetwork.levelIndex)
                             break;
                         GhostManager.receivingDestroyMessage = true;
                         foreach (NetIndex16 id in nmRemoveGhosts.remove)
@@ -203,7 +203,7 @@ namespace DuckGame
                         break;
                     case NMGhostData _:
                         NMGhostData nmGhostData = m as NMGhostData;
-                        if ((int)nmGhostData.levelIndex != (int)DuckNetwork.levelIndex)
+                        if (nmGhostData.levelIndex != DuckNetwork.levelIndex)
                             break;
                         using (List<NMGhostState>.Enumerator enumerator = nmGhostData.states.GetEnumerator())
                         {
@@ -213,7 +213,7 @@ namespace DuckGame
                         }
                     case NMGhostState _:
                         NMGhostState pState = m as NMGhostState;
-                        if ((int)pState.levelIndex != (int)DuckNetwork.levelIndex)
+                        if (pState.levelIndex != DuckNetwork.levelIndex)
                             break;
                         this.ProcessGhostState(pState);
                         break;
@@ -235,10 +235,10 @@ namespace DuckGame
                 GhostObject removedGhost = profile.removedGhosts[pState.id];
                 if (removedGhost != null)
                 {
-                    if (removedGhost.removeLogCooldown == (byte)0)
+                    if (removedGhost.removeLogCooldown == 0)
                     {
                         DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + removedGhost.ToString() + ")", pState.connection);
-                        removedGhost.removeLogCooldown = (byte)5;
+                        removedGhost.removeLogCooldown = 5;
                     }
                     else
                         --removedGhost.removeLogCooldown;
@@ -249,7 +249,7 @@ namespace DuckGame
             else
             {
                 GhostObject ghostObject = this.GetGhost(pState.id);
-                if (pState.classID == (ushort)0)
+                if (pState.classID == 0)
                 {
                     this.RemoveGhost(ghostObject, pState.id);
                 }
@@ -262,7 +262,7 @@ namespace DuckGame
                         GhostManager.receivingDestroyMessage = true;
                         GhostManager.changingGhostType = true;
                         this.RemoveGhost(ghostObject, ghostObject.ghostObjectIndex);
-                        ghostObject = (GhostObject)null;
+                        ghostObject = null;
                         GhostManager.receivingDestroyMessage = false;
                         GhostManager.changingGhostType = false;
                     }
@@ -289,7 +289,7 @@ namespace DuckGame
                         if (ghostObject.thing.isBitBufferCreatedGhostThing)
                         {
                             ghostObject.thing.isBitBufferCreatedGhostThing = false;
-                            ghostObject.thing.level = (Level)null;
+                            ghostObject.thing.level = null;
                             Level.Add(ghostObject.thing);
                         }
                         if (pState.header.connection != null)
@@ -311,7 +311,7 @@ namespace DuckGame
                             ghostObject.DirtyStateMask(mask, connection);
                         }
                     }
-                    double x = (double)ghostObject.thing.position.x;
+                    double x = ghostObject.thing.position.x;
                 }
             }
         }
@@ -377,7 +377,7 @@ namespace DuckGame
                         break;
                     }
                 case NMRemoveGhosts _:
-                    if ((int)DuckNetwork.levelIndex != (int)(pMessage as NMRemoveGhosts).levelIndex || Level.core.nextLevel != null || (int)Level.current.networkIndex != (int)(pMessage as NMRemoveGhosts).levelIndex)
+                    if (DuckNetwork.levelIndex != (pMessage as NMRemoveGhosts).levelIndex || Level.core.nextLevel != null || Level.current.networkIndex != (pMessage as NMRemoveGhosts).levelIndex)
                         break;
                     Send.Resend(pMessage);
                     break;
@@ -444,7 +444,7 @@ namespace DuckGame
         {
             if (this._destroyedGhosts.Count <= 0 && this._destroyResends.Count <= 0)
                 return;
-            Send.Message((NetMessage)new NMRemoveGhosts(this), NetMessagePriority.Volatile);
+            Send.Message(new NMRemoveGhosts(this), NetMessagePriority.Volatile);
         }
 
         public void RemoveGhost(GhostObject ghost, bool makeOld)
@@ -487,10 +487,10 @@ namespace DuckGame
 
         public Thing GetSpecialSync(ushort index)
         {
-            Thing specialSync = (Thing)null;
+            Thing specialSync = null;
             if (!this._specialSyncMap.TryGetValue(index, out specialSync))
             {
-                specialSync = Level.current.things.First<Thing>((Func<Thing, bool>)(x => (int)x.specialSyncIndex == (int)index));
+                specialSync = Level.current.things.First<Thing>(x => x.specialSyncIndex == index);
                 if (specialSync != null)
                     this._specialSyncMap[index] = specialSync;
             }
@@ -540,10 +540,10 @@ namespace DuckGame
             {
                 Thing[] thingArray = new Thing[lev.things.updateList.Count];
                 lev.things.updateList.CopyTo(thingArray);
-                Array.Sort<Thing>(thingArray, (IComparer<Thing>)GhostManager.helperPhysicsIndexSorter);
+                Array.Sort<Thing>(thingArray, helperPhysicsIndexSorter);
                 if (thingArray != null)
                 {
-                    int num = ((IEnumerable<Thing>)thingArray).Count<Thing>();
+                    int num = thingArray.Count<Thing>();
                     for (int index = 0; index < num; ++index)
                     {
                         Thing thing = thingArray[index];
@@ -573,7 +573,7 @@ namespace DuckGame
             foreach (GhostObject remove in this._removeList)
             {
                 if (remove.thing != null)
-                    remove.thing.ghostType = (ushort)0;
+                    remove.thing.ghostType = 0;
                 this.RemoveGhost(remove, remove.ghostObjectIndex);
             }
             this._removeList.Clear();
@@ -586,7 +586,7 @@ namespace DuckGame
         {
             if (this._managerState != null)
                 return;
-            this._managerState = new GhostObject((Thing)new GhostManagerState(), this, 0);
+            this._managerState = new GhostObject(new GhostManagerState(), this, 0);
         }
 
         public void OnDisconnect(NetworkConnection connection)
@@ -634,7 +634,7 @@ namespace DuckGame
                         ghost.thing.DoInitialize();
                     if (pDelta & pSendMessages && ghost.thing._netData != null && ghost.thing._netData.IsDirty(pConnection))
                     {
-                        Send.Message((NetMessage)new NMObjectNetData(ghost.thing, pConnection), NetMessagePriority.Volatile, pConnection);
+                        Send.Message(new NMObjectNetData(ghost.thing, pConnection), NetMessagePriority.Volatile, pConnection);
                         ghost.thing._netData.Clean(pConnection);
                     }
                     if (!pDelta || ghost.NeedsSync(pConnection))
@@ -680,14 +680,14 @@ namespace DuckGame
                 nmGhostDataList.Add(serializedGhostData);
                 pStartIndex += serializedGhostData.ghostMaskPairs.Count;
                 if (pSendMessages)
-                    Send.Message((NetMessage)serializedGhostData, pPriority, pConnection);
+                    Send.Message(serializedGhostData, pPriority, pConnection);
             }
             return nmGhostDataList;
         }
 
         private class HelperPhysicsIndexSorter : IComparer<Thing>
         {
-            int IComparer<Thing>.Compare(Thing a, Thing b) => (int)a.physicsIndex - (int)b.physicsIndex;
+            int IComparer<Thing>.Compare(Thing a, Thing b) => a.physicsIndex - b.physicsIndex;
         }
     }
 }

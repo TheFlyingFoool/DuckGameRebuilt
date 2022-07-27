@@ -42,9 +42,9 @@ namespace DuckGame
 
         public Thing thing => this._thing;
 
-        public System.Type killThingType => this._thing == null ? (System.Type)null : this._thing.killThingType;
+        public System.Type killThingType => this._thing == null ? null : this._thing.killThingType;
 
-        public Profile responsibleProfile => this._thing == null ? (Profile)null : this._thing.responsibleProfile;
+        public Profile responsibleProfile => this._thing == null ? null : this._thing.responsibleProfile;
 
         public DestroyType(Thing t = null) => this._thing = t;
     }

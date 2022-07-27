@@ -22,7 +22,7 @@ namespace DuckGame
             if (this.who != null)
             {
                 this.who.isConversionMessage = true;
-                this.who.LayToRest((Profile)null);
+                this.who.LayToRest(null);
                 this.who.isConversionMessage = false;
             }
             base.Activate();

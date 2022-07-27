@@ -12,7 +12,7 @@ namespace DuckGame
         public CTFLevel(string lev)
           : base(lev)
         {
-            this._mode = (GameMode)new CTF();
+            this._mode = new CTF();
         }
     }
 }

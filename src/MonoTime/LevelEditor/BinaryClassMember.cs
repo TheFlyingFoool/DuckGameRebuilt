@@ -16,51 +16,51 @@ namespace DuckGame
     {
       {
         typeof (int),
-        (byte) 1
+         1
       },
       {
         typeof (uint),
-        (byte) 2
+         2
       },
       {
         typeof (short),
-        (byte) 3
+         3
       },
       {
         typeof (ushort),
-        (byte) 4
+         4
       },
       {
         typeof (sbyte),
-        (byte) 5
+         5
       },
       {
         typeof (byte),
-        (byte) 6
+         6
       },
       {
         typeof (double),
-        (byte) 7
+         7
       },
       {
         typeof (float),
-        (byte) 8
+         8
       },
       {
         typeof (long),
-        (byte) 9
+         9
       },
       {
         typeof (ulong),
-        (byte) 10
+         10
       },
       {
         typeof (string),
-        (byte) 11
+         11
       },
       {
         typeof (bool),
-        (byte) 12
+         12
       }
     };
     }

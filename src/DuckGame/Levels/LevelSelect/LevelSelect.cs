@@ -58,13 +58,15 @@ namespace DuckGame
             this._rootDirectory = root;
             this._font = new BitmapFont("biosFont", 8);
             this._returnLevel = returnLevel;
-            this._dialog = new TextEntryDialog();
-            this._dialog.filename = true;
+            this._dialog = new TextEntryDialog
+            {
+                filename = true
+            };
             this._returnMenu = returnMenu;
             this._iconSheet = new SpriteMap("iconSheet", 16, 16);
             this._onlineMode = onlineMode;
-            this._filters.Add((IFilterLSItems)new LSFilterLevelType(LevelType.Deathmatch, true));
-            this._filters.Add((IFilterLSItems)new LSFilterMods(true));
+            this._filters.Add(new LSFilterLevelType(LevelType.Deathmatch, true));
+            this._filters.Add(new LSFilterMods(true));
         }
 
         public void SetCurrentFolder(string folder) => this.SetCurrentFolder(folder, false, false);
@@ -77,7 +79,7 @@ namespace DuckGame
             if (this._currentDirectory == this._rootDirectory)
             {
                 this._selectedItem = 0;
-                this.mapPack = (MapPack)null;
+                this.mapPack = null;
             }
             else
                 this._selectedItem = 1;
@@ -105,7 +107,7 @@ namespace DuckGame
                 levelsInside.Sort();
                 foreach (string PATH in levelsInside)
                     this.AddItem(new LSItem(0.0f, 0.0f, this, PATH));
-                this._items = this._items.OrderBy<LSItem, bool>((Func<LSItem, bool>)(x => x.data != null && x.data.metaData.eightPlayer)).ToList<LSItem>();
+                this._items = this._items.OrderBy<LSItem, bool>(x => x.data != null && x.data.metaData.eightPlayer).ToList<LSItem>();
                 this.PositionItems();
             }
             else
@@ -134,14 +136,14 @@ namespace DuckGame
                 }
                 foreach (string str in directories)
                 {
-                    if (((IEnumerable<string>)DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories)).Count<string>() > 0)
+                    if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Count<string>() > 0)
                         this.AddItem(new LSItem(0.0f, 0.0f, this, str, pIsModPath: isModPath));
                 }
                 List<string> stringList = new List<string>();
                 foreach (string str in files)
                 {
                     string file = str;
-                    if (Path.GetExtension(file) == ".lev" && this._filters.TrueForAll((Predicate<IFilterLSItems>)(a => a.Filter(file))))
+                    if (Path.GetExtension(file) == ".lev" && this._filters.TrueForAll(a => a.Filter(file)))
                         stringList.Add(file);
                     else if (Path.GetExtension(file) == ".play")
                         this.AddItem(new LSItem(0.0f, 0.0f, this, file, pIsModPath: isModPath));
@@ -164,28 +166,28 @@ namespace DuckGame
             this._confirmMenu = new UIMenu("DELETE FILE!?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@CANCEL @SELECT@SELECT");
             if (this._returnMenu != null)
             {
-                this._confirmMenu.Add((UIComponent)new UIMenuItem("WHAT? NO!", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._confirmMenu, (UIComponent)this._returnMenu), backButton: true), true);
-                this._confirmMenu.Add((UIComponent)new UIMenuItem("YEAH!", (UIMenuAction)new UIMenuActionOpenMenuSetBoolean((UIComponent)this._confirmMenu, (UIComponent)this._returnMenu, this._deleteFile)), true);
+                this._confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionOpenMenu(_confirmMenu, _returnMenu), backButton: true), true);
+                this._confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionOpenMenuSetBoolean(_confirmMenu, _returnMenu, this._deleteFile)), true);
                 this._notOnlineMenu = new UIMenu("NO WAY", num1 / 2f, num2 / 2f, 160f, conString: "@SELECT@OH :(");
                 BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
                 UIText component1 = new UIText("THIS LEVEL CONTAINS", Color.White);
                 component1.SetFont(f);
-                this._notOnlineMenu.Add((UIComponent)component1, true);
+                this._notOnlineMenu.Add(component1, true);
                 UIText component2 = new UIText("OFFLINE ONLY STUFF.", Color.White);
                 component2.SetFont(f);
-                this._notOnlineMenu.Add((UIComponent)component2, true);
+                this._notOnlineMenu.Add(component2, true);
                 UIText component3 = new UIText(" ", Color.White);
                 component3.SetFont(f);
-                this._notOnlineMenu.Add((UIComponent)component3, true);
-                this._notOnlineMenu.Add((UIComponent)new UIMenuItem("OH", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._confirmMenu, (UIComponent)this._returnMenu), backButton: true), true);
+                this._notOnlineMenu.Add(component3, true);
+                this._notOnlineMenu.Add(new UIMenuItem("OH", new UIMenuActionOpenMenu(_confirmMenu, _returnMenu), backButton: true), true);
             }
             else
             {
-                this._confirmMenu.Add((UIComponent)new UIMenuItem("WHAT? NO!", (UIMenuAction)new UIMenuActionCloseMenu((UIComponent)this._confirmMenu), backButton: true), true);
-                this._confirmMenu.Add((UIComponent)new UIMenuItem("YEAH!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean((UIComponent)this._confirmMenu, this._deleteFile)), true);
+                this._confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
+                this._confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._deleteFile)), true);
             }
             this._confirmMenu.Close();
-            Level.Add((Thing)this._confirmMenu);
+            Level.Add(_confirmMenu);
         }
 
         public void AddItem(LSItem item) => this._items.Add(item);
@@ -205,7 +207,7 @@ namespace DuckGame
                 {
                     lsItem.visible = true;
                     lsItem.x = this._leftPos;
-                    lsItem.y = this._topPos + (float)(num2 * 10);
+                    lsItem.y = this._topPos + num2 * 10;
                     if (num1 == this._selectedItem)
                     {
                         lsItem.selected = true;
@@ -226,7 +228,7 @@ namespace DuckGame
             if (this._currentDirectory == "@WORKSHOP@" || this.modRoot != null && this.modRoot.Contains(this._currentDirectory) || this._currentDirectory == "@VANILLA@")
             {
                 this.SetCurrentFolder(this._rootDirectory);
-                this.modRoot = (string)null;
+                this.modRoot = null;
             }
             else
                 this.SetCurrentFolder(this._currentDirectory.Substring(0, this._currentDirectory.LastIndexOf('/')), pIsModPath, false);
@@ -276,17 +278,17 @@ namespace DuckGame
             this._dialog.DoUpdate();
             if (this._dialog.opened)
                 return;
-            Editor.lockInput = (ContextMenu)null;
+            Editor.lockInput = null;
             if (this._dialog.result != null && this._dialog.result != "")
             {
                 string result = this._dialog.result;
                 LevelPlaylist levelPlaylist = new LevelPlaylist();
-                levelPlaylist.levels.AddRange((IEnumerable<string>)Editor.activatedLevels);
+                levelPlaylist.levels.AddRange(Editor.activatedLevels);
                 DuckXML doc = new DuckXML();
                 doc.Add(levelPlaylist.Serialize());
                 DuckFile.SaveDuckXML(doc, DuckFile.levelDirectory + result + ".play");
                 this.SetCurrentFolder(this._rootDirectory);
-                this._dialog.result = (string)null;
+                this._dialog.result = null;
             }
             else
             {
@@ -379,7 +381,7 @@ namespace DuckGame
                                 {
                                     this._selectedLevel.enabled = true;
                                     this._selectedLevel.partiallyEnabled = false;
-                                    Editor.activatedLevels.AddRange((IEnumerable<string>)this._selectedLevel.levelsInside);
+                                    Editor.activatedLevels.AddRange(_selectedLevel.levelsInside);
                                 }
                                 else
                                 {
@@ -419,12 +421,12 @@ namespace DuckGame
                     else if (Input.Pressed("RAGDOLL"))
                     {
                         this._dialog.Open("New Playlist...");
-                        Editor.lockInput = (ContextMenu)this._dialog;
+                        Editor.lockInput = _dialog;
                     }
                     else if (Input.Pressed("MENU2") && this.modRoot == null && this._currentDirectory != "@VANILLA@" && this._selectedLevel.path != "@VANILLA@" && this._currentDirectory != "@WORKSHOP@" && this.mapPack == null && MonoMain.pauseMenu != this._confirmMenu && this._selectedLevel.itemType != LSItemType.UpFolder && this._selectedLevel.itemType != LSItemType.Workshop && this._selectedLevel.itemType != LSItemType.MapPack)
                     {
                         LevelSelect._skipCompanionOpening = true;
-                        MonoMain.pauseMenu = (UIComponent)this._confirmMenu;
+                        MonoMain.pauseMenu = _confirmMenu;
                         HUD.CloseAllCorners();
                         this._confirmMenu.Open();
                         SFX.Play("pause", 0.6f);
@@ -444,13 +446,13 @@ namespace DuckGame
                             if (preview != null)
                             {
                                 this._preview = preview.preview;
-                                this._previewSprite = this._preview == null ? (Sprite)null : new Sprite((Tex2D)this._preview);
+                                this._previewSprite = this._preview == null ? null : new Sprite((Tex2D)this._preview);
                             }
                             else
-                                this._previewSprite = (Sprite)null;
+                                this._previewSprite = null;
                         }
                         else
-                            this._previewSprite = (Sprite)null;
+                            this._previewSprite = null;
                         this._previewItem = this._selectedLevel;
                     }
                     foreach (Thing thing in this._items)
@@ -478,7 +480,7 @@ namespace DuckGame
             else if (this._selectedLevel.mapPack != null && this._selectedLevel.mapPack.preview != null)
             {
                 Tex2D preview = this._selectedLevel.mapPack.preview;
-                Vec2 vec2 = new Vec2(320f / (float)preview.width, 180f / (float)preview.height) * 0.5f;
+                Vec2 vec2 = new Vec2(320f / preview.width, 180f / preview.height) * 0.5f;
                 DuckGame.Graphics.Draw(preview, 150f, 45f, vec2.x, vec2.y);
             }
             this._font.depth = depth;

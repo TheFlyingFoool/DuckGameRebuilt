@@ -28,7 +28,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";
@@ -60,29 +60,29 @@ namespace DuckGame
                     this.handPitch = owner.inputProfile.leftTrigger;
                     if (owner.inputProfile.hasMotionAxis)
                         this.handPitch += owner.inputProfile.motionAxis;
-                    int num = Keyboard.CurrentNote(owner.inputProfile, (Thing)this);
+                    int num = Keyboard.CurrentNote(owner.inputProfile, this);
                     if (num >= 0)
                     {
-                        this.notePitch = (float)((double)num / 12.0 + 0.00999999977648258);
+                        this.notePitch = (float)(num / 12.0 + 0.00999999977648258);
                         this.handPitch = this.notePitch;
-                        if ((double)this.notePitch != (double)this.prevNotePitch)
+                        if (notePitch != (double)this.prevNotePitch)
                         {
                             this.prevNotePitch = 0.0f;
                             if (this.noteSound != null)
                             {
                                 this.noteSound.Stop();
-                                this.noteSound = (Sound)null;
+                                this.noteSound = null;
                             }
                         }
                     }
                     else
                         this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0.0f : this.handPitch + 0.01f;
                 }
-                if ((double)this.notePitch != (double)this.prevNotePitch)
+                if (notePitch != (double)this.prevNotePitch)
                 {
-                    if ((double)this.notePitch != 0.0)
+                    if (notePitch != 0.0)
                     {
-                        int num = (int)Math.Round((double)this.notePitch * 12.0);
+                        int num = (int)Math.Round(notePitch * 12.0);
                         if (num < 0)
                             num = 0;
                         if (num > 12)
@@ -90,16 +90,16 @@ namespace DuckGame
                         if (this.noteSound == null)
                         {
                             this.hitPitch = this.notePitch;
-                            this.noteSound = SFX.Play("sax" + Change.ToString((object)num));
-                            Level.Add((Thing)new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
+                            this.noteSound = SFX.Play("sax" + Change.ToString(num));
+                            Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = Maths.Clamp((float)(((double)this.notePitch - (double)this.hitPitch) * 0.100000001490116), -1f, 1f);
+                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - (double)this.hitPitch) * 0.100000001490116), -1f, 1f);
                     }
                     else if (this.noteSound != null)
                     {
                         this.noteSound.Stop();
-                        this.noteSound = (Sound)null;
+                        this.noteSound = null;
                     }
                 }
                 if (this._raised)
@@ -113,9 +113,9 @@ namespace DuckGame
                 }
                 else
                 {
-                    this.handOffset = new Vec2((float)(5.0 + (1.0 - (double)this.handPitch) * 2.0), (float)((1.0 - (double)this.handPitch) * 4.0 - 2.0));
-                    this.handAngle = (float)((1.0 - (double)this.handPitch) * 0.400000005960464) * (float)this.offDir;
-                    this._holdOffset = new Vec2((float)(4.0 + (double)this.handPitch * 2.0), this.handPitch * 2f);
+                    this.handOffset = new Vec2((float)(5.0 + (1.0 - handPitch) * 2.0), (float)((1.0 - handPitch) * 4.0 - 2.0));
+                    this.handAngle = (float)((1.0 - handPitch) * 0.400000005960464) * offDir;
+                    this._holdOffset = new Vec2((float)(4.0 + handPitch * 2.0), this.handPitch * 2f);
                     this.collisionOffset = new Vec2(-1f, -7f);
                     this.collisionSize = new Vec2(2f, 16f);
                 }

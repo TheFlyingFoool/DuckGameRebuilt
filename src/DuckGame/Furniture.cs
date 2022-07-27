@@ -142,16 +142,16 @@ namespace DuckGame
             get
             {
                 if (this.type == FurnitureType.Prop)
-                    return (int)Math.Ceiling((double)(this.sprite.width * this.sprite.height) / 12.0 * (double)this.group.priceMultiplier * (1.0 + (double)this.rarity / 100.0));
+                    return (int)Math.Ceiling(this.sprite.width * this.sprite.height / 12.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
                 if (this.type == FurnitureType.Theme)
-                    return (int)Math.Ceiling(100.0 * (double)this.group.priceMultiplier * (1.0 + (double)this.rarity / 100.0));
-                return this.type == FurnitureType.Font ? (int)Math.Ceiling(60.0 * (double)this.group.priceMultiplier * (1.0 + (double)this.rarity / 100.0)) : 9999;
+                    return (int)Math.Ceiling(100.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
+                return this.type == FurnitureType.Font ? (int)Math.Ceiling(60.0 * group.priceMultiplier * (1.0 + rarity / 100.0)) : 9999;
             }
         }
 
         public VariatingSprite GetSprite(ulong id, int variation, VSType t)
         {
-            VariatingSprite sprite = this._eggSprites.FirstOrDefault<VariatingSprite>((Func<VariatingSprite, bool>)(x => (long)x.id == (long)id && x.variation == variation && x.type == t));
+            VariatingSprite sprite = this._eggSprites.FirstOrDefault<VariatingSprite>(x => (long)x.id == (long)id && x.variation == variation && x.type == t);
             if (sprite != null)
                 return sprite;
             this._eggSprites.Add(new VariatingSprite()
@@ -161,7 +161,7 @@ namespace DuckGame
                 type = t,
                 sprite = t != VSType.Egg ? Profile.GetPaintingSprite(variation, id) : Profile.GetEggSprite(variation, id)
             });
-            return (VariatingSprite)null;
+            return null;
         }
 
         public void Draw(
@@ -202,9 +202,9 @@ namespace DuckGame
                         float y = 0.39f * g.scale.x;
                         for (int index = 0; index < 30; ++index)
                         {
-                            float num2 = (float)Math.Sin((double)DuckGame.Graphics.frame / 10.0 + (double)index * 0.180000007152557);
+                            float num2 = (float)Math.Sin(Graphics.frame / 10.0 + index * 0.180000007152557);
                             Vec2 vec2 = pos + new Vec2((g.flipH ? -2f : 2f) * g.scale.x, -9f * g.scale.y);
-                            DuckGame.Graphics.Draw(flag.texture, vec2 + new Vec2((float)((double)(index * 2) * (double)y * (g.flipH ? -1.0 : 1.0)), (float)((double)num2 * 1.39999997615814 * ((double)index / 51.0))), new Rectangle?(new Rectangle((float)(index * 2), 0.0f, 3f, 41f)), Color.White, 0.0f, Vec2.Zero, g.flipH ? new Vec2(-y, y) : new Vec2(y), SpriteEffects.None, depth - 2);
+                            DuckGame.Graphics.Draw(flag.texture, vec2 + new Vec2((float)(index * 2 * (double)y * (g.flipH ? -1.0 : 1.0)), (float)((double)num2 * 1.39999997615814 * (index / 51.0))), new Rectangle?(new Rectangle(index * 2, 0.0f, 3f, 41f)), Color.White, 0.0f, Vec2.Zero, g.flipH ? new Vec2(-y, y) : new Vec2(y), SpriteEffects.None, depth - 2);
                         }
                     }
                 }
@@ -227,7 +227,7 @@ namespace DuckGame
                 this._photoSprite.frame = UILevelBox.LittleManFrame(variation, 7, num1);
                 this._photoSprite.depth = depth + 6;
                 this._photoSprite.scale = this.sprite.scale;
-                DuckGame.Graphics.Draw((Sprite)this._photoSprite, pos.x - 6f * this._photoSprite.xscale, pos.y - 4f * this._photoSprite.yscale, new Rectangle(2f, 0.0f, 12f, 10f));
+                DuckGame.Graphics.Draw(_photoSprite, pos.x - 6f * this._photoSprite.xscale, pos.y - 4f * this._photoSprite.yscale, new Rectangle(2f, 0.0f, 12f, 10f));
                 DuckGame.Graphics.DrawRect(pos + new Vec2(-6f * this._photoSprite.xscale, -6f * this._photoSprite.yscale), pos + new Vec2(6f * this._photoSprite.xscale, 6f * this._photoSprite.yscale), Colors.DGBlue, depth - 4);
                 g.frame = 0;
             }
@@ -260,7 +260,7 @@ namespace DuckGame
             }
             g.depth = depth;
             g.angle = angle;
-            DuckGame.Graphics.Draw((Sprite)g, pos.x, pos.y - this.yOffset);
+            DuckGame.Graphics.Draw(g, pos.x, pos.y - this.yOffset);
             g.scale = new Vec2(1f);
         }
 
@@ -311,10 +311,10 @@ namespace DuckGame
             if (this.sprite != null)
             {
                 this.sprite.CenterOrigin();
-                if ((double)this.sprite.height / 2.0 - Math.Floor((double)this.sprite.height / 2.0) == 0.0)
+                if (sprite.height / 2.0 - Math.Floor(sprite.height / 2.0) == 0.0)
                     --this.sprite.centery;
                 else
-                    this.sprite.centery = (float)Math.Floor((double)this.sprite.height / 2.0);
+                    this.sprite.centery = (float)Math.Floor(sprite.height / 2.0);
             }
             if (this.icon != null)
                 this.icon.CenterOrigin();
@@ -364,10 +364,10 @@ namespace DuckGame
             if (this.sprite != null)
             {
                 this.sprite.CenterOrigin();
-                if ((double)this.sprite.height / 2.0 - Math.Floor((double)this.sprite.height / 2.0) == 0.0)
+                if (sprite.height / 2.0 - Math.Floor(sprite.height / 2.0) == 0.0)
                     --this.sprite.centery;
                 else
-                    this.sprite.centery = (float)Math.Floor((double)this.sprite.height / 2.0);
+                    this.sprite.centery = (float)Math.Floor(sprite.height / 2.0);
             }
             if (this.icon != null)
                 this.icon.CenterOrigin();

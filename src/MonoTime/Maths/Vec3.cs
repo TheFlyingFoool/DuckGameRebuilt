@@ -136,26 +136,26 @@ namespace DuckGame
         public static Vec3 Cross(Vec3 vector1, Vec3 Vec2)
         {
             Vec3 vec3;
-            vec3.x = (float)((double)vector1.y * (double)Vec2.z - (double)Vec2.y * (double)vector1.z);
-            vec3.y = (float)((double)Vec2.x * (double)vector1.z - (double)vector1.x * (double)Vec2.z);
-            vec3.z = (float)((double)vector1.x * (double)Vec2.y - (double)Vec2.x * (double)vector1.y);
+            vec3.x = (float)(vector1.y * (double)Vec2.z - Vec2.y * (double)vector1.z);
+            vec3.y = (float)(Vec2.x * (double)vector1.z - vector1.x * (double)Vec2.z);
+            vec3.z = (float)(vector1.x * (double)Vec2.y - Vec2.x * (double)vector1.y);
             return vec3;
         }
 
         public static void Cross(ref Vec3 vector1, ref Vec3 Vec2, out Vec3 result)
         {
-            result.x = (float)((double)vector1.y * (double)Vec2.z - (double)Vec2.y * (double)vector1.z);
-            result.y = (float)((double)Vec2.x * (double)vector1.z - (double)vector1.x * (double)Vec2.z);
-            result.z = (float)((double)vector1.x * (double)Vec2.y - (double)Vec2.x * (double)vector1.y);
+            result.x = (float)(vector1.y * (double)Vec2.z - Vec2.y * (double)vector1.z);
+            result.y = (float)(Vec2.x * (double)vector1.z - vector1.x * (double)Vec2.z);
+            result.z = (float)(vector1.x * (double)Vec2.y - Vec2.x * (double)vector1.y);
         }
 
-        public static float Distance(Vec3 value1, Vec3 value2) => (float)Math.Sqrt(((double)value1.x - (double)value2.x) * ((double)value1.x - (double)value2.x) + ((double)value1.y - (double)value2.y) * ((double)value1.y - (double)value2.y) + ((double)value1.z - (double)value2.z) * ((double)value1.z - (double)value2.z));
+        public static float Distance(Vec3 value1, Vec3 value2) => (float)Math.Sqrt((value1.x - (double)value2.x) * (value1.x - (double)value2.x) + (value1.y - (double)value2.y) * (value1.y - (double)value2.y) + (value1.z - (double)value2.z) * (value1.z - (double)value2.z));
 
-        public static void Distance(ref Vec3 value1, ref Vec3 value2, out float result) => result = (float)Math.Sqrt(((double)value1.x - (double)value2.x) * ((double)value1.x - (double)value2.x) + ((double)value1.y - (double)value2.y) * ((double)value1.y - (double)value2.y) + ((double)value1.z - (double)value2.z) * ((double)value1.z - (double)value2.z));
+        public static void Distance(ref Vec3 value1, ref Vec3 value2, out float result) => result = (float)Math.Sqrt((value1.x - (double)value2.x) * (value1.x - (double)value2.x) + (value1.y - (double)value2.y) * (value1.y - (double)value2.y) + (value1.z - (double)value2.z) * (value1.z - (double)value2.z));
 
-        public static float DistanceSquared(Vec3 value1, Vec3 value2) => (float)(((double)value1.x - (double)value2.x) * ((double)value1.x - (double)value2.x) + ((double)value1.y - (double)value2.y) * ((double)value1.y - (double)value2.y) + ((double)value1.z - (double)value2.z) * ((double)value1.z - (double)value2.z));
+        public static float DistanceSquared(Vec3 value1, Vec3 value2) => (float)((value1.x - (double)value2.x) * (value1.x - (double)value2.x) + (value1.y - (double)value2.y) * (value1.y - (double)value2.y) + (value1.z - (double)value2.z) * (value1.z - (double)value2.z));
 
-        public static void DistanceSquared(ref Vec3 value1, ref Vec3 value2, out float result) => result = (float)(((double)value1.x - (double)value2.x) * ((double)value1.x - (double)value2.x) + ((double)value1.y - (double)value2.y) * ((double)value1.y - (double)value2.y) + ((double)value1.z - (double)value2.z) * ((double)value1.z - (double)value2.z));
+        public static void DistanceSquared(ref Vec3 value1, ref Vec3 value2, out float result) => result = (float)((value1.x - (double)value2.x) * (value1.x - (double)value2.x) + (value1.y - (double)value2.y) * (value1.y - (double)value2.y) + (value1.z - (double)value2.z) * (value1.z - (double)value2.z));
 
         public static Vec3 Divide(Vec3 value1, Vec3 value2)
         {
@@ -189,15 +189,15 @@ namespace DuckGame
             result.z = value1.z / value2.z;
         }
 
-        public static float Dot(Vec3 vector1, Vec3 Vec2) => (float)((double)vector1.x * (double)Vec2.x + (double)vector1.y * (double)Vec2.y + (double)vector1.z * (double)Vec2.z);
+        public static float Dot(Vec3 vector1, Vec3 Vec2) => (float)(vector1.x * (double)Vec2.x + vector1.y * (double)Vec2.y + vector1.z * (double)Vec2.z);
 
-        public static void Dot(ref Vec3 vector1, ref Vec3 Vec2, out float result) => result = (float)((double)vector1.x * (double)Vec2.x + (double)vector1.y * (double)Vec2.y + (double)vector1.z * (double)Vec2.z);
+        public static void Dot(ref Vec3 vector1, ref Vec3 Vec2, out float result) => result = (float)(vector1.x * (double)Vec2.x + vector1.y * (double)Vec2.y + vector1.z * (double)Vec2.z);
 
         public override bool Equals(object obj) => obj is Vec3 vec3 && this == vec3;
 
         public bool Equals(Vec3 other) => this == other;
 
-        public override int GetHashCode() => (int)((double)this.x + (double)this.y + (double)this.z);
+        public override int GetHashCode() => (int)(x + (double)this.y + z);
 
         public static Vec3 Hermite(
           Vec3 value1,
@@ -225,9 +225,9 @@ namespace DuckGame
             result.z = MathHelper.Hermite(value1.z, tangent1.z, value2.z, tangent2.z, amount);
         }
 
-        public float Length() => (float)Math.Sqrt((double)this.x * (double)this.x + (double)this.y * (double)this.y + (double)this.z * (double)this.z);
+        public float Length() => (float)Math.Sqrt(x * (double)this.x + y * (double)this.y + z * (double)this.z);
 
-        public float LengthSquared() => (float)((double)this.x * (double)this.x + (double)this.y * (double)this.y + (double)this.z * (double)this.z);
+        public float LengthSquared() => (float)(x * (double)this.x + y * (double)this.y + z * (double)this.z);
 
         public static Vec3 Lerp(Vec3 value1, Vec3 value2, float amount) => new Vec3(MathHelper.Lerp(value1.x, value2.x, amount), MathHelper.Lerp(value1.y, value2.y, amount), MathHelper.Lerp(value1.z, value2.z, amount));
 
@@ -288,7 +288,7 @@ namespace DuckGame
 
         public void Normalize()
         {
-            float num = 1f / (float)Math.Sqrt((double)this.x * (double)this.x + (double)this.y * (double)this.y + (double)this.z * (double)this.z);
+            float num = 1f / (float)Math.Sqrt(x * (double)this.x + y * (double)this.y + z * (double)this.z);
             this.x *= num;
             this.y *= num;
             this.z *= num;
@@ -296,7 +296,7 @@ namespace DuckGame
 
         public static Vec3 Normalize(Vec3 value)
         {
-            float num = 1f / (float)Math.Sqrt((double)value.x * (double)value.x + (double)value.y * (double)value.y + (double)value.z * (double)value.z);
+            float num = 1f / (float)Math.Sqrt(value.x * (double)value.x + value.y * (double)value.y + value.z * (double)value.z);
             value.x *= num;
             value.y *= num;
             value.z *= num;
@@ -305,7 +305,7 @@ namespace DuckGame
 
         public static void Normalize(ref Vec3 value, out Vec3 result)
         {
-            float num = 1f / (float)Math.Sqrt((double)value.x * (double)value.x + (double)value.y * (double)value.y + (double)value.z * (double)value.z);
+            float num = 1f / (float)Math.Sqrt(value.x * (double)value.x + value.y * (double)value.y + value.z * (double)value.z);
             result.x = value.x * num;
             result.y = value.y * num;
             result.z = value.z * num;
@@ -366,7 +366,7 @@ namespace DuckGame
             return position;
         }
 
-        public static void Transform(ref Vec3 position, ref Matrix matrix, out Vec3 result) => result = new Vec3((float)((double)position.x * (double)matrix.M11 + (double)position.y * (double)matrix.M21 + (double)position.z * (double)matrix.M31) + matrix.M41, (float)((double)position.x * (double)matrix.M12 + (double)position.y * (double)matrix.M22 + (double)position.z * (double)matrix.M32) + matrix.M42, (float)((double)position.x * (double)matrix.M13 + (double)position.y * (double)matrix.M23 + (double)position.z * (double)matrix.M33) + matrix.M43);
+        public static void Transform(ref Vec3 position, ref Matrix matrix, out Vec3 result) => result = new Vec3((float)(position.x * (double)matrix.M11 + position.y * (double)matrix.M21 + position.z * (double)matrix.M31) + matrix.M41, (float)(position.x * (double)matrix.M12 + position.y * (double)matrix.M22 + position.z * (double)matrix.M32) + matrix.M42, (float)(position.x * (double)matrix.M13 + position.y * (double)matrix.M23 + position.z * (double)matrix.M33) + matrix.M43);
 
         public static Vec3 Transform(Vec3 value, Quaternion rotation) => throw new NotImplementedException();
 
@@ -429,11 +429,11 @@ namespace DuckGame
             return normal;
         }
 
-        public static void TransformNormal(ref Vec3 normal, ref Matrix matrix, out Vec3 result) => result = new Vec3((float)((double)normal.x * (double)matrix.M11 + (double)normal.y * (double)matrix.M21 + (double)normal.z * (double)matrix.M31), (float)((double)normal.x * (double)matrix.M12 + (double)normal.y * (double)matrix.M22 + (double)normal.z * (double)matrix.M32), (float)((double)normal.x * (double)matrix.M13 + (double)normal.y * (double)matrix.M23 + (double)normal.z * (double)matrix.M33));
+        public static void TransformNormal(ref Vec3 normal, ref Matrix matrix, out Vec3 result) => result = new Vec3((float)(normal.x * (double)matrix.M11 + normal.y * (double)matrix.M21 + normal.z * (double)matrix.M31), (float)(normal.x * (double)matrix.M12 + normal.y * (double)matrix.M22 + normal.z * (double)matrix.M32), (float)(normal.x * (double)matrix.M13 + normal.y * (double)matrix.M23 + normal.z * (double)matrix.M33));
 
-        public static bool operator ==(Vec3 value1, Vec3 value2) => (double)value1.x == (double)value2.x && (double)value1.y == (double)value2.y && (double)value1.z == (double)value2.z;
+        public static bool operator ==(Vec3 value1, Vec3 value2) => value1.x == (double)value2.x && value1.y == (double)value2.y && value1.z == (double)value2.z;
 
-        public static bool operator !=(Vec3 value1, Vec3 value2) => (double)value1.x != (double)value2.x || (double)value1.y != (double)value2.y || (double)value1.z != (double)value2.z;
+        public static bool operator !=(Vec3 value1, Vec3 value2) => value1.x != (double)value2.x || value1.y != (double)value2.y || value1.z != (double)value2.z;
 
         public static Vec3 operator +(Vec3 value1, Vec3 value2)
         {

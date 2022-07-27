@@ -25,23 +25,23 @@ namespace DuckGame
             foreach (System.Type type in this._types)
             {
                 Thing thing1 = Thing.Instantiate(type);
-                thing1.x = (float)(num2 + num1 * 22);
+                thing1.x = num2 + num1 * 22;
                 thing1.y = 200f;
                 Level.Add(thing1);
                 Thing thing2 = Thing.Instantiate(type);
-                thing2.x = (float)(num2 + num1 * 22 + 8);
+                thing2.x = num2 + num1 * 22 + 8;
                 thing2.y = 200f;
                 Level.Add(thing2);
                 ++num1;
             }
             Duck t1 = new Duck(210f, 200f, Profiles.DefaultPlayer1);
-            Level.Add((Thing)t1);
-            (Level.current as DeathmatchLevel).followCam.Add((Thing)t1);
+            Level.Add(t1);
+            (Level.current as DeathmatchLevel).followCam.Add(t1);
             Duck t2 = new Duck(400f, 200f, Profiles.DefaultPlayer2);
-            Level.Add((Thing)t2);
-            (Level.current as DeathmatchLevel).followCam.Add((Thing)t2);
-            Level.Add((Thing)new PhysicsChain(300f, 100f));
-            Level.Add((Thing)new PhysicsRope(350f, 100f));
+            Level.Add(t2);
+            (Level.current as DeathmatchLevel).followCam.Add(t2);
+            Level.Add(new PhysicsChain(300f, 100f));
+            Level.Add(new PhysicsRope(350f, 100f));
         }
     }
 }

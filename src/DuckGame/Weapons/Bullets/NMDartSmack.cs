@@ -37,7 +37,7 @@ namespace DuckGame
                 duck.forceFire = true;
             if ((double)Rando.Float(1f) > 0.600000023841858)
                 duck.Swear();
-            duck.Disarm((Thing)null);
+            duck.Disarm(null);
         }
     }
 }

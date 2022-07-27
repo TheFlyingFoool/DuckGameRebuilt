@@ -53,13 +53,13 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2(-99999f, -99999f);
             foreach (Block block in this._blocks)
             {
-                if ((double)block.left < (double)vec2_1.x)
+                if ((double)block.left < vec2_1.x)
                     vec2_1.x = block.left;
-                if ((double)block.right > (double)vec2_2.x)
+                if ((double)block.right > vec2_2.x)
                     vec2_2.x = block.right;
-                if ((double)block.top < (double)vec2_1.y)
+                if ((double)block.top < vec2_1.y)
                     vec2_1.y = block.top;
-                if ((double)block.bottom > (double)vec2_2.y)
+                if ((double)block.bottom > vec2_2.y)
                     vec2_2.y = block.bottom;
                 this.physicsMaterial = block.physicsMaterial;
                 this.thickness = block.thickness;
@@ -73,7 +73,7 @@ namespace DuckGame
         {
             foreach (Thing block in this._blocks)
                 Level.Add(block);
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Update()
@@ -82,7 +82,7 @@ namespace DuckGame
             {
                 foreach (Thing block in this._blocks)
                     Level.Add(block);
-                Level.Remove((Thing)this);
+                Level.Remove(this);
                 this._wreck = false;
             }
             if (this.needsRefresh)
@@ -112,7 +112,7 @@ namespace DuckGame
         {
             foreach (Block block in this._blocks)
             {
-                if (Collision.Rect(block.topLeft, block.bottomRight, (Thing)with))
+                if (Collision.Rect(block.topLeft, block.bottomRight, with))
                     block.OnSolidImpact(with, from);
             }
         }
@@ -123,7 +123,7 @@ namespace DuckGame
             {
                 foreach (Block block in this._blocks)
                 {
-                    if (Collision.Circle(location, 3f, (Thing)block))
+                    if (Collision.Circle(location, 3f, block))
                         block.HeatUp(location);
                 }
             }

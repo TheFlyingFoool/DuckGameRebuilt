@@ -54,14 +54,14 @@ namespace DuckGame
 
         public void SetSerializedData(BitBuffer data) => this._serializedData = data;
 
-        public void ClearSerializedData() => this._serializedData = (BitBuffer)null;
+        public void ClearSerializedData() => this._serializedData = null;
 
         public void Deserialize(BitBuffer msg) => this.OnDeserialize(msg);
 
         private FieldInfo[] getFields()
         {
             System.Type type = this.GetType();
-            FieldInfo[] fields1 = (FieldInfo[])null;
+            FieldInfo[] fields1;
             if (NetMessage._messageFields.TryGetValue(type, out fields1))
                 return fields1;
             FieldInfo[] fields2 = type.GetFields();
@@ -81,46 +81,46 @@ namespace DuckGame
             foreach (FieldInfo field in this.getFields())
             {
                 if (field.FieldType == typeof(string))
-                    field.SetValue((object)this, (object)msg.ReadString());
+                    field.SetValue(this, msg.ReadString());
                 else if (field.FieldType == typeof(float))
-                    field.SetValue((object)this, (object)msg.ReadFloat());
+                    field.SetValue(this, msg.ReadFloat());
                 else if (field.FieldType == typeof(bool) && field.Name != "activated" && field.Name != "queued")
-                    field.SetValue((object)this, (object)msg.ReadBool());
+                    field.SetValue(this, msg.ReadBool());
                 else if (field.FieldType == typeof(byte))
-                    field.SetValue((object)this, (object)msg.ReadByte());
+                    field.SetValue(this, msg.ReadByte());
                 else if (field.FieldType == typeof(sbyte))
-                    field.SetValue((object)this, (object)msg.ReadSByte());
+                    field.SetValue(this, msg.ReadSByte());
                 else if (field.FieldType == typeof(double))
-                    field.SetValue((object)this, (object)msg.ReadDouble());
+                    field.SetValue(this, msg.ReadDouble());
                 else if (field.FieldType == typeof(int))
-                    field.SetValue((object)this, (object)msg.ReadInt());
+                    field.SetValue(this, msg.ReadInt());
                 else if (field.FieldType == typeof(ulong))
-                    field.SetValue((object)this, (object)msg.ReadULong());
+                    field.SetValue(this, msg.ReadULong());
                 else if (field.FieldType == typeof(uint))
-                    field.SetValue((object)this, (object)msg.ReadUInt());
+                    field.SetValue(this, msg.ReadUInt());
                 else if (field.FieldType == typeof(ushort) && field.Name != "order" && field.Name != "typeIndex")
-                    field.SetValue((object)this, (object)msg.ReadUShort());
+                    field.SetValue(this, msg.ReadUShort());
                 else if (field.FieldType == typeof(short))
-                    field.SetValue((object)this, (object)msg.ReadShort());
+                    field.SetValue(this, msg.ReadShort());
                 else if (field.FieldType == typeof(NetIndex4) && field.Name != "session")
-                    field.SetValue((object)this, (object)msg.ReadNetIndex4());
+                    field.SetValue(this, msg.ReadNetIndex4());
                 else if (field.FieldType == typeof(NetIndex16))
-                    field.SetValue((object)this, (object)msg.ReadNetIndex16());
+                    field.SetValue(this, msg.ReadNetIndex16());
                 else if (field.FieldType == typeof(Vec2))
-                    field.SetValue((object)this, (object)new Vec2()
+                    field.SetValue(this, new Vec2()
                     {
                         x = msg.ReadFloat(),
                         y = msg.ReadFloat()
                     });
                 else if (field.FieldType == typeof(Profile))
-                    field.SetValue((object)this, (object)msg.ReadProfile());
+                    field.SetValue(this, msg.ReadProfile());
                 else if (field.FieldType == typeof(Team))
-                    field.SetValue((object)this, (object)msg.ReadTeam());
+                    field.SetValue(this, msg.ReadTeam());
                 else if (typeof(Thing).IsAssignableFrom(field.FieldType))
                 {
                     Thing thing = msg.ReadThing(field.FieldType);
                     if (thing == null || field.FieldType.IsAssignableFrom(thing.GetType()))
-                        field.SetValue((object)this, (object)thing);
+                        field.SetValue(this, thing);
                     else
                         DevConsole.Log("|DGRED|NetMessage.OnDeserialize invalid assignment (" + field.FieldType.Name + " = " + thing.GetType().Name + ")");
                 }
@@ -139,7 +139,7 @@ namespace DuckGame
 
         public void SerializePacketData()
         {
-            this._serializedData = (BitBuffer)null;
+            this._serializedData = null;
             this.OnSerialize();
         }
 
@@ -157,43 +157,43 @@ namespace DuckGame
             foreach (FieldInfo field in this.getFields())
             {
                 if (field.FieldType == typeof(string))
-                    this._serializedData.Write(field.GetValue((object)this) as string);
+                    this._serializedData.Write(field.GetValue(this) as string);
                 else if (field.FieldType == typeof(float))
-                    this._serializedData.Write((float)field.GetValue((object)this));
+                    this._serializedData.Write((float)field.GetValue(this));
                 else if (field.FieldType == typeof(bool))
-                    this._serializedData.Write((bool)field.GetValue((object)this));
+                    this._serializedData.Write((bool)field.GetValue(this));
                 else if (field.FieldType == typeof(byte))
-                    this._serializedData.Write((byte)field.GetValue((object)this));
+                    this._serializedData.Write((byte)field.GetValue(this));
                 else if (field.FieldType == typeof(sbyte))
-                    this._serializedData.Write((sbyte)field.GetValue((object)this));
+                    this._serializedData.Write((sbyte)field.GetValue(this));
                 else if (field.FieldType == typeof(double))
-                    this._serializedData.Write((double)field.GetValue((object)this));
+                    this._serializedData.Write((double)field.GetValue(this));
                 else if (field.FieldType == typeof(int))
-                    this._serializedData.Write((int)field.GetValue((object)this));
+                    this._serializedData.Write((int)field.GetValue(this));
                 else if (field.FieldType == typeof(ulong))
-                    this._serializedData.Write((ulong)field.GetValue((object)this));
+                    this._serializedData.Write((ulong)field.GetValue(this));
                 else if (field.FieldType == typeof(uint))
-                    this._serializedData.Write((uint)field.GetValue((object)this));
+                    this._serializedData.Write((uint)field.GetValue(this));
                 else if (field.FieldType == typeof(ushort))
-                    this._serializedData.Write((ushort)field.GetValue((object)this));
+                    this._serializedData.Write((ushort)field.GetValue(this));
                 else if (field.FieldType == typeof(short))
-                    this._serializedData.Write((short)field.GetValue((object)this));
+                    this._serializedData.Write((short)field.GetValue(this));
                 else if (field.FieldType == typeof(NetIndex4))
-                    this._serializedData.WritePacked((int)(NetIndex4)field.GetValue((object)this), 4);
+                    this._serializedData.WritePacked((int)(NetIndex4)field.GetValue(this), 4);
                 else if (field.FieldType == typeof(NetIndex16))
-                    this._serializedData.WritePacked((int)(NetIndex16)field.GetValue((object)this), 16);
+                    this._serializedData.WritePacked((int)(NetIndex16)field.GetValue(this), 16);
                 else if (field.FieldType == typeof(Vec2))
                 {
-                    Vec2 vec2 = (Vec2)field.GetValue((object)this);
+                    Vec2 vec2 = (Vec2)field.GetValue(this);
                     this._serializedData.Write(vec2.x);
                     this._serializedData.Write(vec2.y);
                 }
                 else if (field.FieldType == typeof(Profile))
-                    this._serializedData.WriteProfile((Profile)field.GetValue((object)this));
+                    this._serializedData.WriteProfile((Profile)field.GetValue(this));
                 else if (field.FieldType == typeof(Team))
-                    this._serializedData.WriteTeam((Team)field.GetValue((object)this));
+                    this._serializedData.WriteTeam((Team)field.GetValue(this));
                 else if (typeof(Thing).IsAssignableFrom(field.FieldType))
-                    this._serializedData.Write((object)(field.GetValue((object)this) as Thing));
+                    this._serializedData.Write(field.GetValue(this) as Thing);
             }
         }
 

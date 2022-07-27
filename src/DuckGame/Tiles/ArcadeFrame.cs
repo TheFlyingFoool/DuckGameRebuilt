@@ -46,10 +46,12 @@ namespace DuckGame
         public ArcadeFrame(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._frame = new SpriteMap("arcadeFrame01", 48, 48);
-            this._frame.imageIndex = 0;
-            this.graphic = (Sprite)this._frame;
-            this.center = new Vec2((float)(this.graphic.width / 2), (float)(this.graphic.height / 2));
+            this._frame = new SpriteMap("arcadeFrame01", 48, 48)
+            {
+                imageIndex = 0
+            };
+            this.graphic = _frame;
+            this.center = new Vec2(this.graphic.width / 2, this.graphic.height / 2);
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -8f);
             this._screen = new Sprite("shot01");
@@ -84,9 +86,9 @@ namespace DuckGame
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
             if (Editor.copying)
-                binaryClassChunk.AddProperty("FrameID", (object)Guid.NewGuid().ToString());
+                binaryClassChunk.AddProperty("FrameID", Guid.NewGuid().ToString());
             else
-                binaryClassChunk.AddProperty("FrameID", (object)this._identifier);
+                binaryClassChunk.AddProperty("FrameID", _identifier);
             return binaryClassChunk;
         }
 
@@ -100,9 +102,9 @@ namespace DuckGame
         {
             DXMLNode dxmlNode = base.LegacySerialize();
             if (Editor.copying)
-                dxmlNode.Add(new DXMLNode("FrameID", (object)Guid.NewGuid().ToString()));
+                dxmlNode.Add(new DXMLNode("FrameID", Guid.NewGuid().ToString()));
             else
-                dxmlNode.Add(new DXMLNode("FrameID", (object)this._identifier));
+                dxmlNode.Add(new DXMLNode("FrameID", _identifier));
             return dxmlNode;
         }
 

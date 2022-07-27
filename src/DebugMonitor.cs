@@ -50,11 +50,11 @@ namespace DbMon.NET
         /// <summary>Handle for our shared memory</summary>
         private static IntPtr m_SharedMem = IntPtr.Zero;
         /// <summary>Our capturing thread</summary>
-        private static Thread m_Capturer = (Thread)null;
+        private static Thread m_Capturer = null;
         /// <summary>Our synchronization root</summary>
         private static object m_SyncRoot = new object();
         /// <summary>Mutex for singleton check</summary>
-        private static Mutex m_Mutex = (Mutex)null;
+        private static Mutex m_Mutex = null;
 
         /// <summary>
         /// Private constructor so no one can create a instance
@@ -213,7 +213,7 @@ namespace DbMon.NET
             if (DebugMonitor.m_Mutex == null)
                 return;
             DebugMonitor.m_Mutex.Close();
-            DebugMonitor.m_Mutex = (Mutex)null;
+            DebugMonitor.m_Mutex = null;
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace DbMon.NET
         {
             lock (DebugMonitor.m_SyncRoot)
             {
-                DebugMonitor.m_Capturer = DebugMonitor.m_Capturer != null ? (Thread)null : throw new ObjectDisposedException(nameof(DebugMonitor), "This DebugMonitor is not running.");
+                DebugMonitor.m_Capturer = DebugMonitor.m_Capturer != null ? null : throw new ObjectDisposedException(nameof(DebugMonitor), "This DebugMonitor is not running.");
                 DebugMonitor.PulseEvent(DebugMonitor.m_ReadyEvent);
                 do
                     ;
@@ -237,7 +237,7 @@ namespace DbMon.NET
         /// last win 32 error code appended.
         /// </summary>
         /// <param name="text">text</param>
-        private static ApplicationException CreateApplicationException(string text) => text != null && text.Length >= 1 ? new ApplicationException(string.Format("{0}. Last Win32 Error was {1}", (object)text, (object)Marshal.GetLastWin32Error())) : throw new ArgumentNullException(nameof(text), "'text' may not be empty or null.");
+        private static ApplicationException CreateApplicationException(string text) => text != null && text.Length >= 1 ? new ApplicationException(string.Format("{0}. Last Win32 Error was {1}", text, Marshal.GetLastWin32Error())) : throw new ArgumentNullException(nameof(text), "'text' may not be empty or null.");
 
         private struct SECURITY_DESCRIPTOR
         {

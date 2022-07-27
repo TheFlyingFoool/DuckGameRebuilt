@@ -67,7 +67,7 @@ namespace DuckGame
                     source.Add(searchLobbyAtIndex);
                 }
             }
-            return source.OrderBy<Lobby, int>((Func<Lobby, int>)(x =>
+            return source.OrderBy<Lobby, int>(x =>
            {
                int orderedLobbyList = 100;
                if (x.GetLobbyData("version") != DG.version)
@@ -75,19 +75,19 @@ namespace DuckGame
                if (UIMatchmakingBox.core != null && UIMatchmakingBox.core.nonPreferredServers.Contains(x.id))
                    orderedLobbyList += 50;
                return orderedLobbyList;
-           })).ToList<Lobby>();
+           }).ToList<Lobby>();
         }
 
         private Lobby TakeLobby()
         {
             if (!this.HasLobby())
-                return (Lobby)null;
+                return null;
             Lobby lobby = this.lobbies[this._takeIndex];
             ++this._takeIndex;
             return lobby;
         }
 
-        private Lobby PeekLobby() => this.HasLobby() ? this.lobbies[this._takeIndex] : (Lobby)null;
+        private Lobby PeekLobby() => this.HasLobby() ? this.lobbies[this._takeIndex] : null;
 
         private bool HasLobby() => this.lobbies.Count<Lobby>() > 0 && this._takeIndex < this.lobbies.Count;
 

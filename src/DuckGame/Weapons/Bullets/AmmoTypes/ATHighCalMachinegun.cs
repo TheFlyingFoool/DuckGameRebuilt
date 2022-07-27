@@ -19,9 +19,11 @@ namespace DuckGame
 
         public override void PopShell(float x, float y, int dir)
         {
-            SniperShell sniperShell = new SniperShell(x, y);
-            sniperShell.hSpeed = (float)dir * (1.5f + Rando.Float(1f));
-            Level.Add((Thing)sniperShell);
+            SniperShell sniperShell = new SniperShell(x, y)
+            {
+                hSpeed = dir * (1.5f + Rando.Float(1f))
+            };
+            Level.Add(sniperShell);
         }
     }
 }

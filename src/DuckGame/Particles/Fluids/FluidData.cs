@@ -31,15 +31,15 @@ namespace DuckGame
         public void Mix(FluidData with)
         {
             float num1 = with.amount + this.amount;
-            if ((double)with.amount > 0.0)
+            if (with.amount > 0.0)
             {
                 float num2 = this.amount / num1;
                 float num3 = with.amount / num1;
-                this.flammable = (float)((double)num2 * (double)this.flammable + (double)num3 * (double)with.flammable);
+                this.flammable = (float)((double)num2 * flammable + (double)num3 * with.flammable);
                 this.color = this.color * num2 + with.color * num3;
-                this.heat = (float)((double)this.heat * (double)num2 + (double)with.heat * (double)num3);
-                this.transparent = (float)((double)this.transparent * (double)num2 + (double)with.transparent * (double)num3);
-                this.douseFire = (float)((double)this.douseFire * (double)num2 + (double)with.douseFire * (double)num3);
+                this.heat = (float)(heat * (double)num2 + with.heat * (double)num3);
+                this.transparent = (float)(transparent * (double)num2 + with.transparent * (double)num3);
+                this.douseFire = (float)(douseFire * (double)num2 + with.douseFire * (double)num3);
             }
             this.amount = num1;
         }

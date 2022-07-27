@@ -23,7 +23,7 @@ namespace DuckGame
                 return;
             DevConsole.core.ReceiveLogData(this.data, this.connection);
             ++this.connection.logTransferProgress;
-            Send.Message((NetMessage)new NMLogPartWasReceived(), this.connection);
+            Send.Message(new NMLogPartWasReceived(), this.connection);
             if (this.connection.logTransferProgress != this.connection.logTransferSize)
                 return;
             DevConsole.LogTransferComplete(this.connection);

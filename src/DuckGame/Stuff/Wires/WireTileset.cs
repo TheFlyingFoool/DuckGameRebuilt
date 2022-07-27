@@ -206,22 +206,22 @@ namespace DuckGame
             if (updatePrev)
                 signal.prevPosition = signal.position;
             float overshoot;
-            if ((double)signal.travel.position.x < (double)signal.position.x)
+            if (signal.travel.position.x < (double)signal.position.x)
             {
                 signal.position.x -= travelSpeed;
                 overshoot = signal.travel.position.x - signal.position.x;
             }
-            else if ((double)signal.travel.position.x > (double)signal.position.x)
+            else if (signal.travel.position.x > (double)signal.position.x)
             {
                 signal.position.x += travelSpeed;
                 overshoot = signal.position.x - signal.travel.position.x;
             }
-            else if ((double)signal.travel.position.y > (double)signal.position.y)
+            else if (signal.travel.position.y > (double)signal.position.y)
             {
                 signal.position.y += travelSpeed;
                 overshoot = signal.position.y - signal.travel.position.y;
             }
-            else if ((double)signal.travel.position.y < (double)signal.position.y)
+            else if (signal.travel.position.y < (double)signal.position.y)
             {
                 signal.position.y -= travelSpeed;
                 overshoot = signal.travel.position.y - signal.position.y;
@@ -229,9 +229,9 @@ namespace DuckGame
             else
                 overshoot = 0.0f;
             signal.life -= (float)((double)travelSpeed / 16.0 * 0.00999999977648258);
-            if ((double)overshoot >= 0.0 && (double)signal.life > 0.0)
+            if ((double)overshoot >= 0.0 && signal.life > 0.0)
                 this.Emit(signal, overshoot, signal.signalType);
-            if ((double)signal.life > 0.0)
+            if (signal.life > 0.0)
                 return;
             this._removeSignals.Add(signal);
         }
@@ -284,7 +284,7 @@ namespace DuckGame
                 for (int index = 0; index < 3; ++index)
                 {
                     Sprite signalSprite = this._signalSprite;
-                    signalSprite.depth = signalSprite.depth - 1;
+                    signalSprite.depth-= 1;
                     prevPosition += vec2 * (length / 4f);
                     this._signalSprite.alpha = num * signal.life;
                     num += 0.2f;
@@ -296,10 +296,10 @@ namespace DuckGame
 
         private void UpdateConnections()
         {
-            this.upTile = Level.CheckPoint<AutoTile>(this.x, this.y - 16f, (Thing)this);
-            this.downTile = Level.CheckPoint<AutoTile>(this.x, this.y + 16f, (Thing)this);
-            this.leftTile = Level.CheckPoint<AutoTile>(this.x - 16f, this.y, (Thing)this);
-            this.rightTile = Level.CheckPoint<AutoTile>(this.x + 16f, this.y, (Thing)this);
+            this.upTile = Level.CheckPoint<AutoTile>(this.x, this.y - 16f, this);
+            this.downTile = Level.CheckPoint<AutoTile>(this.x, this.y + 16f, this);
+            this.leftTile = Level.CheckPoint<AutoTile>(this.x - 16f, this.y, this);
+            this.rightTile = Level.CheckPoint<AutoTile>(this.x + 16f, this.y, this);
             this._connections.Clear();
             if (this._sprite.frame == 32 || this._sprite.frame == 41)
             {

@@ -13,15 +13,15 @@ namespace DuckGame
         {
             get
             {
-                this._value = (ushort)0;
+                this._value = 0;
                 if ((this._thing as WireActivator).action)
-                    this._value = (ushort)1;
+                    this._value = 1;
                 return this._value;
             }
             set
             {
                 this._value = value;
-                (this._thing as WireActivator).action = ((uint)this._value & 1U) > 0U;
+                (this._thing as WireActivator).action = (_value & 1U) > 0U;
             }
         }
 

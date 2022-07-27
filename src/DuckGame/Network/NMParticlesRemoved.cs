@@ -29,7 +29,7 @@ namespace DuckGame
 
         protected override void OnSerialize()
         {
-            if (this.removeParticles.Count > (int)byte.MaxValue)
+            if (this.removeParticles.Count > byte.MaxValue)
                 throw new Exception("NMParticlesRemoved.removeParticles should not have more than 255 particles.");
             this._serializedData.Write(this.levelIndex);
             this._serializedData.Write((byte)this.removeParticles.Count);
@@ -41,7 +41,7 @@ namespace DuckGame
         {
             this.levelIndex = d.ReadByte();
             byte num = d.ReadByte();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
                 this.removeParticles.Add(d.ReadUShort());
         }
     }

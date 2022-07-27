@@ -53,7 +53,7 @@ namespace DuckGame
                 if (this.down)
                 {
                     this._downWait -= 0.06f;
-                    if ((double)this._downWait <= 0.0)
+                    if (_downWait <= 0.0)
                     {
                         if (this._doneDown)
                         {
@@ -71,7 +71,7 @@ namespace DuckGame
                 else
                 {
                     this._openWait -= 0.06f;
-                    if ((double)this._openWait <= 0.0 && this._wrapped && !this._flash)
+                    if (_openWait <= 0.0 && this._wrapped && !this._flash)
                         this._flash = true;
                     if (this._flash)
                     {
@@ -83,7 +83,7 @@ namespace DuckGame
                             {
                                 this._oldSong = Music.currentSong;
                                 Music.Play("jollyjingle");
-                                Profiles.experienceProfile.SetNumFurnitures((int)this._furni.index, Profiles.experienceProfile.GetNumFurnitures((int)this._furni.index) + 1);
+                                Profiles.experienceProfile.SetNumFurnitures(_furni.index, Profiles.experienceProfile.GetNumFurnitures(_furni.index) + 1);
                                 SFX.Play("harp");
                                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                             }

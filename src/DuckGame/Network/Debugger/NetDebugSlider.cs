@@ -40,15 +40,15 @@ namespace DuckGame
             Graphics.DrawString(this._name, position, Color.White, this.depth + 10);
             float num1 = this._getValue();
             int num2 = 20;
-            int num3 = (int)Math.Round((double)num1 * (double)num2);
-            Rectangle rectangle = new Rectangle(position.x + 100f, position.y, (float)(num2 * 5), 8f);
+            int num3 = (int)Math.Round((double)num1 * num2);
+            Rectangle rectangle = new Rectangle(position.x + 100f, position.y, num2 * 5, 8f);
             float num4 = -1f;
             if (rectangle.Contains(Mouse.positionConsole) & allowInput)
             {
-                num4 = (float)(int)(((double)Mouse.positionConsole.x - (double)rectangle.Left) / (double)rectangle.width * (double)num2);
+                num4 = (int)((Mouse.positionConsole.x - (double)rectangle.Left) / rectangle.width * num2);
                 if (Mouse.left == InputState.Down)
                 {
-                    this._setValue(num4 / (float)num2);
+                    this._setValue(num4 / num2);
                     flag = true;
                 }
             }
@@ -56,7 +56,7 @@ namespace DuckGame
             for (int index = 0; index < num2; ++index)
             {
                 Color col = Color.Gray;
-                if ((double)num4 >= (double)index && (double)num4 != -1.0)
+                if ((double)num4 >= index && (double)num4 != -1.0)
                     col = Color.White;
                 else if (num3 >= index)
                     col = new Color(200, 200, 200);

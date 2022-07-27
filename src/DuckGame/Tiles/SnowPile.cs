@@ -19,7 +19,7 @@ namespace DuckGame
         public SnowPile(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("bigDrift", 32, 32);
+            this.graphic = new SpriteMap("bigDrift", 32, 32);
             this.hugWalls = WallHug.Floor;
             this.center = new Vec2(12f, 24f);
             this.collisionSize = new Vec2(24f, 10f);
@@ -32,7 +32,7 @@ namespace DuckGame
         public override void Update()
         {
             if (this._collisionPred == null)
-                this._collisionPred = (Predicate<MaterialThing>)(thing => thing == null || !Collision.Rect(this.topLeft, this.bottomRight, (Thing)thing));
+                this._collisionPred = thing => thing == null || !Collision.Rect(this.topLeft, this.bottomRight, thing);
             this.clip.RemoveWhere(this._collisionPred);
             if (this.melt)
             {
@@ -41,7 +41,7 @@ namespace DuckGame
                 this.y += 0.13f;
             }
             if ((double)this.yscale < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 
@@ -63,7 +63,7 @@ namespace DuckGame
                     float num3 = 1f;
                     if (index < 10)
                         num3 = 0.7f;
-                    Level.Add((Thing)new SnowFallParticle(this.x + Rando.Float(-9f, 9f), this.y + 7f + Rando.Float(-16f, 0.0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
+                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-9f, 9f), this.y + 7f + Rando.Float(-16f, 0.0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
                 }
             }
             base.OnSoftImpact(with, from);

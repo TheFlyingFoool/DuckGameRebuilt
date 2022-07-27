@@ -94,20 +94,20 @@ namespace DuckGame
         public static CloudFile GetLocal(string pLocalPath, bool pDelete = false)
         {
             if (pLocalPath.EndsWith(".lev") && !pLocalPath.Contains(DuckFile.levelDirectory) && !pDelete)
-                return (CloudFile)null;
+                return null;
             bool flag = DuckFile.IsUserPath(pLocalPath);
             if (!pLocalPath.Contains(":"))
-                return (CloudFile)null;
+                return null;
             pLocalPath = DuckFile.GetLocalSavePath(pLocalPath);
             if (pLocalPath == null)
-                return (CloudFile)null;
+                return null;
             pLocalPath = pLocalPath.Replace('\\', '/');
             if (pLocalPath[pLocalPath.Length - 1] == '?')
-                return (CloudFile)null;
+                return null;
             foreach (string cloudFolderFilter in CloudFile._cloudFolderFilters)
             {
                 if (pLocalPath.StartsWith(cloudFolderFilter))
-                    return (CloudFile)null;
+                    return null;
             }
             return CloudFile.Get((pLocalPath.EndsWith(".lev") || !flag ? "nq403216_" : "nq500000_") + pLocalPath, pDelete);
         }
@@ -116,23 +116,23 @@ namespace DuckGame
         {
             if (pDelete)
                 CloudFile._index.Remove(pCloudPath);
-            CloudFile cloudFile = (CloudFile)null;
+            CloudFile cloudFile;
             if (!CloudFile._index.TryGetValue(pCloudPath, out cloudFile))
             {
                 if (!pDelete)
                 {
                     if (pCloudPath == "nq500000_" || pCloudPath.Contains("localsettings.dat") || pCloudPath.Contains("_dgbalooga_save"))
-                        return (CloudFile)null;
+                        return null;
                     bool flag1 = pCloudPath.StartsWith("nq403216_");
                     if (!pCloudPath.Contains("nq500000_") && !flag1)
-                        return (CloudFile)null;
+                        return null;
                     bool flag2 = pCloudPath.EndsWith(".lev");
                     if (flag2 && !flag1)
-                        return (CloudFile)null;
+                        return null;
                     if (flag2 && !pCloudPath.StartsWith("nq403216_Levels") && !pDelete)
-                        return (CloudFile)null;
+                        return null;
                     if (flag1 && !flag2 && Steam.FileExists(pCloudPath.Replace("nq403216_", "nq500000_")))
-                        return (CloudFile)null;
+                        return null;
                 }
                 string filePath = CloudFile.CloudPathToFilePath(pCloudPath);
                 cloudFile = new CloudFile(pCloudPath, filePath);

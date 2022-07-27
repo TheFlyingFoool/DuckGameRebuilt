@@ -37,8 +37,8 @@ namespace DuckGame
 
         internal ModConfiguration()
         {
-            this.softDependencies = (IEnumerable<string>)new string[0];
-            this.hardDependencies = (IEnumerable<string>)new string[0];
+            this.softDependencies = (new string[0]);
+            this.hardDependencies = (new string[0]);
         }
 
         /// <summary>The full path to the root directory of this mod.</summary>
@@ -71,7 +71,7 @@ namespace DuckGame
                 {
                     if (this.author != null)
                         this._uniqueID = this._uniqueID + "_" + this.author.ToString();
-                    if (this.version != (Version)null)
+                    if (this.version != null)
                         this._uniqueID = this._uniqueID + "_" + this.version.ToString();
                 }
                 return this._uniqueID;
@@ -203,7 +203,7 @@ namespace DuckGame
         {
             object[] customAttributes = this._assembly.GetCustomAttributes(typeof(T), false);
             int index = 0;
-            return index < customAttributes.Length ? (T)(object)customAttributes[index] : default(T);
+            return index < customAttributes.Length ? (T)customAttributes[index] : default(T);
         }
 
         /// <summary>The Assembly that this mod was loaded from.</summary>
@@ -261,13 +261,13 @@ namespace DuckGame
                 XmlElement documentElement = this.configDocument.DocumentElement;
                 XmlElement xmlElement1 = documentElement["SoftDependencies"];
                 if (xmlElement1 != null)
-                    this.softDependencies = (IEnumerable<string>)xmlElement1.InnerText.Split(new char[1]
+                    this.softDependencies = xmlElement1.InnerText.Split(new char[1]
                     {
             '|'
                     }, StringSplitOptions.RemoveEmptyEntries);
                 XmlElement xmlElement2 = documentElement["HardDependencies"];
                 if (xmlElement2 != null)
-                    this.hardDependencies = (IEnumerable<string>)xmlElement2.InnerText.Split(new char[1]
+                    this.hardDependencies = xmlElement2.InnerText.Split(new char[1]
                     {
             '|'
                     }, StringSplitOptions.RemoveEmptyEntries);
@@ -280,7 +280,7 @@ namespace DuckGame
             else
             {
                 this.configDocument = new XmlDocument();
-                this.configDocument.AppendChild((XmlNode)this.configDocument.CreateElement("Mod"));
+                this.configDocument.AppendChild(this.configDocument.CreateElement("Mod"));
                 this.configDocument.Save(this.configFilePath);
             }
         }
@@ -306,7 +306,7 @@ namespace DuckGame
         {
             XmlElement documentElement = this.configDocument.DocumentElement;
             if (documentElement["WorkshopID"] == null)
-                documentElement.AppendChild((XmlNode)this.configDocument.CreateElement("WorkshopID"));
+                documentElement.AppendChild(this.configDocument.CreateElement("WorkshopID"));
             documentElement["WorkshopID"].InnerText = id.ToString();
             this.workshopID = id;
             this.configDocument.Save(this.configFilePath);

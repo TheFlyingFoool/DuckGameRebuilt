@@ -16,9 +16,11 @@ namespace DuckGame
         public DartShell(float xpos, float ypos, float rotSpeed, bool flip)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("dart", 16, 16);
-            this._sprite.flipH = flip;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("dart", 16, 16)
+            {
+                flipH = flip
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this._bounceSound = "";
             this._rotSpeed = rotSpeed;
@@ -35,7 +37,7 @@ namespace DuckGame
                 this.alpha -= 0.05f;
             if ((double)this.alpha > 0.0)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

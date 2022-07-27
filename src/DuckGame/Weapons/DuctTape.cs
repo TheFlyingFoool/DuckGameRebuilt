@@ -32,7 +32,7 @@ namespace DuckGame
             {
                 if (!this.isServerForObject)
                     return;
-                Holdable holdable = Level.current.NearestThingFilter<Holdable>(this.position, (Predicate<Thing>)(t =>
+                Holdable holdable = Level.current.NearestThingFilter<Holdable>(this.position, t =>
                {
                    if (t.owner == null && t != this)
                    {
@@ -47,23 +47,23 @@ namespace DuckGame
                        }
                    }
                    return false;
-               }));
-                if ((double)this.Distance((Thing)holdable) >= 16.0)
+               });
+                if ((double)this.Distance(holdable) >= 16.0)
                     return;
-                Level.Add((Thing)SmallSmoke.New(this.position.x, this.position.y));
-                Level.Add((Thing)SmallSmoke.New(this.position.x, this.position.y));
+                Level.Add(SmallSmoke.New(this.position.x, this.position.y));
+                Level.Add(SmallSmoke.New(this.position.x, this.position.y));
                 SFX.PlaySynchronized("equip", 0.8f);
                 TapedGun h = new TapedGun(0.0f, 0.0f);
-                Thing.ExtraFondle((Thing)holdable, this.connection);
+                Thing.ExtraFondle(holdable, this.connection);
                 h.gun1 = holdable;
-                holdable.owner = (Thing)this.duck;
-                Level.Add((Thing)h);
+                holdable.owner = duck;
+                Level.Add(h);
                 if (this.duck != null && this.held)
                 {
                     this.duck.resetAction = true;
-                    this.duck.GiveHoldable((Holdable)h);
+                    this.duck.GiveHoldable(h);
                 }
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             }
             catch (Exception ex)
             {

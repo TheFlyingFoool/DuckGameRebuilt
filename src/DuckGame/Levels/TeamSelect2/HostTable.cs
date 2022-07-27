@@ -25,14 +25,16 @@ namespace DuckGame
         {
             this.layer = Layer.HUD;
             this.graphic.CenterOrigin();
-            this.center = new Vec2((float)(this.graphic.w / 2), 0.0f);
+            this.center = new Vec2(this.graphic.w / 2, 0.0f);
             this._chair = new Sprite("hostChair");
             this._beverage = new SpriteMap("beverages", 16, 18);
             this._chair.CenterOrigin();
             this._crown = new Sprite("hostCrown");
             this._crown.CenterOrigin();
-            this._fakeLevelCore = new LevelCore();
-            this._fakeLevelCore.currentLevel = new Level();
+            this._fakeLevelCore = new LevelCore
+            {
+                currentLevel = new Level()
+            };
         }
 
         public override void Update()
@@ -60,16 +62,18 @@ namespace DuckGame
                     if (data.duck == null)
                     {
                         InputProfile inputProfile = spectator.inputProfile;
-                        data.duck = new Duck(100f, 0.0f, spectator);
-                        data.duck.enablePhysics = false;
-                        Level.Add((Thing)data.duck);
-                        data.duck.mindControl = (InputProfile)(data.ai = new DuckAI());
+                        data.duck = new Duck(100f, 0.0f, spectator)
+                        {
+                            enablePhysics = false
+                        };
+                        Level.Add(data.duck);
+                        data.duck.mindControl = data.ai = new DuckAI();
                         data.duck.derpMindControl = false;
                         data.duck.depth = this.depth - 20;
                         data.ai.virtualDevice = new VirtualInput(0);
                         data.ai.virtualQuack = true;
                         data.duck.connection = spectator.connection;
-                        spectator.duck = (Duck)null;
+                        spectator.duck = null;
                         spectator.inputProfile = inputProfile;
                     }
                     bool flag = spectator.netData.Get<bool>("quack", false);
@@ -84,8 +88,8 @@ namespace DuckGame
                     if (spectator.team.hasHat && data.duck.hat == null)
                     {
                         TeamHat e = new TeamHat(0.0f, 0.0f, spectator.team);
-                        Level.Add((Thing)e);
-                        data.duck.Equip((Equipment)e, false);
+                        Level.Add(e);
+                        data.duck.Equip(e, false);
                     }
                     data.quack = flag;
                 }
@@ -96,8 +100,8 @@ namespace DuckGame
                 if (data.duck != null)
                 {
                     if (data.duck.hat != null)
-                        Level.Remove((Thing)data.duck.hat);
-                    Level.Remove((Thing)data.duck);
+                        Level.Remove(data.duck.hat);
+                    Level.Remove(data.duck);
                     this._data.Remove(profile);
                 }
                 this.spectators.Remove(profile);
@@ -113,7 +117,7 @@ namespace DuckGame
 
         private HostTable.MemberData GetData(Profile pProfile)
         {
-            HostTable.MemberData data = (HostTable.MemberData)null;
+            MemberData data;
             if (!this._data.TryGetValue(pProfile, out data))
                 this._data[pProfile] = data = new HostTable.MemberData();
             return data;
@@ -134,23 +138,23 @@ namespace DuckGame
                 }
                 thing.DoDraw();
             }
-            float num1 = (float)(this.spectators.Count * 22);
+            float num1 = this.spectators.Count * 22;
             float x = (float)((double)this.x - (double)num1 / 2.0 + 10.0);
             int num2 = 0;
             foreach (Profile spectator in this.spectators)
             {
                 HostTable.MemberData data = this.GetData(spectator);
-                sbyte num3 = spectator.netData.Get<sbyte>("spectatorBeverage", (sbyte)-1);
-                if (data.beverage != (int)num3)
+                sbyte num3 = spectator.netData.Get<sbyte>("spectatorBeverage", -1);
+                if (data.beverage != num3)
                 {
                     data.beverageLerp = Lerp.FloatSmooth(data.beverageLerp, 1f, 0.2f, 1.1f);
-                    if ((double)data.beverageLerp >= 1.0)
-                        data.beverage = (int)num3;
+                    if (data.beverageLerp >= 1.0)
+                        data.beverage = num3;
                 }
                 else
                 {
                     data.beverageLerp = Lerp.FloatSmooth(data.beverageLerp, 0.0f, 0.2f, 1.1f);
-                    if ((double)data.beverageLerp < 0.0500000007450581)
+                    if (data.beverageLerp < 0.0500000007450581)
                         data.beverageLerp = 0.0f;
                 }
                 bool flag = num2 >= this.spectators.Count / 2;
@@ -159,11 +163,11 @@ namespace DuckGame
                 if (data.beverage != -1)
                 {
                     this._beverage.frame = data.beverage;
-                    float num4 = (float)((double)(num2 * num2) * 5.40416526794434 % 1.0 * 7.0);
+                    float num4 = (float)(num2 * num2 * 5.40416526794434 % 1.0 * 7.0);
                     int num5 = 1;
                     if (num2 == 1 || num2 == 2)
                         num5 = 0;
-                    Graphics.Draw((Sprite)this._beverage, (float)((double)x - (double)num4 + (num2 >= this.spectators.Count / 2 ? 5.0 : -16.0)), (float)((double)this.y - 15.0 + 16.0 * (double)data.beverageLerp) + (float)num5, (double)data.beverageLerp < 0.0500000007450581 ? this.depth + 1 : this.depth - 1);
+                    Graphics.Draw(_beverage, (float)((double)x - (double)num4 + (num2 >= this.spectators.Count / 2 ? 5.0 : -16.0)), (float)((double)this.y - 15.0 + 16.0 * data.beverageLerp) + num5, data.beverageLerp < 0.0500000007450581 ? this.depth + 1 : this.depth - 1);
                 }
                 if (spectator == DuckNetwork.hostProfile)
                     Graphics.Draw(this._crown, x, this.y + 2f, this.depth + 2);
@@ -171,7 +175,7 @@ namespace DuckGame
                 vec2_1 += new Vec2(data.tilt.x, (float)(-(double)data.tilt.y * 0.25)) * 4f;
                 Vec2 vec2_2 = vec2_1;
                 Vec2 bob = data.bob;
-                if ((double)bob.y < 0.0)
+                if (bob.y < 0.0)
                     bob.y *= 1.6f;
                 Vec2 vec2_3 = vec2_2 + new Vec2(bob.x, (float)(-(double)bob.y * 1.5)) * 4f;
                 data.tilt = Lerp.Vec2Smooth(data.tilt, spectator.netData.Get<Vec2>("spectatorTilt", Vec2.Zero), 0.15f);
@@ -184,7 +188,7 @@ namespace DuckGame
                 }
                 this._chair.flipH = flag;
                 Graphics.Draw(this._chair, vec2_1.x - (flag ? -4f : 4f), vec2_1.y - 4f, this.depth - 40);
-                x += num1 / (float)this.spectators.Count;
+                x += num1 / spectators.Count;
                 ++num2;
             }
             Level.core = core;

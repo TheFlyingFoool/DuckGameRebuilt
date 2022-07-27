@@ -82,15 +82,17 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 999999;
-            this._ammoType = (AmmoType)new ATLaserOrange();
+            this._ammoType = new ATLaserOrange();
             this._ammoType.affectedByGravity = true;
             this._type = "gun";
             this.graphic = new Sprite("positronShooter");
             this.center = new Vec2(10f, 4f);
             this.collisionOffset = new Vec2(-8f, -3f);
             this.collisionSize = new Vec2(16f, 7f);
-            this._positronWinder = new Sprite("positronWinder");
-            this._positronWinder.center = new Vec2(1.5f, 6.5f);
+            this._positronWinder = new Sprite("positronWinder")
+            {
+                center = new Vec2(1.5f, 6.5f)
+            };
             this._barrelOffsetTL = new Vec2(27f, 4f);
             this._fireSound = "laserRifle";
             this._fullAuto = true;
@@ -98,8 +100,10 @@ namespace DuckGame
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
             this._holdOffset = new Vec2(-4f, -2f);
-            this._flare = new SpriteMap("laserFlareOrange", 16, 16);
-            this._flare.center = new Vec2(0.0f, 8f);
+            this._flare = new SpriteMap("laserFlareOrange", 16, 16)
+            {
+                center = new Vec2(0.0f, 8f)
+            };
             this.editorTooltip = "A futuristic weapon from the WORLD OF TOMORROW!";
         }
 
@@ -108,7 +112,7 @@ namespace DuckGame
             if (this._bursting)
             {
                 this._burstWait = Maths.CountDown(this._burstWait, 0.16f);
-                if ((double)this._burstWait <= 0.0)
+                if (_burstWait <= 0.0)
                 {
                     this._burstWait = 1f;
                     if (this.isServerForObject)
@@ -117,7 +121,7 @@ namespace DuckGame
                         this.Fire();
                         PositronShooter.inFire = false;
                         if (Network.isActive)
-                            Send.Message((NetMessage)new NMFireGun((Gun)this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
+                            Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         this.firedBullets.Clear();
                     }
                     this._wait = 0.0f;
@@ -131,7 +135,7 @@ namespace DuckGame
                     this._wait = this._fireWait;
                 }
             }
-            if ((double)this._windVelocity > 0.300000011920929)
+            if (_windVelocity > 0.300000011920929)
                 this._windVelocity = 0.3f;
             this._windVelocity = Lerp.Float(this._windVelocity, 0.0f, 0.0035f);
             if (this._noteIndex <= this._notes.Count)
@@ -167,7 +171,7 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 vec2 = this.Offset(new Vec2(0.5f, 0.5f));
-            this._positronWinder.angle = this._wind * (float)this.offDir;
+            this._positronWinder.angle = this._wind * offDir;
             Graphics.Draw(this._positronWinder, vec2.x, vec2.y, this.depth + 10);
             base.Draw();
         }
@@ -181,7 +185,7 @@ namespace DuckGame
             }
             else
             {
-                float num = (float)this._noteIndex / (float)this._notes.Count;
+                float num = _noteIndex / (float)this._notes.Count;
                 this._ammoType.range = 1000f;
                 this._ammoType.bulletSpeed = (float)(1.0 + (double)num * 20.0);
                 this._ammoType.affectedByGravity = (double)num < 0.600000023841858;
@@ -216,12 +220,12 @@ namespace DuckGame
                     if (this.duck != null)
                     {
                         this.duck.vSpeed -= 3f;
-                        this.duck.hSpeed = (float)((int)this.duck.offDir * -6);
+                        this.duck.hSpeed = duck.offDir * -6;
                         if (this._winding)
                         {
                             this.duck.Swear();
                             this.duck.GoRagdoll();
-                            this.hSpeed += (float)this.offDir * 3f;
+                            this.hSpeed += offDir * 3f;
                             this.vSpeed -= 3f;
                             this._winding = false;
                             this._windVelocity = 0.0f;

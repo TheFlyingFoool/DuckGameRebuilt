@@ -31,7 +31,7 @@ namespace DuckGame
         {
             if (!(this._pageToOpen.specialText == "Upload Thing"))
                 return;
-            Level.current = (Level)new MainPage(this._cards, true);
+            Level.current = new MainPage(this._cards, true);
         }
 
         public void CardSelected(Card card)
@@ -47,24 +47,24 @@ namespace DuckGame
             this._font = new BitmapFont("biosFont", 8);
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@SELECT@SELECT");
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
-            CategoryGrid categoryGrid = new CategoryGrid(12f, 20f, (List<Card>)null, (IPageListener)this);
-            Level.Add((Thing)categoryGrid);
+            CategoryGrid categoryGrid = new CategoryGrid(12f, 20f, null, this);
+            Level.Add(categoryGrid);
             if (this._cards.Count > 4)
-                this._cards.Insert(4, (Card)new LevelInfo(false, "Upload Thing"));
+                this._cards.Insert(4, new LevelInfo(false, "Upload Thing"));
             StripInfo infos = new StripInfo(false);
-            infos.cards.AddRange((IEnumerable<Card>)this._cards);
+            infos.cards.AddRange(_cards);
             infos.header = "Your Things";
             infos.cardsVisible = 4;
             categoryGrid.AddStrip(infos);
             categoryGrid.AddStrip(new StripInfo(false)
             {
                 cards = {
-          (Card) new LevelInfo(false, "Not a thing.")
+           new LevelInfo(false, "Not a thing.")
         },
                 header = "Browse Things",
                 cardsVisible = 4
             });
-            this._strip = (Thing)categoryGrid;
+            this._strip = categoryGrid;
             base.Initialize();
         }
 

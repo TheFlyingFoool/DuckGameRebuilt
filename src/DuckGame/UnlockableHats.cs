@@ -88,15 +88,15 @@ namespace DuckGame
                     float y1 = y + 12f;
                     this._persona[index].sprite.depth = depth;
                     this._persona[index].sprite.color = Color.White;
-                    Graphics.Draw(this._persona[index].sprite, 0, num2 - num1 + (float)(index * 18), y1);
+                    Graphics.Draw(this._persona[index].sprite, 0, num2 - num1 + index * 18, y1);
                     this._persona[index].armSprite.frame = this._persona[index].sprite.imageIndex;
                     this._persona[index].armSprite.scale = new Vec2(1f, 1f);
                     this._persona[index].armSprite.depth = depth + 4;
-                    Graphics.Draw((Sprite)this._persona[index].armSprite, (float)((double)num2 - (double)num1 + (double)(index * 18) - 3.0), y1 + 6f);
+                    Graphics.Draw(_persona[index].armSprite, (float)((double)num2 - (double)num1 + index * 18 - 3.0), y1 + 6f);
                     Vec2 hatPoint = DuckRig.GetHatPoint(this._persona[index].sprite.imageIndex);
                     team.hat.depth = depth + 2;
                     team.hat.center = new Vec2(16f, 16f) + team.hatOffset;
-                    Graphics.Draw(team.hat, team.hat.frame, num2 - num1 + (float)(index * 18) + hatPoint.x, y1 + hatPoint.y);
+                    Graphics.Draw(team.hat, team.hat.frame, num2 - num1 + index * 18 + hatPoint.x, y1 + hatPoint.y);
                 }
                 ++index;
             }

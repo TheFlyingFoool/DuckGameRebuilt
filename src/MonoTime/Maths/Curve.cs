@@ -64,31 +64,31 @@ namespace DuckGame
 
         private static double Bernstein(int n, int i, double t)
         {
-            double num1 = t != 0.0 || i != 0 ? Math.Pow(t, (double)i) : 1.0;
-            double num2 = n != i || t != 1.0 ? Math.Pow(1.0 - t, (double)(n - i)) : 1.0;
+            double num1 = t != 0.0 || i != 0 ? Math.Pow(t, i) : 1.0;
+            double num2 = n != i || t != 1.0 ? Math.Pow(1.0 - t, n - i) : 1.0;
             return Curve.Ni(n, i) * num1 * num2;
         }
 
         public static Vec2 Calculate(Vec2 start, Vec2 end, float lerp, float arcSizeMult = 1f)
         {
             Vec2 vec2_1 = (start + end) / 2f;
-            if ((double)end.x == (double)start.x)
+            if (end.x == (double)start.x)
             {
-                vec2_1.x = (double)end.y <= (double)start.y ? start.x + 6f * arcSizeMult : start.x - 6f * arcSizeMult;
+                vec2_1.x = end.y <= (double)start.y ? start.x + 6f * arcSizeMult : start.x - 6f * arcSizeMult;
                 arcSizeMult *= 0.2f;
             }
-            vec2_1.y = (double)end.y <= (double)start.y ? end.y - 16f * arcSizeMult : start.y - 22f * arcSizeMult;
+            vec2_1.y = end.y <= (double)start.y ? end.y - 16f * arcSizeMult : start.y - 22f * arcSizeMult;
             List<Vec2> vec2List = Curve.Bezier(8, start, vec2_1, end);
             float num1 = 0.0f;
             for (int index = 1; index < vec2List.Count; ++index)
                 num1 += (vec2List[index] - vec2List[index - 1]).length;
-            double num2 = (double)num1 / (double)vec2List.Count;
-            int index1 = (int)Math.Floor((double)lerp * (double)vec2List.Count) + 1;
+            double num2 = (double)num1 / vec2List.Count;
+            int index1 = (int)Math.Floor((double)lerp * vec2List.Count) + 1;
             if (index1 >= vec2List.Count)
                 return end;
             Vec2 vec2_2 = vec2List[index1 - 1];
             Vec2 vec2_3 = vec2List[index1];
-            float num3 = lerp % (1f / (float)vec2List.Count) * (float)vec2List.Count;
+            float num3 = lerp % (1f / vec2List.Count) * vec2List.Count;
             end = vec2_2 + (vec2_3 - vec2_2) * num3;
             return end;
         }
@@ -97,7 +97,7 @@ namespace DuckGame
         {
             int length = points.Length;
             double t = 0.0;
-            double num1 = 1.0 / (double)(cpts - 1);
+            double num1 = 1.0 / (cpts - 1);
             List<Vec2> vec2List = new List<Vec2>();
             for (int index = 0; index != cpts; ++index)
             {

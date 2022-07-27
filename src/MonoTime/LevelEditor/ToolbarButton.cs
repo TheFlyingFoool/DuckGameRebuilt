@@ -26,11 +26,13 @@ namespace DuckGame
             this.layer = Editor.objectMenuLayer;
             if (image == 99)
             {
-                this.graphic = new Sprite("steamIcon");
-                this.graphic.scale = new Vec2(0.5f, 0.5f);
+                this.graphic = new Sprite("steamIcon")
+                {
+                    scale = new Vec2(0.5f, 0.5f)
+                };
             }
             else
-                this.graphic = (Sprite)new SpriteMap("iconSheet", 16, 16)
+                this.graphic = new SpriteMap("iconSheet", 16, 16)
                 {
                     frame = image
                 };
@@ -50,8 +52,7 @@ namespace DuckGame
                         this._hover = true;
                         if (Mouse.left != InputState.Pressed)
                             return;
-                        this._owner.toolBarToolTip = (string)null;
-                        Level level = this._level;
+                        this._owner.toolBarToolTip = null;
                         Editor.clickedMenu = true;
                         this._owner.ButtonPressed(this);
                         return;
@@ -62,7 +63,6 @@ namespace DuckGame
                     if (TouchScreen.GetTap().Check(pRect, this.layer.camera))
                     {
                         this._hover = true;
-                        Level level = this._level;
                         Editor.clickedMenu = true;
                         this._owner.ButtonPressed(this);
                         return;

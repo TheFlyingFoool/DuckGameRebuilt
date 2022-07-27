@@ -28,7 +28,7 @@ namespace DuckGame
         private float _prevCenterMoveY;
         private float _prevViewSize;
         private bool _startedFollowing;
-        private Vec2 _averagePosition = Vec2.Zero;
+        //private Vec2 _averagePosition = Vec2.Zero;
         private bool _startCentered = true;
         private float _lerpMult = 1f;
         private float _speed = 1f;
@@ -124,7 +124,7 @@ namespace DuckGame
                 this._startedFollowing = false;
             if (Level.current is TeamSelect2)
             {
-                this._follow.RemoveWhere((Predicate<Thing>)(x => x is Duck));
+                this._follow.RemoveWhere(x => x is Duck);
                 foreach (Thing t in Level.current.things[typeof(Duck)])
                     this.Add(t);
             }
@@ -143,8 +143,8 @@ namespace DuckGame
                 CustomCamera customCamera = Level.First<CustomCamera>();
                 if (customCamera != null)
                 {
-                    this.width = (float)customCamera.wide.value;
-                    this.height = (float)customCamera.wide.value * (9f / 16f);
+                    this.width = customCamera.wide.value;
+                    this.height = customCamera.wide.value * (9f / 16f);
                     this.center = customCamera.position;
                     this._skipResize = true;
                 }
@@ -160,16 +160,16 @@ namespace DuckGame
                     if (!t.dead)
                         flag = true;
                     if (Network.isActive && !t.dead)
-                        this.Add((Thing)t);
+                        this.Add(t);
                 }
                 if (Network.isActive)
                 {
                     foreach (RCCar t in Level.current.things[typeof(RCCar)])
                     {
                         if (t.receivingSignal)
-                            this.Add((Thing)t);
+                            this.Add(t);
                         else
-                            this.Remove((Thing)t);
+                            this.Remove(t);
                     }
                 }
                 foreach (Thing thing in this._follow)
@@ -194,7 +194,7 @@ namespace DuckGame
             float lerpMult = this.lerpMult;
             if ((double)this.lerpSpeed > 0.899999976158142)
                 this.lerpMult = 1.8f;
-            this.border += (float)(((double)this._lerpBorder - (double)this.border) * ((double)this.lerpSpeed * 16.0 * (double)this._lerpMult)) * this._speed;
+            this.border += (float)((_lerpBorder - (double)this.border) * ((double)this.lerpSpeed * 16.0 * _lerpMult)) * this._speed;
             if (this.immediate)
                 this.border = this._lerpBorder;
             float num1 = 99999f;
@@ -211,10 +211,10 @@ namespace DuckGame
                 if (this._prevPositions.ContainsKey(key))
                 {
                     Vec2 prevPosition = this._prevPositions[key];
-                    if (this._overFollow || FollowCam.boost || (double)key.overfollow > 0.0)
+                    if (this._overFollow || FollowCam.boost || key.overfollow > 0.0)
                     {
                         float amount = 0.3f;
-                        if ((double)key.overfollow > 0.0)
+                        if (key.overfollow > 0.0)
                             amount = key.overfollow;
                         Vec2 vec2 = (key.cameraPosition - prevPosition) * 24f;
                         if ((double)vec2.length > 100.0)
@@ -232,13 +232,13 @@ namespace DuckGame
                 }
                 else
                     this._prevPositions[key] = key.cameraPosition;
-                if ((double)current.x < (double)num1)
+                if (current.x < (double)num1)
                     num1 = current.x;
-                if ((double)current.x > (double)num2)
+                if (current.x > (double)num2)
                     num2 = current.x;
-                if ((double)current.y < (double)num3)
+                if (current.y < (double)num3)
                     num3 = current.y;
-                if ((double)current.y > (double)num4)
+                if (current.y > (double)num4)
                     num4 = current.y;
                 zero += current;
             }
@@ -279,7 +279,7 @@ namespace DuckGame
             float num9 = num2 + this.border;
             float num10 = (float)(((double)num8 + (double)num9) / 2.0);
             float num11 = (float)(((double)num6 + (double)num7) / 2.0);
-            float num12 = (float)Resolution.current.x / (float)Resolution.current.y;
+            float num12 = Resolution.current.x / (float)Resolution.current.y;
             float num13 = Math.Abs(num8 - num9);
             float num14 = Math.Abs(num6 - num7);
             if ((double)this.lerpSpeed > 0.899999976158142)
@@ -292,15 +292,15 @@ namespace DuckGame
                 num15 = this._prevViewSize;
             else
                 this._prevViewSize = num15;
-            this._viewSize += (float)(((double)num15 - (double)this._viewSize) * ((double)this.lerpSpeed * (double)this._lerpMult * (double)this._speed));
+            this._viewSize += (float)(((double)num15 - _viewSize) * ((double)this.lerpSpeed * _lerpMult * _speed));
             if (this.immediate)
                 this._viewSize = num15;
             float num16 = this._viewSize;
-            if ((double)this.manualViewSize > 0.0)
+            if (manualViewSize > 0.0)
                 num16 = this.manualViewSize;
             this.width = num16 * num12;
             this.height = num16;
-            this._lerpBorder = Maths.Clamp((float)((double)Math.Min(this.width, 740f) / 740.0 * (90.0 * (double)this._zoomMult)), this.minSize * this._zoomMult, 90f * this._zoomMult);
+            this._lerpBorder = Maths.Clamp((float)((double)Math.Min(this.width, 740f) / 740.0 * (90.0 * _zoomMult)), this.minSize * this._zoomMult, 90f * this._zoomMult);
             if (!flag && this.woteFrame)
             {
                 num10 = this._prevCenterMoveX;
@@ -313,8 +313,8 @@ namespace DuckGame
             }
             if (!flag)
                 this.woteFrame = true;
-            this._center.x += (float)(((double)num10 - (double)this._center.x) * ((double)this.lerpSpeed * (double)this._lerpMult));
-            this._center.y += (float)(((double)num11 - (double)this._center.y) * ((double)this.lerpSpeed * (double)this._lerpMult));
+            this._center.x += (float)(((double)num10 - _center.x) * ((double)this.lerpSpeed * _lerpMult));
+            this._center.y += (float)(((double)num11 - _center.y) * ((double)this.lerpSpeed * _lerpMult));
             if (this.immediate)
             {
                 this._center.x = num10;
@@ -322,20 +322,20 @@ namespace DuckGame
             }
             if ((double)this.lerpSpeed > 0.899999976158142 && this._startCentered)
             {
-                this._center.x = (float)(((double)Level.current.bottomRight.x + (double)Level.current.topLeft.x) / 2.0);
-                this._center.y = (float)(((double)Level.current.bottomRight.y + (double)Level.current.topLeft.y) / 2.0);
+                this._center.x = (float)((Level.current.bottomRight.x + (double)Level.current.topLeft.x) / 2.0);
+                this._center.y = (float)((Level.current.bottomRight.y + (double)Level.current.topLeft.y) / 2.0);
             }
             this.x = this._center.x - this.width / 2f;
             this.y = this._center.y - this.height / 2f;
-            if ((double)this.x < (double)this.hardLimitLeft)
+            if ((double)this.x < hardLimitLeft)
                 this.x = this.hardLimitLeft;
-            if ((double)this.right > (double)this.hardLimitRight)
+            if ((double)this.right > hardLimitRight)
                 this.x = this.hardLimitRight - this.width;
-            if ((double)this.y < (double)this.hardLimitTop)
+            if ((double)this.y < hardLimitTop)
                 this.y = this.hardLimitTop;
-            if ((double)this.bottom > (double)this.hardLimitBottom)
+            if ((double)this.bottom > hardLimitBottom)
                 this.y = this.hardLimitBottom - this.height;
-            if ((double)this._lerpSpeed > 0.899999976158142)
+            if (_lerpSpeed > 0.899999976158142)
                 this._lerpSpeed = 0.05f;
             this.lerpMult = lerpMult;
             FollowCam.boost = false;

@@ -32,12 +32,12 @@ namespace DuckGame
 
         protected override void CheckTravelPath(Vec2 pStart, Vec2 pEnd)
         {
-            if ((double)this._thickness > 1.0 && this._travels > 0)
+            if (_thickness > 1.0 && this._travels > 0)
             {
                 for (int index = 0; index < 10; ++index)
                 {
-                    Vec2 vec2 = pStart + (pEnd - pStart) * ((float)index / 10f);
-                    if (ATMissile.DestroyRadius(vec2, 16f, (Thing)this, true) > 0 && !this._exploded)
+                    Vec2 vec2 = pStart + (pEnd - pStart) * (index / 10f);
+                    if (ATMissile.DestroyRadius(vec2, 16f, this, true) > 0 && !this._exploded)
                     {
                         this._exploded = true;
                         SFX.Play("explode");
@@ -50,7 +50,7 @@ namespace DuckGame
                             case Equipment _:
                                 continue;
                             default:
-                                physicsObject.Destroy((DestroyType)new DTIncinerate((Thing)this));
+                                physicsObject.Destroy(new DTIncinerate(this));
                                 continue;
                         }
                     }

@@ -39,25 +39,25 @@ namespace DuckGame
         public override void Initialize()
         {
             this._plasma = new PlasmaLayer("PLASMA", -85);
-            Layer.Add((Layer)this._plasma);
+            Layer.Add(_plasma);
             this._treeLayer = new Layer("TREE", -95, new Camera());
             Layer.Add(this._treeLayer);
             this._tree = new UnlockTree(this, this._treeLayer);
-            Level.Add((Thing)this._tree);
+            Level.Add(_tree);
         }
 
         public void OpenBuyConfirmation(UnlockData unlock)
         {
             if (this._pauseGroup != null)
             {
-                Level.Remove((Thing)this._pauseGroup);
-                this._pauseGroup = (UIComponent)null;
+                Level.Remove(_pauseGroup);
+                this._pauseGroup = null;
             }
             this._confirm.value = false;
             this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
             this._confirmMenu = new UIMenu("UNLOCK FEATURE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@CANCEL  @SELECT@BUY");
-            this._confirmMenu.Add((UIComponent)new UIText(unlock.GetNameForDisplay(), Color.Green), true);
-            this._confirmMenu.Add((UIComponent)new UIText(" ", Color.White), true);
+            this._confirmMenu.Add(new UIText(unlock.GetNameForDisplay(), Color.Green), true);
+            this._confirmMenu.Add(new UIText(" ", Color.White), true);
             float num = 190f;
             string str1 = unlock.longDescription;
             string textVal = "";
@@ -70,9 +70,9 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((double)((textVal.Length + str2.Length) * 8) > (double)num)
+                    if ((textVal.Length + str2.Length) * 8 > (double)num)
                     {
-                        this._confirmMenu.Add((UIComponent)new UIText(textVal, Color.White, UIAlign.Left), true);
+                        this._confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
                     }
                     if (textVal.Length > 0)
@@ -92,14 +92,14 @@ namespace DuckGame
                 textVal += str2;
             }
             if (textVal.Length > 0)
-                this._confirmMenu.Add((UIComponent)new UIText(textVal, Color.White, UIAlign.Left), true);
-            this._confirmMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("CANCEL", (UIMenuAction)new UIMenuActionCloseMenu(this._pauseGroup), c: Colors.MenuOption, backButton: true), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("BUY UNLOCK |WHITE|(|LIME|" + unlock.cost.ToString() + "|WHITE| TICKETS)", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._confirm)), true);
+                this._confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
+            this._confirmMenu.Add(new UIText(" ", Color.White), true);
+            this._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(this._pauseGroup), c: Colors.MenuOption, backButton: true), true);
+            this._confirmMenu.Add(new UIMenuItem("BUY UNLOCK |WHITE|(|LIME|" + unlock.cost.ToString() + "|WHITE| TICKETS)", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._confirm)), true);
             this._confirmMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._confirmMenu, false);
+            this._pauseGroup.Add(_confirmMenu, false);
             this._pauseGroup.Close();
-            Level.Add((Thing)this._pauseGroup);
+            Level.Add(_pauseGroup);
             for (int index = 0; index < 10; ++index)
             {
                 this._pauseGroup.Update();
@@ -173,16 +173,16 @@ namespace DuckGame
 
         public void MakeActive()
         {
-            HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding((object)Profiles.active[0], "ticketCount"), animateCount: true);
+            HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding(Profiles.active[0], "ticketCount"), animateCount: true);
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
             this.SelectionChanged();
         }
 
         public override void Update()
         {
-            float num1 = (float)Graphics.width / (this._treeLayer.camera.width * 2f);
-            float num2 = (float)Graphics.height / (this._treeLayer.camera.height * 2f);
-            this._treeLayer.scissor = new Rectangle(50f * num1, 44f * num1, (float)Graphics.width - 180f * num1, 214f * num2);
+            float num1 = Graphics.width / (this._treeLayer.camera.width * 2f);
+            float num2 = Graphics.height / (this._treeLayer.camera.height * 2f);
+            this._treeLayer.scissor = new Rectangle(50f * num1, 44f * num1, Graphics.width - 180f * num1, 214f * num2);
             if (this._confirmMenu != null && !this._confirmMenu.open && this._tryBuy != null)
             {
                 if (this._confirm.value)
@@ -196,16 +196,16 @@ namespace DuckGame
                 }
                 else
                     SFX.Play("resume");
-                this._tryBuy = (UnlockData)null;
+                this._tryBuy = null;
             }
             if (this._confirmMenu != null && !this._confirmMenu.open && this._pauseGroup != null)
             {
-                Level.Remove((Thing)this._pauseGroup);
-                this._pauseGroup = (UIComponent)null;
-                this._confirmMenu = (UIMenu)null;
+                Level.Remove(_pauseGroup);
+                this._pauseGroup = null;
+                this._confirmMenu = null;
             }
-            if (!Layer.Contains((Layer)this._plasma))
-                Layer.Add((Layer)this._plasma);
+            if (!Layer.Contains(_plasma))
+                Layer.Add(_plasma);
             if (!Layer.Contains(this._treeLayer))
                 Layer.Add(this._treeLayer);
             this._plasma.alpha = this.alpha;
@@ -237,7 +237,7 @@ namespace DuckGame
             string text = this._tree.selected.GetNameForDisplay();
             if (!flag2)
                 text = "???";
-            Graphics.DrawString(text, p1 + new Vec2((float)(((double)vec2.x - 27.0) / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), 2f), (flag1 ? new Color(163, 206, 39) : Color.Red) * this.alpha, (Depth)0.5f);
+            Graphics.DrawString(text, p1 + new Vec2((float)((vec2.x - 27.0) / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), 2f), (flag1 ? new Color(163, 206, 39) : Color.Red) * this.alpha, (Depth)0.5f);
             this._tail.depth = (Depth)0.5f;
             this._tail.alpha = this.alpha;
             this._tail.flipH = false;

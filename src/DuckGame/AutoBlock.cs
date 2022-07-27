@@ -78,25 +78,25 @@ namespace DuckGame
             this._neighborsInitialized = true;
             if (this._leftBlock == null)
             {
-                this._leftBlock = (Block)Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.left - 2f, this.position.y), this.checkFilter);
+                this._leftBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.left - 2f, this.position.y), this.checkFilter);
                 if (this._leftBlock != null)
                     this._leftBlock.InitializeNeighbors();
             }
             if (this._rightBlock == null)
             {
-                this._rightBlock = (Block)Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.right + 2f, this.position.y), this.checkFilter);
+                this._rightBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.right + 2f, this.position.y), this.checkFilter);
                 if (this._rightBlock != null)
                     this._rightBlock.InitializeNeighbors();
             }
             if (this._upBlock == null)
             {
-                this._upBlock = (Block)Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.position.x, this.top - 2f), this.checkFilter);
+                this._upBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.position.x, this.top - 2f), this.checkFilter);
                 if (this._upBlock != null)
                     this._upBlock.InitializeNeighbors();
             }
             if (this._downBlock != null)
                 return;
-            this._downBlock = (Block)Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.position.x, this.bottom + 2f), this.checkFilter);
+            this._downBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(this.position.x, this.bottom + 2f), this.checkFilter);
             if (this._downBlock == null)
                 return;
             this._downBlock.InitializeNeighbors();
@@ -110,15 +110,15 @@ namespace DuckGame
                 this._processedByEditor = true;
                 this.InitializeNeighbors();
                 if (this.upBlock != null && !this.upBlock.processedByEditor)
-                    binaryClassChunk.AddProperty("north", (object)this.upBlock.Serialize());
+                    binaryClassChunk.AddProperty("north", this.upBlock.Serialize());
                 if (this.downBlock != null && !this.downBlock.processedByEditor)
-                    binaryClassChunk.AddProperty("north", (object)this.downBlock.Serialize());
+                    binaryClassChunk.AddProperty("north", this.downBlock.Serialize());
                 if (this.rightBlock != null && !this.rightBlock.processedByEditor)
-                    binaryClassChunk.AddProperty("east", (object)this.rightBlock.Serialize());
+                    binaryClassChunk.AddProperty("east", this.rightBlock.Serialize());
                 if (this.leftBlock != null && !this.leftBlock.processedByEditor)
-                    binaryClassChunk.AddProperty("west", (object)this.leftBlock.Serialize());
+                    binaryClassChunk.AddProperty("west", this.leftBlock.Serialize());
             }
-            binaryClassChunk.AddProperty("frame", (object)this._sprite.frame);
+            binaryClassChunk.AddProperty("frame", _sprite.frame);
             return binaryClassChunk;
         }
 
@@ -133,33 +133,33 @@ namespace DuckGame
                 if (property1 != null)
                 {
                     AutoBlock autoBlock = Thing.LoadThing(property1) as AutoBlock;
-                    this._upBlock = (Block)autoBlock;
-                    autoBlock._downBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._upBlock = autoBlock;
+                    autoBlock._downBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
                 BinaryClassChunk property2 = node.GetProperty<BinaryClassChunk>("south");
                 if (property2 != null)
                 {
                     AutoBlock autoBlock = Thing.LoadThing(property2) as AutoBlock;
-                    this._downBlock = (Block)autoBlock;
-                    autoBlock._upBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._downBlock = autoBlock;
+                    autoBlock._upBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
                 BinaryClassChunk property3 = node.GetProperty<BinaryClassChunk>("east");
                 if (property3 != null)
                 {
                     AutoBlock autoBlock = Thing.LoadThing(property3) as AutoBlock;
-                    this._rightBlock = (Block)autoBlock;
-                    autoBlock._leftBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._rightBlock = autoBlock;
+                    autoBlock._leftBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
                 BinaryClassChunk property4 = node.GetProperty<BinaryClassChunk>("west");
                 if (property4 != null)
                 {
                     AutoBlock autoBlock = Thing.LoadThing(property4) as AutoBlock;
-                    this._leftBlock = (Block)autoBlock;
-                    autoBlock._rightBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._leftBlock = autoBlock;
+                    autoBlock._rightBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
             }
             this._sprite.frame = node.GetProperty<int>("frame");
@@ -182,7 +182,7 @@ namespace DuckGame
                 if (this.leftBlock != null && !this.leftBlock.processedByEditor)
                     new DXMLNode("west").Add(this.leftBlock.LegacySerialize());
             }
-            dxmlNode.Add(new DXMLNode("frame", (object)this._sprite.frame));
+            dxmlNode.Add(new DXMLNode("frame", _sprite.frame));
             return dxmlNode;
         }
 
@@ -197,33 +197,33 @@ namespace DuckGame
                 if (node1 != null)
                 {
                     AutoBlock autoBlock = Thing.LegacyLoadThing(node1) as AutoBlock;
-                    this._upBlock = (Block)autoBlock;
-                    autoBlock._downBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._upBlock = autoBlock;
+                    autoBlock._downBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
                 DXMLNode node2 = node.Element("south");
                 if (node2 != null)
                 {
                     AutoBlock autoBlock = Thing.LegacyLoadThing(node2) as AutoBlock;
-                    this._downBlock = (Block)autoBlock;
-                    autoBlock._upBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._downBlock = autoBlock;
+                    autoBlock._upBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
                 DXMLNode node3 = node.Element("east");
                 if (node3 != null)
                 {
                     AutoBlock autoBlock = Thing.LegacyLoadThing(node3) as AutoBlock;
-                    this._rightBlock = (Block)autoBlock;
-                    autoBlock._leftBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._rightBlock = autoBlock;
+                    autoBlock._leftBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
                 DXMLNode node4 = node.Element("west");
                 if (node4 != null)
                 {
                     AutoBlock autoBlock = Thing.LegacyLoadThing(node4) as AutoBlock;
-                    this._leftBlock = (Block)autoBlock;
-                    autoBlock._rightBlock = (Block)this;
-                    this._additionalBlocks.Add((Thing)autoBlock);
+                    this._leftBlock = autoBlock;
+                    autoBlock._rightBlock = this;
+                    this._additionalBlocks.Add(autoBlock);
                 }
             }
             DXMLNode dxmlNode = node.Element("frame");
@@ -243,16 +243,18 @@ namespace DuckGame
         public AutoBlock(float x, float y, string tileset)
           : base(x, y)
         {
-            this.checkFilter = (Func<Thing, bool>)(blok => blok != this && (blok as AutoBlock)._tileset == this._tileset);
+            this.checkFilter = blok => blok != this && (blok as AutoBlock)._tileset == this._tileset;
             if (tileset == null)
                 tileset = "";
             if (tileset != "")
             {
-                this._sprite = new SpriteMap(tileset, 16, 16);
-                this._sprite.frame = 40;
+                this._sprite = new SpriteMap(tileset, 16, 16)
+                {
+                    frame = 40
+                };
             }
             this._tileset = tileset;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.collisionSize = new Vec2(16f, 16f);
             this.thickness = 10f;
             this.centerx = 8f;
@@ -292,17 +294,19 @@ namespace DuckGame
         {
             if (f == null || f.removeFromLevel)
                 return;
-            int num1 = (int)((double)f.collisionSize.x / 8.0);
-            float num2 = f.data.amount / (float)num1;
+            int num1 = (int)(f.collisionSize.x / 8.0);
+            float num2 = f.data.amount / num1;
             for (int index = 0; index < num1; ++index)
             {
                 FluidData data = f.data;
                 data.amount = num2;
-                Fluid fluid = new Fluid(f.left + 8f + (float)(index * 8), (float)((double)f.top - 4.0 + Math.Sin((double)index * 0.699999988079071) * 2.0), new Vec2(0.0f, 1f), data);
-                fluid.vSpeed = -2f;
-                Level.Add((Thing)fluid);
+                Fluid fluid = new Fluid(f.left + 8f + index * 8, (float)((double)f.top - 4.0 + Math.Sin(index * 0.699999988079071) * 2.0), new Vec2(0.0f, 1f), data)
+                {
+                    vSpeed = -2f
+                };
+                Level.Add(fluid);
             }
-            Level.Remove((Thing)f);
+            Level.Remove(f);
         }
 
         protected override bool OnDestroy(DestroyType type = null)
@@ -310,46 +314,46 @@ namespace DuckGame
             if (!(type is DTRocketExplosion))
                 return false;
             if (this.up == null)
-                this.up = Level.CheckPoint<AutoBlock>(this.x, this.y - 16f, (Thing)this);
+                this.up = Level.CheckPoint<AutoBlock>(this.x, this.y - 16f, this);
             if (this.down == null)
-                this.down = Level.CheckPoint<AutoBlock>(this.x, this.y + 16f, (Thing)this);
+                this.down = Level.CheckPoint<AutoBlock>(this.x, this.y + 16f, this);
             if (this.bLeft == null)
-                this.bLeft = Level.CheckPoint<AutoBlock>(this.x - 16f, this.y, (Thing)this);
+                this.bLeft = Level.CheckPoint<AutoBlock>(this.x - 16f, this.y, this);
             if (this.bRight == null)
-                this.bRight = Level.CheckPoint<AutoBlock>(this.x + 16f, this.y, (Thing)this);
+                this.bRight = Level.CheckPoint<AutoBlock>(this.x + 16f, this.y, this);
             if (this.up != null && this.up._tileset == this._tileset)
             {
                 this.up.brokeDown = true;
                 this.up.hasBroke = true;
-                this.up.downBlock = (Block)null;
-                this.up.down = (AutoBlock)null;
+                this.up.downBlock = null;
+                this.up.down = null;
             }
             if (this.down != null && this.down._tileset == this._tileset)
             {
                 this.down.brokeUp = true;
                 this.down.hasBroke = true;
-                this.down.upBlock = (Block)null;
-                this.down.up = (AutoBlock)null;
+                this.down.upBlock = null;
+                this.down.up = null;
             }
             if (this.bLeft != null && this.bLeft._tileset == this._tileset)
             {
                 this.bLeft.brokeRight = true;
                 this.bLeft.hasBroke = true;
-                this.bLeft.rightBlock = (Block)null;
-                this.bLeft.bRight = (AutoBlock)null;
+                this.bLeft.rightBlock = null;
+                this.bLeft.bRight = null;
             }
             if (this.bRight != null && this.bRight._tileset == this._tileset)
             {
                 this.bRight.brokeLeft = true;
                 this.bRight.hasBroke = true;
-                this.bRight.leftBlock = (Block)null;
-                this.bRight.bLeft = (AutoBlock)null;
+                this.bRight.leftBlock = null;
+                this.bRight.bLeft = null;
             }
             if (this.structure != null)
             {
                 foreach (Block block in this.structure.blocks)
-                    block.structure = (BlockStructure)null;
-                this.structure = (BlockStructure)null;
+                    block.structure = null;
+                this.structure = null;
             }
             if (this.up == null)
                 this.DestroyPuddle(Level.CheckPoint<FluidPuddle>(new Vec2(this.x, this.y - 9f)));
@@ -458,14 +462,14 @@ namespace DuckGame
             }
             if (this._bLeftNub != null)
             {
-                Level.Add((Thing)this._bLeftNub);
+                Level.Add(_bLeftNub);
                 this._bLeftNub.depth = this.depth;
                 this._bLeftNub.layer = this.layer;
                 this._bLeftNub.material = this.material;
             }
             if (this._bRightNub == null)
                 return;
-            Level.Add((Thing)this._bRightNub);
+            Level.Add(_bRightNub);
             this._bRightNub.depth = this.depth;
             this._bRightNub.layer = this.layer;
             this._bRightNub.material = this.material;
@@ -481,8 +485,8 @@ namespace DuckGame
             {
                 if (this.shouldWreck)
                 {
-                    this.Destroy((DestroyType)new DTRocketExplosion((Thing)null));
-                    Level.Remove((Thing)this);
+                    this.Destroy(new DTRocketExplosion(null));
+                    Level.Remove(this);
                 }
                 if (this.needsRefresh)
                 {
@@ -499,7 +503,7 @@ namespace DuckGame
         public BlockGroup GroupWithNeighbors(bool addToLevel = true)
         {
             if (this._groupedWithNeighbors)
-                return (BlockGroup)null;
+                return null;
             this._groupedWithNeighbors = true;
             AutoBlock autoBlock1 = this.leftBlock as AutoBlock;
             AutoBlock autoBlock2 = this.rightBlock as AutoBlock;
@@ -507,23 +511,23 @@ namespace DuckGame
             autoBlockList1.Add(this);
             while (autoBlock1 != null && !autoBlock1._groupedWithNeighbors)
             {
-                if ((double)autoBlock1.collisionSize.y == (double)this.collisionSize.y && (double)autoBlock1.collisionOffset.y == (double)this.collisionOffset.y)
+                if (autoBlock1.collisionSize.y == (double)this.collisionSize.y && autoBlock1.collisionOffset.y == (double)this.collisionOffset.y)
                 {
                     autoBlockList1.Add(autoBlock1);
                     autoBlock1 = autoBlock1.leftBlock as AutoBlock;
                 }
                 else
-                    autoBlock1 = (AutoBlock)null;
+                    autoBlock1 = null;
             }
             while (autoBlock2 != null && !autoBlock2._groupedWithNeighbors)
             {
-                if ((double)autoBlock2.collisionSize.y == (double)this.collisionSize.y && (double)autoBlock2.collisionOffset.y == (double)this.collisionOffset.y)
+                if (autoBlock2.collisionSize.y == (double)this.collisionSize.y && autoBlock2.collisionOffset.y == (double)this.collisionOffset.y)
                 {
                     autoBlockList1.Add(autoBlock2);
                     autoBlock2 = autoBlock2.rightBlock as AutoBlock;
                 }
                 else
-                    autoBlock2 = (AutoBlock)null;
+                    autoBlock2 = null;
             }
             List<AutoBlock> autoBlockList2 = new List<AutoBlock>();
             autoBlockList2.Add(this);
@@ -531,40 +535,40 @@ namespace DuckGame
             AutoBlock autoBlock4 = this.downBlock as AutoBlock;
             while (autoBlock3 != null && !autoBlock3._groupedWithNeighbors)
             {
-                if ((double)autoBlock3.collisionSize.x == (double)this.collisionSize.x && (double)autoBlock3.collisionOffset.x == (double)this.collisionOffset.x)
+                if (autoBlock3.collisionSize.x == (double)this.collisionSize.x && autoBlock3.collisionOffset.x == (double)this.collisionOffset.x)
                 {
                     autoBlockList2.Add(autoBlock3);
                     autoBlock3 = autoBlock3.upBlock as AutoBlock;
                 }
                 else
-                    autoBlock3 = (AutoBlock)null;
+                    autoBlock3 = null;
             }
             while (autoBlock4 != null && !autoBlock4._groupedWithNeighbors)
             {
-                if ((double)autoBlock4.collisionSize.x == (double)this.collisionSize.x && (double)autoBlock4.collisionOffset.x == (double)this.collisionOffset.x)
+                if (autoBlock4.collisionSize.x == (double)this.collisionSize.x && autoBlock4.collisionOffset.x == (double)this.collisionOffset.x)
                 {
                     autoBlockList2.Add(autoBlock4);
                     autoBlock4 = autoBlock4.downBlock as AutoBlock;
                 }
                 else
-                    autoBlock4 = (AutoBlock)null;
+                    autoBlock4 = null;
             }
             List<AutoBlock> autoBlockList3 = autoBlockList1;
             if (autoBlockList2.Count > autoBlockList3.Count)
                 autoBlockList3 = autoBlockList2;
             if (autoBlockList3.Count <= 1)
-                return (BlockGroup)null;
+                return null;
             BlockGroup blockGroup = new BlockGroup();
             foreach (AutoBlock b in autoBlockList3)
             {
                 b._groupedWithNeighbors = true;
-                blockGroup.Add((Block)b);
+                blockGroup.Add(b);
                 if (addToLevel)
-                    Level.Remove((Thing)b);
+                    Level.Remove(b);
             }
             blockGroup.CalculateSize();
             if (addToLevel)
-                Level.Add((Thing)blockGroup);
+                Level.Add(blockGroup);
             return blockGroup;
         }
 
@@ -602,13 +606,13 @@ namespace DuckGame
         {
             if (this._bLeftNub != null)
             {
-                Level.Remove((Thing)this._bLeftNub);
-                this._bLeftNub = (Nubber)null;
+                Level.Remove(_bLeftNub);
+                this._bLeftNub = null;
             }
             if (this._bRightNub == null)
                 return;
-            Level.Remove((Thing)this._bRightNub);
-            this._bRightNub = (Nubber)null;
+            Level.Remove(_bRightNub);
+            this._bRightNub = null;
         }
 
         public override void Draw()
@@ -668,7 +672,7 @@ namespace DuckGame
                 case 51:
                 case 53:
                 case 58:
-                    this.collisionSize = new Vec2((float)(8.0 + (double)this.verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
                     this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
                     break;
                 case 37:
@@ -676,7 +680,7 @@ namespace DuckGame
                 case 45:
                 case 52:
                 case 60:
-                    this.collisionSize = new Vec2((float)(8.0 + (double)this.verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
                     this.collisionOffset = new Vec2(-8f, -8f);
                     break;
                 case 40:
@@ -699,7 +703,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     this._collisionSize.x = this.verticalWidthThick;
-                    this._collisionOffset.x = (float)(16.0 - (double)this.verticalWidthThick - 8.0);
+                    this._collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
                     break;
                 case 4:
                 case 5:
@@ -805,7 +809,6 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    AutoBlock bottombLeft = this.bottombLeft;
                                     this._sprite.frame = 24;
                                 }
                             }
@@ -833,7 +836,6 @@ namespace DuckGame
                             {
                                 if (this.topbLeft == null)
                                 {
-                                    AutoBlock bottombLeft = this.bottombLeft;
                                 }
                                 this._sprite.frame = 7;
                             }
@@ -847,7 +849,6 @@ namespace DuckGame
                                     this._sprite.frame = 2;
                                     return;
                                 }
-                                AutoBlock bottombLeft = this.bottombLeft;
                             }
                             this._sprite.frame = 53;
                         }
@@ -885,7 +886,6 @@ namespace DuckGame
                             {
                                 if (this.bottombRight == null)
                                 {
-                                    AutoBlock topbRight = this.topbRight;
                                 }
                                 this._sprite.frame = 15;
                             }
@@ -1026,11 +1026,9 @@ namespace DuckGame
                     {
                         if (this.bottombLeft != null)
                         {
-                            AutoBlock bottombRight = this.bottombRight;
                             this._sprite.frame = 4;
                             return;
                         }
-                        AutoBlock bottombRight1 = this.bottombRight;
                     }
                     this._sprite.frame = 52;
                 }
@@ -1048,6 +1046,6 @@ namespace DuckGame
                 this._sprite.frame = 40;
         }
 
-        public override ContextMenu GetContextMenu() => (ContextMenu)null;
+        public override ContextMenu GetContextMenu() => null;
     }
 }

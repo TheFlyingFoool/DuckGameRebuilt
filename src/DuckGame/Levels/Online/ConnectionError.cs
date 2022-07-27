@@ -41,7 +41,7 @@ namespace DuckGame
                 string lobbyData = ConnectionError.joinLobby.GetLobbyData("mods");
                 if (lobbyData != null && lobbyData != "")
                 {
-                    if (((IEnumerable<string>)lobbyData.Split('|')).Contains<string>("LOCAL"))
+                    if (lobbyData.Split('|').Contains<string>("LOCAL"))
                     {
                         this._text = "Host has non-workshop mods enabled!";
                         goto label_6;
@@ -50,17 +50,17 @@ namespace DuckGame
                 if (this._text == "INCOMPATIBLE MOD SETUP!" || this._text == "Host has different Mods enabled!")
                 {
                     this._downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 290f, conString: "@SELECT@SELECT");
-                    this._downloadModsMenu.Add((UIComponent)new UIText("You're missing the mods required", Colors.DGBlue), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIText("to join this game. Would you", Colors.DGBlue), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIText("like to automatically subscribe to", Colors.DGBlue), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIText("all required mods, restart and", Colors.DGBlue), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIText("join the game?", Colors.DGBlue), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIText("", Colors.DGBlue), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionCloseMenu((UIComponent)this._downloadModsMenu)), true);
-                    this._downloadModsMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCloseMenuCallFunction((UIComponent)this._downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(UIServerBrowser.SubscribeAndRestart))), true);
+                    this._downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue), true);
+                    this._downloadModsMenu.Add(new UIText("to join this game. Would you", Colors.DGBlue), true);
+                    this._downloadModsMenu.Add(new UIText("like to automatically subscribe to", Colors.DGBlue), true);
+                    this._downloadModsMenu.Add(new UIText("all required mods, restart and", Colors.DGBlue), true);
+                    this._downloadModsMenu.Add(new UIText("join the game?", Colors.DGBlue), true);
+                    this._downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
+                    this._downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_downloadModsMenu)), true);
+                    this._downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(UIServerBrowser.SubscribeAndRestart))), true);
                     this._downloadModsMenu.Close();
                     this._downloadModsMenu.Open();
-                    MonoMain.pauseMenu = (UIComponent)this._downloadModsMenu;
+                    MonoMain.pauseMenu = _downloadModsMenu;
                 }
             }
         label_6:
@@ -74,8 +74,8 @@ namespace DuckGame
         {
             if ((this._downloadModsMenu == null || !this._downloadModsMenu.open) && Input.Pressed("START"))
             {
-                Level.current = (Level)new TitleScreen();
-                ConnectionError.joinLobby = (Lobby)null;
+                Level.current = new TitleScreen();
+                ConnectionError.joinLobby = null;
             }
             base.Update();
         }
@@ -83,7 +83,7 @@ namespace DuckGame
         public override void Draw()
         {
             string[] source = this._text.Split('{');
-            float num = (float)(-(((IEnumerable<string>)source).Count<string>() - 1) * 8);
+            float num = -(source.Count<string>() - 1) * 8;
             foreach (string text in source)
             {
                 float stringHeight = Graphics.GetStringHeight(text);

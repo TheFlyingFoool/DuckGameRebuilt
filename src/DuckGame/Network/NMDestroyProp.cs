@@ -24,7 +24,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (!(Level.current is GameLevel) || (int)DuckNetwork.levelIndex != (int)this._levelIndex || !(this.prop is MaterialThing prop))
+            if (!(Level.current is GameLevel) || DuckNetwork.levelIndex != _levelIndex || !(this.prop is MaterialThing prop))
                 return;
             prop.NetworkDestroy();
         }

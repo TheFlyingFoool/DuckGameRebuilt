@@ -22,11 +22,11 @@ namespace DuckGame
             {
                 SpriteMap graphic = new SpriteMap("duck", 32, 32);
                 graphic.CenterOrigin();
-                graphic.depth = (Depth)(float)(0.899999976158142 + 0.00999999977648258 * (double)index);
-                graphic.position = new Vec2((float)((double)index * 9.41176414489746 - 16.0 + 16.0), -2f);
-                graphicList.Add((Sprite)graphic);
+                graphic.depth = (Depth)(float)(0.899999976158142 + 0.00999999977648258 * index);
+                graphic.position = new Vec2((float)(index * 9.41176414489746 - 16.0 + 16.0), -2f);
+                graphicList.Add(graphic);
             }
-            this.graphic = (Sprite)graphicList;
+            this.graphic = graphicList;
             this._editorName = "Team Spawn";
             this.center = new Vec2(8f, 5f);
             this.collisionSize = new Vec2(32f, 16f);
@@ -44,7 +44,7 @@ namespace DuckGame
                     this._eight = new SpriteMap("redEight", 10, 10);
                     this._eight.CenterOrigin();
                 }
-                Graphics.Draw((Sprite)this._eight, this.x - 5f, this.y + 7f, (Depth)1f);
+                Graphics.Draw(_eight, this.x - 5f, this.y + 7f, (Depth)1f);
             }
             base.Draw();
         }

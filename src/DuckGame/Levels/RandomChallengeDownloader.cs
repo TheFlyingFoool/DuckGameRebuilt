@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public static class RandomChallengeDownloader
     {
-        private static WorkshopQueryAll _currentQuery = (WorkshopQueryAll)null;
+        private static WorkshopQueryAll _currentQuery = null;
         public static bool ready = false;
         public static int numToHaveReady = 10;
         public static int numSinceLowRating = 0;
@@ -26,13 +26,13 @@ namespace DuckGame
         public static LevelData GetNextChallenge()
         {
             if (RandomChallengeDownloader._readyChallenges.Count == 0)
-                return (LevelData)null;
+                return null;
             LevelData nextChallenge = RandomChallengeDownloader._readyChallenges.First<LevelData>();
             RandomChallengeDownloader._readyChallenges.RemoveAt(0);
             return nextChallenge;
         }
 
-        public static LevelData PeekNextChallenge() => RandomChallengeDownloader._readyChallenges.Count == 0 ? (LevelData)null : RandomChallengeDownloader._readyChallenges.First<LevelData>();
+        public static LevelData PeekNextChallenge() => RandomChallengeDownloader._readyChallenges.Count == 0 ? null : RandomChallengeDownloader._readyChallenges.First<LevelData>();
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
@@ -40,7 +40,7 @@ namespace DuckGame
                 RandomChallengeDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll).numResultsFetched);
             if (RandomChallengeDownloader._toFetchIndex == RandomChallengeDownloader._numFetch && Steam.DownloadWorkshopItem(result.details.publishedFile))
                 RandomChallengeDownloader._downloading = result.details.publishedFile;
-            RandomChallengeDownloader._currentQuery = (WorkshopQueryAll)null;
+            RandomChallengeDownloader._currentQuery = null;
             ++RandomChallengeDownloader._numFetch;
         }
 
@@ -69,12 +69,12 @@ namespace DuckGame
         private static void SearchDirLevels(string dir, LevelLocation location)
         {
             foreach (string path in location == LevelLocation.Content ? Content.GetFiles(dir) : DuckFile.GetFiles(dir, "*.*"))
-                RandomChallengeDownloader.ProcessChallenge(path, location);
+                RandomChallengeDownloader.ProcessChallenge(path);
             foreach (string dir1 in location == LevelLocation.Content ? Content.GetDirectories(dir) : DuckFile.GetDirectories(dir))
                 RandomChallengeDownloader.SearchDirLevels(dir1, location);
         }
 
-        private static void ProcessChallenge(string path, LevelLocation location)
+        private static void ProcessChallenge(string path) // removed , LevelLocation loation
         {
             Main.SpecialCode = "Loading Challenge " + path != null ? path : "null";
             try
@@ -130,7 +130,7 @@ namespace DuckGame
                     return;
                 if (RandomChallengeDownloader._downloading.downloadResult == SteamResult.OK)
                     RandomChallengeDownloader.SearchDirLevels(RandomChallengeDownloader._downloading.path, LevelLocation.Workshop);
-                RandomChallengeDownloader._downloading = (WorkshopItem)null;
+                RandomChallengeDownloader._downloading = null;
             }
             else
             {

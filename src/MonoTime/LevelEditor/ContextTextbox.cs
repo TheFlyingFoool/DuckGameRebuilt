@@ -27,7 +27,7 @@ namespace DuckGame
             this._text = text;
             this._field = field;
             if (field == null)
-                this._field = new FieldBinding((object)this, "isChecked");
+                this._field = new FieldBinding(this, "isChecked");
             this._fancyFont = new FancyBitmapFont("smallFont");
             this.tooltip = valTooltip;
         }
@@ -40,17 +40,17 @@ namespace DuckGame
             this._text = text;
             this._field = field;
             if (field == null)
-                this._field = new FieldBinding((object)this, "isChecked");
+                this._field = new FieldBinding(this, "isChecked");
             this._fancyFont = new FancyBitmapFont("smallFont");
         }
 
         public override void Initialize()
         {
             this._dialog = new TextEntryDialog();
-            Level.Add((Thing)this._dialog);
+            Level.Add(_dialog);
         }
 
-        public override void Terminate() => Level.Remove((Thing)this._dialog);
+        public override void Terminate() => Level.Remove(_dialog);
 
         public override void Selected()
         {
@@ -66,7 +66,7 @@ namespace DuckGame
             {
                 if (this._owner == null)
                     return;
-                this._owner.Selected((ContextMenu)this);
+                this._owner.Selected(this);
             }
         }
 
@@ -75,12 +75,12 @@ namespace DuckGame
             if (this._dialog.opened)
                 return;
             this._blink += 0.04f;
-            if ((double)this._blink >= 1.0)
+            if (_blink >= 1.0)
                 this._blink = 0.0f;
             if (this._dialog.result != null)
             {
-                this._field.value = (object)this._dialog.result;
-                this._dialog.result = (string)null;
+                this._field.value = _dialog.result;
+                this._dialog.result = null;
                 Editor.hasUnsavedChanges = true;
             }
             base.Update();
@@ -110,7 +110,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((double)this._blink >= 0.5)
+                    if (_blink >= 0.5)
                         text += "_";
                     this._fancyFont.maxWidth = 200;
                     this._fancyFont.Draw(text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.86f);

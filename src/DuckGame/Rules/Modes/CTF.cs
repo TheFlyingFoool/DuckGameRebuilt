@@ -57,9 +57,9 @@ namespace DuckGame
                                 {
                                     activeProfile.duck.position = activeProfile.duck.respawnPos;
                                     if (Level.current.camera is FollowCam)
-                                        (Level.current.camera as FollowCam).Add((Thing)activeProfile.duck);
+                                        (Level.current.camera as FollowCam).Add(activeProfile.duck);
                                     activeProfile.duck.respawnTime += 0.016f;
-                                    if ((double)activeProfile.duck.respawnTime > 1.5)
+                                    if (activeProfile.duck.respawnTime > 1.5)
                                     {
                                         activeProfile.duck.respawnTime = 0.0f;
                                         activeProfile.duck.dead = false;
@@ -70,15 +70,15 @@ namespace DuckGame
                                         activeProfile.duck.immobilized = false;
                                         activeProfile.duck.crouch = false;
                                         activeProfile.duck.sliding = false;
-                                        activeProfile.duck._cooked = (CookedDuck)null;
+                                        activeProfile.duck._cooked = null;
                                         activeProfile.duck.onFire = false;
                                         activeProfile.duck.unfocus = 1f;
                                         if (activeProfile.duck._trapped != null)
-                                            Level.Remove((Thing)activeProfile.duck._trapped);
-                                        activeProfile.duck._trapped = (TrappedDuck)null;
+                                            Level.Remove(activeProfile.duck._trapped);
+                                        activeProfile.duck._trapped = null;
                                         if (Level.current.camera is FollowCam)
-                                            (Level.current.camera as FollowCam).Add((Thing)activeProfile.duck);
-                                        Level.Add((Thing)activeProfile.duck);
+                                            (Level.current.camera as FollowCam).Add(activeProfile.duck);
+                                        Level.Add(activeProfile.duck);
                                     }
                                 }
                             }
@@ -92,9 +92,9 @@ namespace DuckGame
             base.Update();
         }
 
-        protected override List<Duck> AssignSpawns() => Spawn.SpawnCTF().OrderBy<Duck, float>((Func<Duck, float>)(sp => sp.x)).ToList<Duck>();
+        protected override List<Duck> AssignSpawns() => Spawn.SpawnCTF().OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
 
-        protected override Level GetNextLevel() => (Level)new CTFLevel(Deathmatch.RandomLevelString(GameMode.previousLevel, "ctf"));
+        protected override Level GetNextLevel() => new CTFLevel(Deathmatch.RandomLevelString(GameMode.previousLevel, "ctf"));
 
         protected override List<Profile> AddPoints()
         {
@@ -135,7 +135,7 @@ namespace DuckGame
             }
             if (source.Count <= 1 && source.Count > 0)
             {
-                source.AddRange((IEnumerable<Team>)collection);
+                source.AddRange(collection);
                 foreach (Team team in source)
                 {
                     foreach (Profile activeProfile in team.activeProfiles)
@@ -148,15 +148,17 @@ namespace DuckGame
                             Profile p = activeProfile;
                             if (activeProfile.duck.converted != null)
                                 p = activeProfile.duck.converted.profile;
-                            PlusOne plusOne = new PlusOne(0.0f, 0.0f, p);
-                            plusOne.anchor = (Anchor)(Thing)activeProfile.duck;
+                            PlusOne plusOne = new PlusOne(0.0f, 0.0f, p)
+                            {
+                                anchor = (Anchor)activeProfile.duck
+                            };
                             plusOne.anchor.offset = new Vec2(0.0f, -16f);
-                            Level.Add((Thing)plusOne);
+                            Level.Add(plusOne);
                         }
                     }
                 }
                 if (Network.isActive && Network.isServer)
-                    Send.Message((NetMessage)new NMAssignWin(pProfiles, (Profile)null));
+                    Send.Message(new NMAssignWin(pProfiles, null));
                 ++source.First<Team>().score;
             }
             return pProfiles;

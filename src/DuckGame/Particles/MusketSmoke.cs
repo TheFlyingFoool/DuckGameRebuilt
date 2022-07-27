@@ -30,15 +30,19 @@ namespace DuckGame
             this.move.x = Rando.Float(0.2f) - 0.1f;
             this.move.y = Rando.Float(0.2f) - 0.1f;
             GraphicList graphicList = new GraphicList();
-            Sprite graphic1 = new Sprite("smoke");
-            graphic1.depth = (Depth)1f;
+            Sprite graphic1 = new Sprite("smoke")
+            {
+                depth = (Depth)1f
+            };
             graphic1.CenterOrigin();
             graphicList.Add(graphic1);
-            Sprite graphic2 = new Sprite("smokeBack");
-            graphic2.depth = - 0.1f;
+            Sprite graphic2 = new Sprite("smokeBack")
+            {
+                depth = -0.1f
+            };
             graphic2.CenterOrigin();
             graphicList.Add(graphic2);
-            this.graphic = (Sprite)graphicList;
+            this.graphic = graphicList;
             this.center = new Vec2(0.0f, 0.0f);
             this.depth = (Depth)1f;
             this._backgroundSmoke = new Sprite("smokeBack");
@@ -48,17 +52,17 @@ namespace DuckGame
         {
             this.angle += this._angleInc;
             this.xscale += this._scaleInc;
-            if ((double)this._fastGrow > 0.0)
+            if (_fastGrow > 0.0)
             {
                 this._fastGrow -= 0.05f;
                 this.xscale += 0.05f;
             }
-            if ((double)this.fly.x > 0.00999999977648258 || (double)this.fly.x < -0.00999999977648258)
+            if (fly.x > 0.00999999977648258 || fly.x < -0.00999999977648258)
             {
                 this.x += this.fly.x;
                 this.fly.x *= 0.9f;
             }
-            if ((double)this.fly.y > 0.00999999977648258 || (double)this.fly.y < -0.00999999977648258)
+            if (fly.y > 0.00999999977648258 || fly.y < -0.00999999977648258)
             {
                 this.y += this.fly.y;
                 this.fly.y *= 0.9f;
@@ -69,7 +73,7 @@ namespace DuckGame
             this.xscale -= 0.005f;
             if ((double)this.xscale >= 0.100000001490116)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
     }
 }

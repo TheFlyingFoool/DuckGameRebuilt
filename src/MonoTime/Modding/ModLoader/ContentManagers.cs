@@ -24,7 +24,7 @@ namespace DuckGame
 
         internal static IManageContent GetContentManager(System.Type t)
         {
-            if (t == (System.Type)null)
+            if (t == null)
                 t = typeof(DefaultContentManager);
             IManageContent manageContent;
             return ContentManagers._contentManagers.TryGetValue(t, out manageContent) ? manageContent : ContentManagers.AddContentManager(t);

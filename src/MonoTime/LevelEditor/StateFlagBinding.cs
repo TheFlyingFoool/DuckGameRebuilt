@@ -16,7 +16,7 @@ namespace DuckGame
         private List<AccessorInfo> _accessors = new List<AccessorInfo>();
         private ushort _value;
 
-        public override string ToString() => this.GetDebugString((object)null);
+        public override string ToString() => this.GetDebugString(null);
 
         public override string GetDebugString(object with)
         {
@@ -28,7 +28,7 @@ namespace DuckGame
                 if (with == null)
                     debugString = debugString + field + ": " + Convert.ToString((bool)this._accessors[index].getAccessor(this._thing) ? 1 : 0) + " | ";
                 else
-                    debugString = debugString + field + ": " + Convert.ToString(((long)(ushort)with & 1L << this._bits - (int)num) != 0L ? 1 : 0) + " | ";
+                    debugString = debugString + field + ": " + Convert.ToString(((ushort)with & 1L << this._bits - num) != 0L ? 1 : 0) + " | ";
                 ++index;
                 ++num;
             }
@@ -41,7 +41,7 @@ namespace DuckGame
         {
             get
             {
-                this._value = (ushort)0;
+                this._value = 0;
                 bool flag = true;
                 foreach (AccessorInfo accessor in this._accessors)
                 {
@@ -50,7 +50,7 @@ namespace DuckGame
                     this._value |= (bool)accessor.getAccessor(this._thing) ? (ushort)1 : (ushort)0;
                     flag = false;
                 }
-                return (object)this._value;
+                return _value;
             }
             set
             {
@@ -58,7 +58,7 @@ namespace DuckGame
                 byte num = 1;
                 foreach (AccessorInfo accessor in this._accessors)
                 {
-                    accessor.setAccessor(this._thing, (object)(((ulong)this._value & (ulong)(1L << this._bits - (int)num)) > 0UL));
+                    accessor.setAccessor(this._thing, (_value & (ulong)(1L << this._bits - num)) > 0UL);
                     ++num;
                 }
             }
@@ -80,7 +80,7 @@ namespace DuckGame
             foreach (string field in this._fields)
             {
                 if (field == pKey)
-                    return ((ulong)pValue & (ulong)(1L << this._bits - (int)num)) > 0UL;
+                    return (pValue & (ulong)(1L << this._bits - num)) > 0UL;
                 ++num;
             }
             return false;
@@ -103,7 +103,7 @@ namespace DuckGame
         public override void Connect(Thing t)
         {
             this._bits = 0;
-            this._thing = (object)t;
+            this._thing = t;
             System.Type type = t.GetType();
             this._accessors.Clear();
             foreach (string field in this._fields)

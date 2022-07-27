@@ -27,14 +27,16 @@ namespace DuckGame
         public OptionsBeam(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._selectBeam = new Sprite("selectBeam");
-            this._selectBeam.alpha = 0.9f;
-            this._selectBeam.depth = - 0.8f;
-            this._selectBeam.center = new Vec2((float)(this._selectBeam.w / 2), 0.0f);
+            this._selectBeam = new Sprite("selectBeam")
+            {
+                alpha = 0.9f,
+                depth = -0.8f
+            };
+            this._selectBeam.center = new Vec2(this._selectBeam.w / 2, 0.0f);
             this.depth = (Depth)0.5f;
-            this._collisionOffset = new Vec2((float)-((double)(this._selectBeam.w / 2) * 0.800000011920929), 0.0f);
-            this._collisionSize = new Vec2((float)this._selectBeam.w * 0.8f, 180f);
-            this.center = new Vec2((float)(this._selectBeam.w / 2));
+            this._collisionOffset = new Vec2((float)-(this._selectBeam.w / 2 * 0.800000011920929), 0.0f);
+            this._collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
+            this.center = new Vec2(this._selectBeam.w / 2);
             this.layer = Layer.Background;
             this.thickness = 10f;
         }
@@ -46,16 +48,16 @@ namespace DuckGame
             this._selectBeam.color = new Color(0.5f, (float)(0.200000002980232 + (double)this._wave2.normalized * 0.200000002980232), (float)(0.300000011920929 + (double)this._wave.normalized * 0.300000011920929)) * (1f + this._flash);
             this._flash = Maths.CountDown(this._flash, 0.1f);
             this._spawnWait -= 0.025f;
-            if ((double)this._spawnWait < 0.0)
+            if (_spawnWait < 0.0)
             {
-                Level.Add((Thing)new MultiBeamParticle(this.x, this.y + 190f, -0.8f - this._wave.normalized, false, Color.Cyan * 0.8f));
-                Level.Add((Thing)new MultiBeamParticle(this.x, this.y + 190f, -0.8f - this._wave2.normalized, true, Color.LightBlue * 0.8f));
+                Level.Add(new MultiBeamParticle(this.x, this.y + 190f, -0.8f - this._wave.normalized, false, Color.Cyan * 0.8f));
+                Level.Add(new MultiBeamParticle(this.x, this.y + 190f, -0.8f - this._wave2.normalized, true, Color.LightBlue * 0.8f));
                 this._spawnWait = 1f;
             }
             foreach (Duck duck in Level.CheckRectAll<Duck>(this.position - this.center, this.position - this.center + new Vec2(this._collisionSize.x, this._collisionSize.y)))
             {
                 Duck d = duck;
-                if (!this._ducks.Any<BeamDuck>((Func<BeamDuck, bool>)(t => t.duck == d)))
+                if (!this._ducks.Any<BeamDuck>(t => t.duck == d))
                 {
                     float num = (double)d.y >= 100.0 ? 130f : 40f;
                     SFX.Play("stepInBeam");
@@ -63,7 +65,7 @@ namespace DuckGame
                     d.crouch = false;
                     d.sliding = false;
                     if (d.holdObject != null)
-                        this._guns.Add((Thing)d.holdObject);
+                        this._guns.Add(d.holdObject);
                     d.ThrowItem();
                     d.solid = false;
                     d.grounded = false;
@@ -81,13 +83,13 @@ namespace DuckGame
             }
             foreach (Holdable holdable in Level.CheckRectAll<Holdable>(this.position - this.center, this.position - this.center + new Vec2(this._collisionSize.x, this._collisionSize.y)))
             {
-                if (holdable.owner == null && !this._guns.Contains((Thing)holdable))
-                    this._guns.Add((Thing)holdable);
+                if (holdable.owner == null && !this._guns.Contains(holdable))
+                    this._guns.Add(holdable);
             }
             int count = this._ducks.Count;
             int num1 = 0;
             float num2 = 40f;
-            float num3 = (float)(((double)this._beamHeight - (double)num2 * 2.0) / (count > 1 ? (double)(count - 1) : 1.0));
+            float num3 = (float)((_beamHeight - (double)num2 * 2.0) / (count > 1 ? count - 1 : 1.0));
             for (int index = 0; index < this._ducks.Count; ++index)
             {
                 BeamDuck duck = this._ducks[index];
@@ -107,7 +109,7 @@ namespace DuckGame
                 else
                 {
                     duck.duck.position.x = Lerp.FloatSmooth(duck.duck.position.x, this.position.x + (float)duck.sin2 * 1f, 0.2f);
-                    duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)((double)num2 + (double)num3 * (double)index + (double)(float)duck.sin * 2.0), 0.08f);
+                    duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)((double)num2 + (double)num3 * index + (double)(float)duck.sin * 2.0), 0.08f);
                     duck.duck.vSpeed = 0.0f;
                     duck.duck.hSpeed = 0.0f;
                 }
@@ -115,7 +117,7 @@ namespace DuckGame
                 {
                     duck.leaving = true;
                     this._leaveLeft = false;
-                    duck.duck.offDir = (sbyte)1;
+                    duck.duck.offDir = 1;
                     this.entered = false;
                 }
                 ++num1;
@@ -145,7 +147,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             for (int index = 0; index < 6; ++index)
-                Level.Add((Thing)new GlassParticle(hitPos.x, hitPos.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                Level.Add(new GlassParticle(hitPos.x, hitPos.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
             this._flash = 1f;
             return true;
         }
@@ -155,7 +157,7 @@ namespace DuckGame
             base.Draw();
             this._selectBeam.depth = this.depth;
             for (int index = 0; index < 6; ++index)
-                Graphics.Draw(this._selectBeam, this.x, this.y + (float)(index * 32));
+                Graphics.Draw(this._selectBeam, this.x, this.y + index * 32);
         }
     }
 }

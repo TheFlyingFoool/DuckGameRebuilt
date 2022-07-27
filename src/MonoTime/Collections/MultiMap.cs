@@ -58,7 +58,7 @@ namespace DuckGame
             {
                 try
                 {
-                    this._map.Add(key, (TList)Activator.CreateInstance(typeof(TList), (object)value));
+                    this._map.Add(key, (TList)Activator.CreateInstance(typeof(TList), value));
                 }
                 catch
                 {
@@ -103,18 +103,18 @@ namespace DuckGame
 
         public void Clear() => this._map.Clear();
 
-        public IEnumerable<TKey> Keys => (IEnumerable<TKey>)this._map.Keys;
+        public IEnumerable<TKey> Keys => _map.Keys;
 
-        public IEnumerable<TList> Values => (IEnumerable<TList>)this._map.Values;
+        public IEnumerable<TList> Values => _map.Values;
 
-        public IEnumerator<KeyValuePair<TKey, TList>> GetEnumerator() => (IEnumerator<KeyValuePair<TKey, TList>>)this._map.GetEnumerator();
+        public IEnumerator<KeyValuePair<TKey, TList>> GetEnumerator() => this._map.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
         IEnumerator<KeyValuePair<TKey, ICollection<TElement>>> IEnumerable<KeyValuePair<TKey, ICollection<TElement>>>.GetEnumerator()
         {
             foreach (KeyValuePair<TKey, TList> keyValuePair in this._map)
-                yield return new KeyValuePair<TKey, ICollection<TElement>>(keyValuePair.Key, (ICollection<TElement>)keyValuePair.Value);
+                yield return new KeyValuePair<TKey, ICollection<TElement>>(keyValuePair.Key, keyValuePair.Value);
         }
     }
 }

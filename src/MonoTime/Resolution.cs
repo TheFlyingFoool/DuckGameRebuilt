@@ -33,11 +33,11 @@ namespace DuckGame
 
         public static Resolution current => Options.LocalData.currentResolution;
 
-        public static float fontSizeMultiplier => (float)Resolution.current.x / 1280f;
+        public static float fontSizeMultiplier => current.x / 1280f;
 
         public static Resolution lastApplied => Resolution._lastApplied;
 
-        public static Vec2 size => DuckGame.Graphics._screenViewport.HasValue ? new Vec2((float)DuckGame.Graphics._screenViewport.Value.Width, (float)DuckGame.Graphics._screenViewport.Value.Height) : Resolution.current.dimensions;
+        public static Vec2 size => DuckGame.Graphics._screenViewport.HasValue ? new Vec2(Graphics._screenViewport.Value.Width, Graphics._screenViewport.Value.Height) : Resolution.current.dimensions;
 
         private static float GetScreenDPI()
         {
@@ -89,13 +89,13 @@ namespace DuckGame
                 {
                     case ScreenMode.Windowed:
                         DuckGame.Graphics.mouseVisible = false;
-                        DuckGame.Graphics._screenBufferTarget = (RenderTarget2D)null;
+                        DuckGame.Graphics._screenBufferTarget = null;
                         Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
                         Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         break;
                     case ScreenMode.Fullscreen:
                         DuckGame.Graphics.mouseVisible = false;
-                        DuckGame.Graphics._screenBufferTarget = (RenderTarget2D)null;
+                        DuckGame.Graphics._screenBufferTarget = null;
                         break;
                     case ScreenMode.Borderless:
                         DuckGame.Graphics.mouseVisible = false;
@@ -124,7 +124,7 @@ namespace DuckGame
                     Layer.Game.camera.DoUpdate();
                 if (Program.isLinux)
                     Resolution._takeFocus = 10;
-                Resolution._pendingResolution = (Resolution)null;
+                Resolution._pendingResolution = null;
                 DuckGame.Graphics._screenViewport = new Viewport?();
             }
         }
@@ -146,9 +146,9 @@ namespace DuckGame
         public static Matrix getTransformationMatrix()
         {
             Viewport viewport = DuckGame.Graphics.viewport;
-            double xScale = (double)viewport.Width / (double)MonoMain.screenWidth;
+            double xScale = viewport.Width / (double)MonoMain.screenWidth;
             viewport = DuckGame.Graphics.viewport;
-            double yScale = (double)viewport.Height / (double)MonoMain.screenHeight;
+            double yScale = viewport.Height / (double)MonoMain.screenHeight;
             return Matrix.CreateScale((float)xScale, (float)yScale, 1f);
         }
 
@@ -157,13 +157,13 @@ namespace DuckGame
         public int x
         {
             get => (int)this.dimensions.x;
-            set => this.dimensions.x = (float)value;
+            set => this.dimensions.x = value;
         }
 
         public int y
         {
             get => (int)this.dimensions.y;
-            set => this.dimensions.y = (float)value;
+            set => this.dimensions.y = value;
         }
 
         public static void Initialize(object pWindow, GraphicsDeviceManager pDeviceManager)
@@ -178,31 +178,31 @@ namespace DuckGame
             DevConsole.Log(DCSection.General, "Registered adapter size is (" + MonoMain.instance._adapterW.ToString() + "x" + MonoMain.instance._adapterH.ToString() + ")");
             Resolution.RegisterDisplaySize(ScreenMode.Fullscreen, new Resolution()
             {
-                dimensions = new Vec2((float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
+                dimensions = new Vec2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             }, false);
             Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
             {
-                dimensions = new Vec2((float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
+                dimensions = new Vec2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             }, false);
             Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
             {
-                dimensions = new Vec2((float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
+                dimensions = new Vec2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             }, false);
             foreach (DisplayMode supportedDisplayMode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
             {
                 Resolution.RegisterDisplaySize(ScreenMode.Fullscreen, new Resolution()
                 {
-                    dimensions = new Vec2((float)supportedDisplayMode.Width, (float)supportedDisplayMode.Height)
+                    dimensions = new Vec2(supportedDisplayMode.Width, supportedDisplayMode.Height)
                 }, false);
                 if (supportedDisplayMode.Width <= MonoMain.instance._adapterW && supportedDisplayMode.Height <= MonoMain.instance._adapterH)
                 {
                     Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
                     {
-                        dimensions = new Vec2((float)supportedDisplayMode.Width, (float)supportedDisplayMode.Height)
+                        dimensions = new Vec2(supportedDisplayMode.Width, supportedDisplayMode.Height)
                     }, false);
                     Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
                     {
-                        dimensions = new Vec2((float)supportedDisplayMode.Width, (float)supportedDisplayMode.Height)
+                        dimensions = new Vec2(supportedDisplayMode.Width, supportedDisplayMode.Height)
                     }, false);
                 }
             }
@@ -296,7 +296,7 @@ namespace DuckGame
         public static Resolution Load(string pSize, string pMemberName = null)
         {
             if (Resolution.supportedDisplaySizes == null)
-                return (Resolution)null;
+                return null;
             try
             {
                 string[] strArray = pSize.ToLower().Trim().Split('x');
@@ -318,14 +318,14 @@ namespace DuckGame
                         return nearest;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "Failed to load resolution (" + pSize + ")");
             }
-            return (Resolution)null;
+            return null;
         }
 
-        public static Resolution GetDefault(ScreenMode pMode) => Resolution.supportedDisplaySizes[pMode].FirstOrDefault<Resolution>((Func<Resolution, bool>)(x => x.isDefault)) ?? Resolution.supportedDisplaySizes[pMode].Last<Resolution>();
+        public static Resolution GetDefault(ScreenMode pMode) => Resolution.supportedDisplaySizes[pMode].FirstOrDefault<Resolution>(x => x.isDefault) ?? Resolution.supportedDisplaySizes[pMode].Last<Resolution>();
 
         public static Resolution FindNearest(
           ScreenMode pMode,
@@ -373,20 +373,20 @@ namespace DuckGame
           bool pRecommended = false,
           bool pForce = false)
         {
-            List<Resolution> resolutionList = (List<Resolution>)null;
+            List<Resolution> resolutionList = null;
             if (!Resolution.supportedDisplaySizes.TryGetValue(pMode, out resolutionList))
                 Resolution.supportedDisplaySizes[pMode] = resolutionList = new List<Resolution>();
             if (pResolution.x > GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width || pResolution.y > GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             {
                 DevConsole.Log("Invalid resolution (" + pResolution.ToString() + "): Larger than adapter (" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + "x" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString() + ")");
-                return (Resolution)null;
+                return null;
             }
             if (pMode == ScreenMode.Windowed && pResolution.x == MonoMain.instance._adapterW && pResolution.y == MonoMain.instance._adapterH && !pForce)
             {
                 DevConsole.Log("Invalid resolution (" + pResolution.ToString() + "): Windowed resolution must not equal adapter size (" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + "x" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString() + ")");
-                return (Resolution)null;
+                return null;
             }
-            Resolution resolution = resolutionList.FirstOrDefault<Resolution>((Func<Resolution, bool>)(x => x.x == pResolution.x && x.y == pResolution.y));
+            Resolution resolution = resolutionList.FirstOrDefault<Resolution>(x => x.x == pResolution.x && x.y == pResolution.y);
             if (resolution == null)
                 resolutionList.Add(pResolution);
             else
@@ -405,6 +405,6 @@ namespace DuckGame
             Resolution.supportedDisplaySizes[ScreenMode.Fullscreen] = Resolution.SortDisplaySizes(Resolution.supportedDisplaySizes[ScreenMode.Fullscreen]);
         }
 
-        internal static List<Resolution> SortDisplaySizes(List<Resolution> pList) => pList == null ? new List<Resolution>() : pList.OrderBy<Resolution, int>((Func<Resolution, int>)(x => x.x * 100 + x.y)).ToList<Resolution>();
+        internal static List<Resolution> SortDisplaySizes(List<Resolution> pList) => pList == null ? new List<Resolution>() : pList.OrderBy<Resolution, int>(x => x.x * 100 + x.y).ToList<Resolution>();
     }
 }

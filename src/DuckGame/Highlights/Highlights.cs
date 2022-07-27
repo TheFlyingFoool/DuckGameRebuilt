@@ -49,11 +49,11 @@ namespace DuckGame
                 Highlights.Initialize();
             Highlights.highlightRatingMultiplier = 1f;
             Recording currentRecording = Recorder.currentRecording;
-            Recorder.currentRecording = (Recording)null;
+            Recorder.currentRecording = null;
             if (currentRecording == null)
                 return;
             float num = 0.0f;
-            float lastMatchLength = (float)Stats.lastMatchLength;
+            float lastMatchLength = Stats.lastMatchLength;
             currentRecording.Rewind();
             while (!currentRecording.StepForward())
                 num += currentRecording.GetFrameTotal();

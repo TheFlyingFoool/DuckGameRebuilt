@@ -68,7 +68,7 @@ namespace DuckGame
         {
             this._sprite = new SpriteMap(tileset, 16, 16);
             this._tileset = tileset;
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.collisionSize = new Vec2(16f, 16f);
             this.thickness = 0.2f;
             this.centerx = 8f;
@@ -84,10 +84,10 @@ namespace DuckGame
         {
             if (this._neighborsInitialized)
                 return;
-            this._leftBlock = Level.CheckPoint<AutoPlatform>(this.left - 2f, this.position.y, (Thing)this);
-            this._rightBlock = Level.CheckPoint<AutoPlatform>(this.right + 2f, this.position.y, (Thing)this);
-            this._upBlock = Level.CheckPoint<AutoPlatform>(this.position.x, this.top - 2f, (Thing)this);
-            this._downBlock = Level.CheckPoint<AutoPlatform>(this.position.x, this.bottom + 2f, (Thing)this);
+            this._leftBlock = Level.CheckPoint<AutoPlatform>(this.left - 2f, this.position.y, this);
+            this._rightBlock = Level.CheckPoint<AutoPlatform>(this.right + 2f, this.position.y, this);
+            this._upBlock = Level.CheckPoint<AutoPlatform>(this.position.x, this.top - 2f, this);
+            this._downBlock = Level.CheckPoint<AutoPlatform>(this.position.x, this.bottom + 2f, this);
             this._neighborsInitialized = true;
         }
 
@@ -127,7 +127,7 @@ namespace DuckGame
                 case 51:
                 case 53:
                 case 58:
-                    this.collisionSize = new Vec2((float)(8.0 + (double)this.verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
                     this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
                     break;
                 case 37:
@@ -135,7 +135,7 @@ namespace DuckGame
                 case 45:
                 case 52:
                 case 60:
-                    this.collisionSize = new Vec2((float)(8.0 + (double)this.verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
                     this.collisionOffset = new Vec2(-8f, -8f);
                     break;
                 case 40:
@@ -158,7 +158,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     this._collisionSize.x = this.verticalWidthThick;
-                    this._collisionOffset.x = (float)(16.0 - (double)this.verticalWidthThick - 8.0);
+                    this._collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
                     break;
                 case 4:
                 case 5:
@@ -199,30 +199,30 @@ namespace DuckGame
 
         public void FindFrame()
         {
-            AutoTile autoTile1 = Level.CheckPoint<AutoTile>(this.x, this.y - 16f, (Thing)this);
-            AutoTile autoTile2 = Level.CheckPoint<AutoTile>(this.x, this.y + 16f, (Thing)this);
-            AutoTile autoTile3 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y, (Thing)this);
-            AutoTile autoTile4 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y, (Thing)this);
-            AutoTile autoTile5 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y - 16f, (Thing)this);
-            AutoTile autoTile6 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y - 16f, (Thing)this);
-            AutoTile autoTile7 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y + 16f, (Thing)this);
-            AutoTile autoTile8 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y + 16f, (Thing)this);
+            AutoTile autoTile1 = Level.CheckPoint<AutoTile>(this.x, this.y - 16f, this);
+            AutoTile autoTile2 = Level.CheckPoint<AutoTile>(this.x, this.y + 16f, this);
+            AutoTile autoTile3 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y, this);
+            AutoTile autoTile4 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y, this);
+            AutoTile autoTile5 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y - 16f, this);
+            AutoTile autoTile6 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y - 16f, this);
+            AutoTile autoTile7 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y + 16f, this);
+            AutoTile autoTile8 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y + 16f, this);
             if (autoTile1 != null && autoTile1._tileset != this._tileset)
-                autoTile1 = (AutoTile)null;
+                autoTile1 = null;
             if (autoTile2 != null && autoTile2._tileset != this._tileset)
-                autoTile2 = (AutoTile)null;
+                autoTile2 = null;
             if (autoTile3 != null && autoTile3._tileset != this._tileset)
-                autoTile3 = (AutoTile)null;
+                autoTile3 = null;
             if (autoTile4 != null && autoTile4._tileset != this._tileset)
-                autoTile4 = (AutoTile)null;
+                autoTile4 = null;
             if (autoTile5 != null && autoTile5._tileset != this._tileset)
-                autoTile5 = (AutoTile)null;
+                autoTile5 = null;
             if (autoTile6 != null && autoTile6._tileset != this._tileset)
-                autoTile6 = (AutoTile)null;
+                autoTile6 = null;
             if (autoTile7 != null && autoTile7._tileset != this._tileset)
-                autoTile7 = (AutoTile)null;
+                autoTile7 = null;
             if (autoTile8 != null && autoTile8._tileset != this._tileset)
-                autoTile8 = (AutoTile)null;
+                autoTile8 = null;
             this.leftTile = autoTile3;
             this.rightTile = autoTile4;
             this.upTile = autoTile1;
@@ -506,6 +506,6 @@ namespace DuckGame
                 this.frame = 40;
         }
 
-        public override ContextMenu GetContextMenu() => (ContextMenu)null;
+        public override ContextMenu GetContextMenu() => null;
     }
 }

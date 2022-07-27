@@ -24,8 +24,8 @@ namespace DuckGame
           : base()
         {
             this._sprite = new SpriteMap("mirrorMode", 16, 16);
-            this.graphic = (Sprite)this._sprite;
-            this.mode = new EditorProperty<MirrorMode.Setting>(MirrorMode.Setting.Vertical, (Thing)this);
+            this.graphic = _sprite;
+            this.mode = new EditorProperty<MirrorMode.Setting>(MirrorMode.Setting.Vertical, this, 0f, 1f, 0.1f, null, false, false);
             this.mode.value = MirrorMode.Setting.Vertical;
             this.collisionSize = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-4f, -4f);

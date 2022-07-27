@@ -24,7 +24,7 @@ namespace DuckGame
         public override void Update()
         {
             if (this._sprite.finished)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             base.Update();
         }
 
@@ -35,7 +35,7 @@ namespace DuckGame
             this._sprite.color = this.color;
             this._sprite.depth = this.depth;
             this._sprite.flipH = this.flipHorizontal;
-            Graphics.Draw((Sprite)this._sprite, this.x, this.y);
+            Graphics.Draw(_sprite, this.x, this.y);
             base.Draw();
         }
     }

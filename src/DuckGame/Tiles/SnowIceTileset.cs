@@ -27,9 +27,11 @@ namespace DuckGame
             this._impactThreshold = -1f;
             this.willHeat = true;
             this._tileset = "snowTileset";
-            this._sprite = new SpriteMap("snowIceTileset", 16, 16);
-            this._sprite.frame = 40;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("snowIceTileset", 16, 16)
+            {
+                frame = 40
+            };
+            this.graphic = _sprite;
             this.frozenTileset = tset;
         }
 
@@ -45,9 +47,11 @@ namespace DuckGame
             if (Network.isActive)
                 return;
             this.melted = false;
-            this._sprite = new SpriteMap(this.frozenTileset, 16, 16);
-            this._sprite.frame = (this.graphic as SpriteMap).frame;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap(this.frozenTileset, 16, 16)
+            {
+                frame = (this.graphic as SpriteMap).frame
+            };
+            this.graphic = _sprite;
             this.DoPositioning();
             this.melt = 0.0f;
         }
@@ -57,12 +61,14 @@ namespace DuckGame
             if (!Network.isActive)
             {
                 this.melt += 0.05f;
-                if ((double)this.melt > 1.0)
+                if (melt > 1.0)
                 {
                     this.melted = true;
-                    this._sprite = new SpriteMap(this.meltedTileset, 16, 16);
-                    this._sprite.frame = (this.graphic as SpriteMap).frame;
-                    this.graphic = (Sprite)this._sprite;
+                    this._sprite = new SpriteMap(this.meltedTileset, 16, 16)
+                    {
+                        frame = (this.graphic as SpriteMap).frame
+                    };
+                    this.graphic = _sprite;
                     this.DoPositioning();
                 }
             }

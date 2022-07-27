@@ -79,7 +79,7 @@ namespace DuckGame
             }
             if (this.m_filtercnt != 0)
                 return;
-            this.m_iirfilter = (WdlResampler.WDL_Resampler_IIRFilter)null;
+            this.m_iirfilter = null;
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace DuckGame
 
         public double GetCurrentLatency()
         {
-            double currentLatency = ((double)this.m_samples_in_rsinbuf - (double)this.m_filtlatency) / this.m_sratein;
+            double currentLatency = (m_samples_in_rsinbuf - (double)this.m_filtlatency) / this.m_sratein;
             if (currentLatency < 0.0)
                 currentLatency = 0.0;
             return currentLatency;
@@ -147,7 +147,7 @@ namespace DuckGame
         {
             if (nch > 64 || nch < 1)
             {
-                inbuffer = (float[])null;
+                inbuffer = null;
                 inbufferOffset = 0;
                 return 0;
             }
@@ -162,7 +162,7 @@ namespace DuckGame
                 if (this.m_samples_in_rsinbuf > 0)
                     this.m_rsinbuf = new float[this.m_samples_in_rsinbuf * nch];
             }
-            int num3 = this.m_feedmode ? out_samples : (int)(this.m_ratio * (double)out_samples) + 4 + num1 - this.m_samples_in_rsinbuf;
+            int num3 = this.m_feedmode ? out_samples : (int)(this.m_ratio * out_samples) + 4 + num1 - this.m_samples_in_rsinbuf;
             if (num3 < 0)
                 num3 = 0;
             int num4;
@@ -202,7 +202,7 @@ namespace DuckGame
                 if (this.m_iirfilter == null)
                     this.m_iirfilter = new WdlResampler.WDL_Resampler_IIRFilter();
                 int filtercnt = this.m_filtercnt;
-                this.m_iirfilter.setParms(1.0 / this.m_ratio * (double)this.m_filterpos, (double)this.m_filterq);
+                this.m_iirfilter.setParms(1.0 / this.m_ratio * m_filterpos, m_filterq);
                 int num1 = this.m_samples_in_rsinbuf * nch;
                 int num2 = 0;
                 for (int index1 = 0; index1 < nch; ++index1)
@@ -220,7 +220,7 @@ namespace DuckGame
                 Array.Resize<float>(ref this.m_rsinbuf, newSize);
                 if (this.m_rsinbuf.Length == newSize)
                 {
-                    Array.Clear((Array)this.m_rsinbuf, this.m_samples_in_rsinbuf * nch, num4 * nch);
+                    Array.Clear(m_rsinbuf, this.m_samples_in_rsinbuf * nch, num4 * nch);
                     num3 = this.m_samples_in_rsinbuf + num4;
                 }
             }
@@ -249,7 +249,7 @@ namespace DuckGame
                             int num8 = (int)fracpos;
                             if (num8 < num7 - 1)
                             {
-                                this.SincSample1(outBuffer, index3, this.m_rsinbuf, destinationIndex + num8, fracpos - (double)num8, this.m_filter_coeffs, filterIndex, filterCoeffsSize);
+                                this.SincSample1(outBuffer, index3, this.m_rsinbuf, destinationIndex + num8, fracpos - num8, this.m_filter_coeffs, filterIndex, filterCoeffsSize);
                                 ++index3;
                                 fracpos += ratio;
                                 ++ns;
@@ -264,7 +264,7 @@ namespace DuckGame
                             int num9 = (int)fracpos;
                             if (num9 < num7 - 1)
                             {
-                                this.SincSample2(outBuffer, index3, this.m_rsinbuf, destinationIndex + num9 * 2, fracpos - (double)num9, this.m_filter_coeffs, filterIndex, filterCoeffsSize);
+                                this.SincSample2(outBuffer, index3, this.m_rsinbuf, destinationIndex + num9 * 2, fracpos - num9, this.m_filter_coeffs, filterIndex, filterCoeffsSize);
                                 index3 += 2;
                                 fracpos += ratio;
                                 ++ns;
@@ -279,7 +279,7 @@ namespace DuckGame
                             int num10 = (int)fracpos;
                             if (num10 < num7 - 1)
                             {
-                                this.SincSample(outBuffer, index3, this.m_rsinbuf, destinationIndex + num10 * nch, fracpos - (double)num10, nch, this.m_filter_coeffs, filterIndex, filterCoeffsSize);
+                                this.SincSample(outBuffer, index3, this.m_rsinbuf, destinationIndex + num10 * nch, fracpos - num10, nch, this.m_filter_coeffs, filterIndex, filterCoeffsSize);
                                 index3 += nch;
                                 fracpos += ratio;
                                 ++ns;
@@ -331,7 +331,7 @@ namespace DuckGame
                             int num14 = (int)fracpos;
                             if (num14 < num3)
                             {
-                                Array.Copy((Array)this.m_rsinbuf, destinationIndex + num14 * nch, (Array)outBuffer, index3, nch);
+                                Array.Copy(m_rsinbuf, destinationIndex + num14 * nch, outBuffer, index3, nch);
                                 index3 += nch;
                                 fracpos += ratio;
                                 ++ns;
@@ -350,12 +350,12 @@ namespace DuckGame
                         while (num5-- != 0)
                         {
                             int num15 = (int)fracpos;
-                            double num16 = fracpos - (double)num15;
+                            double num16 = fracpos - num15;
                             if (num15 < num3 - 1)
                             {
                                 double num17 = 1.0 - num16;
                                 int index4 = destinationIndex + num15;
-                                outBuffer[index3++] = (float)((double)this.m_rsinbuf[index4] * num17 + (double)this.m_rsinbuf[index4 + 1] * num16);
+                                outBuffer[index3++] = (float)(this.m_rsinbuf[index4] * num17 + this.m_rsinbuf[index4 + 1] * num16);
                                 fracpos += ratio;
                                 ++ns;
                             }
@@ -367,13 +367,13 @@ namespace DuckGame
                         while (num5-- != 0)
                         {
                             int num18 = (int)fracpos;
-                            double num19 = fracpos - (double)num18;
+                            double num19 = fracpos - num18;
                             if (num18 < num3 - 1)
                             {
                                 double num20 = 1.0 - num19;
                                 int index5 = destinationIndex + num18 * 2;
-                                outBuffer[index3] = (float)((double)this.m_rsinbuf[index5] * num20 + (double)this.m_rsinbuf[index5 + 2] * num19);
-                                outBuffer[index3 + 1] = (float)((double)this.m_rsinbuf[index5 + 1] * num20 + (double)this.m_rsinbuf[index5 + 3] * num19);
+                                outBuffer[index3] = (float)(this.m_rsinbuf[index5] * num20 + this.m_rsinbuf[index5 + 2] * num19);
+                                outBuffer[index3 + 1] = (float)(this.m_rsinbuf[index5 + 1] * num20 + this.m_rsinbuf[index5 + 3] * num19);
                                 index3 += 2;
                                 fracpos += ratio;
                                 ++ns;
@@ -386,7 +386,7 @@ namespace DuckGame
                         while (num5-- != 0)
                         {
                             int num21 = (int)fracpos;
-                            double num22 = fracpos - (double)num21;
+                            double num22 = fracpos - num21;
                             if (num21 < num3 - 1)
                             {
                                 double num23 = 1.0 - num22;
@@ -394,7 +394,7 @@ namespace DuckGame
                                 int index6 = destinationIndex + num21 * nch;
                                 while (num24-- != 0)
                                 {
-                                    outBuffer[index3++] = (float)((double)this.m_rsinbuf[index6] * num23 + (double)this.m_rsinbuf[index6 + nch] * num22);
+                                    outBuffer[index3++] = (float)(this.m_rsinbuf[index6] * num23 + this.m_rsinbuf[index6 + nch] * num22);
                                     ++index6;
                                 }
                                 fracpos += ratio;
@@ -411,7 +411,7 @@ namespace DuckGame
                 if (this.m_iirfilter == null)
                     this.m_iirfilter = new WdlResampler.WDL_Resampler_IIRFilter();
                 int filtercnt = this.m_filtercnt;
-                this.m_iirfilter.setParms(this.m_ratio * (double)this.m_filterpos, (double)this.m_filterq);
+                this.m_iirfilter.setParms(this.m_ratio * m_filterpos, m_filterq);
                 int num25 = 0;
                 for (int index7 = 0; index7 < nch; ++index7)
                 {
@@ -421,7 +421,7 @@ namespace DuckGame
             }
             if (ns > 0 && num3 > this.m_samples_in_rsinbuf)
             {
-                double num26 = (fracpos - (double)this.m_samples_in_rsinbuf + (double)num6) / ratio;
+                double num26 = (fracpos - m_samples_in_rsinbuf + num6) / ratio;
                 if (num26 > 0.0)
                 {
                     ns -= (int)(num26 + 0.5);
@@ -430,12 +430,12 @@ namespace DuckGame
                 }
             }
             int num27 = (int)fracpos;
-            this.m_fracpos = fracpos - (double)num27;
+            this.m_fracpos = fracpos - num27;
             this.m_samples_in_rsinbuf -= num27;
             if (this.m_samples_in_rsinbuf <= 0)
                 this.m_samples_in_rsinbuf = 0;
             else
-                Array.Copy((Array)this.m_rsinbuf, destinationIndex + num27 * nch, (Array)this.m_rsinbuf, destinationIndex, this.m_samples_in_rsinbuf * nch);
+                Array.Copy(m_rsinbuf, destinationIndex + num27 * nch, m_rsinbuf, destinationIndex, this.m_samples_in_rsinbuf * nch);
             return ns;
         }
 
@@ -456,9 +456,9 @@ namespace DuckGame
                 int num2 = num1 / 2;
                 double num3 = 0.0;
                 double d = 0.0;
-                double num4 = 2.0 * Math.PI / (double)num1;
-                double num5 = Math.PI / (double)this.m_lp_oversize * filtpos;
-                double a = num5 * (double)-num2;
+                double num4 = 2.0 * Math.PI / num1;
+                double num5 = Math.PI / m_lp_oversize * filtpos;
+                double a = num5 * -num2;
                 for (int index = -num2; index < num2 + this.m_lp_oversize; ++index)
                 {
                     double num6 = 287.0 / 800.0 - 0.48829 * Math.Cos(d) + 0.14128 * Math.Cos(2.0 * d) - 0.01168 * Math.Cos(6.0 * d);
@@ -470,7 +470,7 @@ namespace DuckGame
                     if (index < num2)
                         num3 += num6;
                 }
-                double num7 = (double)this.m_lp_oversize / num3;
+                double num7 = m_lp_oversize / num3;
                 for (int index = 0; index < num1 + this.m_lp_oversize; ++index)
                     this.m_filter_coeffs[index] = this.m_filter_coeffs[index] * (float)num7;
             }
@@ -490,10 +490,10 @@ namespace DuckGame
           int filtsz)
         {
             int lpOversize = this.m_lp_oversize;
-            fracpos *= (double)lpOversize;
+            fracpos *= lpOversize;
             int num1 = (int)fracpos;
             filterIndex += lpOversize - 1 - num1;
-            fracpos -= (double)num1;
+            fracpos -= num1;
             for (int index1 = 0; index1 < nch; ++index1)
             {
                 double num2 = 0.0;
@@ -503,8 +503,8 @@ namespace DuckGame
                 int num4 = filtsz;
                 while (num4-- != 0)
                 {
-                    num2 += (double)filter[index2] * (double)inBuffer[index3];
-                    num3 += (double)filter[index2 + 1] * (double)inBuffer[index3];
+                    num2 += filter[index2] * (double)inBuffer[index3];
+                    num3 += filter[index2 + 1] * (double)inBuffer[index3];
                     index3 += nch;
                     index2 += lpOversize;
                 }
@@ -523,10 +523,10 @@ namespace DuckGame
           int filtsz)
         {
             int lpOversize = this.m_lp_oversize;
-            fracpos *= (double)lpOversize;
+            fracpos *= lpOversize;
             int num1 = (int)fracpos;
             filterIndex += lpOversize - 1 - num1;
-            fracpos -= (double)num1;
+            fracpos -= num1;
             double num2 = 0.0;
             double num3 = 0.0;
             int index1 = filterIndex;
@@ -534,8 +534,8 @@ namespace DuckGame
             int num4 = filtsz;
             while (num4-- != 0)
             {
-                num2 += (double)filter[index1] * (double)inBuffer[index2];
-                num3 += (double)filter[index1 + 1] * (double)inBuffer[index2];
+                num2 += filter[index1] * (double)inBuffer[index2];
+                num3 += filter[index1 + 1] * (double)inBuffer[index2];
                 ++index2;
                 index1 += lpOversize;
             }
@@ -553,10 +553,10 @@ namespace DuckGame
           int filtsz)
         {
             int lpOversize = this.m_lp_oversize;
-            fracpos *= (double)lpOversize;
+            fracpos *= lpOversize;
             int num1 = (int)fracpos;
             filterIndex += lpOversize - 1 - num1;
-            fracpos -= (double)num1;
+            fracpos -= num1;
             double num2 = 0.0;
             double num3 = 0.0;
             double num4 = 0.0;
@@ -566,14 +566,14 @@ namespace DuckGame
             int num6 = filtsz / 2;
             while (num6-- != 0)
             {
-                double num7 = num2 + (double)filter[index1] * (double)inBuffer[index2];
-                double num8 = num3 + (double)filter[index1] * (double)inBuffer[index2 + 1];
-                double num9 = num4 + (double)filter[index1 + 1] * (double)inBuffer[index2];
-                double num10 = num5 + (double)filter[index1 + 1] * (double)inBuffer[index2 + 1];
-                num2 = num7 + (double)filter[index1 + lpOversize] * (double)inBuffer[index2 + 2];
-                num3 = num8 + (double)filter[index1 + lpOversize] * (double)inBuffer[index2 + 3];
-                num4 = num9 + (double)filter[index1 + lpOversize + 1] * (double)inBuffer[index2 + 2];
-                num5 = num10 + (double)filter[index1 + lpOversize + 1] * (double)inBuffer[index2 + 3];
+                double num7 = num2 + filter[index1] * (double)inBuffer[index2];
+                double num8 = num3 + filter[index1] * (double)inBuffer[index2 + 1];
+                double num9 = num4 + filter[index1 + 1] * (double)inBuffer[index2];
+                double num10 = num5 + filter[index1 + 1] * (double)inBuffer[index2 + 1];
+                num2 = num7 + filter[index1 + lpOversize] * (double)inBuffer[index2 + 2];
+                num3 = num8 + filter[index1 + lpOversize] * (double)inBuffer[index2 + 3];
+                num4 = num9 + filter[index1 + lpOversize + 1] * (double)inBuffer[index2 + 2];
+                num5 = num10 + filter[index1 + lpOversize + 1] * (double)inBuffer[index2 + 3];
                 index2 += 4;
                 index1 += lpOversize * 2;
             }
@@ -630,7 +630,7 @@ namespace DuckGame
                 double a2 = this.m_a2;
                 while (ns-- != 0)
                 {
-                    double num = (double)inBuffer[inIndex];
+                    double num = inBuffer[inIndex];
                     inIndex += span;
                     double x = num * b0 + this.m_hist[w, 0] * b1 + this.m_hist[w, 1] * b2 - this.m_hist[w, 2] * a1 - this.m_hist[w, 3] * a2;
                     this.m_hist[w, 1] = this.m_hist[w, 0];

@@ -66,20 +66,24 @@ namespace DuckGame
         public ChallengeLevel(string name)
           : base(name)
         {
-            this._followCam = new FollowCam();
-            this._followCam.lerpMult = 1f;
-            this._followCam.startCentered = false;
-            this.camera = (Camera)this._followCam;
+            this._followCam = new FollowCam
+            {
+                lerpMult = 1f,
+                startCentered = false
+            };
+            this.camera = _followCam;
             this.simulatePhysics = false;
         }
 
         public ChallengeLevel(LevelData data, bool validityTest)
           : base(data)
         {
-            this._followCam = new FollowCam();
-            this._followCam.lerpMult = 1f;
-            this._followCam.startCentered = false;
-            this.camera = (Camera)this._followCam;
+            this._followCam = new FollowCam
+            {
+                lerpMult = 1f,
+                startCentered = false
+            };
+            this.camera = _followCam;
             this.simulatePhysics = false;
             this._levelData = data;
             this._validityTest = validityTest;
@@ -117,43 +121,43 @@ namespace DuckGame
                 {
                     if (prof.team != null)
                         prof.team.Leave(prof);
-                    prof.inputProfile = (InputProfile)null;
+                    prof.inputProfile = null;
                 }
             }
-            this._pendingSpawns = new Deathmatch((Level)this).SpawnPlayers(false);
-            this._pendingSpawns = this._pendingSpawns.OrderBy<Duck, float>((Func<Duck, float>)(sp => sp.x)).ToList<Duck>();
+            this._pendingSpawns = new Deathmatch(this).SpawnPlayers(false);
+            this._pendingSpawns = this._pendingSpawns.OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
             foreach (Thing pendingSpawn in this._pendingSpawns)
                 this.followCam.Add(pendingSpawn);
             this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
             this._pauseMenu = new UIMenu("@LWING@CHALLENGE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            this._captureMenu = (UIMenu)new UICaptureBox(this._pauseMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
+            this._captureMenu = new UICaptureBox(this._pauseMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
             this._captureMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._captureMenu, false);
+            this._pauseGroup.Add(_captureMenu, false);
             UIDivider component = new UIDivider(true, 0.8f);
-            component.leftSection.Add((UIComponent)new UIMenuItem("RESTART!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._restart), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("RESUME", (UIMenuAction)new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("OPTIONS", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)Options.optionsMenu), UIAlign.Left), true);
-            component.leftSection.Add((UIComponent)new UIText("", Color.White), true);
-            component.leftSection.Add((UIComponent)new UIMenuItem("|DGRED|QUIT", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)this._confirmMenu), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("RESTART!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._restart), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            component.leftSection.Add(new UIText("", Color.White), true);
+            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
             if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
             {
-                component.leftSection.Add((UIComponent)new UIText("", Color.White), true);
-                component.leftSection.Add((UIComponent)new UIMenuItem("CAPTURE ICON", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)this._captureMenu), UIAlign.Left), true);
+                component.leftSection.Add(new UIText("", Color.White), true);
+                component.leftSection.Add(new UIMenuItem("CAPTURE ICON", new UIMenuActionOpenMenu(_pauseMenu, _captureMenu), UIAlign.Left), true);
             }
-            component.rightSection.Add((UIComponent)new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add((UIComponent)component, true);
+            component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            this._pauseMenu.Add(component, true);
             this._pauseMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._pauseMenu, false);
+            this._pauseGroup.Add(_pauseMenu, false);
             Options.AddMenus(this._pauseGroup);
             Options.openOnClose = this._pauseMenu;
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("NO!", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._confirmMenu, (UIComponent)this._pauseMenu), UIAlign.Left, backButton: true), true);
-            this._confirmMenu.Add((UIComponent)new UIMenuItem("YES!", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
+            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
             this._confirmMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._confirmMenu, false);
+            this._pauseGroup.Add(_confirmMenu, false);
             this._pauseGroup.isPauseMenu = true;
             this._pauseGroup.Close();
-            Level.Add((Thing)this._pauseGroup);
+            Level.Add(_pauseGroup);
             Music.volume = 1f;
             this.followCam.Adjust();
         }
@@ -224,24 +228,24 @@ namespace DuckGame
                 if (this._validityTest)
                 {
                     ArcadeTestDialogue.success = this._challenge.wonTrophies.Count > 0 && this._challenge.wonTrophies.Count > 0 && (this._challenge.wonTrophies[0].type == TrophyType.Platinum || this._challenge.wonTrophies[0].type == TrophyType.Developer);
-                    Level.current = (Level)ArcadeTestDialogue.currentEditor;
+                    Level.current = ArcadeTestDialogue.currentEditor;
                     DuckGame.Graphics.fade = 1f;
                 }
                 else
                 {
                     if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
                     {
-                        Level.current = (Level)(this.things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel).editor;
+                        Level.current = (things[typeof(EditorTestLevel)].First() as EditorTestLevel).editor;
                         Music.Stop();
                     }
                     else
-                        Level.current = Arcade.currentArcade == null ? (Level)ArcadeLevel.currentArcade : (Level)Arcade.currentArcade;
+                        Level.current = Arcade.currentArcade == null ? ArcadeLevel.currentArcade : Arcade.currentArcade;
                     this._fading = false;
                 }
             }
             else
             {
-                if ((double)this._restartMessageWait > 0.0)
+                if (_restartMessageWait > 0.0)
                     this._restartMessageWait -= 0.008f;
                 else
                     HUD.CloseCorner(HUDCorner.TopLeft);
@@ -249,36 +253,36 @@ namespace DuckGame
                 {
                     ChallengeLevel.running = false;
                     this._waitForRestart -= 0.04f;
-                    if ((double)this._waitForRestart <= 0.0)
+                    if (_waitForRestart <= 0.0)
                         this._restarting = true;
                 }
                 this._waitFade -= 0.04f;
-                if (!this._didFade && (double)this._waitFade <= 0.0 && (double)DuckGame.Graphics.fade < 1.0)
+                if (!this._didFade && _waitFade <= 0.0 && (double)DuckGame.Graphics.fade < 1.0)
                     DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.04f);
                 else if (this._restarting)
                 {
                     ChallengeLevel.running = false;
                     this.transitionSpeedMultiplier = 2f;
-                    EditorTestLevel t = (EditorTestLevel)null;
+                    EditorTestLevel t = null;
                     if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
                         t = this.things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                    Level.current = !(this._level != "") ? (Level)new ChallengeLevel(this._levelData, this._validityTest) : (Level)new ChallengeLevel(this._level);
+                    Level.current = !(this._level != "") ? new ChallengeLevel(this._levelData, this._validityTest) : (Level)new ChallengeLevel(this._level);
                     Level.current.transitionSpeedMultiplier = 2f;
                     ((ChallengeLevel)Level.current)._waitSpawn = 0.0f;
                     if (t == null)
                         return;
-                    Level.current.AddThing((Thing)t);
+                    Level.current.AddThing(t);
                 }
                 else
                 {
-                    if ((double)this._waitFade > 0.0)
+                    if (_waitFade > 0.0)
                         return;
                     this._didFade = true;
                     if (this._finished)
                     {
                         ChallengeLevel.running = false;
                         this.PauseLogic();
-                        if ((double)this._finishWait > 0.0)
+                        if (_finishWait > 0.0)
                         {
                             this._finishWait -= 0.01f;
                         }
@@ -288,7 +292,7 @@ namespace DuckGame
                             {
                                 this._playedEndMusic = true;
                                 Level.current.simulatePhysics = false;
-                                ArcadeFrame arcadeFrame = (ArcadeFrame)null;
+                                ArcadeFrame arcadeFrame = null;
                                 if (this._win)
                                 {
                                     if (ArcadeLevel.currentArcade != null)
@@ -299,35 +303,35 @@ namespace DuckGame
                                             Vec2 renderTargetSize = arcadeFrame.GetRenderTargetSize();
                                             float renderTargetZoom = arcadeFrame.GetRenderTargetZoom();
                                             if (this._captureTarget == null)
-                                                this._captureTarget = new RenderTarget2D((int)((double)renderTargetSize.x * 6.0), (int)((double)renderTargetSize.y * 6.0));
+                                                this._captureTarget = new RenderTarget2D((int)(renderTargetSize.x * 6.0), (int)(renderTargetSize.y * 6.0));
                                             int num = DuckGame.Graphics.width / 320;
-                                            Camera camera = new Camera(0.0f, 0.0f, (float)this._captureTarget.width * renderTargetZoom, (float)this._captureTarget.height * renderTargetZoom);
+                                            Camera camera = new Camera(0.0f, 0.0f, _captureTarget.width * renderTargetZoom, _captureTarget.height * renderTargetZoom);
                                             if (ChallengeLevel._duck != null)
                                             {
                                                 Layer.HUD.visible = false;
                                                 MonoMain.RenderGame(MonoMain.screenCapture);
                                                 Layer.HUD.visible = true;
                                                 Matrix result;
-                                                Matrix.CreateOrthographicOffCenter(0.0f, (float)MonoMain.screenCapture.width, (float)MonoMain.screenCapture.height, 0.0f, 0.0f, -1f, out result);
+                                                Matrix.CreateOrthographicOffCenter(0.0f, MonoMain.screenCapture.width, MonoMain.screenCapture.height, 0.0f, 0.0f, -1f, out result);
                                                 result.M41 += -0.5f * result.M11;
                                                 result.M42 += -0.5f * result.M22;
                                                 Matrix matrix = Level.current.camera.getMatrix();
                                                 Vec3 vec3 = (Vec3)DuckGame.Graphics.viewport.Project((Vector3)new Vec3(ChallengeLevel._duck.cameraPosition.x, ChallengeLevel._duck.cameraPosition.y, 0.0f), (Microsoft.Xna.Framework.Matrix)result, (Microsoft.Xna.Framework.Matrix)matrix, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                                 DuckGame.Graphics.SetRenderTarget(this._captureTarget);
                                                 camera.center = new Vec2(vec3.x, vec3.y);
-                                                if ((double)camera.bottom > (double)MonoMain.screenCapture.height)
-                                                    camera.centerY = (float)MonoMain.screenCapture.height - camera.height / 2f;
+                                                if ((double)camera.bottom > MonoMain.screenCapture.height)
+                                                    camera.centerY = MonoMain.screenCapture.height - camera.height / 2f;
                                                 if ((double)camera.top < 0.0)
                                                     camera.centerY = camera.height / 2f;
-                                                if ((double)camera.right > (double)MonoMain.screenCapture.width)
-                                                    camera.centerX = (float)MonoMain.screenCapture.width - camera.width / 2f;
+                                                if ((double)camera.right > MonoMain.screenCapture.width)
+                                                    camera.centerX = MonoMain.screenCapture.width - camera.width / 2f;
                                                 if ((double)camera.left < 0.0)
                                                     camera.centerX = camera.width / 2f;
                                                 DuckGame.Graphics.Clear(Color.Black);
-                                                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, (MTEffect)null, camera.getMatrix());
-                                                DuckGame.Graphics.Draw((Tex2D)MonoMain.screenCapture, 0.0f, 0.0f);
+                                                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
+                                                DuckGame.Graphics.Draw(MonoMain.screenCapture, 0.0f, 0.0f);
                                                 DuckGame.Graphics.screen.End();
-                                                DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+                                                DuckGame.Graphics.SetRenderTarget(null);
                                             }
                                         }
                                     }
@@ -398,16 +402,16 @@ namespace DuckGame
                                     else
                                     {
                                         elapsed = ChallengeLevel.timer.elapsed;
-                                        num2 = elapsed.TotalSeconds * 1000.0 < (double)bestTime ? 1 : 0;
+                                        num2 = elapsed.TotalSeconds * 1000.0 < bestTime ? 1 : 0;
                                     }
                                     bool flag4 = num2 != 0;
                                     string textVal = this.FormatResultString("|WHITE|", "TIME", flag4 ? "|TIMELIME|" : "|DGRED|", MonoMain.TimeString(ChallengeLevel.timer.elapsed, small: true), this._challenge.wonTrophies.Count > 0 ? this._challenge.wonTrophies[0].colorString : "|DGRED|", this._challenge.wonTrophies.Count > 0 ? this._challenge.wonTrophies[0].name : "FAILED!");
-                                    component1.leftSection.Add((UIComponent)new UIText(textVal, Color.White, UIAlign.Left), true);
+                                    component1.leftSection.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                                     if (flag4)
                                         flag1 = true;
-                                    string result = MonoMain.TimeString(TimeSpan.FromMilliseconds((double)saveData.bestTime), small: true);
-                                    component2.leftSection.Add((UIComponent)new UIText(this.FormatResultString(captionColor, "BEST", "|WHITE|", result, (string)null, (string)null, 19), Color.White, UIAlign.Left), true);
-                                    component2.leftSection.Add((UIComponent)new UIText("               ", Color.White, UIAlign.Left), true);
+                                    string result = MonoMain.TimeString(TimeSpan.FromMilliseconds(saveData.bestTime), small: true);
+                                    component2.leftSection.Add(new UIText(this.FormatResultString(captionColor, "BEST", "|WHITE|", result, null, null, 19), Color.White, UIAlign.Left), true);
+                                    component2.leftSection.Add(new UIText("               ", Color.White, UIAlign.Left), true);
                                     flag3 = true;
                                 }
                                 if (!flag3 && this._challenge.challenge.countTargets)
@@ -418,10 +422,10 @@ namespace DuckGame
                                     string result = ChallengeLevel.targetsShot.ToString();
                                     if (targets1 < ChallengeLevel.targetsShot)
                                         flag1 = true;
-                                    component2.leftSection.Add((UIComponent)new UIText(this.FormatResultString(captionColor, "BEST", "|WHITE|", saveData.targets.ToString(), (string)null, (string)null, 19), Color.White, UIAlign.Left), true);
-                                    component2.leftSection.Add((UIComponent)new UIText("               ", Color.White, UIAlign.Left), true);
+                                    component2.leftSection.Add(new UIText(this.FormatResultString(captionColor, "BEST", "|WHITE|", saveData.targets.ToString(), null, null, 19), Color.White, UIAlign.Left), true);
+                                    component2.leftSection.Add(new UIText("               ", Color.White, UIAlign.Left), true);
                                     string textVal = this.FormatResultString("|WHITE|", caption, ChallengeLevel.targetsShot > targets1 ? "|TIMELIME|" : "|DGRED|", result, this._challenge.wonTrophies.Count > 0 ? this._challenge.wonTrophies[0].colorString : "|DGRED|", this._challenge.wonTrophies.Count > 0 ? this._challenge.wonTrophies[0].name : "FAILED!");
-                                    component1.leftSection.Add((UIComponent)new UIText(textVal, Color.White, UIAlign.Left), true);
+                                    component1.leftSection.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                                     flag3 = true;
                                 }
                                 if (!flag3 && this._challenge.challenge.countGoodies)
@@ -432,15 +436,15 @@ namespace DuckGame
                                     string result = ChallengeLevel.goodiesGot.ToString();
                                     if (targets2 < ChallengeLevel.goodiesGot)
                                         flag1 = true;
-                                    component2.leftSection.Add((UIComponent)new UIText(this.FormatResultString(captionColor, "BEST", "|WHITE|", saveData.goodies.ToString(), (string)null, (string)null, 19), Color.White, UIAlign.Left), true);
-                                    component2.leftSection.Add((UIComponent)new UIText("               ", Color.White, UIAlign.Left), true);
+                                    component2.leftSection.Add(new UIText(this.FormatResultString(captionColor, "BEST", "|WHITE|", saveData.goodies.ToString(), null, null, 19), Color.White, UIAlign.Left), true);
+                                    component2.leftSection.Add(new UIText("               ", Color.White, UIAlign.Left), true);
                                     string textVal = this.FormatResultString("|WHITE|", caption, ChallengeLevel.goodiesGot > targets2 ? "|TIMELIME|" : "|DGRED|", result, this._challenge.wonTrophies.Count > 0 ? this._challenge.wonTrophies[0].colorString : "|DGRED|", this._challenge.wonTrophies.Count > 0 ? this._challenge.wonTrophies[0].name : "FAILED!");
-                                    component1.leftSection.Add((UIComponent)new UIText(textVal, Color.White, UIAlign.Left), true);
+                                    component1.leftSection.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                                 }
                                 if (saveData.trophy < TrophyType.Gold || !flag2)
                                     flag1 = false;
                                 int wide = 19;
-                                foreach (ChallengeTrophy challengeTrophy in (IEnumerable<ChallengeTrophy>)this._challenge.challenge.trophies.OrderBy<ChallengeTrophy, int>((Func<ChallengeTrophy, int>)(x => -(int)x.type)))
+                                foreach (ChallengeTrophy challengeTrophy in (IEnumerable<ChallengeTrophy>)this._challenge.challenge.trophies.OrderBy<ChallengeTrophy, int>(x => -(int)x.type))
                                 {
                                     if (challengeTrophy.type == TrophyType.Gold || challengeTrophy.type == TrophyType.Silver || challengeTrophy.type == TrophyType.Bronze)
                                     {
@@ -450,7 +454,7 @@ namespace DuckGame
                                         {
                                             if (challengeTrophy.timeRequirement == 0 && this._challenge.challenge.trophies[0].timeRequirement != 0)
                                                 challengeTrophy.timeRequirement = this._challenge.challenge.trophies[0].timeRequirement;
-                                            result = challengeTrophy.timeRequirement == 0 ? "ANY TIME" : MonoMain.TimeString(TimeSpan.FromSeconds((double)challengeTrophy.timeRequirement), small: true);
+                                            result = challengeTrophy.timeRequirement == 0 ? "ANY TIME" : MonoMain.TimeString(TimeSpan.FromSeconds(challengeTrophy.timeRequirement), small: true);
                                         }
                                         else if (this._challenge.challenge.countGoodies)
                                         {
@@ -462,45 +466,45 @@ namespace DuckGame
                                             num3 = challengeTrophy.targets;
                                             result = num3.ToString();
                                         }
-                                        component2.leftSection.Add((UIComponent)new UIText(this.FormatResultString(challengeTrophy.colorString, challengeTrophy.name, "|WHITE|", result, (string)null, (string)null, wide), Color.White, UIAlign.Left), true);
-                                        component2.leftSection.Add((UIComponent)new UIText("               ", Color.White, UIAlign.Left), true);
+                                        component2.leftSection.Add(new UIText(this.FormatResultString(challengeTrophy.colorString, challengeTrophy.name, "|WHITE|", result, null, null, wide), Color.White, UIAlign.Left), true);
+                                        component2.leftSection.Add(new UIText("               ", Color.White, UIAlign.Left), true);
                                     }
                                 }
                                 if (this._challenge.wonTrophies.Count > 0)
                                     imageVal.frame = (int)this._challenge.wonTrophies[0].type;
-                                component2.rightSection.Add((UIComponent)new UIImage((Sprite)imageVal, UIAlign.Right), true);
+                                component2.rightSection.Add(new UIImage(imageVal, UIAlign.Right), true);
                                 if (this._validityTest && this._challenge.wonTrophies.Count > 0 && (this._challenge.wonTrophies[0].type == TrophyType.Platinum || this._challenge.wonTrophies[0].type == TrophyType.Developer))
                                 {
-                                    this._trophyMenu.SetBackFunction((UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._quit));
-                                    this._trophyMenu.SetAcceptFunction((UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._quit));
+                                    this._trophyMenu.SetBackFunction(new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._quit));
+                                    this._trophyMenu.SetAcceptFunction(new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._quit));
                                 }
                                 else
                                 {
-                                    this._trophyMenu.SetBackFunction((UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._restart));
-                                    this._trophyMenu.SetAcceptFunction((UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._quit));
+                                    this._trophyMenu.SetBackFunction(new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._restart));
+                                    this._trophyMenu.SetAcceptFunction(new UIMenuActionCloseMenuSetBoolean(this._trophyGroup, this._quit));
                                 }
-                                component1.rightSection.Add((UIComponent)component2, true);
-                                this._trophyMenu.Add((UIComponent)component1, true);
+                                component1.rightSection.Add(component2, true);
+                                this._trophyMenu.Add(component1, true);
                                 this._trophyMenu.Close();
-                                this._trophyGroup.Add((UIComponent)this._trophyMenu, false);
+                                this._trophyGroup.Add(_trophyMenu, false);
                                 this._trophyGroup.Close();
-                                Level.Add((Thing)this._trophyGroup);
+                                Level.Add(_trophyGroup);
                                 if (arcadeFrame != null & flag1 && saveData != null)
                                 {
                                     saveData.frameID = arcadeFrame._identifier;
-                                    saveData.frameImage = Editor.TextureToString((Texture2D)(Tex2D)this._captureTarget);
+                                    saveData.frameImage = Editor.TextureToString((Texture2D)_captureTarget);
                                     arcadeFrame.saveData = saveData;
                                 }
                                 Profiles.Save(ChallengeLevel._duck.profile);
                             }
-                            if ((double)this._showEndTextWait > 0.0)
+                            if (_showEndTextWait > 0.0)
                             {
                                 this._showEndTextWait -= 0.01f;
                             }
                             else
                             {
                                 this._fontFade = 1f;
-                                if ((double)this._showResultsWait > 0.0)
+                                if (_showResultsWait > 0.0)
                                     this._showResultsWait -= 0.01f;
                                 else if (!this._showedEndMenu)
                                 {
@@ -528,18 +532,18 @@ namespace DuckGame
                     else
                     {
                         this._waitSpawn -= 0.06f;
-                        if ((double)this._waitSpawn > 0.0)
+                        if (_waitSpawn > 0.0)
                             return;
                         if (this._pendingSpawns != null && this._pendingSpawns.Count > 0)
                         {
                             this._waitSpawn = 0.5f;
                             Duck pendingSpawn = this._pendingSpawns[0];
-                            this.AddThing((Thing)pendingSpawn);
+                            this.AddThing(pendingSpawn);
                             this._pendingSpawns.RemoveAt(0);
                             Vec3 color = pendingSpawn.profile.persona.color;
-                            Level.Add((Thing)new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0.0f, new Color((int)color.x, (int)color.z, (int)color.z), 32f));
-                            Level.Add((Thing)new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
-                            Level.Add((Thing)new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0.0f, new Color((int)color.x, (int)color.z, (int)color.z), 32f));
+                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             SFX.Play("pullPin", 0.7f);
                             ChallengeLevel._duck = pendingSpawn;
                             this._challenge = this.things[typeof(ChallengeMode)].First<Thing>() as ChallengeMode;
@@ -548,8 +552,8 @@ namespace DuckGame
                             this._challenge.PrepareCounts();
                             ChallengeLevel.random = this._challenge.random.value;
                             this._challenge.duck = pendingSpawn;
-                            ChallengeLevel._timer.maxTime = TimeSpan.FromSeconds((double)this._challenge.challenge.trophies[0].timeRequirement);
-                            HUD.AddCornerTimer(HUDCorner.BottomRight, "", (Timer)ChallengeLevel._timer);
+                            ChallengeLevel._timer.maxTime = TimeSpan.FromSeconds(_challenge.challenge.trophies[0].timeRequirement);
+                            HUD.AddCornerTimer(HUDCorner.BottomRight, "", _timer);
                             if (this._challenge.challenge.countTargets)
                             {
                                 int num = this._challenge.challenge.trophies[0].targets;
@@ -559,7 +563,7 @@ namespace DuckGame
                                     foreach (GoalType goalType in this._challenge.goalTypes)
                                         num += goalType.numObjectsRemaining;
                                 }
-                                HUD.AddCornerCounter(HUDCorner.BottomLeft, "@RETICULE@", new FieldBinding((object)this, "targetsShot"), num > 0 ? num : 0);
+                                HUD.AddCornerCounter(HUDCorner.BottomLeft, "@RETICULE@", new FieldBinding(this, "targetsShot"), num > 0 ? num : 0);
                             }
                             if (this._challenge.challenge.countGoodies)
                             {
@@ -571,7 +575,7 @@ namespace DuckGame
                                     if (sequence.isValid && sequence.type == SequenceItemType.Goody)
                                         multiMap.Add(type, element);
                                 }
-                                System.Type key = (System.Type)null;
+                                System.Type key = null;
                                 int num = 0;
                                 foreach (KeyValuePair<System.Type, List<ISequenceItem>> keyValuePair in (MultiMap<System.Type, ISequenceItem, List<ISequenceItem>>)multiMap)
                                 {
@@ -581,7 +585,7 @@ namespace DuckGame
                                         num = keyValuePair.Value.Count;
                                     }
                                 }
-                                if (key != (System.Type)null)
+                                if (key != null)
                                 {
                                     ISequenceItem sequenceItem = multiMap[key][0];
                                     string text = "@STARGOODY@";
@@ -601,7 +605,7 @@ namespace DuckGame
                                             break;
                                     }
                                     int goodies = this._challenge.challenge.trophies[0].goodies;
-                                    HUD.AddCornerCounter(HUDCorner.BottomLeft, text, new FieldBinding((object)this, "goodiesGot"), goodies > 0 ? goodies : 0);
+                                    HUD.AddCornerCounter(HUDCorner.BottomLeft, text, new FieldBinding(this, "goodiesGot"), goodies > 0 ? goodies : 0);
                                 }
                             }
                             if (this._firstStart)
@@ -617,7 +621,7 @@ namespace DuckGame
                                     if (targetDuck.sequence.order == -1)
                                     {
                                         if (_max <= 0)
-                                            targetDuck.sequence.order = Rando.Int((int)byte.MaxValue);
+                                            targetDuck.sequence.order = Rando.Int(byte.MaxValue);
                                         else
                                             targetDuck.sequence.order = Rando.Int(_max);
                                     }
@@ -653,7 +657,7 @@ namespace DuckGame
                         else if (!this._started)
                         {
                             this._waitAfterSpawn -= 0.06f;
-                            if ((double)this._waitAfterSpawn > 0.0)
+                            if (_waitAfterSpawn > 0.0)
                                 return;
                             ++this._waitAfterSpawnDings;
                             if (this._waitAfterSpawnDings > 2)
@@ -673,7 +677,7 @@ namespace DuckGame
                         else
                         {
                             this._fontFade -= 0.1f;
-                            if ((double)this._fontFade < 0.0)
+                            if (_fontFade < 0.0)
                                 this._fontFade = 0.0f;
                             this.PauseLogic();
                         }
@@ -722,7 +726,7 @@ namespace DuckGame
 
         public override void PostDrawLayer(Layer layer)
         {
-            if (layer == Layer.HUD && (!this._started || this._finished) && this._waitAfterSpawnDings > 0 && (double)this._fontFade > 0.00999999977648258)
+            if (layer == Layer.HUD && (!this._started || this._finished) && this._waitAfterSpawnDings > 0 && _fontFade > 0.00999999977648258)
             {
                 this._font.scale = new Vec2(2f, 2f);
                 this._font.alpha = this._fontFade;

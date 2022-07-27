@@ -12,7 +12,7 @@ namespace DuckGame
     {
         public StateBinding _loadStateBinding = new StateBinding(nameof(_loadState));
         public StateBinding _angleOffsetBinding = new StateBinding(nameof(_angleOffset));
-        public StateBinding _netLoadBinding = (StateBinding)new NetSoundBinding(nameof(_netLoad));
+        public StateBinding _netLoadBinding = new NetSoundBinding(nameof(_netLoad));
         public NetSoundEffect _netLoad = new NetSoundEffect(new string[1]
         {
       "loadSniper"
@@ -25,7 +25,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 3;
-            this._ammoType = (AmmoType)new ATSniper();
+            this._ammoType = new ATSniper();
             this._type = "gun";
             this.graphic = new Sprite("sniper");
             this.center = new Vec2(16f, 4f);
@@ -67,7 +67,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 1)
                 {
-                    if ((double)this._angleOffset < 0.159999996423721)
+                    if (_angleOffset < 0.159999996423721)
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.15f);
                     else
                         ++this._loadState;
@@ -75,7 +75,7 @@ namespace DuckGame
                 else if (this._loadState == 2)
                 {
                     this.handOffset.x += 0.4f;
-                    if ((double)this.handOffset.x > 4.0)
+                    if (handOffset.x > 4.0)
                     {
                         ++this._loadState;
                         this.Reload();
@@ -85,7 +85,7 @@ namespace DuckGame
                 else if (this._loadState == 3)
                 {
                     this.handOffset.x -= 0.4f;
-                    if ((double)this.handOffset.x <= 0.0)
+                    if (handOffset.x <= 0.0)
                     {
                         ++this._loadState;
                         this.handOffset.x = 0.0f;
@@ -93,7 +93,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 4)
                 {
-                    if ((double)this._angleOffset > 0.0399999991059303)
+                    if (_angleOffset > 0.0399999991059303)
                     {
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.15f);
                     }
@@ -129,7 +129,7 @@ namespace DuckGame
         public override void Draw()
         {
             float angle = this.angle;
-            if (this.offDir > (sbyte)0)
+            if (this.offDir > 0)
                 this.angle -= this._angleOffset;
             else
                 this.angle += this._angleOffset;

@@ -34,12 +34,12 @@ namespace DuckGame
                 Mouse._prevScrollValue = Mouse.scroll;
                 Mouse._mouseStatePrev = Mouse._mouseState;
                 Mouse._mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-                Vec3 vec3 = new Vec3((float)Mouse._mouseState.X, (float)Mouse._mouseState.Y, 0.0f);
+                Vec3 vec3 = new Vec3(_mouseState.X, _mouseState.Y, 0.0f);
                 if (Graphics._screenViewport.HasValue)
                     Mouse._mouseScreenPos = new Vec2(vec3.x / Resolution.size.x * Layer.HUD.camera.width, vec3.y / Resolution.size.y * Layer.HUD.camera.height);
-                Mouse._mouseScreenPos.x = (float)(int)Mouse._mouseScreenPos.x;
-                Mouse._mouseScreenPos.y = (float)(int)Mouse._mouseScreenPos.y;
-                Mouse._mousePos = new Vec2((float)Mouse._mouseState.X, (float)Mouse._mouseState.Y);
+                Mouse._mouseScreenPos.x = (int)Mouse._mouseScreenPos.x;
+                Mouse._mouseScreenPos.y = (int)Mouse._mouseScreenPos.y;
+                Mouse._mousePos = new Vec2(_mouseState.X, _mouseState.Y);
                 if (!Mouse._outOfFocus)
                     return;
                 if (Mouse._mouseState.LeftButton == ButtonState.Released && Mouse._mouseState.MiddleButton == ButtonState.Released && Mouse._mouseState.RightButton == ButtonState.Released)
@@ -87,11 +87,11 @@ namespace DuckGame
 
         public static bool available => true;
 
-        public static float scroll => (float)(Mouse._mouseStatePrev.ScrollWheelValue - Mouse._mouseState.ScrollWheelValue);
+        public static float scroll => Mouse._mouseStatePrev.ScrollWheelValue - Mouse._mouseState.ScrollWheelValue;
 
-        public static bool prevScrollDown => (double)Mouse._prevScrollValue > 0.0;
+        public static bool prevScrollDown => _prevScrollValue > 0.0;
 
-        public static bool prevScrollUp => (double)Mouse._prevScrollValue < 0.0;
+        public static bool prevScrollUp => _prevScrollValue < 0.0;
 
         public static float x => Mouse._mouseScreenPos.x;
 

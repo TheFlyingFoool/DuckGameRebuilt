@@ -32,16 +32,16 @@ namespace DuckGame
             feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = hitPos;
-            Level.Add((Thing)feather);
+            Level.Add(feather);
             Vec2 point = hitPos + bullet.travelDirNormalized * 3f;
-            if (bullet.isLocal && this._duckOwner.sliding && this._duckOwner.ragdoll == null && (double)point.x > (double)this.left + 2.0 && (double)point.x < (double)this.right - 2.0 && (double)point.y > (double)this.top + 2.0 && (double)point.y < (double)this.bottom - 2.0)
+            if (bullet.isLocal && this._duckOwner.sliding && this._duckOwner.ragdoll == null && point.x > (double)this.left + 2.0 && point.x < (double)this.right - 2.0 && point.y > (double)this.top + 2.0 && point.y < (double)this.bottom - 2.0)
             {
                 foreach (Equipment equipment in Level.CheckPointAll<Equipment>(point))
                 {
                     if (equipment is Helmet || equipment is ChestPlate)
                         return false;
                 }
-                this._duckOwner.Kill((DestroyType)new DTShot(bullet));
+                this._duckOwner.Kill(new DTShot(bullet));
             }
             return false;
         }
@@ -55,7 +55,7 @@ namespace DuckGame
             feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = exitPos;
-            Level.Add((Thing)feather);
+            Level.Add(feather);
         }
     }
 }

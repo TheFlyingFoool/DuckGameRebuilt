@@ -19,9 +19,11 @@ namespace DuckGame
         public Present(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("presents", 16, 16);
-            this._sprite.frame = Rando.Int(0, 7);
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("presents", 16, 16)
+            {
+                frame = Rando.Int(0, 7)
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 11f);
@@ -40,11 +42,11 @@ namespace DuckGame
             {
                 SFX.Play("flameExplode");
                 for (int index = 0; index < 3; ++index)
-                    Level.Add((Thing)SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
-                Holdable holdable = this.SpawnPresent((Thing)null);
+                    Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                Holdable holdable = this.SpawnPresent(null);
                 if (holdable != null)
                     holdable.velocity = Rando.Vec2(-1f, 1f, -2f, 0.0f);
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             }
             return base.OnDestroy(type);
         }
@@ -52,26 +54,26 @@ namespace DuckGame
         public override void Initialize()
         {
             List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
-            physicsObjects.RemoveAll((Predicate<System.Type>)(t => t == typeof(Present) || t == typeof(LavaBarrel) || t == typeof(Grapple)));
+            physicsObjects.RemoveAll(t => t == typeof(Present) || t == typeof(LavaBarrel) || t == typeof(Grapple));
             this._contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
         }
 
         public static void OpenEffect(Vec2 pPosition, int pFrame, bool pIsNetMessage)
         {
-            Level.Add((Thing)new OpenPresent(pPosition.x, pPosition.y, pFrame));
+            Level.Add(new OpenPresent(pPosition.x, pPosition.y, pFrame));
             for (int index = 0; index < 4; ++index)
-                Level.Add((Thing)SmallSmoke.New(pPosition.x + Rando.Float(-2f, 2f), pPosition.y + Rando.Float(-2f, 2f)));
+                Level.Add(SmallSmoke.New(pPosition.x + Rando.Float(-2f, 2f), pPosition.y + Rando.Float(-2f, 2f)));
             SFX.Play("harp", 0.8f);
             if (pIsNetMessage)
                 return;
-            Send.Message((NetMessage)new NMPresentOpen(pPosition, (byte)pFrame));
+            Send.Message(new NMPresentOpen(pPosition, (byte)pFrame));
         }
 
         public Holdable SpawnPresent(Thing pOwner)
         {
             if (!this.isServerForObject)
-                return (Holdable)null;
-            if (this._contains == (System.Type)null)
+                return null;
+            if (this._contains == null)
                 this.Initialize();
             Holdable thing1 = Editor.CreateThing(this._contains) as Holdable;
             if (thing1 != null)
@@ -93,7 +95,7 @@ namespace DuckGame
                     thing1.x = this.x;
                     thing1.y = this.y;
                 }
-                Level.Add((Thing)thing1);
+                Level.Add(thing1);
                 if (duck != null)
                 {
                     duck.GiveHoldable(thing1);
@@ -115,7 +117,7 @@ namespace DuckGame
                 ++Global.data.presentsOpened.valueInt;
                 this.duck.ThrowItem();
             }
-            Level.Remove((Thing)this);
+            Level.Remove(this);
             Present.OpenEffect(this.position, this._sprite.frame, false);
             this.SpawnPresent(owner);
         }

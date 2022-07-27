@@ -18,7 +18,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("net", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 7f);
             this.collisionOffset = new Vec2(-6f, -5f);
             this.collisionSize = new Vec2(12f, 12f);
@@ -36,11 +36,11 @@ namespace DuckGame
             if (this.grounded && (double)Math.Abs(this.vSpeed) + (double)Math.Abs(this.hSpeed) <= 0.0)
                 this.alpha -= 0.2f;
             if ((double)this.alpha <= 0.0)
-                Level.Remove((Thing)this);
-            if (!this.onFire && Level.CheckRect<SmallFire>(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), (Thing)this) != null)
+                Level.Remove(this);
+            if (!this.onFire && Level.CheckRect<SmallFire>(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), this) != null)
             {
                 this.onFire = true;
-                Level.Add((Thing)SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: ((MaterialThing)this), firedFrom: ((Thing)this)));
+                Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
             }
             base.Update();
         }
@@ -60,7 +60,7 @@ namespace DuckGame
                             SmallSmoke smallSmoke = SmallSmoke.New(duck._trapped.x + Rando.Float(-4f, 4f), duck._trapped.y + Rando.Float(-4f, 4f));
                             smallSmoke.hSpeed += duck._trapped.hSpeed * Rando.Float(0.3f, 0.5f);
                             smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                            Level.Add((Thing)smallSmoke);
+                            Level.Add(smallSmoke);
                         }
                     }
                     if (Recorder.currentRecording == null)
@@ -69,7 +69,7 @@ namespace DuckGame
                     break;
                 case RagdollPart ragdollPart when ragdollPart.doll.captureDuck != null && !ragdollPart.doll.captureDuck.dead:
                     Duck captureDuck = ragdollPart.doll.captureDuck;
-                    this.Fondle((Thing)ragdollPart.doll);
+                    this.Fondle(ragdollPart.doll);
                     ragdollPart.doll.Unragdoll();
                     captureDuck.Netted(this);
                     if (captureDuck._trapped != null)
@@ -79,7 +79,7 @@ namespace DuckGame
                             SmallSmoke smallSmoke = SmallSmoke.New(captureDuck._trapped.x + Rando.Float(-4f, 4f), captureDuck._trapped.y + Rando.Float(-4f, 4f));
                             smallSmoke.hSpeed += captureDuck._trapped.hSpeed * Rando.Float(0.3f, 0.5f);
                             smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                            Level.Add((Thing)smallSmoke);
+                            Level.Add(smallSmoke);
                         }
                     }
                     if (Recorder.currentRecording == null)

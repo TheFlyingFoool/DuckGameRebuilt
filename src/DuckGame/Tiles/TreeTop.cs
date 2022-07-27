@@ -18,10 +18,12 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.graphic = new Sprite("treeTop");
-            this._treeInside = new Sprite("treeTopInside");
-            this._treeInside.center = new Vec2(24f, 24f);
-            this._treeInside.alpha = 0.8f;
-            this._treeInside.depth = (Depth)0.9f;
+            this._treeInside = new Sprite("treeTopInside")
+            {
+                center = new Vec2(24f, 24f),
+                alpha = 0.8f,
+                depth = (Depth)0.9f
+            };
             this.center = new Vec2(24f, 24f);
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -8f);
@@ -31,7 +33,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.graphic.flipH = this.offDir <= (sbyte)0;
+            this.graphic.flipH = this.offDir <= 0;
             base.Draw();
         }
     }

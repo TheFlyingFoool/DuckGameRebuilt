@@ -12,17 +12,17 @@ namespace DuckGame
 {
     public class RasterFont : FancyBitmapFont
     {
-        public static readonly RasterFont None = new RasterFont((string)null, 0.0f);
+        public static readonly RasterFont None = new RasterFont(null, 0.0f);
         public RasterFont.Data data;
 
-        public static float fontScaleFactor => (float)(Resolution.current.y / 72) / 10f;
+        public static float fontScaleFactor => Resolution.current.y / 72 / 10f;
 
         public float size
         {
             get => this.data.fontSize;
             set
             {
-                if ((double)value == (double)this.data.fontSize)
+                if ((double)value == data.fontSize)
                     return;
                 this.Rebuild(this.data.name, value);
             }
@@ -60,7 +60,7 @@ namespace DuckGame
             if (pFont != null && pFont != "NULLDUCKFONTDATA")
             {
                 this.data = FontGDIContext.CreateRasterFontData(pFont, pSize);
-                this._texture = (Sprite)null;
+                this._texture = null;
                 this._widths = new List<Rectangle>();
                 foreach (BitmapFont_CharacterInfo character in this.data.characters)
                     this._widths.Add(character.area);
@@ -91,7 +91,7 @@ namespace DuckGame
                     string str = strArray[0];
                     int pSize = Math.Min(Convert.ToInt32(strArray[1]), 120);
                     if (FontGDIContext.GetName(str) != null)
-                        return new RasterFont(str, (float)pSize);
+                        return new RasterFont(str, pSize);
                 }
             }
             catch (Exception)

@@ -61,7 +61,7 @@ namespace DuckGame
                 return;
             if (Level.current.camera is FollowCam camera)
                 camera.minSize = 90f;
-            this._eligibleTrophies.AddRange((IEnumerable<ChallengeTrophy>)this._challenge.trophies);
+            this._eligibleTrophies.AddRange(_challenge.trophies);
             if (ChallengeLevel.timer != null)
             {
                 if (this._challenge.trophies[0].timeRequirement != 0)
@@ -126,7 +126,7 @@ namespace DuckGame
                 else
                 {
                     bool flag4 = this.reverseTimeLimit;
-                    if (eligibleTrophy.timeRequirement != 0 && (int)ChallengeLevel.timer.elapsed.TotalSeconds >= eligibleTrophy.timeRequirement && (eligibleTrophy.type == TrophyType.Baseline || Math.Abs(ChallengeLevel.timer.elapsed.TotalSeconds - (double)eligibleTrophy.timeRequirement) > 0.00999999977648258) && (eligibleTrophy.timeRequirementMilliseconds == 0 || (int)Math.Round(ChallengeLevel.timer.elapsed.TotalSeconds % 1.0 * 100.0) > eligibleTrophy.timeRequirementMilliseconds))
+                    if (eligibleTrophy.timeRequirement != 0 && (int)ChallengeLevel.timer.elapsed.TotalSeconds >= eligibleTrophy.timeRequirement && (eligibleTrophy.type == TrophyType.Baseline || Math.Abs(ChallengeLevel.timer.elapsed.TotalSeconds - eligibleTrophy.timeRequirement) > 0.00999999977648258) && (eligibleTrophy.timeRequirementMilliseconds == 0 || (int)Math.Round(ChallengeLevel.timer.elapsed.TotalSeconds % 1.0 * 100.0) > eligibleTrophy.timeRequirementMilliseconds))
                     {
                         flag2 = false;
                         flag4 = !this.reverseTimeLimit;
@@ -246,34 +246,34 @@ namespace DuckGame
                 return;
             if (Teams.all[this._hatIndex].hasHat)
             {
-                this._hatMenu.image = (Sprite)Teams.all[this._hatIndex].hat.CloneMap();
+                this._hatMenu.image = Teams.all[this._hatIndex].hat.CloneMap();
                 this._hatMenu.image.center = new Vec2(12f, 12f) + Teams.all[this._hatIndex].hatOffset;
             }
             else
-                this._hatMenu.image = (Sprite)null;
+                this._hatMenu.image = null;
         }
 
         public ChallengeData challenge => this._challenge;
 
         public override ContextMenu GetContextMenu()
         {
-            FieldBinding fieldBinding = new FieldBinding((object)this, "hatIndex");
+            FieldBinding fieldBinding = new FieldBinding(this, "hatIndex");
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            ContextTextbox contextTextbox1 = new ContextTextbox("Name", (IContextListener)null, new FieldBinding((object)this._challenge, "name"), "The name of this Challenge.");
-            contextMenu.AddItem((ContextMenu)contextTextbox1);
-            ContextTextbox contextTextbox2 = new ContextTextbox("Desc", (IContextListener)null, new FieldBinding((object)this._challenge, "description"), "The Story.");
-            contextMenu.AddItem((ContextMenu)contextTextbox2);
-            ContextTextbox contextTextbox3 = new ContextTextbox("Goal Desc", (IContextListener)null, new FieldBinding((object)this._challenge, "goal"), "A description of how to win the challenge.");
-            contextMenu.AddItem((ContextMenu)contextTextbox3);
+            ContextTextbox contextTextbox1 = new ContextTextbox("Name", null, new FieldBinding(_challenge, "name"), "The name of this Challenge.");
+            contextMenu.AddItem(contextTextbox1);
+            ContextTextbox contextTextbox2 = new ContextTextbox("Desc", null, new FieldBinding(_challenge, "description"), "The Story.");
+            contextMenu.AddItem(contextTextbox2);
+            ContextTextbox contextTextbox3 = new ContextTextbox("Goal Desc", null, new FieldBinding(_challenge, "goal"), "A description of how to win the challenge.");
+            contextMenu.AddItem(contextTextbox3);
             if (!(this is ChallengeModeNew))
             {
-                ContextTextbox contextTextbox4 = new ContextTextbox("Requires", (IContextListener)null, new FieldBinding((object)this._challenge, "requirement"), "Number of arcade trophies required to unlock. B15 = 15 Bronze. B2P2 = 2 Bronze, 2 Platinum.");
-                contextMenu.AddItem((ContextMenu)contextTextbox4);
-                ContextTextbox contextTextbox5 = new ContextTextbox("noun(plural)", (IContextListener)null, new FieldBinding((object)this._challenge, "prefix"), "Name of goal object pluralized, for example \"Ducks\", \"Stars\", etc.");
-                contextMenu.AddItem((ContextMenu)contextTextbox5);
-                contextMenu.AddItem((ContextMenu)new ContextFile("Prev", (IContextListener)null, new FieldBinding((object)this._challenge, "prevchal"), ContextFileType.Level, "If set, Chancy will offer this challenge as a special challenge after PREV is completed, if REQUIRES is met."));
-                contextMenu.AddItem((ContextMenu)new ContextCheckBox("Goodies", (IContextListener)null, new FieldBinding((object)this._challenge, "countGoodies"), (System.Type)null, "If set, the goal for this challenge is to collect goodies (stars, finish flags, etc)."));
-                contextMenu.AddItem((ContextMenu)new ContextCheckBox("Targets", (IContextListener)null, new FieldBinding((object)this._challenge, "countTargets"), (System.Type)null, "If set, the goal for this challenge is to knock down targets."));
+                ContextTextbox contextTextbox4 = new ContextTextbox("Requires", null, new FieldBinding(_challenge, "requirement"), "Number of arcade trophies required to unlock. B15 = 15 Bronze. B2P2 = 2 Bronze, 2 Platinum.");
+                contextMenu.AddItem(contextTextbox4);
+                ContextTextbox contextTextbox5 = new ContextTextbox("noun(plural)", null, new FieldBinding(_challenge, "prefix"), "Name of goal object pluralized, for example \"Ducks\", \"Stars\", etc.");
+                contextMenu.AddItem(contextTextbox5);
+                contextMenu.AddItem(new ContextFile("Prev", null, new FieldBinding(_challenge, "prevchal"), ContextFileType.Level, "If set, Chancy will offer this challenge as a special challenge after PREV is completed, if REQUIRES is met."));
+                contextMenu.AddItem(new ContextCheckBox("Goodies", null, new FieldBinding(_challenge, "countGoodies"), null, "If set, the goal for this challenge is to collect goodies (stars, finish flags, etc)."));
+                contextMenu.AddItem(new ContextCheckBox("Targets", null, new FieldBinding(_challenge, "countTargets"), null, "If set, the goal for this challenge is to knock down targets."));
             }
             int num = 0;
             bool flag1 = false;
@@ -281,10 +281,12 @@ namespace DuckGame
             bool flag3 = false;
             foreach (ChallengeTrophy trophy in this._challenge.trophies)
             {
-                SpriteMap image = new SpriteMap("challengeTrophyIcons", 16, 16);
-                image.frame = num;
+                SpriteMap image = new SpriteMap("challengeTrophyIcons", 16, 16)
+                {
+                    frame = num
+                };
                 ++num;
-                EditorGroupMenu editorGroupMenu = new EditorGroupMenu((IContextListener)contextMenu, image: image);
+                EditorGroupMenu editorGroupMenu = new EditorGroupMenu(contextMenu, image: image);
                 if (trophy.type == TrophyType.Bronze)
                     editorGroupMenu.tooltip = "This one should be pretty easy.";
                 if (trophy.type == TrophyType.Silver)
@@ -299,9 +301,9 @@ namespace DuckGame
                 if (trophy.type == TrophyType.Baseline)
                 {
                     editorGroupMenu.text = "Goals";
-                    editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Goodies", (IContextListener)null, new FieldBinding((object)trophy, "goodies", -1f, 300f), 1f, "ALL", false, (System.Type)null, "You must always collect exactly this many goodies."));
-                    editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Targets", (IContextListener)null, new FieldBinding((object)trophy, "targets", -1f, 300f), 1f, "ALL", false, (System.Type)null, "You must always knock down exactly this many targets."));
-                    editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Time Limit", (IContextListener)null, new FieldBinding((object)trophy, "timeRequirement", max: 600f), 1f, "NONE", true, (System.Type)null, "You have at most this much time to complete the challenge."));
+                    editorGroupMenu.AddItem(new ContextSlider("Goodies", null, new FieldBinding(trophy, "goodies", -1f, 300f), 1f, "ALL", false, null, "You must always collect exactly this many goodies."));
+                    editorGroupMenu.AddItem(new ContextSlider("Targets", null, new FieldBinding(trophy, "targets", -1f, 300f), 1f, "ALL", false, null, "You must always knock down exactly this many targets."));
+                    editorGroupMenu.AddItem(new ContextSlider("Time Limit", null, new FieldBinding(trophy, "timeRequirement", max: 600f), 1f, "NONE", true, null, "You have at most this much time to complete the challenge."));
                     if (trophy.goodies >= 0)
                         flag2 = true;
                     if (trophy.targets >= 0)
@@ -310,25 +312,25 @@ namespace DuckGame
                 else
                 {
                     if (!flag2)
-                        editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Goodies", (IContextListener)null, new FieldBinding((object)trophy, "goodies", -1f, 300f), 1f, "ALL", false, (System.Type)null, "Collect this many items to get this trophy"));
+                        editorGroupMenu.AddItem(new ContextSlider("Goodies", null, new FieldBinding(trophy, "goodies", -1f, 300f), 1f, "ALL", false, null, "Collect this many items to get this trophy"));
                     if (!flag3)
-                        editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Targets", (IContextListener)null, new FieldBinding((object)trophy, "targets", -1f, 300f), 1f, "ALL", false, (System.Type)null, "Knock down this many targets to get this trophy"));
+                        editorGroupMenu.AddItem(new ContextSlider("Targets", null, new FieldBinding(trophy, "targets", -1f, 300f), 1f, "ALL", false, null, "Knock down this many targets to get this trophy"));
                     if (!flag1)
                     {
-                        editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Time", (IContextListener)null, new FieldBinding((object)trophy, "timeRequirement", max: 600f), 1f, "GOAL TIME", true, (System.Type)null, "Complete challenge in this time or less to get this trophy."));
-                        editorGroupMenu.AddItem((ContextMenu)new ContextSlider("Milis", (IContextListener)null, new FieldBinding((object)trophy, "timeRequirementMilliseconds", max: 99f), 1f, "NONE", false, (System.Type)null, "Fine control over challenge time requirement."));
+                        editorGroupMenu.AddItem(new ContextSlider("Time", null, new FieldBinding(trophy, "timeRequirement", max: 600f), 1f, "GOAL TIME", true, null, "Complete challenge in this time or less to get this trophy."));
+                        editorGroupMenu.AddItem(new ContextSlider("Milis", null, new FieldBinding(trophy, "timeRequirementMilliseconds", max: 99f), 1f, "NONE", false, null, "Fine control over challenge time requirement."));
                     }
                 }
-                contextMenu.AddItem((ContextMenu)editorGroupMenu);
+                contextMenu.AddItem(editorGroupMenu);
             }
-            return (ContextMenu)contextMenu;
+            return contextMenu;
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("hatIndex", (object)this.hatIndex);
-            binaryClassChunk.AddProperty("challengeData", (object)this._challenge.Serialize());
+            binaryClassChunk.AddProperty("hatIndex", hatIndex);
+            binaryClassChunk.AddProperty("challengeData", this._challenge.Serialize());
             return binaryClassChunk;
         }
 
@@ -350,7 +352,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("hatIndex", (object)this.hatIndex));
+            dxmlNode.Add(new DXMLNode("hatIndex", hatIndex));
             dxmlNode.Add(this._challenge.LegacySerialize());
             return dxmlNode;
         }

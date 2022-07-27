@@ -25,7 +25,7 @@ namespace DuckGame
         private string _default = "";
 
         public TextEntryDialog()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -51,9 +51,11 @@ namespace DuckGame
             this._root = true;
             this.invalidPathChars = Path.GetInvalidPathChars();
             this._fancyFont = new FancyBitmapFont("smallFont");
-            this._textbox = new MysteryTextbox(vec2_1.x + 4f, vec2_1.y + 4f, num1 - 20f, num2 - 10f);
-            this._textbox.enterConfirms = true;
-            this._textbox.filename = true;
+            this._textbox = new MysteryTextbox(vec2_1.x + 4f, vec2_1.y + 4f, num1 - 20f, num2 - 10f)
+            {
+                enterConfirms = true,
+                filename = true
+            };
         }
 
         private void TextEntryComplete(string pResult)
@@ -72,14 +74,14 @@ namespace DuckGame
         {
             this._usingOnscreenKeyboard = false;
             this._startingText = startingText;
-            this.result = (string)null;
+            this.result = null;
             this.opened = true;
             if (Steam.ShowOnscreenKeyboard(false, text, startingText, maxChars))
             {
                 Steam.TextEntryComplete += new Steam.TextEntryCompleteDelegate(this.TextEntryComplete);
                 this._usingOnscreenKeyboard = true;
                 Editor.enteringText = true;
-                Editor.PushFocus((object)this);
+                Editor.PushFocus(this);
                 SFX.Play("openClick", 0.4f);
             }
             else
@@ -89,7 +91,7 @@ namespace DuckGame
                 Keyboard.keyString = "";
                 Editor.enteringText = true;
                 this._maxChars = maxChars;
-                Editor.PushFocus((object)this);
+                Editor.PushFocus(this);
                 SFX.Play("openClick", 0.4f);
                 this._textbox.text = this._default;
                 this._textbox._cursorPosition = this._textbox.text.Length;

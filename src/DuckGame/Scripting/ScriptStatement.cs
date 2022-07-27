@@ -6,12 +6,14 @@ namespace DuckGame
 	{
 		public static ScriptStatement Parse(string statement, object left = null, object right = null, ScriptOperator operat = ScriptOperator.None, string func = null, bool isChild = false)
 		{
-			ScriptStatement newStatement = new ScriptStatement();
-			newStatement.leftObject = left;
-			newStatement.rightObject = right;
-			newStatement.op = operat;
-			newStatement.functionName = func;
-			int openParenthesis = 1;
+            ScriptStatement newStatement = new ScriptStatement
+            {
+                leftObject = left,
+                rightObject = right,
+                op = operat,
+                functionName = func
+            };
+            int openParenthesis = 1;
 			if (!isChild)
 			{
 				openParenthesis++;
@@ -395,7 +397,7 @@ namespace DuckGame
 					}
 					if (finalResult is float && obj != null)
 					{
-						finalResult = (float)finalResult * (float)(obj.negative ? -1 : 1);
+						finalResult = (float)finalResult * (obj.negative ? -1 : 1);
 					}
 					if (finalResult is int && obj != null)
 					{

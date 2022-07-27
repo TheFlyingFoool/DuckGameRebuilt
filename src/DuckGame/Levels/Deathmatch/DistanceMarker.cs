@@ -23,14 +23,14 @@ namespace DuckGame
             this._distanceSign.CenterOrigin();
             this.collisionOffset = new Vec2(-8f, -6f);
             this.collisionSize = new Vec2(16f, 13f);
-            this.center = new Vec2((float)(this._distanceSign.w / 2), (float)(this._distanceSign.h / 2));
+            this.center = new Vec2(this._distanceSign.w / 2, this._distanceSign.h / 2);
         }
 
         public override void Draw()
         {
             this._distanceSign.depth = this.depth;
             Graphics.Draw(this._distanceSign, this.x, this.y);
-            string text = Change.ToString((object)this._distance);
+            string text = Change.ToString(_distance);
             this._font.Draw(text, this.x - this._font.GetWidth(text) / 2f, (float)((double)this.y - (double)this._font.height / 2.0 + 1.0), Color.DarkSlateGray, this.depth + 1);
         }
     }

@@ -23,11 +23,11 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if ((int)DuckNetwork.levelIndex != (int)this.levelIndex)
+            if (DuckNetwork.levelIndex != levelIndex)
                 return;
             DevConsole.Log(DCSection.DuckNet, "|DGGREEN|Received Level Information (" + this.levelIndex.ToString() + ").");
             Level.current.TransferComplete(this.connection);
-            Send.Message((NetMessage)new NMLevelReady(this.levelIndex), NetMessagePriority.ReliableOrdered);
+            Send.Message(new NMLevelReady(this.levelIndex), NetMessagePriority.ReliableOrdered);
             this.connection.levelIndex = this.levelIndex;
         }
     }

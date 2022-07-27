@@ -64,29 +64,29 @@ namespace DuckGame
         public override void Update()
         {
             if (Input.CheckCode((InputCode)"LEFT|LEFT|RIGHT|RIGHT|SHOOT|SHOOT|UP|UP|DOWN|DOWN|SHOOT|SHOOT"))
-                Global.data.onlineMatches.value = (object)100;
+                Global.data.onlineMatches.value = 100;
             if (Input.CheckCode((InputCode)"UP|UP|UP|SHOOT|DOWN|DOWN|DOWN|SHOOT|LEFT|RIGHT|SHOOT"))
-                Global.data.winsAsHair.value = (object)100;
+                Global.data.winsAsHair.value = 100;
             if (this._desiredTransition != this._transition)
             {
                 this._fade = Lerp.Float(this._fade, 0.0f, 0.06f);
-                if ((double)this._fade <= 0.0)
+                if (_fade <= 0.0)
                 {
                     this._transition = this._desiredTransition;
                     if (this._transition == DoorTransition.Profile)
                     {
                         Graphics.fade = 0.0f;
-                        Level.current = (Level)new LockerRoom(this._profile);
+                        Level.current = new LockerRoom(this._profile);
                     }
                     else if (this._transition == DoorTransition.Exit)
                     {
                         Graphics.fade = 0.0f;
-                        Level.current = (Level)new TitleScreen();
+                        Level.current = new TitleScreen();
                     }
                     else if (this._transition == DoorTransition.Album)
                     {
                         Graphics.fade = 0.0f;
-                        Level.current = (Level)new Album();
+                        Level.current = new Album();
                     }
                 }
             }
@@ -115,9 +115,9 @@ namespace DuckGame
                     this._desiredTransition = DoorTransition.Album;
                     HUD.CloseAllCorners();
                 }
-                if ((double)this._slideTo != 0.0 && (double)this._slide != (double)this._slideTo)
+                if (_slideTo != 0.0 && _slide != (double)this._slideTo)
                     this._slide = Lerp.Float(this._slide, this._slideTo, 0.05f);
-                else if ((double)this._slideTo != 0.0 && (double)this._slide == (double)this._slideTo)
+                else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
                 {
                     this._slide = 0.0f;
                     this._slideTo = 0.0f;
@@ -173,8 +173,8 @@ namespace DuckGame
                     string str = "NO PROFILE";
                     if (index2 != -1)
                         str = this._profiles[index2].name;
-                    float num3 = (float)((double)vec2_1.x + (double)num1 + 3.0 * (double)num2);
-                    float x = (float)((double)vec2_1.x + (double)num1 + (double)index1 * (double)num2 + -(double)this._slide * (double)num2);
+                    float num3 = (float)(vec2_1.x + (double)num1 + 3.0 * (double)num2);
+                    float x = (float)(vec2_1.x + (double)num1 + index1 * (double)num2 + -(double)this._slide * (double)num2);
                     double num4 = (double)Maths.Clamp((float)((100.0 - (double)Math.Abs(x - num3)) / 100.0), 0.0f, 1f);
                     float num5 = (float)num4 * Maths.NormalizeSection((float)num4, 0.0f, 0.9f);
                     this._door.color = Color.White * num5 * this._fade;

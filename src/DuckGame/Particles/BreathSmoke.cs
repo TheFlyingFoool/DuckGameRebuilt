@@ -19,7 +19,7 @@ namespace DuckGame
         private SpriteMap _sprite2;
         private SpriteMap _sprite;
         private SpriteMap _orbiter;
-        private float _life = 1f;
+        //private float _life = 1f;
         private float _rotSpeed = Rando.Float(0.05f, 0.15f);
         private float _distPulseSpeed = Rando.Float(0.05f, 0.15f);
         private float _distPulse = Rando.Float(5f);
@@ -40,7 +40,7 @@ namespace DuckGame
             BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject + 1) % BreathSmoke.kMaxObjects;
             breathSmoke.Init(xpos, ypos);
             breathSmoke.ResetProperties();
-            breathSmoke._sprite.globalIndex = (int)Thing.GetGlobalIndex();
+            breathSmoke._sprite.globalIndex = Thing.GetGlobalIndex();
             breathSmoke.globalIndex = Thing.GetGlobalIndex();
             breathSmoke.depth = (Depth)depth;
             breathSmoke.s1 *= scaleMul;
@@ -63,7 +63,7 @@ namespace DuckGame
             BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject + 1) % BreathSmoke.kMaxObjects;
             breathSmoke.Init(xpos, ypos);
             breathSmoke.ResetProperties();
-            breathSmoke._sprite.globalIndex = (int)Thing.GetGlobalIndex();
+            breathSmoke._sprite.globalIndex = Thing.GetGlobalIndex();
             breathSmoke.globalIndex = Thing.GetGlobalIndex();
             breathSmoke.depth = (Depth)0.8f;
             return breathSmoke;
@@ -82,16 +82,18 @@ namespace DuckGame
             int num2 = Rando.Int(3) * 4;
             this._orbiter.AddAnimation("idle", 0.1f, true, 2 + num2);
             this._orbiter.AddAnimation("puff", Rando.Float(0.08f, 0.12f), false, 2 + num2, 1 + num2, num2);
-            this._sprite2 = new SpriteMap("tinySmokeTestBack", 16, 16);
-            this._sprite2.currentAnimation = (string)null;
-            this._orbiter.currentAnimation = (string)null;
+            this._sprite2 = new SpriteMap("tinySmokeTestBack", 16, 16)
+            {
+                currentAnimation = null
+            };
+            this._orbiter.currentAnimation = null;
             this.center = new Vec2(8f, 8f);
         }
 
         private void Init(float xpos, float ypos)
         {
             this._orbitInc += 0.2f;
-            this._life = 1f;
+            //this._life = 1f;
             this.position.x = xpos;
             this.position.y = ypos;
             this._sprite.SetAnimation("idle");
@@ -104,7 +106,7 @@ namespace DuckGame
             this.s2 = Rando.Float(0.6f, 1f);
             this.hSpeed = Rando.Float(-0.15f, 0.15f);
             this.vSpeed = Rando.Float(-0.1f, -0.05f);
-            this._life += Rando.Float(0.2f);
+            //this._life += Rando.Float(0.2f);
             this._sprite.color = Color.White;
             this.depth = (Depth)0.8f;
             this.alpha = 0.15f;
@@ -127,24 +129,24 @@ namespace DuckGame
             if (this._sprite.currentAnimation != "puff")
                 this._sprite.SetAnimation("puff");
             if ((double)this.alpha < 0.0)
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             this.x += this.hSpeed;
             this.y += this.vSpeed;
         }
 
         public override void Draw()
         {
-            float num1 = (float)Math.Sin((double)this._distPulse);
-            float num2 = (float)-(Math.Sin((double)this._orbitInc) * (double)num1) * this.s1;
-            float num3 = (float)Math.Cos((double)this._orbitInc) * num1 * this.s1;
+            float num1 = (float)Math.Sin(_distPulse);
+            float num2 = (float)-(Math.Sin(_orbitInc) * (double)num1) * this.s1;
+            float num3 = (float)Math.Cos(_orbitInc) * num1 * this.s1;
             this._sprite.imageIndex = this._sprite.imageIndex;
             this._sprite.depth = this.depth;
             this._sprite.scale = new Vec2(this.s1);
             this._sprite.center = this.center;
             this._sprite.alpha = this.alpha;
-            this._sprite.color = new Color(byte.MaxValue, byte.MaxValue, byte.MaxValue, (byte)((double)this.alpha * (double)byte.MaxValue));
+            this._sprite.color = new Color(byte.MaxValue, byte.MaxValue, byte.MaxValue, (byte)((double)this.alpha * byte.MaxValue));
             this._sprite.color = Color.White * this.alpha;
-            Graphics.Draw((Sprite)this._sprite, this.x + num2, this.y + num3);
+            Graphics.Draw(_sprite, this.x + num2, this.y + num3);
             this._sprite2.frame = 0;
             this._sprite2.imageIndex = this._sprite.imageIndex;
             this._sprite2.angle = this._sprite.angle;
@@ -153,7 +155,7 @@ namespace DuckGame
             this._sprite2.center = this.center;
             double num4 = (double)Rando.Float(0.2f);
             this._sprite2.color = this._sprite.color;
-            Graphics.Draw((Sprite)this._sprite2, this.x + num2, this.y + num3);
+            Graphics.Draw(_sprite2, this.x + num2, this.y + num3);
         }
     }
 }

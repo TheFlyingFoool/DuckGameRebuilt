@@ -50,7 +50,7 @@ namespace DuckGame
             }
             if (this._sprite == null)
                 this._sprite = new SpriteMap(this.tileset, 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._sprite.frame = num;
         }
 
@@ -59,7 +59,7 @@ namespace DuckGame
         {
             this.tileset = tset;
             this.UpdateCustomTileset();
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.collisionSize = new Vec2(8f, 5f);
             this._sprite.frame = left ? 62 : 63;
             if (left)

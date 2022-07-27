@@ -30,9 +30,9 @@ namespace DuckGame
             {
                 base.flipHorizontal = value;
                 if (this.flipHorizontal)
-                    this.offDir = (sbyte)-1;
+                    this.offDir = -1;
                 else
-                    this.offDir = (sbyte)1;
+                    this.offDir = 1;
                 if (!this._initialized)
                     return;
                 this.CreateShutter();
@@ -53,7 +53,7 @@ namespace DuckGame
             if (this._lastFallthrough != this.fallthrough.value)
             {
                 Level.Remove(this._shutter);
-                this._shutter = (Thing)null;
+                this._shutter = null;
             }
             bool flag = false;
             if (this._shutter == null)
@@ -65,12 +65,12 @@ namespace DuckGame
             if (flag || Level.current is Editor)
             {
                 if (this._open)
-                    this._shutter.angleDegrees = 90f * (float)this.offDir;
+                    this._shutter.angleDegrees = 90f * offDir;
                 else
                     this._shutter.angleDegrees = 0.0f;
             }
             else if (this._open)
-                this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 90f * (float)this.offDir, 10f);
+                this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 90f * offDir, 10f);
             else
                 this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 0.0f, 10f);
             (this._shutter as IShutter).UpdateSprite();
@@ -79,12 +79,12 @@ namespace DuckGame
         public WireTrapDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.fallthrough = new EditorProperty<bool>(true, (Thing)this);
-            this.length = new EditorProperty<int>(2, (Thing)this, 1f, 4f, 1f);
-            this.color = new EditorProperty<int>(2, (Thing)this, max: 3f, increment: 1f);
-            this.open = new EditorProperty<bool>(false, (Thing)this);
+            this.fallthrough = new EditorProperty<bool>(true, this);
+            this.length = new EditorProperty<int>(2, this, 1f, 4f, 1f);
+            this.color = new EditorProperty<int>(2, this, max: 3f, increment: 1f);
+            this.open = new EditorProperty<bool>(false, this);
             this._sprite = new SpriteMap("wireBlock", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -100,7 +100,7 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("newTrapdoorVersion", (object)this.newTrapdoorVersion);
+            binaryClassChunk.AddProperty("newTrapdoorVersion", newTrapdoorVersion);
             return binaryClassChunk;
         }
 
@@ -121,7 +121,7 @@ namespace DuckGame
         {
             if (this._shutter != null)
                 Level.Remove(this._shutter);
-            this._shutter = !this.fallthrough.value ? (Thing)new WireTrapDoorShutterSolid(this.x + (float)(4 * (int)this.offDir), this.y - 5f, this) : (Thing)new WireTrapDoorShutter(this.x + (float)(4 * (int)this.offDir), this.y - 5f, this);
+            this._shutter = !this.fallthrough.value ? new WireTrapDoorShutterSolid(this.x + 4 * this.offDir, this.y - 5f, this) : new WireTrapDoorShutter(this.x + 4 * this.offDir, this.y - 5f, this);
             this._shutter.depth = this.depth + 5;
             this._shutter.offDir = this.offDir;
             Level.Add(this._shutter);
@@ -149,7 +149,7 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+            Thing.Fondle(this, DuckNetwork.localConnection);
             this._open = !this._open;
             SFX.Play("click");
         }

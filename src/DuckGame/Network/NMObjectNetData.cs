@@ -30,7 +30,7 @@ namespace DuckGame
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write((object)this.thing);
+            this._serializedData.Write(thing);
             this._serializedData.Write((object)this.thing.authority);
             BitBuffer val = this.thing._netData.Serialize(this._connection, this._hashes);
             this.syncIndex = this.thing._netData.GetSyncIndex(this._connection);
@@ -40,7 +40,7 @@ namespace DuckGame
         public override void OnDeserialize(BitBuffer d)
         {
             this.thing = d.Read<Thing>();
-            this.authority = (NetIndex8)(int)d.ReadByte();
+            this.authority = (NetIndex8)d.ReadByte();
             this._netData = d.ReadBitBuffer();
         }
     }

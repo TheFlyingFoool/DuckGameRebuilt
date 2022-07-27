@@ -15,12 +15,12 @@ namespace DuckGame
     {
         private BitmapFont _font;
         private BitmapFont _fontSmall;
-        private SinWave _pulse = new SinWave(0.05f);
+        //private SinWave _pulse = new SinWave(0.05f);
         private bool _playerActive;
         private int _teamSelection;
-        private Sprite _plaque;
+        //private Sprite _plaque;
         private Sprite _onlineIcon;
-        private Sprite _wirelessIcon;
+        //private Sprite _wirelessIcon;
         private bool _ready;
         private InputProfile _inputProfile;
         private Profile _playerProfile;
@@ -63,7 +63,7 @@ namespace DuckGame
         private int hostFrames;
         public HatSelector _hatSelector;
         private DuckNetStatus _prevStatus = DuckNetStatus.EstablishingCommunicationWithServer;
-        private const int kDoorIconStartButtonFrame = 10;
+        //private const int kDoorIconStartButtonFrame = 10;
         public float _tooManyPulse;
         public float _noMorePulse;
         private float _prevDoorX;
@@ -72,7 +72,7 @@ namespace DuckGame
 
         public bool ready => this._ready;
 
-        public bool doorIsOpen => (double)this._doorX > 82.0;
+        public bool doorIsOpen => _doorX > 82.0;
 
         public Profile profile => this._playerProfile;
 
@@ -110,72 +110,92 @@ namespace DuckGame
         {
             this._hostCrown = new Sprite("hostCrown");
             this._hostCrown.CenterOrigin();
-            this._lightBar = new SpriteMap("lightBar", 2, 1);
-            this._lightBar.frame = 0;
-            this._roomSwitch = new SpriteMap("roomSwitch", 7, 5);
-            this._roomSwitch.frame = 0;
+            this._lightBar = new SpriteMap("lightBar", 2, 1)
+            {
+                frame = 0
+            };
+            this._roomSwitch = new SpriteMap("roomSwitch", 7, 5)
+            {
+                frame = 0
+            };
             this._controllerIndex = pIndex;
             this._font = new BitmapFont("biosFont", 8);
             this._fontSmall = new BitmapFont("smallBiosFont", 7, 6);
             this.layer = Layer.Game;
             this._collisionSize = new Vec2(150f, 87f);
-            this._plaque = new Sprite("plaque");
-            this._plaque.center = new Vec2(16f, 16f);
+            //this._plaque = new Sprite("plaque")
+            //{
+            //    center = new Vec2(16f, 16f)
+            //};
             this._inputProfile = pProfile;
             this._playerProfile = pDefaultProfile;
             this._teamSelection = this.ControllerNumber();
-            this._doorLeft = new Sprite("selectDoorLeftPC");
-            this._doorLeft.depth = (Depth)0.905f;
-            this._doorRight = new Sprite("selectDoorRight");
-            this._doorRight.depth = (Depth)0.9f;
-            this._doorLeftBlank = new Sprite("selectDoorLeftBlank");
-            this._doorLeftBlank.depth = (Depth)0.905f;
-            this._doorRightBlank = new Sprite("selectDoorRightBlank");
-            this._doorRightBlank.depth = (Depth)0.9f;
+            this._doorLeft = new Sprite("selectDoorLeftPC")
+            {
+                depth = (Depth)0.905f
+            };
+            this._doorRight = new Sprite("selectDoorRight")
+            {
+                depth = (Depth)0.9f
+            };
+            this._doorLeftBlank = new Sprite("selectDoorLeftBlank")
+            {
+                depth = (Depth)0.905f
+            };
+            this._doorRightBlank = new Sprite("selectDoorRightBlank")
+            {
+                depth = (Depth)0.9f
+            };
             this._doorSpinner = new SpriteMap("doorSpinner", 25, 25);
             this._doorSpinner.AddAnimation("spin", 0.2f, true, 0, 1, 2, 3, 4, 5, 6, 7);
             this._doorSpinner.SetAnimation("spin");
             this._doorIcon = new SpriteMap("doorSpinner", 25, 25);
             this._onlineIcon = new Sprite("gameServerOnline");
-            this._wirelessIcon = new Sprite("gameServerWireless");
+            //this._wirelessIcon = new Sprite("gameServerWireless");
             this._teamSelect = pTeamSelect;
             this._defaultProfile = pDefaultProfile;
             if (this.rightRoom)
             {
-                this._roomSwitch = new SpriteMap("roomSwitchRight", 7, 5);
-                this._roomSwitch.frame = 0;
+                this._roomSwitch = new SpriteMap("roomSwitchRight", 7, 5)
+                {
+                    frame = 0
+                };
                 this._roomLeftBackground = new Sprite("rightRoomBackground");
                 this._roomLeftForeground = new Sprite("rightRoomForeground");
-                Level.Add((Thing)new InvisibleBlock((float)((double)this.x - 2.0 + 142.0 - 138.0), this.y + 69f, 138f, 16f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock((float)((double)this.x - 2.0 + 142.0 - 138.0), this.y - 11f, 138f, 12f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock((float)((double)this.x + 142.0 - 98.0 - 46.0), this.y + 56f, 50f, 16f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock((float)((double)this.x + 142.0 + 2.0 - 8.0), this.y, 8f, 100f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock((float)((double)this.x + 142.0 - 136.0 - 9.0), this.y, 8f, 25f, PhysicsMaterial.Metal));
-                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(this.x + 126f, this.y + 63f);
-                scaffoldingTileset.neverCheap = true;
-                Level.Add((Thing)scaffoldingTileset);
+                Level.Add(new InvisibleBlock((float)((double)this.x - 2.0 + 142.0 - 138.0), this.y + 69f, 138f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)((double)this.x - 2.0 + 142.0 - 138.0), this.y - 11f, 138f, 12f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)((double)this.x + 142.0 - 98.0 - 46.0), this.y + 56f, 50f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)((double)this.x + 142.0 + 2.0 - 8.0), this.y, 8f, 100f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)((double)this.x + 142.0 - 136.0 - 9.0), this.y, 8f, 25f, PhysicsMaterial.Metal));
+                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(this.x + 126f, this.y + 63f)
+                {
+                    neverCheap = true
+                };
+                Level.Add(scaffoldingTileset);
                 scaffoldingTileset.depth = - 0.5f;
                 scaffoldingTileset.PlaceBlock();
                 scaffoldingTileset.UpdateNubbers();
-                Level.Add((Thing)new Platform(this.x + 49f, this.y + 56f, 3f, 5f));
+                Level.Add(new Platform(this.x + 49f, this.y + 56f, 3f, 5f));
                 this._readySign = new Sprite("readyLeft");
             }
             else
             {
                 this._roomLeftBackground = new Sprite("leftRoomBackground");
                 this._roomLeftForeground = new Sprite("leftRoomForeground");
-                Level.Add((Thing)new InvisibleBlock(this.x + 2f, this.y + 69f, 138f, 16f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock(this.x + 2f, this.y - 11f, 138f, 12f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock(this.x + 92f, this.y + 56f, 50f, 16f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock(this.x - 4f, this.y, 8f, 100f, PhysicsMaterial.Metal));
-                Level.Add((Thing)new InvisibleBlock(this.x + 135f, this.y, 8f, 25f, PhysicsMaterial.Metal));
-                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(this.x + 14f, this.y + 63f);
-                scaffoldingTileset.neverCheap = true;
-                Level.Add((Thing)scaffoldingTileset);
+                Level.Add(new InvisibleBlock(this.x + 2f, this.y + 69f, 138f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(this.x + 2f, this.y - 11f, 138f, 12f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(this.x + 92f, this.y + 56f, 50f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(this.x - 4f, this.y, 8f, 100f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(this.x + 135f, this.y, 8f, 25f, PhysicsMaterial.Metal));
+                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(this.x + 14f, this.y + 63f)
+                {
+                    neverCheap = true
+                };
+                Level.Add(scaffoldingTileset);
                 scaffoldingTileset.depth = - 0.5f;
                 scaffoldingTileset.PlaceBlock();
                 scaffoldingTileset.UpdateNubbers();
-                Level.Add((Thing)new Platform(this.x + 89f, this.y + 56f, 3f, 5f));
+                Level.Add(new Platform(this.x + 89f, this.y + 56f, 3f, 5f));
                 this._readySign = new Sprite("readyRight");
             }
             this._gunSpawnPoint = !this.rightRoom ? new Vec2(this.x + 113f, this.y + 50f) : new Vec2((float)((double)this.x + 142.0 - 118.0), this.y + 50f);
@@ -193,21 +213,23 @@ namespace DuckGame
             this._selectConsole.SetAnimation("idle");
             if (Network.isServer)
             {
-                this._hatSelector = new HatSelector(this.x, this.y, this._playerProfile, this);
-                this._hatSelector.profileBoxNumber = (sbyte)pIndex;
-                Level.Add((Thing)this._hatSelector);
+                this._hatSelector = new HatSelector(this.x, this.y, this._playerProfile, this)
+                {
+                    profileBoxNumber = (sbyte)pIndex
+                };
+                Level.Add(_hatSelector);
             }
             if (this.rightRoom)
             {
                 this._projector = new TeamProjector(this.x + 80f, this.y + 68f, this._playerProfile);
-                Level.Add((Thing)new ItemSpawner(this.x + 26f, this.y + 54f));
+                Level.Add(new ItemSpawner(this.x + 26f, this.y + 54f));
             }
             else
             {
                 this._projector = new TeamProjector(this.x + 59f, this.y + 68f, this._playerProfile);
-                Level.Add((Thing)new ItemSpawner(this.x + 112f, this.y + 54f));
+                Level.Add(new ItemSpawner(this.x + 112f, this.y + 54f));
             }
-            Level.Add((Thing)this._projector);
+            Level.Add(_projector);
         }
 
         public override void Initialize()
@@ -269,7 +291,7 @@ namespace DuckGame
                     p.inputProfile = this._playerProfile.inputProfile;
                 p.UpdatePersona();
                 if (!Network.isActive)
-                    this._playerProfile.inputProfile = (InputProfile)null;
+                    this._playerProfile.inputProfile = null;
                 this._playerProfile = p;
                 if (this._duck != null)
                 {
@@ -294,7 +316,7 @@ namespace DuckGame
             if (!(Level.current is ArcadeLevel))
                 return;
             HUD.CloseAllCorners();
-            HUD.AddCornerCounter(HUDCorner.BottomRight, "@TICKET@ ", new FieldBinding((object)this._playerProfile, "ticketCount"), animateCount: true);
+            HUD.AddCornerCounter(HUDCorner.BottomRight, "@TICKET@ ", new FieldBinding(_playerProfile, "ticketCount"), animateCount: true);
             List<ChallengeSaveData> allSaveData = Challenges.GetAllSaveData(this._playerProfile);
             Dictionary<TrophyType, int> dictionary = new Dictionary<TrophyType, int>()
       {
@@ -387,7 +409,7 @@ namespace DuckGame
             if (this._duck != null)
                 this._duck.immobilized = true;
             this._playerActive = false;
-            if ((double)this._doorX != 0.0)
+            if (_doorX != 0.0)
                 return;
             this.OnDoorClosed();
         }
@@ -408,13 +430,13 @@ namespace DuckGame
                     this._duck.profile = this._playerProfile;
                     if (this._duck.GetEquipment(typeof(Hat)) is Hat equipment)
                     {
-                        this._duck.Unequip((Equipment)equipment);
-                        Level.Remove((Thing)equipment);
+                        this._duck.Unequip(equipment);
+                        Level.Remove(equipment);
                     }
                 }
                 foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(this.topLeft, this.bottomRight))
                     Level.Remove(thing);
-                this._turret = (RoomDefenceTurret)null;
+                this._turret = null;
             }
             this.Despawn();
             //this._doorClosing = false;
@@ -431,30 +453,36 @@ namespace DuckGame
             }
             else
             {
-                this._gun = new VirtualShotgun(this._gunSpawnPoint.x, this._gunSpawnPoint.y);
-                this._gun.roomIndex = (byte)this._controllerIndex;
-                Level.Add((Thing)this._gun);
+                this._gun = new VirtualShotgun(this._gunSpawnPoint.x, this._gunSpawnPoint.y)
+                {
+                    roomIndex = (byte)this._controllerIndex
+                };
+                Level.Add(_gun);
                 if (this.rightRoom)
                 {
                     this._duck = new Duck((float)((double)this.x + 142.0 - 48.0), this.y + 40f, this._playerProfile);
-                    this._window = new Window((float)((double)this.x + 142.0 - 141.0), this.y + 49f);
-                    this._window.noframe = true;
-                    Level.Add((Thing)this._window);
+                    this._window = new Window((float)((double)this.x + 142.0 - 141.0), this.y + 49f)
+                    {
+                        noframe = true
+                    };
+                    Level.Add(_window);
                 }
                 else
                 {
                     this._duck = new Duck(this.x + 48f, this.y + 40f, this._playerProfile);
-                    this._window = new Window(this.x + 139f, this.y + 49f);
-                    this._window.noframe = true;
-                    Level.Add((Thing)this._window);
+                    this._window = new Window(this.x + 139f, this.y + 49f)
+                    {
+                        noframe = true
+                    };
+                    Level.Add(_window);
                 }
                 foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(this.topLeft, this.bottomRight))
                     Level.Remove(thing);
-                this._turret = (RoomDefenceTurret)null;
-                Level.Add((Thing)this._duck);
+                this._turret = null;
+                Level.Add(_duck);
                 if (this._duck == null || !this._duck.HasEquipment(typeof(TeamHat)))
                     return;
-                this._hatSelector.hat = (Hat)(this._duck.GetEquipment(typeof(TeamHat)) as TeamHat);
+                this._hatSelector.hat = this._duck.GetEquipment(typeof(TeamHat)) as TeamHat;
             }
         }
 
@@ -464,25 +492,25 @@ namespace DuckGame
                 return;
             if (this._duck != null)
             {
-                Thing.Fondle((Thing)this._duck, DuckNetwork.localConnection);
-                Level.Remove((Thing)this._duck);
+                Thing.Fondle(_duck, DuckNetwork.localConnection);
+                Level.Remove(_duck);
                 if (!Network.isActive && this._duck.ragdoll != null)
-                    Level.Remove((Thing)this._duck.ragdoll);
+                    Level.Remove(_duck.ragdoll);
             }
             if (this._gun != null)
             {
-                Thing.Fondle((Thing)this._gun, DuckNetwork.localConnection);
-                Level.Remove((Thing)this._gun);
+                Thing.Fondle(_gun, DuckNetwork.localConnection);
+                Level.Remove(_gun);
             }
             foreach (Window t in Level.CheckRectAll<Window>(this.topLeft, this.bottomRight))
             {
                 t.lobbyRemoving = true;
-                Thing.Fondle((Thing)t, DuckNetwork.localConnection);
-                Level.Remove((Thing)t);
+                Thing.Fondle(t, DuckNetwork.localConnection);
+                Level.Remove(t);
             }
-            this._window = (Window)null;
-            this._duck = (Duck)null;
-            this._gun = (VirtualShotgun)null;
+            this._window = null;
+            this._duck = null;
+            this._gun = null;
         }
 
         public void OpenDoor()
@@ -532,7 +560,7 @@ namespace DuckGame
                     {
                         Network.lanMode = true;
                         DuckNetwork.Join("test", "netdebug");
-                        Level.current = (Level)new ConnectingScreen();
+                        Level.current = new ConnectingScreen();
                     }
                 }
             }
@@ -540,10 +568,10 @@ namespace DuckGame
             {
                 if (!Network.isServer && this.profile.networkStatus != DuckNetStatus.Disconnected)
                 {
-                    this._duck = (Duck)null;
+                    this._duck = null;
                     foreach (Duck duck in Level.current.things[typeof(Duck)])
                     {
-                        if ((int)duck.netProfileIndex == this._controllerIndex)
+                        if (duck.netProfileIndex == this._controllerIndex)
                             this._duck = duck;
                     }
                 }
@@ -557,7 +585,7 @@ namespace DuckGame
                 this._hatSelector.Reset();
             foreach (VirtualShotgun virtualShotgun in Level.current.things[typeof(VirtualShotgun)])
             {
-                if ((int)virtualShotgun.roomIndex == this._controllerIndex && virtualShotgun.isServerForObject && (double)virtualShotgun.alpha <= 0.0)
+                if (virtualShotgun.roomIndex == this._controllerIndex && virtualShotgun.isServerForObject && (double)virtualShotgun.alpha <= 0.0)
                 {
                     virtualShotgun.position = this._gunSpawnPoint;
                     virtualShotgun.alpha = 1f;
@@ -597,7 +625,7 @@ namespace DuckGame
                 this.SelectTeam();
                 this.Spawn();
             }
-            this._ready = this.doorIsOpen && this._duck != null && (this._duck.dead || this._duck.beammode || (double)this._duck.cameraPosition.y < -100.0 || (double)this._duck.cameraPosition.y > 400.0);
+            this._ready = this.doorIsOpen && this._duck != null && (this._duck.dead || this._duck.beammode || _duck.cameraPosition.y < -100.0 || _duck.cameraPosition.y > 400.0);
             if (this._duck != null)
             {
                 this._currentMessage = 0;
@@ -612,25 +640,25 @@ namespace DuckGame
                     {
                         this._duck.immobilized = true;
                         this._hatSelector.Open(this._playerProfile);
-                        this._duck.Fondle((Thing)this._hatSelector);
+                        this._duck.Fondle(_hatSelector);
                         SFX.Play("consoleOpen", 0.5f);
                     }
                 }
                 else
                     this._duck.canFire = true;
-                if (this._hatSelector.hat != null && (double)this._hatSelector.hat.alpha < 0.00999999977648258 && !this._duck.HasEquipment((Equipment)this._hatSelector.hat))
+                if (this._hatSelector.hat != null && (double)this._hatSelector.hat.alpha < 0.00999999977648258 && !this._duck.HasEquipment(_hatSelector.hat))
                 {
                     this._hatSelector.hat.alpha = 1f;
-                    this._duck.Equip((Equipment)this._hatSelector.hat, false);
+                    this._duck.Equip(_hatSelector.hat, false);
                 }
                 if (this.ready)
                 {
                     this._currentMessage = 3;
                     this._readySign.color = Lerp.Color(this._readySign.color, Color.LimeGreen, 0.1f);
-                    if (this._hatSelector.hat != null && !this._duck.HasEquipment((Equipment)this._hatSelector.hat))
+                    if (this._hatSelector.hat != null && !this._duck.HasEquipment(_hatSelector.hat))
                     {
                         this._hatSelector.hat.alpha = 1f;
-                        this._duck.Equip((Equipment)this._hatSelector.hat, false);
+                        this._duck.Equip(_hatSelector.hat, false);
                     }
                 }
                 else
@@ -655,36 +683,38 @@ namespace DuckGame
             }
             this._prevDoorX = this._doorX;
             bool flag3 = this._playerActive && (this._playerProfile.team != null || Network.isActive && Network.connections.Count == 0);
-            if (this._playerProfile.connection != null && (int)this._playerProfile.connection.levelIndex != (int)DuckNetwork.levelIndex)
+            if (this._playerProfile.connection != null && _playerProfile.connection.levelIndex != DuckNetwork.levelIndex)
                 flag3 = false;
             if (flag3 && this._hatSelector != null && this._hatSelector.isServerForObject)
             {
-                if (this.profile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("PERIMETER DEFENCE").index) > 0)
+                if (this.profile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("PERIMETER DEFENCE").index) > 0)
                 {
                     if (this._turret == null)
                     {
                         foreach (FurniturePosition furniturePosition in this.profile.furniturePositions)
                         {
-                            if (RoomEditor.GetFurniture((int)furniturePosition.id).name == "PERIMETER DEFENCE")
+                            if (RoomEditor.GetFurniture(furniturePosition.id).name == "PERIMETER DEFENCE")
                             {
-                                Vec2 vec2 = new Vec2((float)((int)furniturePosition.x - 2), (float)((int)furniturePosition.y + 2));
+                                Vec2 vec2 = new Vec2(furniturePosition.x - 2, furniturePosition.y + 2);
                                 if (this.rightRoom)
                                 {
-                                    vec2.x = (float)RoomEditor.roomSize - vec2.x;
+                                    vec2.x = RoomEditor.roomSize - vec2.x;
                                     vec2.x += 2f;
                                 }
                                 Vec2 pPosition = vec2 + this.position;
-                                if ((double)pPosition.x > (double)this.x)
+                                if (pPosition.x > (double)this.x)
                                 {
-                                    if ((double)pPosition.y > (double)this.y)
+                                    if (pPosition.y > (double)this.y)
                                     {
-                                        if ((double)pPosition.x < (double)this.x + (double)RoomEditor.roomSize)
+                                        if (pPosition.x < (double)this.x + RoomEditor.roomSize)
                                         {
-                                            if ((double)pPosition.y < (double)this.y + (double)RoomEditor.roomSize)
+                                            if (pPosition.y < (double)this.y + RoomEditor.roomSize)
                                             {
-                                                this._turret = new RoomDefenceTurret(pPosition, this.duck);
-                                                this._turret.offDir = this.rightRoom ? (sbyte)-1 : (sbyte)1;
-                                                Level.Add((Thing)this._turret);
+                                                this._turret = new RoomDefenceTurret(pPosition, this.duck)
+                                                {
+                                                    offDir = this.rightRoom ? (sbyte)-1 : (sbyte)1
+                                                };
+                                                Level.Add(_turret);
                                                 break;
                                             }
                                             break;
@@ -700,21 +730,21 @@ namespace DuckGame
                 }
                 else if (this._turret != null)
                 {
-                    Level.Remove((Thing)this._turret);
-                    this._turret = (RoomDefenceTurret)null;
+                    Level.Remove(_turret);
+                    this._turret = null;
                 }
             }
             if (this._turret != null)
                 this._turret._friendly = this.duck;
             this._doorX = Maths.LerpTowards(this._doorX, flag3 ? 83f : 0.0f, 4f);
-            if (Network.isActive && (this.profile.networkStatus == DuckNetStatus.Disconnected && this._prevStatus != DuckNetStatus.Disconnected || this.profile.slotType == SlotType.Spectator) || (double)this._doorX == 0.0 && (double)this._prevDoorX != 0.0)
+            if (Network.isActive && (this.profile.networkStatus == DuckNetStatus.Disconnected && this._prevStatus != DuckNetStatus.Disconnected || this.profile.slotType == SlotType.Spectator) || _doorX == 0.0 && _prevDoorX != 0.0)
                 this.OnDoorClosed();
             if (this._playerActive && this.controllerIndex > 3 && !(Level.current.camera is FollowCam))
                 TeamSelect2.growCamera = true;
             if (this._currentMessage != this._tutorialMessages.frame)
             {
                 this._screenFade = Maths.LerpTowards(this._screenFade, 0.0f, 0.15f);
-                if ((double)this._screenFade < 0.00999999977648258)
+                if (_screenFade < 0.00999999977648258)
                     this._tutorialMessages.frame = this._currentMessage;
             }
             else
@@ -734,16 +764,16 @@ namespace DuckGame
             else
             {
                 if (this._duck != null)
-                    this._duck.mindControl = (InputProfile)null;
+                    this._duck.mindControl = null;
                 this._projector.visible = true;
-                if ((double)this._tooManyPulse > 0.00999999977648258)
+                if (_tooManyPulse > 0.00999999977648258)
                     Graphics.DrawStringOutline("ROOM FULL", this.position + new Vec2(0.0f, 36f), Color.Red * this._tooManyPulse, Color.Black * this._tooManyPulse, (Depth)0.95f, scale: 2f);
-                if ((double)this._noMorePulse > 0.00999999977648258)
+                if (_noMorePulse > 0.00999999977648258)
                     Graphics.DrawStringOutline(" NO MORE ", this.position + new Vec2(0.0f, 36f), Color.Red * this._noMorePulse, Color.Black * this._noMorePulse, (Depth)0.95f, scale: 2f);
                 this._tooManyPulse = Lerp.Float(this._tooManyPulse, 0.0f, 0.05f);
                 this._noMorePulse = Lerp.Float(this._noMorePulse, 0.0f, 0.05f);
                 bool flag1 = this.profile.networkStatus != 0;
-                if ((double)this._doorX < 82.0)
+                if (_doorX < 82.0)
                 {
                     Sprite sprite1 = this._doorLeft;
                     Sprite sprite2 = this._doorRight;
@@ -769,18 +799,18 @@ namespace DuckGame
                     Sprite doorRightBlank = this._doorRightBlank;
                     if (this.rightRoom)
                     {
-                        Rectangle sourceRectangle1 = new Rectangle((float)(int)this._doorX, 0.0f, (float)doorLeftBlank.width, (float)this._doorLeft.height);
+                        Rectangle sourceRectangle1 = new Rectangle((int)this._doorX, 0.0f, doorLeftBlank.width, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, this.x - 1f, this.y, sourceRectangle1);
-                        Rectangle sourceRectangle2 = new Rectangle((float)(int)-(double)this._doorX, 0.0f, (float)this._doorRight.width, (float)this._doorRight.height);
+                        Rectangle sourceRectangle2 = new Rectangle((int)-(double)this._doorX, 0.0f, _doorRight.width, _doorRight.height);
                         Graphics.Draw(doorRightBlank, (float)((double)this.x - 1.0 + 68.0), this.y, sourceRectangle2);
-                        if ((double)this._doorX == 0.0)
+                        if (_doorX == 0.0)
                         {
                             this._fontSmall.depth = doorLeftBlank.depth + 10;
                             if (!Network.isActive || flag6 && Network.isServer)
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 10;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
                                 this._fontSmall.DrawOutline("PRESS", new Vec2(this.x + 19f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("START", new Vec2(this.x + 85f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -788,18 +818,18 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 8;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
                             }
                             else if (flag1)
                             {
                                 this._doorSpinner.depth = doorLeftBlank.depth + 10;
-                                Graphics.Draw((Sprite)this._doorSpinner, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorSpinner, (int)this.x + 57, this.y + 31f);
                             }
                             else if (flag3)
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 11;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
                                 this._fontSmall.DrawOutline("PALS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -807,7 +837,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 12;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
                                 this._fontSmall.DrawOutline("VIPS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -815,7 +845,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 12;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 float num = 120f;
                                 float x = this.x + 10f;
                                 Graphics.DrawRect(new Vec2(x, this.y + 35f), new Vec2(x + num, this.y + 52f), Color.Black, doorLeftBlank.depth + 20);
@@ -830,7 +860,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 13;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
                                 this._fontSmall.DrawOutline("HOST", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -838,7 +868,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 9;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 57), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
                                 this._fontSmall.DrawOutline("OPEN", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -846,18 +876,18 @@ namespace DuckGame
                     }
                     else
                     {
-                        Rectangle sourceRectangle3 = new Rectangle((float)(int)this._doorX, 0.0f, (float)this._doorLeft.width, (float)this._doorLeft.height);
+                        Rectangle sourceRectangle3 = new Rectangle((int)this._doorX, 0.0f, _doorLeft.width, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, this.x, this.y, sourceRectangle3);
-                        Rectangle sourceRectangle4 = new Rectangle((float)(int)-(double)this._doorX, 0.0f, (float)this._doorRight.width, (float)this._doorRight.height);
+                        Rectangle sourceRectangle4 = new Rectangle((int)-(double)this._doorX, 0.0f, _doorRight.width, _doorRight.height);
                         Graphics.Draw(doorRightBlank, this.x + 68f, this.y, sourceRectangle4);
-                        if ((double)this._doorX == 0.0)
+                        if (_doorX == 0.0)
                         {
                             this._fontSmall.depth = doorLeftBlank.depth + 10;
                             if (!Network.isActive || flag6 && Network.isServer)
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 10;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 this._fontSmall.DrawOutline("PRESS", new Vec2(this.x + 20f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("START", new Vec2(this.x + 86f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -865,18 +895,18 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 8;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                             }
                             else if (flag1)
                             {
                                 this._doorSpinner.depth = doorLeftBlank.depth + 10;
-                                Graphics.Draw((Sprite)this._doorSpinner, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorSpinner, (int)this.x + 58, this.y + 31f);
                             }
                             else if (flag3)
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 11;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 this._fontSmall.DrawOutline("PALS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -884,7 +914,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 12;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 this._fontSmall.DrawOutline("VIPS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -892,7 +922,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 12;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 float num = 120f;
                                 float x = this.x + 10f;
                                 Graphics.DrawRect(new Vec2(x, this.y + 35f), new Vec2(x + num, this.y + 52f), Color.Black, doorLeftBlank.depth + 20);
@@ -907,7 +937,7 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 13;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 this._fontSmall.DrawOutline("HOST", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
@@ -915,16 +945,16 @@ namespace DuckGame
                             {
                                 this._doorIcon.depth = doorLeftBlank.depth + 10;
                                 this._doorIcon.frame = 9;
-                                Graphics.Draw((Sprite)this._doorIcon, (float)((int)this.x + 58), this.y + 31f);
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
                                 this._fontSmall.DrawOutline("OPEN", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                 this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                         }
                     }
                 }
-                if (this._playerProfile.team == null || (double)this._doorX <= 0.0)
+                if (this._playerProfile.team == null || _doorX <= 0.0)
                     return;
-                Furniture furniture1 = (Furniture)null;
+                Furniture furniture1 = null;
                 if (Profiles.experienceProfile != null)
                 {
                     bool flag7 = true;
@@ -936,7 +966,7 @@ namespace DuckGame
                         List<FurniturePosition> source1 = new List<FurniturePosition>();
                         foreach (FurniturePosition furniturePosition in this.profile.furniturePositions)
                         {
-                            Furniture furniture2 = RoomEditor.GetFurniture((int)furniturePosition.id);
+                            Furniture furniture2 = RoomEditor.GetFurniture(furniturePosition.id);
                             if (furniture2 != null)
                             {
                                 if (furniture2.group == Furniture.Characters)
@@ -958,19 +988,19 @@ namespace DuckGame
                                     furniture1 = furniture2;
                                 else if (furniture2.type != FurnitureType.Font)
                                 {
-                                    furniture2.sprite.depth = (Depth)(float)((double)furniture2.deep * (1.0 / 1000.0) - 0.560000002384186);
-                                    furniture2.sprite.frame = (int)furniturePosition.variation;
-                                    Vec2 pos = new Vec2((float)furniturePosition.x, (float)furniturePosition.y);
+                                    furniture2.sprite.depth = (Depth)(float)(furniture2.deep * (1.0 / 1000.0) - 0.560000002384186);
+                                    furniture2.sprite.frame = furniturePosition.variation;
+                                    Vec2 pos = new Vec2(furniturePosition.x, furniturePosition.y);
                                     furniture2.sprite.flipH = furniturePosition.flip;
                                     if (this.rightRoom)
                                     {
-                                        pos.x = (float)RoomEditor.roomSize - pos.x;
+                                        pos.x = RoomEditor.roomSize - pos.x;
                                         furniture2.sprite.flipH = !furniture2.sprite.flipH;
                                         --pos.x;
                                     }
                                     pos += this.position;
                                     if (furniture2.visible)
-                                        furniture2.Draw(pos, furniture2.sprite.depth, (int)furniturePosition.variation, this.profile);
+                                        furniture2.Draw(pos, furniture2.sprite.depth, furniturePosition.variation, this.profile);
                                     furniture2.sprite.frame = 0;
                                     furniture2.sprite.flipH = false;
                                 }
@@ -978,8 +1008,8 @@ namespace DuckGame
                         }
                         if (source1.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy<FurniturePosition, int>((Func<FurniturePosition, int>)(furni => (int)furni.x + (int)furni.y * 100));
-                            IEnumerable<FurniturePosition> source3 = (IEnumerable<FurniturePosition>)source1.OrderBy<FurniturePosition, int>((Func<FurniturePosition, int>)(furni => (int)-furni.x + (int)furni.y * 100));
+                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy<FurniturePosition, int>(furni => furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> source3 = source1.OrderBy<FurniturePosition, int>(furni => -furni.x + furni.y * 100);
                             int index1 = 0;
                             for (int index2 = 0; index2 < source2.Count<FurniturePosition>(); ++index2)
                             {
@@ -987,13 +1017,13 @@ namespace DuckGame
                                 Furniture furniMapping1 = furniturePosition1.furniMapping;
                                 FurniturePosition furniturePosition2 = source3.ElementAt<FurniturePosition>(index1);
                                 Furniture furniMapping2 = furniturePosition2.furniMapping;
-                                furniMapping1.sprite.depth = (Depth)(float)((double)furniMapping2.deep * (1.0 / 1000.0) - 0.560000002384186);
-                                furniMapping1.sprite.frame = (int)furniturePosition1.variation;
-                                Vec2 pos = new Vec2((float)furniturePosition2.x, (float)furniturePosition2.y);
+                                furniMapping1.sprite.depth = (Depth)(float)(furniMapping2.deep * (1.0 / 1000.0) - 0.560000002384186);
+                                furniMapping1.sprite.frame = furniturePosition1.variation;
+                                Vec2 pos = new Vec2(furniturePosition2.x, furniturePosition2.y);
                                 furniMapping1.sprite.flipH = furniturePosition1.flip;
                                 if (this.rightRoom)
                                 {
-                                    pos.x = (float)RoomEditor.roomSize - pos.x;
+                                    pos.x = RoomEditor.roomSize - pos.x;
                                     furniMapping1.sprite.flipH = !furniMapping1.sprite.flipH;
                                     --pos.x;
                                 }
@@ -1007,8 +1037,8 @@ namespace DuckGame
                         }
                         if (furniturePositionList.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy<FurniturePosition, int>((Func<FurniturePosition, int>)(furni => (int)-furni.x + (int)furni.y * 100));
-                            IEnumerable<FurniturePosition> source5 = (IEnumerable<FurniturePosition>)source1.OrderBy<FurniturePosition, int>((Func<FurniturePosition, int>)(furni => (int)furni.x + (int)furni.y * 100));
+                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy<FurniturePosition, int>(furni => -furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> source5 = source1.OrderBy<FurniturePosition, int>(furni => furni.x + furni.y * 100);
                             int index3 = 0;
                             for (int index4 = 0; index4 < source4.Count<FurniturePosition>(); ++index4)
                             {
@@ -1016,13 +1046,13 @@ namespace DuckGame
                                 Furniture furniMapping3 = furniturePosition3.furniMapping;
                                 FurniturePosition furniturePosition4 = source5.ElementAt<FurniturePosition>(index3);
                                 Furniture furniMapping4 = furniturePosition4.furniMapping;
-                                furniMapping3.sprite.depth = (Depth)(float)((double)furniMapping4.deep * (1.0 / 1000.0) - 0.560000002384186);
-                                furniMapping3.sprite.frame = (int)furniturePosition4.variation;
-                                Vec2 pos = new Vec2((float)furniturePosition3.x, (float)furniturePosition3.y);
+                                furniMapping3.sprite.depth = (Depth)(float)(furniMapping4.deep * (1.0 / 1000.0) - 0.560000002384186);
+                                furniMapping3.sprite.frame = furniturePosition4.variation;
+                                Vec2 pos = new Vec2(furniturePosition3.x, furniturePosition3.y);
                                 furniMapping3.sprite.flipH = furniturePosition3.flip;
                                 if (this.rightRoom)
                                 {
-                                    pos.x = (float)RoomEditor.roomSize - pos.x;
+                                    pos.x = RoomEditor.roomSize - pos.x;
                                     furniMapping3.sprite.flipH = !furniMapping3.sprite.flipH;
                                     --pos.x;
                                 }
@@ -1048,12 +1078,12 @@ namespace DuckGame
                             {
                                 this._lightBar.depth = this._tutorialTV.depth;
                                 this._lightBar.frame = index;
-                                Graphics.Draw((Sprite)this._lightBar, this.x + 38f + (float)(index * 3), this.y + 49f);
+                                Graphics.Draw(_lightBar, this.x + 38f + index * 3, this.y + 49f);
                             }
                         }
                         this._roomSwitch.depth = this._tutorialTV.depth;
                         this._roomSwitch.frame = this.profile.switchStatus ? 1 : 0;
-                        Graphics.Draw((Sprite)this._roomSwitch, this.x + 52f, this.y + 47f);
+                        Graphics.Draw(_roomSwitch, this.x + 52f, this.y + 47f);
                     }
                     if (furniture1 != null)
                     {
@@ -1063,17 +1093,17 @@ namespace DuckGame
                         furniture3.background.depth = this._roomLeftBackground.depth;
                         furniture3.sprite.scale = new Vec2(1f);
                         furniture3.background.scale = new Vec2(1f);
-                        Graphics.Draw((Sprite)furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 4f, 87f));
-                        Graphics.Draw((Sprite)furniture3.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
-                        Graphics.Draw((Sprite)furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 141f, 16f));
-                        Graphics.Draw((Sprite)furniture3.sprite, this.x + 21f, this.y + 44f, new Rectangle(49f, 0.0f, 92f, 68f));
+                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 4f, 87f));
+                        Graphics.Draw(furniture3.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 141f, 16f));
+                        Graphics.Draw(furniture3.sprite, this.x + 21f, this.y + 44f, new Rectangle(49f, 0.0f, 92f, 68f));
                         furniture3.sprite.depth = this._selectConsole.depth - 20;
-                        Graphics.Draw((Sprite)furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), this.y + 44f, new Rectangle(4f, 0.0f, 44f, 54f));
+                        Graphics.Draw(furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), this.y + 44f, new Rectangle(4f, 0.0f, 44f, 54f));
                         furniture3.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw((Sprite)furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), (float)((double)this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), (float)((double)this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
                         furniture3.sprite.flipH = false;
                         furniture3.background.flipH = true;
-                        Graphics.Draw((Sprite)furniture3.background, this.x + 70f, this.y + 45f);
+                        Graphics.Draw(furniture3.background, this.x + 70f, this.y + 45f);
                         furniture3.background.flipH = false;
                     }
                     else
@@ -1101,12 +1131,12 @@ namespace DuckGame
                             {
                                 this._lightBar.depth = this._tutorialTV.depth;
                                 this._lightBar.frame = index;
-                                Graphics.Draw((Sprite)this._lightBar, this.x + 91f + (float)(index * 3), this.y + 49f);
+                                Graphics.Draw(_lightBar, this.x + 91f + index * 3, this.y + 49f);
                             }
                         }
                         this._roomSwitch.depth = this._tutorialTV.depth;
                         this._roomSwitch.frame = this.profile.switchStatus ? 1 : 0;
-                        Graphics.Draw((Sprite)this._roomSwitch, this.x + 81f, this.y + 47f);
+                        Graphics.Draw(_roomSwitch, this.x + 81f, this.y + 47f);
                     }
                     if (furniture1 != null)
                     {
@@ -1115,15 +1145,15 @@ namespace DuckGame
                         furniture4.background.depth = this._roomLeftBackground.depth;
                         furniture4.sprite.scale = new Vec2(1f);
                         furniture4.background.scale = new Vec2(1f);
-                        Graphics.Draw((Sprite)furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 4f, 87f));
-                        Graphics.Draw((Sprite)furniture4.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
-                        Graphics.Draw((Sprite)furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 141f, 16f));
-                        Graphics.Draw((Sprite)furniture4.sprite, (float)((double)this.x + 70.0 + 49.0), this.y + 44f, new Rectangle(49f, 0.0f, 92f, 68f));
+                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 4f, 87f));
+                        Graphics.Draw(furniture4.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 141f, 16f));
+                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 49.0), this.y + 44f, new Rectangle(49f, 0.0f, 92f, 68f));
                         furniture4.sprite.depth = this._selectConsole.depth - 20;
-                        Graphics.Draw((Sprite)furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), this.y + 44f, new Rectangle(4f, 0.0f, 44f, 54f));
+                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), this.y + 44f, new Rectangle(4f, 0.0f, 44f, 54f));
                         furniture4.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw((Sprite)furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), (float)((double)this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
-                        Graphics.Draw((Sprite)furniture4.background, this.x + 70f, this.y + 45f);
+                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), (float)((double)this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(furniture4.background, this.x + 70f, this.y + 45f);
                     }
                     else
                     {
@@ -1165,8 +1195,8 @@ namespace DuckGame
                     else if (this._selectConsole.imageIndex == 2)
                         this._consoleFlash.alpha = 0.0f;
                     Graphics.Draw(this._consoleFlash, this._consolePos.x + 9f, this._consolePos.y + 7f);
-                    Graphics.Draw((Sprite)this._selectConsole, this._consolePos.x, this._consolePos.y);
-                    if ((double)this._consoleFade > 0.00999999977648258)
+                    Graphics.Draw(_selectConsole, this._consolePos.x, this._consolePos.y);
+                    if (_consoleFade > 0.00999999977648258)
                     {
                         this._consoleHighlight.alpha = this._consoleFade;
                         Graphics.Draw(this._consoleHighlight, this._consolePos.x, this._consolePos.y);
@@ -1214,7 +1244,7 @@ namespace DuckGame
                             }
                         }
                         else
-                            Graphics.Draw(this._onlineIcon, (float)((int)this.x + 72), this.y + 19f, (Depth)num2);
+                            Graphics.Draw(this._onlineIcon, (int)this.x + 72, this.y + 19f, (Depth)num2);
                     }
                     this._font.depth = (Depth)0.6f;
                     float num4 = 0.0f;
@@ -1269,10 +1299,10 @@ namespace DuckGame
                             else
                                 this.profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)((double)this.x + 24.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num6, this.y + 75f + num7, Color.White, (Depth)0.7f, this.profile.inputProfile);
                             this.profile.font.scale = new Vec2(0.25f, 0.25f);
-                            int num9 = Profiles.experienceProfile.GetNumFurnitures((int)furniture5.index) - this.profile.GetNumFurnituresPlaced((int)furniture5.index);
+                            int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - this.profile.GetNumFurnituresPlaced(furniture5.index);
                             this.profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)((double)this.x + 17.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num6, (float)((double)this.y + 75.0 + 6.5) + num7, Color.White, (Depth)0.7f);
                             int furnituresPlaced = this.profile.GetTotalFurnituresPlaced();
-                            float num10 = (float)furnituresPlaced / (float)RoomEditor.maxFurnitures;
+                            float num10 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
                             this.profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)((double)this.x + 68.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num6, (float)((double)this.y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
                             Vec2 p1 = new Vec2((float)((double)this.x + 56.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num6, (float)((double)this.y + 75.0 + 6.0) + num7);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
@@ -1300,8 +1330,8 @@ namespace DuckGame
                     else if (this._selectConsole.imageIndex == 2)
                         this._consoleFlash.alpha = 0.0f;
                     Graphics.Draw(this._consoleFlash, this._consolePos.x + 9f, this._consolePos.y + 7f);
-                    Graphics.Draw((Sprite)this._selectConsole, this._consolePos.x, this._consolePos.y);
-                    if ((double)this._consoleFade > 0.00999999977648258)
+                    Graphics.Draw(_selectConsole, this._consolePos.x, this._consolePos.y);
+                    if (_consoleFade > 0.00999999977648258)
                     {
                         this._consoleHighlight.alpha = this._consoleFade;
                         Graphics.Draw(this._consoleHighlight, this._consolePos.x, this._consolePos.y);
@@ -1348,7 +1378,7 @@ namespace DuckGame
                             }
                         }
                         else
-                            Graphics.Draw(this._onlineIcon, (float)((int)this.x + 53), this.y + 19f, (Depth)num11);
+                            Graphics.Draw(this._onlineIcon, (int)this.x + 53, this.y + 19f, (Depth)num11);
                     }
                     this._font.depth = (Depth)0.6f;
                     this._aButton.position = new Vec2(this.x + 39f, this.y + 71f);
@@ -1401,10 +1431,10 @@ namespace DuckGame
                             else
                                 this.profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)((double)this.x + 24.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num14, this.y + 75f + num15, Color.White, (Depth)0.7f, this.profile.inputProfile);
                             this.profile.font.scale = new Vec2(0.25f, 0.25f);
-                            int num16 = Profiles.experienceProfile.GetNumFurnitures((int)furniture6.index) - this.profile.GetNumFurnituresPlaced((int)furniture6.index);
+                            int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - this.profile.GetNumFurnituresPlaced(furniture6.index);
                             this.profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)((double)this.x + 17.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num14, (float)((double)this.y + 75.0 + 6.5) + num15, Color.White, (Depth)0.7f);
                             int furnituresPlaced = this.profile.GetTotalFurnituresPlaced();
-                            float num17 = (float)furnituresPlaced / (float)RoomEditor.maxFurnitures;
+                            float num17 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
                             this.profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)((double)this.x + 68.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num14, (float)((double)this.y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
                             Vec2 p1 = new Vec2((float)((double)this.x + 56.0 - (double)this.profile.font.GetWidth(text) / 2.0) - num14, (float)((double)this.y + 75.0 + 6.0) + num15);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);

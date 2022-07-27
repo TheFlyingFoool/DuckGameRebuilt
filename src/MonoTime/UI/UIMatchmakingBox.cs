@@ -125,7 +125,7 @@ namespace DuckGame
             }
         }
 
-        public bool IsBlacklisted(ulong lobby) => this._permenantBlacklist.FirstOrDefault<BlacklistServer>((Func<BlacklistServer, bool>)(x => (long)x.lobby == (long)lobby)) != null || this._failedAttempts.FirstOrDefault<BlacklistServer>((Func<BlacklistServer, bool>)(x => (long)x.lobby == (long)lobby)) != null || UIMatchmakingBox.core.blacklist.Contains(lobby);
+        public bool IsBlacklisted(ulong lobby) => this._permenantBlacklist.FirstOrDefault<BlacklistServer>(x => (long)x.lobby == (long)lobby) != null || this._failedAttempts.FirstOrDefault<BlacklistServer>(x => (long)x.lobby == (long)lobby) != null || UIMatchmakingBox.core.blacklist.Contains(lobby);
 
         private void OnStateChange(MatchmakingState s)
         {
@@ -162,8 +162,8 @@ namespace DuckGame
                 Music.Play("jazzroom");
             this._triesSinceSearch = 0;
             this.triedHostingAlready = false;
-            this._tryConnectLobby = (Lobby)null;
-            this._tryHostingLobby = (Lobby)null;
+            this._tryConnectLobby = null;
+            this._tryHostingLobby = null;
             this.ChangeState(MatchmakingState.ConnectToMoon);
             this._tryHostingWait = 0.0f;
             this._tryConnectTimeout = 0.0f;
@@ -208,7 +208,7 @@ namespace DuckGame
         {
             if (!Network.isActive)
             {
-                Level.current = (Level)new TeamSelect2();
+                Level.current = new TeamSelect2();
                 Level.UpdateLevelChange();
             }
             HUD.CloseAllCorners();
@@ -217,7 +217,7 @@ namespace DuckGame
             if (this._openOnClose is UIServerBrowser)
                 this._searchingIsOver = true;
             if (this._searchingIsOver)
-                MonoMain.pauseMenu = (UIComponent)this._openOnClose;
+                MonoMain.pauseMenu = _openOnClose;
             if (Network.isActive || !(Level.current is TeamSelect2) || (Level.current as TeamSelect2)._beam == null)
                 return;
             (Level.current as TeamSelect2)._beam.ClearBeam();
@@ -282,7 +282,7 @@ namespace DuckGame
                     cooldown = 15f
                 });
             DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Connection failure, continuing search.", Color.White);
-            this._tryConnectLobby = (Lobby)null;
+            this._tryConnectLobby = null;
             if (this._continueSearchOnFail)
             {
                 this.ChangeState(MatchmakingState.SearchForLobbies);
@@ -304,7 +304,7 @@ namespace DuckGame
             {
                 if (this._tryHostingLobby != null)
                     this._tries = 0;
-                this._tryHostingLobby = (Lobby)null;
+                this._tryHostingLobby = null;
                 if (this._quit)
                     this.FinishAndClose();
                 else if (this._tryConnectLobby != null)
@@ -324,10 +324,10 @@ namespace DuckGame
             if (!this._searchingIsOver)
             {
                 this._scroll += 0.1f;
-                if ((double)this._scroll > 9.0)
+                if (_scroll > 9.0)
                     this._scroll = 0.0f;
                 this._dots += 0.01f;
-                if ((double)this._dots > 1.0)
+                if (_dots > 1.0)
                     this._dots = 0.0f;
             }
             if (this.open)
@@ -369,21 +369,21 @@ namespace DuckGame
                     if (this._tryHostingLobby != null)
                     {
                         (Level.current as TeamSelect2).CloseAllDialogs();
-                        Level.current = (Level)new TeamSelect2();
+                        Level.current = new TeamSelect2();
                         DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Finished! (HOST).", Color.White);
                         return;
                     }
                     if (Level.current != this._currentLevel)
                         return;
                     (Level.current as TeamSelect2).CloseAllDialogs();
-                    Level.current = (Level)new ConnectingScreen();
+                    Level.current = new ConnectingScreen();
                     DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Finished! (CLIENT).", Color.White);
                     return;
                 }
                 if (UIMatchmakingBox._core._state == MatchmakingState.Waiting)
                 {
                     this._stateWait -= Maths.IncFrameTimer();
-                    if ((double)this._stateWait <= 0.0)
+                    if (_stateWait <= 0.0)
                     {
                         this._stateWait = 0.0f;
                         this.OnStateChange(this._pendingState);
@@ -485,7 +485,7 @@ namespace DuckGame
                                 if (this._tryHostingLobby == null || (long)lobby.id != (long)this._tryHostingLobby.id)
                                 {
                                     if (index2 == Network.activeNetwork.core.NumLobbiesFound() - 1)
-                                        this._failedAttempts.RemoveAll((Predicate<BlacklistServer>)(x => (double)x.cooldown <= 0.0));
+                                        this._failedAttempts.RemoveAll(x => x.cooldown <= 0.0);
                                     if (this.IsBlacklisted(lobby.id))
                                         DevConsole.Log("|PURPLE|LOBBY    |DGRED|Skipping " + lobby.id.ToString() + " (BLACKLISTED)", Color.White);
                                     else if (UIMatchmakingBox._core.nonPreferredServers.Contains(lobby.id) && index1 == 0)
@@ -559,7 +559,7 @@ namespace DuckGame
                     ++this._connectTimeout;
                     if (!Network.connected && this._connectTimeout > 120)
                     {
-                        this._tryConnectLobby = (Lobby)null;
+                        this._tryConnectLobby = null;
                         DevConsole.Log("|PURPLE|LOBBY    |DGRED|Failed to connect!", Color.White);
                         if (this is UIGameConnectionBox)
                         {
@@ -587,7 +587,7 @@ namespace DuckGame
             if (this._newStatusList.Count > 0)
             {
                 this._newStatusWait -= 0.1f;
-                if ((double)this._newStatusWait <= 0.0)
+                if (_newStatusWait <= 0.0)
                 {
                     this._newStatusWait = 1f;
                     while ((double)this._fancyFont.GetWidth(this._newStatusList[0]) > 100.0)
@@ -620,7 +620,7 @@ namespace DuckGame
                 for (int index = 0; index < 7; ++index)
                 {
                     float num1 = this.x - 28f;
-                    float x = num1 + (float)(index * 9) + (float)Math.Round((double)this._scroll);
+                    float x = num1 + index * 9 + (float)Math.Round(_scroll);
                     float num2 = num1 + 63f;
                     double num3 = ((double)x - (double)num1) / ((double)num2 - (double)num1);
                     this._matchmakingSignal.depth = this.depth + 4;
@@ -634,21 +634,21 @@ namespace DuckGame
                         this._matchmakingSignal.frame = 1;
                     if (num3 > 0.949999988079071)
                         this._matchmakingSignal.frame = 0;
-                    Graphics.Draw((Sprite)this._matchmakingSignal, x, this.y - 21f);
+                    Graphics.Draw(_matchmakingSignal, x, this.y - 21f);
                 }
             }
             this._matchmakingStars[0].depth = this.depth + 2;
-            Graphics.Draw((Sprite)this._matchmakingStars[0], this.x - 9f, this.y - 18f);
+            Graphics.Draw(this._matchmakingStars[0], this.x - 9f, this.y - 18f);
             this._matchmakingStars[1].depth = this.depth + 2;
-            Graphics.Draw((Sprite)this._matchmakingStars[1], this.x + 31f, this.y - 22f);
+            Graphics.Draw(this._matchmakingStars[1], this.x + 31f, this.y - 22f);
             this._matchmakingStars[2].depth = this.depth + 2;
-            Graphics.Draw((Sprite)this._matchmakingStars[2], this.x + 12f, this.y - 20f);
+            Graphics.Draw(this._matchmakingStars[2], this.x + 12f, this.y - 20f);
             this._matchmakingStars[3].depth = this.depth + 2;
-            Graphics.Draw((Sprite)this._matchmakingStars[3], this.x - 23f, this.y - 21f);
+            Graphics.Draw(this._matchmakingStars[3], this.x - 23f, this.y - 21f);
             this._signalCrossLocal.depth = this.depth + 2;
-            Graphics.Draw((Sprite)this._signalCrossLocal, this.x - 35f, this.y - 19f);
+            Graphics.Draw(_signalCrossLocal, this.x - 35f, this.y - 19f);
             this._signalCrossNetwork.depth = this.depth + 2;
-            Graphics.Draw((Sprite)this._signalCrossNetwork, this.x + 45f, this.y - 23f);
+            Graphics.Draw(_signalCrossNetwork, this.x + 45f, this.y - 23f);
             this._font.DrawOutline(this._caption, this.position + new Vec2((float)-((double)this._font.GetWidth(this._caption) / 2.0), -42f), Color.White, Color.Black, this.depth + 2);
             this._fancyFont.scale = new Vec2(0.5f);
             int num4 = 0;
@@ -669,13 +669,13 @@ namespace DuckGame
                         }
                         for (int index = 0; index < 3; ++index)
                         {
-                            if ((double)this._dots * 4.0 > (double)(index + 1))
+                            if (_dots * 4.0 > index + 1)
                                 str2 += str3;
                         }
                         str1 += str2;
                     }
                 }
-                this._fancyFont.Draw(str1, new Vec2(this.x - 52f, this.y - 8f + (float)(num4 * 6)), Color.White, this.depth + 2);
+                this._fancyFont.Draw(str1, new Vec2(this.x - 52f, this.y - 8f + num4 * 6), Color.White, this.depth + 2);
                 ++num4;
                 ++num5;
             }

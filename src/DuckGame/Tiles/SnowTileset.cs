@@ -27,7 +27,7 @@ namespace DuckGame
             this.horizontalHeight = 15f;
             this._tileset = "snowTileset";
             this._sprite = new SpriteMap("snowTileset", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this._sprite.frame = 40;
             this.cold = true;
             this.willHeat = true;
@@ -47,7 +47,7 @@ namespace DuckGame
             if (!this.melted)
             {
                 this.melt += 0.05f;
-                if ((double)this.melt > 1.0)
+                if (melt > 1.0)
                     this.Melt();
             }
             base.HeatUp(location);
@@ -60,13 +60,15 @@ namespace DuckGame
             if (this.melted || !(pServer | pNetMessage))
                 return;
             this.melted = true;
-            this._sprite = new SpriteMap(this.meltedTileset, 16, 16);
-            this._sprite.frame = (this.graphic as SpriteMap).frame;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap(this.meltedTileset, 16, 16)
+            {
+                frame = (this.graphic as SpriteMap).frame
+            };
+            this.graphic = _sprite;
             this.DoPositioning();
             if (!Network.isActive || pNetMessage)
                 return;
-            Send.Message((NetMessage)new NMMeltTile(this.position));
+            Send.Message(new NMMeltTile(this.position));
         }
 
         public void Freeze() => this.Freeze(Network.isServer, false);
@@ -76,14 +78,16 @@ namespace DuckGame
             if (!this.melted || !(pServer | pNetMessage))
                 return;
             this.melted = false;
-            this._sprite = new SpriteMap(this.frozenTileset, 16, 16);
-            this._sprite.frame = (this.graphic as SpriteMap).frame;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap(this.frozenTileset, 16, 16)
+            {
+                frame = (this.graphic as SpriteMap).frame
+            };
+            this.graphic = _sprite;
             this.DoPositioning();
             this.melt = 0.0f;
             if (this.melted || !Network.isActive || pNetMessage)
                 return;
-            Send.Message((NetMessage)new NMFreezeTile(this.position));
+            Send.Message(new NMFreezeTile(this.position));
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
@@ -108,19 +112,19 @@ namespace DuckGame
                 {
                     case ImpactedFrom.Left:
                         for (int index = 0; index < num; ++index)
-                            Level.Add((Thing)new SnowFallParticle(this.right - Rando.Float(0.0f, 1f), with.y + Rando.Float(-6f, 6f), new Vec2(Rando.Float(0.3f, 1f), Rando.Float(-0.5f, 0.5f))));
+                            Level.Add(new SnowFallParticle(this.right - Rando.Float(0.0f, 1f), with.y + Rando.Float(-6f, 6f), new Vec2(Rando.Float(0.3f, 1f), Rando.Float(-0.5f, 0.5f))));
                         break;
                     case ImpactedFrom.Right:
                         for (int index = 0; index < num; ++index)
-                            Level.Add((Thing)new SnowFallParticle(this.left - Rando.Float(0.0f, 1f), with.y + Rando.Float(-6f, 6f), new Vec2(-Rando.Float(0.3f, 1f), Rando.Float(-0.5f, 0.5f))));
+                            Level.Add(new SnowFallParticle(this.left - Rando.Float(0.0f, 1f), with.y + Rando.Float(-6f, 6f), new Vec2(-Rando.Float(0.3f, 1f), Rando.Float(-0.5f, 0.5f))));
                         break;
                     case ImpactedFrom.Top:
                         for (int index = 0; index < num; ++index)
-                            Level.Add((Thing)new SnowFallParticle(with.x + Rando.Float(-6f, 6f), this.bottom + Rando.Float(0.0f, 1f), new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0.3f, 1f))));
+                            Level.Add(new SnowFallParticle(with.x + Rando.Float(-6f, 6f), this.bottom + Rando.Float(0.0f, 1f), new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0.3f, 1f))));
                         break;
                     case ImpactedFrom.Bottom:
                         for (int index = 0; index < num; ++index)
-                            Level.Add((Thing)new SnowFallParticle(with.x + Rando.Float(-6f, 6f), this.top - Rando.Float(0.0f, 1f), new Vec2(Rando.Float(-0.5f, 0.5f), -Rando.Float(0.3f, 1f))));
+                            Level.Add(new SnowFallParticle(with.x + Rando.Float(-6f, 6f), this.top - Rando.Float(0.0f, 1f), new Vec2(Rando.Float(-0.5f, 0.5f), -Rando.Float(0.3f, 1f))));
                         break;
                 }
             }

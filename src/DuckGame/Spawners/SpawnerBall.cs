@@ -25,9 +25,11 @@ namespace DuckGame
         public SpawnerBall(float xpos, float ypos, bool secondBall)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("spawnerBall", 4, 4);
-            this._sprite.frame = 1;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("spawnerBall", 4, 4)
+            {
+                frame = 1
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(2f, 2f);
             this._sprite.center = new Vec2(2f, 2f);
             this.depth = (Depth)0.5f;
@@ -39,7 +41,7 @@ namespace DuckGame
             this.orbitDistance = MathHelper.Lerp(this.orbitDistance, this.desiredOrbitDistance, 0.05f);
             this.orbitHeight = MathHelper.Lerp(this.orbitHeight, this.desiredOrbitHeight, 0.05f);
             this._wave += 0.08f;
-            if ((double)this._wave > 6.28000020980835)
+            if (_wave > 6.28000020980835)
             {
                 this._wave -= 6.28f;
                 this._grow = !this._grow;
@@ -49,18 +51,18 @@ namespace DuckGame
 
         public override void Draw()
         {
-            float num = (float)((Math.Sin((double)this._wave + 1.57000005245209) + 1.0) / 2.0 * 0.5);
+            float num = (float)((Math.Sin(_wave + 1.57000005245209) + 1.0) / 2.0 * 0.5);
             if (!this._secondBall)
             {
                 this._sprite.scale = new Vec2(num + 0.6f, num + 0.6f);
-                this._sprite.depth = (Depth)((double)this._sprite.scale.x > 0.800000011920929 ? 0.4f : -0.8f);
-                Graphics.Draw((Sprite)this._sprite, this.x + (float)Math.Sin((double)this._wave) * this.orbitDistance, this.y - this.orbitHeight);
+                this._sprite.depth = (Depth)(_sprite.scale.x > 0.800000011920929 ? 0.4f : -0.8f);
+                Graphics.Draw(_sprite, this.x + (float)Math.Sin(_wave) * this.orbitDistance, this.y - this.orbitHeight);
             }
             else
             {
                 this._sprite.scale = new Vec2((float)(0.5 - (double)num + 0.600000023841858), (float)(0.5 - (double)num + 0.600000023841858));
-                this._sprite.depth = (Depth)((double)this._sprite.scale.x > 0.800000011920929 ? 0.4f : -0.8f);
-                Graphics.Draw((Sprite)this._sprite, this.x - (float)Math.Sin((double)this._wave) * this.orbitDistance, this.y - this.orbitHeight);
+                this._sprite.depth = (Depth)(_sprite.scale.x > 0.800000011920929 ? 0.4f : -0.8f);
+                Graphics.Draw(_sprite, this.x - (float)Math.Sin(_wave) * this.orbitDistance, this.y - this.orbitHeight);
             }
         }
     }

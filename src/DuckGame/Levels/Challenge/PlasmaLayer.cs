@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this.visible = (double)this.alpha > 0.00999999977648258;
+            this.visible = alpha > 0.00999999977648258;
             if (!this.visible)
                 return;
             this._plasmaMaterial.offset = 0.5f;
@@ -40,7 +40,7 @@ namespace DuckGame
             this._plasmaMaterial.color1 = Color.DeepPink;
             this._plasmaMaterial.color2 = Color.HotPink;
             this._plasmaMaterial.Apply();
-            DuckGame.Graphics.currentLayer = (Layer)this;
+            DuckGame.Graphics.currentLayer = this;
             DuckGame.Graphics.SetRenderTarget(this._target);
             Viewport viewport = DuckGame.Graphics.viewport;
             DuckGame.Graphics.viewport = new Viewport(0, 0, 320, (int)(320.0 * (double)DuckGame.Graphics.aspect));
@@ -50,29 +50,29 @@ namespace DuckGame
             DuckGame.Graphics.device.SamplerStates[0] = SamplerState.PointWrap;
             DuckGame.Graphics.Draw(this._plasma, -30f, -30f);
             this._batch.End();
-            DuckGame.Graphics.SetRenderTarget((RenderTarget2D)null);
+            DuckGame.Graphics.SetRenderTarget(null);
             DuckGame.Graphics.viewport = viewport;
-            DuckGame.Graphics.screen = (MTSpriteBatch)null;
-            DuckGame.Graphics.currentLayer = (Layer)null;
+            DuckGame.Graphics.screen = null;
+            DuckGame.Graphics.currentLayer = null;
         }
 
         public override void Begin(bool transparent, bool isTargetDraw = false)
         {
             DuckGame.Graphics.screen = this._batch;
-            this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.DepthRead, this._state, (MTEffect)(Material)this._plasmaMaterial, this.camera.getMatrix());
+            this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.DepthRead, this._state, (MTEffect)_plasmaMaterial, this.camera.getMatrix());
         }
 
         public override void Draw(bool transparent, bool isTargetDraw = false)
         {
             if (!this.visible)
                 return;
-            DuckGame.Graphics.currentLayer = (Layer)this;
+            DuckGame.Graphics.currentLayer = this;
             DuckGame.Graphics.screen = this._batch;
-            this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, this._state, (MTEffect)null, this.camera.getMatrix());
-            DuckGame.Graphics.Draw((Tex2D)this._target, Vec2.Zero, new Rectangle?(), Color.White * this.alpha, 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, (Depth)1f);
+            this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, this._state, null, this.camera.getMatrix());
+            DuckGame.Graphics.Draw(_target, Vec2.Zero, new Rectangle?(), Color.White * this.alpha, 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, (Depth)1f);
             this._batch.End();
-            DuckGame.Graphics.screen = (MTSpriteBatch)null;
-            DuckGame.Graphics.currentLayer = (Layer)null;
+            DuckGame.Graphics.screen = null;
+            DuckGame.Graphics.currentLayer = null;
         }
     }
 }

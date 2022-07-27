@@ -13,7 +13,7 @@ namespace DuckGame
         public WaterFallEdgeTop(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("waterFallEdgeTop", 16, 20);
+            this.graphic = new SpriteMap("waterFallEdgeTop", 16, 20);
             this.center = new Vec2(8f, 12f);
             this._collisionSize = new Vec2(8f, 8f);
             this._collisionOffset = new Vec2(-8f, -8f);
@@ -24,8 +24,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            (this.graphic as SpriteMap).frame = (int)((double)Graphics.frame / 3.0 % 4.0);
-            this.graphic.flipH = this.offDir <= (sbyte)0;
+            (this.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            this.graphic.flipH = this.offDir <= 0;
             base.Draw();
         }
     }

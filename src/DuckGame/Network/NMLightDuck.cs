@@ -22,7 +22,7 @@ namespace DuckGame
             if (this.duck == null)
                 return;
             this.duck.isBurnMessage = true;
-            this.duck.Burn(this.duck.position, (Thing)null);
+            this.duck.Burn(this.duck.position, null);
             this.duck.isBurnMessage = false;
         }
     }

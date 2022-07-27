@@ -68,7 +68,7 @@ namespace DuckGame
         public bool drag;
 
         public SteamUploadDialog()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -81,27 +81,27 @@ namespace DuckGame
             this._root = true;
             this.drawControls = false;
             this._descriptionBox = new Textbox(this.x + 5f, this.y + 225f, 316f, 40f, 0.5f, 9, "<ENTER DESCRIPTION>");
-            this._nameBox = new Textbox(this.x + 5f, this.y + (float)byte.MaxValue, 316f, 12f, maxLines: 1, emptyText: "<ENTER NAME>");
+            this._nameBox = new Textbox(this.x + 5f, this.y + byte.MaxValue, 316f, 12f, maxLines: 1, emptyText: "<ENTER NAME>");
             this._font = new FancyBitmapFont("smallFont");
             this._confirm = new MessageDialogue();
-            Level.Add((Thing)this._confirm);
+            Level.Add(_confirm);
             this._upload = new UploadDialogue();
-            Level.Add((Thing)this._upload);
+            Level.Add(_upload);
             this._notify = new NotifyDialogue();
-            Level.Add((Thing)this._notify);
+            Level.Add(_notify);
             this._deathmatchTest = new DeathmatchTestDialogue();
-            Level.Add((Thing)this._deathmatchTest);
+            Level.Add(_deathmatchTest);
             this._testSuccess = new TestSuccessDialogue();
-            Level.Add((Thing)this._testSuccess);
+            Level.Add(_testSuccess);
             this._arcadeTest = new ArcadeTestDialogue();
-            Level.Add((Thing)this._arcadeTest);
+            Level.Add(_arcadeTest);
         }
 
         public void Open(LevelData pData)
         {
             SteamUploadDialog._editingMod = false;
-            this._publishItem = (EditorWorkshopItem)null;
-            Editor.lockInput = (ContextMenu)this;
+            this._publishItem = null;
+            Editor.lockInput = this;
             SFX.Play("openClick", 0.4f);
             this.opened = true;
             this._publishItem = new EditorWorkshopItem(pData);
@@ -118,8 +118,8 @@ namespace DuckGame
         public void Open(Mod pData)
         {
             SteamUploadDialog._editingMod = true;
-            this._publishItem = (EditorWorkshopItem)null;
-            Editor.lockInput = (ContextMenu)this;
+            this._publishItem = null;
+            Editor.lockInput = this;
             SFX.Play("openClick", 0.4f);
             this.opened = true;
             this._publishItem = new EditorWorkshopItem(pData);
@@ -135,11 +135,11 @@ namespace DuckGame
 
         public void Close()
         {
-            Editor.lockInput = (ContextMenu)null;
+            Editor.lockInput = null;
             this.opened = false;
             this._descriptionBox.LoseFocus();
             this._nameBox.LoseFocus();
-            this._publishItem = (EditorWorkshopItem)null;
+            this._publishItem = null;
             this.ClearItems();
         }
 
@@ -151,8 +151,8 @@ namespace DuckGame
             if (this._tagMenu == null)
                 return;
             this._tagMenu.opened = false;
-            Level.Remove((Thing)this._tagMenu);
-            this._tagMenu = (ContextMenu)null;
+            Level.Remove(_tagMenu);
+            this._tagMenu = null;
             if (Editor.PeekFocus() != this._tagMenu)
                 return;
             Editor.PopFocus();
@@ -224,7 +224,7 @@ namespace DuckGame
                 if (this.opened)
                     Keyboard.keyString = "";
                 if (this.opened)
-                    Editor.lockInput = (ContextMenu)this;
+                    Editor.lockInput = this;
                 this._opening = false;
                 foreach (ContextMenu contextMenu in this._items)
                     contextMenu.disabled = true;
@@ -260,11 +260,11 @@ namespace DuckGame
                         ArcadeTestDialogue.success = false;
                         ArcadeTestDialogue.currentEditor = Level.current as Editor;
                         if (this._arcadeTestIndex == 0)
-                            Level.current = (Level)new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge01Data, true);
+                            Level.current = new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge01Data, true);
                         else if (this._arcadeTestIndex == 1)
-                            Level.current = (Level)new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge02Data, true);
+                            Level.current = new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge02Data, true);
                         else if (this._arcadeTestIndex == 2)
-                            Level.current = (Level)new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge03Data, true);
+                            Level.current = new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge03Data, true);
                         this._testing = true;
                         return;
                     }
@@ -306,7 +306,7 @@ namespace DuckGame
                         Profiles.defaultProfiles[index].UpdatePersona();
                         Input.ApplyDefaultMapping(Profiles.defaultProfiles[index].inputProfile, Profiles.defaultProfiles[index]);
                     }
-                    Level.current = (Level)new GameLevel(this._levelData.GetPath(), validityTest: true);
+                    Level.current = new GameLevel(this._levelData.GetPath(), validityTest: true);
                     this._testing = true;
                 }
                 this._deathmatchTest.result = -1;
@@ -331,7 +331,7 @@ namespace DuckGame
                 Vec2 vec2 = new Vec2((float)((double)this.layer.width / 2.0 - (double)this.width / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 - (double)this.height / 2.0 - 15.0)) + new Vec2(7f, 276f);
                 foreach (KeyValuePair<string, Vec2> tagPosition in this.tagPositions)
                 {
-                    if ((double)Mouse.x > (double)tagPosition.Value.x && (double)Mouse.x < (double)tagPosition.Value.x + 8.0 && (double)Mouse.y > (double)tagPosition.Value.y && (double)Mouse.y < (double)tagPosition.Value.y + 8.0 && Mouse.left == InputState.Pressed)
+                    if ((double)Mouse.x > tagPosition.Value.x && (double)Mouse.x < tagPosition.Value.x + 8.0 && (double)Mouse.y > tagPosition.Value.y && (double)Mouse.y < tagPosition.Value.y + 8.0 && Mouse.left == InputState.Pressed)
                     {
                         this._publishItem.RemoveTag(tagPosition.Key);
                         return;
@@ -340,21 +340,23 @@ namespace DuckGame
                 if (this.tagPositions.Count != SteamUploadDialog.possibleTags.Count)
                 {
                     bool flag = false;
-                    if ((double)Mouse.x > (double)this._plusPosition.x && (double)Mouse.x < (double)this._plusPosition.x + 8.0 && (double)Mouse.y > (double)this._plusPosition.y && (double)Mouse.y < (double)this._plusPosition.y + 8.0)
+                    if ((double)Mouse.x > _plusPosition.x && (double)Mouse.x < _plusPosition.x + 8.0 && (double)Mouse.y > _plusPosition.y && (double)Mouse.y < _plusPosition.y + 8.0)
                         flag = true;
                     if (flag && Mouse.left == InputState.Pressed)
                     {
-                        ContextMenu contextMenu = new ContextMenu((IContextListener)this);
-                        contextMenu.x = this._plusPosition.x;
-                        contextMenu.y = this._plusPosition.y;
-                        contextMenu.root = true;
-                        contextMenu.depth = this.depth + 20;
+                        ContextMenu contextMenu = new ContextMenu(this)
+                        {
+                            x = this._plusPosition.x,
+                            y = this._plusPosition.y,
+                            root = true,
+                            depth = this.depth + 20
+                        };
                         int num = 0;
                         foreach (string possibleTag in SteamUploadDialog.possibleTags)
                         {
                             if (!this._publishItem.tags.Contains<string>(possibleTag))
                             {
-                                contextMenu.AddItem(new ContextMenu((IContextListener)this)
+                                contextMenu.AddItem(new ContextMenu(this)
                                 {
                                     itemSize = {
                     x = 40f
@@ -364,8 +366,8 @@ namespace DuckGame
                                 ++num;
                             }
                         }
-                        contextMenu.y -= (float)(num * 16 + 10);
-                        Level.Add((Thing)contextMenu);
+                        contextMenu.y -= num * 16 + 10;
+                        Level.Add(contextMenu);
                         contextMenu.opened = true;
                         contextMenu.closeOnRight = true;
                         this._tagMenu = contextMenu;
@@ -373,14 +375,14 @@ namespace DuckGame
                         return;
                     }
                 }
-                Editor.lockInput = (ContextMenu)this;
+                Editor.lockInput = this;
                 this._descriptionBox.Update();
                 this._nameBox.Update();
                 this._acceptHover = false;
                 this._cancelHover = false;
-                if ((double)Mouse.x > (double)this._acceptPos.x && (double)Mouse.x < (double)this._acceptPos.x + (double)this._acceptSize.x && (double)Mouse.y > (double)this._acceptPos.y && (double)Mouse.y < (double)this._acceptPos.y + (double)this._acceptSize.y)
+                if ((double)Mouse.x > _acceptPos.x && (double)Mouse.x < _acceptPos.x + (double)this._acceptSize.x && (double)Mouse.y > _acceptPos.y && (double)Mouse.y < _acceptPos.y + (double)this._acceptSize.y)
                     this._acceptHover = true;
-                if ((double)Mouse.x > (double)this._cancelPos.x && (double)Mouse.x < (double)this._cancelPos.x + (double)this._cancelSize.x && (double)Mouse.y > (double)this._cancelPos.y && (double)Mouse.y < (double)this._cancelPos.y + (double)this._cancelSize.y)
+                if ((double)Mouse.x > _cancelPos.x && (double)Mouse.x < _cancelPos.x + (double)this._cancelSize.x && (double)Mouse.y > _cancelPos.y && (double)Mouse.y < _cancelPos.y + (double)this._cancelSize.y)
                     this._cancelHover = true;
                 if (this._acceptHover && Mouse.left == InputState.Pressed)
                 {
@@ -432,7 +434,7 @@ namespace DuckGame
                 int num5 = SteamUploadDialog.possibleTags.Contains(tag) ? 1 : 0;
                 this._workshopTag.depth = this.depth + 8;
                 this._workshopTag.frame = 0;
-                Graphics.Draw((Sprite)this._workshopTag, vec2.x, vec2.y);
+                Graphics.Draw(_workshopTag, vec2.x, vec2.y);
                 float stringWidth = Graphics.GetStringWidth(tag, scale: 0.5f);
                 float num6 = 4f;
                 if (num5 == 0)
@@ -448,7 +450,7 @@ namespace DuckGame
                     Graphics.DrawString("x", position, Color.Red, this.depth + 14, scale: 0.5f);
                 }
                 this._workshopTag.frame = 1;
-                Graphics.Draw((Sprite)this._workshopTag, (float)((double)vec2.x + (double)num6 + 4.0) + stringWidth, vec2.y);
+                Graphics.Draw(_workshopTag, (float)(vec2.x + (double)num6 + 4.0) + stringWidth, vec2.y);
                 vec2.x += stringWidth + 11f + num6;
                 ++num3;
             }
@@ -471,7 +473,7 @@ namespace DuckGame
             {
                 this._previewTarget.depth = this.depth + 10;
                 this._previewTarget.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(this._previewTarget, (float)((double)p1.x + ((double)p2.x - (double)p1.x) / 2.0 - (double)this._previewTarget.width * (double)this._previewTarget.scale.x / 2.0), (float)((double)p1.y + ((double)p2.y - (double)p1.y) / 2.0 - (double)this._previewTarget.height * (double)this._previewTarget.scale.y / 2.0 - 20.0));
+                Graphics.Draw(this._previewTarget, (float)(p1.x + (p2.x - (double)p1.x) / 2.0 - _previewTarget.width * (double)this._previewTarget.scale.x / 2.0), (float)(p1.y + (p2.y - (double)p1.y) / 2.0 - _previewTarget.height * (double)this._previewTarget.scale.y / 2.0 - 20.0));
             }
             else
             {

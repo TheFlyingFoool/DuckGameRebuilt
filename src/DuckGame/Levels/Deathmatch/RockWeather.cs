@@ -524,38 +524,38 @@ namespace DuckGame
 
         private RockWeatherState GetWeatherState(float time, bool lerp = true)
         {
-            RockWeatherState rockWeatherState1 = (RockWeatherState)null;
-            RockWeatherState rockWeatherState2 = (RockWeatherState)null;
+            RockWeatherState rockWeatherState1 = null;
+            RockWeatherState rockWeatherState2 = null;
             float num1 = 0.0f;
             int index = 0;
             switch (RockWeather._weather)
             {
                 case Weather.Sunny:
-                    num1 = 1f / (float)this.timeOfDayColorMultMap.Count;
-                    index = (int)((double)RockWeather._timeOfDay * (double)this.timeOfDayColorMultMap.Count);
+                    num1 = 1f / timeOfDayColorMultMap.Count;
+                    index = (int)(_timeOfDay * (double)this.timeOfDayColorMultMap.Count);
                     if (index >= this.timeOfDayColorMultMap.Count)
                         index = this.timeOfDayColorMultMap.Count - 1;
                     rockWeatherState1 = this.timeOfDayColorMultMap[index];
                     rockWeatherState2 = index + 1 <= this.timeOfDayColorMultMap.Count - 1 ? this.timeOfDayColorMultMap[index + 1] : this.timeOfDayColorMultMap[0];
                     break;
                 case Weather.Snowing:
-                    num1 = 1f / (float)this.timeOfDayColorMultMapWinter.Count;
-                    index = (int)((double)RockWeather._timeOfDay * (double)this.timeOfDayColorMultMapWinter.Count);
+                    num1 = 1f / timeOfDayColorMultMapWinter.Count;
+                    index = (int)(_timeOfDay * (double)this.timeOfDayColorMultMapWinter.Count);
                     if (index >= this.timeOfDayColorMultMapWinter.Count)
                         index = this.timeOfDayColorMultMapWinter.Count - 1;
                     rockWeatherState1 = this.timeOfDayColorMultMapWinter[index];
                     rockWeatherState2 = index + 1 <= this.timeOfDayColorMultMapWinter.Count - 1 ? this.timeOfDayColorMultMapWinter[index + 1] : this.timeOfDayColorMultMapWinter[0];
                     break;
                 case Weather.Raining:
-                    num1 = 1f / (float)this.timeOfDayColorMultMapRaining.Count;
-                    index = (int)((double)RockWeather._timeOfDay * (double)this.timeOfDayColorMultMapRaining.Count);
+                    num1 = 1f / timeOfDayColorMultMapRaining.Count;
+                    index = (int)(_timeOfDay * (double)this.timeOfDayColorMultMapRaining.Count);
                     if (index >= this.timeOfDayColorMultMapRaining.Count)
                         index = this.timeOfDayColorMultMapRaining.Count - 1;
                     rockWeatherState1 = this.timeOfDayColorMultMapRaining[index];
                     rockWeatherState2 = index + 1 <= this.timeOfDayColorMultMapRaining.Count - 1 ? this.timeOfDayColorMultMapRaining[index + 1] : this.timeOfDayColorMultMapRaining[0];
                     break;
             }
-            float num2 = Maths.NormalizeSection(RockWeather._timeOfDay, num1 * (float)index, num1 * (float)(index + 1));
+            float num2 = Maths.NormalizeSection(RockWeather._timeOfDay, num1 * index, num1 * (index + 1));
             RockWeatherState weatherState = new RockWeatherState();
             if (this._lastAppliedState == null)
                 this._lastAppliedState = rockWeatherState1.Copy();
@@ -644,7 +644,7 @@ namespace DuckGame
             RockWeather._weatherTime += 6.17284E-06f;
             if (RockWeather._weather == Weather.Raining)
                 RockWeather._timeRaining += Maths.IncFrameTimer();
-            if ((double)RockWeather._timeOfDay <= 1.0)
+            if (_timeOfDay <= 1.0)
                 return;
             RockWeather._timeOfDay = 0.0f;
         }
@@ -771,11 +771,11 @@ namespace DuckGame
                 RockWeather.rainbowFade = 1f;
                 RockWeather.rainbowTime = 1f;
             }
-            RockWeather.rainbowFade = Lerp.Float(RockWeather.rainbowFade, (double)RockWeather.rainbowTime > 0.0 ? 1f : 0.0f, 1f / 1000f);
+            RockWeather.rainbowFade = Lerp.Float(RockWeather.rainbowFade, rainbowTime > 0.0 ? 1f : 0.0f, 1f / 1000f);
             RockWeather.rainbowTime -= Maths.IncFrameTimer();
             if (RockWeather._weather != Weather.Sunny)
                 RockWeather.rainbowTime -= Maths.IncFrameTimer() * 8f;
-            if ((double)RockWeather.rainbowTime < 0.0)
+            if (rainbowTime < 0.0)
                 RockWeather.rainbowTime = 0.0f;
             if (RockWeather.neverRainbow)
                 RockWeather.rainbowFade = 0.0f;
@@ -787,29 +787,29 @@ namespace DuckGame
             if (Network.isServer)
             {
                 this.wait += 3f / 1000f;
-                if ((double)this.wait > 1.0)
+                if (wait > 1.0)
                 {
                     this.wait = 0.0f;
-                    if ((double)RockWeather._weatherTime > 0.100000001490116)
+                    if (_weatherTime > 0.100000001490116)
                     {
-                        if ((double)RockWeather.snowChance > 0.0 && RockWeather._weather != Weather.Snowing && (double)Rando.Float(1f) > 1.0 - (double)RockWeather.snowChance)
+                        if (snowChance > 0.0 && RockWeather._weather != Weather.Snowing && (double)Rando.Float(1f) > 1.0 - snowChance)
                         {
                             RockWeather._prevWeatherLerp = 1f;
                             RockWeather.sunshowers = 0.0f;
                             RockWeather._prevWeather = RockWeather._weather;
                             RockWeather._weather = Weather.Snowing;
                             if (Network.isActive)
-                                Send.Message((NetMessage)new NMChangeWeather((byte)RockWeather._weather));
+                                Send.Message(new NMChangeWeather((byte)RockWeather._weather));
                             RockWeather._weatherTime = 0.0f;
                         }
-                        if ((double)RockWeather.rainChance > 0.0 && RockWeather._weather != Weather.Raining && (double)Rando.Float(1f) > 1.0 - (double)RockWeather.rainChance)
+                        if (rainChance > 0.0 && RockWeather._weather != Weather.Raining && (double)Rando.Float(1f) > 1.0 - rainChance)
                         {
                             RockWeather._prevWeatherLerp = 1f;
                             RockWeather.sunshowers = 0.0f;
                             RockWeather._prevWeather = RockWeather._weather;
                             RockWeather._weather = Weather.Raining;
                             if (Network.isActive)
-                                Send.Message((NetMessage)new NMChangeWeather((byte)RockWeather._weather));
+                                Send.Message(new NMChangeWeather((byte)RockWeather._weather));
                             RockWeather._weatherTime = 0.0f;
                         }
                         if (RockWeather._weather != Weather.Sunny && (double)Rando.Float(1f) > 0.980000019073486)
@@ -817,7 +817,7 @@ namespace DuckGame
                             RockWeather._prevWeatherLerp = 1f;
                             if (RockWeather._weather == Weather.Raining)
                             {
-                                if ((double)RockWeather._timeRaining > 900.0 && (double)Rando.Float(1f) > 0.449999988079071 || (double)Rando.Float(1f) > 0.949999988079071)
+                                if (_timeRaining > 900.0 && (double)Rando.Float(1f) > 0.449999988079071 || (double)Rando.Float(1f) > 0.949999988079071)
                                     RockWeather.rainbowTime = Rando.Float(30f, 240f);
                                 if ((double)Rando.Float(1f) > 0.400000005960464)
                                     RockWeather.sunshowers = Rando.Float(0.1f, 60f);
@@ -826,39 +826,43 @@ namespace DuckGame
                             RockWeather._prevWeather = RockWeather._weather;
                             RockWeather._weather = Weather.Sunny;
                             if (Network.isActive)
-                                Send.Message((NetMessage)new NMChangeWeather((byte)RockWeather._weather));
+                                Send.Message(new NMChangeWeather((byte)RockWeather._weather));
                             RockWeather._weatherTime = 0.0f;
                         }
                     }
                 }
             }
             RockWeather.sunshowers -= Maths.IncFrameTimer();
-            if ((double)RockWeather.sunshowers <= 0.0)
+            if (sunshowers <= 0.0)
                 RockWeather.sunshowers = 0.0f;
             switch (RockWeather._weather)
             {
                 case Weather.Snowing:
-                    while ((double)this._particleWait <= 0.0)
+                    while (_particleWait <= 0.0)
                     {
                         ++this._particleWait;
-                        SnowParticle snowParticle = new SnowParticle(new Vec2(Rando.Float(-100f, 400f), Rando.Float(-500f, -550f)));
-                        snowParticle.z = Rando.Float(0.0f, 200f);
-                        this._particles.Add((WeatherParticle)snowParticle);
+                        SnowParticle snowParticle = new SnowParticle(new Vec2(Rando.Float(-100f, 400f), Rando.Float(-500f, -550f)))
+                        {
+                            z = Rando.Float(0.0f, 200f)
+                        };
+                        this._particles.Add(snowParticle);
                     }
                     this._particleWait -= 0.5f;
                     break;
                 case Weather.Raining:
-                    while ((double)this._particleWait <= 0.0)
+                    while (_particleWait <= 0.0)
                     {
                         ++this._particleWait;
-                        RainParticle rainParticle = new RainParticle(new Vec2(Rando.Float(-100f, 900f), Rando.Float(-500f, -550f)));
-                        rainParticle.z = Rando.Float(0.0f, 200f);
-                        this._particles.Add((WeatherParticle)rainParticle);
+                        RainParticle rainParticle = new RainParticle(new Vec2(Rando.Float(-100f, 900f), Rando.Float(-500f, -550f)))
+                        {
+                            z = Rando.Float(0.0f, 200f)
+                        };
+                        this._particles.Add(rainParticle);
                     }
                     --this._particleWait;
                     break;
                 default:
-                    if ((double)RockWeather.sunshowers <= 0.0)
+                    if (sunshowers <= 0.0)
                         break;
                     goto case Weather.Raining;
             }
@@ -866,24 +870,24 @@ namespace DuckGame
             foreach (WeatherParticle particle in this._particles)
             {
                 particle.Update();
-                if ((double)particle.position.y > 0.0)
+                if (particle.position.y > 0.0)
                     particle.die = true;
                 switch (particle)
                 {
-                    case RainParticle _ when (double)particle.z < 70.0 && (double)particle.position.y > -62.0:
+                    case RainParticle _ when particle.z < 70.0 && particle.position.y > -62.0:
                         particle.die = true;
                         particle.position.y = -58f;
                         break;
-                    case RainParticle _ when (double)particle.z < 40.0 && (double)particle.position.y > -98.0:
+                    case RainParticle _ when particle.z < 40.0 && particle.position.y > -98.0:
                         particle.die = true;
                         particle.position.y = -98f;
                         break;
-                    case RainParticle _ when (double)particle.z < 25.0 && (double)particle.position.x > 175.0 && (double)particle.position.x < 430.0 && (double)particle.position.y > -362.0 && (double)particle.position.y < -352.0:
+                    case RainParticle _ when particle.z < 25.0 && particle.position.x > 175.0 && particle.position.x < 430.0 && particle.position.y > -362.0 && particle.position.y < -352.0:
                         particle.die = true;
                         particle.position.y = -362f;
                         break;
                 }
-                if ((double)particle.alpha < 0.00999999977648258)
+                if (particle.alpha < 0.00999999977648258)
                     weatherParticleList.Add(particle);
             }
             foreach (WeatherParticle weatherParticle in weatherParticleList)

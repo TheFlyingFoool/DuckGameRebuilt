@@ -13,7 +13,7 @@ namespace DuckGame
     [BaggedProperty("isFatal", false)]
     public class Banana : Gun
     {
-        public StateBinding _bananaStateBinding = (StateBinding)new BananaFlagBinding();
+        public StateBinding _bananaStateBinding = new BananaFlagBinding();
         private SpriteMap _sprite;
         public bool _pin = true;
         public bool _thrown;
@@ -28,7 +28,7 @@ namespace DuckGame
             {
                 if (this.owner == null)
                     return base.angle;
-                return this.offDir > (sbyte)0 ? base.angle + 1.570796f : base.angle - 1.570796f;
+                return this.offDir > 0 ? base.angle + 1.570796f : base.angle - 1.570796f;
             }
             set => this._angle = value;
         }
@@ -37,10 +37,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 1;
-            this._ammoType = (AmmoType)new ATShrapnel();
+            this._ammoType = new ATShrapnel();
             this._type = "gun";
             this._sprite = new SpriteMap("banana", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 13f);
             this.collisionOffset = new Vec2(-6f, -3f);
             this.collisionSize = new Vec2(12f, 5f);
@@ -72,7 +72,7 @@ namespace DuckGame
                 this.alpha -= 0.1f;
                 if ((double)this.alpha <= 0.0)
                 {
-                    Level.Remove((Thing)this);
+                    Level.Remove(this);
                     this.alpha = 0.0f;
                 }
             }
@@ -98,7 +98,7 @@ namespace DuckGame
                     if (duck.grounded && !duck.crouch && !duck.sliding && (double)duck.bottom <= (double)this.bottom + 2.0 && duck.isServerForObject && (double)Math.Abs(duck.hSpeed) > 2.5)
                     {
                         RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
-                        duck.Fondle((Thing)this);
+                        duck.Fondle(this);
                         if (Network.isActive)
                         {
                             if (this.isServerForObject)
@@ -117,33 +117,33 @@ namespace DuckGame
                         this.friction = 0.05f;
                         this.weight = 0.01f;
                         duck.crippleTimer = 1.5f;
-                        PhysicsObject holdObject = (PhysicsObject)duck.holdObject;
+                        PhysicsObject holdObject = duck.holdObject;
                         if (holdObject != null)
                         {
                             duck.ThrowItem(false);
                             holdObject.vSpeed -= 4f;
                             holdObject.hSpeed = duck.hSpeed * 0.8f;
-                            holdObject.clip.Add((MaterialThing)duck);
-                            duck.clip.Add((MaterialThing)holdObject);
+                            holdObject.clip.Add(duck);
+                            duck.clip.Add(holdObject);
                         }
                         duck.GoRagdoll();
                         if (duck.ragdoll != null && duck.ragdoll.part1 != null && duck.ragdoll.part2 != null && duck.ragdoll.part3 != null)
                         {
                             if (holdObject != null)
                             {
-                                duck.ragdoll.part1.clip.Add((MaterialThing)holdObject);
-                                duck.ragdoll.part2.clip.Add((MaterialThing)holdObject);
-                                duck.ragdoll.part3.clip.Add((MaterialThing)holdObject);
-                                holdObject.clip.Add((MaterialThing)duck.ragdoll.part1);
-                                holdObject.clip.Add((MaterialThing)duck.ragdoll.part2);
-                                holdObject.clip.Add((MaterialThing)duck.ragdoll.part3);
+                                duck.ragdoll.part1.clip.Add(holdObject);
+                                duck.ragdoll.part2.clip.Add(holdObject);
+                                duck.ragdoll.part3.clip.Add(holdObject);
+                                holdObject.clip.Add(duck.ragdoll.part1);
+                                holdObject.clip.Add(duck.ragdoll.part2);
+                                holdObject.clip.Add(duck.ragdoll.part3);
                             }
                             duck.ragdoll.part1.hSpeed *= 0.5f;
                             duck.ragdoll.part3.hSpeed *= 1.5f;
                         }
                         this._sprite.frame = 3;
                         this._fade = true;
-                        Level.Add((Thing)new BananaSlip(this.x, this.y + 2f, duck.offDir > (sbyte)0));
+                        Level.Add(new BananaSlip(this.x, this.y + 2f, duck.offDir > 0));
                     }
                 }
             }
@@ -152,7 +152,7 @@ namespace DuckGame
                 if (this.duck == null)
                     return;
                 this.duck.quack = 20;
-                if (this.offDir > (sbyte)0)
+                if (this.offDir > 0)
                 {
                     this.handAngle = -1.099557f;
                     this.handOffset = new Vec2(8f, -1f);

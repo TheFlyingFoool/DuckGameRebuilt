@@ -41,7 +41,7 @@ namespace DuckGame
                 Steam.SendPacket(connection as User, data, (uint)length, P2PDataSendType.Unreliable);
             else
                 Steam.SendPacket(connection as User, data, (uint)length, P2PDataSendType.Reliable);
-            return (NCError)null;
+            return null;
         }
 
         public void HookUpDelegates()
@@ -68,7 +68,7 @@ namespace DuckGame
             Steam.ConnectionFailed -= this._connectionFailed;
             Steam.InviteReceived -= this._inviteReceived;
             Steam.LobbySearchComplete -= this._lobbySearchComplete;
-            this._connectionRequest = (Steam.ConnectionRequestedDelegate)null;
+            this._connectionRequest = null;
         }
 
         public override NCError OnHostServer(
@@ -86,7 +86,7 @@ namespace DuckGame
                 this.UnhookLobbyChatMessage(this._lobby, new Lobby.ChatMessageDelegate(this.OnChatMessage));
                 DevConsole.Log(DCSection.Steam, "|DGYELLOW|Leaving lobby to host new lobby.");
             }
-            this._lobby = (Lobby)null;
+            this._lobby = null;
             this.HookUpDelegates();
             this._initializedSettings = false;
             this._lobby = Steam.CreateLobby((SteamLobbyType)lobbyType, maxConnections);
@@ -140,7 +140,7 @@ namespace DuckGame
                 this.UnhookLobbyChatMessage(this._lobby, new Lobby.ChatMessageDelegate(this.OnChatMessage));
                 DevConsole.Log(DCSection.Steam, "|DGYELLOW|Leaving lobby to join new lobby.");
             }
-            this._lobby = (Lobby)null;
+            this._lobby = null;
             this.HookUpDelegates();
             this._serverIdentifier = identifier;
             if (identifier == "joinTest")
@@ -164,17 +164,17 @@ namespace DuckGame
         public void OnUserStatusChange(User who, SteamLobbyUserStatusFlags flags, User responsible)
         {
             DevConsole.Log(DCSection.Connection, "NCSteam.LobbyStatusChange(" + this.GetDrawString(who) + ", " + flags.ToString() + ")");
-            if ((flags & SteamLobbyUserStatusFlags.Entered) != (SteamLobbyUserStatusFlags)0)
+            if ((flags & SteamLobbyUserStatusFlags.Entered) != 0)
             {
                 DevConsole.Log(DCSection.Steam, "|DGGREEN|" + who.name + " (" + who.id.ToString() + ") has joined the Steam lobby.");
                 if (Network.isServer && DuckNetwork.localConnection.status == ConnectionStatus.Connected)
-                    this.AttemptConnection((object)who);
+                    this.AttemptConnection(who);
             }
-            else if ((flags & SteamLobbyUserStatusFlags.Left) != (SteamLobbyUserStatusFlags)0)
+            else if ((flags & SteamLobbyUserStatusFlags.Left) != 0)
                 DevConsole.Log(DCSection.Steam, "|DGRED|" + this.GetDrawString(who) + " has left the Steam lobby.");
-            else if ((flags & SteamLobbyUserStatusFlags.Disconnected) != (SteamLobbyUserStatusFlags)0)
+            else if ((flags & SteamLobbyUserStatusFlags.Disconnected) != 0)
                 DevConsole.Log(DCSection.Steam, "|DGRED|" + this.GetDrawString(who) + " has disconnected from the Steam lobby.");
-            if ((flags & SteamLobbyUserStatusFlags.Kicked) == (SteamLobbyUserStatusFlags)0)
+            if ((flags & SteamLobbyUserStatusFlags.Kicked) == 0)
                 return;
             DevConsole.Log(DCSection.Steam, "|DGYELLOW|" + this.GetDrawString(responsible) + " kicked " + this.GetDrawString(who) + ".");
         }
@@ -194,7 +194,7 @@ namespace DuckGame
                 if (!(steamLobbyMessage.message == "IM_OUTTAHERE"))
                     return;
                 DevConsole.Log(DCSection.Connection, "Received lobby exit message from " + who.name + "...");
-                Network.DisconnectClient(this.GetConnection((object)who), new DuckNetErrorInfo(DuckNetError.ClientDisconnected, who.name + " left the lobby."));
+                Network.DisconnectClient(this.GetConnection(who), new DuckNetErrorInfo(DuckNetError.ClientDisconnected, who.name + " left the lobby."));
             }
         }
 
@@ -203,7 +203,7 @@ namespace DuckGame
         public void OnConnectionRequest(User who)
         {
             DevConsole.Log(DCSection.Connection, "NCSteam.OnConnectionRequest(" + this.GetDrawString(who) + ")");
-            if ((this.GetConnection((object)who) != null || this.lobby != null && this.lobby.users.Contains(who)) && Network.isActive)
+            if ((this.GetConnection(who) != null || this.lobby != null && this.lobby.users.Contains(who)) && Network.isActive)
             {
                 DevConsole.Log(DCSection.Steam, "|DGYELLOW|" + this.GetDrawString(who) + " has requested a connection.");
                 Steam.AcceptConnection(who);
@@ -241,7 +241,7 @@ namespace DuckGame
                         break;
                     goto label_2;
             }
-            Level.current = (Level)new JoinServer(lobby.id);
+            Level.current = new JoinServer(lobby.id);
         }
 
         public void OnLobbySearchComplete(Lobby lobby)
@@ -252,7 +252,7 @@ namespace DuckGame
         {
         }
 
-        protected override object GetConnectionObject(string identifier) => (object)User.GetUser(Convert.ToUInt64(identifier));
+        protected override object GetConnectionObject(string identifier) => User.GetUser(Convert.ToUInt64(identifier));
 
         public override string GetConnectionIdentifier(object connection) => connection is User user ? user.id.ToString() : "no info";
 
@@ -263,9 +263,9 @@ namespace DuckGame
         protected override NCError OnSpinServerThread()
         {
             if (this._lobby == null)
-                return NetworkDebugger.enabled ? (NCError)null : new NCError("|DGORANGE|STEAM |DGRED|Lobby was closed.", NCErrorType.CriticalError);
+                return NetworkDebugger.enabled ? null : new NCError("|DGORANGE|STEAM |DGRED|Lobby was closed.", NCErrorType.CriticalError);
             if (this._lobby.processing)
-                return (NCError)null;
+                return null;
             return this._lobby.id == 0UL ? new NCError("|DGORANGE|STEAM |DGRED|Failed to create lobby.", NCErrorType.CriticalError) : this.RunSharedLogic();
         }
 
@@ -274,7 +274,7 @@ namespace DuckGame
             if (this._lobby == null)
                 return new NCError("|DGORANGE|STEAM |DGYELLOW|Lobby was closed.", NCErrorType.CriticalError);
             if (this._lobby.processing)
-                return (NCError)null;
+                return null;
             return this._lobby.id == 0UL ? new NCError("|DGORANGE|STEAM |DGRED|Failed to join lobby.", NCErrorType.CriticalError) : this.RunSharedLogic();
         }
 
@@ -284,11 +284,11 @@ namespace DuckGame
             {
                 SteamPacket steamPacket = Steam.ReadPacket();
                 if (steamPacket != null)
-                    this.OnPacket(steamPacket.data, (object)steamPacket.connection);
+                    this.OnPacket(steamPacket.data, steamPacket.connection);
                 else
                     break;
             }
-            return (NCError)null;
+            return null;
         }
 
         protected override void Disconnect(NetworkConnection c)
@@ -307,13 +307,13 @@ namespace DuckGame
             {
                 if (this._lobby.owner == Steam.user && DuckNetwork.potentialHostObject is User potentialHostObject && this._lobby.users.Contains(potentialHostObject))
                     this._lobby.owner = potentialHostObject;
-                Steam_LobbyMessage.Send("IM_OUTTAHERE", (User)null);
+                Steam_LobbyMessage.Send("IM_OUTTAHERE", null);
                 Steam.LeaveLobby(this._lobby);
                 this.UnhookLobbyUserStatusChange(this._lobby, new Lobby.UserStatusChangeDelegate(this.OnUserStatusChange));
                 this.UnhookLobbyChatMessage(this._lobby, new Lobby.ChatMessageDelegate(this.OnChatMessage));
                 DevConsole.Log(DCSection.Steam, "|DGYELLOW|Leaving lobby to host new lobby.");
             }
-            this._lobby = (Lobby)null;
+            this._lobby = null;
             this._lobbyCreationComplete = false;
             this._initializedSettings = false;
             base.KillConnection();
@@ -391,7 +391,7 @@ namespace DuckGame
                             return;
                         }
                         if (UIMatchmakerMark2.instance != null)
-                            UIMatchmakerMark2.instance.Hook_OnLobbyProcessed((object)this._lobby);
+                            UIMatchmakerMark2.instance.Hook_OnLobbyProcessed(_lobby);
                         if (this._lobby.joinResult == SteamLobbyJoinResult.Success)
                         {
                             string lobbyData1 = this._lobby.GetLobbyData("version");
@@ -452,7 +452,7 @@ namespace DuckGame
                             }
                             DevConsole.Log(DCSection.Steam, "|DGGREEN|----------------------------------------");
                             DevConsole.Log(DCSection.Steam, "|DGGREEN|Lobby Joined (" + this._lobby.owner.name + ")");
-                            this.AttemptConnection((object)this._lobby.owner, true);
+                            this.AttemptConnection(_lobby.owner, true);
                         }
                         else
                         {
@@ -592,7 +592,7 @@ namespace DuckGame
             if (NCSteam.globalSearch)
                 Steam.SearchForLobbyWorldwide();
             else
-                Steam.SearchForLobby((User)null);
+                Steam.SearchForLobby(null);
             NCSteam.globalSearch = false;
         }
 

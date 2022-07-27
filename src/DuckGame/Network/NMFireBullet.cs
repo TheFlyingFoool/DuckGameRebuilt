@@ -31,10 +31,10 @@ namespace DuckGame
             this.typeInstance.accuracy = 1f;
             this.typeInstance.bulletSpeed = this.speed;
             this.typeInstance.speedVariation = 0.0f;
-            Bullet bullet = this.typeInstance.GetBullet(position.x, position.y, (Thing)owner?.duck, -this.angle, distance: this.range, network: false);
+            Bullet bullet = this.typeInstance.GetBullet(position.x, position.y, owner?.duck, -this.angle, distance: this.range, network: false);
             bullet.isLocal = false;
             bullet.connection = this.connection;
-            Level.current.AddThing((Thing)bullet);
+            Level.current.AddThing(bullet);
         }
     }
 }

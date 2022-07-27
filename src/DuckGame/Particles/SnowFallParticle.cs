@@ -39,7 +39,7 @@ namespace DuckGame
                 this.vSpeed = 1f;
             if (this._grounded)
                 return;
-            float num = (float)Math.Sin((double)this._sin) * this._sinSize;
+            float num = (float)Math.Sin(_sin) * this._sinSize;
             this._sin += this._moveSpeed;
             this.x += Rando.Float(-0.3f, 0.3f);
             this.x += num / 60f;

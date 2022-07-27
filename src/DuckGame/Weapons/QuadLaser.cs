@@ -14,7 +14,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 3;
-            this._ammoType = (AmmoType)new AT9mm();
+            this._ammoType = new AT9mm();
             this._type = "gun";
             this.graphic = new Sprite("quadLaser");
             this.center = new Vec2(8f, 8f);
@@ -39,9 +39,11 @@ namespace DuckGame
             Vec2 vec2 = this.Offset(this.barrelOffset);
             if (this.isServerForObject)
             {
-                QuadLaserBullet quadLaserBullet = new QuadLaserBullet(vec2.x, vec2.y, this.barrelVector);
-                quadLaserBullet.killThingType = this.GetType();
-                Level.Add((Thing)quadLaserBullet);
+                QuadLaserBullet quadLaserBullet = new QuadLaserBullet(vec2.x, vec2.y, this.barrelVector)
+                {
+                    killThingType = this.GetType()
+                };
+                Level.Add(quadLaserBullet);
                 if (this.duck != null)
                 {
                     RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));

@@ -19,7 +19,7 @@ namespace DuckGame
             this._sprite.SetAnimation("splash");
             this._sprite.color = new Color(fluid.color);
             this.center = new Vec2(8f, 16f);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.depth = (Depth)0.7f;
         }
 
@@ -27,7 +27,7 @@ namespace DuckGame
         {
             if (!this._sprite.finished)
                 return;
-            Level.Remove((Thing)this);
+            Level.Remove(this);
         }
 
         public override void Draw() => base.Draw();

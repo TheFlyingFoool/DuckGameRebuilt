@@ -17,7 +17,7 @@ namespace DuckGame
         public SpaceBackground(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = (Sprite)new SpriteMap("backgroundIcons", 16, 16)
+            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 3
             };
@@ -40,9 +40,11 @@ namespace DuckGame
             this.level.backgroundColor = this.backgroundColor;
             this._parallax = new ParallaxBackground("background/space", 0.0f, 0.0f, 3);
             float speed = 0.4f * this._speedMult;
-            Sprite s = new Sprite("background/planet4");
-            s.depth = - 0.9f;
-            s.position = new Vec2(200f, 50f);
+            Sprite s = new Sprite("background/planet4")
+            {
+                depth = -0.9f,
+                position = new Vec2(200f, 50f)
+            };
             this._parallax.AddZoneSprite(s, 19, 0.99f, speed);
             this._parallax.AddZone(20, 0.93f, speed, this._moving);
             this._parallax.AddZone(21, 0.9f, speed, this._moving);
@@ -54,11 +56,11 @@ namespace DuckGame
             this._parallax.AddZone(27, 0.78f, speed, this._moving);
             this._parallax.AddZone(28, 0.75f, speed, this._moving);
             this._parallax.AddZone(29, 0.75f, speed, this._moving);
-            Level.Add((Thing)this._parallax);
+            Level.Add(_parallax);
         }
 
         public override void Update() => base.Update();
 
-        public override void Terminate() => Level.Remove((Thing)this._parallax);
+        public override void Terminate() => Level.Remove(_parallax);
     }
 }

@@ -41,14 +41,14 @@ namespace DuckGame
             {
                 if (this._gun1 != null)
                 {
-                    this._gun1.owner = (Thing)null;
+                    this._gun1.owner = null;
                     this._gun1.enablePhysics = true;
-                    this._gun1.tape = (TapedGun)null;
+                    this._gun1.tape = null;
                 }
                 this._gun1 = value;
                 if (this._gun1 != null)
                 {
-                    this._gun1.owner = (Thing)this;
+                    this._gun1.owner = this;
                     this._gun1.enablePhysics = false;
                     this._gun1.tape = this;
                 }
@@ -63,14 +63,14 @@ namespace DuckGame
             {
                 if (this._gun2 != null)
                 {
-                    this._gun2.owner = (Thing)null;
+                    this._gun2.owner = null;
                     this._gun2.enablePhysics = true;
-                    this._gun2.tape = (TapedGun)null;
+                    this._gun2.tape = null;
                 }
                 this._gun2 = value;
                 if (this._gun2 != null)
                 {
-                    this._gun2.owner = (Thing)this;
+                    this._gun2.owner = this;
                     this._gun2.enablePhysics = false;
                     this._gun2.tape = this;
                 }
@@ -81,8 +81,8 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("gun1", this.gun1 != null ? (object)this.gun1.Serialize() : (object)(BinaryClassChunk)null);
-            binaryClassChunk.AddProperty("gun2", this.gun2 != null ? (object)this.gun2.Serialize() : (object)(BinaryClassChunk)null);
+            binaryClassChunk.AddProperty("gun1", this.gun1 != null ? this.gun1.Serialize() : (object)(BinaryClassChunk)null);
+            binaryClassChunk.AddProperty("gun2", this.gun2 != null ? this.gun2.Serialize() : (object)(BinaryClassChunk)null);
             return binaryClassChunk;
         }
 
@@ -108,9 +108,9 @@ namespace DuckGame
         public override void Initialize()
         {
             if (this.gun1 != null)
-                this.level.AddThing((Thing)this.gun1);
+                this.level.AddThing(gun1);
             if (this.gun2 != null)
-                this.level.AddThing((Thing)this.gun2);
+                this.level.AddThing(gun2);
             base.Initialize();
         }
 
@@ -119,7 +119,7 @@ namespace DuckGame
         public TapedGun(float xval, float yval)
           : base(xval, yval)
         {
-            this._ammoType = (AmmoType)new ATDefault();
+            this._ammoType = new ATDefault();
             this.ammo = 99;
             this._type = "gun";
             this.graphic = new Sprite("tinyGun");
@@ -144,12 +144,12 @@ namespace DuckGame
                 this.gun1.owner = this.owner;
             if (this.gun2 != null && !this.gun2.removeFromLevel)
                 this.gun2.owner = this.owner;
-            this.gun1.tape = (TapedGun)null;
+            this.gun1.tape = null;
             if (this.gun2 != null)
-                this.gun2.tape = (TapedGun)null;
-            this.gun1 = (Holdable)null;
-            this.gun2 = (Holdable)null;
-            Level.Remove((Thing)this);
+                this.gun2.tape = null;
+            this.gun1 = null;
+            this.gun2 = null;
+            Level.Remove(this);
         }
 
         public void PreUpdatePositioning()
@@ -189,7 +189,7 @@ namespace DuckGame
             float y2 = num2 - y1 * 2f;
             if (this.gun1 != null)
             {
-                if ((double)this.gun1.angleMul != 1.0)
+                if (gun1.angleMul != 1.0)
                     this.angleMul = this.gun1.angleMul;
                 if (this.gun1.addVerticalTapeOffset)
                     this.gun1.position = this.Offset(new Vec2(0.0f, y1) + this.gun1.tapedOffset);
@@ -198,7 +198,7 @@ namespace DuckGame
                 this.gun1.depth = this.depth - 8;
                 if (this.taping)
                 {
-                    this.gun1.angleDegrees = this.angleDegrees + (float)(90 * (int)this.offDir);
+                    this.gun1.angleDegrees = this.angleDegrees + 90 * offDir;
                     this.gun1.offDir = this.offDir;
                 }
                 else
@@ -210,7 +210,7 @@ namespace DuckGame
                 this.gun1.hSpeed = this.hSpeed;
                 this.gun1.vSpeed = this.vSpeed;
                 this.gun1.lastGrounded = this.lastGrounded;
-                this.gun1.clip = new HashSet<MaterialThing>((IEnumerable<MaterialThing>)this.clip);
+                this.gun1.clip = new HashSet<MaterialThing>(clip);
                 if (this.gun1 is TapedGun)
                 {
                     (this.gun1 as TapedGun).tapeDepth = this.tapeDepth + 1;
@@ -238,7 +238,7 @@ namespace DuckGame
             }
             if (this.gun2 != null)
             {
-                if ((double)this.gun2.angleMul != 1.0)
+                if (gun2.angleMul != 1.0)
                     this.angleMul = this.gun2.angleMul;
                 if (this.gun2.addVerticalTapeOffset)
                     this.gun2.position = this.Offset(new Vec2(0.0f, -y1) + this.gun2.tapedOffset);
@@ -251,7 +251,7 @@ namespace DuckGame
                 this.gun2.hSpeed = this.hSpeed;
                 this.gun2.vSpeed = this.vSpeed;
                 this.gun2.lastGrounded = this.lastGrounded;
-                this.gun2.clip = new HashSet<MaterialThing>((IEnumerable<MaterialThing>)this.clip);
+                this.gun2.clip = new HashSet<MaterialThing>(clip);
                 if (this.gun2 is TapedGun)
                 {
                     (this.gun2 as TapedGun).tapeDepth = this.tapeDepth + 1;
@@ -304,9 +304,9 @@ namespace DuckGame
         public override void Terminate()
         {
             if (this.gun1 != null)
-                Level.Remove((Thing)this.gun1);
+                Level.Remove(gun1);
             if (this.gun2 != null)
-                Level.Remove((Thing)this.gun2);
+                Level.Remove(gun2);
             base.Terminate();
         }
 
@@ -331,18 +331,18 @@ namespace DuckGame
                 if (this.taping)
                     this.duck.resetAction = true;
                 if (this.gun1 != null)
-                    this.gun1.owner = (Thing)this.duck;
+                    this.gun1.owner = duck;
                 if (this.gun2 == null)
                     return;
-                this.gun2.owner = (Thing)this.duck;
+                this.gun2.owner = duck;
             }
             else
             {
                 if (this.gun1 != null)
-                    this.gun1.owner = (Thing)this;
+                    this.gun1.owner = this;
                 if (this.gun2 == null)
                     return;
-                this.gun2.owner = (Thing)this;
+                this.gun2.owner = this;
             }
         }
 
@@ -352,9 +352,9 @@ namespace DuckGame
             if (this.isServerForObject)
             {
                 if (this.gun1 != null && !this.gun1.isServerForObject)
-                    this.Fondle((Thing)this.gun1);
+                    this.Fondle(gun1);
                 if (this.gun2 != null && !this.gun2.isServerForObject)
-                    this.Fondle((Thing)this.gun2);
+                    this.Fondle(gun2);
             }
             try
             {
@@ -368,7 +368,7 @@ namespace DuckGame
                             {
                                 if (this.duck.inputProfile.Pressed("SHOOT"))
                                 {
-                                    Holdable holdable1 = Level.current.NearestThingFilter<Holdable>(this.position, (Predicate<Thing>)(t =>
+                                    Holdable holdable1 = Level.current.NearestThingFilter<Holdable>(this.position, t =>
                                    {
                                        if (t.owner == null && t != this && t != this.gun1)
                                        {
@@ -385,32 +385,32 @@ namespace DuckGame
                                            }
                                        }
                                        return false;
-                                   }));
-                                    if ((double)this.Distance((Thing)holdable1) < 16.0)
+                                   });
+                                    if ((double)this.Distance(holdable1) < 16.0)
                                     {
-                                        Level.Add((Thing)SmallSmoke.New(this.position.x, this.position.y));
-                                        Level.Add((Thing)SmallSmoke.New(this.position.x, this.position.y));
+                                        Level.Add(SmallSmoke.New(this.position.x, this.position.y));
+                                        Level.Add(SmallSmoke.New(this.position.x, this.position.y));
                                         SFX.PlaySynchronized("equip", 0.8f);
-                                        Thing.ExtraFondle((Thing)holdable1, this.connection);
+                                        Thing.ExtraFondle(holdable1, this.connection);
                                         this.gun2 = holdable1;
-                                        this.gun2.owner = (Thing)this.duck;
+                                        this.gun2.owner = duck;
                                         this.taping = false;
                                         if (this.duck != null)
                                             this.duck.resetAction = true;
                                         Holdable holdable2 = this.gun1.BecomeTapedMonster(this);
                                         if (holdable2 != null)
                                         {
-                                            Thing.Fondle((Thing)holdable2, DuckNetwork.localConnection);
+                                            Thing.Fondle(holdable2, DuckNetwork.localConnection);
                                             holdable2.position = this.position;
-                                            Level.Add((Thing)holdable2);
+                                            Level.Add(holdable2);
                                             if (this.duck != null)
                                                 this.duck.GiveHoldable(holdable2);
-                                            Thing.Fondle((Thing)this, DuckNetwork.localConnection);
-                                            Thing.Fondle((Thing)this.gun1, DuckNetwork.localConnection);
-                                            Thing.Fondle((Thing)this.gun2, DuckNetwork.localConnection);
-                                            Level.Remove((Thing)this.gun1);
-                                            Level.Remove((Thing)this.gun2);
-                                            Level.Remove((Thing)this);
+                                            Thing.Fondle(this, DuckNetwork.localConnection);
+                                            Thing.Fondle(gun1, DuckNetwork.localConnection);
+                                            Thing.Fondle(gun2, DuckNetwork.localConnection);
+                                            Level.Remove(gun1);
+                                            Level.Remove(gun2);
+                                            Level.Remove(this);
                                         }
                                         else if (this.gun1.tapedIndexPreference >= 0 && this.gun1.tapedIndexPreference != 0)
                                         {
@@ -453,11 +453,11 @@ namespace DuckGame
             this.UpdatePositioning();
             this._tape.depth = this.depth + 16;
             this._tape.angleDegrees = this.angleDegrees;
-            this._tape.flipH = this.offDir < (sbyte)0;
+            this._tape.flipH = this.offDir < 0;
             Vec2 vec2_1 = new Vec2(0.0f, this.bottom - this.top);
             if (this.gun2 != null)
             {
-                Vec2 vec2_2 = this.gun2.Offset(new Vec2(0.0f, (float)-((double)this.collisionOffset.y / 2.0)));
+                Vec2 vec2_2 = this.gun2.Offset(new Vec2(0.0f, (float)-(collisionOffset.y / 2.0)));
                 Graphics.Draw(this._tape, vec2_2.x, vec2_2.y);
             }
             else
@@ -475,9 +475,9 @@ namespace DuckGame
         {
             try
             {
-                if (this.gun1 != null && (double)this.gun1.flammable > 0.0)
+                if (this.gun1 != null && gun1.flammable > 0.0)
                     this.gun1.Burn(firePosition, litBy);
-                if (this.gun2 == null || (double)this.gun2.flammable <= 0.0)
+                if (this.gun2 == null || gun2.flammable <= 0.0)
                     return;
                 this.gun2.Burn(firePosition, litBy);
             }

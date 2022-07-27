@@ -30,9 +30,9 @@ namespace DuckGame
 
         public override void Touch(MaterialThing with)
         {
-            if (with.isServerForObject && with.Sprung((Thing)this))
+            if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed < 12.0 * (double)this._mult)
+                if ((double)with.vSpeed < 12.0 * _mult)
                     with.vSpeed = 12f * this._mult;
                 if (with is Gun)
                     (with as Gun).PressAction();

@@ -18,7 +18,7 @@ namespace DuckGame
 
         private bool Cache(string lev, bool result)
         {
-            Dictionary<bool, bool> dictionary = (Dictionary<bool, bool>)null;
+            Dictionary<bool, bool> dictionary;
             if (!LSFilterMods._filters.TryGetValue(lev, out dictionary))
                 LSFilterMods._filters[lev] = dictionary = new Dictionary<bool, bool>();
             dictionary[this._isOnline] = result;
@@ -29,7 +29,7 @@ namespace DuckGame
         {
             try
             {
-                Dictionary<bool, bool> dictionary = (Dictionary<bool, bool>)null;
+                Dictionary<bool, bool> dictionary = null;
                 bool flag;
                 if (LSFilterMods._filters.TryGetValue(lev, out dictionary) && dictionary.TryGetValue(this._isOnline, out flag))
                     return flag;
@@ -49,7 +49,7 @@ namespace DuckGame
                         if (accessibleMod.workshopIDFacade != 0UL)
                             other.Add(accessibleMod.workshopIDFacade);
                     }
-                    if (!modData.workshopIDs.IsSubsetOf((IEnumerable<ulong>)other))
+                    if (!modData.workshopIDs.IsSubsetOf(other))
                         return this.Cache(lev, false);
                 }
                 return this.Cache(lev, true);

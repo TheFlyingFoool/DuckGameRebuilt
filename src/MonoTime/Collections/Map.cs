@@ -23,9 +23,9 @@ namespace DuckGame
         private Dictionary<TKey, TValue> _byKey = new Dictionary<TKey, TValue>();
         private Dictionary<TValue, TKey> _byValue = new Dictionary<TValue, TKey>();
 
-        public ICollection<TKey> Keys => (ICollection<TKey>)this._byKey.Keys;
+        public ICollection<TKey> Keys => _byKey.Keys;
 
-        public ICollection<TValue> Values => (ICollection<TValue>)this._byKey.Values;
+        public ICollection<TValue> Values => _byKey.Values;
 
         public int Count => this._byKey.Count;
 
@@ -119,7 +119,7 @@ namespace DuckGame
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => ((IEnumerable<KeyValuePair<TKey, TValue>>)this._byKey).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)((IEnumerable<KeyValuePair<TKey, TValue>>)this._byKey).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<TKey, TValue>>)this._byKey).GetEnumerator();
 
         void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(
           KeyValuePair<TKey, TValue>[] array,

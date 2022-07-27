@@ -61,7 +61,7 @@ namespace DuckGame
         {
             ushort num = msg.ReadUShort();
             this._unlockList = new List<bool>();
-            for (int index = 0; index < (int)num; ++index)
+            for (int index = 0; index < num; ++index)
                 this._unlockList.Add(msg.ReadBool());
             base.OnDeserialize(msg);
         }
@@ -74,8 +74,8 @@ namespace DuckGame
                 this.profile.stats.loyalFans = this.loyalFans;
                 this.profile.ParentalControlsActive = this.areParentalControlsActive;
                 this.profile.flagIndex = this.flagIndex;
-                if (this.numCustomHats > (ushort)0)
-                    this.profile.GetCustomTeam((ushort)((uint)this.numCustomHats - 1U));
+                if (this.numCustomHats > 0)
+                    this.profile.GetCustomTeam((ushort)(numCustomHats - 1U));
                 this.profile.networkHatUnlockStatuses = this._unlockList;
             }
             base.Activate();

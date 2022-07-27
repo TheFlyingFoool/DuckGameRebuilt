@@ -24,7 +24,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("rock01", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -5f);
             this.collisionSize = new Vec2(16f, 12f);
@@ -42,7 +42,7 @@ namespace DuckGame
         {
             if (this.gold.value)
             {
-                this.material = (Material)new MaterialGold((Thing)this);
+                this.material = new MaterialGold(this);
                 this.isGoldRock = true;
             }
             base.Initialize();
@@ -54,13 +54,13 @@ namespace DuckGame
             {
                 if (this.material == null)
                 {
-                    this.material = (Material)new MaterialGold((Thing)this);
+                    this.material = new MaterialGold(this);
                     this.isGoldRock = true;
                 }
             }
             else
             {
-                this.material = (Material)null;
+                this.material = null;
                 this.isGoldRock = false;
             }
             base.EditorRender();
@@ -83,13 +83,13 @@ namespace DuckGame
                 this._winSound.Stop();
             this._killWait = 0;
             this._didKill = false;
-            this._winSound = (Sound)null;
+            this._winSound = null;
         }
 
         public override void Update()
         {
             if (this.isGoldRock && !(this.material is MaterialGold))
-                this.material = (Material)new MaterialGold((Thing)this);
+                this.material = new MaterialGold(this);
             if (this.isServerForObject)
             {
                 if (this.isGoldRock)
@@ -112,7 +112,7 @@ namespace DuckGame
                         foreach (Duck duck in Level.current.things[typeof(Duck)])
                         {
                             if (duck != null && duck.team != this.duck.team)
-                                duck.Kill((DestroyType)new DTCrush((PhysicsObject)this));
+                                duck.Kill(new DTCrush(this));
                         }
                     }
                 }
@@ -143,14 +143,14 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && this.owner == null)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             if (this.isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 if (this.duck != null)
                     this.duck.ThrowItem();
-                this.Destroy((DestroyType)new DTShot(bullet));
-                Level.Remove((Thing)this);
-                Level.Add((Thing)new GrenadeExplosion(this.x, this.y));
+                this.Destroy(new DTShot(bullet));
+                Level.Remove(this);
+                Level.Add(new GrenadeExplosion(this.x, this.y));
             }
             return base.Hit(bullet, hitPos);
         }

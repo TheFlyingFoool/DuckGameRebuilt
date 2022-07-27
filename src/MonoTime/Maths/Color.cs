@@ -20,7 +20,7 @@ namespace DuckGame
         public static Color AliceBlue = new Color(240, 248, (int)byte.MaxValue, (int)byte.MaxValue);
         public static Color AntiqueWhite = new Color(250, 235, 215, (int)byte.MaxValue);
         public static Color Aqua = new Color(0, (int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue);
-        public static Color Aquamarine = new Color((int)sbyte.MaxValue, (int)byte.MaxValue, 212, (int)byte.MaxValue);
+        public static Color Aquamarine = new Color(sbyte.MaxValue, (int)byte.MaxValue, 212, (int)byte.MaxValue);
         public static Color Azure = new Color(240, (int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue);
         public static Color Beige = new Color(245, 245, 220, (int)byte.MaxValue);
         public static Color Bisque = new Color((int)byte.MaxValue, 228, 196, (int)byte.MaxValue);
@@ -31,9 +31,9 @@ namespace DuckGame
         public static Color Brown = new Color(165, 42, 42, (int)byte.MaxValue);
         public static Color BurlyWood = new Color(222, 184, 135, (int)byte.MaxValue);
         public static Color CadetBlue = new Color(95, 158, 160, (int)byte.MaxValue);
-        public static Color Chartreuse = new Color((int)sbyte.MaxValue, (int)byte.MaxValue, 0, (int)byte.MaxValue);
+        public static Color Chartreuse = new Color(sbyte.MaxValue, (int)byte.MaxValue, 0, (int)byte.MaxValue);
         public static Color Chocolate = new Color(210, 105, 30, (int)byte.MaxValue);
-        public static Color Coral = new Color((int)byte.MaxValue, (int)sbyte.MaxValue, 80, (int)byte.MaxValue);
+        public static Color Coral = new Color((int)byte.MaxValue, sbyte.MaxValue, 80, (int)byte.MaxValue);
         public static Color CornflowerBlue = new Color(100, 149, 237, (int)byte.MaxValue);
         public static Color Cornsilk = new Color((int)byte.MaxValue, 248, 220, (int)byte.MaxValue);
         public static Color Crimson = new Color(220, 20, 60, (int)byte.MaxValue);
@@ -143,7 +143,7 @@ namespace DuckGame
         public static Color SlateBlue = new Color(106, 90, 205, (int)byte.MaxValue);
         public static Color SlateGray = new Color(112, 128, 144, (int)byte.MaxValue);
         public static Color Snow = new Color((int)byte.MaxValue, 250, 250, (int)byte.MaxValue);
-        public static Color SpringGreen = new Color(0, (int)byte.MaxValue, (int)sbyte.MaxValue, (int)byte.MaxValue);
+        public static Color SpringGreen = new Color(0, (int)byte.MaxValue, sbyte.MaxValue, (int)byte.MaxValue);
         public static Color SteelBlue = new Color(70, 130, 180, (int)byte.MaxValue);
         public static Color Tan = new Color(210, 180, 140, (int)byte.MaxValue);
         public static Color Teal = new Color(0, 128, 128, (int)byte.MaxValue);
@@ -183,17 +183,17 @@ namespace DuckGame
         }
 
         public Color(int r, int g, int b, int a)
-          : this((byte)MathHelper.Clamp(r, 0, (int)byte.MaxValue), (byte)MathHelper.Clamp(g, 0, (int)byte.MaxValue), (byte)MathHelper.Clamp(b, 0, (int)byte.MaxValue), (byte)MathHelper.Clamp(a, 0, (int)byte.MaxValue))
+          : this((byte)MathHelper.Clamp(r, 0, byte.MaxValue), (byte)MathHelper.Clamp(g, 0, byte.MaxValue), (byte)MathHelper.Clamp(b, 0, byte.MaxValue), (byte)MathHelper.Clamp(a, 0, byte.MaxValue))
         {
         }
 
         public Color(int r, int g, int b)
-          : this(r, g, b, (int)byte.MaxValue)
+          : this(r, g, b, byte.MaxValue)
         {
         }
 
         public Color(float r, float g, float b, float a)
-          : this((byte)((double)MathHelper.Clamp(r, 0.0f, 1f) * (double)byte.MaxValue), (byte)((double)MathHelper.Clamp(g, 0.0f, 1f) * (double)byte.MaxValue), (byte)((double)MathHelper.Clamp(b, 0.0f, 1f) * (double)byte.MaxValue), (byte)((double)MathHelper.Clamp(a, 0.0f, 1f) * (double)byte.MaxValue))
+          : this((byte)((double)MathHelper.Clamp(r, 0.0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(g, 0.0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(b, 0.0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(a, 0.0f, 1f) * byte.MaxValue))
         {
         }
 
@@ -203,7 +203,7 @@ namespace DuckGame
         }
 
         public Color(uint hex)
-          : this((byte)(hex & (uint)byte.MaxValue), (byte)((int)hex << 8 & (int)byte.MaxValue), (byte)((int)hex << 16 & (int)byte.MaxValue), (byte)((int)hex << 24 & (int)byte.MaxValue))
+          : this((byte)(hex & byte.MaxValue), (byte)((int)hex << 8 & byte.MaxValue), (byte)((int)hex << 16 & byte.MaxValue), (byte)((int)hex << 24 & byte.MaxValue))
         {
         }
 
@@ -212,16 +212,16 @@ namespace DuckGame
         {
             if (hex > 16777215U)
             {
-                this.r = (byte)(hex >> 24 & (uint)byte.MaxValue);
-                this.g = (byte)(hex >> 16 & (uint)byte.MaxValue);
-                this.b = (byte)(hex >> 8 & (uint)byte.MaxValue);
-                this.a = (byte)(hex & (uint)byte.MaxValue);
+                this.r = (byte)(hex >> 24 & byte.MaxValue);
+                this.g = (byte)(hex >> 16 & byte.MaxValue);
+                this.b = (byte)(hex >> 8 & byte.MaxValue);
+                this.a = (byte)(hex & byte.MaxValue);
             }
             else
             {
-                this.r = (byte)(hex >> 16 & (uint)byte.MaxValue);
-                this.g = (byte)(hex >> 8 & (uint)byte.MaxValue);
-                this.b = (byte)(hex & (uint)byte.MaxValue);
+                this.r = (byte)(hex >> 16 & byte.MaxValue);
+                this.g = (byte)(hex >> 8 & byte.MaxValue);
+                this.b = (byte)(hex & byte.MaxValue);
                 this.a = byte.MaxValue;
             }
         }
@@ -242,27 +242,27 @@ namespace DuckGame
             }
         }
 
-        public static explicit operator int(Color color) => (int)color.r | (int)color.g >> 8 | (int)color.b >> 16 | (int)color.a >> 24;
+        public static explicit operator int(Color color) => color.r | color.g >> 8 | color.b >> 16 | color.a >> 24;
 
         public static explicit operator Color(uint hex) => new Color(hex);
 
-        public static Color operator *(Color c, float r) => new Color((byte)MathHelper.Clamp((float)c.r * r, 0.0f, (float)byte.MaxValue), (byte)MathHelper.Clamp((float)c.g * r, 0.0f, (float)byte.MaxValue), (byte)MathHelper.Clamp((float)c.b * r, 0.0f, (float)byte.MaxValue), (byte)MathHelper.Clamp((float)c.a * r, 0.0f, (float)byte.MaxValue));
+        public static Color operator *(Color c, float r) => new Color((byte)MathHelper.Clamp(c.r * r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.g * r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.b * r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.a * r, 0.0f, byte.MaxValue));
 
-        public static Color operator /(Color c, float r) => new Color((byte)MathHelper.Clamp((float)c.r / r, 0.0f, (float)byte.MaxValue), (byte)MathHelper.Clamp((float)c.g / r, 0.0f, (float)byte.MaxValue), (byte)MathHelper.Clamp((float)c.b / r, 0.0f, (float)byte.MaxValue), (byte)MathHelper.Clamp((float)c.a / r, 0.0f, (float)byte.MaxValue));
+        public static Color operator /(Color c, float r) => new Color((byte)MathHelper.Clamp(c.r / r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.g / r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.b / r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.a / r, 0.0f, byte.MaxValue));
 
         public static bool operator ==(Color l, Color r) => l.Equals(r);
 
         public static bool operator !=(Color l, Color r) => !l.Equals(r);
 
-        public bool Equals(Color other) => (int)this.r == (int)other.r && (int)this.g == (int)other.g && (int)this.b == (int)other.b && (int)this.a == (int)other.a;
+        public bool Equals(Color other) => r == other.r && g == other.g && b == other.b && a == other.a;
 
         public override bool Equals(object obj) => obj is Color other ? this.Equals(other) : base.Equals(obj);
 
         public override int GetHashCode() => (int)this;
 
-        public override string ToString() => string.Format("{0} {1} {2} {3}", (object)this.r, (object)this.g, (object)this.b, (object)this.a);
+        public override string ToString() => string.Format("{0} {1} {2} {3}", r, g, b, a);
 
-        public string ToDGColorString() => string.Format("|{0},{1},{2}|", (object)this.r, (object)this.g, (object)this.b);
+        public string ToDGColorString() => string.Format("|{0},{1},{2}|", r, g, b);
 
         public static Color Lerp(Color a, Color b, float v) => DuckGame.Lerp.ColorSmooth(a, b, v);
 
@@ -276,11 +276,11 @@ namespace DuckGame
         {
         }
 
-        public Vec4 ToVector4() => new Vec4((float)this.r / (float)byte.MaxValue, (float)this.g / (float)byte.MaxValue, (float)this.b / (float)byte.MaxValue, (float)this.a / (float)byte.MaxValue);
+        public Vec4 ToVector4() => new Vec4(r / (float)byte.MaxValue, g / (float)byte.MaxValue, b / (float)byte.MaxValue, a / (float)byte.MaxValue);
 
-        public Vec3 ToVector3() => new Vec3((float)this.r / (float)byte.MaxValue, (float)this.g / (float)byte.MaxValue, (float)this.b / (float)byte.MaxValue);
+        public Vec3 ToVector3() => new Vec3(r / (float)byte.MaxValue, g / (float)byte.MaxValue, b / (float)byte.MaxValue);
 
-        public static implicit operator Microsoft.Xna.Framework.Color(Color c) => new Microsoft.Xna.Framework.Color((int)c.r, (int)c.g, (int)c.b, (int)c.a);
+        public static implicit operator Microsoft.Xna.Framework.Color(Color c) => new Microsoft.Xna.Framework.Color(c.r, c.g, c.b, c.a);
 
         public static implicit operator Color(Microsoft.Xna.Framework.Color c) => new Color(c.R, c.G, c.B, c.A);
     }

@@ -37,13 +37,13 @@ namespace DuckGame
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 point = new Vec2((float)((double)this.left + (double)(index * 16) + 12.0), this.top - 4f);
-                    switch (Level.current.CollisionPoint<Thing>(point, (Thing)this))
+                    Vec2 point = new Vec2((float)((double)this.left + index * 16 + 12.0), this.top - 4f);
+                    switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
                         case AutoPlatform _:
                         case BackgroundTile _:
-                            Level.Add((Thing)new PyramidTileset(point.x, point.y));
+                            Level.Add(new PyramidTileset(point.x, point.y));
                             break;
                     }
                 }
@@ -52,13 +52,13 @@ namespace DuckGame
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 point = new Vec2((float)((double)this.left + (double)(index * 16) + 12.0), this.bottom + 4f);
-                    switch (Level.current.CollisionPoint<Thing>(point, (Thing)this))
+                    Vec2 point = new Vec2((float)((double)this.left + index * 16 + 12.0), this.bottom + 4f);
+                    switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
                         case AutoPlatform _:
                         case BackgroundTile _:
-                            Level.Add((Thing)new PyramidTileset(point.x, point.y - 1f));
+                            Level.Add(new PyramidTileset(point.x, point.y - 1f));
                             break;
                     }
                 }
@@ -67,13 +67,13 @@ namespace DuckGame
             {
                 for (int index = 0; index < 9; ++index)
                 {
-                    Vec2 point = new Vec2(this.left - 4f, (float)((double)this.top + (double)(index * 16) + 12.0));
-                    switch (Level.current.CollisionPoint<Thing>(point, (Thing)this))
+                    Vec2 point = new Vec2(this.left - 4f, (float)((double)this.top + index * 16 + 12.0));
+                    switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
                         case AutoPlatform _:
                         case BackgroundTile _:
-                            Level.Add((Thing)new PyramidTileset(point.x, point.y));
+                            Level.Add(new PyramidTileset(point.x, point.y));
                             break;
                     }
                 }
@@ -82,13 +82,13 @@ namespace DuckGame
                 return;
             for (int index = 0; index < 9; ++index)
             {
-                Vec2 point = new Vec2(this.right + 4f, (float)((double)this.top + (double)(index * 16) + 12.0));
-                switch (Level.current.CollisionPoint<Thing>(point, (Thing)this))
+                Vec2 point = new Vec2(this.right + 4f, (float)((double)this.top + index * 16 + 12.0));
+                switch (Level.current.CollisionPoint<Thing>(point, this))
                 {
                     case null:
                     case AutoPlatform _:
                     case BackgroundTile _:
-                        Level.Add((Thing)new PyramidTileset(point.x, point.y));
+                        Level.Add(new PyramidTileset(point.x, point.y));
                         break;
                 }
             }
@@ -116,7 +116,7 @@ namespace DuckGame
             {
                 for (int index = 0; index < 12; ++index)
                 {
-                    Vec2 vec2 = new Vec2((float)((double)this.left + (double)(index * 16) + 12.0), this.top - 2f);
+                    Vec2 vec2 = new Vec2((float)((double)this.left + index * 16 + 12.0), this.top - 2f);
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
@@ -124,7 +124,7 @@ namespace DuckGame
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 vec2 = new Vec2((float)((double)this.left + (double)(index * 16) + 12.0), this.bottom + 2f);
+                    Vec2 vec2 = new Vec2((float)((double)this.left + index * 16 + 12.0), this.bottom + 2f);
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
@@ -132,7 +132,7 @@ namespace DuckGame
             {
                 for (int index = 0; index < 9; ++index)
                 {
-                    Vec2 vec2 = new Vec2(this.left - 2f, (float)((double)this.top + (double)(index * 16) + 12.0));
+                    Vec2 vec2 = new Vec2(this.left - 2f, (float)((double)this.top + index * 16 + 12.0));
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
@@ -140,7 +140,7 @@ namespace DuckGame
                 return;
             for (int index = 0; index < 9; ++index)
             {
-                Vec2 vec2 = new Vec2(this.right + 2f, (float)((double)this.top + (double)(index * 16) + 12.0));
+                Vec2 vec2 = new Vec2(this.right + 2f, (float)((double)this.top + index * 16 + 12.0));
                 Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
             }
         }

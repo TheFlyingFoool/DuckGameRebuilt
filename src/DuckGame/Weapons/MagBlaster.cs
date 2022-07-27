@@ -17,7 +17,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 12;
-            this._ammoType = (AmmoType)new ATMag();
+            this._ammoType = new ATMag();
             this._ammoType.penetration = 0.4f;
             this.wideBarrel = true;
             this.barrelInsertOffset = new Vec2(3f, 1f);
@@ -26,7 +26,7 @@ namespace DuckGame
             this._sprite.AddAnimation("idle", 1f, true, new int[1]);
             this._sprite.AddAnimation("fire", 0.8f, false, 1, 1, 2, 2, 3, 3);
             this._sprite.AddAnimation("empty", 1f, true, 4);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(12f, 8f);
             this.collisionOffset = new Vec2(-8f, -7f);
             this.collisionSize = new Vec2(16f, 14f);
@@ -59,7 +59,7 @@ namespace DuckGame
                 {
                     Vec2 vec2 = this.Offset(new Vec2(-9f, 0.0f));
                     Vec2 hitAngle = this.barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);
-                    Level.Add((Thing)Spark.New(vec2.x, vec2.y, hitAngle, 0.1f));
+                    Level.Add(Spark.New(vec2.x, vec2.y, hitAngle, 0.1f));
                 }
             }
             else

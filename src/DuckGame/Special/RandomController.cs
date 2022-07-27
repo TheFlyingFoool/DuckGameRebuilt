@@ -67,7 +67,7 @@ namespace DuckGame
             else
             {
                 this._waitCount += Maths.IncFrameTimer();
-                if ((double)this._waitCount < (double)this.wait.value)
+                if (_waitCount < (double)this.wait.value)
                     return;
                 this._waitCount = 0.0f;
                 this.PopUpItems();
@@ -80,7 +80,7 @@ namespace DuckGame
             while (this._up.Count < this.max_up.value)
             {
                 List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList<Thing>();
-                list.RemoveAll((Predicate<Thing>)(v => !v.sequence.isValid));
+                list.RemoveAll(v => !v.sequence.isValid);
                 if (this._up.Count >= list.Count)
                     break;
                 int num1 = 0;
@@ -112,7 +112,7 @@ namespace DuckGame
                     flag1 = true;
                 foreach (SequenceItem sequenceItem in sequenceItemList)
                 {
-                    float num4 = (float)sequenceItem.likelyhood / (float)num1;
+                    float num4 = sequenceItem.likelyhood / (float)num1;
                     if ((double)num2 > (double)num3 && (double)num2 < (double)num3 + (double)num4)
                     {
                         sequenceItem.randomMode = true;

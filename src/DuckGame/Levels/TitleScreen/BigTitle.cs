@@ -51,7 +51,7 @@ namespace DuckGame
             this.graphic = this._sprite;
             this.depth = (Depth)0.6f;
             this.graphic.color = Color.Black;
-            this.centery = (float)(this.graphic.height / 2);
+            this.centery = this.graphic.height / 2;
             this.alpha = 0.0f;
             this.layer = Layer.HUD;
             this._currentColor = this._lerpColors[0];
@@ -78,31 +78,30 @@ namespace DuckGame
             if (Main.isDemo)
             {
                 this._fartWait -= 0.008f;
-                if ((double)this._fartWait < 0.0 && !this._showFart)
+                if (_fartWait < 0.0 && !this._showFart)
                 {
                     this._showFart = true;
                     SFX.Play("fart" + Rando.Int(3).ToString());
                 }
             }
             ++this._wait;
-            int wait = this._wait;
             if (this._fade)
             {
                 this.alpha -= 0.05f;
                 if ((double)this.alpha >= 0.0)
                     return;
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             }
             else
             {
                 if (this._wait <= 30 || this._count >= this._maxCount)
                     return;
-                this._lerpNum = (int)((double)((float)this._count / (float)this._maxCount) * (double)this._lerpColors.Count - 0.00999999977648258);
+                this._lerpNum = (int)((double)(_count / (float)this._maxCount) * _lerpColors.Count - 0.00999999977648258);
                 int num = this._maxCount / this._lerpColors.Count;
                 this._currentColor = Color.Lerp(this._currentColor, this._lerpColors[this._lerpNum], 0.1f);
-                this._currentColor.a = (byte)((double)this._alpha * (double)byte.MaxValue);
+                this._currentColor.a = (byte)(_alpha * (double)byte.MaxValue);
                 this._alpha -= 0.02f;
-                if ((double)this._alpha < 0.0)
+                if (_alpha < 0.0)
                     this._alpha = 0.0f;
                 ++this._count;
             }

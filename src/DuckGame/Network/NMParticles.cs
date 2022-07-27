@@ -20,7 +20,7 @@ namespace DuckGame
         public void Add(PhysicsParticle pParticle)
         {
             byte netTypeIndex = PhysicsParticle.TypeToNetTypeIndex(pParticle.GetType());
-            List<PhysicsParticle> physicsParticleList = (List<PhysicsParticle>)null;
+            List<PhysicsParticle> physicsParticleList;
             if (!this.particles.TryGetValue(netTypeIndex, out physicsParticleList))
                 physicsParticleList = this.particles[netTypeIndex] = new List<PhysicsParticle>();
             physicsParticleList.Add(pParticle);

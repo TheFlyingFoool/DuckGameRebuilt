@@ -38,24 +38,24 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if ((int)DuckNetwork.levelIndex != (int)this._levelIndex || (int)this.index >= DuckNetwork.profiles.Count)
+            if (DuckNetwork.levelIndex != _levelIndex || index >= DuckNetwork.profiles.Count)
                 return;
-            Profile profile = DuckNetwork.profiles[(int)this.index];
+            Profile profile = DuckNetwork.profiles[index];
             if (profile.duck == null || !profile.duck.WillAcceptLifeChange(this.lifeChange))
                 return;
-            DestroyType type = !this.crush ? (!this.fall ? (DestroyType)new DTImpact((Thing)null) : (DestroyType)new DTFall()) : (DestroyType)new DTCrush((PhysicsObject)null);
+            DestroyType type = !this.crush ? (!this.fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
             profile.duck.isKillMessage = true;
             if (profile.duck.Kill(type))
             {
                 if (!this.cook)
                     profile.duck.GoRagdoll();
-                Thing.Fondle((Thing)profile.duck, this.connection);
+                Thing.Fondle(profile.duck, this.connection);
                 if (profile.duck._ragdollInstance != null)
-                    Thing.Fondle((Thing)profile.duck._ragdollInstance, this.connection);
+                    Thing.Fondle(profile.duck._ragdollInstance, this.connection);
                 if (profile.duck._trappedInstance != null)
-                    Thing.Fondle((Thing)profile.duck._trappedInstance, this.connection);
+                    Thing.Fondle(profile.duck._trappedInstance, this.connection);
                 if (profile.duck._cookedInstance != null)
-                    Thing.Fondle((Thing)profile.duck._cookedInstance, this.connection);
+                    Thing.Fondle(profile.duck._cookedInstance, this.connection);
             }
             profile.duck.isKillMessage = false;
         }

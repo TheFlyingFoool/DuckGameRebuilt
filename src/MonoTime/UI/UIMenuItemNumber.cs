@@ -41,14 +41,16 @@ namespace DuckGame
                 c = Colors.MenuOption;
             this._valueStrings = valStrings;
             UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0.0f : 0.8f);
-            UIText component2 = new UIText(text, c);
-            component2.align = UIAlign.Left;
-            component1.leftSection.Add((UIComponent)component2, true);
+            UIText component2 = new UIText(text, c)
+            {
+                align = UIAlign.Left
+            };
+            component1.leftSection.Add(component2, true);
             if (field == null)
             {
-                this._textItem = (UIText)new UIChangingText(-1f, -1f, field, (FieldBinding)null);
+                this._textItem = new UIChangingText(-1f, -1f, field, null);
                 this._textItem.align = UIAlign.Right;
-                component1.rightSection.Add((UIComponent)this._textItem, true);
+                component1.rightSection.Add(_textItem, true);
             }
             else if (this._valueStrings != null)
             {
@@ -62,19 +64,21 @@ namespace DuckGame
                 }
                 else
                 {
-                    this._textItem = (UIText)new UIChangingText(-1f, -1f, field, (FieldBinding)null);
+                    this._textItem = new UIChangingText(-1f, -1f, field, null);
                     int index = (int)field.value;
                     if (index >= 0 && index < this._valueStrings.Count)
                         this._textItem.text = this._valueStrings[index];
                     this._textItem.align = UIAlign.Right;
-                    component1.rightSection.Add((UIComponent)this._textItem, true);
+                    component1.rightSection.Add(_textItem, true);
                 }
             }
             else
             {
-                UINumber component3 = new UINumber(-1f, -1f, field, append, filterField, this._setting);
-                component3.align = UIAlign.Right;
-                component1.rightSection.Add((UIComponent)component3, true);
+                UINumber component3 = new UINumber(-1f, -1f, field, append, filterField, this._setting)
+                {
+                    align = UIAlign.Right
+                };
+                component1.rightSection.Add(component3, true);
             }
             if (this._valueStrings != null)
             {
@@ -88,11 +92,13 @@ namespace DuckGame
                 this._textItem.minLength = str.Length + 3;
                 this._textItem.text = this._textItem.text;
             }
-            this.rightSection.Add((UIComponent)component1, true);
-            this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add((UIComponent)this._arrow, true);
+            this.rightSection.Add(component1, true);
+            this._arrow = new UIImage("contextArrowRight")
+            {
+                align = UIAlign.Right,
+                visible = false
+            };
+            this.leftSection.Add(_arrow, true);
             this._field = field;
             this._step = step;
             this._upperBoundField = upperBoundField;
@@ -136,27 +142,27 @@ namespace DuckGame
                     if (!(bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT"))
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = (object)true;
-                        this._field.value = (object)(int)this._field.min;
+                        this._filterField.value = true;
+                        this._field.value = (int)this._field.min;
                         return;
                     }
                     if (!(bool)this._filterField.value && trigger == "MENULEFT")
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = (object)true;
-                        this._field.value = (object)(int)this._field.max;
+                        this._filterField.value = true;
+                        this._field.value = (int)this._field.max;
                         return;
                     }
-                    if ((bool)this._filterField.value && trigger == "MENULEFT" && (double)(int)this._field.value == (double)this._field.min)
+                    if ((bool)this._filterField.value && trigger == "MENULEFT" && (int)this._field.value == (double)this._field.min)
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = (object)false;
+                        this._filterField.value = false;
                         return;
                     }
-                    if ((bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (double)(int)this._field.value == (double)this._field.max)
+                    if ((bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (int)this._field.value == (double)this._field.max)
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = (object)false;
+                        this._filterField.value = false;
                         return;
                     }
                     if (this._setting != null && trigger == "MENU2")
@@ -180,20 +186,20 @@ namespace DuckGame
                 }
                 int num1 = (int)this._field.value;
                 if (trigger == "MENULEFT")
-                    this._field.value = (object)((int)this._field.value - this.GetStep((int)this._field.value, false));
+                    this._field.value = (int)this._field.value - this.GetStep((int)this._field.value, false);
                 else if (trigger == "MENURIGHT" || trigger == "SELECT")
-                    this._field.value = (object)((int)this._field.value + this.GetStep((int)this._field.value, true));
-                int index = (int)Maths.Clamp((float)(int)this._field.value, this._field.min, this._field.max);
+                    this._field.value = (int)this._field.value + this.GetStep((int)this._field.value, true);
+                int index = (int)Maths.Clamp((int)this._field.value, this._field.min, this._field.max);
                 if (this._upperBoundField != null && index > (int)this._upperBoundField.value)
-                    this._upperBoundField.value = (object)index;
+                    this._upperBoundField.value = index;
                 if (this._lowerBoundField != null && index < (int)this._lowerBoundField.value)
-                    this._lowerBoundField.value = (object)index;
+                    this._lowerBoundField.value = index;
                 if (num1 != index && this._action != null)
                     this._action.Activate();
                 if (num1 != (int)this._field.value)
                     SFX.Play("textLetter", 0.7f);
                 int num2 = index - num1;
-                this._field.value = (object)index;
+                this._field.value = index;
                 if (num2 > 0)
                 {
                     int num3 = num2;
@@ -205,10 +211,10 @@ namespace DuckGame
                             FieldBinding current = enumerator.Current;
                             while (true)
                             {
-                                if ((double)(int)current.value > (double)current.min && num3 > 0)
+                                if ((int)current.value > (double)current.min && num3 > 0)
                                 {
                                     int num4 = (int)current.value - (int)current.inc;
-                                    current.value = (object)num4;
+                                    current.value = num4;
                                     num3 -= (int)current.inc;
                                 }
                                 else
@@ -228,10 +234,10 @@ namespace DuckGame
                             FieldBinding current = enumerator.Current;
                             while (true)
                             {
-                                if ((double)(int)current.value < (double)current.max && num5 < 0)
+                                if ((int)current.value < (double)current.max && num5 < 0)
                                 {
                                     int num6 = (int)current.value + (int)current.inc;
-                                    current.value = (object)num6;
+                                    current.value = num6;
                                     num5 += (int)current.inc;
                                 }
                                 else

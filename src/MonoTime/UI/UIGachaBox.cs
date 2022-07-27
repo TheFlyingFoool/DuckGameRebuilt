@@ -71,12 +71,12 @@ namespace DuckGame
           bool rareDupesChance = false)
         {
             List<Furniture> randomFurniture = new List<Furniture>();
-            IOrderedEnumerable<Furniture> source = RoomEditor.AllFurnis().Where<Furniture>((Func<Furniture, bool>)(x => x.rarity >= minRarity)).OrderBy<Furniture, int>((Func<Furniture, int>)(x => Rando.Int(999999)));
+            IOrderedEnumerable<Furniture> source = RoomEditor.AllFurnis().Where<Furniture>(x => x.rarity >= minRarity).OrderBy<Furniture, int>(x => Rando.Int(999999));
             for (int index = 0; index < num; ++index)
             {
-                Furniture winner = (Furniture)null;
-                Furniture furniture1 = (Furniture)null;
-                Furniture furniture2 = (Furniture)null;
+                Furniture winner = null;
+                Furniture furniture1 = null;
+                Furniture furniture2 = null;
                 List<int> intList = new List<int>();
                 foreach (Furniture furniture3 in (IEnumerable<Furniture>)source)
                 {
@@ -84,7 +84,7 @@ namespace DuckGame
                     {
                         if (furniture2 == null)
                             furniture2 = furniture3;
-                        bool flag = Profiles.experienceProfile.GetNumFurnitures((int)furniture3.index) > 0;
+                        bool flag = Profiles.experienceProfile.GetNumFurnitures(furniture3.index) > 0;
                         int _max = 35;
                         if (furniture3.rarity >= Rarity.VeryRare)
                             _max = 25;
@@ -98,7 +98,7 @@ namespace DuckGame
                         {
                             if (furniture1 == null)
                                 furniture1 = furniture3;
-                            if (Profiles.experienceProfile.GetNumFurnitures((int)furniture3.index) <= 0 || Rando.Int(2) == 0)
+                            if (Profiles.experienceProfile.GetNumFurnitures(furniture3.index) <= 0 || Rando.Int(2) == 0)
                                 intList.Add(furniture3.rarity);
                             if (furniture1 == null || furniture3.rarity < furniture1.rarity)
                                 furniture1 = furniture3;
@@ -108,8 +108,8 @@ namespace DuckGame
                             {
                                 int num1 = furniture3.rarity;
                                 if (rareDupesChance & flag && furniture3.rarity > minRarity)
-                                    num1 = (int)((double)num1 * 0.5);
-                                if (furniture3.rarity == Rarity.Common || Rando.Int((int)((double)num1 * (double)rarityMult)) == 0)
+                                    num1 = (int)(num1 * 0.5);
+                                if (furniture3.rarity == Rarity.Common || Rando.Int((int)(num1 * (double)rarityMult)) == 0)
                                     winner = furniture3;
                             }
                         }
@@ -119,11 +119,11 @@ namespace DuckGame
                     winner = furniture1;
                 if (winner == null)
                     winner = furniture2;
-                if (Profiles.experienceProfile.GetNumFurnitures((int)winner.index) > 0)
+                if (Profiles.experienceProfile.GetNumFurnitures(winner.index) > 0)
                     --numDupes;
                 randomFurniture.Add(winner);
                 if (index != num - 1)
-                    source = source.Where<Furniture>((Func<Furniture, bool>)(x => x != winner)).OrderBy<Furniture, int>((Func<Furniture, int>)(x => Rando.Int(999999)));
+                    source = source.Where<Furniture>(x => x != winner).OrderBy<Furniture, int>(x => Rando.Int(999999));
             }
             return randomFurniture;
         }
@@ -145,7 +145,7 @@ namespace DuckGame
             this._frame = new Sprite("unlockFrame");
             this._frame.CenterOrigin();
             this._furni = new Sprite("furni/tub");
-            this._furni.center = new Vec2((float)(this._furni.width / 2), (float)this._furni.height);
+            this._furni.center = new Vec2(this._furni.width / 2, _furni.height);
             this._star = new Sprite("prettyStar");
             this._star.CenterOrigin();
             this._font = new BitmapFont("biosFontUI", 8, 7);
@@ -178,7 +178,7 @@ namespace DuckGame
             Profiles.Save(Profiles.experienceProfile);
             if (this._openOnClose == null)
                 return;
-            MonoMain.pauseMenu = (UIComponent)this._openOnClose;
+            MonoMain.pauseMenu = _openOnClose;
         }
 
         public override void Open() => base.Open();
@@ -191,9 +191,9 @@ namespace DuckGame
                 this.UpdateParts();
                 this.doubleUpdating = false;
             }
-            if ((double)this.yOffset < 1.0)
+            if (yOffset < 1.0)
             {
-                if ((double)this._insertCoin < 1.0)
+                if (_insertCoin < 1.0)
                 {
                     this._insertCoinInc += 0.008f;
                     this._insertCoin += this._insertCoinInc;
@@ -206,33 +206,33 @@ namespace DuckGame
                         this._chinged = true;
                     }
                     this._insertCoin = 1f;
-                    if ((double)this._afterInsertWait < 1.0)
+                    if (_afterInsertWait < 1.0)
                     {
                         this._afterInsertWait += 0.32f;
                     }
                     else
                     {
-                        if ((double)this._gachaWait >= 0.5 && !this.played)
+                        if (_gachaWait >= 0.5 && !this.played)
                         {
                             this.played = true;
                             SFX.Play("gachaSound", pitch: Rando.Float(-0.1f, 0.1f));
                         }
                         this._gachaWait += 0.1f;
-                        if ((double)this._gachaWait >= 1.0)
+                        if (_gachaWait >= 1.0)
                         {
                             this.gachaSpeed += 0.25f;
-                            if ((double)this.gachaSpeed > 6.0)
+                            if (gachaSpeed > 6.0)
                                 this.gachaSpeed = 6f;
                             this.gachaY += this.gachaSpeed;
-                            if ((double)this.gachaY > 50.0 && (double)this.gachaSpeed > 0.0)
+                            if (gachaY > 50.0 && gachaSpeed > 0.0)
                             {
-                                if ((double)this.gachaSpeed > 0.800000011920929)
+                                if (gachaSpeed > 0.800000011920929)
                                     SFX.Play("gachaBounce", pitch: 0.2f);
                                 this.gachaY = 50f;
                                 this.gachaSpeed = (float)(-(double)this.gachaSpeed * 0.400000005960464);
                             }
                             this._openWait += 0.019f;
-                            if ((double)this._openWait >= 1.0)
+                            if (_openWait >= 1.0)
                             {
                                 if (!this.opened)
                                 {
@@ -241,13 +241,13 @@ namespace DuckGame
                                     this._gachaEgg.frame += 2;
                                 }
                                 this._swapWait += 0.06f;
-                                if ((double)this._swapWait >= 1.0)
+                                if (_swapWait >= 1.0)
                                 {
                                     if (!this._swapped)
                                     {
                                         SFX.Play("harp");
                                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                                        Profiles.experienceProfile.SetNumFurnitures((int)this._contains.index, Profiles.experienceProfile.GetNumFurnitures((int)this._contains.index) + 1);
+                                        Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
                                     }
                                     this._starGrow += 0.05f;
                                     this._swapped = true;
@@ -268,7 +268,7 @@ namespace DuckGame
                 else
                 {
                     this._downWait -= 0.06f;
-                    if ((double)this._downWait <= 0.0)
+                    if (_downWait <= 0.0)
                     {
                         this._downWait = 1f;
                         this.down = false;
@@ -295,18 +295,18 @@ namespace DuckGame
             if (this._swapped)
             {
                 this._contains.Draw(this.position + new Vec2(0.0f, 10f), - 0.8f);
-                if ((double)this._starGrow <= 1.0)
+                if (_starGrow <= 1.0)
                 {
                     this._star.depth = (Depth)0.9f;
-                    this._star.scale = new Vec2((float)(2.5 + (double)this._starGrow * 3.0));
+                    this._star.scale = new Vec2((float)(2.5 + _starGrow * 3.0));
                     this._star.alpha = 1f - this._starGrow;
                     Graphics.Draw(this._star, this.x, this.y + 10f);
                 }
             }
-            else if ((double)this.gachaY > 10.0)
+            else if (gachaY > 10.0)
             {
                 this._gachaEgg.depth = - 0.8f;
-                Graphics.Draw((Sprite)this._gachaEgg, this.x, this.y - 38f + this.gachaY);
+                Graphics.Draw(_gachaEgg, this.x, this.y - 38f + this.gachaY);
             }
             string text1 = "@LWING@NEW TOY@RWING@";
             if (this._rare)
@@ -320,16 +320,16 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2((float)-((double)this._fancyFont.GetWidth(text2) / 2.0), -25f);
             this._fancyFont.DrawOutline(text2, this.position + vec2_2, this._rare || this._swapped && this._rareCapsule ? Colors.DGYellow : Color.White, Color.Black, this.depth + 2);
             this._fancyFont.scale = new Vec2(0.5f, 0.5f);
-            if ((double)this._insertCoin > 0.00999999977648258)
+            if (_insertCoin > 0.00999999977648258)
             {
                 this._duckCoin.frame = this._rare ? 1 : 0;
                 this._duckCoin.depth = - 0.8f;
-                Graphics.Draw((Sprite)this._duckCoin, this.x + 40f, (float)((double)this.y - 100.0 + (double)this._insertCoin * 65.0));
+                Graphics.Draw(_duckCoin, this.x + 40f, (float)((double)this.y - 100.0 + _insertCoin * 65.0));
             }
             if (this._swapped)
             {
                 string text3 = this._contains.description;
-                int num = Profiles.experienceProfile.GetNumFurnitures((int)this._contains.index) - 1;
+                int num = Profiles.experienceProfile.GetNumFurnitures(_contains.index) - 1;
                 if (num > 0)
                     text3 = "I've already got " + (num - 1 >= this.numberNames.Count ? num.ToString() : this.numberNames[num - 1]) + " of these...";
                 Vec2 vec2_3 = new Vec2((float)-((double)this._fancyFont.GetWidth(text3) / 2.0), 38f);

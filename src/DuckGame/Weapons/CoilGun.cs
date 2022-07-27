@@ -12,7 +12,7 @@ namespace DuckGame
     [BaggedProperty("isOnlineCapable", false)]
     public class CoilGun : Gun
     {
-        public StateBinding _laserStateBinding = (StateBinding)new CoilGunFlagBinding();
+        public StateBinding _laserStateBinding = new CoilGunFlagBinding();
         public StateBinding _animationIndexBinding = new StateBinding(nameof(netAnimationIndex), 4);
         public StateBinding _frameBinding = new StateBinding(nameof(spriteFrame));
         public bool doBlast;
@@ -32,9 +32,9 @@ namespace DuckGame
             get => this._chargeAnim == null ? (byte)0 : (byte)this._chargeAnim.animationIndex;
             set
             {
-                if (this._chargeAnim == null || this._chargeAnim.animationIndex == (int)value)
+                if (this._chargeAnim == null || this._chargeAnim.animationIndex == value)
                     return;
-                this._chargeAnim.animationIndex = (int)value;
+                this._chargeAnim.animationIndex = value;
             }
         }
 
@@ -45,7 +45,7 @@ namespace DuckGame
             {
                 if (this._chargeAnim == null)
                     return;
-                this._chargeAnim._frame = (int)value;
+                this._chargeAnim._frame = value;
             }
         }
 
@@ -72,7 +72,7 @@ namespace DuckGame
             this._chargeAnim.AddAnimation("uncharge", 1.2f, false, 7, 6, 5, 4, 7, 6, 5, 4, 3, 2, 1, 0, 3, 2, 1, 0);
             this._chargeAnim.AddAnimation("drain", 2f, false, 7, 6, 5, 4, 7, 6, 5, 4, 3, 2, 1, 0, 3, 2, 1, 0);
             this._chargeAnim.SetAnimation("idle");
-            this.graphic = (Sprite)this._chargeAnim;
+            this.graphic = _chargeAnim;
         }
 
         public override void Initialize()
@@ -86,7 +86,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if ((double)this._charge > 0.0)
+            if (_charge > 0.0)
                 this._charge -= 0.1f;
             else
                 this._charge = 0.0f;
@@ -178,7 +178,7 @@ namespace DuckGame
             this._chargeAnim.SetAnimation("drain");
             SFX.Play("laserBlast");
             for (int index = 0; index < 4; ++index)
-                Level.Add((Thing)new ElectricalCharge(this.barrelPosition.x, this.barrelPosition.y, (int)this.offDir, (Thing)this));
+                Level.Add(new ElectricalCharge(this.barrelPosition.x, this.barrelPosition.y, offDir, this));
         }
     }
 }

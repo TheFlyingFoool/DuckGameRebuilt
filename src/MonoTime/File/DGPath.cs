@@ -111,12 +111,12 @@ namespace DuckGame
             string key = "";
             foreach (string pExtension in pExtensions)
                 key += pExtension;
-            DGPath[] filesAndDirectories = (DGPath[])null;
+            DGPath[] filesAndDirectories;
             if (!this._filesAndDirectories.TryGetValue(key, out filesAndDirectories))
             {
                 List<DGPath> dgPathList = new List<DGPath>();
-                dgPathList.AddRange((IEnumerable<DGPath>)this.GetDirectories());
-                dgPathList.AddRange((IEnumerable<DGPath>)this.GetFiles(pExtensions));
+                dgPathList.AddRange(this.GetDirectories());
+                dgPathList.AddRange(this.GetFiles(pExtensions));
                 filesAndDirectories = dgPathList.ToArray();
             }
             if (filesAndDirectories == null)
@@ -153,7 +153,7 @@ namespace DuckGame
             string key = "";
             foreach (string pExtension in pExtensions)
                 key += pExtension;
-            DGPath[] files = (DGPath[])null;
+            DGPath[] files;
             if (!this._files.TryGetValue(key, out files))
             {
                 if (!this.isDirectory)
@@ -202,10 +202,10 @@ namespace DuckGame
             bool flag = false;
             this._file = false;
             this._rooted = false;
-            this._directories = (DGPath[])null;
-            this._files = (Dictionary<string, DGPath[]>)null;
-            this._filesAndDirectories = (Dictionary<string, DGPath[]>)null;
-            this._specialData = (object)null;
+            this._directories = null;
+            this._files = null;
+            this._filesAndDirectories = null;
+            this._specialData = null;
             int index = 0;
             DGPath.kBuilder.Clear();
             if (pPath.Length > 1 && pPath[1] == ':')

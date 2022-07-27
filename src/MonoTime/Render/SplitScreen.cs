@@ -22,7 +22,7 @@ namespace DuckGame
                 Viewport viewport1 = DuckGame.Graphics.viewport;
                 if (key.duck != null)
                 {
-                    FollowCam followCam1 = (FollowCam)null;
+                    FollowCam followCam1;
                     if (!SplitScreen._cameras.TryGetValue(key, out followCam1))
                     {
                         followCam1 = SplitScreen._cameras[key] = new FollowCam();
@@ -80,14 +80,14 @@ namespace DuckGame
                     followCam1.minSize = 160f;
                     followCam1.Clear();
                     if (key.duck.ragdoll != null)
-                        followCam1.Add((Thing)key.duck.ragdoll);
+                        followCam1.Add(key.duck.ragdoll);
                     else if (key.duck._trapped != null)
-                        followCam1.Add((Thing)key.duck._trapped);
+                        followCam1.Add(key.duck._trapped);
                     else if (key.duck._cooked != null)
-                        followCam1.Add((Thing)key.duck._cooked);
+                        followCam1.Add(key.duck._cooked);
                     else
-                        followCam1.Add((Thing)key.duck);
-                    Level.current.camera = (Camera)followCam1;
+                        followCam1.Add(key.duck);
+                    Level.current.camera = followCam1;
                     followCam1.lerpSpeed = 0.11f;
                     followCam1.DoUpdate();
                     Layer.DrawLayers();

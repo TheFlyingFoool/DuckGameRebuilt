@@ -16,7 +16,7 @@ namespace DuckGame
           : base(0.0f, 0.0f, -1f, -1f)
         {
             this._image = new Sprite(imageVal);
-            this._collisionSize = new Vec2((float)this._image.w, (float)this._image.h);
+            this._collisionSize = new Vec2(_image.w, _image.h);
             this._image.CenterOrigin();
             this.align = al;
         }
@@ -25,7 +25,7 @@ namespace DuckGame
           : base(0.0f, 0.0f, -1f, -1f)
         {
             this._image = imageVal;
-            this._collisionSize = new Vec2((float)this._image.w, (float)this._image.h);
+            this._collisionSize = new Vec2(_image.w, _image.h);
             this._image.CenterOrigin();
             this.align = al;
         }
@@ -34,7 +34,7 @@ namespace DuckGame
           : base(0.0f, 0.0f, -1f, -1f)
         {
             this._image = imageVal;
-            this._collisionSize = new Vec2((float)this._image.w * s, (float)this._image.h * s);
+            this._collisionSize = new Vec2(_image.w * s, _image.h * s);
             this._image.CenterOrigin();
             this.scale = new Vec2(s);
             this.align = al;

@@ -109,7 +109,7 @@ namespace DuckGame
 
         public override string networkIdentifier => "@TEAMSELECT";
 
-        public ProfileBox2 GetBox(byte box) => this._profiles[(int)box];
+        public ProfileBox2 GetBox(byte box) => this._profiles[box];
 
         public static List<MatchSetting> matchSettings => DuckNetwork.core.matchSettings;
 
@@ -142,9 +142,9 @@ namespace DuckGame
             TeamSelect2._hostGameEditedMatchSettings = false;
         }
 
-        public static MatchSetting GetMatchSetting(string id) => TeamSelect2.matchSettings.FirstOrDefault<MatchSetting>((Func<MatchSetting, bool>)(x => x.id == id));
+        public static MatchSetting GetMatchSetting(string id) => TeamSelect2.matchSettings.FirstOrDefault<MatchSetting>(x => x.id == id);
 
-        public static MatchSetting GetOnlineSetting(string id) => TeamSelect2.onlineSettings.FirstOrDefault<MatchSetting>((Func<MatchSetting, bool>)(x => x.id == id));
+        public static MatchSetting GetOnlineSetting(string id) => TeamSelect2.onlineSettings.FirstOrDefault<MatchSetting>(x => x.id == id);
 
         public static int GetSettingInt(string id)
         {
@@ -165,11 +165,11 @@ namespace DuckGame
         {
             if (index < 0 || index >= DG.MaxPlayers || this._profiles == null || this._profiles[index]._hatSelector == null)
                 return;
-            this._profiles[index]._hatSelector._desiredTeamSelection = (short)(sbyte)index;
+            this._profiles[index]._hatSelector._desiredTeamSelection = (sbyte)index;
             if (this._profiles[index].duck != null)
                 this._profiles[index].duck.profile.team = Teams.all[index];
             this._profiles[index]._hatSelector.ConfirmTeamSelection();
-            this._profiles[index]._hatSelector._teamSelection = this._profiles[index]._hatSelector._desiredTeamSelection = (short)(sbyte)index;
+            this._profiles[index]._hatSelector._teamSelection = this._profiles[index]._hatSelector._desiredTeamSelection = (sbyte)index;
         }
 
         public static bool GetSettingBool(string id)
@@ -245,7 +245,7 @@ namespace DuckGame
             UnlockData unlock = Unlocks.GetUnlock(id);
             if (unlock == null || Network.isActive && !unlock.onlineEnabled)
                 return false;
-            bool flag = false;
+            bool flag;
             TeamSelect2._modifierStatus.TryGetValue(id, out flag);
             return flag;
         }
@@ -330,73 +330,75 @@ namespace DuckGame
         public void BuildPauseMenu()
         {
             if (this._pauseGroup != null)
-                Level.Remove((Thing)this._pauseGroup);
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
-            this._pauseGroup.isPauseMenu = true;
+                Level.Remove(_pauseGroup);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f)
+            {
+                isPauseMenu = true
+            };
             this._pauseMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 200f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-            this._inviteMenu = (UIMenu)new UIInviteMenu("INVITE FRIENDS", (UIMenuAction)null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
-            ((UIInviteMenu)this._inviteMenu).SetAction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._inviteMenu, (UIComponent)this._pauseMenu));
+            this._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
+            ((UIInviteMenu)this._inviteMenu).SetAction(new UIMenuActionOpenMenu(_inviteMenu, _pauseMenu));
             UIDivider component1 = new UIDivider(true, 0.8f);
-            component1.rightSection.Add((UIComponent)new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add((UIComponent)component1, true);
-            component1.leftSection.Add((UIComponent)new UIMenuItem("RESUME", (UIMenuAction)new UIMenuActionCloseMenu(this._pauseGroup)), true);
-            component1.leftSection.Add((UIComponent)new UIMenuItem("OPTIONS", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)Options.optionsMenu)), true);
-            component1.leftSection.Add((UIComponent)new UIText("", Color.White), true);
+            component1.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            this._pauseMenu.Add(component1, true);
+            component1.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup)), true);
+            component1.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu)), true);
+            component1.leftSection.Add(new UIText("", Color.White), true);
             Options.openOnClose = this._pauseMenu;
             Options.AddMenus(this._pauseGroup);
             if (Network.isActive)
             {
                 if (Network.isServer)
-                    component1.leftSection.Add((UIComponent)new UIMenuItem("END SESSION", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._backOut)), true);
+                    component1.leftSection.Add(new UIMenuItem("END SESSION", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._backOut)), true);
                 else
-                    component1.leftSection.Add((UIComponent)new UIMenuItem("DISCONNECT", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._backOut)), true);
+                    component1.leftSection.Add(new UIMenuItem("DISCONNECT", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._backOut)), true);
             }
             else
             {
                 if (this._pauseMenuProfile.playerActive)
-                    component1.leftSection.Add((UIComponent)new UIMenuItem("BACK OUT", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._backOut)), true);
-                component1.leftSection.Add((UIComponent)new UIMenuItem("|DGRED|MAIN MENU", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._returnToMenu)), true);
+                    component1.leftSection.Add(new UIMenuItem("BACK OUT", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._backOut)), true);
+                component1.leftSection.Add(new UIMenuItem("|DGRED|MAIN MENU", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._returnToMenu)), true);
             }
             bool flag = false;
             if (!TeamSelect2.eightPlayersActive)
             {
                 flag = true;
-                component1.leftSection.Add((UIComponent)new UIText("", Color.White), true);
+                component1.leftSection.Add(new UIText("", Color.White), true);
                 if (TeamSelect2.showEightPlayerSelected)
-                    component1.leftSection.Add((UIComponent)new UIMenuItem("|DGGREEN|HIDE 8 PLAYER", (UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(this.ShowEightPlayer))), true);
+                    component1.leftSection.Add(new UIMenuItem("|DGGREEN|HIDE 8 PLAYER", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(this.ShowEightPlayer))), true);
                 else
-                    component1.leftSection.Add((UIComponent)new UIMenuItem("|DGGREEN|SHOW 8 PLAYER", (UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(this.ShowEightPlayer))), true);
+                    component1.leftSection.Add(new UIMenuItem("|DGGREEN|SHOW 8 PLAYER", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(this.ShowEightPlayer))), true);
             }
             if (Network.available && this._pauseMenuProfile != null && this._pauseMenuProfile.profile.steamID != 0UL && this._pauseMenuProfile.profile == Profiles.experienceProfile)
             {
                 if (!flag)
-                    component1.leftSection.Add((UIComponent)new UIText("", Color.White), true);
-                component1.leftSection.Add((UIComponent)new UIMenuItem("|DGGREEN|INVITE FRIENDS", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._pauseMenu, (UIComponent)this._inviteMenu), UIAlign.Right), true);
-                component1.leftSection.Add((UIComponent)new UIMenuItem("|DGGREEN|COPY INVITE LINK", (UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(TeamSelect2.HostGameInviteLink)), UIAlign.Left), true);
+                    component1.leftSection.Add(new UIText("", Color.White), true);
+                component1.leftSection.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_pauseMenu, _inviteMenu), UIAlign.Right), true);
+                component1.leftSection.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(TeamSelect2.HostGameInviteLink)), UIAlign.Left), true);
             }
             this._pauseMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._pauseMenu, false);
+            this._pauseGroup.Add(_pauseMenu, false);
             this._inviteMenu.Close();
-            this._pauseGroup.Add((UIComponent)this._inviteMenu, false);
+            this._pauseGroup.Add(_inviteMenu, false);
             this._inviteMenu.DoUpdate();
             this._pauseGroup.Close();
-            Level.Add((Thing)this._pauseGroup);
+            Level.Add(_pauseGroup);
             this._pauseGroup.Update();
             this._pauseGroup.Update();
             this._pauseGroup.Update();
             if (this._localPauseGroup != null)
-                Level.Remove((Thing)this._localPauseGroup);
+                Level.Remove(_localPauseGroup);
             this._localPauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
             this._localPauseMenu = new UIMenu("MULTIPLAYER", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
             UIDivider component2 = new UIDivider(true, 0.8f);
-            component2.rightSection.Add((UIComponent)new UIImage("pauseIcons", UIAlign.Right), true);
-            this._localPauseMenu.Add((UIComponent)component2, true);
-            component2.leftSection.Add((UIComponent)new UIMenuItem("RESUME", (UIMenuAction)new UIMenuActionCloseMenu(this._localPauseGroup)), true);
-            component2.leftSection.Add((UIComponent)new UIMenuItem("BACK OUT", (UIMenuAction)new UIMenuActionCloseMenuSetBoolean(this._localPauseGroup, this._localBackOut)), true);
+            component2.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            this._localPauseMenu.Add(component2, true);
+            component2.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._localPauseGroup)), true);
+            component2.leftSection.Add(new UIMenuItem("BACK OUT", new UIMenuActionCloseMenuSetBoolean(this._localPauseGroup, this._localBackOut)), true);
             this._localPauseMenu.Close();
-            this._localPauseGroup.Add((UIComponent)this._localPauseMenu, false);
+            this._localPauseGroup.Add(_localPauseMenu, false);
             this._localPauseGroup.Close();
-            Level.Add((Thing)this._localPauseGroup);
+            Level.Add(_localPauseGroup);
             this._localPauseGroup.Update();
             this._localPauseGroup.Update();
             this._localPauseGroup.Update();
@@ -416,7 +418,7 @@ namespace DuckGame
         public void ClosedOnline()
         {
             foreach (Profile profile in Profiles.all)
-                profile.team = (Team)null;
+                profile.team = null;
             int num = 0;
             foreach (MatchmakingPlayer matchmakingProfile in UIMatchmakingBox.core.matchmakingProfiles)
             {
@@ -457,7 +459,7 @@ namespace DuckGame
             TeamSelect2.UpdateModifierStatus();
             if (!Network.isActive)
                 return;
-            Send.Message((NetMessage)new NMMatchSettings(initial, (byte)TeamSelect2.GetSettingInt("requiredwins"), (byte)TeamSelect2.GetSettingInt("restsevery"), (byte)TeamSelect2.GetSettingInt("randommaps"), (byte)TeamSelect2.GetSettingInt("workshopmaps"), (byte)TeamSelect2.GetSettingInt("normalmaps"), (bool)TeamSelect2.GetOnlineSetting("teams").value, (byte)TeamSelect2.GetSettingInt("custommaps"), Editor.activatedLevels.Count, TeamSelect2.GetSettingBool("wallmode"), TeamSelect2.GetNetworkModifierList(), TeamSelect2.GetSettingBool("clientlevelsenabled")), c);
+            Send.Message(new NMMatchSettings(initial, (byte)TeamSelect2.GetSettingInt("requiredwins"), (byte)TeamSelect2.GetSettingInt("restsevery"), (byte)TeamSelect2.GetSettingInt("randommaps"), (byte)TeamSelect2.GetSettingInt("workshopmaps"), (byte)TeamSelect2.GetSettingInt("normalmaps"), (bool)TeamSelect2.GetOnlineSetting("teams").value, (byte)TeamSelect2.GetSettingInt("custommaps"), Editor.activatedLevels.Count, TeamSelect2.GetSettingBool("wallmode"), TeamSelect2.GetNetworkModifierList(), TeamSelect2.GetSettingBool("clientlevelsenabled")), c);
         }
 
         public void OpenFindGameMenu() => this.OpenFindGameMenu(true);
@@ -469,7 +471,7 @@ namespace DuckGame
             MonoMain.pauseMenu = this._playOnlineGroup;
             if (ModLoader.modHash != "nomods")
                 HUD.AddCornerMessage(HUDCorner.TopLeft, "@PLUG@|LIME|Mods enabled.");
-            new UIMenuActionOpenMenu((UIComponent)this._playOnlineMenu, (UIComponent)this._joinGameMenu).Activate();
+            new UIMenuActionOpenMenu(_playOnlineMenu, _joinGameMenu).Activate();
         }
 
         public void OpenCreateGameMenu() => this.OpenCreateGameMenu(true);
@@ -481,7 +483,7 @@ namespace DuckGame
             MonoMain.pauseMenu = this._playOnlineGroup;
             if (ModLoader.modHash != "nomods")
                 HUD.AddCornerMessage(HUDCorner.TopLeft, "@PLUG@|LIME|Mods enabled.");
-            new UIMenuActionOpenMenu((UIComponent)this._playOnlineMenu, (UIComponent)this._hostGameMenu).Activate();
+            new UIMenuActionOpenMenu(_playOnlineMenu, _hostGameMenu).Activate();
         }
 
         public void OpenNoModsFindGame()
@@ -504,7 +506,7 @@ namespace DuckGame
         private void SetMatchSettingsOpenedFromHostGame()
         {
             TeamSelect2._hostGameEditedMatchSettings = true;
-            this._hostMatchSettingsMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostMatchSettingsMenu, (UIComponent)this._hostSettingsMenu));
+            this._hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
         }
 
         private void BuildHostMatchSettingsMenu()
@@ -512,22 +514,22 @@ namespace DuckGame
             float num1 = 320f;
             float num2 = 180f;
             this._hostMatchSettingsMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            this._hostLevelSelectMenu = (UIMenu)new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, this._hostMatchSettingsMenu);
-            this._playOnlineGroup.Add((UIComponent)this._hostLevelSelectMenu, false);
+            this._hostLevelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, this._hostMatchSettingsMenu);
+            this._playOnlineGroup.Add(_hostLevelSelectMenu, false);
             this._hostModifiersMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
             foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
             {
                 if (unlock.onlineEnabled)
                 {
                     if (unlock.unlocked)
-                        this._hostModifiersMenu.Add((UIComponent)new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding((object)unlock, "enabled")), true);
+                        this._hostModifiersMenu.Add(new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding(unlock, "enabled")), true);
                     else
-                        this._hostModifiersMenu.Add((UIComponent)new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
+                        this._hostModifiersMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
                 }
             }
-            this._hostModifiersMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostModifiersMenu, (UIComponent)this._hostMatchSettingsMenu));
+            this._hostModifiersMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostModifiersMenu, _hostMatchSettingsMenu));
             this._hostModifiersMenu.Close();
-            this._playOnlineGroup.Add((UIComponent)this._hostModifiersMenu, false);
+            this._playOnlineGroup.Add(_hostModifiersMenu, false);
             this._hostMatchSettingsMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
             foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
             {
@@ -536,22 +538,22 @@ namespace DuckGame
                     if (matchSetting.id != "partymode")
                         this._hostMatchSettingsMenu.AddMatchSetting(matchSetting, false);
                     if (matchSetting.id == "wallmode")
-                        this._hostMatchSettingsMenu.Add((UIComponent)new UIText(" ", Color.White), true);
+                        this._hostMatchSettingsMenu.Add(new UIText(" ", Color.White), true);
                 }
             }
-            this._hostMatchSettingsMenu.Add((UIComponent)new UIText(" ", Color.White), true);
+            this._hostMatchSettingsMenu.Add(new UIText(" ", Color.White), true);
             if (!ParentalControls.AreParentalControlsActive())
-                this._hostMatchSettingsMenu.Add((UIComponent)new UICustomLevelMenu((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostMatchSettingsMenu, (UIComponent)this._hostLevelSelectMenu)), true);
-            this._hostMatchSettingsMenu.Add((UIComponent)new UIModifierMenuItem((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostMatchSettingsMenu, (UIComponent)this._hostModifiersMenu)), true);
-            this._hostMatchSettingsMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostMatchSettingsMenu, (UIComponent)this._hostSettingsMenu));
+                this._hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
+            this._hostMatchSettingsMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostModifiersMenu)), true);
+            this._hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
             this._hostMatchSettingsMenu.Close();
-            this._playOnlineGroup.Add((UIComponent)this._hostMatchSettingsMenu, false);
+            this._playOnlineGroup.Add(_hostMatchSettingsMenu, false);
         }
 
         public void OpenHostGameMenuNonMini()
         {
             this.miniHostMenu = false;
-            this._hostGameMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostGameMenu, (UIComponent)this._playOnlineMenu));
+            this._hostGameMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostGameMenu, _playOnlineMenu));
         }
 
         public static void ControllerLayoutsChanged()
@@ -626,69 +628,73 @@ namespace DuckGame
             this.backgroundColor = Color.Black;
             if (Network.isActive && Network.isServer)
             {
-                Network.ContextSwitch((byte)0);
+                Network.ContextSwitch(0);
                 DuckNetwork.ChangeSlotSettings();
-                this.networkIndex = (byte)0;
+                this.networkIndex = 0;
             }
-            this._countdown = new SpriteMap("countdown", 32, 32);
-            this._countdown.center = new Vec2(16f, 16f);
+            this._countdown = new SpriteMap("countdown", 32, 32)
+            {
+                center = new Vec2(16f, 16f)
+            };
             TeamSelect2.showEightPlayerSelected = false;
             List<Profile> defaultProfiles = this.defaultProfiles;
             double xpos1 = 1.0;
             ProfileBox2 profileBox2_1 = new ProfileBox2((float)xpos1, 1f, InputProfile.Get(InputProfile.MPPlayer1), defaultProfiles[0], this, 0);
             this._profiles.Add(profileBox2_1);
-            Level.Add((Thing)profileBox2_1);
+            Level.Add(profileBox2_1);
             ProfileBox2 profileBox2_2 = new ProfileBox2((float)(xpos1 + 178.0), 1f, InputProfile.Get(InputProfile.MPPlayer2), defaultProfiles[1], this, 1);
             this._profiles.Add(profileBox2_2);
-            Level.Add((Thing)profileBox2_2);
+            Level.Add(profileBox2_2);
             ProfileBox2 profileBox2_3 = new ProfileBox2((float)xpos1, 90f, InputProfile.Get(InputProfile.MPPlayer3), defaultProfiles[2], this, 2);
             this._profiles.Add(profileBox2_3);
-            Level.Add((Thing)profileBox2_3);
+            Level.Add(profileBox2_3);
             ProfileBox2 profileBox2_4 = new ProfileBox2((float)(xpos1 + 178.0), 90f, InputProfile.Get(InputProfile.MPPlayer4), defaultProfiles[3], this, 3);
             this._profiles.Add(profileBox2_4);
-            Level.Add((Thing)profileBox2_4);
+            Level.Add(profileBox2_4);
             TeamSelect2.growCamera = false;
             double xpos2 = 357.0;
             float num1 = 0.0f;
             ProfileBox2 profileBox2_5 = new ProfileBox2((float)xpos2, num1 + 1f, InputProfile.Get(InputProfile.MPPlayer5), defaultProfiles[4], this, 4);
             this._profiles.Add(profileBox2_5);
-            Level.Add((Thing)profileBox2_5);
+            Level.Add(profileBox2_5);
             ProfileBox2 profileBox2_6 = new ProfileBox2((float)xpos2, num1 + 90f, InputProfile.Get(InputProfile.MPPlayer6), defaultProfiles[5], this, 5);
             this._profiles.Add(profileBox2_6);
-            Level.Add((Thing)profileBox2_6);
+            Level.Add(profileBox2_6);
             float ypos = 179f;
             ProfileBox2 profileBox2_7 = new ProfileBox2(2f, ypos, InputProfile.Get(InputProfile.MPPlayer7), defaultProfiles[6], this, 6);
             this._profiles.Add(profileBox2_7);
-            Level.Add((Thing)profileBox2_7);
+            Level.Add(profileBox2_7);
             ProfileBox2 profileBox2_8 = new ProfileBox2((float)(357.0 - 1.0), ypos, InputProfile.Get(InputProfile.MPPlayer8), defaultProfiles[7], this, 7);
             this._profiles.Add(profileBox2_8);
-            Level.Add((Thing)profileBox2_8);
-            Level.Add((Thing)new BlankDoor(178f, 179f));
-            Level.Add((Thing)new HostTable(160f, 170f));
+            Level.Add(profileBox2_8);
+            Level.Add(new BlankDoor(178f, 179f));
+            Level.Add(new HostTable(160f, 170f));
             if (Network.isActive)
                 this.PrepareForOnline();
-            this._font = new BitmapFont("biosFont", 8);
-            this._font.scale = new Vec2(1f, 1f);
+            this._font = new BitmapFont("biosFont", 8)
+            {
+                scale = new Vec2(1f, 1f)
+            };
             this._buttons = new SpriteMap("buttons", 14, 14);
             this._buttons.CenterOrigin();
             this._buttons.depth = (Depth)0.9f;
             Music.Play("CharacterSelect");
             this._beam = new TeamBeam(160f, 0.0f);
             this._beam2 = new TeamBeam(338f, 0.0f);
-            Level.Add((Thing)this._beam);
-            Level.Add((Thing)this._beam2);
+            Level.Add(_beam);
+            Level.Add(_beam2);
             TeamSelect2.UpdateModifierStatus();
             this._configGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
             this._multiplayerMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._modifierMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            this._modifierMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._modifierMenu, (UIComponent)this._multiplayerMenu));
-            this._levelSelectMenu = (UIMenu)new LevelSelectCompanionMenu(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, this._multiplayerMenu);
+            this._modifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_modifierMenu, _multiplayerMenu));
+            this._levelSelectMenu = new LevelSelectCompanionMenu(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, this._multiplayerMenu);
             foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
             {
                 if (unlock.unlocked)
-                    this._modifierMenu.Add((UIComponent)new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding((object)unlock, "enabled")), true);
+                    this._modifierMenu.Add(new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding(unlock, "enabled")), true);
                 else
-                    this._modifierMenu.Add((UIComponent)new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
+                    this._modifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
             }
             this._modifierMenu.Close();
             foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
@@ -697,18 +703,18 @@ namespace DuckGame
                 {
                     this._multiplayerMenu.AddMatchSetting(matchSetting, false);
                     if (matchSetting.id == "wallmode")
-                        this._multiplayerMenu.Add((UIComponent)new UIText(" ", Color.White), true);
+                        this._multiplayerMenu.Add(new UIText(" ", Color.White), true);
                 }
             }
-            this._multiplayerMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-            this._multiplayerMenu.Add((UIComponent)new UICustomLevelMenu((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._multiplayerMenu, (UIComponent)this._levelSelectMenu)), true);
-            this._multiplayerMenu.Add((UIComponent)new UIModifierMenuItem((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._multiplayerMenu, (UIComponent)this._modifierMenu)), true);
+            this._multiplayerMenu.Add(new UIText(" ", Color.White), true);
+            this._multiplayerMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_multiplayerMenu, _levelSelectMenu)), true);
+            this._multiplayerMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_multiplayerMenu, _modifierMenu)), true);
             this._multiplayerMenu.Close();
-            this._configGroup.Add((UIComponent)this._multiplayerMenu, false);
-            this._configGroup.Add((UIComponent)this._modifierMenu, false);
-            this._configGroup.Add((UIComponent)this._levelSelectMenu, false);
+            this._configGroup.Add(_multiplayerMenu, false);
+            this._configGroup.Add(_modifierMenu, false);
+            this._configGroup.Add(_levelSelectMenu, false);
             this._configGroup.Close();
-            Level.Add((Thing)this._configGroup);
+            Level.Add(_configGroup);
             this._playOnlineGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
             this._playOnlineMenu = new UIMenu("@PLANET@PLAY ONLINE@PLANET@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._hostGameMenu = new UIMenu("@LWING@CREATE GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -717,79 +723,115 @@ namespace DuckGame
             float num2 = 3f;
             this._playOnlineBumper = new UIMenu("PLAYING ONLINE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
             UIMenu playOnlineBumper1 = this._playOnlineBumper;
-            UIText component1 = new UIText("", Color.White, heightAdd: -3f);
-            component1.scale = new Vec2(0.5f);
-            playOnlineBumper1.Add((UIComponent)component1, true);
+            UIText component1 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper1.Add(component1, true);
             UIMenu playOnlineBumper2 = this._playOnlineBumper;
-            UIText component2 = new UIText("There are many tools of expression", Color.White, heightAdd: -4f);
-            component2.scale = new Vec2(0.5f);
-            playOnlineBumper2.Add((UIComponent)component2, true);
+            UIText component2 = new UIText("There are many tools of expression", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper2.Add(component2, true);
             UIMenu playOnlineBumper3 = this._playOnlineBumper;
-            UIText component3 = new UIText("in Duck Game. Please use them for", Color.White, heightAdd: -4f);
-            component3.scale = new Vec2(0.5f);
-            playOnlineBumper3.Add((UIComponent)component3, true);
+            UIText component3 = new UIText("in Duck Game. Please use them for", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper3.Add(component3, true);
             UIMenu playOnlineBumper4 = this._playOnlineBumper;
-            UIText component4 = new UIText("|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|", Color.White, heightAdd: -4f);
-            component4.scale = new Vec2(0.5f);
-            playOnlineBumper4.Add((UIComponent)component4, true);
+            UIText component4 = new UIText("|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper4.Add(component4, true);
             UIMenu playOnlineBumper5 = this._playOnlineBumper;
-            UIText component5 = new UIText("", Color.White, heightAdd: -3f);
-            component5.scale = new Vec2(0.5f);
-            playOnlineBumper5.Add((UIComponent)component5, true);
+            UIText component5 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper5.Add(component5, true);
             UIMenu playOnlineBumper6 = this._playOnlineBumper;
-            UIText component6 = new UIText("Things every Duck aught to remember:", Color.White, heightAdd: -4f);
-            component6.scale = new Vec2(0.5f);
-            playOnlineBumper6.Add((UIComponent)component6, true);
+            UIText component6 = new UIText("Things every Duck aught to remember:", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper6.Add(component6, true);
             UIMenu playOnlineBumper7 = this._playOnlineBumper;
-            UIText component7 = new UIText("", Color.White, heightAdd: -3f);
-            component7.scale = new Vec2(0.5f);
-            playOnlineBumper7.Add((UIComponent)component7, true);
+            UIText component7 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper7.Add(component7, true);
             UIMenu playOnlineBumper8 = this._playOnlineBumper;
-            UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2));
-            component8.scale = new Vec2(0.5f);
-            playOnlineBumper8.Add((UIComponent)component8, true);
+            UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper8.Add(component8, true);
             UIMenu playOnlineBumper9 = this._playOnlineBumper;
-            UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2));
-            component9.scale = new Vec2(0.5f);
-            playOnlineBumper9.Add((UIComponent)component9, true);
+            UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper9.Add(component9, true);
             UIMenu playOnlineBumper10 = this._playOnlineBumper;
-            UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2));
-            component10.scale = new Vec2(0.5f);
-            playOnlineBumper10.Add((UIComponent)component10, true);
+            UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper10.Add(component10, true);
             UIMenu playOnlineBumper11 = this._playOnlineBumper;
-            UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2));
-            component11.scale = new Vec2(0.5f);
-            playOnlineBumper11.Add((UIComponent)component11, true);
+            UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper11.Add(component11, true);
             UIMenu playOnlineBumper12 = this._playOnlineBumper;
-            UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2));
-            component12.scale = new Vec2(0.5f);
-            playOnlineBumper12.Add((UIComponent)component12, true);
+            UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper12.Add(component12, true);
             UIMenu playOnlineBumper13 = this._playOnlineBumper;
-            UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2));
-            component13.scale = new Vec2(0.5f);
-            playOnlineBumper13.Add((UIComponent)component13, true);
+            UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper13.Add(component13, true);
             UIMenu playOnlineBumper14 = this._playOnlineBumper;
-            UIText component14 = new UIText("", Color.White, heightAdd: -3f);
-            component14.scale = new Vec2(0.5f);
-            playOnlineBumper14.Add((UIComponent)component14, true);
+            UIText component14 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper14.Add(component14, true);
             UIMenu playOnlineBumper15 = this._playOnlineBumper;
-            UIText component15 = new UIText("If anyone is hacking or being unkind, please", Color.White, heightAdd: -4f);
-            component15.scale = new Vec2(0.5f);
-            playOnlineBumper15.Add((UIComponent)component15, true);
+            UIText component15 = new UIText("If anyone is hacking or being unkind, please", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper15.Add(component15, true);
             UIMenu playOnlineBumper16 = this._playOnlineBumper;
-            UIText component16 = new UIText("hover their name in the pause menu", Color.White, heightAdd: -4f);
-            component16.scale = new Vec2(0.5f);
-            playOnlineBumper16.Add((UIComponent)component16, true);
+            UIText component16 = new UIText("hover their name in the pause menu", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper16.Add(component16, true);
             UIMenu playOnlineBumper17 = this._playOnlineBumper;
-            UIText component17 = new UIText("and go 'Mute -> Block'.", Color.White, heightAdd: -4f);
-            component17.scale = new Vec2(0.5f);
-            playOnlineBumper17.Add((UIComponent)component17, true);
+            UIText component17 = new UIText("and go 'Mute -> Block'.", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper17.Add(component17, true);
             UIMenu playOnlineBumper18 = this._playOnlineBumper;
-            UIText component18 = new UIText("", Color.White, heightAdd: -3f);
-            component18.scale = new Vec2(0.5f);
-            playOnlineBumper18.Add((UIComponent)component18, true);
-            this._playOnlineBumper.SetAcceptFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._playOnlineBumper, (UIComponent)this._playOnlineMenu));
-            this._playOnlineBumper.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._playOnlineBumper, (UIComponent)this._playOnlineMenu));
+            UIText component18 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            playOnlineBumper18.Add(component18, true);
+            this._playOnlineBumper.SetAcceptFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
+            this._playOnlineBumper.SetBackFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
             this._browseGamesMenu = new UIServerBrowser(this._playOnlineMenu, "SERVER BROWSER", Layer.HUD.camera.width, Layer.HUD.camera.height, 550f);
             if (Network.available)
             {
@@ -798,25 +840,25 @@ namespace DuckGame
                 this._filterModifierMenu = new UIMenu("@LWING@FILTER MODIFIERS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
             }
             if (Network.available)
-                this._matchmaker = UIMatchmakerMark2.Platform_GetMatchkmaker((UIServerBrowser.LobbyData)null, this._joinGameMenu);
+                this._matchmaker = UIMatchmakerMark2.Platform_GetMatchkmaker(null, this._joinGameMenu);
             if (ModLoader.modHash != "nomods")
             {
                 if (Network.available)
-                    this._playOnlineMenu.Add((UIComponent)new UIMenuItem("FIND GAME", (UIMenuAction)new UIMenuActionCloseMenuCallFunction((UIComponent)this._playOnlineMenu, new UIMenuActionCloseMenuCallFunction.Function(this.OpenNoModsFindGame))), true);
-                this._playOnlineMenu.Add((UIComponent)new UIMenuItem("CREATE GAME", (UIMenuAction)new UIMenuActionCloseMenuCallFunction((UIComponent)this._playOnlineMenu, new UIMenuActionCloseMenuCallFunction.Function(this.OpenNoModsCreateGame))), true);
+                    this._playOnlineMenu.Add(new UIMenuItem("FIND GAME", new UIMenuActionCloseMenuCallFunction(_playOnlineMenu, new UIMenuActionCloseMenuCallFunction.Function(this.OpenNoModsFindGame))), true);
+                this._playOnlineMenu.Add(new UIMenuItem("CREATE GAME", new UIMenuActionCloseMenuCallFunction(_playOnlineMenu, new UIMenuActionCloseMenuCallFunction.Function(this.OpenNoModsCreateGame))), true);
             }
             else
             {
                 if (Network.available)
-                    this._playOnlineMenu.Add((UIComponent)new UIMenuItem("FIND GAME", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._playOnlineMenu, (UIComponent)this._joinGameMenu)), true);
-                this._playOnlineMenu.Add((UIComponent)new UIMenuItem("CREATE GAME", (UIMenuAction)new UIMenuActionOpenMenuCallFunction((UIComponent)this._playOnlineMenu, (UIComponent)this._hostGameMenu, new UIMenuActionOpenMenuCallFunction.Function(this.OpenHostGameMenuNonMini))), true);
+                    this._playOnlineMenu.Add(new UIMenuItem("FIND GAME", new UIMenuActionOpenMenu(_playOnlineMenu, _joinGameMenu)), true);
+                this._playOnlineMenu.Add(new UIMenuItem("CREATE GAME", new UIMenuActionOpenMenuCallFunction(_playOnlineMenu, _hostGameMenu, new UIMenuActionOpenMenuCallFunction.Function(this.OpenHostGameMenuNonMini))), true);
             }
-            this._playOnlineMenu.Add((UIComponent)new UIMenuItem("BROWSE GAMES", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._playOnlineMenu, (UIComponent)this._browseGamesMenu)), true);
-            this._playOnlineMenu.SetBackFunction((UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._playOnlineGroup, new UIMenuActionCloseMenuCallFunction.Function(this.ClosedOnline)));
+            this._playOnlineMenu.Add(new UIMenuItem("BROWSE GAMES", new UIMenuActionOpenMenu(_playOnlineMenu, _browseGamesMenu)), true);
+            this._playOnlineMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(this._playOnlineGroup, new UIMenuActionCloseMenuCallFunction.Function(this.ClosedOnline)));
             this._playOnlineMenu.Close();
-            this._playOnlineGroup.Add((UIComponent)this._playOnlineMenu, false);
+            this._playOnlineGroup.Add(_playOnlineMenu, false);
             this._playOnlineBumper.Close();
-            this._playOnlineGroup.Add((UIComponent)this._playOnlineBumper, false);
+            this._playOnlineGroup.Add(_playOnlineBumper, false);
             string str = "";
             bool flag = false;
             foreach (MatchSetting onlineSetting in TeamSelect2.onlineSettings)
@@ -849,21 +891,21 @@ namespace DuckGame
                     }
                 }
             }
-            this._hostGameMenu.Add((UIComponent)new UIText(" ", Color.White), true);
+            this._hostGameMenu.Add(new UIText(" ", Color.White), true);
             this.BuildHostMatchSettingsMenu();
-            this._hostGameMenu.Add((UIComponent)new UIMenuItem("|DGBLUE|SETTINGS", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostGameMenu, (UIComponent)this._hostSettingsMenu)), true);
-            this._hostSettingsMenu.Add((UIComponent)new UIMenuItem("|DGBLUE|MATCH SETTINGS", (UIMenuAction)new UIMenuActionOpenMenuCallFunction((UIComponent)this._hostSettingsMenu, (UIComponent)this._hostMatchSettingsMenu, new UIMenuActionOpenMenuCallFunction.Function(this.SetMatchSettingsOpenedFromHostGame))), true);
-            this._hostSettingsMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostSettingsMenu, (UIComponent)this._hostGameMenu));
-            this._hostGameMenu.Add((UIComponent)new UIMenuItem("|DGGREEN|CREATE GAME", (UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._playOnlineGroup, new UIMenuActionCloseMenuCallFunction.Function(this.CreateGame))), true);
-            this._hostGameMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._hostGameMenu, (UIComponent)this._playOnlineMenu));
+            this._hostGameMenu.Add(new UIMenuItem("|DGBLUE|SETTINGS", new UIMenuActionOpenMenu(_hostGameMenu, _hostSettingsMenu)), true);
+            this._hostSettingsMenu.Add(new UIMenuItem("|DGBLUE|MATCH SETTINGS", new UIMenuActionOpenMenuCallFunction(_hostSettingsMenu, _hostMatchSettingsMenu, new UIMenuActionOpenMenuCallFunction.Function(this.SetMatchSettingsOpenedFromHostGame))), true);
+            this._hostSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostSettingsMenu, _hostGameMenu));
+            this._hostGameMenu.Add(new UIMenuItem("|DGGREEN|CREATE GAME", new UIMenuActionCloseMenuCallFunction(this._playOnlineGroup, new UIMenuActionCloseMenuCallFunction.Function(this.CreateGame))), true);
+            this._hostGameMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostGameMenu, _playOnlineMenu));
             this._hostGameMenu.Close();
             this._browseGamesMenu.Close();
-            this._playOnlineGroup.Add((UIComponent)this._browseGamesMenu, false);
-            this._playOnlineGroup.Add((UIComponent)this._browseGamesMenu._passwordEntryMenu, false);
-            this._playOnlineGroup.Add((UIComponent)this._browseGamesMenu._portEntryMenu, false);
-            this._playOnlineGroup.Add((UIComponent)this._hostGameMenu, false);
+            this._playOnlineGroup.Add(_browseGamesMenu, false);
+            this._playOnlineGroup.Add(_browseGamesMenu._passwordEntryMenu, false);
+            this._playOnlineGroup.Add(_browseGamesMenu._portEntryMenu, false);
+            this._playOnlineGroup.Add(_hostGameMenu, false);
             this._hostSettingsMenu.Close();
-            this._playOnlineGroup.Add((UIComponent)this._hostSettingsMenu, false);
+            this._playOnlineGroup.Add(_hostSettingsMenu, false);
             if (Network.available)
             {
                 foreach (MatchSetting onlineSetting in TeamSelect2.onlineSettings)
@@ -871,42 +913,42 @@ namespace DuckGame
                     if (!onlineSetting.createOnly && (!(onlineSetting.id == "customlevelsenabled") || !ParentalControls.AreParentalControlsActive()))
                         this._joinGameMenu.AddMatchSetting(onlineSetting, true);
                 }
-                this._joinGameMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                this._joinGameMenu.Add((UIComponent)new UIMenuItemNumber("Ping", field: new FieldBinding(typeof(UIMatchmakerMark2), "searchMode", 0.0f, 2f, 0.1f), valStrings: new List<string>()
+                this._joinGameMenu.Add(new UIText(" ", Color.White), true);
+                this._joinGameMenu.Add(new UIMenuItemNumber("Ping", field: new FieldBinding(typeof(UIMatchmakerMark2), "searchMode", 0.0f, 2f, 0.1f), valStrings: new List<string>()
         {
           "|DGYELLO|PREFER GOOD",
           "|DGGREEN|GOOD PING",
           "|DGREDDD|ANY PING"
         }), true);
-                this._joinGameMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                this._joinGameMenu.Add((UIComponent)new UIMenuItem("|DGGREEN|FIND GAME", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._joinGameMenu, (UIComponent)this._matchmaker)), true);
+                this._joinGameMenu.Add(new UIText(" ", Color.White), true);
+                this._joinGameMenu.Add(new UIMenuItem("|DGGREEN|FIND GAME", new UIMenuActionOpenMenu(_joinGameMenu, _matchmaker)), true);
                 this._joinGameMenu.AssignDefaultSelection();
-                this._joinGameMenu.SetBackFunction((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._joinGameMenu, (UIComponent)this._playOnlineMenu));
+                this._joinGameMenu.SetBackFunction(new UIMenuActionOpenMenu(_joinGameMenu, _playOnlineMenu));
                 this._joinGameMenu.Close();
-                this._playOnlineGroup.Add((UIComponent)this._joinGameMenu, false);
+                this._playOnlineGroup.Add(_joinGameMenu, false);
                 foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
                 {
                     if (!(matchSetting.id == "workshopmaps") || Network.available)
                         this._filtersMenu.AddMatchSetting(matchSetting, true);
                 }
-                this._filtersMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                this._filtersMenu.Add((UIComponent)new UIModifierMenuItem((UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._filtersMenu, (UIComponent)this._filterModifierMenu)), true);
-                this._filtersMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                this._filtersMenu.Add((UIComponent)new UIMenuItem("|DGBLUE|CLEAR FILTERS", (UIMenuAction)new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.ClearFilters))), true);
-                this._filtersMenu.Add((UIComponent)new UIMenuItem("BACK", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._filtersMenu, (UIComponent)this._joinGameMenu), backButton: true), true);
+                this._filtersMenu.Add(new UIText(" ", Color.White), true);
+                this._filtersMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_filtersMenu, _filterModifierMenu)), true);
+                this._filtersMenu.Add(new UIText(" ", Color.White), true);
+                this._filtersMenu.Add(new UIMenuItem("|DGBLUE|CLEAR FILTERS", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(this.ClearFilters))), true);
+                this._filtersMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_filtersMenu, _joinGameMenu), backButton: true), true);
                 this._filtersMenu.Close();
-                this._playOnlineGroup.Add((UIComponent)this._filtersMenu, false);
+                this._playOnlineGroup.Add(_filtersMenu, false);
                 foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
-                    this._filterModifierMenu.Add((UIComponent)new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding((object)unlock, "enabled"), filterBinding: new FieldBinding((object)unlock, "filtered")), true);
-                this._filterModifierMenu.Add((UIComponent)new UIText(" ", Color.White), true);
-                this._filterModifierMenu.Add((UIComponent)new UIMenuItem("BACK", (UIMenuAction)new UIMenuActionOpenMenu((UIComponent)this._filterModifierMenu, (UIComponent)this._filtersMenu), backButton: true), true);
+                    this._filterModifierMenu.Add(new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding(unlock, "enabled"), filterBinding: new FieldBinding(unlock, "filtered")), true);
+                this._filterModifierMenu.Add(new UIText(" ", Color.White), true);
+                this._filterModifierMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_filterModifierMenu, _filtersMenu), backButton: true), true);
                 this._filterModifierMenu.Close();
-                this._playOnlineGroup.Add((UIComponent)this._filterModifierMenu, false);
+                this._playOnlineGroup.Add(_filterModifierMenu, false);
                 this._matchmaker.Close();
-                this._playOnlineGroup.Add((UIComponent)this._matchmaker, false);
+                this._playOnlineGroup.Add(_matchmaker, false);
             }
             this._playOnlineGroup.Close();
-            Level.Add((Thing)this._playOnlineGroup);
+            Level.Add(_playOnlineGroup);
             Graphics.fade = 0.0f;
             Layer l = new Layer("HUD2", -85, new Camera());
             l.camera.width /= 2f;
@@ -916,7 +958,7 @@ namespace DuckGame
             Layer.HUD = l;
             Layer.HUD = hud;
             if (!DuckNetwork.isDedicatedServer && !DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
-                MonoMain.pauseMenu = (UIComponent)new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
             Level.core.endedGameInProgress = false;
         }
 
@@ -990,16 +1032,16 @@ namespace DuckGame
             if (MonoMain.pauseMenu == null && Options.Data.showControllerWarning && Input.mightHavePlaystationController && !TeamSelect2._showedPS4Warning)
             {
                 TeamSelect2._showedPS4Warning = true;
-                MonoMain.pauseMenu = (UIComponent)Options.controllerWarning;
+                MonoMain.pauseMenu = Options.controllerWarning;
                 Options.controllerWarning.Open();
             }
             if (Level.core.endedGameInProgress && !DuckNetwork.isDedicatedServer)
             {
                 this._waitToShow -= Maths.IncFrameTimer();
-                if ((double)this._waitToShow <= 0.0 && MonoMain.pauseMenu == null)
+                if (_waitToShow <= 0.0 && MonoMain.pauseMenu == null)
                 {
                     if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
-                        MonoMain.pauseMenu = (UIComponent)new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                        MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                     Level.core.endedGameInProgress = false;
                 }
             }
@@ -1050,9 +1092,9 @@ namespace DuckGame
             {
                 this.explicitlyCreated = this._createGame.value;
                 if (!Network.available)
-                    TeamSelect2.GetOnlineSetting("type").value = (object)3;
+                    TeamSelect2.GetOnlineSetting("type").value = 3;
                 if ((string)TeamSelect2.GetOnlineSetting("name").value == "")
-                    TeamSelect2.GetOnlineSetting("name").value = (object)TeamSelect2.DefaultGameName();
+                    TeamSelect2.GetOnlineSetting("name").value = TeamSelect2.DefaultGameName();
                 DuckNetwork.ChangeSlotSettings();
                 if (this._hostGame.value)
                     TeamSelect2.FillMatchmakingProfiles();
@@ -1130,7 +1172,7 @@ namespace DuckGame
                 if (this._levelSelector.isClosed)
                 {
                     this._levelSelector.Terminate();
-                    this._levelSelector = (LevelSelect)null;
+                    this._levelSelector = null;
                     Layer.skipDrawing = false;
                     this._beam.active = true;
                     this._beam.visible = true;
@@ -1150,7 +1192,7 @@ namespace DuckGame
                 Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.04f);
                 if ((double)Graphics.fade >= 0.00999999977648258)
                     return;
-                this._levelSelector = new LevelSelect(returnLevel: ((Level)this));
+                this._levelSelector = new LevelSelect(returnLevel: this);
                 this._levelSelector.Initialize();
                 this.openLevelSelect = false;
                 Layer.skipDrawing = true;
@@ -1173,7 +1215,7 @@ namespace DuckGame
                 {
                     if (Network.isActive)
                     {
-                        Level.current = (Level)new DisconnectFromGame();
+                        Level.current = new DisconnectFromGame();
                     }
                     else
                     {
@@ -1183,12 +1225,12 @@ namespace DuckGame
                             if (this._beam != null)
                                 this._beam.RemoveDuck(this._pauseMenuProfile.duck);
                             this._pauseMenuProfile.CloseDoor();
-                            this._pauseMenuProfile = (ProfileBox2)null;
+                            this._pauseMenuProfile = null;
                         }
                     }
                 }
                 if ((double)Graphics.fade <= 0.0 && this._returnToMenu.value)
-                    Level.current = (Level)new TitleScreen();
+                    Level.current = new TitleScreen();
                 if (!Network.isActive)
                     DuckNetwork.core.startCountdown = this._starting;
                 int num2 = 1;
@@ -1215,7 +1257,7 @@ namespace DuckGame
                         DuckNetwork.inGame = true;
                         this.dim = Maths.LerpTowards(this.dim, 0.8f, 0.02f);
                         this._countTime -= 0.006666667f;
-                        if ((double)this._countTime <= 0.0 && Network.isServer && ((double)Graphics.fade <= 0.0 || NetworkDebugger.enabled))
+                        if (_countTime <= 0.0 && Network.isServer && ((double)Graphics.fade <= 0.0 || NetworkDebugger.enabled))
                         {
                             TeamSelect2.UpdateModifierStatus();
                             DevConsole.qwopMode = TeamSelect2.Enabled("QWOPPY", true);
@@ -1240,7 +1282,7 @@ namespace DuckGame
                             if (this._singlePlayer)
                             {
                                 Level.current.Clear();
-                                Level.current = (Level)new ArcadeLevel(Content.GetLevelID("arcade"));
+                                Level.current = new ArcadeLevel(Content.GetLevelID("arcade"));
                             }
                             else
                             {
@@ -1248,11 +1290,11 @@ namespace DuckGame
                                     return;
                                 foreach (Profile profile in DuckNetwork.profiles)
                                 {
-                                    profile.reservedUser = (object)null;
+                                    profile.reservedUser = null;
                                     if ((profile.connection == null || profile.connection.status != ConnectionStatus.Connected) && profile.slotType == SlotType.Reserved)
                                         profile.slotType = SlotType.Closed;
                                 }
-                                Level level = !TeamSelect2.ctfMode ? (Level)new GameLevel(Deathmatch.RandomLevelString()) : (Level)new CTFLevel(Deathmatch.RandomLevelString(folder: "ctf"));
+                                Level level = !TeamSelect2.ctfMode ? new GameLevel(Deathmatch.RandomLevelString()) : (Level)new CTFLevel(Deathmatch.RandomLevelString(folder: "ctf"));
                                 this._spectatorCountdownStop = false;
                                 Main.lastLevel = level.level;
                                 if (Network.isActive && Network.isServer)
@@ -1274,7 +1316,7 @@ namespace DuckGame
                     {
                         DuckNetwork.inGame = false;
                         this.dim = Maths.LerpTowards(this.dim, 0.0f, 0.1f);
-                        if ((double)this.dim < 0.0500000007450581)
+                        if (dim < 0.0500000007450581)
                             this._countTime = 1.5f;
                     }
                     this._matchSetup = true;
@@ -1295,7 +1337,7 @@ namespace DuckGame
                         {
                             if (Network.isActive)
                             {
-                                Send.Message((NetMessage)new NMBeginCountdown());
+                                Send.Message(new NMBeginCountdown());
                                 this._sentDedicatedCountdown = true;
                                 this._spectatorCountdownStop = false;
                             }
@@ -1308,14 +1350,14 @@ namespace DuckGame
                             this._sentDedicatedCountdown = false;
                             this._starting = false;
                             DuckNetwork.core.startCountdown = false;
-                            Send.Message((NetMessage)new NMCancelCountdown());
+                            Send.Message(new NMCancelCountdown());
                         }
                     }
                 }
                 else
                 {
                     this.dim = Maths.LerpTowards(this.dim, 0.0f, 0.1f);
-                    if ((double)this.dim < 0.0500000007450581)
+                    if (dim < 0.0500000007450581)
                         this._countTime = 1.5f;
                     this._matchSetup = false;
                     this._starting = false;
@@ -1335,17 +1377,17 @@ namespace DuckGame
                     }
                     if (DuckNetwork.lobbyType == DuckNetwork.LobbyType.FriendsOnly || DuckNetwork.lobbyType == DuckNetwork.LobbyType.Private)
                         this._afkTimeout = 0.0f;
-                    if ((double)this._afkTimeout > (double)this._afkShowTimeout && (int)this._afkTimeout != this._timeoutBeep)
+                    if (_afkTimeout > (double)this._afkShowTimeout && (int)this._afkTimeout != this._timeoutBeep)
                     {
                         this._timeoutBeep = (int)this._afkTimeout;
                         SFX.Play("cameraBeep");
                     }
-                    if ((double)this._afkTimeout > (double)this._afkMaxTimeout)
-                        Level.current = (Level)new DisconnectFromGame();
+                    if (_afkTimeout > (double)this._afkMaxTimeout)
+                        Level.current = new DisconnectFromGame();
                 }
                 else
                     this._afkTimeout = 0.0f;
-                Graphics.fade = Lerp.Float(Graphics.fade, this._returnToMenu.value || (double)this._countTime <= 0.0 ? 0.0f : 1f, 0.02f);
+                Graphics.fade = Lerp.Float(Graphics.fade, this._returnToMenu.value || _countTime <= 0.0 ? 0.0f : 1f, 0.02f);
                 this._setupFade = Lerp.Float(this._setupFade, !this._matchSetup || this.menuOpen || DuckNetwork.core.startCountdown ? 0.0f : 1f, 0.05f);
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, this._matchSetup ? 0.5f : 1f, 0.05f);
             }
@@ -1371,16 +1413,16 @@ namespace DuckGame
             MonoMain.pauseMenu = this._playOnlineGroup;
         }
 
-        private void HostOnlineMultipleLocalPlayers() => this.HostOnlineMultipleLocalPlayersAfterOnline();
+        //private void HostOnlineMultipleLocalPlayers() => this.HostOnlineMultipleLocalPlayersAfterOnline();
 
-        private void HostOnlineMultipleLocalPlayersAfterOnline()
-        {
-            this._playOnlineGroup.Open();
-            this.miniHostMenu = true;
-            this._hostGameMenu.SetBackFunction((UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._playOnlineGroup, new UIMenuActionCloseMenuCallFunction.Function(TeamSelect2.DefaultSettingsHostWindow)));
-            this._hostGameMenu.Open();
-            MonoMain.pauseMenu = this._playOnlineGroup;
-        }
+        //private void HostOnlineMultipleLocalPlayersAfterOnline()
+        //{
+        //    this._playOnlineGroup.Open();
+        //    this.miniHostMenu = true;
+        //    this._hostGameMenu.SetBackFunction((UIMenuAction)new UIMenuActionCloseMenuCallFunction(this._playOnlineGroup, new UIMenuActionCloseMenuCallFunction.Function(TeamSelect2.DefaultSettingsHostWindow)));
+        //    this._hostGameMenu.Open();
+        //    MonoMain.pauseMenu = this._playOnlineGroup;
+        //}
 
         public static void FillMatchmakingProfiles()
         {
@@ -1391,8 +1433,8 @@ namespace DuckGame
                 if (Level.current is TeamSelect2)
                     (Level.current as TeamSelect2).ClearTeam(index);
             }
-            Profile profile1 = Profiles.active.FirstOrDefault<Profile>((Func<Profile, bool>)(x => x == Profiles.experienceProfile));
-            Profile profile2 = (Profile)null;
+            Profile profile1 = Profiles.active.FirstOrDefault<Profile>(x => x == Profiles.experienceProfile);
+            Profile profile2 = null;
             if (profile1 == null)
             {
                 profile2 = Profiles.active[0];
@@ -1412,7 +1454,7 @@ namespace DuckGame
                     team = profile3.team,
                     persona = profile3.persona,
                     originallySelectedProfile = profile3,
-                    customData = (byte[])null
+                    customData = null
                 };
                 if (profile3 == profile2)
                     matchmakingPlayer.isMaster = true;
@@ -1451,12 +1493,12 @@ namespace DuckGame
                 Layer background = Layer.Background;
                 if (layer == Layer.HUD)
                 {
-                    if ((double)this._afkTimeout >= (double)this._afkShowTimeout)
+                    if (_afkTimeout >= (double)this._afkShowTimeout)
                     {
                         this._timeoutFade = Lerp.Float(this._timeoutFade, 1f, 0.05f);
                         Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(10000f, 10000f), Color.Black * 0.7f * this._timeoutFade, (Depth)0.95f);
                         string text1 = "AFK TIMEOUT IN";
-                        string text2 = ((int)((double)this._afkMaxTimeout - (double)this._afkTimeout)).ToString();
+                        string text2 = ((int)(_afkMaxTimeout - (double)this._afkTimeout)).ToString();
                         Graphics.DrawString(text1, new Vec2((float)((double)layer.width / 2.0 - (double)Graphics.GetStringWidth(text1) / 2.0), (float)((double)layer.height / 2.0 - 8.0)), Color.White * this._timeoutFade, (Depth)0.96f);
                         Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)((double)layer.height / 2.0 + 4.0)), Color.White * this._timeoutFade, (Depth)0.96f, scale: 2f);
                     }
@@ -1500,13 +1542,13 @@ namespace DuckGame
                         if (text3.Length > 30)
                             num1 = 1f / 500f;
                         this._topScroll += num1;
-                        if ((double)this._topScroll > 1.0)
+                        if (_topScroll > 1.0)
                             --this._topScroll;
-                        if ((double)this._topScroll < 0.0)
+                        if (_topScroll < 0.0)
                             ++this._topScroll;
-                        this._littleFont.Draw(text4, new Vec2((float)(1.0 - (double)this._topScroll * ((double)this._littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
+                        this._littleFont.Draw(text4, new Vec2((float)(1.0 - _topScroll * ((double)this._littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
                     }
-                    if ((double)this._setupFade > 0.00999999977648258)
+                    if (_setupFade > 0.00999999977648258)
                     {
                         float num = (float)((double)Layer.HUD.camera.height / 2.0 - 28.0);
                         string str1 = "@MENU2@PLAY ONLINE";
@@ -1571,28 +1613,28 @@ namespace DuckGame
                         }
                         this._countdownScreen.alpha = this._setupFade;
                         this._countdownScreen.depth = (Depth)0.8f;
-                        this._countdownScreen.centery = (float)(this._countdownScreen.height / 2);
+                        this._countdownScreen.centery = this._countdownScreen.height / 2;
                         Graphics.Draw(this._countdownScreen, Layer.HUD.camera.x, Layer.HUD.camera.height / 2f);
                     }
-                    if ((double)this.dim > 0.00999999977648258)
+                    if (dim > 0.00999999977648258)
                     {
                         this._countdownScreen.alpha = 1f;
                         this._countdownScreen.depth = (Depth)0.8f;
-                        this._countdownScreen.centery = (float)(this._countdownScreen.height / 2);
+                        this._countdownScreen.centery = this._countdownScreen.height / 2;
                         Graphics.Draw(this._countdownScreen, Layer.HUD.camera.x, Layer.HUD.camera.height / 2f);
                         this._countdown.alpha = this.dim * 1.2f;
                         this._countdown.depth = (Depth)0.81f;
-                        this._countdown.frame = (int)(float)Math.Ceiling((1.0 - (double)this._countTime) * 2.0);
-                        this._countdown.centery = (float)(this._countdown.height / 2);
+                        this._countdown.frame = (int)(float)Math.Ceiling((1.0 - _countTime) * 2.0);
+                        this._countdown.centery = this._countdown.height / 2;
                         if (DuckNetwork.isDedicatedServer)
                         {
-                            Graphics.Draw((Sprite)this._countdown, 160f, (float)((double)Layer.HUD.camera.height / 2.0 - 8.0));
+                            Graphics.Draw(_countdown, 160f, (float)((double)Layer.HUD.camera.height / 2.0 - 8.0));
                             string text = "@CANCEL@STOP COUNTDOWN";
                             this._font.alpha = this.dim * 1.2f;
                             this._font.Draw(text, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text) / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 + 8.0), Color.White, (Depth)0.81f);
                         }
                         else
-                            Graphics.Draw((Sprite)this._countdown, 160f, (float)((double)Layer.HUD.camera.height / 2.0 - 3.0));
+                            Graphics.Draw(_countdown, 160f, (float)((double)Layer.HUD.camera.height / 2.0 - 3.0));
                     }
                 }
                 base.PostDrawLayer(layer);
@@ -1611,10 +1653,10 @@ namespace DuckGame
 
         public override void OnNetworkConnecting(Profile p)
         {
-            if ((int)p.networkIndex < this._profiles.Count)
+            if (p.networkIndex < this._profiles.Count)
             {
-                this._profiles[(int)p.networkIndex].Despawn();
-                this._profiles[(int)p.networkIndex].PrepareDoor();
+                this._profiles[p.networkIndex].Despawn();
+                this._profiles[p.networkIndex].PrepareDoor();
             }
             else
                 DevConsole.Log(DCSection.Connection, "@error@|DGRED|TeamSelect2.OnNetworkConnecting out of range(" + p.networkIndex.ToString() + "," + p.slotType.ToString() + ")");
@@ -1622,9 +1664,9 @@ namespace DuckGame
 
         public override void OnNetworkDisconnected(Profile p)
         {
-            if (UIMatchmakerMark2.instance != null || (int)p.networkIndex >= this._profiles.Count)
+            if (UIMatchmakerMark2.instance != null || p.networkIndex >= this._profiles.Count)
                 return;
-            this._profiles[(int)p.networkIndex].Despawn();
+            this._profiles[p.networkIndex].Despawn();
         }
 
         public override void OnSessionEnded(DuckNetErrorInfo error)

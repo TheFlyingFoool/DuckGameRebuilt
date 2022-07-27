@@ -16,9 +16,11 @@ namespace DuckGame
         public SawsRight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("movingSpikes", 16, 21);
-            this._sprite.speed = 0.3f;
-            this.graphic = (Sprite)this._sprite;
+            this._sprite = new SpriteMap("movingSpikes", 16, 21)
+            {
+                speed = 0.3f
+            };
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 14f);
             this.collisionOffset = new Vec2(-2f, -6f);
             this.collisionSize = new Vec2(4f, 12f);
@@ -37,7 +39,7 @@ namespace DuckGame
         {
             if (with.destroyed)
                 return;
-            with.Destroy((DestroyType)new DTImpale((Thing)this));
+            with.Destroy(new DTImpale(this));
             with.hSpeed = 3f;
         }
 

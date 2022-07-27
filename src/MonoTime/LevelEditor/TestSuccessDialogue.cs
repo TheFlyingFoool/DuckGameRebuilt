@@ -18,7 +18,7 @@ namespace DuckGame
         private string _caption;
 
         public TestSuccessDialogue()
-          : base((IContextListener)null)
+          : base(null)
         {
         }
 
@@ -68,8 +68,8 @@ namespace DuckGame
             Vec2 vec2_4 = new Vec2(135f, 30f);
             Vec2 vec2_5 = new Vec2(vec2_1.x + 136f, vec2_2.y - 70f) + new Vec2(18f, 28f);
             Vec2 vec2_6 = new Vec2(135f, 30f);
-            this._hoverOk = (double)Mouse.x > (double)vec2_3.x && (double)Mouse.x < (double)vec2_3.x + (double)vec2_4.x && (double)Mouse.y > (double)vec2_3.y && (double)Mouse.y < (double)vec2_3.y + (double)vec2_4.y;
-            this._hoverCancel = (double)Mouse.x > (double)vec2_5.x && (double)Mouse.x < (double)vec2_5.x + (double)vec2_6.x && (double)Mouse.y > (double)vec2_5.y && (double)Mouse.y < (double)vec2_5.y + (double)vec2_6.y;
+            this._hoverOk = (double)Mouse.x > vec2_3.x && (double)Mouse.x < vec2_3.x + (double)vec2_4.x && (double)Mouse.y > vec2_3.y && (double)Mouse.y < vec2_3.y + (double)vec2_4.y;
+            this._hoverCancel = (double)Mouse.x > vec2_5.x && (double)Mouse.x < vec2_5.x + (double)vec2_6.x && (double)Mouse.y > vec2_5.y && (double)Mouse.y < vec2_5.y + (double)vec2_6.y;
             if (this._selectedIndex < 0)
                 this._selectedIndex = 0;
             if (this._selectedIndex > 1)
@@ -119,10 +119,10 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2(135f, 30f);
             Graphics.DrawRect(p1_2, p1_2 + vec2_1, this._hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             string text1 = "PUBLISH!";
-            this._font.Draw(text1, (float)((double)p1_2.x + (double)vec2_1.x / 2.0 - (double)this._font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw(text1, (float)(p1_2.x + vec2_1.x / 2.0 - (double)this._font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
             Graphics.DrawRect(p1_3, p1_3 + vec2_2, this._hoverCancel ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             string text2 = "CANCEL!";
-            this._font.Draw(text2, (float)((double)p1_3.x + (double)vec2_2.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
         }
     }
 }

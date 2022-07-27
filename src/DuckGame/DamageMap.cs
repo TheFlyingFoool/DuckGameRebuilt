@@ -17,8 +17,8 @@ namespace DuckGame
 
         public bool InRange(int x, int y)
         {
-            x = (int)((double)x - (double)this.thing.left);
-            y = (int)((double)y - (double)this.thing.top);
+            x = (int)(x - (double)this.thing.left);
+            y = (int)(y - (double)this.thing.top);
             x += y * 16;
             return x >= 0 && x < 256;
         }
@@ -32,16 +32,16 @@ namespace DuckGame
 
         public bool CheckPoint(int x, int y)
         {
-            x = (int)((double)x - (double)this.thing.left);
-            y = (int)((double)y - (double)this.thing.top);
+            x = (int)(x - (double)this.thing.left);
+            y = (int)(y - (double)this.thing.top);
             x += y * 16;
-            return x < 0 || x >= 256 || this.bytes[x] > (byte)0;
+            return x < 0 || x >= 256 || this.bytes[x] > 0;
         }
 
         public bool CheckPointRelative(int x, int y)
         {
             x += y * 16;
-            return x < 0 || x >= 256 || this.bytes[x] > (byte)0;
+            return x < 0 || x >= 256 || this.bytes[x] > 0;
         }
 
         public bool CheckPoint(float x, float y)
@@ -67,7 +67,7 @@ namespace DuckGame
             {
                 for (int x = 0; x < 16; ++x)
                 {
-                    if ((double)(new Vec2((float)x, (float)y) - point).length <= (double)radius)
+                    if ((double)(new Vec2(x, y) - point).length <= (double)radius)
                         this.SetPoint(x, y, false);
                 }
             }
@@ -76,7 +76,7 @@ namespace DuckGame
         public void Clear()
         {
             for (int index = 0; index < 256; ++index)
-                this.bytes[index] = (byte)1;
+                this.bytes[index] = 1;
         }
     }
 }

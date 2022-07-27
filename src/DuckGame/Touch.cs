@@ -40,8 +40,8 @@ namespace DuckGame
             Vec2 vec2_2 = this.Transform(pCamera);
             if (vec2_2 != new Vec2(-1f, -1f))
             {
-                vec2_2.x = (float)Math.Round((double)vec2_2.x / (double)pCellSize) * pCellSize;
-                vec2_2.y = (float)Math.Round((double)vec2_2.y / (double)pCellSize) * pCellSize;
+                vec2_2.x = (float)Math.Round(vec2_2.x / (double)pCellSize) * pCellSize;
+                vec2_2.y = (float)Math.Round(vec2_2.y / (double)pCellSize) * pCellSize;
             }
             return vec2_2;
         }

@@ -34,7 +34,7 @@ namespace DuckGame
           int pMaxNumber = 2147483647)
           : base(title, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, directional ? 160f : 220f, 60f, directional ? "@WASD@SET @SELECT@ACCEPT" : "@ENTERKEY@ACCEPT @ESCAPEKEY@")
         {
-            this.Add((UIComponent)new UIBox(0.0f, 0.0f, 100f, 16f, isVisible: false), true);
+            this.Add(new UIBox(0.0f, 0.0f, 100f, 16f, isVisible: false), true);
             this._binding = pBinding;
             this._directional = directional;
             this._numeric = pNumeric;
@@ -59,7 +59,7 @@ namespace DuckGame
         {
             Keyboard.repeat = false;
             if (this.wasOpen && this._cancelled)
-                this._binding.value = this._directional ? (object)"" : (object)this._originalValue;
+                this._binding.value = this._directional ? "" : (object)this._originalValue;
             this.wasOpen = false;
             base.OnClose();
         }
@@ -87,7 +87,7 @@ namespace DuckGame
                     }
                     if (Input.Pressed("SELECT"))
                     {
-                        this._binding.value = (object)this.password;
+                        this._binding.value = password;
                         this._cancelled = false;
                         this._backFunction.Activate();
                     }
@@ -130,7 +130,7 @@ namespace DuckGame
                         if (!flag)
                         {
                             UIMenu.globalUILock = false;
-                            this._binding.value = (object)this.password;
+                            this._binding.value = password;
                             this._cancelled = false;
                             this._backFunction.Activate();
                         }
@@ -150,9 +150,9 @@ namespace DuckGame
         public override void Draw()
         {
             if (this._directional)
-                Graphics.DrawPassword(this.password, new Vec2(this.x - (float)(this.password.Length * 8 / 2), this.y - 6f), Color.White, this.depth + 10);
+                Graphics.DrawPassword(this.password, new Vec2(this.x - this.password.Length * 8 / 2, this.y - 6f), Color.White, this.depth + 10);
             else
-                Graphics.DrawString(this.password + ((double)this.blink % 1.0 > 0.5 ? "_" : ""), new Vec2(this.x - (float)(this.password.Length * 8 / 2), this.y - 6f), Color.White, this.depth + 10);
+                Graphics.DrawString(this.password + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(this.x - this.password.Length * 8 / 2, this.y - 6f), Color.White, this.depth + 10);
             base.Draw();
         }
     }

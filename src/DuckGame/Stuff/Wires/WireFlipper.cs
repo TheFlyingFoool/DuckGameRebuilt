@@ -17,7 +17,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("wireFlipper", 16, 16);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
@@ -35,7 +35,7 @@ namespace DuckGame
         public override void Draw()
         {
             bool flipHorizontal = this.flipHorizontal;
-            this._sprite.frame = this.offDir >= (sbyte)0 ? 0 : 1;
+            this._sprite.frame = this.offDir >= 0 ? 0 : 1;
             this.flipHorizontal = false;
             base.Draw();
             this.flipHorizontal = flipHorizontal;

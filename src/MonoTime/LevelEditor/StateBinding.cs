@@ -32,7 +32,7 @@ namespace DuckGame
 
         public GhostPriority priority => this._priority;
 
-        public override string ToString() => this.GetDebugString((object)null);
+        public override string ToString() => this.GetDebugString(null);
 
         public virtual string GetDebugString(object with)
         {
@@ -57,7 +57,7 @@ namespace DuckGame
 
         public virtual object classValue
         {
-            get => this._accessor.getAccessor == null ? (object)null : this._accessor.getAccessor(this._thing);
+            get => this._accessor.getAccessor == null ? null : this._accessor.getAccessor(this._thing);
             set
             {
                 if (this._accessor.setAccessor == null)
@@ -66,14 +66,14 @@ namespace DuckGame
             }
         }
 
-        public virtual T getTyped<T>() => this._accessor.type == typeof(T) ? this._accessor.Get<T>(this._thing) : (T)(object)this.classValue;
+        public virtual T getTyped<T>() => this._accessor.type == typeof(T) ? this._accessor.Get<T>(this._thing) : (T)classValue;
 
         public virtual void setTyped<T>(T value)
         {
             if (this._accessor.type == typeof(T))
                 this._accessor.Set<T>(this._thing, value);
             else
-                this.classValue = (object)value;
+                this.classValue = value;
         }
 
         public virtual byte byteValue
@@ -84,7 +84,7 @@ namespace DuckGame
                 if (this._accessor.type == typeof(byte))
                     this._accessor.Set<byte>(this._thing, value);
                 else
-                    this.classValue = (object)value;
+                    this.classValue = value;
             }
         }
 
@@ -96,7 +96,7 @@ namespace DuckGame
                 if (this._accessor.type == typeof(ushort))
                     this._accessor.Set<ushort>(this._thing, value);
                 else
-                    this.classValue = (object)value;
+                    this.classValue = value;
             }
         }
 
@@ -108,7 +108,7 @@ namespace DuckGame
                 if (this._accessor.type == typeof(int))
                     this._accessor.Set<int>(this._thing, value);
                 else
-                    this.classValue = (object)value;
+                    this.classValue = value;
             }
         }
 
@@ -132,8 +132,8 @@ namespace DuckGame
 
         public bool Compare<T>(T f, out T newVal)
         {
-            newVal = (T)(object)this.classValue;
-            return StateBinding.CompareBase((object)f, (object)newVal);
+            newVal = (T)classValue;
+            return StateBinding.CompareBase(f, newVal);
         }
 
         public virtual int bits => this._bits;
@@ -147,7 +147,7 @@ namespace DuckGame
         public StateBinding(string field, int bits = -1, bool rot = false, bool vel = false)
         {
             this._fieldName = field;
-            this._previousValue = (object)null;
+            this._previousValue = null;
             this._bits = bits;
             this._isRotation = rot;
             this._isVelocity = vel;
@@ -156,7 +156,7 @@ namespace DuckGame
         public StateBinding(bool doLerp, string field, int bits = -1, bool rot = false, bool vel = false)
         {
             this._fieldName = field;
-            this._previousValue = (object)null;
+            this._previousValue = null;
             this._bits = bits;
             this._isRotation = rot;
             this._isVelocity = vel;
@@ -175,7 +175,7 @@ namespace DuckGame
           bool doLerp = false)
         {
             this._fieldName = field;
-            this._previousValue = (object)null;
+            this._previousValue = null;
             this._bits = bits;
             this._isRotation = rot;
             this._isVelocity = vel;
@@ -186,7 +186,7 @@ namespace DuckGame
         public StateBinding(string field, int bits, bool rot)
         {
             this._fieldName = field;
-            this._previousValue = (object)null;
+            this._previousValue = null;
             this._bits = bits;
             this._isRotation = rot;
             this._isVelocity = false;
@@ -202,7 +202,7 @@ namespace DuckGame
 
         public virtual void Connect(Thing t)
         {
-            this._thing = (object)t;
+            this._thing = t;
             this._accessor = Editor.GetAccessorInfo(t.GetType(), this._fieldName);
             if (this._accessor == null)
                 throw new Exception("Could not find accessor for binding.");

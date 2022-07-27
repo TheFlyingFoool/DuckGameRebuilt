@@ -30,7 +30,7 @@ namespace DuckGame
             get => this._zoomInc;
             set
             {
-                if ((double)this._zoomInc == (double)value)
+                if (_zoomInc == (double)value)
                     return;
                 this._zoomInc = value;
                 this._dirty = true;

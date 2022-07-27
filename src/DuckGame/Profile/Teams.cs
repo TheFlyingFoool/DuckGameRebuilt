@@ -45,34 +45,34 @@ namespace DuckGame
 
         public static int numTeams => Teams._core.all.Count;
 
-        public static Team GetTeam(string name) => Teams._core.all.FirstOrDefault<Team>((Func<Team, bool>)(x => x.name == name)) ?? Teams._core.teams[8];
+        public static Team GetTeam(string name) => Teams._core.all.FirstOrDefault<Team>(x => x.name == name) ?? Teams._core.teams[8];
 
         public static int IndexOf(Team t)
         {
             if (Network.isActive && Teams._core.extraTeams.Contains(t))
-                return (int)DuckNetwork.localProfile.customTeamIndexOffset + Teams._core.extraTeams.IndexOf(t);
+                return DuckNetwork.localProfile.customTeamIndexOffset + Teams._core.extraTeams.IndexOf(t);
             return t.owner != null ? t.owner.IndexOfCustomTeam(t) : Teams._core.all.IndexOf(t);
         }
 
         public static Team ParseFromIndex(ushort pIndex)
         {
-            Team fromIndex = (Team)null;
+            Team fromIndex = null;
             try
             {
-                if (pIndex >= (ushort)0)
+                if (pIndex >= 0)
                 {
-                    if ((int)pIndex < Teams.kCustomOffset)
+                    if (pIndex < Teams.kCustomOffset)
                     {
-                        fromIndex = Teams.all[(int)pIndex];
+                        fromIndex = Teams.all[pIndex];
                     }
                     else
                     {
-                        int index = ((int)pIndex - Teams.kCustomOffset) / Teams.kCustomSpread;
+                        int index = (pIndex - Teams.kCustomOffset) / Teams.kCustomSpread;
                         if (index >= 0)
                         {
                             if (index < DuckNetwork.profilesFixedOrder.Count)
                             {
-                                int pIndex1 = ((int)pIndex - Teams.kCustomOffset) % Teams.kCustomSpread;
+                                int pIndex1 = (pIndex - Teams.kCustomOffset) % Teams.kCustomSpread;
                                 fromIndex = DuckNetwork.profilesFixedOrder[index].GetCustomTeam((ushort)pIndex1);
                             }
                         }
@@ -105,7 +105,7 @@ namespace DuckGame
             get
             {
                 List<Team> teamList = new List<Team>();
-                teamList.AddRange((IEnumerable<Team>)Teams.all);
+                teamList.AddRange(all);
                 List<Team> allRandomized = new List<Team>();
                 while (teamList.Count > 0)
                 {
@@ -124,7 +124,7 @@ namespace DuckGame
                 List<Team> active = new List<Team>();
                 foreach (Team team in Teams.all)
                 {
-                    if (team.activeProfiles.Where<Profile>((Func<Profile, bool>)(x => x.slotType != SlotType.Spectator)).Count<Profile>() > 0)
+                    if (team.activeProfiles.Where<Profile>(x => x.slotType != SlotType.Spectator).Count<Profile>() > 0)
                         active.Add(team);
                 }
                 return active;

@@ -151,7 +151,7 @@ namespace DuckGame
                         foreach (string file in DuckFile.GetFiles(allWorkshopItem.path))
                         {
                             string lName = file;
-                            if (lName.EndsWith(".lev") && selector.filters.TrueForAll((Predicate<IFilterLSItems>)(a => a.Filter(lName, LevelLocation.Workshop))))
+                            if (lName.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(lName, LevelLocation.Workshop)))
                                 levelsInside.Add(lName);
                         }
                     }
@@ -161,11 +161,11 @@ namespace DuckGame
             {
                 string path1 = DuckFile.contentDirectory + "Levels/deathmatch/";
                 foreach (string directory in DuckFile.GetDirectories(path1))
-                    levelsInside.AddRange(LSItem.GetLevelsInside(selector, directory).Where<string>((Func<string, bool>)(x => !x.Contains("online") && !x.Contains("holiday"))));
+                    levelsInside.AddRange(LSItem.GetLevelsInside(selector, directory).Where<string>(x => !x.Contains("online") && !x.Contains("holiday")));
                 foreach (string file1 in Content.GetFiles(path1))
                 {
                     string file = file1;
-                    if (!file.Contains("online") && !file.Contains("holiday") && file.EndsWith(".lev") && selector.filters.TrueForAll((Predicate<IFilterLSItems>)(a => a.Filter(file))))
+                    if (!file.Contains("online") && !file.Contains("holiday") && file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
                     {
                         string str = file.Replace('\\', '/');
                         levelsInside.Add(str);
@@ -182,7 +182,7 @@ namespace DuckGame
                     foreach (string level in levelPlaylist.levels)
                     {
                         string lName = level;
-                        if (selector.filters.TrueForAll((Predicate<IFilterLSItems>)(a => a.Filter(lName))))
+                        if (selector.filters.TrueForAll(a => a.Filter(lName)))
                             levelsInside.Add(lName);
                     }
                 }
@@ -190,11 +190,11 @@ namespace DuckGame
             else
             {
                 foreach (string directory in DuckFile.GetDirectories(path))
-                    levelsInside.AddRange((IEnumerable<string>)LSItem.GetLevelsInside(selector, directory));
+                    levelsInside.AddRange(LSItem.GetLevelsInside(selector, directory));
                 foreach (string file2 in Content.GetFiles(path))
                 {
                     string file = file2;
-                    if (file.EndsWith(".lev") && selector.filters.TrueForAll((Predicate<IFilterLSItems>)(a => a.Filter(file))))
+                    if (file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
                     {
                         string str = file.Replace('\\', '/');
                         levelsInside.Add(str);
@@ -217,7 +217,7 @@ namespace DuckGame
             if (this._selected)
             {
                 this._icons.frame = 3;
-                Graphics.Draw((Sprite)this._icons, x - 8f, this.y);
+                Graphics.Draw(_icons, x - 8f, this.y);
             }
             string text = this._name;
             if (text.Length > 15)
@@ -225,7 +225,7 @@ namespace DuckGame
             if (this._itemType != LSItemType.UpFolder)
             {
                 this._icons.frame = this._partiallyEnabled ? 4 : (this._enabled ? 1 : 0);
-                Graphics.Draw((Sprite)this._icons, x, this.y);
+                Graphics.Draw(_icons, x, this.y);
                 x += 10f;
             }
             bool flag1 = false;
@@ -243,13 +243,13 @@ namespace DuckGame
                     this._icons.frame = 7;
                     flag1 = true;
                 }
-                Graphics.Draw((Sprite)this._icons, x, this.y);
+                Graphics.Draw(_icons, x, this.y);
                 x += 10f;
             }
             if (this._itemType == LSItemType.Playlist)
             {
                 this._icons.frame = 5;
-                Graphics.Draw((Sprite)this._icons, x, this.y);
+                Graphics.Draw(_icons, x, this.y);
                 x += 10f;
                 flag1 = true;
             }

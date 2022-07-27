@@ -13,20 +13,20 @@ namespace DuckGame
         {
             get
             {
-                this._value = (ushort)0;
+                this._value = 0;
                 Banana thing = this._thing as Banana;
                 if (thing._pin)
-                    this._value |= (ushort)2;
+                    this._value |= 2;
                 if (thing._thrown)
-                    this._value |= (ushort)1;
+                    this._value |= 1;
                 return this._value;
             }
             set
             {
                 this._value = value;
                 Banana thing = this._thing as Banana;
-                thing._pin = ((uint)this._value & 2U) > 0U;
-                thing._thrown = ((uint)this._value & 1U) > 0U;
+                thing._pin = (_value & 2U) > 0U;
+                thing._thrown = (_value & 1U) > 0U;
             }
         }
 

@@ -19,7 +19,7 @@ namespace DuckGame
             List<DXMLAttribute> dxmlAttributeList = new List<DXMLAttribute>();
             foreach (T obj in source)
             {
-                DXMLNode dxmlNode = (DXMLNode)obj;
+                DXMLNode dxmlNode = obj;
                 foreach (DXMLAttribute attribute in dxmlNode.Attributes())
                 {
                     if (attribute.Name == name)
@@ -28,7 +28,7 @@ namespace DuckGame
                 IEnumerable<DXMLAttribute> collection = dxmlNode.Elements().Attributes<DXMLNode>(name);
                 dxmlAttributeList.AddRange(collection);
             }
-            return (IEnumerable<DXMLAttribute>)dxmlAttributeList;
+            return dxmlAttributeList;
         }
 
         public static IEnumerable<DXMLNode> Elements<T>(this IEnumerable<T> source) where T : DXMLNode
@@ -36,12 +36,12 @@ namespace DuckGame
             List<DXMLNode> dxmlNodeList = new List<DXMLNode>();
             foreach (T obj in source)
             {
-                DXMLNode dxmlNode = (DXMLNode)obj;
+                DXMLNode dxmlNode = obj;
                 dxmlNodeList.Add(dxmlNode);
                 IEnumerable<DXMLNode> collection = dxmlNode.Elements().Elements<DXMLNode>();
                 dxmlNodeList.AddRange(collection);
             }
-            return (IEnumerable<DXMLNode>)dxmlNodeList;
+            return dxmlNodeList;
         }
 
         public static IEnumerable<DXMLNode> Elements<T>(
@@ -52,13 +52,13 @@ namespace DuckGame
             List<DXMLNode> dxmlNodeList = new List<DXMLNode>();
             foreach (T obj in source)
             {
-                DXMLNode dxmlNode = (DXMLNode)obj;
+                DXMLNode dxmlNode = obj;
                 if (dxmlNode.Name == name)
                     dxmlNodeList.Add(dxmlNode);
                 IEnumerable<DXMLNode> collection = dxmlNode.Elements().Elements<DXMLNode>(name);
                 dxmlNodeList.AddRange(collection);
             }
-            return (IEnumerable<DXMLNode>)dxmlNodeList;
+            return dxmlNodeList;
         }
     }
 }

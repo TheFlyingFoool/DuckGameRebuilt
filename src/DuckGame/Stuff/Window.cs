@@ -35,7 +35,7 @@ namespace DuckGame
         public bool doShake;
         protected WindowFrame _frame;
         public EditorProperty<int> windowHeight;
-        public EditorProperty<int> tint = new EditorProperty<int>(0, max: ((float)(Window.windowColors.Count - 1)), increment: 1f);
+        public EditorProperty<int> tint = new EditorProperty<int>(0, max: Window.windowColors.Count - 1, increment: 1f);
         public EditorProperty<bool> valid;
         public EditorProperty<bool> bars = new EditorProperty<bool>(false);
         public static List<Color> windowColors = new List<Color>()
@@ -69,8 +69,8 @@ namespace DuckGame
                 this.position = value;
                 if (this._frame != null)
                     this._frame.position = this.position;
-                Level.current.things.quadTree.Remove((Thing)this);
-                Level.current.things.quadTree.Add((Thing)this);
+                Level.current.things.quadTree.Remove(this);
+                Level.current.things.quadTree.Add(this);
             }
         }
 
@@ -89,7 +89,7 @@ namespace DuckGame
 
         public virtual void UpdateHeight()
         {
-            float num = (float)this.windowHeight.value * 16f;
+            float num = windowHeight.value * 16f;
             this.center = new Vec2(3f, 0.0f);
             if (this.floor)
             {
@@ -113,14 +113,16 @@ namespace DuckGame
         public Window(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.windowHeight = new EditorProperty<int>(2, (Thing)this, 1f, 16f, 1f);
-            this.valid = new EditorProperty<bool>(false, (Thing)this);
+            this.windowHeight = new EditorProperty<int>(2, this, 1f, 16f, 1f);
+            this.valid = new EditorProperty<bool>(false, this);
             this._sprite = new Sprite("window32", 6f, 1f);
             this._barSprite = new Sprite("windowBars", 8f, 1f);
             this._borderSprite = new Sprite("window32border");
             this._editorIcon = new Sprite("windowIconVertical");
-            this.sequence = new SequenceItem((Thing)this);
-            this.sequence.type = SequenceItemType.Goody;
+            this.sequence = new SequenceItem(this)
+            {
+                type = SequenceItemType.Goody
+            };
             this.physicsMaterial = PhysicsMaterial.Glass;
             this.center = new Vec2(3f, 24f);
             this.collisionSize = new Vec2(6f, 32f);
@@ -142,7 +144,7 @@ namespace DuckGame
             if (!this.floor && !this.noframe)
             {
                 this._frame = new WindowFrame(this.x, this.y, this.floor);
-                Level.Add((Thing)this._frame);
+                Level.Add(_frame);
             }
             this.UpdateHeight();
         }
@@ -154,15 +156,17 @@ namespace DuckGame
                 this._wrecked = true;
                 for (int index = 0; index < 8; ++index)
                 {
-                    GlassParticle glassParticle = new GlassParticle(this.x - 4f + Rando.Float(8f), this.y - 16f + Rando.Float(32f), Vec2.Zero, this.tint.value);
-                    glassParticle.hSpeed = ((double)Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f);
-                    glassParticle.vSpeed = -Rando.Float(1f);
-                    Level.Add((Thing)glassParticle);
+                    GlassParticle glassParticle = new GlassParticle(this.x - 4f + Rando.Float(8f), this.y - 16f + Rando.Float(32f), Vec2.Zero, this.tint.value)
+                    {
+                        hSpeed = ((double)Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f),
+                        vSpeed = -Rando.Float(1f)
+                    };
+                    Level.Add(glassParticle);
                 }
                 if (this is FloorWindow)
                 {
                     for (int index = 0; index < 8; ++index)
-                        Level.Add((Thing)new GlassDebris(false, this.left + (float)(index * 4), this.y, -Rando.Float(2f), -Rando.Float(2f), 1));
+                        Level.Add(new GlassDebris(false, this.left + index * 4, this.y, -Rando.Float(2f), -Rando.Float(2f), 1));
                     foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(-2f, -3f), this.topRight + new Vec2(2f, -3f)))
                     {
                         physicsObject._sleeping = false;
@@ -172,14 +176,14 @@ namespace DuckGame
                 else
                 {
                     for (int index = 0; index < 8; ++index)
-                        Level.Add((Thing)new GlassDebris(false, this.x, this.top + (float)(index * 4), -Rando.Float(2f), -Rando.Float(2f), 1, this.tint.value));
+                        Level.Add(new GlassDebris(false, this.x, this.top + index * 4, -Rando.Float(2f), -Rando.Float(2f), 1, this.tint.value));
                 }
                 SFX.Play("glassBreak");
             }
             if (!this.floor && !this._wrecked)
             {
-                Level.Remove((Thing)this._frame);
-                this._frame = (WindowFrame)null;
+                Level.Remove(_frame);
+                this._frame = null;
             }
             base.Terminate();
         }
@@ -187,23 +191,23 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             if (!this._hasGlass)
                 return base.Hit(bullet, hitPos);
             this._enter = hitPos + bullet.travelDirNormalized;
-            if ((double)this._enter.x < (double)this.x && (double)this._enter.x < (double)this.left + 2.0)
+            if (_enter.x < (double)this.x && _enter.x < (double)this.left + 2.0)
                 this._enter.x = this.left;
-            else if ((double)this._enter.x > (double)this.x && (double)this._enter.x > (double)this.right - 2.0)
+            else if (_enter.x > (double)this.x && _enter.x > (double)this.right - 2.0)
                 this._enter.x = this.right;
-            if ((double)this._enter.y < (double)this.y && (double)this._enter.y < (double)this.top + 2.0)
+            if (_enter.y < (double)this.y && _enter.y < (double)this.top + 2.0)
                 this._enter.y = this.top;
-            else if ((double)this._enter.y > (double)this.y && (double)this._enter.y > (double)this.bottom - 2.0)
+            else if (_enter.y > (double)this.y && _enter.y > (double)this.bottom - 2.0)
                 this._enter.y = this.bottom;
-            if ((double)this.hitPoints <= 0.0)
+            if (hitPoints <= 0.0)
                 return false;
             hitPos -= bullet.travelDirNormalized;
-            for (int index = 0; (double)index < 1.0 + (double)this.damageMultiplier / 2.0; ++index)
-                Level.Add((Thing)new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, this.tint.value));
+            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+                Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, this.tint.value));
             SFX.Play("glassHit", 0.5f);
             if (this.isServerForObject && bullet.isLocal)
             {
@@ -219,18 +223,18 @@ namespace DuckGame
                 return;
             this._hits.Add(this._enter);
             Vec2 vec2 = exitPos - bullet.travelDirNormalized;
-            if ((double)vec2.x < (double)this.x && (double)vec2.x < (double)this.left + 2.0)
+            if (vec2.x < (double)this.x && vec2.x < (double)this.left + 2.0)
                 vec2.x = this.left;
-            else if ((double)vec2.x > (double)this.x && (double)vec2.x > (double)this.right - 2.0)
+            else if (vec2.x > (double)this.x && vec2.x > (double)this.right - 2.0)
                 vec2.x = this.right;
-            if ((double)vec2.y < (double)this.y && (double)vec2.y < (double)this.top + 2.0)
+            if (vec2.y < (double)this.y && vec2.y < (double)this.top + 2.0)
                 vec2.y = this.top;
-            else if ((double)vec2.y > (double)this.y && (double)vec2.y > (double)this.bottom - 2.0)
+            else if (vec2.y > (double)this.y && vec2.y > (double)this.bottom - 2.0)
                 vec2.y = this.bottom;
             this._hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; (double)index < 1.0 + (double)this.damageMultiplier / 2.0; ++index)
-                Level.Add((Thing)new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, this.tint.value));
+            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+                Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, this.tint.value));
         }
 
         public void Shake()
@@ -242,12 +246,12 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            with.Fondle((Thing)this);
+            with.Fondle(this);
             if (this.floor && (double)with.top > (double)this.top && (double)this.CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
             {
                 if (with is Duck duck)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
-                this.Destroy((DestroyType)new DTImpact((Thing)with));
+                this.Destroy(new DTImpact(with));
             }
             else
             {
@@ -255,8 +259,8 @@ namespace DuckGame
                 if (!this.destroyed && (double)num > 1.5)
                 {
                     ++this.shakeTimes;
-                    if (this.isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (double)(with as PhysicsObject).gravMultiplier < 0.100000001490116)
-                        this.Destroy((DestroyType)new DTImpact((Thing)with));
+                    if (this.isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
+                        this.Destroy(new DTImpact(with));
                 }
                 if (!this.destroyed || !(with is Duck duck))
                     return;
@@ -271,7 +275,7 @@ namespace DuckGame
             if (this.bars.value)
                 this._hasGlass = false;
             else
-                Level.Remove((Thing)this);
+                Level.Remove(this);
             if (this.sequence != null && this.sequence.isValid)
             {
                 this.sequence.Finished();
@@ -284,11 +288,11 @@ namespace DuckGame
         public override void Update()
         {
             this._shake.Update();
-            this.breakForce = (float)(6.0 * ((double)this.hitPoints / (double)this.maxHealth));
-            if ((double)this.hitPoints <= 0.0)
-                this.Destroy((DestroyType)new DTImpact((Thing)null));
+            this.breakForce = (float)(6.0 * (hitPoints / (double)this.maxHealth));
+            if (hitPoints <= 0.0)
+                this.Destroy(new DTImpact(null));
             base.Update();
-            if ((double)this.damageMultiplier > 1.0)
+            if (damageMultiplier > 1.0)
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
@@ -304,13 +308,13 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 zero = Vec2.Zero;
-            float num1 = (float)((double)(float)this._shake * (double)this._shakeVal * 0.800000011920929);
+            float num1 = (float)((double)(float)this._shake * _shakeVal * 0.800000011920929);
             if (this.floor)
                 zero.y = num1;
             else
                 zero.x = num1;
-            this.position = this.position + zero;
-            float num2 = (float)this.windowHeight.value * 16f;
+            this.position += zero;
+            float num2 = windowHeight.value * 16f;
             this._sprite.depth = this.depth;
             this._borderSprite.depth = this.depth;
             this._borderSprite.angle = this._sprite.angle;
@@ -338,11 +342,11 @@ namespace DuckGame
                 {
                     if (index + 1 > this._hits.Count)
                         return;
-                    Color col = new Color((byte)((double)windowColor.r * 0.5), (byte)((double)windowColor.g * 0.5), (byte)((double)windowColor.b * 0.800000011920929), (byte)178);
+                    Color col = new Color((byte)(windowColor.r * 0.5), (byte)(windowColor.g * 0.5), (byte)(windowColor.b * 0.800000011920929), (byte)178);
                     Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col);
                 }
             }
-            this.position = this.position - zero;
+            this.position -= zero;
             if (this.floor)
             {
                 if (this.bars.value)

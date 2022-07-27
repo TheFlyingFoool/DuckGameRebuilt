@@ -13,9 +13,9 @@ namespace DuckGame
     {
         public float scaleFactor;
 
-        public override int width => this._base == null ? -1 : (int)((double)this._base.Width * (double)this.scaleFactor);
+        public override int width => this._base == null ? -1 : (int)(_base.Width * (double)this.scaleFactor);
 
-        public override int height => this._base == null ? -1 : (int)((double)this._base.Height * (double)this.scaleFactor);
+        public override int height => this._base == null ? -1 : (int)(_base.Height * (double)this.scaleFactor);
 
         public BigBoyTex2D(Texture2D tex, string texName, short curTexIndex = 0)
           : base(tex, texName, curTexIndex)

@@ -40,8 +40,10 @@ namespace System.Collections.Concurrent
 
         public void Push(T item)
         {
-            ConcurrentStack<T>.Node node = new ConcurrentStack<T>.Node();
-            node.Value = item;
+            ConcurrentStack<T>.Node node = new ConcurrentStack<T>.Node
+            {
+                Value = item
+            };
             do
             {
                 node.Next = this.head;
@@ -54,13 +56,15 @@ namespace System.Collections.Concurrent
 
         public void PushRange(T[] items, int startIndex, int count)
         {
-            ConcurrentStack<T>.Node node1 = (ConcurrentStack<T>.Node)null;
-            ConcurrentStack<T>.Node node2 = (ConcurrentStack<T>.Node)null;
+            ConcurrentStack<T>.Node node1 = null;
+            ConcurrentStack<T>.Node node2 = null;
             for (int index = startIndex; index < count; ++index)
             {
-                ConcurrentStack<T>.Node node3 = new ConcurrentStack<T>.Node();
-                node3.Value = items[index];
-                node3.Next = node1;
+                ConcurrentStack<T>.Node node3 = new ConcurrentStack<T>.Node
+                {
+                    Value = items[index],
+                    Next = node1
+                };
                 node1 = node3;
                 if (node2 == null)
                     node2 = node3;
@@ -135,10 +139,10 @@ namespace System.Collections.Concurrent
         public void Clear()
         {
             this.count = 0;
-            this.head = (ConcurrentStack<T>.Node)null;
+            this.head = null;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)this.InternalGetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.InternalGetEnumerator();
 
         public IEnumerator<T> GetEnumerator() => this.InternalGetEnumerator();
 

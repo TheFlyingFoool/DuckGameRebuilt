@@ -31,7 +31,7 @@ namespace DuckGame
             set
             {
                 this._profileNumber = value;
-                this.duckProfile = DuckNetwork.profiles[(int)this._profileNumber];
+                this.duckProfile = DuckNetwork.profiles[_profileNumber];
                 if (this.duckProfile == null || this.duckProfile.connection != DuckNetwork.localConnection)
                     return;
                 this.connection = DuckNetwork.localConnection;
@@ -74,12 +74,12 @@ namespace DuckGame
         public override void Update()
         {
             if (this.duckProfile != null && this.duckProfile.connection == DuckNetwork.localConnection)
-                Thing.Fondle((Thing)this, DuckNetwork.localConnection);
+                Thing.Fondle(this, DuckNetwork.localConnection);
             if (this.isServerForObject && this.inputProfile != null)
             {
                 if (!Network.isServer)
                     this.inputProfile.UpdateTriggerStates();
-                if ((int)this.prevState != (int)this.inputProfile.state)
+                if (prevState != inputProfile.state)
                 {
                     NetIndex8 authority = this.authority;
                     this.authority = ++authority;
@@ -87,7 +87,7 @@ namespace DuckGame
                 }
                 this.prevState = this.inputProfile.state;
             }
-            RegisteredVote vote = Vote.GetVote(DuckNetwork.profiles[(int)this._profileNumber]);
+            RegisteredVote vote = Vote.GetVote(DuckNetwork.profiles[_profileNumber]);
             if (vote != null)
             {
                 vote.leftStick = this.leftStick;
@@ -106,7 +106,7 @@ namespace DuckGame
                         }
                         slot.ai._manualQuack = this.inputProfile;
                         slot.duck.manualQuackPitch = true;
-                        slot.duck.quackPitch = (byte)((double)this.leftTrigger * (double)byte.MaxValue);
+                        slot.duck.quackPitch = (byte)((double)this.leftTrigger * byte.MaxValue);
                     }
                 }
             }

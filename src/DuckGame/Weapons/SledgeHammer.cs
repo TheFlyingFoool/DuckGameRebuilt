@@ -35,7 +35,7 @@ namespace DuckGame
           : base(xval, yval)
         {
             this.ammo = 4;
-            this._ammoType = (AmmoType)new ATLaser();
+            this._ammoType = new ATLaser();
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.8f;
             this._type = "gun";
@@ -45,7 +45,7 @@ namespace DuckGame
             this._sledgeSwing.currentAnimation = "swing";
             this._sledgeSwing.speed = 0.0f;
             this._sledgeSwing.center = new Vec2(16f, 16f);
-            this.graphic = (Sprite)this._sprite;
+            this.graphic = _sprite;
             this.center = new Vec2(16f, 14f);
             this.collisionOffset = new Vec2(-2f, 0.0f);
             this.collisionSize = new Vec2(4f, 18f);
@@ -67,7 +67,7 @@ namespace DuckGame
             if (!(with is IPlatform))
                 return;
             for (int index = 0; index < 4; ++index)
-                Level.Add((Thing)Spark.New(this.barrelPosition.x + Rando.Float(-6f, 6f), this.barrelPosition.y + Rando.Float(-3f, 3f), -MaterialThing.ImpactVector(from)));
+                Level.Add(Spark.New(this.barrelPosition.x + Rando.Float(-6f, 6f), this.barrelPosition.y + Rando.Float(-3f, 3f), -MaterialThing.ImpactVector(from)));
         }
 
         public override void CheckIfHoldObstructed()
@@ -97,7 +97,7 @@ namespace DuckGame
             if (this._lastOwner != null && this.owner == null)
             {
                 this._lastOwner.frictionMod = 0.0f;
-                this._lastOwner = (PhysicsObject)null;
+                this._lastOwner = null;
                 this._swing = 0.0f;
                 this._swingVelocity = 0.0f;
             }
@@ -122,7 +122,7 @@ namespace DuckGame
             }
             this.collisionOffset = new Vec2(-2f, 0.0f);
             this.collisionSize = new Vec2(4f, 18f);
-            if ((double)this._swing > 0.0)
+            if (_swing > 0.0)
             {
                 this.collisionOffset = new Vec2(-9999f, 0.0f);
                 this.collisionSize = new Vec2(4f, 18f);
@@ -134,9 +134,9 @@ namespace DuckGame
                 this._swing += this._swingVelocity;
                 float num1 = this._swing - this._swingLast;
                 this._swingLast = this._swing;
-                if ((double)this._swing > 1.0)
+                if (_swing > 1.0)
                     this._swing = 1f;
-                if ((double)this._swing < 0.0)
+                if (_swing < 0.0)
                     this._swing = 0.0f;
                 this._sprite.flipH = false;
                 this._sprite.flipV = false;
@@ -154,46 +154,46 @@ namespace DuckGame
                         this.weight = 5.1f;
                     float num3 = Math.Abs(owner.hSpeed - this._hPull);
                     owner.frictionMod = 0.0f;
-                    if ((double)owner.hSpeed > 0.0 && (double)this._hPull > (double)owner.hSpeed)
+                    if ((double)owner.hSpeed > 0.0 && _hPull > (double)owner.hSpeed)
                         owner.frictionMod = (float)(-(double)num3 * 1.79999995231628);
-                    if ((double)owner.hSpeed < 0.0 && (double)this._hPull < (double)owner.hSpeed)
+                    if ((double)owner.hSpeed < 0.0 && _hPull < (double)owner.hSpeed)
                         owner.frictionMod = (float)(-(double)num3 * 1.79999995231628);
-                    this._lastDir = (int)owner.offDir;
+                    this._lastDir = owner.offDir;
                     this._lastSpeed = hSpeed;
-                    if ((double)this._swing != 0.0 && (double)num1 > 0.0)
+                    if (_swing != 0.0 && (double)num1 > 0.0)
                     {
-                        owner.hSpeed += (float)owner.offDir * (num1 * 3f) * this.weightMultiplier;
+                        owner.hSpeed += owner.offDir * (num1 * 3f) * this.weightMultiplier;
                         owner.vSpeed -= num1 * 2f * this.weightMultiplier;
                     }
                 }
             }
-            if ((double)this._sparkWait > 0.0)
+            if (_sparkWait > 0.0)
                 this._sparkWait -= 0.1f;
             else
                 this._sparkWait = 0.0f;
-            if (owner != null && this.held && (double)this._sparkWait == 0.0 && (double)this._swing == 0.0 && owner.Held((Holdable)this, true))
+            if (owner != null && this.held && _sparkWait == 0.0 && _swing == 0.0 && owner.Held(this, true))
             {
-                if (owner.grounded && owner.offDir > (sbyte)0 && (double)owner.hSpeed > 1.0)
+                if (owner.grounded && owner.offDir > 0 && (double)owner.hSpeed > 1.0)
                 {
                     this._sparkWait = 0.25f;
-                    Level.Add((Thing)Spark.New(this.x - 22f, this.y + 6f, new Vec2(0.0f, 0.5f)));
+                    Level.Add(Spark.New(this.x - 22f, this.y + 6f, new Vec2(0.0f, 0.5f)));
                 }
-                else if (owner.grounded && owner.offDir < (sbyte)0 && (double)owner.hSpeed < -1.0)
+                else if (owner.grounded && owner.offDir < 0 && (double)owner.hSpeed < -1.0)
                 {
                     this._sparkWait = 0.25f;
-                    Level.Add((Thing)Spark.New(this.x + 22f, this.y + 6f, new Vec2(0.0f, 0.5f)));
+                    Level.Add(Spark.New(this.x + 22f, this.y + 6f, new Vec2(0.0f, 0.5f)));
                 }
             }
-            if ((double)this._swing < 0.5)
+            if (_swing < 0.5)
             {
                 float num = this._swing * 2f;
                 this._sprite.imageIndex = (int)((double)num * 10.0);
                 this._sprite.angle = (float)(1.20000004768372 - (double)num * 1.5);
                 this._sprite.yscale = (float)(1.0 - (double)num * 0.100000001490116);
             }
-            else if ((double)this._swing >= 0.5)
+            else if (_swing >= 0.5)
             {
-                float num = (float)(((double)this._swing - 0.5) * 2.0);
+                float num = (float)((_swing - 0.5) * 2.0);
                 this._sprite.imageIndex = 10 - (int)((double)num * 10.0);
                 this._sprite.angle = (float)(-0.300000011920929 - (double)num * 1.5);
                 this._sprite.yscale = (float)(1.0 - (1.0 - (double)num) * 0.100000001490116);
@@ -202,12 +202,12 @@ namespace DuckGame
                 {
                     this._swung = true;
                     if (this.duck != null && this.isServerForObject)
-                        Level.Add((Thing)new ForceWave(this.x + (float)this.offDir * 4f + this.owner.hSpeed, this.y + 8f, (int)this.offDir, 0.15f, 4f + Math.Abs(this.owner.hSpeed), this.owner.vSpeed, this.duck));
+                        Level.Add(new ForceWave(this.x + offDir * 4f + this.owner.hSpeed, this.y + 8f, offDir, 0.15f, 4f + Math.Abs(this.owner.hSpeed), this.owner.vSpeed, this.duck));
                 }
             }
-            if ((double)this._swing == 1.0)
+            if (_swing == 1.0)
                 this._pressed = false;
-            if ((double)this._swing == 1.0 && !this._pressed && (double)this._fullSwing > 1.0)
+            if (_swing == 1.0 && !this._pressed && _fullSwing > 1.0)
             {
                 this._swingForce = -0.08f;
                 this._fullSwing = 0.0f;
@@ -217,7 +217,7 @@ namespace DuckGame
             this._lastOwner = this.owner as PhysicsObject;
             if (this.duck != null && this.held)
             {
-                if ((this.duck.Held((Holdable)this, true) ? this.duck.action : this.triggerAction) && !this._held && (double)this._swing == 0.0)
+                if ((this.duck.Held(this, true) ? this.duck.action : this.triggerAction) && !this._held && _swing == 0.0)
                 {
                     RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));
                     this._fullSwing = 0.0f;
@@ -236,9 +236,9 @@ namespace DuckGame
                     this._held = false;
                 }
             }
-            this.handOffset = new Vec2(this._swing * 3f, (float)(0.0 - (double)this._swing * 4.0));
+            this.handOffset = new Vec2(this._swing * 3f, (float)(0.0 - _swing * 4.0));
             this.handAngle = (float)(1.39999997615814 + ((double)this._sprite.angle * 0.5 - 1.0));
-            if (owner != null && owner.offDir < (sbyte)0)
+            if (owner != null && owner.offDir < 0)
             {
                 this._sprite.angle = -this._sprite.angle;
                 this.handAngle = -this.handAngle;
@@ -252,7 +252,7 @@ namespace DuckGame
                 base.Draw();
             else if (this.owner != null && this._drawOnce)
             {
-                this._offset = new Vec2((float)((double)this.offDir * -6.0 + (double)this._swing * 5.0 * (double)this.offDir), (float)((double)this._swing * 5.0 - 3.0));
+                this._offset = new Vec2((float)(offDir * -6.0 + _swing * 5.0 * offDir), (float)(_swing * 5.0 - 3.0));
                 this.graphic.position = this.position + this._offset;
                 this.graphic.depth = this.depth;
                 this.graphic.Draw();
@@ -260,7 +260,7 @@ namespace DuckGame
                 if ((double)this._sledgeSwing.speed <= 0.0)
                     return;
                 if (owner != null)
-                    this._sledgeSwing.flipH = owner.offDir <= (sbyte)0;
+                    this._sledgeSwing.flipH = owner.offDir <= 0;
                 this._sledgeSwing.position = this.position;
                 this._sledgeSwing.depth = this.depth + 1;
                 this._sledgeSwing.Draw();

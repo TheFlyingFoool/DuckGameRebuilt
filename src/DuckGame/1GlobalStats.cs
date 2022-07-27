@@ -36,11 +36,11 @@ namespace DuckGame
         private static Dictionary<string, bool> _achievementStatus = new Dictionary<string, bool>();
         private static GlobalData _data = new GlobalData();
         private static bool loadCalled = false;
-        public static DXMLNode _customLoadDoc = (DXMLNode)null;
+        public static DXMLNode _customLoadDoc = null;
 
         public static bool HasAchievement(string pAchievement)
         {
-            bool flag = false;
+            bool flag;
             return !Global._achievementStatus.TryGetValue(pAchievement, out flag) ? Steam.GetAchievement(pAchievement) : flag;
         }
 
@@ -127,7 +127,7 @@ namespace DuckGame
                 DevConsole.Log(DCSection.General, "Global.Load()");
             Global.loadCalled = true;
             string globalFileName = Global.globalFileName;
-            DXMLNode dxmlNode = Global._customLoadDoc ?? (DXMLNode)DuckFile.LoadDuckXML(globalFileName);
+            DXMLNode dxmlNode = Global._customLoadDoc ?? DuckFile.LoadDuckXML(globalFileName);
             if (dxmlNode != null)
             {
                 Profile profile = new Profile("");

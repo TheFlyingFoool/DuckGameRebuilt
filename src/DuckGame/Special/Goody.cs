@@ -16,11 +16,13 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.graphic = sprite;
-            this.center = new Vec2((float)(sprite.w / 2), (float)(sprite.h / 2));
+            this.center = new Vec2(sprite.w / 2, sprite.h / 2);
             this._collisionSize = new Vec2(10f, 10f);
             this.collisionOffset = new Vec2(-5f, -5f);
-            this.sequence = new SequenceItem((Thing)this);
-            this.sequence.type = SequenceItemType.Goody;
+            this.sequence = new SequenceItem(this)
+            {
+                type = SequenceItemType.Goody
+            };
             this.enablePhysics = false;
             this._impactThreshold = 1E-06f;
         }
@@ -63,7 +65,7 @@ namespace DuckGame
                         SFX.Play(this.collectSound, 0.8f);
                     if (this._visibleInGame)
                     {
-                        Profile profileToRumble = (Profile)null;
+                        Profile profileToRumble = null;
                         switch (with)
                         {
                             case Duck _:

@@ -31,8 +31,10 @@ namespace DuckGame
                     DXMLAttribute dxmlAttribute1 = source.Attributes<DXMLNode>("name").FirstOrDefault<DXMLAttribute>();
                     if (dxmlAttribute1 != null)
                     {
-                        DuckTitle duckTitle = new DuckTitle();
-                        duckTitle._name = dxmlAttribute1.Value;
+                        DuckTitle duckTitle = new DuckTitle
+                        {
+                            _name = dxmlAttribute1.Value
+                        };
                         bool flag = false;
                         foreach (DXMLNode element in source.Elements<DXMLNode>())
                         {
@@ -42,13 +44,13 @@ namespace DuckGame
                                 DXMLAttribute dxmlAttribute2 = element.Attributes("value").FirstOrDefault<DXMLAttribute>();
                                 if (statNameAttrib != null && dxmlAttribute2 != null)
                                 {
-                                    PropertyInfo key = ((IEnumerable<PropertyInfo>)typeof(ProfileStats).GetProperties()).FirstOrDefault<PropertyInfo>((Func<PropertyInfo, bool>)(x => x.Name == statNameAttrib.Value));
-                                    if (key != (PropertyInfo)null)
+                                    PropertyInfo key = typeof(ProfileStats).GetProperties().FirstOrDefault<PropertyInfo>(x => x.Name == statNameAttrib.Value);
+                                    if (key != null)
                                     {
                                         if (key.GetType() == typeof(float))
-                                            duckTitle._requirementsFloat.Add(key, Change.ToSingle((object)dxmlAttribute2.Value));
+                                            duckTitle._requirementsFloat.Add(key, Change.ToSingle(dxmlAttribute2.Value));
                                         else if (key.GetType() == typeof(int))
-                                            duckTitle._requirementsFloat.Add(key, (float)Convert.ToInt32(dxmlAttribute2.Value));
+                                            duckTitle._requirementsFloat.Add(key, Convert.ToInt32(dxmlAttribute2.Value));
                                         else
                                             duckTitle._requirementsString.Add(key, dxmlAttribute2.Value);
                                     }
@@ -72,7 +74,7 @@ namespace DuckGame
             }
         }
 
-        public static DuckTitle GetTitle(string title) => DuckTitle._titles.FirstOrDefault<DuckTitle>((Func<DuckTitle, bool>)(x => x._name == title));
+        public static DuckTitle GetTitle(string title) => DuckTitle._titles.FirstOrDefault<DuckTitle>(x => x._name == title);
 
         public string previousOwner
         {
@@ -95,24 +97,24 @@ namespace DuckGame
             foreach (KeyValuePair<PropertyInfo, float> keyValuePair in this._requirementsFloat)
             {
                 num1 += keyValuePair.Value;
-                num2 += (float)keyValuePair.Key.GetValue((object)p.stats, (object[])null);
+                num2 += (float)keyValuePair.Key.GetValue(p.stats, null);
             }
             int num3 = 0;
             int num4 = 0;
             foreach (KeyValuePair<PropertyInfo, int> keyValuePair in this._requirementsInt)
             {
                 num3 += keyValuePair.Value;
-                num4 += (int)keyValuePair.Key.GetValue((object)p.stats, (object[])null);
+                num4 += (int)keyValuePair.Key.GetValue(p.stats, null);
             }
             int num5 = 0;
             int num6 = 0;
             foreach (KeyValuePair<PropertyInfo, string> keyValuePair in this._requirementsString)
             {
                 ++num5;
-                if ((string)keyValuePair.Key.GetValue((object)p.stats, (object[])null) == keyValuePair.Value)
+                if ((string)keyValuePair.Key.GetValue(p.stats, null) == keyValuePair.Value)
                     ++num6;
             }
-            return (float)(((double)num2 + (double)num4 + (double)num6) / ((double)num1 + (double)num3 + (double)num5));
+            return (float)(((double)num2 + num4 + num6) / ((double)num1 + num3 + num5));
         }
 
         public void UpdateTitles()

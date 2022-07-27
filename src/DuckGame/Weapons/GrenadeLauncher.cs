@@ -42,7 +42,7 @@ namespace DuckGame
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Light;
             this._holdOffset = new Vec2(4f, 0.0f);
-            this._ammoType = (AmmoType)new ATGrenade();
+            this._ammoType = new ATGrenade();
             this._fireSound = "deepMachineGun";
             this._bulletColor = Color.White;
             this.editorTooltip = "Delivers a fun & exciting present to a long distance friend. Hold fire to adjust arc.";
@@ -51,18 +51,18 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (this._aiming && (double)this._aimWait <= 0.0 && (double)this._fireAngle < 90.0)
+            if (this._aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
                 this._fireAngle += 3f;
-            if ((double)this._aimWait > 0.0)
+            if (_aimWait > 0.0)
                 this._aimWait -= 0.9f;
-            if ((double)this._cooldown > 0.0)
+            if (_cooldown > 0.0)
                 this._cooldown -= 0.1f;
             else
                 this._cooldown = 0.0f;
             if (this.owner != null)
             {
                 this._aimAngle = -Maths.DegToRad(this._fireAngle);
-                if (this.offDir < (sbyte)0)
+                if (this.offDir < 0)
                     this._aimAngle = -this._aimAngle;
             }
             else
@@ -79,7 +79,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if ((double)this._cooldown != 0.0)
+            if (_cooldown != 0.0)
                 return;
             if (this.ammo > 0)
             {
@@ -92,7 +92,7 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if ((double)this._cooldown != 0.0 || this.ammo <= 0)
+            if (_cooldown != 0.0 || this.ammo <= 0)
                 return;
             this._aiming = false;
             this.Fire();

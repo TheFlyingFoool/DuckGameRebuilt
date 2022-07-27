@@ -34,14 +34,14 @@ namespace DuckGame
             bullet.lastReboundSource = this.lastReboundSource;
             bullet.connection = this.connection;
             this.reboundCalled = true;
-            Level.Add((Thing)bullet);
+            Level.Add(bullet);
             SFX.Play("littleRic", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
 
         public override void Update()
         {
             this._isVolatile -= 0.06f;
-            if ((double)this._isVolatile <= 0.0)
+            if (_isVolatile <= 0.0)
                 this.rebound = false;
             base.Update();
         }

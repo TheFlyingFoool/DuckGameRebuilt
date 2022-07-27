@@ -25,8 +25,8 @@ namespace DuckGame
 
         public override void Apply()
         {
-            this._effect.effect.Parameters["replace1"].SetValue((Vector3)(this.persona.color / (float)byte.MaxValue));
-            this._effect.effect.Parameters["replace2"].SetValue((Vector3)(this.persona.colorDark / (float)byte.MaxValue));
+            this._effect.effect.Parameters["replace1"].SetValue((Vector3)(this.persona.color / byte.MaxValue));
+            this._effect.effect.Parameters["replace2"].SetValue((Vector3)(this.persona.colorDark / byte.MaxValue));
             base.Apply();
         }
     }

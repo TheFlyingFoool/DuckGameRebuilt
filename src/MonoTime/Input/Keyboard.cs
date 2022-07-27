@@ -288,19 +288,19 @@ namespace DuckGame
                             Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/alt");
                             continue;
                         case Keys.MouseLeft:
-                            Keyboard._triggerImages[(int)key1] = (Sprite)new SpriteMap("buttons/mouse", 12, 15)
+                            Keyboard._triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
                             {
                                 frame = 0
                             };
                             continue;
                         case Keys.MouseMiddle:
-                            Keyboard._triggerImages[(int)key1] = (Sprite)new SpriteMap("buttons/mouse", 12, 15)
+                            Keyboard._triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
                             {
                                 frame = 1
                             };
                             continue;
                         case Keys.MouseRight:
-                            Keyboard._triggerImages[(int)key1] = (Sprite)new SpriteMap("buttons/mouse", 12, 15)
+                            Keyboard._triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
                             {
                                 frame = 2
                             };
@@ -310,13 +310,13 @@ namespace DuckGame
                     }
                 }
                 else
-                    Keyboard._triggerImages[(int)key1] = (Sprite)new KeyImage(key2);
+                    Keyboard._triggerImages[(int)key1] = new KeyImage(key2);
             }
         }
 
         public override Sprite GetMapImage(int map)
         {
-            Sprite sprite = (Sprite)null;
+            Sprite sprite;
             Keyboard._triggerImages.TryGetValue(map, out sprite);
             return sprite ?? Keyboard._triggerImages[int.MaxValue];
         }
@@ -721,7 +721,7 @@ namespace DuckGame
                 Keyboard._keyStatePrev = Keyboard._keyState;
                 Keyboard._keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
                 Keyboard._keyboardPress = false;
-                int num = ((IEnumerable<Microsoft.Xna.Framework.Input.Keys>)Keyboard._keyState.GetPressedKeys()).Count<Microsoft.Xna.Framework.Input.Keys>();
+                int num = Keyboard._keyState.GetPressedKeys().Count<Microsoft.Xna.Framework.Input.Keys>();
                 if (num != Keyboard._lastKeyCount && num != 0)
                     Keyboard._keyboardPress = true;
                 Keyboard._lastKeyCount = num;
@@ -743,7 +743,7 @@ namespace DuckGame
                 foreach (Keys keys in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {
                     Keys k = keys;
-                    if (this.MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && this._repeatingKeys.FirstOrDefault<Keyboard.RepeatKey>((Func<Keyboard.RepeatKey, bool>)(x => x.key == k)) == null)
+                    if (this.MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && this._repeatingKeys.FirstOrDefault<Keyboard.RepeatKey>(x => x.key == k) == null)
                         this._repeatingKeys.Add(new Keyboard.RepeatKey()
                         {
                             key = k,
@@ -755,9 +755,9 @@ namespace DuckGame
                 {
                     repeatingKey.repeatTime -= 0.1f;
                     bool flag = this.MapDown((int)repeatingKey.key, false);
-                    if (flag && (double)repeatingKey.repeatTime < 0.0)
+                    if (flag && repeatingKey.repeatTime < 0.0)
                         Keyboard._repeatList.Add(repeatingKey.key);
-                    if ((double)repeatingKey.repeatTime <= 0.0 & flag)
+                    if (repeatingKey.repeatTime <= 0.0 & flag)
                         repeatingKey.repeatTime = 0.25f;
                     if (!flag)
                         repeatKeyList.Add(repeatingKey);

@@ -26,19 +26,19 @@ namespace DuckGame
         public void AddStrip(List<Card> infos)
         {
             List<Card> cards = new List<Card>();
-            cards.AddRange((IEnumerable<Card>)infos);
+            cards.AddRange(infos);
             CardStrip cardStrip = new CardStrip(this.x, this.y, cards, this._listener, true);
             this._strips.Add(cardStrip);
-            Level.Add((Thing)cardStrip);
+            Level.Add(cardStrip);
         }
 
         public void AddStrip(StripInfo infos)
         {
             List<Card> cards = new List<Card>();
-            cards.AddRange((IEnumerable<Card>)infos.cards);
+            cards.AddRange(infos.cards);
             CardStrip cardStrip = new CardStrip(this.x, this.y, cards, this._listener, infos.large, infos.cardsVisible, infos.header);
             this._strips.Add(cardStrip);
-            Level.Add((Thing)cardStrip);
+            Level.Add(cardStrip);
         }
 
         public override void Initialize()

@@ -16,14 +16,14 @@ namespace DuckGame
     {
         public List<Profile> defaultProfileMappings = new List<Profile>()
     {
-      (Profile) null,
-      (Profile) null,
-      (Profile) null,
-      (Profile) null,
-      (Profile) null,
-      (Profile) null,
-      (Profile) null,
-      (Profile) null
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
     };
         public List<Profile> _profiles;
         private Profile _experienceProfile;
@@ -32,7 +32,7 @@ namespace DuckGame
         public bool initialized;
         private static int numExperienceProfiles;
 
-        public IEnumerable<Profile> all => DuckNetwork.active ? (IEnumerable<Profile>)DuckNetwork.profiles : (IEnumerable<Profile>)this._profiles;
+        public IEnumerable<Profile> all => DuckNetwork.active ? DuckNetwork.profiles : (IEnumerable<Profile>)this._profiles;
 
         public List<Profile> allCustomProfiles
         {
@@ -52,9 +52,9 @@ namespace DuckGame
         {
             get
             {
-                List<Profile> universalProfileList = new List<Profile>((IEnumerable<Profile>)this._profiles);
-                universalProfileList.AddRange((IEnumerable<Profile>)DuckNetwork.profiles);
-                return (IEnumerable<Profile>)universalProfileList;
+                List<Profile> universalProfileList = new List<Profile>(_profiles);
+                universalProfileList.AddRange(DuckNetwork.profiles);
+                return universalProfileList;
             }
         }
 
@@ -132,7 +132,7 @@ namespace DuckGame
             Profile.loading = true;
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
             string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
-            DevConsole.Log(DCSection.General, "Found (" + ((IEnumerable<string>)files).Count<string>().ToString() + ") profiles.");
+            DevConsole.Log(DCSection.General, "Found (" + files.Count<string>().ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
             foreach (string path in files)
             {
@@ -150,7 +150,7 @@ namespace DuckGame
                                 ulong num;
                                 try
                                 {
-                                    num = Change.ToUInt64((object)dxmlNode.Value.Trim());
+                                    num = Change.ToUInt64(dxmlNode.Value.Trim());
                                 }
                                 catch (Exception)
                                 {
@@ -167,11 +167,13 @@ namespace DuckGame
                         {
                         }
                         bool flag = false;
-                        Profile p = this._profiles.FirstOrDefault<Profile>((Func<Profile, bool>)(pro => pro.name == name));
+                        Profile p = this._profiles.FirstOrDefault<Profile>(pro => pro.name == name);
                         if (p == null || !Profiles.IsDefault(p))
                         {
-                            p = new Profile("");
-                            p.fileName = path;
+                            p = new Profile("")
+                            {
+                                fileName = path
+                            };
                             flag = true;
                         }
                         if (MonoMain.logFileOperations)
@@ -186,40 +188,40 @@ namespace DuckGame
                                 else if (element1.Name == "Name")
                                     p.name = element1.Value;
                                 else if (element1.Name == "Mood")
-                                    p.funslider = Change.ToSingle((object)element1.Value);
+                                    p.funslider = Change.ToSingle(element1.Value);
                                 else if (element1.Name == "PreferredColor" && !Profiles.IsDefault(p))
-                                    p.preferredColor = Change.ToInt32((object)element1.Value);
+                                    p.preferredColor = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "NS")
-                                    p.numSandwiches = Change.ToInt32((object)element1.Value);
+                                    p.numSandwiches = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "MF")
-                                    p.milkFill = Change.ToInt32((object)element1.Value);
+                                    p.milkFill = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "LML")
-                                    p.littleManLevel = Change.ToInt32((object)element1.Value);
+                                    p.littleManLevel = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "NLM")
-                                    p.numLittleMen = Change.ToInt32((object)element1.Value);
+                                    p.numLittleMen = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "LMB")
-                                    p.littleManBucks = Change.ToInt32((object)element1.Value);
+                                    p.littleManBucks = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "RSXP")
-                                    p.roundsSinceXP = Change.ToInt32((object)element1.Value);
+                                    p.roundsSinceXP = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "TimesMet")
-                                    p.timesMetVincent = Change.ToInt32((object)element1.Value);
+                                    p.timesMetVincent = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "TimesMet2")
-                                    p.timesMetVincentSale = Change.ToInt32((object)element1.Value);
+                                    p.timesMetVincentSale = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "TimesMet3")
-                                    p.timesMetVincentSell = Change.ToInt32((object)element1.Value);
+                                    p.timesMetVincentSell = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "TimesMet4")
-                                    p.timesMetVincentImport = Change.ToInt32((object)element1.Value);
+                                    p.timesMetVincentImport = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "TimesMet5")
-                                    p.timesMetVincentHint = Change.ToInt32((object)element1.Value);
+                                    p.timesMetVincentHint = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "TimeOfDay")
-                                    p.timeOfDay = Change.ToSingle((object)element1.Value);
+                                    p.timeOfDay = Change.ToSingle(element1.Value);
                                 else if (element1.Name == "CD")
-                                    p.currentDay = Change.ToInt32((object)element1.Value);
+                                    p.currentDay = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "Punished")
-                                    p.punished = Change.ToInt32((object)element1.Value);
+                                    p.punished = Change.ToInt32(element1.Value);
                                 else if (element1.Name == "XtraPoints")
                                 {
-                                    p.xp = Change.ToInt32((object)element1.Value);
+                                    p.xp = Change.ToInt32(element1.Value);
                                     if (MonoMain.logFileOperations)
                                         DevConsole.Log(DCSection.General, "Profile(" + name != null ? name : ").loadXP(" + p.xp.ToString() + ")");
                                 }
@@ -234,9 +236,9 @@ namespace DuckGame
                                 {
                                     try
                                     {
-                                        p.steamID = Change.ToUInt64((object)element1.Value.Trim());
+                                        p.steamID = Change.ToUInt64(element1.Value.Trim());
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     {
                                         p.steamID = 0UL;
                                     }
@@ -264,8 +266,10 @@ namespace DuckGame
                                     try
                                     {
                                         byte[] bytes = Editor.StringToBytes(element1.Value);
-                                        BitBuffer bitBuffer = new BitBuffer(bytes, false);
-                                        bitBuffer.lengthInBytes = bytes.Length;
+                                        BitBuffer bitBuffer = new BitBuffer(bytes, false)
+                                        {
+                                            lengthInBytes = bytes.Length
+                                        };
                                         while (bitBuffer.position < bitBuffer.lengthInBytes)
                                         {
                                             ChallengeSaveData challengeSaveData = ChallengeSaveData.FromBuffer(bitBuffer.ReadBitBuffer(false));
@@ -304,7 +308,7 @@ namespace DuckGame
                                                     }
                                                 }
                                             }
-                                            catch (Exception ex)
+                                            catch (Exception)
                                             {
                                             }
                                             p.inputMappingOverrides.Add(deviceInputMapping);
@@ -318,7 +322,7 @@ namespace DuckGame
                     }
                 }
             }
-            Profile p1 = (Profile)null;
+            Profile p1 = null;
             ulong num1 = 0;
             ProfilesCore.numExperienceProfiles = 0;
             if (Steam.user == null)
@@ -343,12 +347,12 @@ namespace DuckGame
                 Options.Data.defaultAccountMerged = true;
                 Options.Data.didAutoMerge = true;
             }
-            string file = (string)null;
+            string file = null;
             if (p1 == null)
             {
                 if (num1 != 0UL)
                 {
-                    Profile profile = this._profiles.FirstOrDefault<Profile>((Func<Profile, bool>)(x => x.name == "experience_profile" && x.id == "replace_with_steam"));
+                    Profile profile = this._profiles.FirstOrDefault<Profile>(x => x.name == "experience_profile" && x.id == "replace_with_steam");
                     if (profile != null)
                     {
                         foreach (KeyValuePair<string, ChallengeSaveData> keyValuePair in profile.challengeData)
@@ -361,8 +365,10 @@ namespace DuckGame
                     }
                     else
                     {
-                        p1 = new Profile(num1.ToString(), varID: num1.ToString());
-                        p1.steamID = num1;
+                        p1 = new Profile(num1.ToString(), varID: num1.ToString())
+                        {
+                            steamID = num1
+                        };
                         ++ProfilesCore.numExperienceProfiles;
                     }
                 }
@@ -437,13 +443,13 @@ namespace DuckGame
                 bool flag = false;
                 for (int index = 0; index < roundStatRankings.Count; ++index)
                 {
-                    if ((double)statCalculation > (double)roundStatRankings[index].value)
+                    if ((double)statCalculation > roundStatRankings[index].value)
                     {
                         roundStatRankings.Insert(index, new ProfileStatRank(stat, statCalculation, pro));
                         flag = true;
                         break;
                     }
-                    if ((double)statCalculation == (double)roundStatRankings[index].value)
+                    if ((double)statCalculation == roundStatRankings[index].value)
                     {
                         roundStatRankings[index].profiles.Add(pro);
                         flag = true;
@@ -504,18 +510,18 @@ namespace DuckGame
         public string GetFileName(Profile p)
         {
             if (p == this.EnvironmentProfile)
-                return (string)null;
+                return null;
             if (p.linkedProfile != null)
                 return this.GetFileName(p.linkedProfile);
             if (p.isNetworkProfile)
-                return (string)null;
+                return null;
             if (p.fileName != null)
                 return p.fileName;
             string name = p.name;
             if (p.steamID != 0UL)
             {
                 if (Steam.user == null || (long)p.steamID != (long)DG.localID)
-                    return (string)null;
+                    return null;
                 name = p.steamID.ToString();
             }
             return DuckFile.profileDirectory + DuckFile.ReplaceInvalidCharacters(name) + ".pro";
@@ -539,55 +545,55 @@ namespace DuckGame
                     DevConsole.Log(DCSection.General, "Profile.Save(" + p.name + ")");
                 DuckXML doc = new DuckXML();
                 DXMLNode node1 = new DXMLNode("Profile");
-                DXMLNode node2 = new DXMLNode("Name", (object)p.formattedName);
+                DXMLNode node2 = new DXMLNode("Name", p.formattedName);
                 node1.Add(node2);
-                DXMLNode node3 = new DXMLNode("ID", (object)p.id);
+                DXMLNode node3 = new DXMLNode("ID", p.id);
                 node1.Add(node3);
-                DXMLNode node4 = new DXMLNode("Mood", (object)p.funslider);
+                DXMLNode node4 = new DXMLNode("Mood", p.funslider);
                 node1.Add(node4);
-                DXMLNode node5 = new DXMLNode("PreferredColor", (object)p.preferredColor);
+                DXMLNode node5 = new DXMLNode("PreferredColor", p.preferredColor);
                 node1.Add(node5);
-                DXMLNode node6 = new DXMLNode("NS", (object)p.numSandwiches);
+                DXMLNode node6 = new DXMLNode("NS", p.numSandwiches);
                 node1.Add(node6);
-                DXMLNode node7 = new DXMLNode("MF", (object)p.milkFill);
+                DXMLNode node7 = new DXMLNode("MF", p.milkFill);
                 node1.Add(node7);
-                DXMLNode node8 = new DXMLNode("LML", (object)p.littleManLevel);
+                DXMLNode node8 = new DXMLNode("LML", p.littleManLevel);
                 node1.Add(node8);
-                DXMLNode node9 = new DXMLNode("NLM", (object)p.numLittleMen);
+                DXMLNode node9 = new DXMLNode("NLM", p.numLittleMen);
                 node1.Add(node9);
-                DXMLNode node10 = new DXMLNode("RSXP", (object)p.roundsSinceXP);
+                DXMLNode node10 = new DXMLNode("RSXP", p.roundsSinceXP);
                 node1.Add(node10);
-                DXMLNode node11 = new DXMLNode("LMB", (object)p.littleManBucks);
+                DXMLNode node11 = new DXMLNode("LMB", p.littleManBucks);
                 node1.Add(node11);
-                DXMLNode node12 = new DXMLNode("TimesMet", (object)p.timesMetVincent);
+                DXMLNode node12 = new DXMLNode("TimesMet", p.timesMetVincent);
                 node1.Add(node12);
-                DXMLNode node13 = new DXMLNode("TimesMet2", (object)p.timesMetVincentSale);
+                DXMLNode node13 = new DXMLNode("TimesMet2", p.timesMetVincentSale);
                 node1.Add(node13);
-                DXMLNode node14 = new DXMLNode("TimesMet3", (object)p.timesMetVincentSell);
+                DXMLNode node14 = new DXMLNode("TimesMet3", p.timesMetVincentSell);
                 node1.Add(node14);
-                DXMLNode node15 = new DXMLNode("TimesMet4", (object)p.timesMetVincentImport);
+                DXMLNode node15 = new DXMLNode("TimesMet4", p.timesMetVincentImport);
                 node1.Add(node15);
-                DXMLNode node16 = new DXMLNode("TimesMet5", (object)p.timesMetVincentHint);
+                DXMLNode node16 = new DXMLNode("TimesMet5", p.timesMetVincentHint);
                 node1.Add(node16);
-                DXMLNode node17 = new DXMLNode("TimeOfDay", (object)p.timeOfDay);
+                DXMLNode node17 = new DXMLNode("TimeOfDay", p.timeOfDay);
                 node1.Add(node17);
-                DXMLNode node18 = new DXMLNode("CD", (object)p.currentDay);
+                DXMLNode node18 = new DXMLNode("CD", p.currentDay);
                 node1.Add(node18);
-                DXMLNode node19 = new DXMLNode("Punished", (object)p.punished);
+                DXMLNode node19 = new DXMLNode("Punished", p.punished);
                 node1.Add(node19);
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Profile(" + p.name + ").xp = " + p.xp.ToString());
-                DXMLNode node20 = new DXMLNode("XtraPoints", (object)p.xp);
+                DXMLNode node20 = new DXMLNode("XtraPoints", p.xp);
                 node1.Add(node20);
-                DXMLNode node21 = new DXMLNode("FurniPositions", (object)p.furniturePositionData.ToString());
+                DXMLNode node21 = new DXMLNode("FurniPositions", p.furniturePositionData.ToString());
                 node1.Add(node21);
-                DXMLNode node22 = new DXMLNode("Fowner", (object)p.furnitureOwnershipData.ToString());
+                DXMLNode node22 = new DXMLNode("Fowner", p.furnitureOwnershipData.ToString());
                 node1.Add(node22);
-                DXMLNode node23 = new DXMLNode("SteamID", (object)p.steamID);
+                DXMLNode node23 = new DXMLNode("SteamID", p.steamID);
                 node1.Add(node23);
                 if (p.steamID != 0UL && Steam.user != null && (long)p.steamID == (long)Steam.user.id)
                 {
-                    DXMLNode node24 = new DXMLNode("LastKnownName", (object)Steam.user.name);
+                    DXMLNode node24 = new DXMLNode("LastKnownName", Steam.user.name);
                     node1.Add(node24);
                 }
                 node1.Add(p.stats.Serialize());
@@ -596,11 +602,11 @@ namespace DuckGame
                     varValue = varValue + unlock + "|";
                 if (varValue.Length > 0)
                     varValue = varValue.Substring(0, varValue.Length - 1);
-                DXMLNode node25 = new DXMLNode("Unlocks", (object)varValue);
+                DXMLNode node25 = new DXMLNode("Unlocks", varValue);
                 node1.Add(node25);
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Profile(" + p.name + ").ticketCount = " + p.ticketCount.ToString());
-                DXMLNode node26 = new DXMLNode("Tickets", (object)p.ticketCount);
+                DXMLNode node26 = new DXMLNode("Tickets", p.ticketCount);
                 node1.Add(node26);
                 DXMLNode node27 = new DXMLNode("Mappings");
                 foreach (DeviceInputMapping inputMappingOverride in p.inputMappingOverrides)
@@ -616,7 +622,7 @@ namespace DuckGame
                         BitBuffer buffer = keyValuePair.Value.ToBuffer();
                         bitBuffer.Write(buffer, true);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -624,7 +630,7 @@ namespace DuckGame
                 {
                     if (MonoMain.logFileOperations)
                         DevConsole.Log(DCSection.General, "Profile.SavingChallengeData(" + p.name + ") (found data to save)");
-                    DXMLNode node28 = new DXMLNode("ChallengeData", (object)Editor.BytesToString(bitBuffer.data));
+                    DXMLNode node28 = new DXMLNode("ChallengeData", Editor.BytesToString(bitBuffer.data));
                     node1.Add(node28);
                 }
                 doc.Add(node1);
