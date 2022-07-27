@@ -3969,11 +3969,11 @@ namespace DuckGame
                                         }
                                         break;
                                     }
-                                    else if (levelThing is global::DuckGame.SpawnPoint)
+                                    else if (levelThing is SpawnPoint)
                                     {
                                         ++num3;
                                     }
-                                    else if (levelThing is global::DuckGame.TeamSpawn)
+                                    else if (levelThing is TeamSpawn)
                                     {
                                         ++num4;
                                     }
@@ -4436,48 +4436,48 @@ namespace DuckGame
             return accessor;
         }
 
-        public static global::System.Action<object, object> BuildSetAccessorProperty(global::System.Type t, global::System.Reflection.MethodInfo method)
+        public static Action<object, object> BuildSetAccessorProperty(Type t, MethodInfo method)
         {
-            global::System.Linq.Expressions.ParameterExpression obj = global::System.Linq.Expressions.Expression.Parameter(typeof(object), "o");
-            global::System.Linq.Expressions.ParameterExpression value = global::System.Linq.Expressions.Expression.Parameter(typeof(object));
-            return global::System.Linq.Expressions.Expression.Lambda<global::System.Action<object, object>>(global::System.Linq.Expressions.Expression.Call(method.IsStatic ? null : global::System.Linq.Expressions.Expression.Convert(obj, method.DeclaringType), method, new global::System.Linq.Expressions.Expression[]
+            ParameterExpression obj = Expression.Parameter(typeof(object), "o");
+            ParameterExpression value = Expression.Parameter(typeof(object));
+            return Expression.Lambda<Action<object, object>>(Expression.Call(method.IsStatic ? null : Expression.Convert(obj, method.DeclaringType), method, new Expression[]
             {
-                global::System.Linq.Expressions.Expression.Convert(value, method.GetParameters()[0].ParameterType)
-            }), new global::System.Linq.Expressions.ParameterExpression[]
+                Expression.Convert(value, method.GetParameters()[0].ParameterType)
+            }), new ParameterExpression[]
             {
                 obj,
                 value
             }).Compile();
         }
 
-        public static global::System.Action<object, object> BuildSetAccessorField(global::System.Type t, global::System.Reflection.FieldInfo field)
+        public static Action<object, object> BuildSetAccessorField(Type t, FieldInfo field)
         {
-            global::System.Linq.Expressions.ParameterExpression targetExp = global::System.Linq.Expressions.Expression.Parameter(typeof(object), "target");
-            global::System.Linq.Expressions.ParameterExpression valueExp = global::System.Linq.Expressions.Expression.Parameter(typeof(object), "value");
-            return global::System.Linq.Expressions.Expression.Lambda<global::System.Action<object, object>>(global::System.Linq.Expressions.Expression.Assign(global::System.Linq.Expressions.Expression.Field(field.IsStatic ? null : global::System.Linq.Expressions.Expression.Convert(targetExp, t), field), global::System.Linq.Expressions.Expression.Convert(valueExp, field.FieldType)), new global::System.Linq.Expressions.ParameterExpression[]
+            ParameterExpression targetExp = Expression.Parameter(typeof(object), "target");
+            ParameterExpression valueExp = Expression.Parameter(typeof(object), "value");
+            return Expression.Lambda<Action<object, object>>(Expression.Assign(Expression.Field(field.IsStatic ? null : Expression.Convert(targetExp, t), field), Expression.Convert(valueExp, field.FieldType)), new ParameterExpression[]
             {
                 targetExp,
                 valueExp
             }).Compile();
         }
 
-        public static global::System.Func<object, object> BuildGetAccessorProperty(global::System.Type t, global::System.Reflection.PropertyInfo property)
+        public static Func<object, object> BuildGetAccessorProperty(Type t, PropertyInfo property)
         {
             if (property.GetGetMethod(true) == null)
             {
                 return null;
             }
-            global::System.Linq.Expressions.ParameterExpression obj = global::System.Linq.Expressions.Expression.Parameter(typeof(object), "o");
-            return global::System.Linq.Expressions.Expression.Lambda<global::System.Func<object, object>>(global::System.Linq.Expressions.Expression.Convert(global::System.Linq.Expressions.Expression.Property(property.GetGetMethod(true).IsStatic ? null : global::System.Linq.Expressions.Expression.Convert(obj, t), property), typeof(object)), new global::System.Linq.Expressions.ParameterExpression[]
+            ParameterExpression obj = Expression.Parameter(typeof(object), "o");
+            return Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Property(property.GetGetMethod(true).IsStatic ? null : Expression.Convert(obj, t), property), typeof(object)), new ParameterExpression[]
             {
                 obj
             }).Compile();
         }
 
-        public static global::System.Func<object, object> BuildGetAccessorField(global::System.Type t, global::System.Reflection.FieldInfo field)
+        public static Func<object, object> BuildGetAccessorField(Type t, FieldInfo field)
         {
-            global::System.Linq.Expressions.ParameterExpression obj = global::System.Linq.Expressions.Expression.Parameter(typeof(object), "o");
-            return global::System.Linq.Expressions.Expression.Lambda<global::System.Func<object, object>>(global::System.Linq.Expressions.Expression.Convert(global::System.Linq.Expressions.Expression.Field(field.IsStatic ? null : global::System.Linq.Expressions.Expression.Convert(obj, t), field), typeof(object)), new global::System.Linq.Expressions.ParameterExpression[]
+            ParameterExpression obj = Expression.Parameter(typeof(object), "o");
+            return Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Field(field.IsStatic ? null : Expression.Convert(obj, t), field), typeof(object)), new ParameterExpression[]
             {
                 obj
             }).Compile();

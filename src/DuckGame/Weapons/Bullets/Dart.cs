@@ -58,11 +58,11 @@ namespace DuckGame
             return false;
         }
 
-		public override void OnImpact(global::DuckGame.MaterialThing with, global::DuckGame.ImpactedFrom from)
+		public override void OnImpact(MaterialThing with, ImpactedFrom from)
 		{
-			if (this._stuck || with is global::DuckGame.Gun || (with.weight < 5f && !(with is global::DuckGame.Dart) && !(with is global::DuckGame.RagdollPart)) || with is global::DuckGame.FeatherVolume || with is global::DuckGame.Teleporter || base.removeFromLevel || with is global::DuckGame.Spring || with is global::DuckGame.SpringUpLeft || with is global::DuckGame.SpringUpRight)
+			if (this._stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || base.removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
 			{
-				if (with is global::DuckGame.EnergyBlocker && with.solid)
+				if (with is EnergyBlocker && with.solid)
 				{
 					this.LightOnFire();
 				}
@@ -70,21 +70,21 @@ namespace DuckGame
 			}
 			if (!this.destroyed && !this._stuck)
 			{
-				if (with is global::DuckGame.PhysicsObject)
+				if (with is PhysicsObject)
 				{
-					global::DuckGame.Duck duck = with as global::DuckGame.Duck;
+					Duck duck = with as Duck;
 					if (duck != null && base.isServerForObject)
 					{
 						if (duck.isServerForObject)
 						{
 							duck.hSpeed += this.hSpeed * 0.7f;
 							duck.vSpeed -= 1.5f;
-							global::DuckGame.Event.Log(new global::DuckGame.DartHitEvent(base.responsibleProfile, duck.profile));
-							if (duck.holdObject is global::DuckGame.Grenade)
+							Event.Log(new DartHitEvent(base.responsibleProfile, duck.profile));
+							if (duck.holdObject is Grenade)
 							{
 								duck.forceFire = true;
 							}
-							if (global::DuckGame.Rando.Float(1f) > 0.6f)
+							if (Rando.Float(1f) > 0.6f)
 							{
 								duck.Swear();
 							}
@@ -92,22 +92,22 @@ namespace DuckGame
 						}
 						else
 						{
-							global::DuckGame.Send.Message(new global::DuckGame.NMDartSmack(new global::DuckGame.Vec2(this.hSpeed * 0.7f, -1.5f), duck), duck.connection);
+							Send.Message(new NMDartSmack(new Vec2(this.hSpeed * 0.7f, -1.5f), duck), duck.connection);
 						}
 					}
-					global::DuckGame.RagdollPart r = with as global::DuckGame.RagdollPart;
+					RagdollPart r = with as RagdollPart;
 					if (r != null && base.isServerForObject && r.doll != null && r.doll.captureDuck != null)
 					{
-						global::DuckGame.Duck d = r.doll.captureDuck;
+						Duck d = r.doll.captureDuck;
 						if (r.isServerForObject)
 						{
 							r.hSpeed += this.hSpeed * 0.7f;
 							r.vSpeed -= 1.5f;
-							if (d.holdObject is global::DuckGame.Grenade)
+							if (d.holdObject is Grenade)
 							{
 								d.forceFire = true;
 							}
-							if (global::DuckGame.Rando.Float(1f) > 0.6f)
+							if (Rando.Float(1f) > 0.6f)
 							{
 								d.Swear();
 							}
@@ -115,16 +115,16 @@ namespace DuckGame
 						}
 						else
 						{
-							global::DuckGame.Send.Message(new global::DuckGame.NMDartSmack(new global::DuckGame.Vec2(this.hSpeed * 0.7f, -1.5f), r), r.connection);
+							Send.Message(new NMDartSmack(new Vec2(this.hSpeed * 0.7f, -1.5f), r), r.connection);
 						}
 					}
-					if (with is global::DuckGame.IPlatform || duck != null || r != null)
+					if (with is IPlatform || duck != null || r != null)
 					{
-						global::DuckGame.DartShell dartShell = new global::DuckGame.DartShell(base.x, base.y, -this._sprite.flipMultH * global::DuckGame.Rando.Float(0.6f), this._sprite.flipH);
-						global::DuckGame.Level.Add(dartShell);
-						dartShell.hSpeed = -this.hSpeed / 3f * (0.3f + global::DuckGame.Rando.Float(0.8f));
-						dartShell.vSpeed = -2f + global::DuckGame.Rando.Float(4f);
-						global::DuckGame.Level.Remove(this);
+						DartShell dartShell = new DartShell(base.x, base.y, -this._sprite.flipMultH * Rando.Float(0.6f), this._sprite.flipH);
+						Level.Add(dartShell);
+						dartShell.hSpeed = -this.hSpeed / 3f * (0.3f + Rando.Float(0.8f));
+						dartShell.vSpeed = -2f + Rando.Float(4f);
+						Level.Remove(this);
 						if (this.burning)
 						{
 							with.Burn(this.position, this);
@@ -138,22 +138,22 @@ namespace DuckGame
 					deg += 360f;
 				}
 				bool stick = false;
-				if ((with is global::DuckGame.Block || with is global::DuckGame.Spikes || with is global::DuckGame.Saws) && from == global::DuckGame.ImpactedFrom.Right && (deg < 45f || deg > 315f))
+				if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Right && (deg < 45f || deg > 315f))
 				{
 					stick = true;
 					base.angleDegrees = 0f;
 				}
-				else if ((with is global::DuckGame.Block || with is global::DuckGame.Spikes || with is global::DuckGame.Saws) && from == global::DuckGame.ImpactedFrom.Top && deg > 45f && deg < 135f)
+				else if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Top && deg > 45f && deg < 135f)
 				{
 					stick = true;
 					base.angleDegrees = 270f;
 				}
-				else if ((with is global::DuckGame.Block || with is global::DuckGame.Spikes || with is global::DuckGame.Saws) && from == global::DuckGame.ImpactedFrom.Left && deg > 135f && deg < 225f)
+				else if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Left && deg > 135f && deg < 225f)
 				{
 					stick = true;
 					base.angleDegrees = 180f;
 				}
-				else if (from == global::DuckGame.ImpactedFrom.Bottom && deg > 225f && deg < 315f)
+				else if (from == ImpactedFrom.Bottom && deg > 225f && deg < 315f)
 				{
 					stick = true;
 					base.angleDegrees = 90f;
@@ -161,7 +161,7 @@ namespace DuckGame
 				if (stick)
 				{
 					this._stuck = true;
-					global::DuckGame.SFX.Play("dartStick", 0.8f, -0.1f + global::DuckGame.Rando.Float(0.2f), 0f, false);
+					SFX.Play("dartStick", 0.8f, -0.1f + Rando.Float(0.2f), 0f, false);
 					this.vSpeed = 0f;
 					this.gravMultiplier = 0f;
 					base.grounded = true;

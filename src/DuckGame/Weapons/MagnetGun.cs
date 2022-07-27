@@ -163,7 +163,7 @@ namespace DuckGame
                     if (holdable1 != null && Level.CheckLine<Block>(p1_1, holdable1.position) == null)
                     {
                         float num = (float)((1.0 - (double)Math.Min(val1, this._ammoType.range) / (double)this._ammoType.range) * 0.800000011920929);
-                        global::DuckGame.Duck duck = holdable1.owner as global::DuckGame.Duck;
+                        Duck duck = holdable1.owner as Duck;
                         if (duck != null && !(duck.holdObject is MagnetGun) && (double)num > 0.300000011920929)
                         {
                             if (!(holdable1 is Equipment) || holdable1.equippedDuck == null)

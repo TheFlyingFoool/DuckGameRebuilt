@@ -4,9 +4,9 @@ namespace DuckGame
 {
 	public class ScriptStatement
 	{
-		public static global::DuckGame.ScriptStatement Parse(string statement, object left = null, object right = null, global::DuckGame.ScriptOperator operat = global::DuckGame.ScriptOperator.None, string func = null, bool isChild = false)
+		public static ScriptStatement Parse(string statement, object left = null, object right = null, ScriptOperator operat = ScriptOperator.None, string func = null, bool isChild = false)
 		{
-			global::DuckGame.ScriptStatement newStatement = new global::DuckGame.ScriptStatement();
+			ScriptStatement newStatement = new ScriptStatement();
 			newStatement.leftObject = left;
 			newStatement.rightObject = right;
 			newStatement.op = operat;
@@ -17,7 +17,7 @@ namespace DuckGame
 				openParenthesis++;
 			}
 			string currentWord = "";
-			global::DuckGame.ScriptOperator currentOperator = global::DuckGame.ScriptOperator.None;
+			ScriptOperator currentOperator = ScriptOperator.None;
 			bool isNumber = false;
 			bool isFloat = false;
 			bool isWord = false;
@@ -65,67 +65,67 @@ namespace DuckGame
 						}
 						else if (isFloat)
 						{
-							newStatement.data = global::DuckGame.Change.ToSingle(currentWord);
+							newStatement.data = Change.ToSingle(currentWord);
 						}
 						else if (isNumber)
 						{
-							newStatement.data = global::System.Convert.ToInt32(currentWord);
+							newStatement.data = Convert.ToInt32(currentWord);
 						}
 					}
 					if (isOperator)
 					{
 						if (currentWord == "+")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.Plus;
+							currentOperator = ScriptOperator.Plus;
 						}
 						else if (currentWord == "-")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.Minus;
+							currentOperator = ScriptOperator.Minus;
 						}
 						else if (currentWord == "*")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.Multiply;
+							currentOperator = ScriptOperator.Multiply;
 						}
 						else if (currentWord == "/")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.Divide;
+							currentOperator = ScriptOperator.Divide;
 						}
 						else if (currentWord == "==")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.IsEqual;
+							currentOperator = ScriptOperator.IsEqual;
 						}
 						else if (currentWord == "!=")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.IsNotEqual;
+							currentOperator = ScriptOperator.IsNotEqual;
 						}
 						else if (currentWord == ">")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.GreaterThan;
+							currentOperator = ScriptOperator.GreaterThan;
 						}
 						else if (currentWord == "<")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.LessThan;
+							currentOperator = ScriptOperator.LessThan;
 						}
 						else if (currentWord == "&&")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.And;
+							currentOperator = ScriptOperator.And;
 						}
 						else if (currentWord == "and")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.And;
+							currentOperator = ScriptOperator.And;
 						}
 						else if (currentWord == "or")
 						{
-							currentOperator = global::DuckGame.ScriptOperator.Or;
+							currentOperator = ScriptOperator.Or;
 						}
-						if (newStatement.op == global::DuckGame.ScriptOperator.None)
+						if (newStatement.op == ScriptOperator.None)
 						{
 							newStatement.op = currentOperator;
 						}
 					}
 					if (c == '(')
 					{
-						global::DuckGame.ScriptStatement innerStatement = global::DuckGame.ScriptStatement.Parse(statement, null, null, global::DuckGame.ScriptOperator.None, isWord ? currentWord : null, true);
+						ScriptStatement innerStatement = ScriptStatement.Parse(statement, null, null, ScriptOperator.None, isWord ? currentWord : null, true);
 						statement = innerStatement.remainingStatementString;
 						if (innerStatement.error != null)
 						{
@@ -142,9 +142,9 @@ namespace DuckGame
 					{
 						object dat = newStatement.data;
 						newStatement.data = null;
-						if (currentOperator > global::DuckGame.ScriptOperator.COMPARATORS)
+						if (currentOperator > ScriptOperator.COMPARATORS)
 						{
-							ScriptStatement s = global::DuckGame.ScriptStatement.Parse(statement, dat, null, global::DuckGame.ScriptOperator.None, null, true);
+							ScriptStatement s = ScriptStatement.Parse(statement, dat, null, ScriptOperator.None, null, true);
 							statement = s.remainingStatementString;
 							dat = s;
 						}
@@ -156,7 +156,7 @@ namespace DuckGame
 						{
 							if (newStatement.rightObject != null)
 							{
-								return global::DuckGame.ScriptStatement.Parse(statement, newStatement, dat, currentOperator, null, true);
+								return ScriptStatement.Parse(statement, newStatement, dat, currentOperator, null, true);
 							}
 							newStatement.rightObject = dat;
 						}
@@ -209,7 +209,7 @@ namespace DuckGame
 			get
 			{
 				object finalResult = null;
-				global::DuckGame.ScriptStatement leftStatement = this.leftObject as global::DuckGame.ScriptStatement;
+				ScriptStatement leftStatement = this.leftObject as ScriptStatement;
 				object leftResult;
 				if (leftStatement != null)
 				{
@@ -219,11 +219,11 @@ namespace DuckGame
 				{
 					leftResult = this.leftObject;
 				}
-				global::DuckGame.ScriptStatement rightStatement = this.rightObject as global::DuckGame.ScriptStatement;
+				ScriptStatement rightStatement = this.rightObject as ScriptStatement;
 				object rightResult;
 				if (rightStatement != null)
 				{
-					if (leftResult is bool || this.op <= global::DuckGame.ScriptOperator.IsNotEqual)
+					if (leftResult is bool || this.op <= ScriptOperator.IsNotEqual)
 					{
 						rightResult = rightStatement.result;
 					}
@@ -244,37 +244,37 @@ namespace DuckGame
 						{
 							if (leftResult is float || rightResult is float)
 							{
-								float left = global::DuckGame.Change.ToSingle(leftResult);
-								float right = global::DuckGame.Change.ToSingle(rightResult);
-								if (this.op == global::DuckGame.ScriptOperator.Plus)
+								float left = Change.ToSingle(leftResult);
+								float right = Change.ToSingle(rightResult);
+								if (this.op == ScriptOperator.Plus)
 								{
 									finalResult = left + right;
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.Minus)
+								else if (this.op == ScriptOperator.Minus)
 								{
 									finalResult = left - right;
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.Multiply)
+								else if (this.op == ScriptOperator.Multiply)
 								{
 									finalResult = left * right;
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.Divide)
+								else if (this.op == ScriptOperator.Divide)
 								{
 									finalResult = ((right != 0f) ? (left / right) : 0f);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.IsEqual)
+								else if (this.op == ScriptOperator.IsEqual)
 								{
 									finalResult = (left == right);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.IsNotEqual)
+								else if (this.op == ScriptOperator.IsNotEqual)
 								{
 									finalResult = (left != right);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.GreaterThan)
+								else if (this.op == ScriptOperator.GreaterThan)
 								{
 									finalResult = (left > right);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.LessThan)
+								else if (this.op == ScriptOperator.LessThan)
 								{
 									finalResult = (left < right);
 								}
@@ -283,35 +283,35 @@ namespace DuckGame
 							{
 								int left2 = (int)leftResult;
 								int right2 = (int)rightResult;
-								if (this.op == global::DuckGame.ScriptOperator.Plus)
+								if (this.op == ScriptOperator.Plus)
 								{
 									finalResult = left2 + right2;
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.Minus)
+								else if (this.op == ScriptOperator.Minus)
 								{
 									finalResult = left2 - right2;
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.Multiply)
+								else if (this.op == ScriptOperator.Multiply)
 								{
 									finalResult = left2 * right2;
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.Divide)
+								else if (this.op == ScriptOperator.Divide)
 								{
 									finalResult = ((right2 != 0) ? (left2 / right2) : 0);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.IsEqual)
+								else if (this.op == ScriptOperator.IsEqual)
 								{
 									finalResult = (left2 == right2);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.IsNotEqual)
+								else if (this.op == ScriptOperator.IsNotEqual)
 								{
 									finalResult = (left2 != right2);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.GreaterThan)
+								else if (this.op == ScriptOperator.GreaterThan)
 								{
 									finalResult = (left2 > right2);
 								}
-								else if (this.op == global::DuckGame.ScriptOperator.LessThan)
+								else if (this.op == ScriptOperator.LessThan)
 								{
 									finalResult = (left2 < right2);
 								}
@@ -321,15 +321,15 @@ namespace DuckGame
 						{
 							string left3 = (string)leftResult;
 							string right3 = (string)rightResult;
-							if (this.op == global::DuckGame.ScriptOperator.Plus)
+							if (this.op == ScriptOperator.Plus)
 							{
 								finalResult = left3 + right3;
 							}
-							else if (this.op == global::DuckGame.ScriptOperator.IsEqual)
+							else if (this.op == ScriptOperator.IsEqual)
 							{
 								finalResult = (left3 == right3);
 							}
-							else if (this.op == global::DuckGame.ScriptOperator.IsNotEqual)
+							else if (this.op == ScriptOperator.IsNotEqual)
 							{
 								finalResult = (left3 != right3);
 							}
@@ -338,19 +338,19 @@ namespace DuckGame
 						{
 							bool left4 = (bool)leftResult;
 							bool right4 = (bool)rightResult;
-							if (this.op == global::DuckGame.ScriptOperator.IsEqual)
+							if (this.op == ScriptOperator.IsEqual)
 							{
 								finalResult = (left4 == right4);
 							}
-							else if (this.op == global::DuckGame.ScriptOperator.IsNotEqual)
+							else if (this.op == ScriptOperator.IsNotEqual)
 							{
 								finalResult = (left4 != right4);
 							}
-							else if (this.op == global::DuckGame.ScriptOperator.And)
+							else if (this.op == ScriptOperator.And)
 							{
 								finalResult = (left4 && right4);
 							}
-							else if (this.op == global::DuckGame.ScriptOperator.Or)
+							else if (this.op == ScriptOperator.Or)
 							{
 								finalResult = (left4 || right4);
 							}
@@ -370,21 +370,21 @@ namespace DuckGame
 					object res;
 					if (finalResult is string)
 					{
-						res = global::DuckGame.Script.CallMethod(this.functionName, finalResult as string);
+						res = Script.CallMethod(this.functionName, finalResult as string);
 					}
 					else if (finalResult is int)
 					{
-						res = global::DuckGame.Script.CallMethod(this.functionName, (int)finalResult);
+						res = Script.CallMethod(this.functionName, (int)finalResult);
 					}
 					else if (finalResult is float)
 					{
-						res = global::DuckGame.Script.CallMethod(this.functionName, (float)finalResult);
+						res = Script.CallMethod(this.functionName, (float)finalResult);
 					}
 					else
 					{
-						res = global::DuckGame.Script.CallMethod(this.functionName, null);
+						res = Script.CallMethod(this.functionName, null);
 					}
-					global::DuckGame.ScriptObject obj = res as global::DuckGame.ScriptObject;
+					ScriptObject obj = res as ScriptObject;
 					if (obj != null)
 					{
 						finalResult = obj.objectProperty.GetValue(obj.obj, null);
@@ -402,9 +402,9 @@ namespace DuckGame
 						finalResult = (int)finalResult * (obj.negative ? -1 : 1);
 					}
 				}
-				if (rightResult != null && rightStatement != null && rightStatement.op > global::DuckGame.ScriptOperator.IsNotEqual)
+				if (rightResult != null && rightStatement != null && rightStatement.op > ScriptOperator.IsNotEqual)
 				{
-					return new global::DuckGame.ScriptStatement
+					return new ScriptStatement
 					{
 						leftObject = finalResult,
 						rightObject = rightStatement.rightObject,
@@ -425,7 +425,7 @@ namespace DuckGame
 
 		public object rightObject;
 
-		public global::DuckGame.ScriptOperator op;
+		public ScriptOperator op;
 
 		public string functionName;
 

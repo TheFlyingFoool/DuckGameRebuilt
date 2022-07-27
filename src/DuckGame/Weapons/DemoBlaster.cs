@@ -62,7 +62,7 @@ namespace DuckGame
             {
                 this._stream.sprayAngle = base.barrelVector * 2f;
                 this._stream.position = base.barrelPosition;
-                global::DuckGame.FluidData dat = global::DuckGame.Fluid.Poo;
+                FluidData dat = Fluid.Poo;
                 dat.amount = 0.01f;
                 this._stream.Feed(dat);
                 this._wait = 0;

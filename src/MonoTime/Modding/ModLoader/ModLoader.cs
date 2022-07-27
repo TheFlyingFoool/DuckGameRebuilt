@@ -293,7 +293,7 @@ namespace DuckGame
                             else
                                 modConfig.content.PreloadContentPaths();
                             mod = (Mod)Activator.CreateInstance(array2[0]);
-                            if (mod is global::DuckGame.DisabledMod || mod is global::DuckGame.CoreMod || mod is global::DuckGame.ErrorMod)
+                            if (mod is DisabledMod || mod is CoreMod || mod is ErrorMod)
                             {
                                 mod.clientMod = true;
                             }

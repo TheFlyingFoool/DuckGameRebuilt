@@ -6,15 +6,15 @@ namespace DuckGame
 {
 	public class InputProfile
 	{
-		public static global::DuckGame.InputProfileCore core
+		public static InputProfileCore core
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core;
+				return InputProfile._core;
 			}
 			set
 			{
-				global::DuckGame.InputProfile._core = value;
+				InputProfile._core = value;
 			}
 		}
 
@@ -22,7 +22,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[0];
+				return InputProfile._defaultPlayerMappingStrings[0];
 			}
 		}
 
@@ -30,7 +30,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[1];
+				return InputProfile._defaultPlayerMappingStrings[1];
 			}
 		}
 
@@ -38,7 +38,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[2];
+				return InputProfile._defaultPlayerMappingStrings[2];
 			}
 		}
 
@@ -46,7 +46,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[3];
+				return InputProfile._defaultPlayerMappingStrings[3];
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[4];
+				return InputProfile._defaultPlayerMappingStrings[4];
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[5];
+				return InputProfile._defaultPlayerMappingStrings[5];
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[6];
+				return InputProfile._defaultPlayerMappingStrings[6];
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings[7];
+				return InputProfile._defaultPlayerMappingStrings[7];
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._defaultPlayerMappingStrings;
+				return InputProfile._defaultPlayerMappingStrings;
 			}
 		}
 
@@ -94,193 +94,193 @@ namespace DuckGame
 		{
 			if (fullRemap)
 			{
-				global::DuckGame.Profiles.DefaultPlayer1.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer1);
-				global::DuckGame.Profiles.DefaultPlayer2.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer2);
-				global::DuckGame.Profiles.DefaultPlayer3.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer3);
-				global::DuckGame.Profiles.DefaultPlayer4.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer4);
-				global::DuckGame.Profiles.DefaultPlayer5.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer5);
-				global::DuckGame.Profiles.DefaultPlayer6.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer6);
-				global::DuckGame.Profiles.DefaultPlayer7.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer7);
-				global::DuckGame.Profiles.DefaultPlayer8.inputProfile = global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer8);
+				Profiles.DefaultPlayer1.inputProfile = InputProfile.Get(InputProfile.MPPlayer1);
+				Profiles.DefaultPlayer2.inputProfile = InputProfile.Get(InputProfile.MPPlayer2);
+				Profiles.DefaultPlayer3.inputProfile = InputProfile.Get(InputProfile.MPPlayer3);
+				Profiles.DefaultPlayer4.inputProfile = InputProfile.Get(InputProfile.MPPlayer4);
+				Profiles.DefaultPlayer5.inputProfile = InputProfile.Get(InputProfile.MPPlayer5);
+				Profiles.DefaultPlayer6.inputProfile = InputProfile.Get(InputProfile.MPPlayer6);
+				Profiles.DefaultPlayer7.inputProfile = InputProfile.Get(InputProfile.MPPlayer7);
+				Profiles.DefaultPlayer8.inputProfile = InputProfile.Get(InputProfile.MPPlayer8);
 				return;
 			}
-			global::DuckGame.Profiles.DefaultPlayer1.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer1));
-			global::DuckGame.Profiles.DefaultPlayer2.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer2));
-			global::DuckGame.Profiles.DefaultPlayer3.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer3));
-			global::DuckGame.Profiles.DefaultPlayer4.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer4));
-			global::DuckGame.Profiles.DefaultPlayer5.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer5));
-			global::DuckGame.Profiles.DefaultPlayer6.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer6));
-			global::DuckGame.Profiles.DefaultPlayer7.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer7));
-			global::DuckGame.Profiles.DefaultPlayer8.SetInputProfileLink(global::DuckGame.InputProfile.Get(global::DuckGame.InputProfile.MPPlayer8));
+			Profiles.DefaultPlayer1.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer1));
+			Profiles.DefaultPlayer2.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer2));
+			Profiles.DefaultPlayer3.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer3));
+			Profiles.DefaultPlayer4.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer4));
+			Profiles.DefaultPlayer5.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer5));
+			Profiles.DefaultPlayer6.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer6));
+			Profiles.DefaultPlayer7.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer7));
+			Profiles.DefaultPlayer8.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer8));
 		}
 
 		public static void SwapDefaultInputStrings(string from, string to)
 		{
 			int fromIdx = -1;
 			int toIdx = -1;
-			for (int i = 0; i < global::DuckGame.DG.MaxPlayers; i++)
+			for (int i = 0; i < DG.MaxPlayers; i++)
 			{
-				if (global::DuckGame.InputProfile._defaultPlayerMappingStrings[i] == from)
+				if (InputProfile._defaultPlayerMappingStrings[i] == from)
 				{
 					fromIdx = i;
 				}
-				else if (global::DuckGame.InputProfile._defaultPlayerMappingStrings[i] == to)
+				else if (InputProfile._defaultPlayerMappingStrings[i] == to)
 				{
 					toIdx = i;
 				}
 			}
 			if (fromIdx >= 0 && toIdx >= 0)
 			{
-				string temp = global::DuckGame.InputProfile._defaultPlayerMappingStrings[toIdx];
-				global::DuckGame.InputProfile._defaultPlayerMappingStrings[toIdx] = global::DuckGame.InputProfile._defaultPlayerMappingStrings[fromIdx];
-				global::DuckGame.InputProfile._defaultPlayerMappingStrings[fromIdx] = temp;
+				string temp = InputProfile._defaultPlayerMappingStrings[toIdx];
+				InputProfile._defaultPlayerMappingStrings[toIdx] = InputProfile._defaultPlayerMappingStrings[fromIdx];
+				InputProfile._defaultPlayerMappingStrings[fromIdx] = temp;
 			}
 		}
 
-		public static global::DuckGame.InputProfile active
+		public static InputProfile active
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._active;
+				return InputProfile._active;
 			}
 			set
 			{
-				global::DuckGame.InputProfile._active = value;
+				InputProfile._active = value;
 			}
 		}
 
-		public static global::System.Collections.Generic.List<global::DuckGame.InputProfile> defaultProfiles
+		public static List<InputProfile> defaultProfiles
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.defaultProfiles;
+				return InputProfile._core.defaultProfiles;
 			}
 		}
 
-		public static global::DuckGame.InputProfile FirstProfileWithDevice
+		public static InputProfile FirstProfileWithDevice
 		{
 			get
 			{
-				foreach (global::DuckGame.InputProfile p in global::DuckGame.InputProfile.defaultProfiles)
+				foreach (InputProfile p in InputProfile.defaultProfiles)
 				{
 					if (p.lastActiveDevice != null && p.lastActiveDevice.productName != null)
 					{
 						return p;
 					}
 				}
-				return global::DuckGame.InputProfile.DefaultPlayer1;
+				return InputProfile.DefaultPlayer1;
 			}
 		}
 
-		public static void SetDefaultProfile(int idx, global::DuckGame.InputProfile p)
+		public static void SetDefaultProfile(int idx, InputProfile p)
 		{
 			if (idx == 0)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer1] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer1] = p;
 			}
 			if (idx == 1)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer2] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer2] = p;
 			}
 			if (idx == 2)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer3] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer3] = p;
 			}
 			if (idx == 3)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer4] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer4] = p;
 			}
 			if (idx == 4)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer5] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer5] = p;
 			}
 			if (idx == 5)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer6] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer6] = p;
 			}
 			if (idx == 6)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer7] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer7] = p;
 			}
 			if (idx == 7)
 			{
-				global::DuckGame.InputProfile._core._profiles[global::DuckGame.InputProfile.MPPlayer8] = p;
+				InputProfile._core._profiles[InputProfile.MPPlayer8] = p;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer1
+		public static InputProfile DefaultPlayer1
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer1;
+				return InputProfile._core.DefaultPlayer1;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer2
+		public static InputProfile DefaultPlayer2
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer2;
+				return InputProfile._core.DefaultPlayer2;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer3
+		public static InputProfile DefaultPlayer3
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer3;
+				return InputProfile._core.DefaultPlayer3;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer4
+		public static InputProfile DefaultPlayer4
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer4;
+				return InputProfile._core.DefaultPlayer4;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer5
+		public static InputProfile DefaultPlayer5
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer5;
+				return InputProfile._core.DefaultPlayer5;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer6
+		public static InputProfile DefaultPlayer6
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer6;
+				return InputProfile._core.DefaultPlayer6;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer7
+		public static InputProfile DefaultPlayer7
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer7;
+				return InputProfile._core.DefaultPlayer7;
 			}
 		}
 
-		public static global::DuckGame.InputProfile DefaultPlayer8
+		public static InputProfile DefaultPlayer8
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core.DefaultPlayer8;
+				return InputProfile._core.DefaultPlayer8;
 			}
 		}
 
-		public global::DuckGame.GenericController genericController
+		public GenericController genericController
 		{
 			get
 			{
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> pair in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
 				{
-					if (pair.Key is global::DuckGame.GenericController)
+					if (pair.Key is GenericController)
 					{
-						return pair.Key as global::DuckGame.GenericController;
+						return pair.Key as GenericController;
 					}
 				}
 				return null;
@@ -289,74 +289,74 @@ namespace DuckGame
 
 		protected virtual void UpdateStickPress()
 		{
-			this.StickPress(global::DuckGame.PadButton.DPadLeft, this.leftStick.x < -0.6f);
-			this.StickPress(global::DuckGame.PadButton.DPadRight, this.leftStick.x > 0.6f);
-			this.StickPress(global::DuckGame.PadButton.DPadUp, this.leftStick.y > 0.6f);
-			this.StickPress(global::DuckGame.PadButton.DPadDown, this.leftStick.y < -0.6f);
+			this.StickPress(PadButton.DPadLeft, this.leftStick.x < -0.6f);
+			this.StickPress(PadButton.DPadRight, this.leftStick.x > 0.6f);
+			this.StickPress(PadButton.DPadUp, this.leftStick.y > 0.6f);
+			this.StickPress(PadButton.DPadDown, this.leftStick.y < -0.6f);
 		}
 
-		protected void StickPress(global::DuckGame.PadButton b, bool press)
+		protected void StickPress(PadButton b, bool press)
 		{
 			if (press)
 			{
-				if (this._leftStickStates[b] == global::DuckGame.InputState.None)
+				if (this._leftStickStates[b] == InputState.None)
 				{
-					this._leftStickStates[b] = global::DuckGame.InputState.Pressed;
+					this._leftStickStates[b] = InputState.Pressed;
 					return;
 				}
-				this._leftStickStates[b] = global::DuckGame.InputState.Down;
+				this._leftStickStates[b] = InputState.Down;
 				return;
 			}
 			else
 			{
-				if (this._leftStickStates[b] == global::DuckGame.InputState.Down || this._leftStickStates[global::DuckGame.PadButton.DPadLeft] == global::DuckGame.InputState.Pressed)
+				if (this._leftStickStates[b] == InputState.Down || this._leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
 				{
-					this._leftStickStates[b] = global::DuckGame.InputState.Released;
+					this._leftStickStates[b] = InputState.Released;
 					return;
 				}
-				this._leftStickStates[b] = global::DuckGame.InputState.None;
+				this._leftStickStates[b] = InputState.None;
 				return;
 			}
 		}
 
-		public static global::System.Collections.Generic.Dictionary<string, global::DuckGame.InputProfile> profiles
+		public static Dictionary<string, InputProfile> profiles
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._core._profiles;
+				return InputProfile._core._profiles;
 			}
 		}
 
-		public static global::DuckGame.InputProfile Add(string name)
+		public static InputProfile Add(string name)
 		{
-			return global::DuckGame.InputProfile._core.Add(name);
+			return InputProfile._core.Add(name);
 		}
 
 		public static void Update()
 		{
-			global::DuckGame.InputProfile._core.Update();
+			InputProfile._core.Update();
 		}
 
-		public static global::DuckGame.InputProfile Get(string name)
+		public static InputProfile Get(string name)
 		{
-			return global::DuckGame.InputProfile._core.Get(name);
+			return InputProfile._core.Get(name);
 		}
 
-		private global::DuckGame.InputDevice _lastActiveDevice
+		private InputDevice _lastActiveDevice
 		{
-			[global::System.Runtime.CompilerServices.CompilerGenerated]
+			[CompilerGenerated]
 			get
 			{
 				return this.kBackingField;
 			}
-			[global::System.Runtime.CompilerServices.CompilerGenerated]
+			[CompilerGenerated]
 			set
 			{
 				this.kBackingField = value;
 			}
 		}
 
-		public global::DuckGame.InputDevice lastActiveDevice
+		public InputDevice lastActiveDevice
 		{
 			get
 			{
@@ -364,19 +364,19 @@ namespace DuckGame
 				{
 					return this.lastActiveOverride;
 				}
-				if (!global::DuckGame.MonoMain.started)
+				if (!MonoMain.started)
 				{
-					return new global::DuckGame.InputDevice(0);
+					return new InputDevice(0);
 				}
 				if (this._lastActiveDevice == null)
 				{
-					foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> pair in this._mappings)
+					foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
 					{
-						if (this._lastActiveDevice == null && pair.Key is global::DuckGame.Keyboard)
+						if (this._lastActiveDevice == null && pair.Key is Keyboard)
 						{
 							this._lastActiveDevice = pair.Key;
 						}
-						else if (pair.Key is global::DuckGame.GenericController && (pair.Key as global::DuckGame.GenericController).device is global::DuckGame.XInputPad)
+						else if (pair.Key is GenericController && (pair.Key as GenericController).device is XInputPad)
 						{
 							this._lastActiveDevice = pair.Key;
 						}
@@ -396,7 +396,7 @@ namespace DuckGame
 
 		public bool HasAnyConnectedDevice()
 		{
-			using (global::System.Collections.Generic.Dictionary<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>>.KeyCollection.Enumerator enumerator = this._mappings.Keys.GetEnumerator())
+			using (Dictionary<InputDevice, MultiMap<string, int>>.KeyCollection.Enumerator enumerator = this._mappings.Keys.GetEnumerator())
 			{
 				while (enumerator.MoveNext())
 				{
@@ -426,9 +426,9 @@ namespace DuckGame
 			this._mappings.Clear();
 		}
 
-		public global::DuckGame.MultiMap<string, int> GetMappings(global::System.Type t)
+		public MultiMap<string, int> GetMappings(Type t)
 		{
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> pair in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
 			{
 				if (pair.Key.GetType() == t)
 				{
@@ -438,9 +438,9 @@ namespace DuckGame
 			return null;
 		}
 
-		public global::DuckGame.InputDevice GetDevice(global::System.Type t)
+		public InputDevice GetDevice(Type t)
 		{
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> pair in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
 			{
 				if (pair.Key.GetType() == t)
 				{
@@ -450,14 +450,14 @@ namespace DuckGame
 			return null;
 		}
 
-		public int GetMapping(global::System.Type t, string trigger)
+		public int GetMapping(Type t, string trigger)
 		{
-			global::DuckGame.MultiMap<string, int> map = this.GetMappings(t);
+			MultiMap<string, int> map = this.GetMappings(t);
 			if (map == null)
 			{
 				return -1;
 			}
-			global::System.Collections.Generic.List<int> val = null;
+			List<int> val = null;
 			map.TryGetValue(trigger, out val);
 			if (val != null && val.Count > 0)
 			{
@@ -466,18 +466,18 @@ namespace DuckGame
 			return -1;
 		}
 
-		public string GetMappingString(global::System.Type t, string trigger)
+		public string GetMappingString(Type t, string trigger)
 		{
 			int mapping = this.GetMapping(t, trigger);
 			if (mapping == -1)
 			{
 				return "";
 			}
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> pair in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
 			{
 				if (pair.Key.GetType() == t)
 				{
-					global::System.Collections.Generic.Dictionary<int, string> mappings = pair.Key.GetTriggerNames();
+					Dictionary<int, string> mappings = pair.Key.GetTriggerNames();
 					if (mappings != null)
 					{
 						string name = null;
@@ -492,9 +492,9 @@ namespace DuckGame
 			return "";
 		}
 
-		public virtual global::DuckGame.Sprite GetTriggerImage(string trigger)
+		public virtual Sprite GetTriggerImage(string trigger)
 		{
-			global::DuckGame.InputDevice last_device = this.lastActiveDevice;
+			InputDevice last_device = this.lastActiveDevice;
 			int mapping = 9999;
 			if (trigger != "DPAD" && trigger != "WASD")
 			{
@@ -506,7 +506,7 @@ namespace DuckGame
 			}
 			if (mapping == -1)
 			{
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> pair in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
 				{
 					mapping = this.GetMapping(pair.Key.GetType(), trigger);
 					if (mapping != -1)
@@ -522,28 +522,28 @@ namespace DuckGame
 		public InputProfile(string profile = "")
 		{
 			this._name = profile;
-			this._leftStickStates[global::DuckGame.PadButton.DPadLeft] = global::DuckGame.InputState.None;
-			this._leftStickStates[global::DuckGame.PadButton.DPadRight] = global::DuckGame.InputState.None;
-			this._leftStickStates[global::DuckGame.PadButton.DPadUp] = global::DuckGame.InputState.None;
-			this._leftStickStates[global::DuckGame.PadButton.DPadDown] = global::DuckGame.InputState.None;
+			this._leftStickStates[PadButton.DPadLeft] = InputState.None;
+			this._leftStickStates[PadButton.DPadRight] = InputState.None;
+			this._leftStickStates[PadButton.DPadUp] = InputState.None;
+			this._leftStickStates[PadButton.DPadDown] = InputState.None;
 		}
 
-		public static global::DuckGame.InputProfile GetVirtualInput(int index)
+		public static InputProfile GetVirtualInput(int index)
 		{
-			return global::DuckGame.InputProfile._core.GetVirtualInput(index);
+			return InputProfile._core.GetVirtualInput(index);
 		}
 
-		public global::DuckGame.VirtualInput virtualDevice
+		public VirtualInput virtualDevice
 		{
 			get
 			{
 				if (!this._virtualInputInitialized)
 				{
-					foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> kvp in this._mappings)
+					foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in this._mappings)
 					{
-						if (kvp.Key is global::DuckGame.VirtualInput)
+						if (kvp.Key is VirtualInput)
 						{
-							this._virtualInput = (kvp.Key as global::DuckGame.VirtualInput);
+							this._virtualInput = (kvp.Key as VirtualInput);
 							break;
 						}
 					}
@@ -557,11 +557,11 @@ namespace DuckGame
 			}
 		}
 
-		public virtual void Map(global::DuckGame.InputDevice device, string trigger, int mapping, bool clearExisting = false)
+		public virtual void Map(InputDevice device, string trigger, int mapping, bool clearExisting = false)
 		{
 			if (!this._mappings.ContainsKey(device))
 			{
-				this._mappings[device] = new global::DuckGame.MultiMap<string, int>();
+				this._mappings[device] = new MultiMap<string, int>();
 			}
 			if (clearExisting && this._mappings[device].ContainsKey(trigger))
 			{
@@ -570,25 +570,25 @@ namespace DuckGame
 			this._mappings[device].Add(trigger, mapping);
 		}
 
-		public global::DuckGame.MultiMap<string, int> GetControllerMap<T>() where T : global::DuckGame.InputDevice
+		public MultiMap<string, int> GetControllerMap<T>() where T : InputDevice
 		{
-			global::DuckGame.MultiMap<string, int> controls = null;
-			global::DuckGame.InputDevice d = global::DuckGame.Input.GetDevice<T>(0);
+			MultiMap<string, int> controls = null;
+			InputDevice d = Input.GetDevice<T>(0);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				controls = this._mappings[d];
 			}
-			d = global::DuckGame.Input.GetDevice<T>(1);
+			d = Input.GetDevice<T>(1);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				controls = this._mappings[d];
 			}
-			d = global::DuckGame.Input.GetDevice<T>(2);
+			d = Input.GetDevice<T>(2);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				controls = this._mappings[d];
 			}
-			d = global::DuckGame.Input.GetDevice<T>(3);
+			d = Input.GetDevice<T>(3);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				controls = this._mappings[d];
@@ -596,46 +596,46 @@ namespace DuckGame
 			return controls;
 		}
 
-		public void SetGenericControllerMapIndex<T>(int i, global::DuckGame.MultiMap<string, int> controls) where T : global::DuckGame.InputDevice
+		public void SetGenericControllerMapIndex<T>(int i, MultiMap<string, int> controls) where T : InputDevice
 		{
-			global::DuckGame.InputDevice d = global::DuckGame.Input.GetDevice<T>(0);
+			InputDevice d = Input.GetDevice<T>(0);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				this._mappings.Remove(d);
 			}
-			d = global::DuckGame.Input.GetDevice<T>(1);
+			d = Input.GetDevice<T>(1);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				this._mappings.Remove(d);
 			}
-			d = global::DuckGame.Input.GetDevice<T>(2);
+			d = Input.GetDevice<T>(2);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				this._mappings.Remove(d);
 			}
-			d = global::DuckGame.Input.GetDevice<T>(3);
+			d = Input.GetDevice<T>(3);
 			if (d != null && this._mappings.ContainsKey(d))
 			{
 				this._mappings.Remove(d);
 			}
 			if (controls != null)
 			{
-				this._mappings[global::DuckGame.Input.GetDevice<T>(i)] = controls;
+				this._mappings[Input.GetDevice<T>(i)] = controls;
 			}
 		}
 
-		public global::DuckGame.InputProfile Clone()
+		public InputProfile Clone()
 		{
-			global::DuckGame.InputProfile clone = new global::DuckGame.InputProfile("");
+			InputProfile clone = new InputProfile("");
 			clone._name = this.name;
 			clone._state = this._state;
 			clone._prevState = this._prevState;
 			clone.dindex = this.dindex;
 			clone.swapBack = this.swapBack;
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> kvp in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in this._mappings)
 			{
-				clone._mappings[kvp.Key] = new global::DuckGame.MultiMap<string, int>();
-				foreach (global::System.Collections.Generic.KeyValuePair<string, global::System.Collections.Generic.List<int>> pair in kvp.Value)
+				clone._mappings[kvp.Key] = new MultiMap<string, int>();
+				foreach (KeyValuePair<string, List<int>> pair in kvp.Value)
 				{
 					clone._mappings[kvp.Key].AddRange(pair.Key, pair.Value);
 				}
@@ -647,7 +647,7 @@ namespace DuckGame
 		{
 		}
 
-		public bool CheckCode(global::DuckGame.InputCode c)
+		public bool CheckCode(InputCode c)
 		{
 			return c.Update(this);
 		}
@@ -659,7 +659,7 @@ namespace DuckGame
 
 		public virtual bool Pressed(string trigger, bool any = false)
 		{
-			if (global::DuckGame.Input.ignoreInput && this._virtualInput == null)
+			if (Input.ignoreInput && this._virtualInput == null)
 			{
 				return false;
 			}
@@ -671,17 +671,17 @@ namespace DuckGame
 			{
 				return true;
 			}
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 			{
-				global::DuckGame.InputDevice mapped_device = map.Key;
-				if ((!(mapped_device is global::DuckGame.Keyboard) || !global::DuckGame.InputProfile.ignoreKeyboard) && (this._virtualInput == null || mapped_device is global::DuckGame.VirtualInput))
+				InputDevice mapped_device = map.Key;
+				if ((!(mapped_device is Keyboard) || !InputProfile.ignoreKeyboard) && (this._virtualInput == null || mapped_device is VirtualInput))
 				{
-					global::System.Collections.Generic.List<int> vals;
+					List<int> vals;
 					if (any)
 					{
 						if (mapped_device.MapPressed(-1, true))
 						{
-							this.lastPressFrame = global::DuckGame.Graphics.frame;
+							this.lastPressFrame = Graphics.frame;
 							return true;
 						}
 					}
@@ -689,13 +689,13 @@ namespace DuckGame
 					{
 						foreach (int val in vals)
 						{
-							if ((mapped_device is global::DuckGame.AnalogGamePad || mapped_device is global::DuckGame.GenericController) && this._leftStickStates.ContainsKey((global::DuckGame.PadButton)val) && this._leftStickStates[(global::DuckGame.PadButton)val] == global::DuckGame.InputState.Pressed)
+							if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && this._leftStickStates.ContainsKey((PadButton)val) && this._leftStickStates[(PadButton)val] == InputState.Pressed)
 							{
 								return true;
 							}
 							if (mapped_device.MapPressed(val, any))
 							{
-								this.lastPressFrame = global::DuckGame.Graphics.frame;
+								this.lastPressFrame = Graphics.frame;
 								return true;
 							}
 						}
@@ -707,26 +707,26 @@ namespace DuckGame
 
 		public virtual bool Released(string trigger)
 		{
-			if (global::DuckGame.Input.ignoreInput && this._virtualInput == null)
+			if (Input.ignoreInput && this._virtualInput == null)
 			{
 				return false;
 			}
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 			{
-				global::DuckGame.InputDevice mapped_device = map.Key;
-				global::System.Collections.Generic.List<int> vals;
-				if ((this._virtualInput == null || mapped_device is global::DuckGame.VirtualInput) && map.Value.TryGetValue(trigger, out vals))
+				InputDevice mapped_device = map.Key;
+				List<int> vals;
+				if ((this._virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
 				{
 					foreach (int val in vals)
 					{
-						if ((mapped_device is global::DuckGame.AnalogGamePad || mapped_device is global::DuckGame.GenericController) && this._leftStickStates.ContainsKey((global::DuckGame.PadButton)val) && this._leftStickStates[(global::DuckGame.PadButton)val] == global::DuckGame.InputState.Released)
+						if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && this._leftStickStates.ContainsKey((PadButton)val) && this._leftStickStates[(PadButton)val] == InputState.Released)
 						{
-							this.lastPressFrame = global::DuckGame.Graphics.frame;
+							this.lastPressFrame = Graphics.frame;
 							return true;
 						}
 						if (mapped_device.MapReleased(val))
 						{
-							this.lastPressFrame = global::DuckGame.Graphics.frame;
+							this.lastPressFrame = Graphics.frame;
 							return true;
 						}
 					}
@@ -737,31 +737,31 @@ namespace DuckGame
 
 		public virtual bool Down(string trigger)
 		{
-			if (global::DuckGame.Input.ignoreInput && this._virtualInput == null)
+			if (Input.ignoreInput && this._virtualInput == null)
 			{
 				return false;
 			}
-			foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+			foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 			{
-				global::DuckGame.InputDevice mapped_device = map.Key;
-				global::System.Collections.Generic.List<int> vals;
-				if ((this._virtualInput == null || mapped_device is global::DuckGame.VirtualInput) && map.Value.TryGetValue(trigger, out vals))
+				InputDevice mapped_device = map.Key;
+				List<int> vals;
+				if ((this._virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
 				{
 					foreach (int val in vals)
 					{
-						if ((mapped_device is global::DuckGame.AnalogGamePad || mapped_device is global::DuckGame.GenericController) && this._leftStickStates.ContainsKey((global::DuckGame.PadButton)val) && (this._leftStickStates[(global::DuckGame.PadButton)val] == global::DuckGame.InputState.Down || this._leftStickStates[(global::DuckGame.PadButton)val] == global::DuckGame.InputState.Pressed))
+						if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && this._leftStickStates.ContainsKey((PadButton)val) && (this._leftStickStates[(PadButton)val] == InputState.Down || this._leftStickStates[(PadButton)val] == InputState.Pressed))
 						{
-							this.lastPressFrame = global::DuckGame.Graphics.frame;
+							this.lastPressFrame = Graphics.frame;
 							return true;
 						}
 						if (mapped_device.MapDown(val, false))
 						{
-							if ((!(mapped_device is global::DuckGame.Keyboard) || !global::DuckGame.DuckNetwork.core.enteringText) && !(mapped_device is global::DuckGame.VirtualInput))
+							if ((!(mapped_device is Keyboard) || !DuckNetwork.core.enteringText) && !(mapped_device is VirtualInput))
 							{
 								this._lastActiveDevice = map.Key;
-								global::DuckGame.Input.lastActiveProfile = this;
+								Input.lastActiveProfile = this;
 							}
-							this.lastPressFrame = global::DuckGame.Graphics.frame;
+							this.lastPressFrame = Graphics.frame;
 							return true;
 						}
 					}
@@ -778,22 +778,22 @@ namespace DuckGame
 				{
 					return this._virtualInput.leftTrigger;
 				}
-				if (global::DuckGame.Input.ignoreInput)
+				if (Input.ignoreInput)
 				{
 					return 0f;
 				}
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 				{
-					if (this._virtualInput == null || map.Key is global::DuckGame.VirtualInput)
+					if (this._virtualInput == null || map.Key is VirtualInput)
 					{
-						global::DuckGame.AnalogGamePad pad = map.Key as global::DuckGame.AnalogGamePad;
-						if (pad == null && map.Key is global::DuckGame.GenericController)
+						AnalogGamePad pad = map.Key as AnalogGamePad;
+						if (pad == null && map.Key is GenericController)
 						{
-							pad = (map.Key as global::DuckGame.GenericController).device;
+							pad = (map.Key as GenericController).device;
 						}
 						if (pad != null)
 						{
-							global::System.Collections.Generic.List<int> mappings = null;
+							List<int> mappings = null;
 							if (!map.Value.TryGetValue("LTRIGGER", out mappings) || mappings.Count <= 0)
 							{
 								return pad.leftTrigger;
@@ -822,22 +822,22 @@ namespace DuckGame
 				{
 					return this._virtualInput.rightTrigger;
 				}
-				if (global::DuckGame.Input.ignoreInput)
+				if (Input.ignoreInput)
 				{
 					return 0f;
 				}
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 				{
-					if (this._virtualInput == null || map.Key is global::DuckGame.VirtualInput)
+					if (this._virtualInput == null || map.Key is VirtualInput)
 					{
-						global::DuckGame.AnalogGamePad pad = map.Key as global::DuckGame.AnalogGamePad;
-						if (pad == null && map.Key is global::DuckGame.GenericController)
+						AnalogGamePad pad = map.Key as AnalogGamePad;
+						if (pad == null && map.Key is GenericController)
 						{
-							pad = (map.Key as global::DuckGame.GenericController).device;
+							pad = (map.Key as GenericController).device;
 						}
 						if (pad != null)
 						{
-							global::System.Collections.Generic.List<int> mappings = null;
+							List<int> mappings = null;
 							if (!map.Value.TryGetValue("RTRIGGER", out mappings) || mappings.Count <= 0)
 							{
 								return pad.rightTrigger;
@@ -858,7 +858,7 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec2 leftStick
+		public Vec2 leftStick
 		{
 			get
 			{
@@ -866,22 +866,22 @@ namespace DuckGame
 				{
 					return this._virtualInput.leftStick;
 				}
-				if (global::DuckGame.Input.ignoreInput)
+				if (Input.ignoreInput)
 				{
-					return global::DuckGame.Vec2.Zero;
+					return Vec2.Zero;
 				}
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 				{
-					if (this._virtualInput == null || map.Key is global::DuckGame.VirtualInput)
+					if (this._virtualInput == null || map.Key is VirtualInput)
 					{
-						global::DuckGame.AnalogGamePad pad = map.Key as global::DuckGame.AnalogGamePad;
-						if (pad == null && map.Key is global::DuckGame.GenericController)
+						AnalogGamePad pad = map.Key as AnalogGamePad;
+						if (pad == null && map.Key is GenericController)
 						{
-							pad = (map.Key as global::DuckGame.GenericController).device;
+							pad = (map.Key as GenericController).device;
 						}
 						if (pad != null)
 						{
-							global::System.Collections.Generic.List<int> mappings = null;
+							List<int> mappings = null;
 							if (!map.Value.TryGetValue("LSTICK", out mappings) || mappings.Count <= 0)
 							{
 								return pad.leftStick;
@@ -898,11 +898,11 @@ namespace DuckGame
 						}
 					}
 				}
-				return new global::DuckGame.Vec2(0f, 0f);
+				return new Vec2(0f, 0f);
 			}
 		}
 
-		public global::DuckGame.Vec2 rightStick
+		public Vec2 rightStick
 		{
 			get
 			{
@@ -910,19 +910,19 @@ namespace DuckGame
 				{
 					return this._virtualInput.rightStick;
 				}
-				if (global::DuckGame.Input.ignoreInput)
+				if (Input.ignoreInput)
 				{
-					return global::DuckGame.Vec2.Zero;
+					return Vec2.Zero;
 				}
-				if (global::DuckGame.Mouse.left == global::DuckGame.InputState.Pressed || this._mouseAnchor == global::DuckGame.Vec2.Zero)
+				if (Mouse.left == InputState.Pressed || this._mouseAnchor == Vec2.Zero)
 				{
-					this._mouseAnchor = global::DuckGame.Mouse.position;
+					this._mouseAnchor = Mouse.position;
 				}
 				else
 				{
-					if (global::DuckGame.Mouse.left == global::DuckGame.InputState.Down)
+					if (Mouse.left == InputState.Down)
 					{
-						global::DuckGame.Vec2 dif = (global::DuckGame.Mouse.position - this._mouseAnchor) / 16f;
+						Vec2 dif = (Mouse.position - this._mouseAnchor) / 16f;
 						dif.y *= -1f;
 						float len = dif.length;
 						if (len > 1f)
@@ -931,23 +931,23 @@ namespace DuckGame
 						}
 						return dif.normalized * len;
 					}
-					if (global::DuckGame.Mouse.left == global::DuckGame.InputState.None)
+					if (Mouse.left == InputState.None)
 					{
-						this._mouseAnchor = global::DuckGame.Vec2.Zero;
+						this._mouseAnchor = Vec2.Zero;
 					}
 				}
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 				{
-					if (this._virtualInput == null || map.Key is global::DuckGame.VirtualInput)
+					if (this._virtualInput == null || map.Key is VirtualInput)
 					{
-						global::DuckGame.AnalogGamePad pad = map.Key as global::DuckGame.AnalogGamePad;
-						if (pad == null && map.Key is global::DuckGame.GenericController)
+						AnalogGamePad pad = map.Key as AnalogGamePad;
+						if (pad == null && map.Key is GenericController)
 						{
-							pad = (map.Key as global::DuckGame.GenericController).device;
+							pad = (map.Key as GenericController).device;
 						}
 						if (pad != null)
 						{
-							global::System.Collections.Generic.List<int> mappings = null;
+							List<int> mappings = null;
 							if (!map.Value.TryGetValue("RSTICK", out mappings) || mappings.Count <= 0)
 							{
 								return pad.rightStick;
@@ -964,7 +964,7 @@ namespace DuckGame
 						}
 					}
 				}
-				return new global::DuckGame.Vec2(0f, 0f);
+				return new Vec2(0f, 0f);
 			}
 		}
 
@@ -972,18 +972,18 @@ namespace DuckGame
 		{
 			get
 			{
-				if (global::DuckGame.Input.ignoreInput)
+				if (Input.ignoreInput)
 				{
 					return false;
 				}
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 				{
-					if (this._virtualInput == null || map.Key is global::DuckGame.VirtualInput)
+					if (this._virtualInput == null || map.Key is VirtualInput)
 					{
-						global::DuckGame.AnalogGamePad pad = map.Key as global::DuckGame.AnalogGamePad;
-						if (pad == null && map.Key is global::DuckGame.GenericController)
+						AnalogGamePad pad = map.Key as AnalogGamePad;
+						if (pad == null && map.Key is GenericController)
 						{
-							pad = (map.Key as global::DuckGame.GenericController).device;
+							pad = (map.Key as GenericController).device;
 						}
 						if (pad != null)
 						{
@@ -999,18 +999,18 @@ namespace DuckGame
 		{
 			get
 			{
-				if (global::DuckGame.Input.ignoreInput)
+				if (Input.ignoreInput)
 				{
 					return 0f;
 				}
-				foreach (global::System.Collections.Generic.KeyValuePair<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> map in this._mappings)
+				foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
 				{
-					if (this._virtualInput == null || map.Key is global::DuckGame.VirtualInput)
+					if (this._virtualInput == null || map.Key is VirtualInput)
 					{
-						global::DuckGame.AnalogGamePad pad = map.Key as global::DuckGame.AnalogGamePad;
-						if (pad == null && map.Key is global::DuckGame.GenericController)
+						AnalogGamePad pad = map.Key as AnalogGamePad;
+						if (pad == null && map.Key is GenericController)
 						{
-							pad = (map.Key as global::DuckGame.GenericController).device;
+							pad = (map.Key as GenericController).device;
 						}
 						if (pad != null)
 						{
@@ -1042,18 +1042,18 @@ namespace DuckGame
 		{
 			get
 			{
-				return global::DuckGame.InputProfile._repeat;
+				return InputProfile._repeat;
 			}
 			set
 			{
-				global::DuckGame.InputProfile._repeat = value;
+				InputProfile._repeat = value;
 			}
 		}
 
 		public void UpdateTriggerStates()
 		{
 			this._repeatList.Clear();
-			if (global::DuckGame.InputProfile._repeat)
+			if (InputProfile._repeat)
 			{
 				if (this.Pressed("MENULEFT", false) || this.Pressed("MENURIGHT", false) || this.Pressed("MENUUP", false) || this.Pressed("MENUDOWN", false))
 				{
@@ -1121,7 +1121,7 @@ namespace DuckGame
 			this.UpdateStickPress();
 			this._prevState = this._state;
 			this._state = 0;
-			foreach (string t in global::DuckGame.Network.synchronizedTriggers)
+			foreach (string t in Network.synchronizedTriggers)
 			{
 				this._state |= (this.Down(t) ? (ushort)1 : (ushort)0);
 				this._state = (ushort)(this._state << 1);
@@ -1137,9 +1137,9 @@ namespace DuckGame
 
 		public bool oldAngles;
 
-		public global::DuckGame.InputProfile swapBack;
+		public InputProfile swapBack;
 
-		private static global::DuckGame.InputProfileCore _core = new global::DuckGame.InputProfileCore();
+		private static InputProfileCore _core = new InputProfileCore();
 
 		public const string SinglePlayer = "SinglePlayer";
 
@@ -1157,36 +1157,36 @@ namespace DuckGame
 
 		public const string Blank = "Blank";
 
-		private static global::DuckGame.InputProfile _active;
+		private static InputProfile _active;
 
-		public global::DuckGame.InputDevice lastSynchronizedDevice;
+		public InputDevice lastSynchronizedDevice;
 
-		private global::DuckGame.InputDevice _defaultLastActiveDevice = new global::DuckGame.InputDevice(0);
+		private InputDevice _defaultLastActiveDevice = new InputDevice(0);
 
-		[global::System.Runtime.CompilerServices.CompilerGenerated]
-		private global::DuckGame.InputDevice kBackingField;
+		[CompilerGenerated]
+		private InputDevice kBackingField;
 
-		public global::DuckGame.InputDevice lastActiveOverride;
+		public InputDevice lastActiveOverride;
 
 		private string _name;
 
-		private global::System.Collections.Generic.Dictionary<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>> _mappings = new global::System.Collections.Generic.Dictionary<global::DuckGame.InputDevice, global::DuckGame.MultiMap<string, int>>();
+		private Dictionary<InputDevice, MultiMap<string, int>> _mappings = new Dictionary<InputDevice, MultiMap<string, int>>();
 
-		protected global::System.Collections.Generic.Dictionary<global::DuckGame.PadButton, global::DuckGame.InputState> _leftStickStates = new global::System.Collections.Generic.Dictionary<global::DuckGame.PadButton, global::DuckGame.InputState>(default(global::DuckGame.PadButtonComparer));
+		protected Dictionary<PadButton, InputState> _leftStickStates = new Dictionary<PadButton, InputState>(default(PadButtonComparer));
 
-		public static global::DuckGame.InputProfile Default;
+		public static InputProfile Default;
 
 		public int dindex;
 
 		private bool _virtualInputInitialized;
 
-		private global::DuckGame.VirtualInput _virtualInput;
+		private VirtualInput _virtualInput;
 
 		public long lastPressFrame;
 
 		public static bool ignoreKeyboard = false;
 
-		private global::DuckGame.Vec2 _mouseAnchor = global::DuckGame.Vec2.Zero;
+		private Vec2 _mouseAnchor = Vec2.Zero;
 
 		private ushort _state;
 
@@ -1198,6 +1198,6 @@ namespace DuckGame
 
 		private bool _repeating;
 
-		private global::System.Collections.Generic.List<string> _repeatList = new global::System.Collections.Generic.List<string>();
+		private List<string> _repeatList = new List<string>();
 	}
 }

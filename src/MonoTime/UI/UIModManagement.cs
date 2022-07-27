@@ -100,11 +100,11 @@ namespace DuckGame
 
         private static void DeleteFileOrFolder(string path)
         {
-            global::DuckGame.UIModManagement.SHFILEOPSTRUCT fileop = default(global::DuckGame.UIModManagement.SHFILEOPSTRUCT);
+            UIModManagement.SHFILEOPSTRUCT fileop = default(UIModManagement.SHFILEOPSTRUCT);
             fileop.wFunc = 3;
             fileop.pFrom = path + "\0\0";
             fileop.fFlags = 80;
-            global::DuckGame.UIModManagement.SHFileOperation(ref fileop);
+            UIModManagement.SHFileOperation(ref fileop);
         }
 
         private void DeleteMod() => this.ShowYesNo(this._editModMenu, (UIMenuActionCallFunction.Function)(() =>

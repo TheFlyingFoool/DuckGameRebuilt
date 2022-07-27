@@ -81,7 +81,7 @@ namespace DuckGame
                     this.inputProfile.UpdateTriggerStates();
                 if ((int)this.prevState != (int)this.inputProfile.state)
                 {
-                    global::DuckGame.NetIndex8 authority = this.authority;
+                    NetIndex8 authority = this.authority;
                     this.authority = ++authority;
                     this._inputChangeIndex += 1;
                 }

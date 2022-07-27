@@ -3,22 +3,22 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
-	[global::System.Serializable]
-	public struct Matrix : global::System.IEquatable<global::DuckGame.Matrix>
+	[Serializable]
+	public struct Matrix : IEquatable<Matrix>
 	{
-		public static global::DuckGame.Matrix Identity
+		public static Matrix Identity
 		{
 			get
 			{
-				return global::DuckGame.Matrix.identity;
+				return Matrix.identity;
 			}
 		}
 
-		public global::DuckGame.Vec3 Backward
+		public Vec3 Backward
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(this.M31, this.M32, this.M33);
+				return new Vec3(this.M31, this.M32, this.M33);
 			}
 			set
 			{
@@ -28,11 +28,11 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec3 Down
+		public Vec3 Down
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(-this.M21, -this.M22, -this.M23);
+				return new Vec3(-this.M21, -this.M22, -this.M23);
 			}
 			set
 			{
@@ -42,11 +42,11 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec3 Forward
+		public Vec3 Forward
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(-this.M31, -this.M32, -this.M33);
+				return new Vec3(-this.M31, -this.M32, -this.M33);
 			}
 			set
 			{
@@ -56,11 +56,11 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec3 Left
+		public Vec3 Left
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(-this.M11, -this.M12, -this.M13);
+				return new Vec3(-this.M11, -this.M12, -this.M13);
 			}
 			set
 			{
@@ -70,11 +70,11 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec3 Right
+		public Vec3 Right
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(this.M11, this.M12, this.M13);
+				return new Vec3(this.M11, this.M12, this.M13);
 			}
 			set
 			{
@@ -84,11 +84,11 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec3 Translation
+		public Vec3 Translation
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(this.M41, this.M42, this.M43);
+				return new Vec3(this.M41, this.M42, this.M43);
 			}
 			set
 			{
@@ -98,11 +98,11 @@ namespace DuckGame
 			}
 		}
 
-		public global::DuckGame.Vec3 Up
+		public Vec3 Up
 		{
 			get
 			{
-				return new global::DuckGame.Vec3(this.M21, this.M22, this.M23);
+				return new Vec3(this.M21, this.M22, this.M23);
 			}
 			set
 			{
@@ -183,24 +183,24 @@ namespace DuckGame
 			this.M44 = m44;
 		}
 
-		public static global::DuckGame.Matrix CreateWorld(global::DuckGame.Vec3 position, global::DuckGame.Vec3 forward, global::DuckGame.Vec3 up)
+		public static Matrix CreateWorld(Vec3 position, Vec3 forward, Vec3 up)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateWorld(ref position, ref forward, ref up, out ret);
+			Matrix ret;
+			Matrix.CreateWorld(ref position, ref forward, ref up, out ret);
 			return ret;
 		}
 
-		public static void CreateWorld(ref global::DuckGame.Vec3 position, ref global::DuckGame.Vec3 forward, ref global::DuckGame.Vec3 up, out global::DuckGame.Matrix result)
+		public static void CreateWorld(ref Vec3 position, ref Vec3 forward, ref Vec3 up, out Matrix result)
 		{
-			global::DuckGame.Vec3 z;
-			global::DuckGame.Vec3.Normalize(ref forward, out z);
-			global::DuckGame.Vec3 x;
-			global::DuckGame.Vec3.Cross(ref forward, ref up, out x);
-			global::DuckGame.Vec3 y;
-			global::DuckGame.Vec3.Cross(ref x, ref forward, out y);
+			Vec3 z;
+			Vec3.Normalize(ref forward, out z);
+			Vec3 x;
+			Vec3.Cross(ref forward, ref up, out x);
+			Vec3 y;
+			Vec3.Cross(ref x, ref forward, out y);
 			x.Normalize();
 			y.Normalize();
-			result = default(global::DuckGame.Matrix);
+			result = default(Matrix);
 			result.Right = x;
 			result.Up = y;
 			result.Forward = z;
@@ -208,17 +208,17 @@ namespace DuckGame
 			result.M44 = 1f;
 		}
 
-		public static global::DuckGame.Matrix CreateShadow(global::DuckGame.Vec3 lightDirection, global::DuckGame.Plane plane)
+		public static Matrix CreateShadow(Vec3 lightDirection, Plane plane)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateShadow(ref lightDirection, ref plane, out ret);
+			Matrix ret;
+			Matrix.CreateShadow(ref lightDirection, ref plane, out ret);
 			return ret;
 		}
 
-		public static void CreateShadow(ref global::DuckGame.Vec3 lightDirection, ref global::DuckGame.Plane plane, out global::DuckGame.Matrix result)
+		public static void CreateShadow(ref Vec3 lightDirection, ref Plane plane, out Matrix result)
 		{
-			global::DuckGame.Plane p = global::DuckGame.Plane.Normalize(plane);
-			float d = global::DuckGame.Vec3.Dot(p.normal, lightDirection);
+			Plane p = Plane.Normalize(plane);
+			float d = Vec3.Dot(p.normal, lightDirection);
 			result.M11 = -1f * p.normal.x * lightDirection.x + d;
 			result.M12 = -1f * p.normal.x * lightDirection.y;
 			result.M13 = -1f * p.normal.x * lightDirection.z;
@@ -237,9 +237,9 @@ namespace DuckGame
 			result.M44 = d;
 		}
 
-		public static void CreateReflection(ref global::DuckGame.Plane value, out global::DuckGame.Matrix result)
+		public static void CreateReflection(ref Plane value, out Matrix result)
 		{
-			global::DuckGame.Plane p = global::DuckGame.Plane.Normalize(value);
+			Plane p = Plane.Normalize(value);
 			result.M11 = -2f * p.normal.x * p.normal.x + 1f;
 			result.M12 = -2f * p.normal.x * p.normal.y;
 			result.M13 = -2f * p.normal.x * p.normal.z;
@@ -258,49 +258,49 @@ namespace DuckGame
 			result.M44 = 1f;
 		}
 
-		public static global::DuckGame.Matrix CreateReflection(global::DuckGame.Plane value)
+		public static Matrix CreateReflection(Plane value)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateReflection(ref value, out ret);
+			Matrix ret;
+			Matrix.CreateReflection(ref value, out ret);
 			return ret;
 		}
 
-		public static global::DuckGame.Matrix CreateFromYawPitchRoll(float yaw, float pitch, float roll)
+		public static Matrix CreateFromYawPitchRoll(float yaw, float pitch, float roll)
 		{
-			global::DuckGame.Quaternion quaternion;
-			global::DuckGame.Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
-			global::DuckGame.Matrix matrix;
-			global::DuckGame.Matrix.CreateFromQuaternion(ref quaternion, out matrix);
+			Quaternion quaternion;
+			Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
+			Matrix matrix;
+			Matrix.CreateFromQuaternion(ref quaternion, out matrix);
 			return matrix;
 		}
 
-		public static void CreateFromYawPitchRoll(float yaw, float pitch, float roll, out global::DuckGame.Matrix result)
+		public static void CreateFromYawPitchRoll(float yaw, float pitch, float roll, out Matrix result)
 		{
-			global::DuckGame.Quaternion quaternion;
-			global::DuckGame.Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
-			global::DuckGame.Matrix.CreateFromQuaternion(ref quaternion, out result);
+			Quaternion quaternion;
+			Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
+			Matrix.CreateFromQuaternion(ref quaternion, out result);
 		}
 
-		public static void Transform(ref global::DuckGame.Matrix value, ref global::DuckGame.Quaternion rotation, out global::DuckGame.Matrix result)
+		public static void Transform(ref Matrix value, ref Quaternion rotation, out Matrix result)
 		{
-			global::DuckGame.Matrix matrix = global::DuckGame.Matrix.CreateFromQuaternion(rotation);
-			global::DuckGame.Matrix.Multiply(ref value, ref matrix, out result);
+			Matrix matrix = Matrix.CreateFromQuaternion(rotation);
+			Matrix.Multiply(ref value, ref matrix, out result);
 		}
 
-		public static global::DuckGame.Matrix Transform(global::DuckGame.Matrix value, global::DuckGame.Quaternion rotation)
+		public static Matrix Transform(Matrix value, Quaternion rotation)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.Transform(ref value, ref rotation, out ret);
+			Matrix ret;
+			Matrix.Transform(ref value, ref rotation, out ret);
 			return ret;
 		}
 
-		public bool Decompose(out global::DuckGame.Vec3 scale, out global::DuckGame.Quaternion rotation, out global::DuckGame.Vec3 translation)
+		public bool Decompose(out Vec3 scale, out Quaternion rotation, out Vec3 translation)
 		{
 			translation.x = this.M41;
 			translation.y = this.M42;
 			translation.z = this.M43;
 			float xs;
-			if (global::System.Math.Sign(this.M11 * this.M12 * this.M13 * this.M14) < 0)
+			if (Math.Sign(this.M11 * this.M12 * this.M13 * this.M14) < 0)
 			{
 				xs = -1f;
 			}
@@ -309,7 +309,7 @@ namespace DuckGame
 				xs = 1f;
 			}
 			float ys;
-			if (global::System.Math.Sign(this.M21 * this.M22 * this.M23 * this.M24) < 0)
+			if (Math.Sign(this.M21 * this.M22 * this.M23 * this.M24) < 0)
 			{
 				ys = -1f;
 			}
@@ -318,7 +318,7 @@ namespace DuckGame
 				ys = 1f;
 			}
 			float zs;
-			if (global::System.Math.Sign(this.M31 * this.M32 * this.M33 * this.M34) < 0)
+			if (Math.Sign(this.M31 * this.M32 * this.M33 * this.M34) < 0)
 			{
 				zs = -1f;
 			}
@@ -326,16 +326,16 @@ namespace DuckGame
 			{
 				zs = 1f;
 			}
-			scale.x = xs * (float)global::System.Math.Sqrt((double)(this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13));
-			scale.y = ys * (float)global::System.Math.Sqrt((double)(this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23));
-			scale.z = zs * (float)global::System.Math.Sqrt((double)(this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
+			scale.x = xs * (float)Math.Sqrt((double)(this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13));
+			scale.y = ys * (float)Math.Sqrt((double)(this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23));
+			scale.z = zs * (float)Math.Sqrt((double)(this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
 			if ((double)scale.x == 0.0 || (double)scale.y == 0.0 || (double)scale.z == 0.0)
 			{
-				rotation = global::DuckGame.Quaternion.Identity;
+				rotation = Quaternion.Identity;
 				return false;
 			}
-			global::DuckGame.Matrix m = new global::DuckGame.Matrix(this.M11 / scale.x, this.M12 / scale.x, this.M13 / scale.x, 0f, this.M21 / scale.y, this.M22 / scale.y, this.M23 / scale.y, 0f, this.M31 / scale.z, this.M32 / scale.z, this.M33 / scale.z, 0f, 0f, 0f, 0f, 1f);
-			rotation = global::DuckGame.Quaternion.CreateFromRotationMatrix(m);
+			Matrix m = new Matrix(this.M11 / scale.x, this.M12 / scale.x, this.M13 / scale.x, 0f, this.M21 / scale.y, this.M22 / scale.y, this.M23 / scale.y, 0f, this.M31 / scale.z, this.M32 / scale.z, this.M33 / scale.z, 0f, 0f, 0f, 0f, 1f);
+			rotation = Quaternion.CreateFromRotationMatrix(m);
 			return true;
 		}
 
@@ -351,7 +351,7 @@ namespace DuckGame
 		/// <returns>
 		/// A <see cref="T:DuckGame.Matrix" />
 		/// </returns>
-		public static global::DuckGame.Matrix Add(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix Add(Matrix matrix1, Matrix matrix2)
 		{
 			matrix1.M11 += matrix2.M11;
 			matrix1.M12 += matrix2.M12;
@@ -384,7 +384,7 @@ namespace DuckGame
 		/// <param name="result">
 		/// A <see cref="T:DuckGame.Matrix" />
 		/// </param>
-		public static void Add(ref global::DuckGame.Matrix matrix1, ref global::DuckGame.Matrix matrix2, out global::DuckGame.Matrix result)
+		public static void Add(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
 		{
 			result.M11 = matrix1.M11 + matrix2.M11;
 			result.M12 = matrix1.M12 + matrix2.M12;
@@ -404,60 +404,60 @@ namespace DuckGame
 			result.M44 = matrix1.M44 + matrix2.M44;
 		}
 
-		public static global::DuckGame.Matrix CreateBillboard(global::DuckGame.Vec3 objectPosition, global::DuckGame.Vec3 cameraPosition, global::DuckGame.Vec3 cameraUpVector, global::DuckGame.Vec3? cameraForwardVector)
+		public static Matrix CreateBillboard(Vec3 objectPosition, Vec3 cameraPosition, Vec3 cameraUpVector, Vec3? cameraForwardVector)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateBillboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, cameraForwardVector, out ret);
+			Matrix ret;
+			Matrix.CreateBillboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, cameraForwardVector, out ret);
 			return ret;
 		}
 
-		public static void CreateBillboard(ref global::DuckGame.Vec3 objectPosition, ref global::DuckGame.Vec3 cameraPosition, ref global::DuckGame.Vec3 cameraUpVector, global::DuckGame.Vec3? cameraForwardVector, out global::DuckGame.Matrix result)
+		public static void CreateBillboard(ref Vec3 objectPosition, ref Vec3 cameraPosition, ref Vec3 cameraUpVector, Vec3? cameraForwardVector, out Matrix result)
 		{
-			global::DuckGame.Vec3 translation = objectPosition - cameraPosition;
-			global::DuckGame.Vec3 backwards;
-			global::DuckGame.Vec3.Normalize(ref translation, out backwards);
-			global::DuckGame.Vec3 up;
-			global::DuckGame.Vec3.Normalize(ref cameraUpVector, out up);
-			global::DuckGame.Vec3 right;
-			global::DuckGame.Vec3.Cross(ref backwards, ref up, out right);
-			global::DuckGame.Vec3.Cross(ref backwards, ref right, out up);
-			result = global::DuckGame.Matrix.Identity;
+			Vec3 translation = objectPosition - cameraPosition;
+			Vec3 backwards;
+			Vec3.Normalize(ref translation, out backwards);
+			Vec3 up;
+			Vec3.Normalize(ref cameraUpVector, out up);
+			Vec3 right;
+			Vec3.Cross(ref backwards, ref up, out right);
+			Vec3.Cross(ref backwards, ref right, out up);
+			result = Matrix.Identity;
 			result.Backward = backwards;
 			result.Right = right;
 			result.Up = up;
 			result.Translation = translation;
 		}
 
-		public static global::DuckGame.Matrix CreateConstrainedBillboard(global::DuckGame.Vec3 objectPosition, global::DuckGame.Vec3 cameraPosition, global::DuckGame.Vec3 rotateAxis, global::DuckGame.Vec3? cameraForwardVector, global::DuckGame.Vec3? objectForwardVector)
+		public static Matrix CreateConstrainedBillboard(Vec3 objectPosition, Vec3 cameraPosition, Vec3 rotateAxis, Vec3? cameraForwardVector, Vec3? objectForwardVector)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static void CreateConstrainedBillboard(ref global::DuckGame.Vec3 objectPosition, ref global::DuckGame.Vec3 cameraPosition, ref global::DuckGame.Vec3 rotateAxis, global::DuckGame.Vec3? cameraForwardVector, global::DuckGame.Vec3? objectForwardVector, out global::DuckGame.Matrix result)
+		public static void CreateConstrainedBillboard(ref Vec3 objectPosition, ref Vec3 cameraPosition, ref Vec3 rotateAxis, Vec3? cameraForwardVector, Vec3? objectForwardVector, out Matrix result)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static global::DuckGame.Matrix CreateFromAxisAngle(global::DuckGame.Vec3 axis, float angle)
+		public static Matrix CreateFromAxisAngle(Vec3 axis, float angle)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static void CreateFromAxisAngle(ref global::DuckGame.Vec3 axis, float angle, out global::DuckGame.Matrix result)
+		public static void CreateFromAxisAngle(ref Vec3 axis, float angle, out Matrix result)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static global::DuckGame.Matrix CreateFromQuaternion(global::DuckGame.Quaternion quaternion)
+		public static Matrix CreateFromQuaternion(Quaternion quaternion)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateFromQuaternion(ref quaternion, out ret);
+			Matrix ret;
+			Matrix.CreateFromQuaternion(ref quaternion, out ret);
 			return ret;
 		}
 
-		public static void CreateFromQuaternion(ref global::DuckGame.Quaternion quaternion, out global::DuckGame.Matrix result)
+		public static void CreateFromQuaternion(ref Quaternion quaternion, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
+			result = Matrix.Identity;
 			result.M11 = 1f - 2f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z);
 			result.M12 = 2f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z);
 			result.M13 = 2f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y);
@@ -469,19 +469,19 @@ namespace DuckGame
 			result.M33 = 1f - 2f * (quaternion.x * quaternion.x + quaternion.y * quaternion.y);
 		}
 
-		public static global::DuckGame.Matrix CreateLookAt(global::DuckGame.Vec3 cameraPosition, global::DuckGame.Vec3 cameraTarget, global::DuckGame.Vec3 cameraUpVector)
+		public static Matrix CreateLookAt(Vec3 cameraPosition, Vec3 cameraTarget, Vec3 cameraUpVector)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out ret);
+			Matrix ret;
+			Matrix.CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out ret);
 			return ret;
 		}
 
-		public static void CreateLookAt(ref global::DuckGame.Vec3 cameraPosition, ref global::DuckGame.Vec3 cameraTarget, ref global::DuckGame.Vec3 cameraUpVector, out global::DuckGame.Matrix result)
+		public static void CreateLookAt(ref Vec3 cameraPosition, ref Vec3 cameraTarget, ref Vec3 cameraUpVector, out Matrix result)
 		{
-			global::DuckGame.Vec3 vz = global::DuckGame.Vec3.Normalize(cameraPosition - cameraTarget);
-			global::DuckGame.Vec3 vx = global::DuckGame.Vec3.Normalize(global::DuckGame.Vec3.Cross(cameraUpVector, vz));
-			global::DuckGame.Vec3 vy = global::DuckGame.Vec3.Cross(vz, vx);
-			result = global::DuckGame.Matrix.Identity;
+			Vec3 vz = Vec3.Normalize(cameraPosition - cameraTarget);
+			Vec3 vx = Vec3.Normalize(Vec3.Cross(cameraUpVector, vz));
+			Vec3 vy = Vec3.Cross(vz, vx);
+			result = Matrix.Identity;
 			result.M11 = vx.x;
 			result.M12 = vy.x;
 			result.M13 = vz.x;
@@ -491,19 +491,19 @@ namespace DuckGame
 			result.M31 = vx.z;
 			result.M32 = vy.z;
 			result.M33 = vz.z;
-			result.M41 = -global::DuckGame.Vec3.Dot(vx, cameraPosition);
-			result.M42 = -global::DuckGame.Vec3.Dot(vy, cameraPosition);
-			result.M43 = -global::DuckGame.Vec3.Dot(vz, cameraPosition);
+			result.M41 = -Vec3.Dot(vx, cameraPosition);
+			result.M42 = -Vec3.Dot(vy, cameraPosition);
+			result.M43 = -Vec3.Dot(vz, cameraPosition);
 		}
 
-		public static global::DuckGame.Matrix CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane)
+		public static Matrix CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateOrthographic(width, height, zNearPlane, zFarPlane, out ret);
+			Matrix ret;
+			Matrix.CreateOrthographic(width, height, zNearPlane, zFarPlane, out ret);
 			return ret;
 		}
 
-		public static void CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane, out global::DuckGame.Matrix result)
+		public static void CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane, out Matrix result)
 		{
 			result.M11 = 2f / width;
 			result.M12 = 0f;
@@ -523,14 +523,14 @@ namespace DuckGame
 			result.M44 = 1f;
 		}
 
-		public static global::DuckGame.Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
+		public static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out ret);
+			Matrix ret;
+			Matrix.CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out ret);
 			return ret;
 		}
 
-		public static void CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane, out global::DuckGame.Matrix result)
+		public static void CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane, out Matrix result)
 		{
 			result.M11 = 2f / (right - left);
 			result.M12 = 0f;
@@ -550,43 +550,43 @@ namespace DuckGame
 			result.M44 = 1f;
 		}
 
-		public static global::DuckGame.Matrix CreatePerspective(float width, float height, float zNearPlane, float zFarPlane)
+		public static Matrix CreatePerspective(float width, float height, float zNearPlane, float zFarPlane)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static void CreatePerspective(float width, float height, float zNearPlane, float zFarPlane, out global::DuckGame.Matrix result)
+		public static void CreatePerspective(float width, float height, float zNearPlane, float zFarPlane, out Matrix result)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static global::DuckGame.Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
+		public static Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
 		{
-			global::DuckGame.Matrix ret;
-			global::DuckGame.Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out ret);
+			Matrix ret;
+			Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out ret);
 			return ret;
 		}
 
-		public static void CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance, out global::DuckGame.Matrix result)
+		public static void CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance, out Matrix result)
 		{
-			result = new global::DuckGame.Matrix(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+			result = new Matrix(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
 			if (fieldOfView < 0f || fieldOfView > 3.1415925f)
 			{
-				throw new global::System.ArgumentOutOfRangeException("fieldOfView", "fieldOfView takes a value between 0 and Pi (180 degrees) in radians.");
+				throw new ArgumentOutOfRangeException("fieldOfView", "fieldOfView takes a value between 0 and Pi (180 degrees) in radians.");
 			}
 			if (nearPlaneDistance <= 0f)
 			{
-				throw new global::System.ArgumentOutOfRangeException("nearPlaneDistance", "You should specify positive value for nearPlaneDistance.");
+				throw new ArgumentOutOfRangeException("nearPlaneDistance", "You should specify positive value for nearPlaneDistance.");
 			}
 			if (farPlaneDistance <= 0f)
 			{
-				throw new global::System.ArgumentOutOfRangeException("farPlaneDistance", "You should specify positive value for farPlaneDistance.");
+				throw new ArgumentOutOfRangeException("farPlaneDistance", "You should specify positive value for farPlaneDistance.");
 			}
 			if (farPlaneDistance <= nearPlaneDistance)
 			{
-				throw new global::System.ArgumentOutOfRangeException("nearPlaneDistance", "Near plane distance is larger than Far plane distance. Near plane distance must be smaller than Far plane distance.");
+				throw new ArgumentOutOfRangeException("nearPlaneDistance", "Near plane distance is larger than Far plane distance. Near plane distance must be smaller than Far plane distance.");
 			}
-			float yscale = 1f / (float)global::System.Math.Tan((double)(fieldOfView / 2f));
+			float yscale = 1f / (float)Math.Tan((double)(fieldOfView / 2f));
 			float xscale = yscale / aspectRatio;
 			result.M11 = xscale;
 			result.M22 = yscale;
@@ -595,162 +595,162 @@ namespace DuckGame
 			result.M43 = nearPlaneDistance * farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
 		}
 
-		public static global::DuckGame.Matrix CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
+		public static Matrix CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static void CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float nearPlaneDistance, float farPlaneDistance, out global::DuckGame.Matrix result)
+		public static void CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float nearPlaneDistance, float farPlaneDistance, out Matrix result)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static global::DuckGame.Matrix CreateRotationX(float radians)
+		public static Matrix CreateRotationX(float radians)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
-			returnMatrix.M22 = (float)global::System.Math.Cos((double)radians);
-			returnMatrix.M23 = (float)global::System.Math.Sin((double)radians);
+			Matrix returnMatrix = Matrix.Identity;
+			returnMatrix.M22 = (float)Math.Cos((double)radians);
+			returnMatrix.M23 = (float)Math.Sin((double)radians);
 			returnMatrix.M32 = -returnMatrix.M23;
 			returnMatrix.M33 = returnMatrix.M22;
 			return returnMatrix;
 		}
 
-		public static void CreateRotationX(float radians, out global::DuckGame.Matrix result)
+		public static void CreateRotationX(float radians, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
-			result.M22 = (float)global::System.Math.Cos((double)radians);
-			result.M23 = (float)global::System.Math.Sin((double)radians);
+			result = Matrix.Identity;
+			result.M22 = (float)Math.Cos((double)radians);
+			result.M23 = (float)Math.Sin((double)radians);
 			result.M32 = -result.M23;
 			result.M33 = result.M22;
 		}
 
-		public static global::DuckGame.Matrix CreateRotationY(float radians)
+		public static Matrix CreateRotationY(float radians)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
-			returnMatrix.M11 = (float)global::System.Math.Cos((double)radians);
-			returnMatrix.M13 = (float)global::System.Math.Sin((double)radians);
+			Matrix returnMatrix = Matrix.Identity;
+			returnMatrix.M11 = (float)Math.Cos((double)radians);
+			returnMatrix.M13 = (float)Math.Sin((double)radians);
 			returnMatrix.M31 = -returnMatrix.M13;
 			returnMatrix.M33 = returnMatrix.M11;
 			return returnMatrix;
 		}
 
-		public static void CreateRotationY(float radians, out global::DuckGame.Matrix result)
+		public static void CreateRotationY(float radians, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
-			result.M11 = (float)global::System.Math.Cos((double)radians);
-			result.M13 = (float)global::System.Math.Sin((double)radians);
+			result = Matrix.Identity;
+			result.M11 = (float)Math.Cos((double)radians);
+			result.M13 = (float)Math.Sin((double)radians);
 			result.M31 = -result.M13;
 			result.M33 = result.M11;
 		}
 
-		public static global::DuckGame.Matrix CreateRotationZ(float radians)
+		public static Matrix CreateRotationZ(float radians)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
-			returnMatrix.M11 = (float)global::System.Math.Cos((double)radians);
-			returnMatrix.M12 = (float)global::System.Math.Sin((double)radians);
+			Matrix returnMatrix = Matrix.Identity;
+			returnMatrix.M11 = (float)Math.Cos((double)radians);
+			returnMatrix.M12 = (float)Math.Sin((double)radians);
 			returnMatrix.M21 = -returnMatrix.M12;
 			returnMatrix.M22 = returnMatrix.M11;
 			return returnMatrix;
 		}
 
-		public static void CreateRotationZ(float radians, out global::DuckGame.Matrix result)
+		public static void CreateRotationZ(float radians, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
-			result.M11 = (float)global::System.Math.Cos((double)radians);
-			result.M12 = (float)global::System.Math.Sin((double)radians);
+			result = Matrix.Identity;
+			result.M11 = (float)Math.Cos((double)radians);
+			result.M12 = (float)Math.Sin((double)radians);
 			result.M21 = -result.M12;
 			result.M22 = result.M11;
 		}
 
-		public static global::DuckGame.Matrix CreateScale(float scale)
+		public static Matrix CreateScale(float scale)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
+			Matrix returnMatrix = Matrix.Identity;
 			returnMatrix.M11 = scale;
 			returnMatrix.M22 = scale;
 			returnMatrix.M33 = scale;
 			return returnMatrix;
 		}
 
-		public static void CreateScale(float scale, out global::DuckGame.Matrix result)
+		public static void CreateScale(float scale, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
+			result = Matrix.Identity;
 			result.M11 = scale;
 			result.M22 = scale;
 			result.M33 = scale;
 		}
 
-		public static global::DuckGame.Matrix CreateScale(float xScale, float yScale, float zScale)
+		public static Matrix CreateScale(float xScale, float yScale, float zScale)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
+			Matrix returnMatrix = Matrix.Identity;
 			returnMatrix.M11 = xScale;
 			returnMatrix.M22 = yScale;
 			returnMatrix.M33 = zScale;
 			return returnMatrix;
 		}
 
-		public static void CreateScale(float xScale, float yScale, float zScale, out global::DuckGame.Matrix result)
+		public static void CreateScale(float xScale, float yScale, float zScale, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
+			result = Matrix.Identity;
 			result.M11 = xScale;
 			result.M22 = yScale;
 			result.M33 = zScale;
 		}
 
-		public static global::DuckGame.Matrix CreateScale(global::DuckGame.Vec3 scales)
+		public static Matrix CreateScale(Vec3 scales)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
+			Matrix returnMatrix = Matrix.Identity;
 			returnMatrix.M11 = scales.x;
 			returnMatrix.M22 = scales.y;
 			returnMatrix.M33 = scales.z;
 			return returnMatrix;
 		}
 
-		public static void CreateScale(ref global::DuckGame.Vec3 scales, out global::DuckGame.Matrix result)
+		public static void CreateScale(ref Vec3 scales, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
+			result = Matrix.Identity;
 			result.M11 = scales.x;
 			result.M22 = scales.y;
 			result.M33 = scales.z;
 		}
 
-		public static global::DuckGame.Matrix CreateTranslation(float xPosition, float yPosition, float zPosition)
+		public static Matrix CreateTranslation(float xPosition, float yPosition, float zPosition)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
+			Matrix returnMatrix = Matrix.Identity;
 			returnMatrix.M41 = xPosition;
 			returnMatrix.M42 = yPosition;
 			returnMatrix.M43 = zPosition;
 			return returnMatrix;
 		}
 
-		public static void CreateTranslation(float xPosition, float yPosition, float zPosition, out global::DuckGame.Matrix result)
+		public static void CreateTranslation(float xPosition, float yPosition, float zPosition, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
+			result = Matrix.Identity;
 			result.M41 = xPosition;
 			result.M42 = yPosition;
 			result.M43 = zPosition;
 		}
 
-		public static global::DuckGame.Matrix CreateTranslation(global::DuckGame.Vec3 position)
+		public static Matrix CreateTranslation(Vec3 position)
 		{
-			global::DuckGame.Matrix returnMatrix = global::DuckGame.Matrix.Identity;
+			Matrix returnMatrix = Matrix.Identity;
 			returnMatrix.M41 = position.x;
 			returnMatrix.M42 = position.y;
 			returnMatrix.M43 = position.z;
 			return returnMatrix;
 		}
 
-		public static void CreateTranslation(ref global::DuckGame.Vec3 position, out global::DuckGame.Matrix result)
+		public static void CreateTranslation(ref Vec3 position, out Matrix result)
 		{
-			result = global::DuckGame.Matrix.Identity;
+			result = Matrix.Identity;
 			result.M41 = position.x;
 			result.M42 = position.y;
 			result.M43 = position.z;
 		}
 
-		public static global::DuckGame.Matrix Divide(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix Divide(Matrix matrix1, Matrix matrix2)
 		{
-			global::DuckGame.Matrix inverse = global::DuckGame.Matrix.Invert(matrix2);
-			global::DuckGame.Matrix result;
+			Matrix inverse = Matrix.Invert(matrix2);
+			Matrix result;
 			result.M11 = matrix1.M11 * inverse.M11 + matrix1.M12 * inverse.M21 + matrix1.M13 * inverse.M31 + matrix1.M14 * inverse.M41;
 			result.M12 = matrix1.M11 * inverse.M12 + matrix1.M12 * inverse.M22 + matrix1.M13 * inverse.M32 + matrix1.M14 * inverse.M42;
 			result.M13 = matrix1.M11 * inverse.M13 + matrix1.M12 * inverse.M23 + matrix1.M13 * inverse.M33 + matrix1.M14 * inverse.M43;
@@ -770,9 +770,9 @@ namespace DuckGame
 			return result;
 		}
 
-		public static void Divide(ref global::DuckGame.Matrix matrix1, ref global::DuckGame.Matrix matrix2, out global::DuckGame.Matrix result)
+		public static void Divide(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
 		{
-			global::DuckGame.Matrix inverse = global::DuckGame.Matrix.Invert(matrix2);
+			Matrix inverse = Matrix.Invert(matrix2);
 			result.M11 = matrix1.M11 * inverse.M11 + matrix1.M12 * inverse.M21 + matrix1.M13 * inverse.M31 + matrix1.M14 * inverse.M41;
 			result.M12 = matrix1.M11 * inverse.M12 + matrix1.M12 * inverse.M22 + matrix1.M13 * inverse.M32 + matrix1.M14 * inverse.M42;
 			result.M13 = matrix1.M11 * inverse.M13 + matrix1.M12 * inverse.M23 + matrix1.M13 * inverse.M33 + matrix1.M14 * inverse.M43;
@@ -791,7 +791,7 @@ namespace DuckGame
 			result.M44 = matrix1.M41 * inverse.M14 + matrix1.M42 * inverse.M24 + matrix1.M43 * inverse.M34 + matrix1.M44 * inverse.M44;
 		}
 
-		public static global::DuckGame.Matrix Divide(global::DuckGame.Matrix matrix1, float divider)
+		public static Matrix Divide(Matrix matrix1, float divider)
 		{
 			float inverseDivider = 1f / divider;
 			matrix1.M11 *= inverseDivider;
@@ -813,7 +813,7 @@ namespace DuckGame
 			return matrix1;
 		}
 
-		public static void Divide(ref global::DuckGame.Matrix matrix1, float divider, out global::DuckGame.Matrix result)
+		public static void Divide(ref Matrix matrix1, float divider, out Matrix result)
 		{
 			float inverseDivider = 1f / divider;
 			result.M11 = matrix1.M11 * inverseDivider;
@@ -834,13 +834,13 @@ namespace DuckGame
 			result.M44 = matrix1.M44 * inverseDivider;
 		}
 
-		public static global::DuckGame.Matrix Invert(global::DuckGame.Matrix matrix)
+		public static Matrix Invert(Matrix matrix)
 		{
-			global::DuckGame.Matrix.Invert(ref matrix, out matrix);
+			Matrix.Invert(ref matrix, out matrix);
 			return matrix;
 		}
 
-		public static void Invert(ref global::DuckGame.Matrix matrix, out global::DuckGame.Matrix result)
+		public static void Invert(ref Matrix matrix, out Matrix result)
 		{
 			float det = matrix.M11 * matrix.M22 - matrix.M12 * matrix.M21;
 			float det2 = matrix.M11 * matrix.M23 - matrix.M13 * matrix.M21;
@@ -856,7 +856,7 @@ namespace DuckGame
 			float det12 = matrix.M33 * matrix.M44 - matrix.M34 * matrix.M43;
 			float detMatrix = det * det12 - det2 * det11 + det3 * det10 + det4 * det9 - det5 * det8 + det6 * det7;
 			float invDetMatrix = 1f / detMatrix;
-			global::DuckGame.Matrix ret;
+			Matrix ret;
 			ret.M11 = (matrix.M22 * det12 - matrix.M23 * det11 + matrix.M24 * det10) * invDetMatrix;
 			ret.M12 = (-matrix.M12 * det12 + matrix.M13 * det11 - matrix.M14 * det10) * invDetMatrix;
 			ret.M13 = (matrix.M42 * det6 - matrix.M43 * det5 + matrix.M44 * det4) * invDetMatrix;
@@ -876,19 +876,19 @@ namespace DuckGame
 			result = ret;
 		}
 
-		public static global::DuckGame.Matrix Lerp(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2, float amount)
+		public static Matrix Lerp(Matrix matrix1, Matrix matrix2, float amount)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static void Lerp(ref global::DuckGame.Matrix matrix1, ref global::DuckGame.Matrix matrix2, float amount, out global::DuckGame.Matrix result)
+		public static void Lerp(ref Matrix matrix1, ref Matrix matrix2, float amount, out Matrix result)
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
-		public static global::DuckGame.Matrix Multiply(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix Multiply(Matrix matrix1, Matrix matrix2)
 		{
-			global::DuckGame.Matrix result;
+			Matrix result;
 			result.M11 = matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21 + matrix1.M13 * matrix2.M31 + matrix1.M14 * matrix2.M41;
 			result.M12 = matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22 + matrix1.M13 * matrix2.M32 + matrix1.M14 * matrix2.M42;
 			result.M13 = matrix1.M11 * matrix2.M13 + matrix1.M12 * matrix2.M23 + matrix1.M13 * matrix2.M33 + matrix1.M14 * matrix2.M43;
@@ -908,7 +908,7 @@ namespace DuckGame
 			return result;
 		}
 
-		public static void Multiply(ref global::DuckGame.Matrix matrix1, ref global::DuckGame.Matrix matrix2, out global::DuckGame.Matrix result)
+		public static void Multiply(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
 		{
 			result.M11 = matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21 + matrix1.M13 * matrix2.M31 + matrix1.M14 * matrix2.M41;
 			result.M12 = matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22 + matrix1.M13 * matrix2.M32 + matrix1.M14 * matrix2.M42;
@@ -928,7 +928,7 @@ namespace DuckGame
 			result.M44 = matrix1.M41 * matrix2.M14 + matrix1.M42 * matrix2.M24 + matrix1.M43 * matrix2.M34 + matrix1.M44 * matrix2.M44;
 		}
 
-		public static global::DuckGame.Matrix Multiply(global::DuckGame.Matrix matrix1, float factor)
+		public static Matrix Multiply(Matrix matrix1, float factor)
 		{
 			matrix1.M11 *= factor;
 			matrix1.M12 *= factor;
@@ -949,7 +949,7 @@ namespace DuckGame
 			return matrix1;
 		}
 
-		public static void Multiply(ref global::DuckGame.Matrix matrix1, float factor, out global::DuckGame.Matrix result)
+		public static void Multiply(ref Matrix matrix1, float factor, out Matrix result)
 		{
 			result.M11 = matrix1.M11 * factor;
 			result.M12 = matrix1.M12 * factor;
@@ -969,7 +969,7 @@ namespace DuckGame
 			result.M44 = matrix1.M44 * factor;
 		}
 
-		public static global::DuckGame.Matrix Negate(global::DuckGame.Matrix matrix)
+		public static Matrix Negate(Matrix matrix)
 		{
 			matrix.M11 = -matrix.M11;
 			matrix.M12 = -matrix.M12;
@@ -990,7 +990,7 @@ namespace DuckGame
 			return matrix;
 		}
 
-		public static void Negate(ref global::DuckGame.Matrix matrix, out global::DuckGame.Matrix result)
+		public static void Negate(ref Matrix matrix, out Matrix result)
 		{
 			result.M11 = matrix.M11;
 			result.M12 = matrix.M12;
@@ -1010,7 +1010,7 @@ namespace DuckGame
 			result.M44 = matrix.M44;
 		}
 
-		public static global::DuckGame.Matrix Subtract(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix Subtract(Matrix matrix1, Matrix matrix2)
 		{
 			matrix1.M11 -= matrix2.M11;
 			matrix1.M12 -= matrix2.M12;
@@ -1031,7 +1031,7 @@ namespace DuckGame
 			return matrix1;
 		}
 
-		public static void Subtract(ref global::DuckGame.Matrix matrix1, ref global::DuckGame.Matrix matrix2, out global::DuckGame.Matrix result)
+		public static void Subtract(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
 		{
 			result.M11 = matrix1.M11 - matrix2.M11;
 			result.M12 = matrix1.M12 - matrix2.M12;
@@ -1051,9 +1051,9 @@ namespace DuckGame
 			result.M44 = matrix1.M44 - matrix2.M44;
 		}
 
-		public static global::DuckGame.Matrix Transpose(global::DuckGame.Matrix matrix)
+		public static Matrix Transpose(Matrix matrix)
 		{
-			global::DuckGame.Matrix result;
+			Matrix result;
 			result.M11 = matrix.M11;
 			result.M12 = matrix.M21;
 			result.M13 = matrix.M31;
@@ -1073,7 +1073,7 @@ namespace DuckGame
 			return result;
 		}
 
-		public static void Transpose(ref global::DuckGame.Matrix matrix, out global::DuckGame.Matrix result)
+		public static void Transpose(ref Matrix matrix, out Matrix result)
 		{
 			result.M11 = matrix.M11;
 			result.M12 = matrix.M21;
@@ -1104,12 +1104,12 @@ namespace DuckGame
 			return this.M11 * (this.M22 * minor6 - this.M23 * minor5 + this.M24 * minor4) - this.M12 * (this.M21 * minor6 - this.M23 * minor3 + this.M24 * minor2) + this.M13 * (this.M21 * minor5 - this.M22 * minor3 + this.M24 * minor) - this.M14 * (this.M21 * minor4 - this.M22 * minor2 + this.M23 * minor);
 		}
 
-		public bool Equals(global::DuckGame.Matrix other)
+		public bool Equals(Matrix other)
 		{
 			return this.M11 == other.M11 && this.M12 == other.M12 && this.M13 == other.M13 && this.M14 == other.M14 && this.M21 == other.M21 && this.M22 == other.M22 && this.M23 == other.M23 && this.M24 == other.M24 && this.M31 == other.M31 && this.M32 == other.M32 && this.M33 == other.M33 && this.M34 == other.M34 && this.M41 == other.M41 && this.M42 == other.M42 && this.M43 == other.M43 && this.M44 == other.M44;
 		}
 
-		public static global::DuckGame.Matrix operator +(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix operator +(Matrix matrix1, Matrix matrix2)
 		{
 			matrix1.M11 += matrix2.M11;
 			matrix1.M12 += matrix2.M12;
@@ -1130,10 +1130,10 @@ namespace DuckGame
 			return matrix1;
 		}
 
-		public static global::DuckGame.Matrix operator /(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix operator /(Matrix matrix1, Matrix matrix2)
 		{
-			global::DuckGame.Matrix inverse = global::DuckGame.Matrix.Invert(matrix2);
-			global::DuckGame.Matrix result;
+			Matrix inverse = Matrix.Invert(matrix2);
+			Matrix result;
 			result.M11 = matrix1.M11 * inverse.M11 + matrix1.M12 * inverse.M21 + matrix1.M13 * inverse.M31 + matrix1.M14 * inverse.M41;
 			result.M12 = matrix1.M11 * inverse.M12 + matrix1.M12 * inverse.M22 + matrix1.M13 * inverse.M32 + matrix1.M14 * inverse.M42;
 			result.M13 = matrix1.M11 * inverse.M13 + matrix1.M12 * inverse.M23 + matrix1.M13 * inverse.M33 + matrix1.M14 * inverse.M43;
@@ -1153,7 +1153,7 @@ namespace DuckGame
 			return result;
 		}
 
-		public static global::DuckGame.Matrix operator /(global::DuckGame.Matrix matrix1, float divider)
+		public static Matrix operator /(Matrix matrix1, float divider)
 		{
 			float inverseDivider = 1f / divider;
 			matrix1.M11 *= inverseDivider;
@@ -1175,19 +1175,19 @@ namespace DuckGame
 			return matrix1;
 		}
 
-		public static bool operator ==(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static bool operator ==(Matrix matrix1, Matrix matrix2)
 		{
 			return matrix1.M11 == matrix2.M11 && matrix1.M12 == matrix2.M12 && matrix1.M13 == matrix2.M13 && matrix1.M14 == matrix2.M14 && matrix1.M21 == matrix2.M21 && matrix1.M22 == matrix2.M22 && matrix1.M23 == matrix2.M23 && matrix1.M24 == matrix2.M24 && matrix1.M31 == matrix2.M31 && matrix1.M32 == matrix2.M32 && matrix1.M33 == matrix2.M33 && matrix1.M34 == matrix2.M34 && matrix1.M41 == matrix2.M41 && matrix1.M42 == matrix2.M42 && matrix1.M43 == matrix2.M43 && matrix1.M44 == matrix2.M44;
 		}
 
-		public static bool operator !=(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static bool operator !=(Matrix matrix1, Matrix matrix2)
 		{
 			return matrix1.M11 != matrix2.M11 || matrix1.M12 != matrix2.M12 || matrix1.M13 != matrix2.M13 || matrix1.M14 != matrix2.M14 || matrix1.M21 != matrix2.M21 || matrix1.M22 != matrix2.M22 || matrix1.M23 != matrix2.M23 || matrix1.M24 != matrix2.M24 || matrix1.M31 != matrix2.M31 || matrix1.M32 != matrix2.M32 || matrix1.M33 != matrix2.M33 || matrix1.M34 != matrix2.M34 || matrix1.M41 != matrix2.M41 || matrix1.M42 != matrix2.M42 || matrix1.M43 != matrix2.M43 || matrix1.M44 != matrix2.M44;
 		}
 
-		public static global::DuckGame.Matrix operator *(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix operator *(Matrix matrix1, Matrix matrix2)
 		{
-			global::DuckGame.Matrix result;
+			Matrix result;
 			result.M11 = matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21 + matrix1.M13 * matrix2.M31 + matrix1.M14 * matrix2.M41;
 			result.M12 = matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22 + matrix1.M13 * matrix2.M32 + matrix1.M14 * matrix2.M42;
 			result.M13 = matrix1.M11 * matrix2.M13 + matrix1.M12 * matrix2.M23 + matrix1.M13 * matrix2.M33 + matrix1.M14 * matrix2.M43;
@@ -1207,7 +1207,7 @@ namespace DuckGame
 			return result;
 		}
 
-		public static global::DuckGame.Matrix operator *(global::DuckGame.Matrix matrix, float scaleFactor)
+		public static Matrix operator *(Matrix matrix, float scaleFactor)
 		{
 			matrix.M11 *= scaleFactor;
 			matrix.M12 *= scaleFactor;
@@ -1228,7 +1228,7 @@ namespace DuckGame
 			return matrix;
 		}
 
-		public static global::DuckGame.Matrix operator *(float scaleFactor, global::DuckGame.Matrix matrix)
+		public static Matrix operator *(float scaleFactor, Matrix matrix)
 		{
 			matrix.M11 *= scaleFactor;
 			matrix.M12 *= scaleFactor;
@@ -1249,7 +1249,7 @@ namespace DuckGame
 			return matrix;
 		}
 
-		public static global::DuckGame.Matrix operator -(global::DuckGame.Matrix matrix1, global::DuckGame.Matrix matrix2)
+		public static Matrix operator -(Matrix matrix1, Matrix matrix2)
 		{
 			matrix1.M11 -= matrix2.M11;
 			matrix1.M12 -= matrix2.M12;
@@ -1270,7 +1270,7 @@ namespace DuckGame
 			return matrix1;
 		}
 
-		public static global::DuckGame.Matrix operator -(global::DuckGame.Matrix matrix)
+		public static Matrix operator -(Matrix matrix)
 		{
 			matrix.M11 = -matrix.M11;
 			matrix.M12 = -matrix.M12;
@@ -1293,12 +1293,12 @@ namespace DuckGame
 
 		public override bool Equals(object obj)
 		{
-			return obj is global::DuckGame.Matrix && this == (global::DuckGame.Matrix)obj;
+			return obj is Matrix && this == (Matrix)obj;
 		}
 
 		public override int GetHashCode()
 		{
-			throw new global::System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override string ToString()
@@ -1341,14 +1341,14 @@ namespace DuckGame
 			});
 		}
 
-		public static implicit operator global::Microsoft.Xna.Framework.Matrix(global::DuckGame.Matrix m)
+		public static implicit operator Microsoft.Xna.Framework.Matrix(Matrix m)
 		{
-			return new global::Microsoft.Xna.Framework.Matrix(m.M11, m.M12, m.M13, m.M14, m.M21, m.M22, m.M23, m.M24, m.M31, m.M32, m.M33, m.M34, m.M41, m.M42, m.M43, m.M44);
+			return new Microsoft.Xna.Framework.Matrix(m.M11, m.M12, m.M13, m.M14, m.M21, m.M22, m.M23, m.M24, m.M31, m.M32, m.M33, m.M34, m.M41, m.M42, m.M43, m.M44);
 		}
 
-		public static implicit operator global::DuckGame.Matrix(global::Microsoft.Xna.Framework.Matrix m)
+		public static implicit operator Matrix(Microsoft.Xna.Framework.Matrix m)
 		{
-			return new global::DuckGame.Matrix(m.M11, m.M12, m.M13, m.M14, m.M21, m.M22, m.M23, m.M24, m.M31, m.M32, m.M33, m.M34, m.M41, m.M42, m.M43, m.M44);
+			return new Matrix(m.M11, m.M12, m.M13, m.M14, m.M21, m.M22, m.M23, m.M24, m.M31, m.M32, m.M33, m.M34, m.M41, m.M42, m.M43, m.M44);
 		}
 
 		// Note: this type is marked as 'beforefieldinit'.
@@ -1388,6 +1388,6 @@ namespace DuckGame
 
 		public float M44;
 
-		private static global::DuckGame.Matrix identity = new global::DuckGame.Matrix(1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f);
+		private static Matrix identity = new Matrix(1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f);
 	}
 }

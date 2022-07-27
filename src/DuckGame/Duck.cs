@@ -1048,9 +1048,9 @@ namespace DuckGame
             return true;
         }
 
-        public virtual bool Kill(global::DuckGame.DestroyType type = null)
+        public virtual bool Kill(DestroyType type = null)
         {
-            if (this._killed || (!this.isKillMessage && this.invincible && !(type is global::DuckGame.DTFall) && !(type is global::DuckGame.DTPop)))
+            if (this._killed || (!this.isKillMessage && this.invincible && !(type is DTFall) && !(type is DTPop)))
             {
                 return true;
             }
@@ -1060,37 +1060,37 @@ namespace DuckGame
             }
             this.forceDead = true;
             this._killed = true;
-            global::DuckGame.RumbleManager.AddRumbleEvent(this.profile, new global::DuckGame.RumbleEvent(global::DuckGame.RumbleIntensity.Heavy, global::DuckGame.RumbleDuration.Short, global::DuckGame.RumbleFalloff.Short, global::DuckGame.RumbleType.Gameplay));
+            RumbleManager.AddRumbleEvent(this.profile, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Short, RumbleType.Gameplay));
             int xpLogged = 10;
-            if (type is global::DuckGame.DTFall)
+            if (type is DTFall)
             {
-                global::DuckGame.Vec2 pos = this.GetEdgePos();
-                global::DuckGame.Vec2 dir = (pos - this.GetPos()).normalized;
+                Vec2 pos = this.GetEdgePos();
+                Vec2 dir = (pos - this.GetPos()).normalized;
                 for (int i = 0; i < 8; i++)
                 {
-                    global::DuckGame.Feather feather = global::DuckGame.Feather.New(pos.x - dir.x * 16f, pos.y - dir.y * 16f, this.persona);
+                    Feather feather = Feather.New(pos.x - dir.x * 16f, pos.y - dir.y * 16f, this.persona);
                     feather.hSpeed += dir.x * 1f;
                     feather.vSpeed += dir.y * 1f;
-                    global::DuckGame.Level.Add(feather);
+                    Level.Add(feather);
                 }
             }
-            if (!global::DuckGame.GameMode.firstDead)
+            if (!GameMode.firstDead)
             {
-                global::DuckGame.Party.AddDrink(this.profile, 1);
-                if (global::DuckGame.Rando.Float(1f) > 0.8f)
+                Party.AddDrink(this.profile, 1);
+                if (Rando.Float(1f) > 0.8f)
                 {
-                    global::DuckGame.Party.AddRandomPerk(this.profile);
+                    Party.AddRandomPerk(this.profile);
                 }
-                global::DuckGame.GameMode.firstDead = true;
+                GameMode.firstDead = true;
             }
-            if (global::DuckGame.Rando.Float(1f) > 0.97f)
+            if (Rando.Float(1f) > 0.97f)
             {
-                global::DuckGame.Party.AddRandomPerk(this.profile);
-                global::DuckGame.Party.AddDrink(this.profile, 1);
+                Party.AddRandomPerk(this.profile);
+                Party.AddDrink(this.profile, 1);
             }
-            if (global::DuckGame.Recorder.currentRecording != null)
+            if (Recorder.currentRecording != null)
             {
-                global::DuckGame.Recorder.currentRecording.LogDeath();
+                Recorder.currentRecording.LogDeath();
             }
             base._destroyed = true;
             if (this._isGhost)
@@ -1098,8 +1098,8 @@ namespace DuckGame
                 return false;
             }
             this.swinging = false;
-            global::DuckGame.Holster h = this.GetEquipment(typeof(global::DuckGame.Holster)) as global::DuckGame.Holster;
-            foreach (global::DuckGame.Equipment e in this._equipment)
+            Holster h = this.GetEquipment(typeof(Holster)) as Holster;
+            foreach (Equipment e in this._equipment)
             {
                 if (e != null)
                 {
@@ -1107,35 +1107,35 @@ namespace DuckGame
                     e.owner = null;
                     if (!this.isKillMessage)
                     {
-                        global::DuckGame.Thing.ExtraFondle(e, global::DuckGame.DuckNetwork.localConnection);
+                        Thing.ExtraFondle(e, DuckNetwork.localConnection);
                     }
-                    e.hSpeed = this.hSpeed - (1f + global::DuckGame.NetRand.Float(2f));
-                    e.vSpeed = this.vSpeed - global::DuckGame.NetRand.Float(1.5f);
+                    e.hSpeed = this.hSpeed - (1f + NetRand.Float(2f));
+                    e.vSpeed = this.vSpeed - NetRand.Float(1.5f);
                     this.ReturnItemToWorld(e);
                     e.UnEquip();
                 }
             }
             this._equipment.Clear();
-            if (global::DuckGame.TeamSelect2.QUACK3 && h != null)
+            if (TeamSelect2.QUACK3 && h != null)
             {
                 this.Equip(h, false, false);
             }
-            global::DuckGame.Profile killedBy = type.responsibleProfile;
+            Profile killedBy = type.responsibleProfile;
             bool wasTrapped = false;
             if (this._trapped != null)
             {
-                if (type is global::DuckGame.DTFall || type is global::DuckGame.DTImpale)
+                if (type is DTFall || type is DTImpale)
                 {
                     killedBy = this.trappedBy;
-                    global::DuckGame.Duck d = this._trapped.prevOwner as global::DuckGame.Duck;
+                    Duck d = this._trapped.prevOwner as Duck;
                     if (d != null)
                     {
                         d.AddCoolness(1);
                     }
                 }
-                if ((type is global::DuckGame.DTFall || type is global::DuckGame.DTImpale) && this.trappedBy != null && this.trappedBy.localPlayer)
+                if ((type is DTFall || type is DTImpale) && this.trappedBy != null && this.trappedBy.localPlayer)
                 {
-                    global::DuckGame.Global.data.nettedDuckTossKills += 1;
+                    Global.data.nettedDuckTossKills += 1;
                 }
                 if (!this.killingNet)
                 {
@@ -1144,7 +1144,7 @@ namespace DuckGame
                 }
                 wasTrapped = true;
             }
-            if (type is global::DuckGame.DTIncinerate)
+            if (type is DTIncinerate)
             {
                 xpLogged -= 3;
             }
@@ -1153,24 +1153,24 @@ namespace DuckGame
                 this.killedByProfile = killedBy;
             }
             this.OnKill(type);
-            global::DuckGame.Holdable prevHold = this.holdObject;
+            Holdable prevHold = this.holdObject;
             if (!this.isKillMessage)
             {
                 this.ThrowItem(false);
                 if (prevHold != null)
                 {
                     prevHold.hSpeed *= 0.3f;
-                    if (type is global::DuckGame.DTImpale)
+                    if (type is DTImpale)
                     {
                         prevHold.vSpeed = (prevHold.hSpeed = 0f);
                     }
-                    if (global::DuckGame.Network.isActive)
+                    if (Network.isActive)
                     {
-                        global::DuckGame.Thing.AuthorityFondle(prevHold, global::DuckGame.DuckNetwork.localConnection, 5);
+                        Thing.AuthorityFondle(prevHold, DuckNetwork.localConnection, 5);
                     }
                 }
             }
-            else if (this.profile != null && this.profile.connection == global::DuckGame.DuckNetwork.localConnection)
+            else if (this.profile != null && this.profile.connection == DuckNetwork.localConnection)
             {
                 this.ThrowItem(false);
             }
@@ -1179,34 +1179,34 @@ namespace DuckGame
             {
                 if (killedBy == this.profile)
                 {
-                    global::DuckGame.ProfileStats stats = killedBy.stats;
+                    ProfileStats stats = killedBy.stats;
                     int num = stats.suicides;
                     stats.suicides = num + 1;
                 }
                 else
                 {
-                    global::DuckGame.ProfileStats stats2 = killedBy.stats;
+                    ProfileStats stats2 = killedBy.stats;
                     int num = stats2.kills;
                     stats2.kills = num + 1;
                 }
             }
-            if (global::DuckGame.Level.current is global::DuckGame.TeamSelect2 && this.isKillMessage)
+            if (Level.current is TeamSelect2 && this.isKillMessage)
             {
-                global::DuckGame.ProfileBox2 box = global::DuckGame.Level.CheckPoint<global::DuckGame.ProfileBox2>(this.cameraPosition);
+                ProfileBox2 box = Level.CheckPoint<ProfileBox2>(this.cameraPosition);
                 if (box != null && box.duck == this)
                 {
-                    global::DuckGame.Profile profile = this.profile;
+                    Profile profile = this.profile;
                     int num = profile.punished;
                     profile.punished = num + 1;
                 }
             }
-            if (!global::DuckGame.Network.isActive && !(global::DuckGame.Level.current is global::DuckGame.ChallengeLevel))
+            if (!Network.isActive && !(Level.current is ChallengeLevel))
             {
                 int myCoolness = 0;
                 int yourCoolness = 0;
-                global::System.Type weapon = type.killThingType;
-                global::DuckGame.Thing weaponThing = type.thing;
-                global::DuckGame.Bullet bullet = weaponThing as global::DuckGame.Bullet;
+                Type weapon = type.killThingType;
+                Thing weaponThing = type.thing;
+                Bullet bullet = weaponThing as Bullet;
                 if (bullet != null)
                 {
                     if (bullet.travelTime > 0.5f)
@@ -1223,16 +1223,16 @@ namespace DuckGame
                     }
                     weaponThing = bullet.firedFrom;
                 }
-                global::DuckGame.Event.Log(new global::DuckGame.KillEvent(killedBy, this.profile, weapon));
+                Event.Log(new KillEvent(killedBy, this.profile, weapon));
                 this.profile.stats.LogKill(killedBy);
                 if (weapon != null)
                 {
-                    if (weapon == typeof(global::DuckGame.Mine))
+                    if (weapon == typeof(Mine))
                     {
                         myCoolness--;
                         xpLogged += 5;
                     }
-                    if (weapon == typeof(global::DuckGame.HugeLaser))
+                    if (weapon == typeof(HugeLaser))
                     {
                         myCoolness--;
                         if (killedBy != null)
@@ -1240,7 +1240,7 @@ namespace DuckGame
                             yourCoolness++;
                         }
                     }
-                    if (weapon == typeof(global::DuckGame.SuicidePistol))
+                    if (weapon == typeof(SuicidePistol))
                     {
                         myCoolness--;
                         if (killedBy != null && !killedBy.duck.dead)
@@ -1254,7 +1254,7 @@ namespace DuckGame
                     if (killedBy == this.profile)
                     {
                         yourCoolness -= 2;
-                        if (weapon == typeof(global::DuckGame.Grenade))
+                        if (weapon == typeof(Grenade))
                         {
                             yourCoolness--;
                         }
@@ -1262,48 +1262,48 @@ namespace DuckGame
                         {
                             yourCoolness--;
                         }
-                        if (weapon == typeof(global::DuckGame.QuadLaser))
+                        if (weapon == typeof(QuadLaser))
                         {
                             yourCoolness--;
                         }
-                        global::DuckGame.Party.AddDrink(this.profile, 2);
-                        if (global::DuckGame.Rando.Float(1f) > 0.9f)
+                        Party.AddDrink(this.profile, 2);
+                        if (Rando.Float(1f) > 0.9f)
                         {
-                            global::DuckGame.Party.AddRandomPerk(this.profile);
+                            Party.AddRandomPerk(this.profile);
                         }
                     }
                     else
                     {
                         yourCoolness++;
-                        if (weapon == typeof(global::DuckGame.QuadLaser) && type is global::DuckGame.DTIncinerate)
+                        if (weapon == typeof(QuadLaser) && type is DTIncinerate)
                         {
-                            global::DuckGame.QuadLaserBullet bb = (type as global::DuckGame.DTIncinerate).thing as global::DuckGame.QuadLaserBullet;
-                            float mult = 1f + global::System.Math.Min(bb.timeAlive / 5f, 2f);
+                            QuadLaserBullet bb = (type as DTIncinerate).thing as QuadLaserBullet;
+                            float mult = 1f + Math.Min(bb.timeAlive / 5f, 2f);
                             yourCoolness += (int)(1f * mult);
                         }
-                        if ((global::System.DateTime.Now - killedBy.stats.lastKillTime).TotalSeconds < 2.0)
+                        if ((DateTime.Now - killedBy.stats.lastKillTime).TotalSeconds < 2.0)
                         {
                             yourCoolness++;
                         }
-                        if (bullet != null && global::System.Math.Abs(bullet.travelDirNormalized.y) > 0.3f)
+                        if (bullet != null && Math.Abs(bullet.travelDirNormalized.y) > 0.3f)
                         {
                             yourCoolness++;
                         }
-                        killedBy.stats.lastKillTime = global::System.DateTime.Now;
-                        if (weaponThing is global::DuckGame.Grenade)
+                        killedBy.stats.lastKillTime = DateTime.Now;
+                        if (weaponThing is Grenade)
                         {
                             yourCoolness++;
-                            global::DuckGame.Grenade g = weaponThing as global::DuckGame.Grenade;
+                            Grenade g = weaponThing as Grenade;
                             if (g.cookTimeOnThrow < 0.5f && g.cookThrower != null)
                             {
                                 g.cookThrower.AddCoolness(1);
                             }
                         }
-                        if (global::System.Math.Abs(killedBy.duck.hSpeed) + global::System.Math.Abs(killedBy.duck.vSpeed) + global::System.Math.Abs(this.hSpeed) + global::System.Math.Abs(this.vSpeed) > 20f)
+                        if (Math.Abs(killedBy.duck.hSpeed) + Math.Abs(killedBy.duck.vSpeed) + Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 20f)
                         {
                             yourCoolness++;
                         }
-                        if (this._holdingAtDisarm != null && this._disarmedBy == killedBy && (global::System.DateTime.Now - this._disarmedAt).TotalSeconds < 3.0)
+                        if (this._holdingAtDisarm != null && this._disarmedBy == killedBy && (DateTime.Now - this._disarmedAt).TotalSeconds < 3.0)
                         {
                             if (killedBy.duck.holdObject == this._holdingAtDisarm)
                             {
@@ -1320,59 +1320,59 @@ namespace DuckGame
                             yourCoolness++;
                             killedBy.stats.killsFromTheGrave++;
                         }
-                        if (type is global::DuckGame.DTShot && prevHold == null)
+                        if (type is DTShot && prevHold == null)
                         {
                             killedBy.stats.unarmedDucksShot++;
                         }
                         else if (prevHold != null)
                         {
-                            if (prevHold is global::DuckGame.PlasmaBlaster)
+                            if (prevHold is PlasmaBlaster)
                             {
                                 yourCoolness++;
                             }
-                            else if (prevHold is global::DuckGame.Saxaphone || prevHold is global::DuckGame.Trombone || prevHold is global::DuckGame.DrumSet)
+                            else if (prevHold is Saxaphone || prevHold is Trombone || prevHold is DrumSet)
                             {
                                 yourCoolness--;
                                 myCoolness++;
-                                global::DuckGame.Party.AddDrink(killedBy, 1);
+                                Party.AddDrink(killedBy, 1);
                             }
-                            else if (prevHold is global::DuckGame.Flower)
+                            else if (prevHold is Flower)
                             {
                                 yourCoolness -= 2;
                                 myCoolness += 2;
-                                global::DuckGame.Party.AddDrink(killedBy, 1);
+                                Party.AddDrink(killedBy, 1);
                             }
                         }
                         if (weapon != null)
                         {
-                            if (weapon == typeof(global::DuckGame.SledgeHammer) || weapon == typeof(global::DuckGame.DuelingPistol))
+                            if (weapon == typeof(SledgeHammer) || weapon == typeof(DuelingPistol))
                             {
                                 yourCoolness++;
                             }
-                            if (weaponThing is global::DuckGame.Sword && weaponThing.owner != null && (weaponThing as global::DuckGame.Sword).jabStance)
+                            if (weaponThing is Sword && weaponThing.owner != null && (weaponThing as Sword).jabStance)
                             {
                                 yourCoolness++;
                             }
                         }
-                        if (wasTrapped && type is global::DuckGame.DTFall)
+                        if (wasTrapped && type is DTFall)
                         {
                             yourCoolness++;
                         }
-                        if (type is global::DuckGame.DTCrush)
+                        if (type is DTCrush)
                         {
-                            if (weaponThing is global::DuckGame.PhysicsObject)
+                            if (weaponThing is PhysicsObject)
                             {
-                                double totalSeconds = (global::System.DateTime.Now - (weaponThing as global::DuckGame.PhysicsObject).lastGrounded).TotalSeconds;
-                                yourCoolness += 1 + (int)global::System.Math.Floor((global::System.DateTime.Now - (weaponThing as global::DuckGame.PhysicsObject).lastGrounded).TotalSeconds * 6.0);
-                                if (global::DuckGame.Recorder.currentRecording != null)
+                                double totalSeconds = (DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds;
+                                yourCoolness += 1 + (int)Math.Floor((DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds * 6.0);
+                                if (Recorder.currentRecording != null)
                                 {
-                                    global::DuckGame.Recorder.currentRecording.LogAction(14);
+                                    Recorder.currentRecording.LogAction(14);
                                 }
-                                global::DuckGame.Party.AddDrink(this.profile, 1);
+                                Party.AddDrink(this.profile, 1);
                                 xpLogged += 5;
-                                if (global::DuckGame.Rando.Float(1f) > 0.8f)
+                                if (Rando.Float(1f) > 0.8f)
                                 {
-                                    global::DuckGame.Party.AddRandomPerk(this.profile);
+                                    Party.AddRandomPerk(this.profile);
                                 }
                             }
                             else
@@ -1384,20 +1384,20 @@ namespace DuckGame
                     if (killedBy.duck.team == this.team && killedBy != this.profile)
                     {
                         yourCoolness -= 2;
-                        global::DuckGame.Party.AddDrink(killedBy, 1);
+                        Party.AddDrink(killedBy, 1);
                     }
-                    if ((global::System.DateTime.Now - this._timeSinceDuckLayedToRest).TotalSeconds < 3.0)
+                    if ((DateTime.Now - this._timeSinceDuckLayedToRest).TotalSeconds < 3.0)
                     {
                         yourCoolness--;
                     }
-                    if ((global::System.DateTime.Now - this._timeSinceFuneralPerformed).TotalSeconds < 3.0)
+                    if ((DateTime.Now - this._timeSinceFuneralPerformed).TotalSeconds < 3.0)
                     {
                         yourCoolness -= 2;
                     }
                 }
                 if (this.controlledBy != null && this.controlledBy.profile != null)
                 {
-                    this.controlledBy.profile.stats.coolness += global::System.Math.Abs(myCoolness);
+                    this.controlledBy.profile.stats.coolness += Math.Abs(myCoolness);
                     if (myCoolness > 0)
                     {
                         myCoolness = 0;
@@ -1407,49 +1407,49 @@ namespace DuckGame
                 myCoolness--;
                 if (killedBy != null && killedBy.duck != null)
                 {
-                    yourCoolness *= (int)global::System.Math.Ceiling((double)(1f + killedBy.duck.killMultiplier));
+                    yourCoolness *= (int)Math.Ceiling((double)(1f + killedBy.duck.killMultiplier));
                     killedBy.duck.AddCoolness(yourCoolness);
                 }
                 this.AddCoolness(myCoolness);
                 if (killedBy != null && killedBy.duck != null)
                 {
                     killedBy.duck.killMultiplier += 1f;
-                    if (global::DuckGame.TeamSelect2.KillsForPoints)
+                    if (TeamSelect2.KillsForPoints)
                     {
-                        global::DuckGame.Profile realProfile = killedBy;
+                        Profile realProfile = killedBy;
                         if (killedBy.duck.converted != null)
                         {
                             realProfile = killedBy.duck.converted.profile;
                         }
                         if (killedBy.team != this.profile.team)
                         {
-                            global::DuckGame.SFX.Play("scoreDingShort", 0.9f, 0f, 0f, false);
+                            SFX.Play("scoreDingShort", 0.9f, 0f, 0f, false);
                             if (killedBy.duck != null && killedBy.duck.currentPlusOne != null)
                             {
                                 killedBy.duck.currentPlusOne.Pulse();
                             }
                             else
                             {
-                                global::DuckGame.PlusOne plus = new global::DuckGame.PlusOne(0f, 0f, realProfile, false, true)
+                                PlusOne plus = new PlusOne(0f, 0f, realProfile, false, true)
                                 {
                                     _duck = killedBy.duck
                                 };
                                 plus.anchor = killedBy.duck;
-                                plus.anchor.offset = new global::DuckGame.Vec2(0f, -16f);
+                                plus.anchor.offset = new Vec2(0f, -16f);
                                 if (killedBy.duck != null)
                                 {
                                     killedBy.duck.currentPlusOne = plus;
                                 }
-                                global::DuckGame.Level.Add(plus);
+                                Level.Add(plus);
                             }
                             realProfile.team.score++;
-                            if (global::DuckGame.Teams.active.Count > 1 && global::DuckGame.Network.isActive && killedBy.connection == global::DuckGame.DuckNetwork.localConnection)
+                            if (Teams.active.Count > 1 && Network.isActive && killedBy.connection == DuckNetwork.localConnection)
                             {
-                                global::DuckGame.DuckNetwork.GiveXP("Ducks Despawned", 1, 1, 4, 25, 40, 9999999);
+                                DuckNetwork.GiveXP("Ducks Despawned", 1, 1, 4, 25, 40, 9999999);
                             }
-                            if (global::DuckGame.Network.isActive && global::DuckGame.Network.isServer)
+                            if (Network.isActive && Network.isServer)
                             {
-                                global::DuckGame.Send.Message(new global::DuckGame.NMAssignKill(new global::System.Collections.Generic.List<global::DuckGame.Profile>
+                                Send.Message(new NMAssignKill(new List<Profile>
                                 {
                                     killedBy
                                 }, null));
@@ -1458,42 +1458,42 @@ namespace DuckGame
                     }
                 }
             }
-            if (global::DuckGame.Highlights.highlightRatingMultiplier != 0f)
+            if (Highlights.highlightRatingMultiplier != 0f)
             {
-                global::DuckGame.ProfileStats stats3 = this.profile.stats;
+                ProfileStats stats3 = this.profile.stats;
                 int num = stats3.timesKilled;
                 stats3.timesKilled = num + 1;
             }
-            if (this.profile.connection == global::DuckGame.DuckNetwork.localConnection)
+            if (this.profile.connection == DuckNetwork.localConnection)
             {
-                global::DuckGame.DuckNetwork.deaths++;
+                DuckNetwork.deaths++;
             }
             if (!this.isKillMessage)
             {
-                if (this.profile.connection != global::DuckGame.DuckNetwork.localConnection)
+                if (this.profile.connection != DuckNetwork.localConnection)
                 {
-                    global::DuckGame.DuckNetwork.kills++;
+                    DuckNetwork.kills++;
                 }
-                if (global::DuckGame.TeamSelect2.Enabled("CORPSEBLOW", false))
+                if (TeamSelect2.Enabled("CORPSEBLOW", false))
                 {
-                    global::DuckGame.Grenade grenade = new global::DuckGame.Grenade(base.x, base.y);
-                    grenade.hSpeed = this.hSpeed + global::DuckGame.Rando.Float(-2f, 2f);
-                    grenade.vSpeed = this.vSpeed - global::DuckGame.Rando.Float(1f, 2.5f);
-                    global::DuckGame.Level.Add(grenade);
+                    Grenade grenade = new Grenade(base.x, base.y);
+                    grenade.hSpeed = this.hSpeed + Rando.Float(-2f, 2f);
+                    grenade.vSpeed = this.vSpeed - Rando.Float(1f, 2.5f);
+                    Level.Add(grenade);
                     grenade.PressAction();
                 }
-                global::DuckGame.Thing.SuperFondle(this, global::DuckGame.DuckNetwork.localConnection);
+                Thing.SuperFondle(this, DuckNetwork.localConnection);
                 if (this._trappedInstance != null)
                 {
-                    global::DuckGame.Thing.SuperFondle(this._trappedInstance, global::DuckGame.DuckNetwork.localConnection);
+                    Thing.SuperFondle(this._trappedInstance, DuckNetwork.localConnection);
                 }
                 if (this.holdObject != null)
                 {
-                    global::DuckGame.Thing.SuperFondle(this.holdObject, global::DuckGame.DuckNetwork.localConnection);
+                    Thing.SuperFondle(this.holdObject, DuckNetwork.localConnection);
                 }
                 if (base.y < -999f)
                 {
-                    global::DuckGame.Vec2 pos2 = this.position;
+                    Vec2 pos2 = this.position;
                     this.position = this._lastGoodPosition;
                     this.GoRagdoll();
                     this.position = pos2;
@@ -1503,18 +1503,18 @@ namespace DuckGame
                     this.GoRagdoll();
                 }
             }
-            if (global::DuckGame.Network.isActive && this.ragdoll != null && !this.isKillMessage)
+            if (Network.isActive && this.ragdoll != null && !this.isKillMessage)
             {
-                global::DuckGame.Thing.SuperFondle(this.ragdoll, global::DuckGame.DuckNetwork.localConnection);
+                Thing.SuperFondle(this.ragdoll, DuckNetwork.localConnection);
             }
-            if (global::DuckGame.Network.isActive && !this.isKillMessage)
+            if (Network.isActive && !this.isKillMessage)
             {
                 this.lastAppliedLifeChange += 1;
-                global::DuckGame.Send.Message(new global::DuckGame.NMKillDuck(this.profile.networkIndex, type is global::DuckGame.DTCrush, type is global::DuckGame.DTIncinerate, type is global::DuckGame.DTFall, this.lastAppliedLifeChange));
+                Send.Message(new NMKillDuck(this.profile.networkIndex, type is DTCrush, type is DTIncinerate, type is DTFall, this.lastAppliedLifeChange));
             }
-            if (!(this is global::DuckGame.TargetDuck))
+            if (!(this is TargetDuck))
             {
-                global::DuckGame.Global.Kill(this, type);
+                Global.Kill(this, type);
             }
             return true;
         }
@@ -1730,7 +1730,7 @@ namespace DuckGame
                 float leftTrigger = this.inputProfile.leftTrigger;
                 if (this.inputProfile.hasMotionAxis)
                     leftTrigger += this.inputProfile.motionAxis;
-                global::DuckGame.Hat equipment = this.GetEquipment(typeof(global::DuckGame.Hat)) as global::DuckGame.Hat;
+                Hat equipment = this.GetEquipment(typeof(Hat)) as Hat;
                 if (equipment == null || equipment.quacks)
                 {
                     if (Network.isActive)
@@ -2136,7 +2136,7 @@ namespace DuckGame
 
         private void UpdateGhostStatus()
         {
-            global::DuckGame.GhostPack equipment = this.GetEquipment(typeof(global::DuckGame.GhostPack)) as global::DuckGame.GhostPack;
+            GhostPack equipment = this.GetEquipment(typeof(GhostPack)) as GhostPack;
             if (equipment != null && !this._isGhost)
             {
                 this._equipment.Remove((Equipment)equipment);
@@ -2243,29 +2243,29 @@ namespace DuckGame
             this.Swear();
         }
 
-        public override void OnSoftImpact(global::DuckGame.MaterialThing with, global::DuckGame.ImpactedFrom from)
+        public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            global::DuckGame.Holdable hold = with as global::DuckGame.Holdable;
-            if (this._isGhost || with == null || (hold != null && hold.owner == this) || with is global::DuckGame.FeatherVolume || ((with == this._lastHoldItem || (with.owner != null && with.owner == this._lastHoldItem)) && this._timeSinceThrow < 7) || with == this._trapped || with == this._trappedInstance || with is global::DuckGame.Dart || (with.owner != null && with.owner is global::DuckGame.SpikeHelm))
+            Holdable hold = with as Holdable;
+            if (this._isGhost || with == null || (hold != null && hold.owner == this) || with is FeatherVolume || ((with == this._lastHoldItem || (with.owner != null && with.owner == this._lastHoldItem)) && this._timeSinceThrow < 7) || with == this._trapped || with == this._trappedInstance || with is Dart || (with.owner != null && with.owner is SpikeHelm))
             {
                 return;
             }
-            if (with is global::DuckGame.IceWedge)
+            if (with is IceWedge)
             {
                 this._iceWedging = 5;
             }
-            if (with is global::DuckGame.RagdollPart)
+            if (with is RagdollPart)
             {
-                global::DuckGame.RagdollPart part = with as global::DuckGame.RagdollPart;
+                RagdollPart part = with as RagdollPart;
                 if (part != null && part.doll != null && part.doll.captureDuck != null && part.doll.captureDuck.killedByProfile == this.profile && part.doll.captureDuck.framesSinceKilled < 50)
                 {
                     return;
                 }
-                if (part != null && part.doll != null && (part.doll.PartHeld() || (this.holdObject is global::DuckGame.Chainsaw && this._timeSinceChainKill < 50)))
+                if (part != null && part.doll != null && (part.doll.PartHeld() || (this.holdObject is Chainsaw && this._timeSinceChainKill < 50)))
                 {
                     return;
                 }
-                if (this.holdObject != null && this.holdObject is global::DuckGame.RagdollPart && part != null && part.doll != null && part.doll.holdingOwner == this)
+                if (this.holdObject != null && this.holdObject is RagdollPart && part != null && part.doll != null && part.doll.holdingOwner == this)
                 {
                     return;
                 }
@@ -2282,13 +2282,13 @@ namespace DuckGame
                     return;
                 }
             }
-            if (!this.dead && !this.swinging && with is global::DuckGame.PhysicsObject && with.totalImpactPower > with.weightMultiplierInv * 2f)
+            if (!this.dead && !this.swinging && with is PhysicsObject && with.totalImpactPower > with.weightMultiplierInv * 2f)
             {
-                if (with is global::DuckGame.Duck && with.weight >= 5f)
+                if (with is Duck && with.weight >= 5f)
                 {
-                    global::DuckGame.Duck d = with as global::DuckGame.Duck;
-                    bool bootsmash = d.HasEquipment(typeof(global::DuckGame.Boots)) && !d.sliding;
-                    if (from == global::DuckGame.ImpactedFrom.Top && with.bottom - 5f < base.top && with.impactPowerV > 2f && bootsmash)
+                    Duck d = with as Duck;
+                    bool bootsmash = d.HasEquipment(typeof(Boots)) && !d.sliding;
+                    if (from == ImpactedFrom.Top && with.bottom - 5f < base.top && with.impactPowerV > 2f && bootsmash)
                     {
                         this.vSpeed = with.impactDirectionV * 0.5f;
                         with.vSpeed = -with.vSpeed * 0.7f;
@@ -2296,70 +2296,70 @@ namespace DuckGame
                         d.slamWait = 6;
                         if (with.isServerForObject)
                         {
-                            global::DuckGame.RumbleManager.AddRumbleEvent(d.profile, new global::DuckGame.RumbleEvent(global::DuckGame.RumbleIntensity.Light, global::DuckGame.RumbleDuration.Pulse, global::DuckGame.RumbleFalloff.None, global::DuckGame.RumbleType.Gameplay));
-                            global::DuckGame.Duck.MakeStars(this.position + new global::DuckGame.Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity);
-                            if (global::DuckGame.Network.isActive)
+                            RumbleManager.AddRumbleEvent(d.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None, RumbleType.Gameplay));
+                            Duck.MakeStars(this.position + new Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity);
+                            if (Network.isActive)
                             {
-                                global::DuckGame.Send.Message(new global::DuckGame.NMBonk(this.position + new global::DuckGame.Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity));
+                                Send.Message(new NMBonk(this.position + new Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity));
                             }
                         }
-                        global::DuckGame.Helmet h = this.GetEquipment(typeof(global::DuckGame.Helmet)) as global::DuckGame.Helmet;
+                        Helmet h = this.GetEquipment(typeof(Helmet)) as Helmet;
                         if (h != null)
                         {
-                            global::DuckGame.SFX.Play("metalRebound", 1f, 0f, 0f, false);
-                            global::DuckGame.RumbleManager.AddRumbleEvent(this.profile, new global::DuckGame.RumbleEvent(global::DuckGame.RumbleIntensity.Light, global::DuckGame.RumbleDuration.Short, global::DuckGame.RumbleFalloff.None, global::DuckGame.RumbleType.Gameplay));
+                            SFX.Play("metalRebound", 1f, 0f, 0f, false);
+                            RumbleManager.AddRumbleEvent(this.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None, RumbleType.Gameplay));
                             h.Crush(d);
                             return;
                         }
                         if (with.isServerForObject)
                         {
-                            global::DuckGame.StatBinding ducksCrushed = global::DuckGame.Global.data.ducksCrushed;
+                            StatBinding ducksCrushed = Global.data.ducksCrushed;
                             int valueInt = ducksCrushed.valueInt;
                             ducksCrushed.valueInt = valueInt + 1;
-                            this.Kill(new global::DuckGame.DTCrush(with as global::DuckGame.PhysicsObject));
+                            this.Kill(new DTCrush(with as PhysicsObject));
                             return;
                         }
                     }
                 }
                 else if (with.dontCrush)
                 {
-                    if (with.alpha > 0.99f && (from == global::DuckGame.ImpactedFrom.Left || from == global::DuckGame.ImpactedFrom.Right) && ((!global::DuckGame.Network.isActive && with.impactPowerH > 2.3f) || with.impactPowerH > 3f))
+                    if (with.alpha > 0.99f && (from == ImpactedFrom.Left || from == ImpactedFrom.Right) && ((!Network.isActive && with.impactPowerH > 2.3f) || with.impactPowerH > 3f))
                     {
                         bool processDisarm = with.isServerForObject;
-                        if (!processDisarm && global::DuckGame.Level.CheckLine<global::DuckGame.Block>(this.position, with.position) != null)
+                        if (!processDisarm && Level.CheckLine<Block>(this.position, with.position) != null)
                         {
                             processDisarm = true;
                         }
                         if (processDisarm)
                         {
                             this.hSpeed = with.impactDirectionH * 0.5f;
-                            if (!(with is global::DuckGame.EnergyScimitar))
+                            if (!(with is EnergyScimitar))
                             {
                                 with.hSpeed = -with.hSpeed * with.bouncy;
                             }
-                            if (base.isServerForObject && (!global::DuckGame.Network.isActive || this._disarmWait == 0) && this._disarmDisable <= 0)
+                            if (base.isServerForObject && (!Network.isActive || this._disarmWait == 0) && this._disarmDisable <= 0)
                             {
                                 this.Disarm(with);
                                 this._disarmWait = 5;
-                                global::DuckGame.RumbleManager.AddRumbleEvent(this.profile, new global::DuckGame.RumbleEvent(global::DuckGame.RumbleIntensity.Light, global::DuckGame.RumbleDuration.Short, global::DuckGame.RumbleFalloff.None, global::DuckGame.RumbleType.Gameplay));
+                                RumbleManager.AddRumbleEvent(this.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None, RumbleType.Gameplay));
                             }
                             if (!base.isServerForObject)
                             {
-                                global::DuckGame.Send.Message(new global::DuckGame.NMDisarm(this, with.impactDirectionH * 0.5f), this.connection);
+                                Send.Message(new NMDisarm(this, with.impactDirectionH * 0.5f), this.connection);
                                 return;
                             }
                         }
                     }
                 }
-                else if (from == global::DuckGame.ImpactedFrom.Top && with.y < base.y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
+                else if (from == ImpactedFrom.Top && with.y < base.y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
                 {
-                    if (with is global::DuckGame.PhysicsObject)
+                    if (with is PhysicsObject)
                     {
-                        global::DuckGame.PhysicsObject wp = with as global::DuckGame.PhysicsObject;
+                        PhysicsObject wp = with as PhysicsObject;
                         if (wp.lastPosition.y + with.collisionOffset.y + with.collisionSize.y < base.top)
                         {
-                            global::DuckGame.Helmet h2 = this.GetEquipment(typeof(global::DuckGame.Helmet)) as global::DuckGame.Helmet;
-                            if (h2 != null && h2 is global::DuckGame.SpikeHelm && wp == (h2 as global::DuckGame.SpikeHelm).oldPoke)
+                            Helmet h2 = this.GetEquipment(typeof(Helmet)) as Helmet;
+                            if (h2 != null && h2 is SpikeHelm && wp == (h2 as SpikeHelm).oldPoke)
                             {
                                 return;
                             }
@@ -2367,23 +2367,23 @@ namespace DuckGame
                             with.vSpeed = -with.vSpeed * 0.5f;
                             if (with.isServerForObject)
                             {
-                                global::DuckGame.Duck.MakeStars(this.position + new global::DuckGame.Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity);
-                                if (global::DuckGame.Network.isActive)
+                                Duck.MakeStars(this.position + new Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity);
+                                if (Network.isActive)
                                 {
-                                    global::DuckGame.Send.Message(new global::DuckGame.NMBonk(this.position + new global::DuckGame.Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity));
+                                    Send.Message(new NMBonk(this.position + new Vec2(0f, (float)((this.crouch || this.ragdoll != null) ? -2 : -6)), base.velocity));
                                 }
                             }
                             if (h2 != null && this.ragdoll == null)
                             {
-                                global::DuckGame.SFX.Play("metalRebound", 1f, 0f, 0f, false);
-                                global::DuckGame.RumbleManager.AddRumbleEvent(this.profile, new global::DuckGame.RumbleEvent(global::DuckGame.RumbleIntensity.Light, global::DuckGame.RumbleDuration.Short, global::DuckGame.RumbleFalloff.None, global::DuckGame.RumbleType.Gameplay));
+                                SFX.Play("metalRebound", 1f, 0f, 0f, false);
+                                RumbleManager.AddRumbleEvent(this.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None, RumbleType.Gameplay));
                                 h2.Crush(wp);
                                 return;
                             }
                             if (with.isServerForObject)
                             {
-                                this.Kill(new global::DuckGame.DTCrush(with as global::DuckGame.PhysicsObject));
-                                global::DuckGame.StatBinding ducksCrushed2 = global::DuckGame.Global.data.ducksCrushed;
+                                this.Kill(new DTCrush(with as PhysicsObject));
+                                StatBinding ducksCrushed2 = Global.data.ducksCrushed;
                                 int valueInt = ducksCrushed2.valueInt;
                                 ducksCrushed2.valueInt = valueInt + 1;
                                 return;
@@ -2391,40 +2391,40 @@ namespace DuckGame
                         }
                     }
                 }
-                else if ((from == global::DuckGame.ImpactedFrom.Left || from == global::DuckGame.ImpactedFrom.Right) && ((!global::DuckGame.Network.isActive && with.impactPowerH > 2f) || with.impactPowerH > 3f))
+                else if ((from == ImpactedFrom.Left || from == ImpactedFrom.Right) && ((!Network.isActive && with.impactPowerH > 2f) || with.impactPowerH > 3f))
                 {
-                    if ((this.holdObject is global::DuckGame.SledgeHammer && with is global::DuckGame.RagdollPart) || (this.holdObject is global::DuckGame.Sword && (this.holdObject as global::DuckGame.Sword).crouchStance && ((this.offDir < 0 && from == global::DuckGame.ImpactedFrom.Left) || (this.offDir > 0 && from == global::DuckGame.ImpactedFrom.Right))))
+                    if ((this.holdObject is SledgeHammer && with is RagdollPart) || (this.holdObject is Sword && (this.holdObject as Sword).crouchStance && ((this.offDir < 0 && from == ImpactedFrom.Left) || (this.offDir > 0 && from == ImpactedFrom.Right))))
                     {
                         return;
                     }
                     bool processDisarm2 = with.isServerForObject;
-                    if (!processDisarm2 && global::DuckGame.Level.CheckLine<global::DuckGame.Block>(this.position, with.position) != null)
+                    if (!processDisarm2 && Level.CheckLine<Block>(this.position, with.position) != null)
                     {
                         processDisarm2 = true;
                     }
                     if (processDisarm2)
                     {
                         with.hSpeed = -with.hSpeed * with.bouncy;
-                        if (with is global::DuckGame.TeamHat)
+                        if (with is TeamHat)
                         {
                             this.Swear();
                             return;
                         }
                         this.hSpeed = with.impactDirectionH * 0.5f;
-                        if (base.isServerForObject && (!global::DuckGame.Network.isActive || this._disarmWait == 0) && this._disarmDisable <= 0)
+                        if (base.isServerForObject && (!Network.isActive || this._disarmWait == 0) && this._disarmDisable <= 0)
                         {
                             this.Disarm(with);
-                            global::DuckGame.RumbleManager.AddRumbleEvent(this.profile, new global::DuckGame.RumbleEvent(global::DuckGame.RumbleIntensity.Light, global::DuckGame.RumbleDuration.Short, global::DuckGame.RumbleFalloff.None, global::DuckGame.RumbleType.Gameplay));
+                            RumbleManager.AddRumbleEvent(this.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None, RumbleType.Gameplay));
                             this._disarmWait = 5;
                         }
                         if (!base.isServerForObject)
                         {
-                            global::DuckGame.Send.Message(new global::DuckGame.NMDisarm(this, with.impactDirectionH * 0.5f), this.connection);
+                            Send.Message(new NMDisarm(this, with.impactDirectionH * 0.5f), this.connection);
                             return;
                         }
                     }
                 }
-                else if (!(with is global::DuckGame.TeamHat) && from == global::DuckGame.ImpactedFrom.Bottom && with.y > base.bottom && with.impactPowerV > 2f)
+                else if (!(with is TeamHat) && from == ImpactedFrom.Bottom && with.y > base.bottom && with.impactPowerV > 2f)
                 {
                     this.vSpeed = with.impactDirectionV * 0.5f;
                     with.vSpeed = -with.vSpeed * 0.5f;

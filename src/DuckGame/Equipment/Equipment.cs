@@ -227,22 +227,22 @@ namespace DuckGame
             base.Draw();
         }
 
-        public override void OnSoftImpact(global::DuckGame.MaterialThing with, global::DuckGame.ImpactedFrom from)
+        public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
             if (this._equippedDuck == null && this.autoEquipTime > 0f)
             {
-                global::DuckGame.Duck d = with as global::DuckGame.Duck;
-                if (d == null && with is global::DuckGame.FeatherVolume)
+                Duck d = with as Duck;
+                if (d == null && with is FeatherVolume)
                 {
-                    d = (with as global::DuckGame.FeatherVolume).duckOwner;
+                    d = (with as FeatherVolume).duckOwner;
                 }
                 if (d != null)
                 {
                     d.Equip(this, true, false);
-                    if (this is global::DuckGame.ChokeCollar)
+                    if (this is ChokeCollar)
                     {
-                        (this as global::DuckGame.ChokeCollar).ball.hSpeed = 0f;
-                        (this as global::DuckGame.ChokeCollar).ball.vSpeed = 0f;
+                        (this as ChokeCollar).ball.hSpeed = 0f;
+                        (this as ChokeCollar).ball.vSpeed = 0f;
                     }
                 }
             }

@@ -56,7 +56,7 @@ namespace DuckGame
                                         break;
                                     }
                                 }
-                                global::DuckGame.Duck duck = materialThing as global::DuckGame.Duck;
+                                Duck duck = materialThing as Duck;
                                 if (duck != null && ((double)duck.slideBuildup > 0.0 && duck.sliding || duck.holdObject is Sword && (duck.holdObject as Sword)._slamStance))
                                 {
                                     SmallSmoke smallSmoke = SmallSmoke.New(litBy.x + Rando.Float(-1f, 1f), litBy.y + Rando.Float(-1f, 1f));

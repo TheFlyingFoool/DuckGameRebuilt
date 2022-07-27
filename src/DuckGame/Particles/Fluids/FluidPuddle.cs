@@ -290,21 +290,21 @@ namespace DuckGame
                 if (this._framesSinceFeed > 10)
                 {
                    // this.Feed(this.data with { amount = -1f / 1000f });
-                    global::DuckGame.FluidData dat = this.data;
+                    FluidData dat = this.data;
                     dat.amount = -0.001f;
                     this.Feed(dat);
                     if (this.data.amount <= 0f)
                     {
                         this.data.amount = 0f;
-                        base.alpha = global::DuckGame.Lerp.Float(base.alpha, 0f, 0.04f);
+                        base.alpha = Lerp.Float(base.alpha, 0f, 0.04f);
                     }
                     else
                     {
-                        base.alpha = global::DuckGame.Lerp.Float(base.alpha, 1f, 0.04f);
+                        base.alpha = Lerp.Float(base.alpha, 1f, 0.04f);
                     }
                     if (base.alpha <= 0f)
                     {
-                        global::DuckGame.Level.Remove(this);
+                        Level.Remove(this);
                     }
                 }
             }
@@ -313,7 +313,7 @@ namespace DuckGame
                 this.alpha = Lerp.Float(this.alpha, 1f, 0.04f);
                 if ((double)num < 3.0)
                 {
-                    global::DuckGame.FluidData dat2 = this.data;
+                    FluidData dat2 = this.data;
                     dat2.amount = -0.0001f;
                     this.Feed(dat2);
                 }

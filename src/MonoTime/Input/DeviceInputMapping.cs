@@ -131,12 +131,12 @@ namespace DuckGame
         public bool RunMappingUpdate(string trigger, bool allowDupes = true)
         {
             bool finished = false;
-            if (this.device is global::DuckGame.AnalogGamePad || (this.device is global::DuckGame.GenericController && (this.device as global::DuckGame.GenericController).device != null))
+            if (this.device is AnalogGamePad || (this.device is GenericController && (this.device as GenericController).device != null))
             {
-                global::DuckGame.AnalogGamePad pad = this.device as global::DuckGame.AnalogGamePad;
-                if (pad == null && this.device is global::DuckGame.GenericController)
+                AnalogGamePad pad = this.device as AnalogGamePad;
+                if (pad == null && this.device is GenericController)
                 {
-                    pad = (this.device as global::DuckGame.GenericController).device;
+                    pad = (this.device as GenericController).device;
                 }
                 if (trigger == "LSTICK" || trigger == "RSTICK")
                 {
@@ -172,12 +172,12 @@ namespace DuckGame
                 }
                 else
                 {
-                    using (global::System.Collections.Generic.IEnumerator<global::DuckGame.PadButton> enumerator = global::System.Enum.GetValues(typeof(global::DuckGame.PadButton)).Cast<global::DuckGame.PadButton>().GetEnumerator())
+                    using (IEnumerator<PadButton> enumerator = Enum.GetValues(typeof(PadButton)).Cast<PadButton>().GetEnumerator())
                     {
                         while (enumerator.MoveNext())
                         {
-                            global::DuckGame.PadButton b = enumerator.Current;
-                            if (b != global::DuckGame.PadButton.LeftThumbstickUp && b != global::DuckGame.PadButton.LeftThumbstickDown && b != global::DuckGame.PadButton.LeftThumbstickLeft && b != global::DuckGame.PadButton.LeftThumbstickRight && b != global::DuckGame.PadButton.RightThumbstickUp && b != global::DuckGame.PadButton.RightThumbstickDown && b != global::DuckGame.PadButton.RightThumbstickLeft && b != global::DuckGame.PadButton.RightThumbstickRight && this.device.MapPressed((int)b, false))
+                            PadButton b = enumerator.Current;
+                            if (b != PadButton.LeftThumbstickUp && b != PadButton.LeftThumbstickDown && b != PadButton.LeftThumbstickLeft && b != PadButton.LeftThumbstickRight && b != PadButton.RightThumbstickUp && b != PadButton.RightThumbstickDown && b != PadButton.RightThumbstickLeft && b != PadButton.RightThumbstickRight && this.device.MapPressed((int)b, false))
                             {
                                 this.CleanDupes(trigger, (int)b, allowDupes);
                                 this.MapInput(trigger, (int)b);
@@ -188,9 +188,9 @@ namespace DuckGame
                     }
                 }
             }
-            if (this.device is global::DuckGame.Keyboard)
+            if (this.device is Keyboard)
             {
-                foreach (global::DuckGame.Keys b2 in global::System.Enum.GetValues(typeof(global::DuckGame.Keys)).Cast<global::DuckGame.Keys>())
+                foreach (Keys b2 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {
                     if (this.device.MapPressed((int)b2, false))
                     {
@@ -201,17 +201,17 @@ namespace DuckGame
                 }
                 if (!finished)
                 {
-                    if (global::DuckGame.Mouse.left == global::DuckGame.InputState.Pressed)
+                    if (Mouse.left == InputState.Pressed)
                     {
                         this.MapInput(trigger, 999990);
                         finished = true;
                     }
-                    else if (global::DuckGame.Mouse.middle == global::DuckGame.InputState.Pressed)
+                    else if (Mouse.middle == InputState.Pressed)
                     {
                         this.MapInput(trigger, 999991);
                         finished = true;
                     }
-                    else if (global::DuckGame.Mouse.right == global::DuckGame.InputState.Pressed)
+                    else if (Mouse.right == InputState.Pressed)
                     {
                         this.MapInput(trigger, 999992);
                         finished = true;

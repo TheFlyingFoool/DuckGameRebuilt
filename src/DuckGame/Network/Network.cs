@@ -21,11 +21,11 @@ namespace DuckGame
         private NCNetworkImplementation _lanCore;
         public static bool lanMode = false;
         private static Network _activeNetwork;
-        private global::DuckGame.NetIndex16 _tickSync = new global::DuckGame.NetIndex16(1, true);
+        private NetIndex16 _tickSync = new NetIndex16(1, true);
 
-        public global::DuckGame.NetIndex16 _lastReceivedTime = new global::DuckGame.NetIndex16(1, true);
+        public NetIndex16 _lastReceivedTime = new NetIndex16(1, true);
 
-        public global::DuckGame.NetIndex16 _synchronizedTime = new global::DuckGame.NetIndex16(1, true);
+        public NetIndex16 _synchronizedTime = new NetIndex16(1, true);
         private uint _currentTick;
         private static Map<ushort, ConstructorInfo> _constructorToMessageID = new Map<ushort, ConstructorInfo>();
         private static Map<ushort, System.Type> _typeToMessageID = new Map<ushort, System.Type>();
@@ -499,8 +499,8 @@ namespace DuckGame
         public void Reset()
         {
             this._currentTick = 0U;
-            this._synchronizedTime = new global::DuckGame.NetIndex16(1, true);
-            this._tickSync = new global::DuckGame.NetIndex16(1, true);
+            this._synchronizedTime = new NetIndex16(1, true);
+            this._tickSync = new NetIndex16(1, true);
         }
 
         public static void PreUpdate()

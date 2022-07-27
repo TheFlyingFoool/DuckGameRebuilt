@@ -77,7 +77,7 @@ namespace DuckGame
 
         public bool CanSpawnInfinite()
         {
-            return !(this is global::DuckGame.FlareGun) && !(this is global::DuckGame.QuadLaser) && !(this is global::DuckGame.RomanCandle) && !(this is global::DuckGame.Matchbox) && !(this is global::DuckGame.FireCrackers) && !(this is global::DuckGame.NetGun);
+            return !(this is FlareGun) && !(this is QuadLaser) && !(this is RomanCandle) && !(this is Matchbox) && !(this is FireCrackers) && !(this is NetGun);
         }
 
         public AmmoType ammoType => this._ammoType;

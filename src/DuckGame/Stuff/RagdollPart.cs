@@ -620,7 +620,7 @@ namespace DuckGame
             }
             else if (this.doll != null && this.doll.captureDuck != null)
                 this.doll.captureDuck.tongueCheck = Vec2.Zero;
-            global::DuckGame.SpriteMap graphic1 = this.graphic as global::DuckGame.SpriteMap;
+            SpriteMap graphic1 = this.graphic as SpriteMap;
             if (graphic1 != null && this.doll != null && this.doll.inSleepingBag)
             {
                 if (graphic1.frame == 18)
