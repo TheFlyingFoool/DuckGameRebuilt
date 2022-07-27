@@ -160,8 +160,10 @@ namespace DuckGame
             base.Update();
         }
 
-        public void Hurt(float amount) => this._equipmentHealth -= amount;
-
+        public new void Hurt(float amount)
+        {
+            this._equipmentHealth -= amount;
+        }
         private void UpdateEquippedCollision()
         {
             if (this._hasEquippedCollision && this._equippedDuck != null)

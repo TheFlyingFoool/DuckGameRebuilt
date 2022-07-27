@@ -14,7 +14,7 @@ namespace DuckGame
         private bool _playedMusic;
         private float _moveWait = 1f;
         private float _shiftText;
-        private int great;
+        //private int great;
 
         public BIOSScreen() => this._centeredView = true;
 

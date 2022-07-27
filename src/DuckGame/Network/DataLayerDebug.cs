@@ -58,7 +58,7 @@ namespace DuckGame
             private float _duplicate;
             public NetworkConnection connection;
             public List<DataLayerDebug.BadConnection.DelayedPacket> packets = new List<DataLayerDebug.BadConnection.DelayedPacket>();
-            private int i;
+            //private int i;
 
             public float latency
             {

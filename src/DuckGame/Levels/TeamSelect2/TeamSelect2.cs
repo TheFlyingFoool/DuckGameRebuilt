@@ -61,7 +61,7 @@ namespace DuckGame
         private UIMenu _hostModifiersMenu;
         private UIMenu _hostLevelSelectMenu;
         private UIMenu _hostSettingsMenu;
-        private UIMenu _hostSettingsWirelessGameMenu;
+        //private UIMenu _hostSettingsWirelessGameMenu;
         private UIServerBrowser _browseGamesMenu;
         private UIMatchmakerMark2 _matchmaker;
         private MenuBoolean _returnToMenu = new MenuBoolean();
@@ -77,7 +77,7 @@ namespace DuckGame
         private static bool _hostGameEditedMatchSettings = false;
         private bool miniHostMenu;
         public static bool growCamera;
-        private static bool eight = true;
+        //private static bool eight = true;
         private UIComponent _configGroup;
         private UIMenu _levelSelectMenu;
         private BitmapFont _littleFont;
@@ -89,7 +89,7 @@ namespace DuckGame
         private static bool _didHost = false;
         private static bool _copyInviteLink = false;
         public static bool showEightPlayerSelected = false;
-        private int fakeOnlineWait = 40;
+        //private int fakeOnlineWait = 40;
         private bool _sentDedicatedCountdown;
         private bool explicitlyCreated;
         private Vec2 oldCameraPos = Vec2.Zero;
@@ -193,7 +193,7 @@ namespace DuckGame
             {
                 return Convert.ToInt32((string)TeamSelect2.GetOnlineSetting("port").value);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return 1337;
             }

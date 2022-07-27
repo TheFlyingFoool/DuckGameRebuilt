@@ -78,7 +78,7 @@ namespace DuckGame
                             {
                                 reskinPack.recolors[lowerInvariant] = Color.FromHexString(pString);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                         }

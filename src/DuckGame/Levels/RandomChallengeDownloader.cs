@@ -115,7 +115,7 @@ namespace DuckGame
                 else
                     DevConsole.Log(DCSection.Steam, "Downloaded challenge had incompatible mods, and was ignored!");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

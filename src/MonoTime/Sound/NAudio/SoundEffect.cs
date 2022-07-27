@@ -24,7 +24,7 @@ namespace DuckGame
         private float[] _waveBuffer;
         public int dataSize;
         public WaveStream _decode;
-        private Thread _decoderThread;
+        //private Thread _decoderThread;
         private ISampleProvider _decoderReader;
         private int _decodedSamples;
         private int _totalSamples;

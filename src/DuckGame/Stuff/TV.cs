@@ -27,7 +27,7 @@ namespace DuckGame
         private List<Vec2> trail = new List<Vec2>();
         private SpriteMap _channels;
         private SpriteMap _tvNoise;
-        private int wait;
+        //private int wait;
         private bool fakeGrounded;
         private float prevVSpeed;
 

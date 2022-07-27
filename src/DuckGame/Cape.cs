@@ -260,7 +260,7 @@ namespace DuckGame
 
 		private float killTimer;
 
-		private float counter;
+		//private float counter;
 
 		private PhysicsObject _attach;
 
@@ -268,13 +268,13 @@ namespace DuckGame
 
 		private int maxLength = 10;
 
-		private int minLength = 8;
+		//private int minLength = 8;
 
-		private GeometryItemTexture _geo;
+		//private GeometryItemTexture _geo;
 
 		public bool _trail;
 
-		private float yDistance;
+		//private float yDistance;
 
 		private float _capeWave;
 

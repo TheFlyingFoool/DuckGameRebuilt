@@ -211,7 +211,7 @@ namespace DuckGame
                         SFX._playedThisFrame.Add(sound1);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0.0f, 0.0f, 0.0f, false);
                 }

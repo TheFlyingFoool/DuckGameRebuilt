@@ -14,7 +14,7 @@ namespace DuckGame
     public class PyramidWallLight : Thing
     {
         public static Color lightColor = new Color(byte.MaxValue, (byte)200, (byte)150);
-        private SpriteThing _shade;
+        //private SpriteThing _shade;
         private List<LightOccluder> _occluders = new List<LightOccluder>();
         private SpriteMap _sprite;
         private Vec2 lightPos;

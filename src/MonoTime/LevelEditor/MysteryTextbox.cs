@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class MysteryTextbox
     {
-        private bool allowFocusStealing = true;
+        //private bool allowFocusStealing = true;
         public FancyBitmapFont _font;
         public string text = "";
         public int _cursorPosition;
@@ -33,11 +33,11 @@ namespace DuckGame
         private Vec2 _cursorPos;
         private bool _highlightDrag;
         private string _clipboardText = "";
-        private int prevMaxIndex;
-        private string prevMaxString;
+        //private int prevMaxIndex;
+        //private string prevMaxString;
         public bool confirmed;
         public bool enterConfirms;
-        private string _prevCalcString;
+        //private string _prevCalcString;
         public int numPages;
         public int currentPage;
         public Color color = Color.Black;
@@ -131,7 +131,7 @@ namespace DuckGame
                 if (Mouse.left == InputState.Pressed)
                     Keyboard.keyString = "";
             }
-            this.allowFocusStealing = true;
+            //this.allowFocusStealing = true;
             Vec2 position2 = this._position;
             Keyboard.repeat = true;
             Input._imeAllowed = true;
@@ -255,7 +255,7 @@ namespace DuckGame
             }
             if (this._highlightDrag)
             {
-                this.allowFocusStealing = false;
+                //this.allowFocusStealing = false;
                 this._font._highlightEnd = this._font.GetCharacterIndex(this._drawText, position1.x + 4f * this._font.scale.x - position2.x, position1.y - position2.y);
                 this._blink = 0.5f;
             }

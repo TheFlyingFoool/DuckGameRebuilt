@@ -79,7 +79,7 @@ namespace DuckGame
                     Tex2D tex = (Tex2D)ContentPack.LoadTexture2D(pDir + "/icon.png");
                     pPack._icon = new Sprite(tex);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     pPack._icon = new Sprite("default_mappack_icon");
                 }
@@ -170,7 +170,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                     ++num3;

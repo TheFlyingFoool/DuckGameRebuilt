@@ -23,7 +23,7 @@ namespace DuckGame
         private float gachaY;
         private float gachaSpeed;
         public static bool useNumGachas;
-        private bool _flash;
+        //private bool _flash;
         private float yOffset = 150f;
         public bool down = true;
         private float _downWait = 1f;
@@ -31,7 +31,7 @@ namespace DuckGame
         private SpriteMap _duckCoin;
         private bool _rare;
         private bool _rareCapsule;
-        private string _oldSong;
+        //private string _oldSong;
         private bool played;
         private float _gachaWait;
         private float _openWait;

@@ -89,8 +89,8 @@ namespace DuckGame
         public static bool modsChanged = false;
         private static bool firstStart = true;
         public List<List<string>> creditsRoll = new List<List<string>>();
-        private bool showPendingDeletionDialogue;
-        private bool showSizeNotificationDialogue;
+        //private bool showPendingDeletionDialogue;
+        //private bool showSizeNotificationDialogue;
         private bool _fadeBackground;
         private bool _enterLibrary;
         private bool _enterBuyScreen;
@@ -105,8 +105,8 @@ namespace DuckGame
         private bool quittingCredits;
         private bool showedNewVersionStartup;
         private bool showedModsDisabled;
-        private int time;
-        private static bool _showedSteamFailMessage = false;
+       // private int time;
+      //  private static bool _showedSteamFailMessage = false;
 
         public TitleScreen()
           : this(false, (Profile)null)

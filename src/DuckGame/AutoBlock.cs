@@ -34,7 +34,7 @@ namespace DuckGame
         public int westIndex;
         private List<Thing> _additionalBlocks = new List<Thing>();
         private Func<Thing, bool> checkFilter;
-        private bool inObjectsChanged;
+        //private bool inObjectsChanged;
         protected bool brokeLeft;
         protected bool brokeRight;
         protected bool brokeUp;
@@ -43,7 +43,7 @@ namespace DuckGame
         public bool _hasLeftNub = true;
         public bool _hasRightNub = true;
         public bool needsRefresh;
-        private bool neededRefresh;
+        //private bool neededRefresh;
         public bool setLayer = true;
         public bool cheap;
         public bool isFlipped;
@@ -283,9 +283,9 @@ namespace DuckGame
 
         public override void EditorObjectsChanged()
         {
-            this.inObjectsChanged = true;
+            //this.inObjectsChanged = true;
             this.PlaceBlock();
-            this.inObjectsChanged = false;
+            //this.inObjectsChanged = false;
         }
 
         public void DestroyPuddle(FluidPuddle f)
@@ -488,7 +488,7 @@ namespace DuckGame
                 {
                     this.PlaceBlock();
                     this.needsRefresh = false;
-                    this.neededRefresh = true;
+                    //this.neededRefresh = true;
                 }
             }
             if (this.setLayer)

@@ -25,7 +25,7 @@ namespace DuckGame
         private float _distPulse = Rando.Float(5f);
         private float s1 = 1f;
         private float s2 = 1f;
-        private float lifeTake = 0.05f;
+        //private float lifeTake = 0.05f;
 
         public static BreathSmoke New(float xpos, float ypos, float depth = 0.8f, float scaleMul = 1f)
         {
@@ -45,8 +45,8 @@ namespace DuckGame
             breathSmoke.depth = (Depth)depth;
             breathSmoke.s1 *= scaleMul;
             breathSmoke.s2 *= scaleMul;
-            if (BreathSmoke.shortlife)
-                breathSmoke.lifeTake = 0.14f;
+            //if (BreathSmoke.shortlife)
+                //breathSmoke.lifeTake = 0.14f;
             return breathSmoke;
         }
 

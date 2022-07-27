@@ -39,17 +39,17 @@ namespace DuckGame
 
         public void ReceiveLogData(string pData, NetworkConnection pConnection)
         {
-            if (!this.requestingLogs.Contains(pConnection))
-                return;
-            string str1 = (string)null;
-            if (!this.receivingLogs.TryGetValue(pConnection, out str1))
+            if (this.requestingLogs.Contains(pConnection))
             {
-                string str2;
-                this.receivingLogs[pConnection] = str2 = "";
+                string dat;
+                if (!this.receivingLogs.TryGetValue(pConnection, out dat))
+                {
+                    this.receivingLogs[pConnection] = "";//dat = (this.receivingLogs[pConnection] = "");
+                }
+                Dictionary<NetworkConnection, string> dictionary = this.receivingLogs;
+                dictionary[pConnection] += pData;
             }
-            this.receivingLogs[pConnection] += pData;
         }
-
         public string GetReceivedLogData(NetworkConnection pConnection) => this.receivingLogs.ContainsKey(pConnection) ? this.receivingLogs[pConnection] : (string)null;
     }
 }

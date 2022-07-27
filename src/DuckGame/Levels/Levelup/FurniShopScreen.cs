@@ -14,7 +14,7 @@ namespace DuckGame
         public bool quitOut;
         private PlasmaLayer _plasma;
         private Layer _treeLayer;
-        private static bool _prevOpen;
+        //private static bool _prevOpen;
         public static bool open;
         public static VincentProduct attemptBuy;
         public static bool giveYoYo;

@@ -208,7 +208,7 @@ namespace DuckGame
                             if (Music._currentMusic == null)
                                 Music._currentMusic = ReskinPack.LoadAsset<SoundEffect>(str + ".mp3", true);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                         if (Music._currentMusic == null)

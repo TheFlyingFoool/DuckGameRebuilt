@@ -13,7 +13,7 @@ namespace DuckGame
     [BaggedProperty("isInDemo", true)]
     public class StreetLight : Thing
     {
-        private SpriteThing _shade;
+        //private SpriteThing _shade;
         private List<LightOccluder> _occluders = new List<LightOccluder>();
 
         public StreetLight(float xpos, float ypos)

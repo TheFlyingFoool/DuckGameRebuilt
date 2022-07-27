@@ -263,7 +263,7 @@ namespace DuckGame
                         System.IO.File.WriteAllText(path, "Hey! Keeping save data in the Documents folder was causing all kinds\nof issues for people, and it's with great sadness that I had to move your data.\nDon't worry, it still exists- your data is now located here:\n\n" + DuckFile.saveDirectory + "\n\nAny save data still located in this folder is for the old version (pre-2020) of Duck Game.");
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -326,7 +326,7 @@ namespace DuckGame
                 DuckFile.CreatePath(DuckFile.customMojiDirectory);
                 DuckFile.CreatePath(DuckFile.saveDirectory + "Custom/Hats/");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "|DGRED|Could not create moji path, disabling custom mojis :(");
                 DuckFile.mojimode = false;
@@ -398,7 +398,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -441,7 +441,7 @@ namespace DuckGame
                                            t.SaveAsPng((Stream)System.IO.File.Create(str), t.Width, t.Height);
                                        }), "InitializeMojis.Resize");
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     {
                                     }
                                 }
@@ -469,7 +469,7 @@ namespace DuckGame
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -553,7 +553,7 @@ namespace DuckGame
                                        t.SaveAsPng((Stream)System.IO.File.Create(str2), t.Width, t.Height);
                                    }), "InitializeMojis.Resize");
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                 }
                             }
@@ -582,7 +582,7 @@ namespace DuckGame
                             DevConsole.Log("Error loading " + Path.GetFileName(str) + " MOJI (must be smaller than 28x28)", Color.Red);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -727,7 +727,7 @@ namespace DuckGame
                 foreach (string file in Directory.GetFiles(path, filter, SearchOption.TopDirectoryOnly))
                     filesNoCloud1.Add(file);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             if (so == SearchOption.AllDirectories)
@@ -740,7 +740,7 @@ namespace DuckGame
                         filesNoCloud1.AddRange((IEnumerable<string>)filesNoCloud2);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -780,7 +780,7 @@ namespace DuckGame
                     pRet1.Add(file);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             foreach (string directory in Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly))
@@ -789,7 +789,7 @@ namespace DuckGame
                 {
                     DuckFile.GetAllSavegameFiles(pFolderFilters, pRet1, directory, pRecurseFiltered1, pDontAddFilteredFolders);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -1104,7 +1104,7 @@ namespace DuckGame
                 if (System.IO.File.Exists(pPath))
                     System.IO.File.SetAttributes(pPath, FileAttributes.Normal);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return pPath;

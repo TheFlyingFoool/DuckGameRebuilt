@@ -25,7 +25,7 @@ namespace DuckGame
         public static string currencyType = "USD";
         public static bool stopForever = false;
         public static bool _gotHook = false;
-        private bool didHash;
+        //private bool didHash;
         public bool joinedLobby;
 
         public static string GetPriceString() => "|GREEN|" + Main.price.ToString("0.00", (IFormatProvider)CultureInfo.InvariantCulture) + " " + Main.currencyType + "|WHITE|";

@@ -21,7 +21,7 @@ namespace DuckGame
         private Sprite _star;
         private Furniture _contains;
         private Sprite _whiteCircle;
-        private bool _flash;
+        //private bool _flash;
         private float yOffset = -250f;
         private UIMenu _openOnClose;
         private SpriteMap _duckCoin;
@@ -45,7 +45,7 @@ namespace DuckGame
         public static bool skipping;
         public int numGenerate = 3;
         public int numGenerateRare = 3;
-        private string _oldSong;
+        //private string _oldSong;
         private bool played;
         private float _gachaWait;
         private float _openWait;
@@ -86,7 +86,7 @@ namespace DuckGame
       "nine",
       "ten"
     };
-        private float rott;
+        //private float rott;
         private int seed = 359392;
 
         public UIGachaBoxNew(

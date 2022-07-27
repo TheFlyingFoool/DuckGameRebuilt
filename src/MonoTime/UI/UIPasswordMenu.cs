@@ -121,7 +121,7 @@ namespace DuckGame
                                 }
                                 Keyboard.keyString = num.ToString();
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 Keyboard.keyString = "";
                                 flag = true;

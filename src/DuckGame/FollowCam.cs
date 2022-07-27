@@ -43,7 +43,7 @@ namespace DuckGame
         public float hardLimitTop = -999999f;
         public float hardLimitBottom = 999999f;
         private bool woteFrame;
-        private CameraBounds _bounds;
+        //private CameraBounds _bounds;
         private List<Thing> _removeList = new List<Thing>();
         private int _framesCreated;
         public static bool boost;

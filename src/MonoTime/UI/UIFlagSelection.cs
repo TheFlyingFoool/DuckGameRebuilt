@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class UIFlagSelection : UIMenu
     {
-        private static List<Sprite> _flagSprites = (List<Sprite>)null;
+        //private static List<Sprite> _flagSprites = (List<Sprite>)null;
         private static List<string> _flagFiles = (List<string>)null;
         private int _flagSelection;
         private UIMenu _openOnClose;

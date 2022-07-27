@@ -36,7 +36,7 @@ namespace DuckGame
         public float partSep = 6f;
         public int npi;
         public int tongueShakes;
-        private bool _didSmoke;
+        //private bool _didSmoke;
         public bool jetting;
         private bool _wasZapping;
         public bool _makeActive;

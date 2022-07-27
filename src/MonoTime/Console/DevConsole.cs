@@ -602,14 +602,14 @@ namespace DuckGame
                                     Options.Data.consoleWidth = Math.Min(Math.Max(Convert.ToInt32(lower2), 25), 100);
                                     Options.Save();
                                 }
-                                catch (Exception ex1)
+                                catch (Exception)
                                 {
                                     try
                                     {
                                         Options.Data.consoleWidth = (int)Math.Min(Math.Max(Convert.ToSingle(lower2), 0.25f), 1f) * 100;
                                         Options.Save();
                                     }
-                                    catch (Exception ex2)
+                                    catch (Exception)
                                     {
                                     }
                                 }
@@ -640,14 +640,14 @@ namespace DuckGame
                                     Options.Data.consoleHeight = Math.Min(Math.Max(Convert.ToInt32(lower3), 25), 100);
                                     Options.Save();
                                 }
-                                catch (Exception ex3)
+                                catch (Exception)
                                 {
                                     try
                                     {
                                         Options.Data.consoleHeight = (int)Math.Min(Math.Max(Convert.ToSingle(lower3), 0.25f), 1f) * 100;
                                         Options.Save();
                                     }
-                                    catch (Exception ex4)
+                                    catch (Exception)
                                     {
                                     }
                                 }
@@ -1951,7 +1951,7 @@ namespace DuckGame
                      });
                  }
              }
-             catch (Exception ex)
+             catch (Exception)
              {
              }
              if (flag)
@@ -2286,7 +2286,7 @@ namespace DuckGame
                                             {
                                                 num2 = Convert.ToInt32(parts[1]);
                                             }
-                                            catch (Exception ex)
+                                            catch (Exception)
                                             {
                                             }
                                         }

@@ -9,8 +9,8 @@ namespace DuckGame
 {
     public class UIMenuActionOpenMenuSetBoolean : UIMenuActionOpenMenu
     {
-        private UIComponent _menu;
-        private UIComponent _open;
+        //private UIComponent _menu;
+        //private UIComponent _open;
         private MenuBoolean _value;
 
         public UIMenuActionOpenMenuSetBoolean(UIComponent menu, UIComponent open, MenuBoolean value)

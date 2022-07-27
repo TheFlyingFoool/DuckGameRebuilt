@@ -18,7 +18,7 @@ namespace DuckGame
         public EditorProperty<GoalType.Special> Mode = new EditorProperty<GoalType.Special>(GoalType.Special.None);
         private HashSet<Thing> _trackedObjects = new HashSet<Thing>();
         private HashSet<Thing> _finishedObjects = new HashSet<Thing>();
-        private ChallengeMode challenge;
+        //private ChallengeMode challenge;
 
         public System.Type contains { get; set; }
 

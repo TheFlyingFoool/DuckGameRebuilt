@@ -9,8 +9,8 @@ namespace DuckGame
 {
     internal class ParentalControls
     {
-        private static bool hasCheckedParentalControls;
-        private static bool cachedAreParentalControlsActive;
+        //private static bool hasCheckedParentalControls;
+        //private static bool cachedAreParentalControlsActive;
 
         public static void TestMethod()
         {

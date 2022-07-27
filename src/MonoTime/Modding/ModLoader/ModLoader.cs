@@ -591,7 +591,7 @@ namespace DuckGame
                             modConfiguration.isWorkshop = true;
                             ModLoader.loadableMods.Add(modConfiguration.uniqueID, modConfiguration);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }
@@ -701,7 +701,7 @@ namespace DuckGame
                      cluster = 0;
                      Thread.Sleep(50);
                  }
-                 catch (Exception ex)
+                 catch (Exception)
                  {
                      if (!Options.Data.disableModOnLoadFailure)
                          return;
@@ -775,7 +775,7 @@ namespace DuckGame
                            strArray[0] = strArray[0].Trim();
                            strArray[1] = strArray[1].Trim();
                        }
-                       catch (Exception ex)
+                       catch (Exception)
                        {
                            strArray = (string[])null;
                        }
@@ -830,7 +830,7 @@ namespace DuckGame
             {
                 Program.LogLine("Mod Load Failure (Did not cause crash)\n================================================\n " + s + "\n================================================\n");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

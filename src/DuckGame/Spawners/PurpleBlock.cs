@@ -97,7 +97,7 @@ namespace DuckGame
                 storedItem.serializedData = t.Serialize();
                 storedItem.thing = Thing.LoadThing(storedItem.serializedData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 PurpleBlock._storedItems.Clear();
             }

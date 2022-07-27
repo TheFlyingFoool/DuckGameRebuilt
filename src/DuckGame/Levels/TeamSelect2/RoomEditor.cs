@@ -35,7 +35,7 @@ namespace DuckGame
         private HatSelector _selector;
         private Sprite _furni;
         private FancyBitmapFont _fancyFont = new FancyBitmapFont("smallFont");
-        private UIMenu _confirmMenu;
+        //private UIMenu _confirmMenu;
         private MenuBoolean _deleteProfile = new MenuBoolean();
         private static List<Furniture> allFurnis;
         private static Dictionary<int, Furniture> _furniMap = new Dictionary<int, Furniture>();
@@ -48,9 +48,9 @@ namespace DuckGame
         public float _upSlideTo;
         public Vec2 _furniPos = new Vec2(-30f, -30f);
         public Vec2 _furniCursor = new Vec2(-30f, -30f);
-        private bool upOption;
-        private bool _wasDown;
-        private bool _autoSelect;
+        //private bool upOption;
+        //private bool _wasDown;
+        //private bool _autoSelect;
         private List<DeviceInputMapping> _pendingMaps = new List<DeviceInputMapping>();
         public FurniturePosition _hover;
         public int _placementVariation;
@@ -58,8 +58,8 @@ namespace DuckGame
         public bool _placementFlip;
         public static int roomSize = 141;
         private bool invalidPlacement;
-        private Vec2 _realFurniPos;
-        private float _moodVal = 0.5f;
+        //private Vec2 _realFurniPos;
+        //private float _moodVal = 0.5f;
         private Material grayscale = new Material("Shaders/greyscale");
 
         public float fade => this._fade;

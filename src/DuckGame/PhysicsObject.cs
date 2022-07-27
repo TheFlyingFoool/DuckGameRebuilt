@@ -73,7 +73,7 @@ namespace DuckGame
         public bool platformSkip;
         public float specialFrictionMod = 1f;
         private Predicate<MaterialThing> _collisionPred;
-        private bool firstCheck;
+        //private bool firstCheck;
         private bool _awaken = true;
         private bool modifiedGravForFloat;
         public bool modFric;

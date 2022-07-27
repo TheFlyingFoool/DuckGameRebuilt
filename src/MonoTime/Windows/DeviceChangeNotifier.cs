@@ -12,8 +12,8 @@ namespace DuckGame
 {
     public class DeviceChangeNotifier : Form
     {
-        private static DeviceChangeNotifier mInstance;
-        private static Thread thread;
+        //private static DeviceChangeNotifier mInstance;
+        //private static Thread thread;
 
         public static void Start()
         {

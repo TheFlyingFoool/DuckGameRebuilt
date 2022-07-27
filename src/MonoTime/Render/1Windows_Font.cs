@@ -19,16 +19,16 @@ namespace DuckGame
     {
         private static System.Drawing.Graphics _graphicsContext;
         private static Bitmap _drawingImage;
-        private static bool _dimensionsDirty = false;
-        private static float _setWidth = 0.0f;
-        private static float _setHeight = 0.0f;
+        //private static bool _dimensionsDirty = false;
+        //private static float _setWidth = 0.0f;
+        //private static float _setHeight = 0.0f;
         private static System.Drawing.Font _systemFont;
         private static List<string> _loadedFonts = new List<string>();
         private static string _fontPath;
         private static float _size;
         private static Color _color;
-        private static bool _dirty = false;
-        private static bool _contextDirty = false;
+        //private static bool _dirty = false;
+        //private static bool _contextDirty = false;
         private static Brush _brush;
         private static int _numCharactersToRender = -1;
         private static bool _antiAliasing;
@@ -44,7 +44,7 @@ namespace DuckGame
             if ((double)pSize == (double)FontGDIContext._size)
                 return;
             FontGDIContext._size = pSize;
-            FontGDIContext._dirty = true;
+            //FontGDIContext._dirty = true;
         }
 
         public static void SetColor(Color pColor)
@@ -52,7 +52,7 @@ namespace DuckGame
             if (!(FontGDIContext._color != pColor))
                 return;
             FontGDIContext._color = pColor;
-            FontGDIContext._dirty = true;
+            //FontGDIContext._dirty = true;
         }
 
         public static int numCharactersToRender => FontGDIContext._numCharactersToRender;
@@ -62,7 +62,7 @@ namespace DuckGame
             if (FontGDIContext._numCharactersToRender == pNum)
                 return;
             FontGDIContext._numCharactersToRender = pNum;
-            FontGDIContext._dirty = true;
+           //FontGDIContext._dirty = true;
         }
 
         public static void SetAntiAliasing(bool pAnti)
@@ -70,8 +70,8 @@ namespace DuckGame
             if (FontGDIContext._antiAliasing == pAnti)
                 return;
             FontGDIContext._antiAliasing = pAnti;
-            FontGDIContext._dirty = true;
-            FontGDIContext._contextDirty = true;
+            //FontGDIContext._dirty = true;
+            //FontGDIContext._contextDirty = true;
         }
 
         public static void SetFontStyle(FontStyle pStyle)
@@ -79,7 +79,7 @@ namespace DuckGame
             if (FontGDIContext._fontStyle == pStyle)
                 return;
             FontGDIContext._fontStyle = pStyle;
-            FontGDIContext._dirty = true;
+            //FontGDIContext._dirty = true;
         }
 
         private static StringFormat GetStringFormatting(bool pCenter = false)
@@ -174,9 +174,9 @@ namespace DuckGame
                 using (FontFamily fontFamily = new FontFamily(fontFamilyName))
                     return fontFamily.IsStyleAvailable(FontStyle.Regular) || fontFamily.IsStyleAvailable(FontStyle.Bold) || fontFamily.IsStyleAvailable(FontStyle.Italic) || fontFamily.IsStyleAvailable(FontStyle.Bold | FontStyle.Italic) ? fontFamily.Name : (string)null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (string)null;
+                return null;
             }
         }
 

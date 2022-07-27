@@ -79,7 +79,7 @@ namespace DuckGame
         public byte disarmIndex = 9;
         public Vec2 _tounge;
         private int _netProfileIndex = -1;
-        private bool _netProfileInit;
+        //private bool _netProfileInit;
         private bool _assignedIndex;
         private Sprite _shield;
         public const int BackpackDepth = -15;
@@ -183,8 +183,8 @@ namespace DuckGame
         private int breath = -1;
         private bool _throwFondle = true;
         private int tryGrabFrames;
-        private bool _heldLeft;
-        private bool _heldRight;
+        //private bool _heldLeft;
+        //private bool _heldRight;
         private bool _updatedAnimation;
         private float disarmIndexCooldown;
         public int _disarmWait;
@@ -224,7 +224,7 @@ namespace DuckGame
         private int _leftPressedFrame;
         private int _rightPressedFrame;
         public bool tvJumped;
-        private int bulletIndex;
+        //private int bulletIndex;
         public int pipeOut;
         public int pipeBoost;
         public int slamWait;
@@ -244,7 +244,7 @@ namespace DuckGame
         private Vec2 _lastGoodPosition;
         private byte _prevDisarmIndex = 6;
         public bool manualQuackPitch;
-        private int killedWait;
+        //private int killedWait;
         private bool unfocused;
         private int _framesUnderwater;
         public int framesSinceRagdoll;
@@ -276,7 +276,7 @@ namespace DuckGame
         public WallDoor transportDoor;
         public float enterDoorSpeed;
         public float tilt;
-        private static Material kGhostMaterial;
+        //private static Material kGhostMaterial;
         public int waitGhost;
         private Duck.ConnectionIndicators _indicators;
 
@@ -371,7 +371,7 @@ namespace DuckGame
             if (profile.team == null)
                 profile.team = Teams.all[this._netProfileIndex];
             this.InitProfile();
-            this._netProfileInit = true;
+            //this._netProfileInit = true;
             this._assignedIndex = true;
         }
 
@@ -2816,8 +2816,8 @@ namespace DuckGame
                 }
                 if (this.mindControl != null)
                     this.mindControl.UpdateExtraInput();
-                this._heldLeft = false;
-                this._heldRight = false;
+                //this._heldLeft = false;
+                //this._heldRight = false;
                 Block block1 = Level.CheckRect<Block>(new Vec2(this.x - 3f, this.y - 9f), new Vec2(this.x + 3f, this.y + 4f));
                 this._crouchLock = (this.crouch || this.sliding) && block1 != null && block1.solid;
                 float num1 = 0.55f * this.holdWeightMultiplier * this.grappleMultiplier * this.accelerationMultiplier;
@@ -3013,7 +3013,7 @@ namespace DuckGame
                                 if ((double)this.hSpeed < -(double)this.maxrun * (double)num3)
                                     this.hSpeed = -this.maxrun * num3;
                             }
-                            this._heldLeft = true;
+                            //this._heldLeft = true;
                             if (!this.strafing && !flag3 && (flag2 || this._leftPressedFrame > this._rightPressedFrame))
                                 this.offDir = (sbyte)-1;
                         }
@@ -3025,7 +3025,7 @@ namespace DuckGame
                                 if ((double)this.hSpeed > (double)this.maxrun * (double)num4)
                                     this.hSpeed = this.maxrun * num4;
                             }
-                            this._heldRight = true;
+                            //this._heldRight = true;
                             if (!this.strafing && !flag3 && (flag2 || this._rightPressedFrame > this._leftPressedFrame))
                                 this.offDir = (sbyte)1;
                         }

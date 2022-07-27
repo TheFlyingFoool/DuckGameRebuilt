@@ -18,7 +18,7 @@ namespace DuckGame
         public EditorProperty<int> length;
         public EditorProperty<int> color;
         public EditorProperty<bool> open;
-        private bool _lastFlip;
+        //private bool _lastFlip;
         public EditorProperty<bool> fallthrough;
         private bool _lastFallthrough = true;
         public bool newTrapdoorVersion = true;

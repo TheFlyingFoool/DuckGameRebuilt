@@ -306,8 +306,8 @@ namespace DuckGame
         {
             public Cloud.CloudOperation.Type type;
             public CloudFile file;
-            private static BitBuffer _backupBuffer;
-            private static int _backupPart;
+            //private static BitBuffer _backupBuffer;
+            //private static int _backupPart;
 
             public void Execute()
             {

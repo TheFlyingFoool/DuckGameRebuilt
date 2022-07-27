@@ -22,7 +22,7 @@ namespace DuckGame
         private static float _waitLetter = 1f;
         private static float _waitAfterLine = 1f;
         private static float _talkMove = 0.0f;
-        private static float _showLerp = 0.0f;
+        //private static float _showLerp = 0.0f;
         private static bool _allowMovement = false;
         public static bool open = false;
         private static int frame = 0;
@@ -46,7 +46,7 @@ namespace DuckGame
         public static void Open()
         {
             Plug._lineProgress.Clear();
-            Plug._showLerp = 0.0f;
+            //Plug._showLerp = 0.0f;
             Plug._allowMovement = false;
             Plug._waitAfterLine = 1f;
             Plug._waitLetter = 1f;

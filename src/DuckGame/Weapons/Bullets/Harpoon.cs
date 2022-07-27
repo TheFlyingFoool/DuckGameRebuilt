@@ -11,8 +11,8 @@ namespace DuckGame
     {
         public bool _inGun = true;
         public bool _stuck;
-        private float _hangGrav = 0.1f;
-        private float _hangPull;
+        //private float _hangGrav = 0.1f;
+        //private float _hangPull;
         public Thing _belongsTo;
         public bool noisy = true;
 

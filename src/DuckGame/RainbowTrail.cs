@@ -15,18 +15,18 @@ namespace DuckGame
     {
         private float killTime = 0.0001f;
         private float killTimer;
-        private float counter;
+        //private float counter;
         private PhysicsObject _attach;
         private List<TrailPiece> capePeices = new List<TrailPiece>();
         private int maxLength = 10;
-        private int minLength = 8;
-        private GeometryItemTexture _geo;
-        private float yDistance;
+        //private int minLength = 8;
+        //private GeometryItemTexture _geo;
+        //private float yDistance;
         private float _capeWave;
         private float _inverseWave;
         private float _inverseWave2;
         private float _capeWaveMult;
-        private Vec2 _lastPos;
+        //private Vec2 _lastPos;
         private bool _initLastPos = true;
         private Tex2D _capeTexture;
 
@@ -45,7 +45,7 @@ namespace DuckGame
             base.Update();
             if (this._initLastPos)
             {
-                this._lastPos = this._attach.position;
+                //this._lastPos = this._attach.position;
                 this._initLastPos = false;
             }
             Thing thing = (Thing)this._attach;
@@ -105,7 +105,7 @@ namespace DuckGame
             }
             while (this.capePeices.Count > this.maxLength)
                 this.capePeices.RemoveAt(0);
-            this._lastPos = thing.position;
+            //this._lastPos = thing.position;
             this.visible = thing.visible;
             if (this._capeTexture != null)
                 return;

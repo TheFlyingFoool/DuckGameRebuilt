@@ -60,12 +60,12 @@ namespace DuckGame
         public bool transferCompleteCalled = true;
         private bool _aiInitialized;
         private bool _refreshState;
-        private bool initPaths;
+        //private bool initPaths;
         private Dictionary<NetworkConnection, bool> checksumReplies = new Dictionary<NetworkConnection, bool>();
         public static bool doingOnLoadedMessage = false;
         public float flashDissipationSpeed = 0.15f;
         public bool skipCurrentLevelReset;
-        private int wait = 60;
+        //private int wait = 60;
         private bool _clearScreen = true;
         public bool drawsOverPauseMenu;
         private Sprite _burnGlow;

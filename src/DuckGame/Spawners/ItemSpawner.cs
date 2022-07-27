@@ -31,7 +31,7 @@ namespace DuckGame
         public SpawnerBall _ball2;
         protected int _numSpawned;
         public bool _seated;
-        private bool _triedSeating;
+        //private bool _triedSeating;
         private bool _isClassicSpawner;
         private int _seatingTries;
         private Thing previewThing;

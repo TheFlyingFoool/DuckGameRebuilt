@@ -34,7 +34,7 @@ namespace DuckGame
         private int _networkCape = -1;
         private float glow;
         private bool _filter;
-        private int _lastParticleFrame;
+        //private int _lastParticleFrame;
         private List<TeamHat.CustomParticle> _addedParticles;
         private float _quackWait;
         private float _quackHold;
@@ -566,9 +566,9 @@ namespace DuckGame
             public bool animationLoop;
             private float _currentAnimationFrame;
             private float _lifespan;
-            private Vec2 _movementDif;
-            private Vec2 _prevOwnerPosition;
-            private Vec2 _gravityVelocity;
+            //private Vec2 _movementDif;
+            //private Vec2 _prevOwnerPosition;
+            //private Vec2 _gravityVelocity;
 
             public CustomParticle(Vec2 pPosition, Thing pOwner, Team.CustomHatMetadata pMetadata)
               : base(pPosition.x, pPosition.y)
@@ -583,7 +583,7 @@ namespace DuckGame
                     this.graphic.flipH = this.offDir < (sbyte)0;
                 this.center = new Vec2((float)(this.graphic.width / 2), (float)(this.graphic.height / 2));
                 this._lifespan = this._metadata.ParticleLifespan.value;
-                this._prevOwnerPosition = this._owner.position;
+                //this._prevOwnerPosition = this._owner.position;
                 this._particleAlpha = this._metadata.ParticleAlpha.value;
                 this._particleScale = this._metadata.ParticleScale.value;
                 this._particleGravity = new Vec2(this._owner.OffsetLocal(this._metadata.ParticleGravity.value).x, this._metadata.ParticleGravity.value.y);

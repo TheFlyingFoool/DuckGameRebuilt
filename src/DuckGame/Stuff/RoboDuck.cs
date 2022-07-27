@@ -53,7 +53,7 @@ namespace DuckGame
                 (Level.current.camera as FollowCam).Add((Thing)t);
                 Level.Add((Thing)t);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

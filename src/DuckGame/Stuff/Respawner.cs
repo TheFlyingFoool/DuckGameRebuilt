@@ -14,7 +14,7 @@ namespace DuckGame
     {
         private SpriteMap _sprite;
         private float _animate;
-        private float _noiseOffset;
+        //private float _noiseOffset;
 
         public Respawner(float xpos, float ypos)
           : base(xpos, ypos)

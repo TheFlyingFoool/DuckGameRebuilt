@@ -69,7 +69,7 @@ namespace DuckGame
         protected float startpoint;
         protected float drawdist;
         protected bool _initializedDraw;
-        private byte networkKillWait = 60;
+        //private byte networkKillWait = 60;
 
         public new NetworkConnection connection
         {

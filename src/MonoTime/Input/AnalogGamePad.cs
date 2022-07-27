@@ -34,7 +34,7 @@ namespace DuckGame
         private Vec2 _highestRumble = Vec2.Zero;
         private Vec2 _prevRumble;
         private int _rumbleWait;
-        private int _disableDelay;
+        //private int _disableDelay;
 
         public bool startWasPressed { get; set; }
 

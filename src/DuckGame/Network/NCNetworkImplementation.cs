@@ -38,10 +38,10 @@ namespace DuckGame
         private int _hardDisconnectTimeout = -1;
         public static DuckNetErrorInfo currentError;
         public static DuckNetErrorInfo currentMainDisconnectError;
-        private bool _discardMessagePlayed;
-        private const int kCompressionTag = 696143206;
-        private int _packetHeat;
-        private int _shownHeatMessage;
+        //private bool _discardMessagePlayed;
+        //private const int kCompressionTag = 696143206;
+        //private int _packetHeat;
+        //private int _shownHeatMessage;
         public int frame;
 
         public DataLayer dataLayer => this._dataLayer;
@@ -499,11 +499,11 @@ namespace DuckGame
                     if (this._pendingPackets.Count > 200)
                     {
                         this._pendingMessages.Enqueue(new NCError("|DGRED|Discarding packets due to overflow..", NCErrorType.Debug));
-                        this._discardMessagePlayed = true;
+                        //this._discardMessagePlayed = true;
                     }
                     else
                     {
-                        this._discardMessagePlayed = false;
+                        //this._discardMessagePlayed = false;
                         lock (this._pendingPackets)
                             this._pendingPackets.Enqueue(networkPacket);
                     }
@@ -633,7 +633,7 @@ namespace DuckGame
                             continue;
                         }
                         List<NetMessage> allMessages = packet.GetAllMessages();
-                        this._packetHeat += allMessages.Count<NetMessage>();
+                        //this._packetHeat += allMessages.Count<NetMessage>();
                         foreach (NetMessage pMessage in allMessages)
                             packet.connection.OnAnyMessage(pMessage);
                         if (packet.connection.status == ConnectionStatus.Disconnecting || packet.connection.status == ConnectionStatus.Disconnected)

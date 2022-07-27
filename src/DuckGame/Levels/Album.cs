@@ -125,7 +125,7 @@ namespace DuckGame
                                 texture2D = Texture2D.FromStream(DuckGame.Graphics.device, (Stream)fileStream);
                             this._textures.Add(texture2D);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }

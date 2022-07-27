@@ -13,7 +13,7 @@ namespace DuckGame
         private BitmapFont _font;
         private bool _hoverOk;
         private WorkshopItem _item;
-        private int _uploadIndex;
+        //private int _uploadIndex;
 
         public UploadDialogue()
           : base((IContextListener)null)
@@ -40,7 +40,7 @@ namespace DuckGame
             this._text = text;
             SFX.Play("openClick", 0.4f);
             this._item = pItem;
-            this._uploadIndex = 0;
+            //this._uploadIndex = 0;
         }
 
         public void Close() => this.opened = false;

@@ -49,8 +49,8 @@ namespace DuckGame
         public float _wait;
         public float _fireWait = 1f;
         public bool loaded = true;
-        private Sprite _bayonetSprite;
-        private Sprite _tapeSprite;
+        //private Sprite _bayonetSprite;
+        //private Sprite _tapeSprite;
         private bool _laserInit;
         protected bool _fullAuto;
         protected int _numBulletsPerFire = 1;

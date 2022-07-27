@@ -48,7 +48,7 @@ namespace DuckGame
         private static RenderTarget2D _screenCapture;
         private static Tex2D _blank;
         private static Tex2D _blank2;
-        private static float _depthBias = 0.0f;
+        //private static float _depthBias = 0.0f;
         private static Matrix _projectionMatrix;
         public static float kSpanIncrement = 0.0001f;
         public static bool caseSensitiveStringDrawing = false;
@@ -971,7 +971,7 @@ namespace DuckGame
             {
                 DuckGame.Graphics.device.Viewport = pViewport;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log("Error: Invalid Viewport (x = " + pViewport.X.ToString() + ", y = " + pViewport.Y.ToString() + ", w = " + pViewport.Width.ToString() + ", h = " + pViewport.Height.ToString() + ", minDepth = " + pViewport.MinDepth.ToString() + ", maxDepth = " + pViewport.MaxDepth.ToString() + ")");
             }

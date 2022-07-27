@@ -241,7 +241,7 @@ namespace DuckGame
                 {
                     return (object)Convert.ToInt32(pValue);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 return this.Error("Argument value must be an integer.");
@@ -320,7 +320,7 @@ namespace DuckGame
                         {
                             seedVal = Convert.ToInt32(pValue.Split('|')[1]);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }

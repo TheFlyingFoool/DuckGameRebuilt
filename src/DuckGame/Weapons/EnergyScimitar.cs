@@ -33,7 +33,7 @@ namespace DuckGame
         private float _dragAngle = -110f;
         private float _dragAngleDangle = -145f;
         private bool _swordFlip;
-        private bool _stanceHeld;
+        //private bool _stanceHeld;
         private float _stanceCounter;
         private float _swingDif;
         private int _timeSinceDragJump = 11111;
@@ -453,7 +453,7 @@ namespace DuckGame
 
         public override void Fire()
         {
-            this._stanceHeld = true;
+            //this._stanceHeld = true;
             this._stanceCounter = 0.0f;
         }
 

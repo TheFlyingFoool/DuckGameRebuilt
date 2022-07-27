@@ -15,7 +15,7 @@ namespace DuckGame
     [BaggedProperty("previewPriority", true)]
     public class CityBackground : BackgroundUpdater
     {
-        private Vec2 backgroundPlanePos;
+        //private Vec2 backgroundPlanePos;
         private List<CityBackground.Plane> _planes = new List<CityBackground.Plane>();
         private float timeSinceSkySay;
 

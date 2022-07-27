@@ -236,7 +236,7 @@ namespace DuckGame
                     pString = pString.Substring(2, pString.Length - 2);
                 return new Color(Convert.ToUInt32("0x" + pString, 16), true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Color.White;
             }

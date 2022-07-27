@@ -206,7 +206,7 @@ namespace DuckGame
                         this._tie = new SpriteMap((Tex2D)ContentPack.LoadTexture2D("tieTest.png"), 64, 64);
                         this._tie.center = new Vec2(26f, 27f);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }

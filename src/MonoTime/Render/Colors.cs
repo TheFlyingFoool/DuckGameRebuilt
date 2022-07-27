@@ -229,7 +229,7 @@ namespace DuckGame
                         return new Color((byte)r, (byte)g, (byte)b);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }

@@ -36,8 +36,8 @@ namespace DuckGame
         private Sprite _tutorialTV;
         private SpriteMap _selectConsole;
         private Sprite _consoleHighlight;
-        private Sprite _avatar;
-        private object avatarUser;
+        //private Sprite _avatar;
+        //private object avatarUser;
         private Sprite _aButton;
         private Sprite _readySign;
         public float _doorX;
@@ -56,10 +56,10 @@ namespace DuckGame
         private Duck _duck;
         private VirtualShotgun _gun;
         private RoomDefenceTurret _turret;
-        private bool _doorClosing;
+        //private bool _doorClosing;
         private Window _window;
         private Vec2 _gunSpawnPoint = Vec2.Zero;
-        private bool findDuck;
+        //private bool findDuck;
         private int hostFrames;
         public HatSelector _hatSelector;
         private DuckNetStatus _prevStatus = DuckNetStatus.EstablishingCommunicationWithServer;
@@ -394,7 +394,7 @@ namespace DuckGame
 
         public void OnDoorClosed()
         {
-            this._doorClosing = true;
+            //this._doorClosing = true;
             if (Network.isServer)
             {
                 if (this._playerProfile.team != null)
@@ -417,7 +417,7 @@ namespace DuckGame
                 this._turret = (RoomDefenceTurret)null;
             }
             this.Despawn();
-            this._doorClosing = false;
+            //this._doorClosing = false;
         }
 
         public void Spawn()

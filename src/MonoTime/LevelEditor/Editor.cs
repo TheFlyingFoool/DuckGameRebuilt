@@ -34,7 +34,7 @@ namespace DuckGame
         public static bool active = false;
         public static bool selectingLevel = false;
         private InputType dragModeInputType;
-        private InputType dragStartInputType;
+        //private InputType dragStartInputType;
         private Vec2 _sizeRestriction = new Vec2(800f, 640f);
         public static int placementLimit = 0;
         public int placementTotalCost;
@@ -170,7 +170,7 @@ namespace DuckGame
         private float _twoFingerSpacing;
         private Editor.EditorTouchButton _activeTouchButton;
         private Editor.EditorTouchState _touchState;
-        private bool _prevTouch;
+        //private bool _prevTouch;
         private List<Editor.EditorTouchButton> _touchButtons = new List<Editor.EditorTouchButton>();
         private List<Editor.EditorTouchButton> _fileDialogButtons = new List<Editor.EditorTouchButton>();
         private Editor.EditorTouchButton _cancelButton;
@@ -199,7 +199,7 @@ namespace DuckGame
         private bool _performCopypaste;
         private bool _dragSelectShiftModifier;
         private Thing oldHover;
-        private Thing oldSecondaryHover;
+        //private Thing oldSecondaryHover;
         public static bool editorDraw = false;
         public static int _procXPos = 1;
         public static int _procYPos = 1;
@@ -207,7 +207,7 @@ namespace DuckGame
         public static int _procTilesHigh = 3;
         public static bool hoverTextBox = false;
         private Rectangle _ultimateBounds;
-        private bool _leftSelectionDraw = true;
+        //private bool _leftSelectionDraw = true;
         private int _searchHoverIndex = -1;
         private bool rotateValid;
         private RenderTarget2D _procTarget;
@@ -947,7 +947,7 @@ namespace DuckGame
                     this.Save();
                     Thread.Sleep(10);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -2371,7 +2371,7 @@ namespace DuckGame
                             this._selection.Add(thing);
                     }
                     this._currentDragSelectionHoverAdd.Clear();
-                    this.dragStartInputType = InputType.eNone;
+                    //this.dragStartInputType = InputType.eNone;
                     this._cursorMode = this._selection.Count > 0 ? CursorMode.HasSelection : CursorMode.Normal;
                     Editor.clickedMenu = true;
                     this._selectionDragStart = Vec2.Zero;
@@ -2972,7 +2972,7 @@ namespace DuckGame
                 }
                 if (this._cursorMode == CursorMode.Selection || this._cursorMode == CursorMode.HasSelection || this._cursorMode == CursorMode.Drag || this._cursorMode == CursorMode.DragHover)
                 {
-                    this._leftSelectionDraw = false;
+                    //this._leftSelectionDraw = false;
                     if (this._cursorMode == CursorMode.Selection)
                         DuckGame.Graphics.DrawDottedRect(this._selectionDragStart, this._selectionDragEnd, Color.White * 0.5f, (Depth)1f, 2f, 4f);
                 }
@@ -3599,7 +3599,7 @@ namespace DuckGame
             {
                 return Convert.ToBase64String(scriptData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (string)null;
             }
@@ -3611,7 +3611,7 @@ namespace DuckGame
             {
                 return Convert.FromBase64String(script);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (byte[])null;
             }
@@ -3623,7 +3623,7 @@ namespace DuckGame
             {
                 return Convert.ToBase64String(pData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "";
             }
@@ -3650,7 +3650,7 @@ namespace DuckGame
                 memoryStream.Flush();
                 return Convert.ToBase64String(memoryStream.ToArray());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAAGwXbeBu4P///8AgLYwkid8AAAC9SURBVDhPY2RgYPgPxGQDsAE54rkQHhCUhBdDWRDQs7IXyoIAZHmFSQoMTFA2BpCfKA/Gk19MAmNcAKsBII0HFfVQMC5DwF54kPcAwgMCmGZswP7+JYZciTwoj4FhysvJuL0AAiANIIwPYBgAsgGmEdk2XACrC0AaidEMAnijETk8YC4iKRrRNWMDeAORGIDTgIf5D4kKTIx0AEu6oISD7AWQgSCAnLQJpgNiAE4DQM6GeQFmOzZAYXZmYAAAEzJYPzQv17kAAAAASUVORK5CYII=";
             }
@@ -3706,7 +3706,7 @@ namespace DuckGame
                 bitBuffer.Write(val);
                 return Convert.ToBase64String(bitBuffer.GetBytes());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "";
             }
@@ -4016,7 +4016,7 @@ namespace DuckGame
                 Content.GeneratePreview(Editor._currentLevelData, !isTempSaveForPlayTestMode);
                 Content.doingTempSave = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "Error creating preview for level " + Editor._currentLevelData.metaData.guid.ToString());
             }
@@ -4117,7 +4117,7 @@ namespace DuckGame
                 if (levelData2 != null)
                     return levelData2.metaData;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             DevConsole.Log(DCSection.General, "Editor failed loading metadata from byte[].");
@@ -4137,7 +4137,7 @@ namespace DuckGame
                 if (levelData2 != null)
                     return levelData2.metaData;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             DevConsole.Log(DCSection.General, "Editor failed loading metadata from level (" + pFile + ")");
@@ -4152,7 +4152,7 @@ namespace DuckGame
             {
                 return pData.GetExtraHeaderInfo() != null && pData.GetExtraHeaderInfo() is LevelMetaData ? pData.GetExtraHeaderInfo() as LevelMetaData : pData.metaData;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             DevConsole.Log(DCSection.General, "Editor failed loading metadata from level data.");
@@ -4659,7 +4659,7 @@ namespace DuckGame
                     Editor.ThingTypes = !MonoMain.moddingEnabled ? Editor.GetSubclasses(typeof(Thing)).ToList<System.Type>() : ManagedContent.Things.SortedTypes.ToList<System.Type>();
                     num = Editor.ThingTypes.Count;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 throw new Exception("Error loading constructor parameters for type " + t.ToString() + "(" + Editor._constructorParameters.Count.ToString() + " parms vs " + Program.thingTypes.ToString() + ", " + Program.constructorsLoaded.ToString() + ", " + num.ToString() + " things vs " + Program.thingTypes.ToString() + ")");

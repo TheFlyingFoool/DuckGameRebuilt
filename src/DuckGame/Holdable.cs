@@ -96,9 +96,13 @@ namespace DuckGame
                 this._lastReceivedPosition = value;
             }
         }
-
-        public Duck duck => this._owner as Duck;
-
+        public new Duck duck
+        {
+            get
+            {
+                return this._owner as Duck;
+            }
+        }
         public virtual bool immobilizeOwner
         {
             get => this._immobilizeOwner;

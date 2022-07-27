@@ -14,7 +14,7 @@ namespace DuckGame
         private float _sin;
         private float _moveSpeed = 0.1f;
         private float _sinSize = 0.1f;
-        private float _drift;
+        //private float _drift;
         private float _size;
 
         public SnowFallParticle(float xpos, float ypos, Vec2 startVel, bool big = false)

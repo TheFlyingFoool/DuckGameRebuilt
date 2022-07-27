@@ -94,7 +94,7 @@ namespace DuckGame
                         return new RasterFont(str, (float)pSize);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return RasterFont.None;

@@ -159,17 +159,17 @@ namespace DuckGame
             if (flag1)
                 return;
             Vec2 p1_2;
-            bool flag2;
+            //bool flag2;
             if (Level.CheckLine<Block>(duckPos, duckPos + new Vec2(-36f, 0.0f), out position) != null)
             {
                 position.x += 8f;
                 p1_2 = position;
-                flag2 = true;
+                //flag2 = true;
             }
             else
             {
                 p1_2 = duckPos + new Vec2(-36f, 0.0f);
-                flag2 = true;
+                //flag2 = true;
             }
             Level.CheckLine<Block>(p1_2, p1_2 + new Vec2(0.0f, 20f), out position);
             Chancy.standingPosition = position - new Vec2(0.0f, 25f);

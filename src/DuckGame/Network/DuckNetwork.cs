@@ -1952,7 +1952,7 @@ namespace DuckGame
                                                 }
                                             }
                                         }
-                                        catch (Exception ex)
+                                        catch (Exception)
                                         {
                                         }
                                         NMChatMessage nmChatMessage = new NMChatMessage(DuckNetwork._core.localProfile, currentEnterText, DuckNetwork._core.chatIndex);
@@ -2862,7 +2862,7 @@ namespace DuckGame
                                 DevConsole.Log(DCSection.DuckNet, "|DGBLUE|Received Moji (" + nmMojiData.name + ")");
                                 break;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 break;
                             }

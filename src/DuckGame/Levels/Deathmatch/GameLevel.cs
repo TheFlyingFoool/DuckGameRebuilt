@@ -24,7 +24,7 @@ namespace DuckGame
         public bool _editorTestMode;
         public string levelInputString;
         private static bool first;
-        private bool _startedMatch;
+        //private bool _startedMatch;
         private static int _numberOfDucksSpawned;
         private int wait;
 
@@ -139,7 +139,7 @@ namespace DuckGame
             }
         }
 
-        public virtual void MatchStart() => this._startedMatch = true;
+        public virtual void MatchStart() { } //=> this._startedMatch = true;
 
         public static int NumberOfDucks
         {

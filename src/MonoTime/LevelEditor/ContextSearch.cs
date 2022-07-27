@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class ContextSearch : ContextMenu
     {
-        private bool _searching;
+        //private bool _searching;
 
         public ContextSearch(IContextListener owner)
           : base(owner)

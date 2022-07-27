@@ -192,7 +192,7 @@ namespace DuckGame
                         {
                             dict[DataClass.ReadValue(strArray[0].Trim(), keyType)] = DataClass.ReadValue(strArray[1].Trim(), valType);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }
@@ -227,7 +227,7 @@ namespace DuckGame
                 {
                     dict.Add(DataClass.ReadValue(str2.Trim(), keyType));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }

@@ -14,7 +14,7 @@ namespace DuckGame
     public class MetroidDoor : VerticalDoor
     {
         public Profile _arcadeProfile;
-        private RenderTarget2D _screenCapture;
+        //private RenderTarget2D _screenCapture;
         private bool _transitioning;
 
         public MetroidDoor(float xpos, float ypos)

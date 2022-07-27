@@ -33,7 +33,7 @@ namespace DuckGame
         private Dictionary<ConcaveLine, ConcaveLine> pairG2val = new Dictionary<ConcaveLine, ConcaveLine>();
         private List<KeyValuePair<ConcaveLine, ConcaveLine>> matchingSet = new List<KeyValuePair<ConcaveLine, ConcaveLine>>();
         private List<ConcaveLine> minimumVertex = new List<ConcaveLine>();
-        private int _initializeWait = 20;
+        //private int _initializeWait = 20;
 
         public bool groupedWithNeighbors
         {

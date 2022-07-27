@@ -131,7 +131,7 @@ namespace DuckGame
             Profile.defaultProfileMappings[7] = this._profiles[7];
             Profile.loading = true;
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
-            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory);
+            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
             DevConsole.Log(DCSection.General, "Found (" + ((IEnumerable<string>)files).Count<string>().ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
             foreach (string path in files)
@@ -152,7 +152,7 @@ namespace DuckGame
                                 {
                                     num = Change.ToUInt64((object)dxmlNode.Value.Trim());
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     num = 0UL;
                                 }
@@ -163,7 +163,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                         bool flag = false;

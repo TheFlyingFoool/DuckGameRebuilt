@@ -380,7 +380,7 @@ namespace DuckGame
                             {
                                 lobbyData2.maxPlayers = Convert.ToInt32(lobby.GetLobbyData("maxplayers"));
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 lobbyData2.maxPlayers = 0;
                             }
@@ -459,7 +459,7 @@ namespace DuckGame
                             {
                                 this.lanSearchPort = Convert.ToInt32(this.enteredPort);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                             this.enteredPort = "";
@@ -718,7 +718,7 @@ namespace DuckGame
                                                     key.DownloadFileCompleted += new AsyncCompletedEventHandler(this.Completed);
                                                     UIServerBrowser._clientMap[(object)key] = workshopItem1.id;
                                                 }
-                                                catch (Exception ex)
+                                                catch (Exception)
                                                 {
                                                 }
                                             }

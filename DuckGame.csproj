@@ -68,7 +68,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <DocumentationFile>
@@ -665,7 +665,7 @@
     <Compile Include="src\DuckGame\Network\9NetworkCore.cs" />
     <Compile Include="src\DuckGame\Network\10NetworkCore.cs" />
     <Compile Include="src\DuckGame\Network\11NetworkCore.cs" />
-    <Compile Include="src\DuckGame\Network\12NetworkCore.cs" />
+    <Compile Include="src\DuckGame\Network\NetworkConnection.cs" />
     <Compile Include="src\DuckGame\Network\13NetworkCore.cs" />
     <Compile Include="src\DuckGame\Network\14NetworkCore.cs" />
     <Compile Include="src\DuckGame\Network\15NetworkCore.cs" />
@@ -1595,8 +1595,8 @@
     <Compile Include="src\MonoTime\Sound\NAudio\Resampler\WdlResampler.cs" />
     <Compile Include="src\MonoTime\Sound\NAudio\Resampler\WdlResamplingSampleProvider.cs" />
     <Compile Include="src\MonoTime\Sound\NAudio\WindowsSound.cs" />
-    <Compile Include="src\MonoTime\Sound\NAudio\1WindowsSound.cs" />
-    <Compile Include="src\MonoTime\Sound\NAudio\2WindowsSound.cs" />
+    <Compile Include="src\MonoTime\Sound\NAudio\SoundEffectInstance.cs" />
+    <Compile Include="src\MonoTime\Sound\NAudio\SoundEffect.cs" />
     <Compile Include="src\MonoTime\Sound\OggPlayer.cs" />
     <Compile Include="src\MonoTime\Sound\OggSong.cs" />
     <Compile Include="src\MonoTime\Sound\Retro\SN76489.cs" />
@@ -1615,9 +1615,9 @@
     <Compile Include="src\MonoTime\Sound\Sound.cs" />
     <Compile Include="src\MonoTime\Windows\WavHeader.cs" />
     <Compile Include="src\MonoTime\Sound\WavFile.cs" />
-    <Compile Include="src\MonoTime\Sound\NAudio\WindowsAudio.cs" />
+    <Compile Include="src\MonoTime\Sound\NAudio\MainFilterProvider.cs" />
     <Compile Include="src\MonoTime\Windows\AudioMode.cs" />
-    <Compile Include="src\MonoTime\Sound\NAudio\1WindowsAudio.cs" />
+    <Compile Include="src\MonoTime\Sound\NAudio\WindowsAudio.cs" />
     <Compile Include="src\MonoTime\SpriteThing.cs" />
     <Compile Include="src\MonoTime\SubBackgroundTile.cs" />
     <Compile Include="src\MonoTime\Timer.cs" />

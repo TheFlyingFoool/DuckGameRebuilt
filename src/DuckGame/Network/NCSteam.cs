@@ -20,8 +20,8 @@ namespace DuckGame
         private Steam.LobbySearchCompleteDelegate _lobbySearchComplete;
         private Steam.RequestCurrentStatsDelegate _requestStatsComplete;
         private string _serverIdentifier = "";
-        private int _port;
-        private ulong _connectionPacketIdentifier = 6094567099491692639;
+        //private int _port;
+        //private ulong _connectionPacketIdentifier = 6094567099491692639;
         private bool _initializedSettings;
         private bool _lobbyCreationComplete;
         public static ulong inviteLobbyID;
@@ -98,7 +98,7 @@ namespace DuckGame
             this._chatDelegate = new Lobby.ChatMessageDelegate(this.OnChatMessage);
             this.HookUpLobbyChatMessage(this._lobby, this._chatDelegate);
             this._serverIdentifier = identifier;
-            this._port = port;
+            //this._port = port;
             this.StartServerThread();
             return new NCError("|DGORANGE|STEAM |DGYELLOW|Attempting to create server lobby...", NCErrorType.Message);
         }
@@ -113,7 +113,7 @@ namespace DuckGame
             {
                 l.UserStatusChange -= del;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -124,7 +124,7 @@ namespace DuckGame
             {
                 l.ChatMessage -= del;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -156,7 +156,7 @@ namespace DuckGame
             this.HookUpLobbyUserStatusChange(this._lobby, this._userChange);
             this._chatDelegate = new Lobby.ChatMessageDelegate(this.OnChatMessage);
             this.HookUpLobbyChatMessage(this._lobby, this._chatDelegate);
-            this._port = port;
+            //this._port = port;
             this.StartClientThread();
             return new NCError("|DGORANGE|STEAM |DGGREEN|Connecting to lobbyID " + identifier + ".", NCErrorType.Message);
         }
@@ -445,7 +445,7 @@ namespace DuckGame
                                             }
                                         }
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     {
                                     }
                                 }

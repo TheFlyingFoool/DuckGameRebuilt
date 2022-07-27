@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class Unlockables
     {
-        private static bool wawa = false;
+        //private static bool wawa = false;
         private static List<Unlockable> _unlocks = new List<Unlockable>();
         private static HashSet<Unlockable> _pendingUnlocks = new HashSet<Unlockable>();
 

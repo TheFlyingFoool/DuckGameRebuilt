@@ -69,8 +69,8 @@ namespace DuckGame
         public bool _bursting;
         public int _burstNum;
         private Sprite _positronWinder;
-        private bool _manualWind;
-        private float _prevStick;
+        //private bool _manualWind;
+        //private float _prevStick;
         private int _prevInc;
         private bool _winding;
         private float _windVelocity;
@@ -176,7 +176,7 @@ namespace DuckGame
         {
             if (this._winding && this._noteIndex != this._notes.Count)
             {
-                this._manualWind = false;
+                //this._manualWind = false;
                 this._windVelocity += 0.05f;
             }
             else

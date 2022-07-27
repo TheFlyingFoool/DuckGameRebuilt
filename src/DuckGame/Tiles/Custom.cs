@@ -255,7 +255,7 @@ namespace DuckGame
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     texture2D = (Texture2D)null;
                 }

@@ -57,7 +57,7 @@ namespace DuckGame
                     ncBasicPacketList.Clear();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

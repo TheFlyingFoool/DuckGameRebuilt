@@ -53,7 +53,7 @@ namespace DuckGame
                             return challengeMode.challenge;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }

@@ -47,7 +47,7 @@ namespace DuckGame
         public static UIMenu tempBlockMenu;
         private static bool loadCalled = false;
         public static int legacyPreferredColor = -1;
-        private static string _pendingTTS;
+        //private static string _pendingTTS;
         private static bool _resolutionChanged = false;
 
         public static string GetMuteSettings(Profile pProfile)

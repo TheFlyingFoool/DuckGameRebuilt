@@ -468,7 +468,7 @@ namespace DuckGame
                                         this._previewPair.preview.Dispose();
                                     this._previewPair = Content.GeneratePreview(str2);
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     this._previewPair = (LevelMetaData.PreviewPair)null;
                                     flag2 = false;
@@ -542,7 +542,7 @@ namespace DuckGame
                         {
                             Editor._currentLevelData.metaData.guid = (DuckFile.LoadLevel(this._currentDirectory + "/" + this._overwriteName) ?? throw new Exception()).metaData.guid;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             if (string.IsNullOrEmpty(Editor._currentLevelData.metaData.guid))
                                 Editor._currentLevelData.metaData.guid = Guid.NewGuid().ToString();
@@ -587,7 +587,7 @@ namespace DuckGame
                             {
                                 Process.Start(this._currentDirectory);
                             }
-                            catch (Exception ex2)
+                            catch (Exception)
                             {
                                 DevConsole.Log("|DGRED|Could not open directory '" + Path.GetFullPath(this._currentDirectory) + "' (" + ex1.Message + ")");
                             }

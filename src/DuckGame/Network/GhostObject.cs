@@ -29,7 +29,7 @@ namespace DuckGame
         public bool didDestroyRefresh;
         private BufferedGhostState _networkState;
         private int _finalPositionSyncFrames = 3;
-        private long tickIncFrame;
+        //private long tickIncFrame;
         public bool wrote;
         public BitBuffer previouslySerializedData;
         public List<BufferedGhostState> _stateTimeline = new List<BufferedGhostState>();

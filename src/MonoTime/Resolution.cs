@@ -23,7 +23,7 @@ namespace DuckGame
         private static int _takeFocus;
         private static GraphicsDeviceManager _device;
         private static Resolution _pendingResolution;
-        private static Matrix _matrix;
+        //private static Matrix _matrix;
         public bool isDefault;
         public ScreenMode mode;
         public Vec2 dimensions;

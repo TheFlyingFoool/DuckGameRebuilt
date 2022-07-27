@@ -77,7 +77,7 @@ namespace DuckGame
         private CurrentGame _currentGame = new CurrentGame();
         public string lastKnownName;
         private ulong _steamID;
-        private ulong _lanProfileID;
+        //private ulong _lanProfileID;
         private NetworkConnection _connection;
         private static bool _networkStatusLooping;
         private DuckNetStatus _networkStatus;
@@ -747,10 +747,10 @@ namespace DuckGame
             DuckGame.Graphics.SetRenderTarget(t);
             DuckGame.Graphics.Clear(Color.Black);
             Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, (MTEffect)null, Matrix.Identity);
-            int num1 = 0;
+            //int num1 = 0;
             int num2 = 8 + Rando.Int(12);
-            if (Rando.Int(100) == 1)
-                num1 = 1;
+            Rando.Int(100);
+               // num1 = 1;
             int num3 = 3;
             if (Rando.Int(10) == 1)
                 num2 = 1;

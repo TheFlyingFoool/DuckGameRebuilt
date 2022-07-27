@@ -142,7 +142,7 @@ namespace DuckGame
                                     this._challenges.Add((ArcadeMachine)importMachine);
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                         }

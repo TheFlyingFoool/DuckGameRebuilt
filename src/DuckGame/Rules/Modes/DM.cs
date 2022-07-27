@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class DM : GameMode
     {
-        private int waitFrames = 3;
+        //private int waitFrames = 3;
 
         public DM(bool validityTest = false, bool editorTestMode = false)
           : base(validityTest, editorTestMode)

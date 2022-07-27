@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class UIGameConnectionBox : UIMatchmakingBox
     {
-        private UIMenu _openOnClose;
+        //private UIMenu _openOnClose;
         private UIServerBrowser.LobbyData _connectLobby;
         private string _passwordAttempt;
 

@@ -23,7 +23,7 @@ namespace DuckGame
         protected Dictionary<string, Song> _songs = new Dictionary<string, Song>();
         protected ModConfiguration _modConfig;
         public static ContentPack currentPreloadPack;
-        private long _beginCalculatingAllocatedBytes;
+        //private long _beginCalculatingAllocatedBytes;
 
         public ContentPack(ModConfiguration modConfiguration) => this._modConfig = modConfiguration;
 
@@ -53,7 +53,7 @@ namespace DuckGame
                         DevConsole.Log(DCSection.General, "|DGRED|Failed to load sound effect! (" + path + ")");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -165,7 +165,7 @@ namespace DuckGame
                 if (soundEffect != null)
                     soundEffect.file = file;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return soundEffect;

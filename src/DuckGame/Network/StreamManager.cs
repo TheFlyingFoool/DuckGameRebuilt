@@ -22,10 +22,10 @@ namespace DuckGame
         private int _sent;
         private float _jitter;
         private float _jitterPeak;
-        private int _jitterPeakReset;
+        //private int _jitterPeakReset;
         private float[] _previousPings = new float[32];
         private int _currentPing;
-        private float _prevAverage;
+        //private float _prevAverage;
         private EventManager _eventManager;
         private List<NetMessage> _unreliableMessages = new List<NetMessage>();
         private List<NetMessage> _unacknowledgedMessages = new List<NetMessage>();

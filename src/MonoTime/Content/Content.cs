@@ -30,7 +30,7 @@ namespace DuckGame
         public static short _currentTextureIndex = 0;
         public static Tex2D invalidTexture;
         public static volatile bool readyToRenderPreview = false;
-        private static volatile bool previewRendering = false;
+        //private static volatile bool previewRendering = false;
         public static volatile bool renderingPreview = false;
         public static XMLLevel previewLevel;
         private static Camera _previewCamera;
@@ -201,7 +201,7 @@ namespace DuckGame
                             return;
                     }
                 }
-                DuckGame.Content.previewRendering = false;
+                //DuckGame.Content.previewRendering = false;
                 DuckGame.Content.renderingPreview = false;
             }
             catch (Exception ex)
@@ -638,7 +638,7 @@ namespace DuckGame
             {
                 Program.LogLine("Level Load Failure (Did not cause crash)\n================================================\n " + s + "\n================================================\n");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -850,7 +850,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return (ParallaxBackground.Definition)null;
@@ -893,7 +893,7 @@ namespace DuckGame
                             return obj;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }

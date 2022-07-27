@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class JoinServer : Level, IConnectionScreen
     {
-        private bool _attemptedConnection;
+        //private bool _attemptedConnection;
         private ulong _lobbyID;
         private float _dots;
         private ulong _timeout;
@@ -65,7 +65,7 @@ namespace DuckGame
                 }
                 else
                     DuckNetwork.Join(this._lobbyID.ToString(), "localhost", this.password);
-                this._attemptedConnection = true;
+                //this._attemptedConnection = true;
                 this._startedJoining = true;
                 this._timeout = 0UL;
                 base.Initialize();

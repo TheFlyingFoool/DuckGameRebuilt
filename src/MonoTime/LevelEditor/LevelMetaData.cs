@@ -93,7 +93,7 @@ namespace DuckGame
                    }
                })).Start();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

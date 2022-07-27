@@ -234,7 +234,7 @@ namespace DuckGame
                     this.chatBust.CenterOrigin();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

@@ -24,7 +24,7 @@ namespace DuckGame
         private SpriteMap _lev;
         private SpriteMap _littleMan;
         private Sprite _egg;
-        private Sprite _levelUpArrow;
+        //private Sprite _levelUpArrow;
         private Sprite _talkBubble;
         private SpriteMap _duckCoin;
         private Sprite _sandwich;
@@ -57,7 +57,7 @@ namespace DuckGame
         public static int currentLevel;
         private int _currentLevel = 4;
         private int _desiredLevel = 4;
-        private int _arrowsLevel = -1;
+        //private int _arrowsLevel = -1;
         private float _newXPValue;
         private float _oldXPValue;
         private int _gachaValue;
@@ -75,7 +75,7 @@ namespace DuckGame
         private BitmapFont _bigFont;
         private int _currentDay;
         private List<Tex2D> _eggs = new List<Tex2D>();
-        private static bool _firstOpen;
+        //private static bool _firstOpen;
         private int _originalXP;
         private int _totalXP;
         private int _startRoundsPlayed;
@@ -105,7 +105,7 @@ namespace DuckGame
         private float _finalWait;
         private float _coin2Wait;
         private float _intermissionSlide;
-        private float _newCrossLerp;
+        //private float _newCrossLerp;
         private float _newCircleLerp;
         private float _taxiDrive;
         private float _genericWait;
@@ -114,14 +114,14 @@ namespace DuckGame
         private bool _sandwichShift;
         private bool _showCard;
         private float _dayTake;
-        private bool _updateTime;
+        //private bool _updateTime;
         private float _updateTimeWait;
         private bool _finned;
         private float _advanceDayWait;
         private bool _advancedDay;
         private bool _markedNewDay;
         private float _fallVel;
-        private float _afterScrollWait;
+        //private float _afterScrollWait;
         private float _intermissionWait;
         private float _slideWait;
         private bool _unSlide;
@@ -136,10 +136,10 @@ namespace DuckGame
         private float _ranRot;
         private bool _attemptingVincentClose;
         private bool _gaveToy;
-        private bool _didXPDay;
+        //private bool _didXPDay;
         private float _finishDayWait;
-        private bool earlyExit;
-        private bool doubleUpdate;
+        ////private bool earlyExit;
+        //private bool doubleUpdate;
         private bool doubleUpdating;
         private bool _startedLittleManLeave;
         private float _littleManStartWait;
@@ -207,7 +207,7 @@ namespace DuckGame
         private Vec2 littleManPos;
         private float _lastFill;
         private float _barHeat;
-        private int _lastNum;
+        //private int _lastNum;
 
         private static bool saidSpecial
         {
@@ -243,7 +243,7 @@ namespace DuckGame
           : base(title, xpos, ypos, wide, high, conString)
         {
             Graphics.fade = 1f;
-            UILevelBox._firstOpen = true;
+            //UILevelBox._firstOpen = true;
             this._frames.Add(new Sprite("levWindow_lev0"));
             this._frames[this._frames.Count - 1].CenterOrigin();
             this._frames.Add(new Sprite("levWindow_lev1"));
@@ -1194,7 +1194,7 @@ namespace DuckGame
                                 this._advancedDay = false;
                                 this._fallVel = 0.0f;
                                 this._finned = false;
-                                this._updateTime = false;
+                                //this._updateTime = false;
                                 this._markedNewDay = false;
                                 this._advanceDayWait = 0.0f;
                                 this._dayFallAway = 0.0f;
@@ -1248,7 +1248,7 @@ namespace DuckGame
                                         }
                                         break;
                                     case DayType.FreeXP:
-                                        this._didXPDay = true;
+                                        //this._didXPDay = true;
                                         DuckNetwork.GiveXP("FREE XP DAY", 0, 75);
                                         this._state = UILevelBoxState.Wait;
                                         break;

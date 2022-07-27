@@ -26,7 +26,7 @@ namespace DuckGame
 {
     public class MonoMain : Game
     {
-        private Effect myEffect;
+        //private Effect myEffect;
         private static MonoMainCore _core = new MonoMainCore();
         public static TransitionDirection transitionDirection = TransitionDirection.None;
         public static Level transitionLevel = (Level)null;
@@ -71,7 +71,7 @@ namespace DuckGame
         private RenderTarget2D saveShot;
         public static bool hidef = false;
         public static string[] startupAssemblies;
-        private RenderTarget2D targ;
+        //private RenderTarget2D targ;
         public static bool notOnlineError = false;
         public static int cultureCode;
         public static bool fourK;
@@ -146,14 +146,14 @@ namespace DuckGame
         public static long framesBackInFocus = 0;
         public static bool showingSaveTool = false;
         public static Form saveTool;
-        private bool _checkedSave;
-        private bool _corruptSave;
-        private bool _didStartInit;
+        //private bool _checkedSave;
+        //private bool _corruptSave;
+        //private bool _didStartInit;
         public static bool closedCorruptSaveDialog = false;
         public static bool closedNoSpaceDialog = false;
         public static bool shouldPauseGameplay;
         public static bool exit = false;
-        private Stopwatch _loadingTimer = new Stopwatch();
+        //private Stopwatch _loadingTimer = new Stopwatch();
         public static volatile bool pause = false;
         public static volatile bool paused = false;
         public bool _didInitialVsyncUpdate;
@@ -165,7 +165,7 @@ namespace DuckGame
         private bool _loggedConnectionCheckFailure;
         private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166667L);
         private static double LowestSleepThreshold = 0.0;
-        private long _previousTicks;
+        // private long _previousTicks;
         private TimeSpan _accumulatedElapsedTime = TimeSpan.Zero;
         private bool _setCulture;
         public static bool autoPauseFade = true;
@@ -181,7 +181,7 @@ namespace DuckGame
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;
         private Timer _timeSinceLastLoadFrame = new Timer();
-        private int deviceLostWait;
+        //private int deviceLostWait;
 
         public static MonoMainCore core
         {
@@ -275,7 +275,7 @@ namespace DuckGame
                                 }
                                 str1 = str1 + str2 + "\r\n";
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 str1 = str1 + dcLine.line + "\r\n";
                             }
@@ -283,7 +283,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return str1 + MonoMain.GetDetails();
@@ -381,7 +381,7 @@ namespace DuckGame
                     return (Texture2D)null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return (Texture2D)null;
@@ -437,7 +437,7 @@ namespace DuckGame
                     return (MonoMain.WebCharData)null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return (MonoMain.WebCharData)null;
@@ -557,7 +557,7 @@ namespace DuckGame
                         {
                             MonoMain.infiniteLoopDetails += MonoMain.GetInfiniteLoopDetails();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                         MonoMain.hadInfiniteLoop = true;
@@ -655,7 +655,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             try
@@ -701,7 +701,7 @@ namespace DuckGame
                     Cloud.Update();
                 Steam.Terminate();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             try
@@ -712,7 +712,7 @@ namespace DuckGame
                     DevConsole.SaveNetLog("duck_file_log.rtf");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             if (this._infiniteLoopDetector == null)
@@ -1134,7 +1134,7 @@ namespace DuckGame
                         {
                             DuckFile.SaveString(completedPreviewTask.levelString, completedPreviewTask.savePath);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }
@@ -1159,7 +1159,7 @@ namespace DuckGame
                 if (Keyboard.Pressed(Keys.F2))
                     Program.MakeNetLog();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             if (MonoMain.exit || (Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt)) && Keyboard.Down(Keys.F4))

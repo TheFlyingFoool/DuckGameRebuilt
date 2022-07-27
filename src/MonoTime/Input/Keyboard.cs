@@ -34,7 +34,7 @@ namespace DuckGame
         private static int _usingVoiceRegister;
         private static Thing _registerSetThing;
         private static bool _registerLock = false;
-        private static int _currentNote = 0;
+        //private static int _currentNote = 0;
 
         public static bool NothingPressed() => Keyboard._keyState.GetPressedKeys().Length == 0 && Keyboard._keyStatePrev.GetPressedKeys().Length == 0;
 
@@ -730,7 +730,7 @@ namespace DuckGame
                 if (Keyboard._registerLock && (Keyboard._registerSetThing == null || Keyboard._registerSetThing.removeFromLevel || Keyboard._registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText))
                 {
                     Keyboard._registerLock = false;
-                    Keyboard._currentNote = 0;
+                    //Keyboard._currentNote = 0;
                 }
             }
             else

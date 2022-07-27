@@ -22,7 +22,7 @@ namespace DuckGame
         public EditorProperty<int> FireSpeed = new EditorProperty<int>(60, min: -1f, max: 240f, increment: 2f);
         public EditorProperty<int> ReloadSpeed = new EditorProperty<int>(60, min: -1f, max: 240f, increment: 2f);
         private float _reloadAdd;
-        private float _targetLerpOut = 1f;
+        //private float _targetLerpOut = 1f;
 
         public override bool action => this._holdAction;
 

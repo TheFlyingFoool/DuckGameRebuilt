@@ -21,7 +21,7 @@ namespace DuckGame
         private BitmapFont _littleFont;
         private string _nameText;
         private string _nameTextWithoutColor;
-        private string _name;
+        //private string _name;
         private bool _showKickMenu;
         private bool _showMuteMenu;
         private int _additionalOptionIndex;

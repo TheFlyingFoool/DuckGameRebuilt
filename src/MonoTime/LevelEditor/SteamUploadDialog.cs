@@ -54,13 +54,13 @@ namespace DuckGame
         private Vec2 _cancelSize;
         private bool _cancelHover;
         private EditorWorkshopItem _publishItem;
-        private WorkshopItem _currentUploadItem;
+        //private WorkshopItem _currentUploadItem;
         private bool _testing;
         private Vec2 _plusPosition;
         private ContextMenu _tagMenu;
-        private bool _creatingSubItem;
-        private int _subItemUploadIndex = -1;
-        private int _subItemTries;
+        //private bool _creatingSubItem;
+        //private int _subItemUploadIndex = -1;
+        //private int _subItemTries;
         private Dictionary<string, Vec2> tagPositions = new Dictionary<string, Vec2>();
         private Stack<EditorWorkshopItem> _publishStack = new Stack<EditorWorkshopItem>();
         private float hOffset;

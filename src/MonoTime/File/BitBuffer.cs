@@ -24,8 +24,8 @@ namespace DuckGame
         private byte[] _trimmedBuffer;
         private static int[] _readMasks;
         private bool _allowPacking = true;
-        private int offset;
-        private int currentBit;
+        //private int offset;
+        //private int currentBit;
         public static List<System.Type> kTypeIndexList = new List<System.Type>()
     {
       typeof (string),
@@ -84,7 +84,7 @@ namespace DuckGame
                 }
                 bitBuffer.position = 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DevConsole.Log(DCSection.General, "BitBuffer conversion from string failed.");
                 return new BitBuffer();
@@ -124,7 +124,7 @@ namespace DuckGame
                     Array.Copy((Array)this._buffer, (Array)destinationArray, this.lengthInBytes);
                     return destinationArray;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return (byte[])null;
                 }
@@ -318,7 +318,7 @@ namespace DuckGame
             {
                 if (this.lengthInBits + bits > this._buffer.Length * 8)
                     this.resize(this._buffer.Length * 2);
-                this.currentBit = 0;
+                //this.currentBit = 0;
                 while (bits > 0)
                 {
                     this._buffer[this.position] |= (byte)((number & 1) << this.bitOffset);

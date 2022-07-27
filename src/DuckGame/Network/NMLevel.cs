@@ -139,7 +139,7 @@ namespace DuckGame
                             {
                                 num = Convert.ToInt32(this.level[0].ToString() ?? "");
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                             int networkIndex = (int)DuckNetwork.GetProfiles(DuckNetwork.localConnection).First<Profile>().networkIndex;

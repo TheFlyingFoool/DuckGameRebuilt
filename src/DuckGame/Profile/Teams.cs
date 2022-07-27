@@ -79,7 +79,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return fromIndex;

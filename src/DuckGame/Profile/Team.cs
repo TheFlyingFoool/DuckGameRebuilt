@@ -191,7 +191,7 @@ namespace DuckGame
                 pTeam.customHatPath = pPath;
                 return pTeam;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (Team)null;
             }

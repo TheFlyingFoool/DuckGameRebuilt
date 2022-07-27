@@ -42,8 +42,8 @@ namespace DuckGame
         private uint _personalTick;
         private int _disconnectsSent;
         private string _theirVersion = "";
-        private bool _theirModsIncompatible;
-        private bool _connectionTimeout;
+        //private bool _theirModsIncompatible;
+        //private bool _connectionTimeout;
         public HashSet<InputDevice> synchronizedInputDevices = new HashSet<InputDevice>();
         public byte lastSynchronizedDeviceType = byte.MaxValue;
         public int triesSinceInputChangeSend = 60;
@@ -280,7 +280,7 @@ namespace DuckGame
             this._packetHistory = new NetworkPacket[33];
             this._packetHistoryIndex = 0;
             this._theirVersion = "";
-            this._connectionTimeout = false;
+            //this._connectionTimeout = false;
             this.synchronizedInputDevices.Clear();
             this.lastSynchronizedDeviceType = byte.MaxValue;
             this.pingWait = 0;

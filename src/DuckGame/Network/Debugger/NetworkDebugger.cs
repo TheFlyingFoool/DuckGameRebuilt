@@ -45,7 +45,7 @@ namespace DuckGame
         public static bool startJoin = false;
         public static bool hoveringInstance = true;
         public static int fullscreenIndex = 0;
-        private bool eightPlayerMode = true;
+        //private bool eightPlayerMode = true;
         private bool logTimes = true;
         private bool logSections = true;
         private int logSwitchIndex;
@@ -102,9 +102,9 @@ namespace DuckGame
       }
     };
         private bool showFilters;
-        private SpriteMap _connectionArrow;
-        private Sprite _connectionX;
-        private Sprite _connectionWall;
+        //private SpriteMap _connectionArrow;
+       // private Sprite _connectionX;
+       // private Sprite _connectionWall;
         public static int[] ghostsReceived = new int[8];
         private static Network oldNetwork;
         private static DuckNetworkCore oldDuckNetworkCore;

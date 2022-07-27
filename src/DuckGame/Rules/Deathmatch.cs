@@ -43,7 +43,7 @@ namespace DuckGame
         private UIMenu _confirmMenu;
         private new Level _level;
         private MenuBoolean _quit = new MenuBoolean();
-        private static List<string> _networkLevels = (List<string>)null;
+        //private static List<string> _networkLevels = (List<string>)null;
         public static int levelsSinceRandom = 0;
         public static int levelsSinceWorkshop = 0;
         public static int levelsSinceCustom = 0;

@@ -15,7 +15,7 @@ namespace DuckGame
         private Thing _thing;
         private float transWave = 0.2f;
         private bool secondScan;
-        private bool scanSwitch;
+        //private bool scanSwitch;
         public bool finished;
 
         public MaterialGrid(Thing t)

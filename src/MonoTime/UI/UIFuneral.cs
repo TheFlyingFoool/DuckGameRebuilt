@@ -21,7 +21,7 @@ namespace DuckGame
         private UIMenu _link;
         public static string oldSong;
         private bool _doneDown;
-        private float _openWait = 1f;
+        //private float _openWait = 1f;
         public bool finished;
 
         public UIFuneral(float xpos, float ypos, float wide = -1f, float high = -1f, UIMenu link = null)
@@ -69,7 +69,7 @@ namespace DuckGame
                             this.Close();
                             return;
                         }
-                        this._openWait = 1f;
+                        //this._openWait = 1f;
                         this._downWait = 1f;
                         this.down = false;
                         SFX.Play("pause", 0.6f);

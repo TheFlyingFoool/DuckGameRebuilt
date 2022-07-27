@@ -16,12 +16,12 @@ namespace DuckGame
         public static int _slot = 0;
         public static int _indexX;
         public static int _indexY;
-        private Vec2 _rectPosition;
+        //private Vec2 _rectPosition;
         public static bool editingSlots = false;
         public bool finished;
         private bool _selectionChanged = true;
         private bool _showWarning;
-        private bool _showedWarning;
+        //private bool _showedWarning;
         public static int[,] kIndexMap = new int[3, 3]
         {
       {
@@ -56,7 +56,7 @@ namespace DuckGame
         {
             HUD.CloseAllCorners();
             UISlotEditor.editingSlots = true;
-            this._showedWarning = false;
+            //this._showedWarning = false;
             this._showWarning = false;
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@EXIT");
             MonoMain.doPauseFade = false;
@@ -87,7 +87,7 @@ namespace DuckGame
                     else if (Input.Pressed("MENU2"))
                     {
                         SFX.Play("death");
-                        this._showedWarning = true;
+                        //this._showedWarning = true;
                         this._showWarning = false;
                         if (Level.core.gameInProgress)
                             DuckNetwork.ResetScores();

@@ -26,7 +26,7 @@ namespace DuckGame
         private float s2 = 1f;
         private bool didRemove;
         private float _groundedTime;
-        private float lifeTake = 0.05f;
+        //private float lifeTake = 0.05f;
 
         public int smokeID => this._smokeID;
 

@@ -16,8 +16,8 @@ namespace DuckGame
         public EditorProperty<float> MoveX = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
         public EditorProperty<float> MoveY = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
         public EditorProperty<float> MoveDelay = new EditorProperty<float>(1f, max: 120f, increment: 0.25f);
-        private bool moving;
-        private int inc;
+        //private bool moving;
+        //private int inc;
         private CameraMover curMover;
 
         public CameraFixed()

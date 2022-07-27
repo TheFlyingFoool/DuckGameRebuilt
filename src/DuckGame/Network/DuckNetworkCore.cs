@@ -459,7 +459,7 @@ namespace DuckGame
             {
                 pMessage.text = this._chatFont.FormatWithNewlines(pMessage.text, 800f);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 pMessage.text = "??????";
             }
