@@ -29,7 +29,7 @@ namespace DuckGame
             this.center = new Vec2(7f, 8f);
             this._collisionSize = new Vec2(8f, 8f);
             this._collisionOffset = new Vec2(-4f, -4f);
-            this.depth = - 0.9f;
+            this.depth = -0.9f;
             this.alpha = 0.7f;
             this.layer = Layer.Game;
             this.placementLayerOverride = Layer.Blocks;

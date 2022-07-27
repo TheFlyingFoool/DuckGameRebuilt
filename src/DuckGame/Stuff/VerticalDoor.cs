@@ -5,8 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System;
-
 namespace DuckGame
 {
     [EditorGroup("Stuff|Doors")]
@@ -39,7 +37,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 24f);
             this.collisionSize = new Vec2(6f, 32f);
             this.collisionOffset = new Vec2(-3f, -24f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Vertical Door";
             this.thickness = 3f;
             this.physicsMaterial = PhysicsMaterial.Metal;

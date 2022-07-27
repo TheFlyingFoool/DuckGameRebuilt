@@ -29,7 +29,7 @@ namespace DuckGame
             this.center = new Vec2(10f, 22f);
             this.collisionSize = new Vec2(21f, 30f);
             this.collisionOffset = new Vec2(-10f, -20f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Wall Door";
             this._canFlip = false;
         }
@@ -140,7 +140,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawRect(this.topLeft, this.bottomRight, new Color(18, 25, 33), - 0.6f);
+            Graphics.DrawRect(this.topLeft, this.bottomRight, new Color(18, 25, 33), -0.6f);
             base.Draw();
         }
     }

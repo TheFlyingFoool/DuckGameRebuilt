@@ -40,7 +40,7 @@ namespace DuckGame
         {
             this._sprite = new SpriteMap("arcade/prizeCounter", 69, 30);
             this.graphic = _sprite;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._outline = new Sprite("arcade/prizeCounterOutline")
             {
                 depth = this.depth + 1

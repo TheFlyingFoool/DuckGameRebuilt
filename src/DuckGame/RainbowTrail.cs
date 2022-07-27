@@ -37,7 +37,7 @@ namespace DuckGame
             this.visible = attach.visible;
             //this.killTimer = this.killTime;
             this._attach = attach;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
         }
 
         public override void Update()

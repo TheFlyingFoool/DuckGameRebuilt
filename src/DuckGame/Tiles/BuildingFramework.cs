@@ -21,7 +21,7 @@ namespace DuckGame
             this._hasNubs = false;
             this.indestructable = true;
             this.layer = Layer.Blocks;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.placementLayerOverride = Layer.Game;
         }
 

@@ -34,7 +34,7 @@ namespace DuckGame
             this._sinVal = (float)Math.Sin(_wave);
             this.y += this.vSpeed;
             if (_sinVal < -0.800000011920929 && this.depth > 0.0f)
-                this.depth = - 0.8f;
+                this.depth = -0.8f;
             else if (_sinVal > 0.800000011920929 && this.depth < 0.0f)
                 this.depth = (Depth)0.8f;
             if ((double)this.y < -20.0)

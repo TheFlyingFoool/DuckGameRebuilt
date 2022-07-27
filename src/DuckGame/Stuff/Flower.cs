@@ -28,7 +28,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-3f, -12f);
             this.collisionSize = new Vec2(6f, 14f);
             this._holdOffset = new Vec2(-2f, 2f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.weight = 1f;
             this.flammable = 0.3f;
             this.hugWalls = WallHug.Floor;
@@ -121,7 +121,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    this.depth = - 0.5f;
+                    this.depth = -0.5f;
                     if (this.framesSinceThrown < 15)
                     {
                         Gun gun = Level.current.NearestThing<Gun>(this.position);

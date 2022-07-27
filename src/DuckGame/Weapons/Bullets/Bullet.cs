@@ -124,7 +124,7 @@ namespace DuckGame
             this._gravityAffected = type.affectedByGravity;
             this.gravityMultiplier = type.gravityMultiplier;
             this._bulletLength = type.bulletLength;
-            this.depth = - 0.1f;
+            this.depth = -0.1f;
             if (owner is Duck && ((double)Math.Abs((owner as Duck).holdAngle) > 0.100000001490116 || (owner as Duck).holdObject is Gun && (double)Math.Abs(((owner as Duck).holdObject as Gun).angleDegrees) > 20.0 && !this._gravityAffected))
                 this.trickshot = true;
             if (!tracer)

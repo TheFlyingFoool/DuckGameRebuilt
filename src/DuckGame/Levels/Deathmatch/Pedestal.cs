@@ -80,7 +80,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             base.Draw();
             int count = this._team.activeProfiles.Count;
             if (this._sprite.frame == 0)

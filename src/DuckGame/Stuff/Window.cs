@@ -127,7 +127,7 @@ namespace DuckGame
             this.center = new Vec2(3f, 24f);
             this.collisionSize = new Vec2(6f, 32f);
             this.collisionOffset = new Vec2(-3f, -24f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = nameof(Window);
             this.editorTooltip = "Classic window. Really opens up the room.";
             this.thickness = 0.3f;

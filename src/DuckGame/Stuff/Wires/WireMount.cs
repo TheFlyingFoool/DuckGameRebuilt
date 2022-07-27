@@ -51,7 +51,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Wire Mount";
             this.editorTooltip = "Specifies an object to trigger whenever a connected Button is pressed.";
             this.layer = Layer.Foreground;

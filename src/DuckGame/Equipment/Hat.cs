@@ -91,7 +91,7 @@ namespace DuckGame
             {
                 if (this.owner != null || !(this is TeamHat))
                     return;
-                this.depth = - 0.2f;
+                this.depth = -0.2f;
             }
         }
     }

@@ -18,7 +18,7 @@ namespace DuckGame
             this.verticalWidth = 14f;
             this.verticalWidthThick = 15f;
             this.horizontalHeight = 8f;
-            this.depth = - 0.55f;
+            this.depth = -0.55f;
         }
     }
 }

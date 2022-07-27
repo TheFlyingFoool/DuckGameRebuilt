@@ -5,7 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -27,7 +26,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 11f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.thickness = 0.0f;
             this.weight = 3f;
             this.flammable = 0.3f;

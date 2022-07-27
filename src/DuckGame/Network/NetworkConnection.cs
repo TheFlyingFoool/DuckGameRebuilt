@@ -353,7 +353,7 @@ namespace DuckGame
         }
 
         public void PacketSent()
-        { 
+        {
             this._lastSentTime = this._personalTick;
         }
         public void OnNonConnectionMessage(NetMessage message)

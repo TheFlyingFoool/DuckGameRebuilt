@@ -5,7 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -172,7 +171,7 @@ namespace DuckGame
                     neverCheap = true
                 };
                 Level.Add(scaffoldingTileset);
-                scaffoldingTileset.depth = - 0.5f;
+                scaffoldingTileset.depth = -0.5f;
                 scaffoldingTileset.PlaceBlock();
                 scaffoldingTileset.UpdateNubbers();
                 Level.Add(new Platform(this.x + 49f, this.y + 56f, 3f, 5f));
@@ -192,7 +191,7 @@ namespace DuckGame
                     neverCheap = true
                 };
                 Level.Add(scaffoldingTileset);
-                scaffoldingTileset.depth = - 0.5f;
+                scaffoldingTileset.depth = -0.5f;
                 scaffoldingTileset.PlaceBlock();
                 scaffoldingTileset.UpdateNubbers();
                 Level.Add(new Platform(this.x + 89f, this.y + 56f, 3f, 5f));
@@ -200,7 +199,7 @@ namespace DuckGame
             }
             this._gunSpawnPoint = !this.rightRoom ? new Vec2(this.x + 113f, this.y + 50f) : new Vec2((float)((double)this.x + 142.0 - 118.0), this.y + 50f);
             this._readySign.depth = (Depth)0.2f;
-            this._roomLeftBackground.depth = - 0.85f;
+            this._roomLeftBackground.depth = -0.85f;
             this._roomLeftForeground.depth = (Depth)0.1f;
             this._tutorialMessages = new SpriteMap("tutorialScreensPC", 53, 30);
             this._aButton = new Sprite("aButton");
@@ -1117,7 +1116,7 @@ namespace DuckGame
                     }
                     if (Network.isActive && (Network.isServer && this.profile.connection == DuckNetwork.localConnection || this.profile.connection == Network.host))
                     {
-                        this._hostCrown.depth = - 0.5f;
+                        this._hostCrown.depth = -0.5f;
                         Graphics.Draw(this._hostCrown, this.x + 126f, this.y + 23f);
                     }
                 }
@@ -1166,23 +1165,23 @@ namespace DuckGame
                     }
                     if (Network.isActive && (Network.isServer && this.profile.connection == DuckNetwork.localConnection || this.profile.connection == Network.host))
                     {
-                        this._hostCrown.depth = - 0.5f;
+                        this._hostCrown.depth = -0.5f;
                         Graphics.Draw(this._hostCrown, this.x + 14f, this.y + 23f);
                     }
                 }
-                this._tutorialTV.depth = - 0.58f;
-                this._tutorialMessages.depth = - 0.5f;
+                this._tutorialTV.depth = -0.58f;
+                this._tutorialMessages.depth = -0.5f;
                 this._tutorialMessages.alpha = this._screenFade;
                 this._font.alpha = 1f;
                 this._font.depth = (Depth)0.6f;
                 if (furniture1 != null)
                 {
-                    this._tutorialTV.depth = - 0.8f;
-                    this._tutorialMessages.depth = - 0.8f;
+                    this._tutorialTV.depth = -0.8f;
+                    this._tutorialMessages.depth = -0.8f;
                 }
                 string currentDisplayName = this._playerProfile.team.currentDisplayName;
-                this._selectConsole.depth = - 0.5f;
-                this._consoleHighlight.depth = - 0.49f;
+                this._selectConsole.depth = -0.5f;
+                this._consoleHighlight.depth = -0.49f;
                 float num1 = 8f;
                 if (this.rightRoom)
                 {

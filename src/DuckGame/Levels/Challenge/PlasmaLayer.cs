@@ -45,7 +45,7 @@ namespace DuckGame
             Viewport viewport = DuckGame.Graphics.viewport;
             DuckGame.Graphics.viewport = new Viewport(0, 0, 320, (int)(320.0 * (double)DuckGame.Graphics.aspect));
             this.Begin(false, false);
-            this._plasma.depth = - 0.9f;
+            this._plasma.depth = -0.9f;
             this._plasma.alpha = 1f;
             DuckGame.Graphics.device.SamplerStates[0] = SamplerState.PointWrap;
             DuckGame.Graphics.Draw(this._plasma, -30f, -30f);

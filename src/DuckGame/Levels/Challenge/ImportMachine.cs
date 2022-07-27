@@ -41,7 +41,7 @@ namespace DuckGame
             this._contextMenuFilter.Add("respect");
             this._sprite = new SpriteMap("arcade/userMachine", 48, 48);
             this.graphic = _sprite;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.center = new Vec2(this._sprite.width / 2 - 1, this._sprite.h / 2 + 6);
             this.lit.value = false;
             this.Underlay_Style._tooltip = "If disabled, the Arcade Machine art will be completely replaced by your custom style.";

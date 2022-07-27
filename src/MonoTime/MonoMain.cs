@@ -6,7 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -1536,7 +1535,7 @@ namespace DuckGame
                         Vec2 vec2 = new Vec2(Layer.HUD.camera.width / _screenCapture.width, Layer.HUD.camera.height / _screenCapture.height);
                         DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
                         DuckGame.Graphics.material = _pauseMaterial;
-                        DuckGame.Graphics.Draw(_screenCapture, new Vec2(0.0f, 0.0f), new Rectangle?(), new Color(120, 120, 120), 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, - 0.9f);
+                        DuckGame.Graphics.Draw(_screenCapture, new Vec2(0.0f, 0.0f), new Rectangle?(), new Color(120, 120, 120), 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, -0.9f);
                         DuckGame.Graphics.material = null;
                         DuckGame.Graphics.screen.End();
                         DuckGame.Graphics.RestoreOldViewport();

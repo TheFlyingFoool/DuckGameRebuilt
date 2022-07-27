@@ -88,7 +88,7 @@ namespace DuckGame
             this.thickness = 0.1f;
             this.canPickUp = false;
             this.initLength = init;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
         }
 
         public override void OnPressAction()

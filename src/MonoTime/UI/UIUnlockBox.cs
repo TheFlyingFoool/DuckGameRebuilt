@@ -120,7 +120,7 @@ namespace DuckGame
             }
             else
             {
-                this._frame.depth = - 0.9f;
+                this._frame.depth = -0.9f;
                 Graphics.Draw(this._frame, this.x, this.y);
                 string text1 = "@LWING@UNLOCK@RWING@";
                 if (this._unlock.name == "UR THE BEST")

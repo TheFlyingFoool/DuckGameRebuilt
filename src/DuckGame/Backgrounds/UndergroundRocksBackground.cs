@@ -47,7 +47,7 @@ namespace DuckGame
             this._parallax.restrictBottom = false;
             for (int index = 0; index < 11; ++index)
                 this._parallax.AddZone(21 + index, distance, speed);
-            this._parallax.depth = - 0.9f;
+            this._parallax.depth = -0.9f;
             this._parallax.layer = new Layer("PARALLAX2", 110, new Camera(0.0f, 0.0f, 320f, 200f))
             {
                 aspectReliesOnGameLayer = true,

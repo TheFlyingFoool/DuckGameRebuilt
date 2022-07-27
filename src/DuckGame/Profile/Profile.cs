@@ -754,7 +754,7 @@ namespace DuckGame
             //int num1 = 0;
             int num2 = 8 + Rando.Int(12);
             Rando.Int(100);
-               // num1 = 1;
+            // num1 = 1;
             int num3 = 3;
             if (Rando.Int(10) == 1)
                 num2 = 1;

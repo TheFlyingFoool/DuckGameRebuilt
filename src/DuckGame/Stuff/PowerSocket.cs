@@ -18,7 +18,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this._collisionSize = new Vec2(14f, 14f);
             this._collisionOffset = new Vec2(-7f, -7f);
-            this.depth = - 0.9f;
+            this.depth = -0.9f;
         }
     }
 }

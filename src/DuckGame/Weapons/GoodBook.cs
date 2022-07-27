@@ -396,7 +396,7 @@ namespace DuckGame
             if (this.owner != null && _haloAlpha > 0.00999999977648258)
             {
                 this._halo.alpha = (float)(_haloAlpha * 0.400000005960464 + (double)(float)this._haloWave * 0.100000001490116);
-                this._halo.depth = - 0.2f;
+                this._halo.depth = -0.2f;
                 this._halo.xscale = this._halo.yscale = (float)(0.949999988079071 + (double)(float)this._haloWave * 0.0500000007450581);
                 this._halo.angle += 0.01f;
                 Graphics.Draw(this._halo, this.owner.x, this.owner.y);

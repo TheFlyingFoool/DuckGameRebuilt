@@ -20,7 +20,7 @@ namespace DuckGame
             this.collisionSize = new Vec2(14f, 8f);
             this.collisionOffset = new Vec2(-7f, -6f);
             this._editorName = "Ramp";
-            this.depth = - 0.9f;
+            this.depth = -0.9f;
         }
     }
 }

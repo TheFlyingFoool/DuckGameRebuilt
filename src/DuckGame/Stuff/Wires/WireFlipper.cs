@@ -21,7 +21,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Wire Flipper";
             this.editorTooltip = "Alternates the direction a current will pass through when a connected Button is pressed.";
             this.thickness = 4f;

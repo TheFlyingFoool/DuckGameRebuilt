@@ -47,7 +47,7 @@ namespace DuckGame
                         this._sprite.frame = 1;
                         this._enablePhysics = false;
                         this.position = powerSocket.position;
-                        this.depth = - 0.8f;
+                        this.depth = -0.8f;
                         return;
                     }
                 }

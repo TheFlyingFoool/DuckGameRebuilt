@@ -46,7 +46,7 @@ namespace DuckGame
                 float num2 = (float)(1.0 - ((double)this.y - p1.y) / 24.0);
                 float width = num2 * 3f;
                 p1.y += width / 2f;
-                Graphics.DrawLine(p1, p1 + new Vec2(12f, 0.0f), Colors.DGBlue * (num2 * 0.8f), width, - 0.75f);
+                Graphics.DrawLine(p1, p1 + new Vec2(12f, 0.0f), Colors.DGBlue * (num2 * 0.8f), width, -0.75f);
             }
             Vec2 vec2_1 = new Vec2(7f, 8f);
             Vec2 vec2_2 = this.position + new Vec2(-7f, -24f);
@@ -63,7 +63,7 @@ namespace DuckGame
                     float num7 = (float)(((double)num5 - 0.25) / 0.75) * num6 * Math.Max(0.0f, Math.Min((float)((vec2_3.y / (double)vec2_1.y - 0.100000001490116) * 2.0), 1f));
                     vec2_3 *= 2f;
                     vec2_3.y *= 2f;
-                    Graphics.DrawRect(vec2_3 + vec2_2, vec2_3 + vec2_2 + new Vec2(1f, 1f), Color.White * num7, - 0.5f);
+                    Graphics.DrawRect(vec2_3 + vec2_2, vec2_3 + vec2_2 + new Vec2(1f, 1f), Color.White * num7, -0.5f);
                 }
             }
         }

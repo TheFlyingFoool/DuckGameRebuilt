@@ -289,7 +289,7 @@ namespace DuckGame
                 this._fireRise = Lerp.FloatSmooth(this._fireRise, 1f, 0.1f, 1.2f);
                 if (this._framesSinceFeed > 10)
                 {
-                   // this.Feed(this.data with { amount = -1f / 1000f });
+                    // this.Feed(this.data with { amount = -1f / 1000f });
                     FluidData dat = this.data;
                     dat.amount = -0.001f;
                     this.Feed(dat);
@@ -317,9 +317,9 @@ namespace DuckGame
                     dat2.amount = -0.0001f;
                     this.Feed(dat2);
                 }
-                  //  this.Feed(this.data with { amount = -0.0001f });
+                //  this.Feed(this.data with { amount = -0.0001f });
 
-                   
+
             }
             float depth = this.CalculateDepth();
             if ((double)depth > 4.0 && !this._initializedUpperCorners)
@@ -354,7 +354,7 @@ namespace DuckGame
         public override void Draw()
         {
             Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color) * this.data.transparent, this._collisionSize.y, (Depth)0.9f);
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color), this._collisionSize.y, - 0.99f);
+            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color), this._collisionSize.y, -0.99f);
             if (this._lightRect != null)
             {
                 this._lightRect.position = this.topLeft;
@@ -385,7 +385,7 @@ namespace DuckGame
                     SpriteMap g = this._lava;
                     if (flag)
                         g = this._lavaAlternate;
-                    g.depth = - 0.7f;
+                    g.depth = -0.7f;
                     SpriteMap spriteMap = g;
                     spriteMap.depth += index;
                     g.alpha = 1f;

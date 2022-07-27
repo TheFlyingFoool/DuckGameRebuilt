@@ -438,9 +438,9 @@ namespace DuckGame
             this.y += this.yOffset;
             Random generator = Rando.generator;
             Rando.generator = new Random(this.seed);
-            this._gachaMachine.depth = - 0.8f;
+            this._gachaMachine.depth = -0.8f;
             Graphics.Draw(this._gachaMachine, this.x - 14f, this.y);
-            this._coinSlot.depth = - 0.795f;
+            this._coinSlot.depth = -0.795f;
             Graphics.Draw(this._coinSlot, this.x - 13f, this.y - 13f);
             this._coin.depth = (Depth)0.9f;
             for (int index = 0; index < this.numGenerate + this.numGenerateRare - (this._prizesGiven + 1); ++index)
@@ -451,14 +451,14 @@ namespace DuckGame
             }
             this._coin.frame = !this._contains.rareGen ? 0 : 1;
             float num1 = Math.Min(this._gachaWait * 2f, 1f);
-            this._coin.depth = - 0.798f;
+            this._coin.depth = -0.798f;
             Graphics.Draw(_coin, (float)((double)this.x - 15.0 + (double)num1 * 21.0), (float)((double)this.y - 25.0 - 40.0 * (1.0 - _insertCoin) + (double)num1 * 4.0));
-            this._gachaGlass.depth = - 0.9f;
+            this._gachaGlass.depth = -0.9f;
             Graphics.Draw(this._gachaGlass, this.x - 14f, this.y - 10f);
-            this._gachaDoor.depth = - 0.84f;
+            this._gachaDoor.depth = -0.84f;
             Graphics.Draw(this._gachaDoor, this.x - 14f, this.y);
             Vec2 vec2_1 = Vec2.Zero;
-            this._gachaBall.depth = - 0.85f;
+            this._gachaBall.depth = -0.85f;
             this._gachaBall.alpha = 0.3f;
             this._gachaBall.angleDegrees = Rando.Float(360f);
             this._gachaBall.frame = Rando.Int(2);
@@ -504,10 +504,10 @@ namespace DuckGame
             this._gachaBall.frame = Rando.Int(2);
             this._gachaTwister.angleDegrees = this._gachaTwisterShadow.angleDegrees = this._gachaWait * 360f;
             Vec2 vec2_2 = new Vec2(0.0f, -4f);
-            this._gachaTwister.depth = - 0.1f;
+            this._gachaTwister.depth = -0.1f;
             Graphics.Draw(this._gachaTwister, this.x - 14f + vec2_2.x, this.y + vec2_2.y);
             Vec2 vec2_3 = new Vec2(2f, 2f);
-            this._gachaTwisterShadow.depth = - 0.11f;
+            this._gachaTwisterShadow.depth = -0.11f;
             this._gachaTwisterShadow.alpha = 0.5f;
             Graphics.Draw(this._gachaTwisterShadow, this.x - 14f + vec2_2.x + vec2_3.x, this.y + vec2_2.y + vec2_3.y);
             Material material1 = Graphics.material;
@@ -515,11 +515,11 @@ namespace DuckGame
             this._rainbowMaterial.offset += 0.05f;
             this._rainbowMaterial.offset2 += 0.02f;
             this._rainbow.alpha = 0.25f;
-            this._rainbow.depth = - 0.95f;
+            this._rainbow.depth = -0.95f;
             Graphics.Draw(this._rainbow, 0.0f, 0.0f);
             Graphics.material = material1;
             Rando.generator = generator;
-            this._frame.depth = - 0.9f;
+            this._frame.depth = -0.9f;
             if (this._swapped)
             {
                 this._contains.Draw(this.position + new Vec2(0.0f, 10f), this.depth - 20);
@@ -540,19 +540,19 @@ namespace DuckGame
                 float num8 = 0.0f;
                 if (this.opened)
                     num8 = 3f;
-                this._capsule.depth = - 0.84f;
+                this._capsule.depth = -0.84f;
                 Graphics.Draw(_capsule, this.x + this._eggOffset.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y - (10.0 + (double)num8)) + vec2_4.y);
                 Material material2 = Graphics.material;
                 Graphics.material = this._flatColor;
-                this._contains.Draw(new Vec2(this.x + this._eggOffset.x + this._toyPosition.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y - 10.0 + _toyPosition.y + 8.0) + vec2_4.y), - 0.835f, affectScale: true, halfscale: (!this._swapped), angle: Maths.DegToRad(this._toyAngle + 90f));
+                this._contains.Draw(new Vec2(this.x + this._eggOffset.x + this._toyPosition.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y - 10.0 + _toyPosition.y + 8.0) + vec2_4.y), -0.835f, affectScale: true, halfscale: (!this._swapped), angle: Maths.DegToRad(this._toyAngle + 90f));
                 Graphics.material = material2;
-                this._capsule.depth = - 0.83f;
+                this._capsule.depth = -0.83f;
                 this._capsule.frame += 3;
                 Graphics.Draw(_capsule, this.x + this._eggOffset.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y + (11.0 + (double)num8)) + vec2_4.y, new Rectangle(0.0f, 2f, _capsule.width, this._capsule.height - 2));
                 this._capsule.frame -= 3;
                 if (gachaY > 30.0 && !this.opened)
                 {
-                    this._capsuleBorder.depth = - 0.81f;
+                    this._capsuleBorder.depth = -0.81f;
                     this._capsuleBorder.frame = 0;
                     Graphics.Draw(_capsuleBorder, this.x + this._eggOffset.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y - 2.0) + vec2_4.y);
                 }
@@ -574,7 +574,7 @@ namespace DuckGame
                 if (_insertCoin > 0.00999999977648258)
                 {
                     this._duckCoin.frame = this._rare ? 1 : 0;
-                    this._duckCoin.depth = - 0.8f;
+                    this._duckCoin.depth = -0.8f;
                     Graphics.Draw(_duckCoin, this.x + 40f, (float)((double)this.y - 100.0 + _insertCoin * 65.0));
                 }
                 string text3 = this._contains.description;

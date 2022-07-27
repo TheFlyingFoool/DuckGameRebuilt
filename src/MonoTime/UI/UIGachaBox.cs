@@ -5,7 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -288,13 +287,13 @@ namespace DuckGame
         public override void Draw()
         {
             this.y += this.yOffset;
-            this._frame.depth = - 0.9f;
+            this._frame.depth = -0.9f;
             Graphics.Draw(this._frame, this.x, this.y);
-            this._frame.depth = - 0.7f;
+            this._frame.depth = -0.7f;
             Graphics.Draw(this._frame, this.x, this.y, new Rectangle(0.0f, 0.0f, 125f, 36f));
             if (this._swapped)
             {
-                this._contains.Draw(this.position + new Vec2(0.0f, 10f), - 0.8f);
+                this._contains.Draw(this.position + new Vec2(0.0f, 10f), -0.8f);
                 if (_starGrow <= 1.0)
                 {
                     this._star.depth = (Depth)0.9f;
@@ -305,7 +304,7 @@ namespace DuckGame
             }
             else if (gachaY > 10.0)
             {
-                this._gachaEgg.depth = - 0.8f;
+                this._gachaEgg.depth = -0.8f;
                 Graphics.Draw(_gachaEgg, this.x, this.y - 38f + this.gachaY);
             }
             string text1 = "@LWING@NEW TOY@RWING@";
@@ -323,7 +322,7 @@ namespace DuckGame
             if (_insertCoin > 0.00999999977648258)
             {
                 this._duckCoin.frame = this._rare ? 1 : 0;
-                this._duckCoin.depth = - 0.8f;
+                this._duckCoin.depth = -0.8f;
                 Graphics.Draw(_duckCoin, this.x + 40f, (float)((double)this.y - 100.0 + _insertCoin * 65.0));
             }
             if (this._swapped)

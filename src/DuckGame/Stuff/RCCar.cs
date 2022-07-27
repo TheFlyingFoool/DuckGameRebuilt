@@ -57,7 +57,7 @@ namespace DuckGame
             this.center = new Vec2(16f, 24f);
             this.collisionOffset = new Vec2(-8f, 0.0f);
             this.collisionSize = new Vec2(16f, 11f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "RC Car";
             this.thickness = 2f;
             this.weight = 5f;

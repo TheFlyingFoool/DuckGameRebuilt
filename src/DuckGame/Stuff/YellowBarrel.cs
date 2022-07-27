@@ -45,7 +45,7 @@ namespace DuckGame
             };
             this.collisionOffset = new Vec2(-7f, -8f);
             this.collisionSize = new Vec2(14f, 16f);
-            this.depth = - 0.1f;
+            this.depth = -0.1f;
             this._editorName = "Barrel (Gasoline)";
             this.editorTooltip = "Do not smoke near this barrel. In fact, don't smoke at all. It's not cool, kids!";
             this.thickness = 4f;

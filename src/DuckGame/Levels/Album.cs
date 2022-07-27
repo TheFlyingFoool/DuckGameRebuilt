@@ -154,9 +154,9 @@ namespace DuckGame
         {
             if (layer == Layer.HUD)
             {
-                this._album.depth = - 0.8f;
+                this._album.depth = -0.8f;
                 DuckGame.Graphics.Draw(this._album, 0.0f, 0.0f);
-                this._screen.depth = - 0.6f;
+                this._screen.depth = -0.6f;
                 if (this._pages.Count > 0)
                 {
                     int index1 = 0;
@@ -185,7 +185,7 @@ namespace DuckGame
                                         float num = 0.3f;
                                         Vec2 vec2_2 = new Vec2(vec2_1.x + index3 * 110, vec2_1.y + index2 * 65);
                                         DuckGame.Graphics.Draw((Tex2D)this._textures[index1], vec2_2.x, vec2_2.y, num, num);
-                                        DuckGame.Graphics.DrawRect(vec2_2 + new Vec2(-3f, -3f), vec2_2 + new Vec2((float)(_textures[index1].Width * (double)num + 3.0), (float)(_textures[index1].Height * (double)num + 3.0)), Color.White, - 0.7f);
+                                        DuckGame.Graphics.DrawRect(vec2_2 + new Vec2(-3f, -3f), vec2_2 + new Vec2((float)(_textures[index1].Width * (double)num + 3.0), (float)(_textures[index1].Height * (double)num + 3.0)), Color.White, -0.7f);
                                     }
                                     else
                                     {
@@ -193,7 +193,7 @@ namespace DuckGame
                                         float num = 0.25f;
                                         Vec2 vec2_4 = new Vec2(vec2_3.x + index3 * 100, vec2_3.y + index2 * 65);
                                         DuckGame.Graphics.Draw((Tex2D)this._textures[index1], vec2_4.x, vec2_4.y, num, num);
-                                        DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-3f, -3f), vec2_4 + new Vec2((float)(_textures[index1].Width * (double)num + 3.0), (float)(_textures[index1].Height * (double)num + 3.0)), Color.White, - 0.7f);
+                                        DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-3f, -3f), vec2_4 + new Vec2((float)(_textures[index1].Width * (double)num + 3.0), (float)(_textures[index1].Height * (double)num + 3.0)), Color.White, -0.7f);
                                     }
                                 }
                                 ++index1;
@@ -201,12 +201,12 @@ namespace DuckGame
                         }
                     }
                     string caption = this._pages[this._currentPage].caption;
-                    this._font.Draw(caption, new Vec2((float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(caption) / 2.0 - 4.0), 18f), Color.DarkSlateGray, - 0.5f);
+                    this._font.Draw(caption, new Vec2((float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(caption) / 2.0 - 4.0), 18f), Color.DarkSlateGray, -0.5f);
                 }
                 else
                 {
                     string text = "EMPTY ALBUM :(";
-                    this._font.Draw(text, new Vec2((float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text) / 2.0 - 4.0), 18f), Color.DarkSlateGray, - 0.5f);
+                    this._font.Draw(text, new Vec2((float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text) / 2.0 - 4.0), 18f), Color.DarkSlateGray, -0.5f);
                 }
             }
             base.PostDrawLayer(layer);

@@ -33,7 +33,7 @@ namespace DuckGame
             this._screen.AddAnimation("idle", 0.2f, true, 0, 1, 2);
             this._screen.SetAnimation("idle");
             this.graphic = _sprite;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.center = new Vec2(this._sprite.width / 2, this._sprite.h / 2);
             this._collisionSize = new Vec2(16f, 15f);
             this._collisionOffset = new Vec2(-8f, 2f);

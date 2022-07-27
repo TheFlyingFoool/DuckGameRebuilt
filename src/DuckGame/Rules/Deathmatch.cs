@@ -18,15 +18,15 @@ namespace DuckGame
         public static bool showdown = false;
         private static int numMatches = 0;
         private static Queue<string> _recentLevels = new Queue<string>();
-    //    private static List<string> _demoLevels = new List<string>()
-    //{
-    //  "deathmatch/forest02",
-    //  "deathmatch/office02",
-    //  "deathmatch/forest04",
-    //  "deathmatch/office07",
-    //  "deathmatch/office10",
-    //  "deathmatch/office05"
-    //};
+        //    private static List<string> _demoLevels = new List<string>()
+        //{
+        //  "deathmatch/forest02",
+        //  "deathmatch/office02",
+        //  "deathmatch/forest04",
+        //  "deathmatch/office07",
+        //  "deathmatch/office10",
+        //  "deathmatch/office05"
+        //};
         private static int _winsPerSet = 5;
         private static int _roundsBetweenIntermission = 5;
         private static int _userMapsPercent = 0;

@@ -18,7 +18,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 7f);
             this.collisionOffset = new Vec2(-8f, 0.0f);
             this.collisionSize = new Vec2(16f, 8f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Spring DownRight";
             this.editorTooltip = "Can't reach a low platform or want to get falling fast? That's why we built (down) springs.";
             this.physicsMaterial = PhysicsMaterial.Metal;

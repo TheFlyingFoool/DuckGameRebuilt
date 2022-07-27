@@ -52,7 +52,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 11f);
             this.collisionOffset = new Vec2(-8f, -11f);
             this.collisionSize = new Vec2(16f, 18f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Death Crate";
             this.editorTooltip = "Explodes in a violent surprise when triggered.";
             this.thickness = 2f;

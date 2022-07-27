@@ -14,7 +14,7 @@ namespace DuckGame
         {
             this.graphic = new Sprite(secondaryFrame ? "pyramidDoorFrame" : "doorFrame");
             this.center = new Vec2(5f, 26f);
-            this.depth = - 0.95f;
+            this.depth = -0.95f;
             this._editorCanModify = false;
         }
     }

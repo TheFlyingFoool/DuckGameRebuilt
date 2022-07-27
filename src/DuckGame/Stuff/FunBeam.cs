@@ -31,7 +31,7 @@ namespace DuckGame
             this.center = new Vec2(9f, 8f);
             this.collisionOffset = new Vec2(-2f, -5f);
             this.collisionSize = new Vec2(4f, 10f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Fun Beam";
             this.editorTooltip = "Place 2 generators near each other to create a beam that triggers weapons passing through.";
             this.hugWalls = WallHug.Left;

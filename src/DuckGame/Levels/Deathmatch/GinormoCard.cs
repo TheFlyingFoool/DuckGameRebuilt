@@ -74,7 +74,7 @@ namespace DuckGame
             DuckGame.Graphics.SetRenderTarget(this._faceTarget);
             DuckGame.Graphics.Clear(Color.Transparent);
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
-            this._gradient.depth = - 0.6f;
+            this._gradient.depth = -0.6f;
             this._gradient.alpha = 0.5f;
             if (this._team.activeProfiles.Count == 1)
             {

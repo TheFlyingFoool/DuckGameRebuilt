@@ -84,7 +84,7 @@ namespace DuckGame
                 if (this._eligibleTrophies[index].targets > 0)
                     this.hasTargetLimit = true;
                 //else if (this._eligibleTrophies[index].goodies > 0)
-                    //this.hasGoodyLimit = true;
+                //this.hasGoodyLimit = true;
                 if (index > 0 && this._eligibleTrophies[index - 1].timeRequirement < this._eligibleTrophies[index].timeRequirement && this._eligibleTrophies[index - 1].timeRequirement != 0)
                     this.reverseTimeLimit = true;
             }

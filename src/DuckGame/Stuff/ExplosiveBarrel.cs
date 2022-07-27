@@ -17,7 +17,7 @@ namespace DuckGame
             this.center = new Vec2(7f, 8f);
             this.collisionOffset = new Vec2(-7f, -8f);
             this.collisionSize = new Vec2(14f, 16f);
-            this.depth = - 0.1f;
+            this.depth = -0.1f;
             this._editorName = "Barrel (Explosive)";
             this.editorTooltip = "Nobody knows what's in these things or why everyone just leaves them around.";
             this.thickness = 4f;

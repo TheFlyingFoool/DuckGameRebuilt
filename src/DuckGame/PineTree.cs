@@ -32,7 +32,7 @@ namespace DuckGame
             this.centerx = 4f;
             this.centery = 8f;
             this.collisionOffset = new Vec2(-4f, -8f);
-            this.depth = - 0.12f;
+            this.depth = -0.12f;
             this.placementLayerOverride = Layer.Foreground;
             this.forceEditorGrid = 8;
             this.treeLike = true;
@@ -95,9 +95,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.depth = - 0.12f;
+            this.depth = -0.12f;
             if (_vertPush > 0.0)
-                this.depth = - 0.11f;
+                this.depth = -0.11f;
             if (this._graphic != null)
             {
                 Sprite graphic = this._graphic;

@@ -321,7 +321,7 @@ namespace DuckGame
             else
             {
                 this.UpdateVineProgress();
-                Depth depth = - 0.5f;
+                Depth depth = -0.5f;
                 Vec2 p1 = this.position + new Vec2(0.0f, -4f);
                 if (this._lowestVine != null && this._lowestVine.owner != null)
                 {

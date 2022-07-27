@@ -263,7 +263,7 @@ namespace DuckGame
                             color2 = new Color((byte)(color2.r * (double)num7), (byte)(color2.g * (double)num7), (byte)(color2.b * (double)num7));
                             float num8 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index2 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index2 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
                             p1 = new Vec2(vec2_1.x + num8, vec2_1.y + num4 * 60);
-                            Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 30f), color2 * this.alpha, 6f, - 0.2f);
+                            Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 30f), color2 * this.alpha, 6f, -0.2f);
                             Color color3 = new Color(50, 50, 50);
                             if (!unlockData2.ProfileUnlocked(Profiles.active[0]))
                             {

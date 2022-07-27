@@ -103,8 +103,8 @@ namespace DuckGame
     };
         private bool showFilters;
         //private SpriteMap _connectionArrow;
-       // private Sprite _connectionX;
-       // private Sprite _connectionWall;
+        // private Sprite _connectionX;
+        // private Sprite _connectionWall;
         public static int[] ghostsReceived = new int[8];
         private static Network oldNetwork;
         private static DuckNetworkCore oldDuckNetworkCore;

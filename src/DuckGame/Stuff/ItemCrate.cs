@@ -5,7 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -52,7 +51,7 @@ namespace DuckGame
             this.center = new Vec2(16f, 24f);
             this.collisionOffset = new Vec2(-16f, -24f);
             this.collisionSize = new Vec2(32f, 32f);
-            this.depth = - 0.7f;
+            this.depth = -0.7f;
             this.thickness = 2f;
             this.weight = 10f;
             this._randomMark = new Sprite("itemBoxRandom");

@@ -18,7 +18,7 @@ namespace DuckGame
             this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = name;
             this.layer = Layer.Background;
         }

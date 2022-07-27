@@ -21,7 +21,7 @@ namespace DuckGame
             this._collisionSize = new Vec2(167f, 6f);
             this._collisionOffset = new Vec2(-84f, -2f);
             this.editorOffset = new Vec2(0.0f, 40f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Mallard Billboard";
             this.thickness = 0.2f;
             this.hugWalls = WallHug.Floor;

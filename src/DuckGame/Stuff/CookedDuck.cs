@@ -28,7 +28,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-6f, -4f);
             this.collisionSize = new Vec2(12f, 11f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.thickness = 0.5f;
             this.weight = 5f;
             this.collideSounds.Add("rockHitGround2", ImpactedFrom.Bottom);

@@ -94,7 +94,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Ice Block";
             this.editorTooltip = "Slippery, slidery, fun. Also great for keeping your (gigantic) drinks cold.";
             this.thickness = 2f;

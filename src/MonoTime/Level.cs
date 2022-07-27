@@ -8,7 +8,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -775,7 +774,7 @@ namespace DuckGame
                     Material material = DuckGame.Graphics.material;
                     DuckGame.Graphics.material = null;
                     DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-                    DuckGame.Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Resolution.current.x, Resolution.current.y), color, - 1f);
+                    DuckGame.Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Resolution.current.x, Resolution.current.y), color, -1f);
                     DuckGame.Graphics.screen.End();
                     DuckGame.Graphics.material = material;
                     DuckGame.Graphics.RestoreOldViewport();

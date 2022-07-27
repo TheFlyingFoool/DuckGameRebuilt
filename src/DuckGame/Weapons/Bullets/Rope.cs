@@ -118,7 +118,7 @@ namespace DuckGame
             if (tex != null)
                 this._vine = tex;
             this._isVine = vine;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
         }
 
         public void RemoveRope()

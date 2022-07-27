@@ -58,7 +58,7 @@ namespace DuckGame
                 stream.child = this;
             this.alpha = 1f;
             this._gravMult = 2f;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this.data = dat;
             this._thickMult = thickMult;
             this._thickness = Maths.Clamp(this.data.amount * 600f, 0.2f, 8f) * this._thickMult;

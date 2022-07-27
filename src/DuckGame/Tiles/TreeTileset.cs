@@ -20,7 +20,7 @@ namespace DuckGame
             this.verticalWidthThick = 15f;
             this.horizontalHeight = 8f;
             this._hasNubs = false;
-            this.depth = - 0.15f;
+            this.depth = -0.15f;
             this.placementLayerOverride = Layer.Blocks;
             this.treeLike = true;
         }

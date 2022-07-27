@@ -81,7 +81,7 @@ namespace DuckGame
             this.center = new Vec2(16f, 25f);
             this.collisionSize = new Vec2(6f, 32f);
             this.collisionOffset = new Vec2(-3f, -25f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = nameof(Door);
             this.thickness = 2f;
             this._lock = new Sprite("lock");
@@ -558,14 +558,14 @@ namespace DuckGame
                 this.collisionSize = new Vec2(0.0f, 0.0f);
                 this.solid = false;
                 this.collisionOffset = new Vec2(0.0f, -999999f);
-                this.depth = - 0.7f;
+                this.depth = -0.7f;
             }
             else
             {
                 this.collisionSize = new Vec2(this.colWide, 32f);
                 this.solid = true;
                 this.collisionOffset = new Vec2((float)(-(double)this.colWide / 2.0), -24f);
-                this.depth = - 0.5f;
+                this.depth = -0.5f;
             }
             if (_hitPoints <= 0.0 && !this._destroyed)
                 this.Destroy(new DTImpact(this));

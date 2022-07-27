@@ -93,7 +93,7 @@ namespace DuckGame
                 frame = index
             };
             this.graphic = _sprite;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._canHaveChance = false;
             this._customMachineOverlay = new Sprite("arcade/customMachine");
             this._outline = new Sprite("arcade/arcadeMachineOutline")
@@ -203,7 +203,7 @@ namespace DuckGame
                 };
                 DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)Thing._alphaTestEffect, camera.getMatrix());
-                DuckGame.Graphics.Draw(this._machineStyleSprite, _styleOffsetX, _styleOffsetY, - 0.9f);
+                DuckGame.Graphics.Draw(this._machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
                 DuckGame.Graphics.Draw(this._customMachineOverlayMask, 0.0f, 0.0f, (Depth)0.9f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);

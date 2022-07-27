@@ -129,7 +129,7 @@ namespace DuckGame
         {
             if ((double)this.alpha < 0.00999999977648258)
                 return;
-            Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, Layer.HUD.height - 51f), new Color(20, 20, 20) * this.alpha * 0.7f, - 0.9f);
+            Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, Layer.HUD.height - 51f), new Color(20, 20, 20) * this.alpha * 0.7f, -0.9f);
             Vec2 p1 = new Vec2(20f, 8f);
             Vec2 vec2 = new Vec2(226f, 11f);
             Graphics.DrawRect(p1, p1 + vec2, Color.Black, (Depth)0.96f);

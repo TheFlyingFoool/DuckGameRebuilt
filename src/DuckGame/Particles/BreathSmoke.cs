@@ -46,7 +46,7 @@ namespace DuckGame
             breathSmoke.s1 *= scaleMul;
             breathSmoke.s2 *= scaleMul;
             //if (BreathSmoke.shortlife)
-                //breathSmoke.lifeTake = 0.14f;
+            //breathSmoke.lifeTake = 0.14f;
             return breathSmoke;
         }
 
@@ -150,7 +150,7 @@ namespace DuckGame
             this._sprite2.frame = 0;
             this._sprite2.imageIndex = this._sprite.imageIndex;
             this._sprite2.angle = this._sprite.angle;
-            this._sprite2.depth = - 0.5f;
+            this._sprite2.depth = -0.5f;
             this._sprite2.scale = this._sprite.scale;
             this._sprite2.center = this.center;
             double num4 = (double)Rando.Float(0.2f);

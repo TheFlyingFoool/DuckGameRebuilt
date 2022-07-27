@@ -113,7 +113,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.team = t;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
         }
 
         public TeamHat(float xpos, float ypos, Team t, Profile p)
@@ -121,7 +121,7 @@ namespace DuckGame
         {
             this._profile = p;
             this.team = t;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
         }
 
         public override BinaryClassChunk Serialize()

@@ -48,7 +48,7 @@ namespace DuckGame
             this.verticalWidthThick = 8f;
             this.horizontalHeight = 8f;
             this.layer = Layer.Foreground;
-            this.depth = - 0.8f;
+            this.depth = -0.8f;
             this.weight = 1f;
             this._signalSprite = new Sprite("wireBulge");
             this._signalSprite.CenterOrigin();
@@ -272,7 +272,7 @@ namespace DuckGame
         {
             foreach (WireTileset.WireSignal signal in this._signals)
             {
-                this._signalSprite.depth = - 0.6f;
+                this._signalSprite.depth = -0.6f;
                 this._signalSprite.alpha = signal.life;
                 this._signalSprite.xscale = this._signalSprite.yscale = 1f;
                 Graphics.Draw(this._signalSprite, signal.position.x, signal.position.y);
@@ -284,7 +284,7 @@ namespace DuckGame
                 for (int index = 0; index < 3; ++index)
                 {
                     Sprite signalSprite = this._signalSprite;
-                    signalSprite.depth-= 1;
+                    signalSprite.depth -= 1;
                     prevPosition += vec2 * (length / 4f);
                     this._signalSprite.alpha = num * signal.life;
                     num += 0.2f;

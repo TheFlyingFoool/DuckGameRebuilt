@@ -45,7 +45,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 24f);
             this.collisionSize = new Vec2(6f, 32f);
             this.collisionOffset = new Vec2(-3f, -24f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = nameof(Teleporter);
             this.editorTooltip = "Place 2 teleporters pointing toward each other and Ducks can transport between them.";
             this._editorIcon = new Sprite("teleporterIcon");

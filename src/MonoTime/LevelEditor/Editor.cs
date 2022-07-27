@@ -2796,7 +2796,7 @@ namespace DuckGame
                 Color col = new Color(38, 38, 38);
                 if (Editor.arcadeMachineMode)
                 {
-                    DuckGame.Graphics.DrawRect(this._levelThings[0].position + new Vec2(-17f, -21f), this._levelThings[0].position + new Vec2(18f, 21f), col, - 0.9f, false);
+                    DuckGame.Graphics.DrawRect(this._levelThings[0].position + new Vec2(-17f, -21f), this._levelThings[0].position + new Vec2(18f, 21f), col, -0.9f, false);
                 }
                 else
                 {
@@ -2846,13 +2846,13 @@ namespace DuckGame
                     int num11 = (int)(num9 / (double)this._cellSize);
                     int num12 = (int)(num10 / (double)this._cellSize);
                     for (int index = 0; index < num11 + 1; ++index)
-                        DuckGame.Graphics.DrawLine(new Vec2(x + index * this._cellSize, y), new Vec2(x + index * this._cellSize, y + num12 * this._cellSize), col, 2f, - 0.9f);
+                        DuckGame.Graphics.DrawLine(new Vec2(x + index * this._cellSize, y), new Vec2(x + index * this._cellSize, y + num12 * this._cellSize), col, 2f, -0.9f);
                     for (int index = 0; index < num12 + 1; ++index)
-                        DuckGame.Graphics.DrawLine(new Vec2(x, y + index * this._cellSize), new Vec2(x + num11 * this._cellSize, y + index * this._cellSize), col, 2f, - 0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Top), new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Top), col, 2f, - 0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Top), new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Bottom), col, 2f, - 0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Bottom), new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Bottom), col, 2f, - 0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Bottom), new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Top), col, 2f, - 0.9f);
+                        DuckGame.Graphics.DrawLine(new Vec2(x, y + index * this._cellSize), new Vec2(x + num11 * this._cellSize, y + index * this._cellSize), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Top), new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Top), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Top), new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Bottom), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Bottom), new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Bottom), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Bottom), new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Top), col, 2f, -0.9f);
                     if (this._miniMode)
                     {
                         int num13 = 0;

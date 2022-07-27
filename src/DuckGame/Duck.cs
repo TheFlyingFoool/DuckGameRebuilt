@@ -4559,7 +4559,7 @@ namespace DuckGame
                     }
                     this._sprite.flipH = this.offDir < 0;
                     if (this.enteringWalldoor)
-                        this.depth = - 0.55f;
+                        this.depth = -0.55f;
                     this._spriteArms.depth = this.depth + 11;
                     this._bionicArm.depth = this.depth + 11;
                     this.DrawAIPath();

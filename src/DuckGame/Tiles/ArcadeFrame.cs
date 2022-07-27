@@ -55,7 +55,7 @@ namespace DuckGame
             this._collisionSize = new Vec2(16f, 16f);
             this._collisionOffset = new Vec2(-8f, -8f);
             this._screen = new Sprite("shot01");
-            this.depth = - 0.9f;
+            this.depth = -0.9f;
         }
 
         public Vec2 GetRenderTargetSize()

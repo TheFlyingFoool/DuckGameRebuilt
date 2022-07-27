@@ -643,230 +643,230 @@ namespace DuckGame
         {
             public string hatPath;
             [Team.Metapixel(1, "Hat Offset", "Hat offset position in pixels")]
-			public Team.CustomHatMetadata.MDVec2 HatOffset = new Team.CustomHatMetadata.MDVec2
-			{
-				range = 16f
-			};
+            public Team.CustomHatMetadata.MDVec2 HatOffset = new Team.CustomHatMetadata.MDVec2
+            {
+                range = 16f
+            };
 
-			[Team.Metapixel(2, "Use Duck Color", "If this metapixel exists, White (255, 255, 255) and Grey(157, 157, 157) will be recolored to duck colors.")]
-			public Team.CustomHatMetadata.MDBool UseDuckColor = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(2, "Use Duck Color", "If this metapixel exists, White (255, 255, 255) and Grey(157, 157, 157) will be recolored to duck colors.")]
+            public Team.CustomHatMetadata.MDBool UseDuckColor = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(3, "Hat No-Flip", "If this metapixel exists, the hat will not be flipped with the direction of the duck.")]
-			public Team.CustomHatMetadata.MDBool HatNoFlip = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(3, "Hat No-Flip", "If this metapixel exists, the hat will not be flipped with the direction of the duck.")]
+            public Team.CustomHatMetadata.MDBool HatNoFlip = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(10, "Cape Offset", "Cape offset position in pixels")]
-			public Team.CustomHatMetadata.MDVec2 CapeOffset = new Team.CustomHatMetadata.MDVec2
-			{
-				range = 16f
-			};
+            [Team.Metapixel(10, "Cape Offset", "Cape offset position in pixels")]
+            public Team.CustomHatMetadata.MDVec2 CapeOffset = new Team.CustomHatMetadata.MDVec2
+            {
+                range = 16f
+            };
 
-			[Team.Metapixel(11, "Cape Is Foreground", "If this metapixel exists, the cape will be drawn over the duck.")]
-			public Team.CustomHatMetadata.MDBool CapeForeground = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(11, "Cape Is Foreground", "If this metapixel exists, the cape will be drawn over the duck.")]
+            public Team.CustomHatMetadata.MDBool CapeForeground = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(12, "Cape Sway Modifier", "Affects cape length, and left to right sway.")]
-			public Team.CustomHatMetadata.MDVec2Normalized CapeSwayModifier = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				value = new Vec2(0.3f, 1f),
-				allowNegative = true
-			};
+            [Team.Metapixel(12, "Cape Sway Modifier", "Affects cape length, and left to right sway.")]
+            public Team.CustomHatMetadata.MDVec2Normalized CapeSwayModifier = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                value = new Vec2(0.3f, 1f),
+                allowNegative = true
+            };
 
-			[Team.Metapixel(13, "Cape Wiggle Modifier", "Affects how much the cape wiggles in the wind.")]
-			public Team.CustomHatMetadata.MDVec2Normalized CapeWiggleModifier = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				value = new Vec2(1f, 1f),
-				allowNegative = true
-			};
+            [Team.Metapixel(13, "Cape Wiggle Modifier", "Affects how much the cape wiggles in the wind.")]
+            public Team.CustomHatMetadata.MDVec2Normalized CapeWiggleModifier = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                value = new Vec2(1f, 1f),
+                allowNegative = true
+            };
 
-			[Team.Metapixel(14, "Cape Taper Start", "Affects how narrow the cape/trail is at the top/beginning.")]
-			public Team.CustomHatMetadata.MDFloat CapeTaperStart = new Team.CustomHatMetadata.MDFloat
-			{
-				value = 0.5f
-			};
+            [Team.Metapixel(14, "Cape Taper Start", "Affects how narrow the cape/trail is at the top/beginning.")]
+            public Team.CustomHatMetadata.MDFloat CapeTaperStart = new Team.CustomHatMetadata.MDFloat
+            {
+                value = 0.5f
+            };
 
-			[Team.Metapixel(15, "Cape Taper End", "Affects how narrow the cape/trail is at the bottom/end.")]
-			public Team.CustomHatMetadata.MDFloat CapeTaperEnd = new Team.CustomHatMetadata.MDFloat
-			{
-				value = 1f
-			};
+            [Team.Metapixel(15, "Cape Taper End", "Affects how narrow the cape/trail is at the bottom/end.")]
+            public Team.CustomHatMetadata.MDFloat CapeTaperEnd = new Team.CustomHatMetadata.MDFloat
+            {
+                value = 1f
+            };
 
-			[Team.Metapixel(16, "Cape Alpha Start", "Affects how transparent the cape/trail is at the top/beginning.")]
-			public Team.CustomHatMetadata.MDFloat CapeAlphaStart = new Team.CustomHatMetadata.MDFloat
-			{
-				value = 1f
-			};
+            [Team.Metapixel(16, "Cape Alpha Start", "Affects how transparent the cape/trail is at the top/beginning.")]
+            public Team.CustomHatMetadata.MDFloat CapeAlphaStart = new Team.CustomHatMetadata.MDFloat
+            {
+                value = 1f
+            };
 
-			[Team.Metapixel(17, "Cape Alpha End", "Affects how transparent the cape/trail is at the bottom/end.")]
-			public Team.CustomHatMetadata.MDFloat CapeAlphaEnd = new Team.CustomHatMetadata.MDFloat
-			{
-				value = 1f
-			};
+            [Team.Metapixel(17, "Cape Alpha End", "Affects how transparent the cape/trail is at the bottom/end.")]
+            public Team.CustomHatMetadata.MDFloat CapeAlphaEnd = new Team.CustomHatMetadata.MDFloat
+            {
+                value = 1f
+            };
 
-			[Team.Metapixel(20, "Cape Is Trail", "If this metapixel exists, the cape will be a trail instead of a cape (think of the rainbow trail left by the TV object).")]
-			public Team.CustomHatMetadata.MDBool CapeIsTrail = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(20, "Cape Is Trail", "If this metapixel exists, the cape will be a trail instead of a cape (think of the rainbow trail left by the TV object).")]
+            public Team.CustomHatMetadata.MDBool CapeIsTrail = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(30, "Particle Emitter Offset", "The offset in pixels from the center of the hat where particles will be emitted.")]
-			public Team.CustomHatMetadata.MDVec2 ParticleEmitterOffset = new Team.CustomHatMetadata.MDVec2
-			{
-				range = 16f
-			};
+            [Team.Metapixel(30, "Particle Emitter Offset", "The offset in pixels from the center of the hat where particles will be emitted.")]
+            public Team.CustomHatMetadata.MDVec2 ParticleEmitterOffset = new Team.CustomHatMetadata.MDVec2
+            {
+                range = 16f
+            };
 
-			[Team.Metapixel(31, "Particle Default Behavior", "B defines a particle behavior from a list of presets: 0 = No Behavior, 1 = Spit, 2 = Burst, 3 = Halo, 4 = Exclamation")]
-			public Team.CustomHatMetadata.MDInt ParticleDefaultBehavior = new Team.CustomHatMetadata.MDInt
-			{
-				range = 4,
-				postParseScript = new Action(Team.CustomHatMetadata.ApplyDefaultParticleBehavior)
-			};
+            [Team.Metapixel(31, "Particle Default Behavior", "B defines a particle behavior from a list of presets: 0 = No Behavior, 1 = Spit, 2 = Burst, 3 = Halo, 4 = Exclamation")]
+            public Team.CustomHatMetadata.MDInt ParticleDefaultBehavior = new Team.CustomHatMetadata.MDInt
+            {
+                range = 4,
+                postParseScript = new Action(Team.CustomHatMetadata.ApplyDefaultParticleBehavior)
+            };
 
-			[Team.Metapixel(32, "Particle Emit Shape", "G: 0 = Point, 1 = Circle, 2 = Box   B: 0 = Emit Around Shape Border Randomly, 1 = Fill Shape Randomly, 2 = Emit Around Shape Border Uniformly")]
-			public Team.CustomHatMetadata.MDIntPair ParticleEmitShape = new Team.CustomHatMetadata.MDIntPair
-			{
-				rangeX = 2,
-				rangeY = 2
-			};
+            [Team.Metapixel(32, "Particle Emit Shape", "G: 0 = Point, 1 = Circle, 2 = Box   B: 0 = Emit Around Shape Border Randomly, 1 = Fill Shape Randomly, 2 = Emit Around Shape Border Uniformly")]
+            public Team.CustomHatMetadata.MDIntPair ParticleEmitShape = new Team.CustomHatMetadata.MDIntPair
+            {
+                rangeX = 2,
+                rangeY = 2
+            };
 
-			[Team.Metapixel(33, "Particle Emit Shape Size", "X and Y size of the particle emitter (in pixels)")]
-			public Team.CustomHatMetadata.MDVec2 ParticleEmitShapeSize = new Team.CustomHatMetadata.MDVec2
-			{
-				range = 32f,
-				value = new Vec2(24f, 24f)
-			};
+            [Team.Metapixel(33, "Particle Emit Shape Size", "X and Y size of the particle emitter (in pixels)")]
+            public Team.CustomHatMetadata.MDVec2 ParticleEmitShapeSize = new Team.CustomHatMetadata.MDVec2
+            {
+                range = 32f,
+                value = new Vec2(24f, 24f)
+            };
 
-			[Team.Metapixel(34, "Particle Count", "The number of particles to emit.")]
-			public Team.CustomHatMetadata.MDInt ParticleCount = new Team.CustomHatMetadata.MDInt
-			{
-				range = 8,
-				value = 4
-			};
+            [Team.Metapixel(34, "Particle Count", "The number of particles to emit.")]
+            public Team.CustomHatMetadata.MDInt ParticleCount = new Team.CustomHatMetadata.MDInt
+            {
+                range = 8,
+                value = 4
+            };
 
-			[Team.Metapixel(35, "Particle Lifespan", "Life span of the particle, in seconds.")]
-			public Team.CustomHatMetadata.MDFloat ParticleLifespan = new Team.CustomHatMetadata.MDFloat
-			{
-				range = 2f,
-				value = 1f
-			};
+            [Team.Metapixel(35, "Particle Lifespan", "Life span of the particle, in seconds.")]
+            public Team.CustomHatMetadata.MDFloat ParticleLifespan = new Team.CustomHatMetadata.MDFloat
+            {
+                range = 2f,
+                value = 1f
+            };
 
-			[Team.Metapixel(36, "Particle Velocity", "Initial velocity of the particle.")]
-			public Team.CustomHatMetadata.MDVec2Normalized ParticleVelocity = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				range = 2f,
-				allowNegative = true
-			};
+            [Team.Metapixel(36, "Particle Velocity", "Initial velocity of the particle.")]
+            public Team.CustomHatMetadata.MDVec2Normalized ParticleVelocity = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                range = 2f,
+                allowNegative = true
+            };
 
-			[Team.Metapixel(37, "Particle Gravity", "Gravity applied to the particle.")]
-			public Team.CustomHatMetadata.MDVec2Normalized ParticleGravity = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				range = 2f,
-				allowNegative = true,
-				value = new Vec2(0f, PhysicsObject.gravity)
-			};
+            [Team.Metapixel(37, "Particle Gravity", "Gravity applied to the particle.")]
+            public Team.CustomHatMetadata.MDVec2Normalized ParticleGravity = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                range = 2f,
+                allowNegative = true,
+                value = new Vec2(0f, PhysicsObject.gravity)
+            };
 
-			[Team.Metapixel(38, "Particle Friction", "Friction applied to the particle (The value it's velocity is multiplied by every frame).")]
-			public Team.CustomHatMetadata.MDVec2Normalized ParticleFriction = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				range = 1f,
-				allowNegative = false,
-				value = new Vec2(1f, 1f)
-			};
+            [Team.Metapixel(38, "Particle Friction", "Friction applied to the particle (The value it's velocity is multiplied by every frame).")]
+            public Team.CustomHatMetadata.MDVec2Normalized ParticleFriction = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                range = 1f,
+                allowNegative = false,
+                value = new Vec2(1f, 1f)
+            };
 
-			[Team.Metapixel(39, "Particle Alpha", "G = Start alpha, B = End alpha")]
-			public Team.CustomHatMetadata.MDVec2Normalized ParticleAlpha = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				range = 1f,
-				allowNegative = false,
-				value = new Vec2(1f, 1f)
-			};
+            [Team.Metapixel(39, "Particle Alpha", "G = Start alpha, B = End alpha")]
+            public Team.CustomHatMetadata.MDVec2Normalized ParticleAlpha = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                range = 1f,
+                allowNegative = false,
+                value = new Vec2(1f, 1f)
+            };
 
-			[Team.Metapixel(40, "Particle Scale", "G = Start scale, B = End scale")]
-			public Team.CustomHatMetadata.MDVec2Normalized ParticleScale = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				range = 2f,
-				allowNegative = false,
-				value = new Vec2(1f, 0f)
-			};
+            [Team.Metapixel(40, "Particle Scale", "G = Start scale, B = End scale")]
+            public Team.CustomHatMetadata.MDVec2Normalized ParticleScale = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                range = 2f,
+                allowNegative = false,
+                value = new Vec2(1f, 0f)
+            };
 
-			[Team.Metapixel(41, "Particle Rotation", "G = Start rotation, B = End rotation")]
-			public Team.CustomHatMetadata.MDVec2Normalized ParticleRotation = new Team.CustomHatMetadata.MDVec2Normalized
-			{
-				range = 36f,
-				value = new Vec2(0f, 0f)
-			};
+            [Team.Metapixel(41, "Particle Rotation", "G = Start rotation, B = End rotation")]
+            public Team.CustomHatMetadata.MDVec2Normalized ParticleRotation = new Team.CustomHatMetadata.MDVec2Normalized
+            {
+                range = 36f,
+                value = new Vec2(0f, 0f)
+            };
 
-			[Team.Metapixel(42, "Particle Offset", "Additional X Y offset of particle.")]
-			public Team.CustomHatMetadata.MDVec2 ParticleOffset = new Team.CustomHatMetadata.MDVec2
-			{
-				range = 16f
-			};
+            [Team.Metapixel(42, "Particle Offset", "Additional X Y offset of particle.")]
+            public Team.CustomHatMetadata.MDVec2 ParticleOffset = new Team.CustomHatMetadata.MDVec2
+            {
+                range = 16f
+            };
 
-			[Team.Metapixel(43, "Particle Background", "If this metapixel exists, particles will be rendered behind the duck.")]
-			public Team.CustomHatMetadata.MDBool ParticleBackground = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(43, "Particle Background", "If this metapixel exists, particles will be rendered behind the duck.")]
+            public Team.CustomHatMetadata.MDBool ParticleBackground = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(44, "Particle Anchor", "If this metapixel exists, particles will stay anchored around the hat position when it's moving.")]
-			public Team.CustomHatMetadata.MDBool ParticleAnchor = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(44, "Particle Anchor", "If this metapixel exists, particles will stay anchored around the hat position when it's moving.")]
+            public Team.CustomHatMetadata.MDBool ParticleAnchor = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(45, "Particle Animated", "If this metapixel exists, particles will animate through their frames. Otherwise, a frame will be picked randomly.")]
-			public Team.CustomHatMetadata.MDBool ParticleAnimated = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(45, "Particle Animated", "If this metapixel exists, particles will animate through their frames. Otherwise, a frame will be picked randomly.")]
+            public Team.CustomHatMetadata.MDBool ParticleAnimated = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(46, "Particle Animation Loop", "If this metapixel exists, the particle animation will loop.")]
-			public Team.CustomHatMetadata.MDBool ParticleAnimationLoop = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(46, "Particle Animation Loop", "If this metapixel exists, the particle animation will loop.")]
+            public Team.CustomHatMetadata.MDBool ParticleAnimationLoop = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(47, "Particle Animation Random Frame", "If this metapixel exists, the particle animation will start on a random frame.")]
-			public Team.CustomHatMetadata.MDBool ParticleAnimationRandomFrame = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(47, "Particle Animation Random Frame", "If this metapixel exists, the particle animation will start on a random frame.")]
+            public Team.CustomHatMetadata.MDBool ParticleAnimationRandomFrame = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(48, "Particle Animation Speed", "How quickly the particle animates.")]
-			public Team.CustomHatMetadata.MDFloat ParticleAnimationSpeed = new Team.CustomHatMetadata.MDFloat
-			{
-				range = 1f,
-				value = 0.1f
-			};
+            [Team.Metapixel(48, "Particle Animation Speed", "How quickly the particle animates.")]
+            public Team.CustomHatMetadata.MDFloat ParticleAnimationSpeed = new Team.CustomHatMetadata.MDFloat
+            {
+                range = 1f,
+                value = 0.1f
+            };
 
-			[Team.Metapixel(49, "Particle Anchor Orientation", "If this metapixel exists, particles will flip and rotate to orient with the hat.")]
-			public Team.CustomHatMetadata.MDBool ParticleAnchorOrientation = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(49, "Particle Anchor Orientation", "If this metapixel exists, particles will flip and rotate to orient with the hat.")]
+            public Team.CustomHatMetadata.MDBool ParticleAnchorOrientation = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(60, "Quack Delay", "Amount of time in between pressing the quack button and the quack frame appearing.")]
-			public Team.CustomHatMetadata.MDFloat QuackDelay = new Team.CustomHatMetadata.MDFloat
-			{
-				range = 2f,
-				value = 0f
-			};
+            [Team.Metapixel(60, "Quack Delay", "Amount of time in between pressing the quack button and the quack frame appearing.")]
+            public Team.CustomHatMetadata.MDFloat QuackDelay = new Team.CustomHatMetadata.MDFloat
+            {
+                range = 2f,
+                value = 0f
+            };
 
-			[Team.Metapixel(61, "Quack Hold", "Minimum amount of time to keep the quack frame held, even if the quack button is released.")]
-			public Team.CustomHatMetadata.MDFloat QuackHold = new Team.CustomHatMetadata.MDFloat
-			{
-				range = 2f,
-				value = 0f
-			};
+            [Team.Metapixel(61, "Quack Hold", "Minimum amount of time to keep the quack frame held, even if the quack button is released.")]
+            public Team.CustomHatMetadata.MDFloat QuackHold = new Team.CustomHatMetadata.MDFloat
+            {
+                range = 2f,
+                value = 0f
+            };
 
-			[Team.Metapixel(62, "Quack Suppress Requack", "If this metapixel exists, a new quack will not be allowed to begin until Quack Delay and Quack Hold are finished.")]
-			public Team.CustomHatMetadata.MDBool QuackSuppressRequack = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(62, "Quack Suppress Requack", "If this metapixel exists, a new quack will not be allowed to begin until Quack Delay and Quack Hold are finished.")]
+            public Team.CustomHatMetadata.MDBool QuackSuppressRequack = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(70, "Wet Lips", "If this metapixel exists, the hat will have 'wet lips'.")]
-			public Team.CustomHatMetadata.MDBool WetLips = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(70, "Wet Lips", "If this metapixel exists, the hat will have 'wet lips'.")]
+            public Team.CustomHatMetadata.MDBool WetLips = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(71, "Mechanical Lips", "If this metapixel exists, the hat will have 'mechanical lips'.")]
-			public Team.CustomHatMetadata.MDBool MechanicalLips = new Team.CustomHatMetadata.MDBool();
+            [Team.Metapixel(71, "Mechanical Lips", "If this metapixel exists, the hat will have 'mechanical lips'.")]
+            public Team.CustomHatMetadata.MDBool MechanicalLips = new Team.CustomHatMetadata.MDBool();
 
-			[Team.Metapixel(100, "Randomize Parameter X", "If present, the previously defined metapixel value will have it's X value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
-			public Team.CustomHatMetadata.MDRandomizer RandomizeParameterX = new Team.CustomHatMetadata.MDRandomizer
-			{
-				range = 1f,
-				allowNegative = true
-			};
+            [Team.Metapixel(100, "Randomize Parameter X", "If present, the previously defined metapixel value will have it's X value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
+            public Team.CustomHatMetadata.MDRandomizer RandomizeParameterX = new Team.CustomHatMetadata.MDRandomizer
+            {
+                range = 1f,
+                allowNegative = true
+            };
 
-			[Team.Metapixel(101, "Randomize Parameter Y", "If present, the previously defined metapixel value will have it's Y value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
-			public Team.CustomHatMetadata.MDRandomizer RandomizeParameterY = new Team.CustomHatMetadata.MDRandomizer
-			{
-				range = 1f,
-				allowNegative = true,
-				randomizeY = true
-			};
+            [Team.Metapixel(101, "Randomize Parameter Y", "If present, the previously defined metapixel value will have it's Y value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
+            public Team.CustomHatMetadata.MDRandomizer RandomizeParameterY = new Team.CustomHatMetadata.MDRandomizer
+            {
+                range = 1f,
+                allowNegative = true,
+                randomizeY = true
+            };
 
-			[Team.Metapixel(102, "Randomize Parameter", "If present, the previously defined metapixel value will have a random number between G and B applied to its X and Y values each time it's used. This will generally only work with particles..")]
-			public Team.CustomHatMetadata.MDRandomizer RandomizeParameter = new Team.CustomHatMetadata.MDRandomizer
-			{
-				range = 1f,
-				allowNegative = true,
-				randomizeBoth = true
-			};
+            [Team.Metapixel(102, "Randomize Parameter", "If present, the previously defined metapixel value will have a random number between G and B applied to its X and Y values each time it's used. This will generally only work with particles..")]
+            public Team.CustomHatMetadata.MDRandomizer RandomizeParameter = new Team.CustomHatMetadata.MDRandomizer
+            {
+                range = 1f,
+                allowNegative = true,
+                randomizeBoth = true
+            };
             public Team team;
             private static Team.CustomHatMetadata kCurrentMetadata;
             private static Dictionary<Func<object, object>, Team.Metapixel> kParameterAttributes;

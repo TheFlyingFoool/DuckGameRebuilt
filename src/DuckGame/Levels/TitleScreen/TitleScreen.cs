@@ -105,8 +105,8 @@ namespace DuckGame
         private bool quittingCredits;
         private bool showedNewVersionStartup;
         private bool showedModsDisabled;
-       // private int time;
-      //  private static bool _showedSteamFailMessage = false;
+        // private int time;
+        //  private static bool _showedSteamFailMessage = false;
 
         public TitleScreen()
           : this(false, null)
@@ -204,13 +204,13 @@ namespace DuckGame
             this.AddCreditLine("Leonardo \"Baffo\" Magnani");
             this.AddCreditLine("The Burger Always Wins");
             this.AddCreditLine("RaV3_past");
-            #if DuckGameTurbo
+#if DuckGameTurbo
             this.AddCreditLine("Collin But Faster", "|DGPURPLE|Drake");
-            #elif DuckGame
+#elif DuckGame
             this.AddCreditLine("Collin Based", "|DGPURPLE|Drake");
-            #else
+#else
             this.AddCreditLine("Collin", "|DGPURPLE|Drake");
-            #endif
+#endif
             this.AddCreditLine("Tater");
             this.AddCreditLine("");
             this.AddCreditLine("Jaydex72");
@@ -1164,8 +1164,8 @@ namespace DuckGame
                         Level.current = Main.editor;
                     else if (this._enterLibrary)
                         Level.current = new DoorRoom();
-                   // else if (this._enterBuyScreen)
-                      //  Level.current = new BuyScreen(Main.currencyType, Main.price);
+                    // else if (this._enterBuyScreen)
+                    //  Level.current = new BuyScreen(Main.currencyType, Main.price);
                 }
             }
             this._pressStartBlink += 0.01f;
@@ -1465,7 +1465,7 @@ namespace DuckGame
                 if ((double)this.camera.y > 4.0)
                 {
                     this._starField.alpha = num + (float)(((double)this.camera.y - 4.0) / 13.0) - this.extraFade * 0.7f;
-                    Graphics.Draw(this._starField, 0.0f, layer.camera.y - 58f, - 0.99f);
+                    Graphics.Draw(this._starField, 0.0f, layer.camera.y - 58f, -0.99f);
                 }
             }
             else if (layer == Layer.Background)
@@ -1476,7 +1476,7 @@ namespace DuckGame
                     float num4 = 0.2f;
                     if ((double)this.camera.y > 0.0)
                         num4 += this.camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)(((double)num4 + (double)num3 * 0.600000023841858) * (0.300000011920929 + (1.0 - extraFade) * 0.699999988079071)), - 0.3f);
+                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)(((double)num4 + (double)num3 * 0.600000023841858) * (0.300000011920929 + (1.0 - extraFade) * 0.699999988079071)), -0.3f);
                     float num5 = 0.1f;
                     if ((double)this.camera.y > 0.0)
                         num5 += this.camera.y / 52f;
@@ -1485,7 +1485,7 @@ namespace DuckGame
                     for (int index = 0; index < num6; ++index)
                     {
                         float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0.0f, 0.5f), particle.color * ((float)(1.0 - index / (double)num6) * num5) * (float)(0.300000011920929 + (1.0 - extraFade) * 0.699999988079071), depth: (- 0.4f));
+                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0.0f, 0.5f), particle.color * ((float)(1.0 - index / (double)num6) * num5) * (float)(0.300000011920929 + (1.0 - extraFade) * 0.699999988079071), depth: (-0.4f));
                         pos.x -= num7;
                     }
                 }

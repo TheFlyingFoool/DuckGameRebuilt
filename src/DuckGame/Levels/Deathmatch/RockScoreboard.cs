@@ -263,7 +263,7 @@ namespace DuckGame
                 Layer.Add(this._sunLayer);
                 Thing thing = new SpriteThing(150f, 120f, new Sprite("sun"));
                 thing.z = -9999f;
-                thing.depth = - 0.99f;
+                thing.depth = -0.99f;
                 thing.layer = this._sunLayer;
                 thing.xscale = 1f;
                 thing.yscale = 1f;
@@ -1691,8 +1691,8 @@ namespace DuckGame
             {
                 if (this._mode == ScoreBoardMode.ShowWinner && !this._afterHighlights)
                 {
-                    this._winnerPost.depth = - 0.962f;
-                    this._winnerBanner.depth = - 0.858f;
+                    this._winnerPost.depth = -0.962f;
+                    this._winnerBanner.depth = -0.858f;
                     float num1 = -10f;
                     DuckGame.Graphics.Draw(this._winnerPost, 63f, 40f + num1);
                     DuckGame.Graphics.Draw(this._winnerPost, 248f, 40f + num1);

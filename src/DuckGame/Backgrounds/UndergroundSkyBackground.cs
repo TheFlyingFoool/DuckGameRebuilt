@@ -52,7 +52,7 @@ namespace DuckGame
             Level.Add(_parallax);
             this._parallax.x -= 340f;
             this._parallax.restrictBottom = false;
-            this._parallax.depth = - 0.9f;
+            this._parallax.depth = -0.9f;
             this._parallax.layer = new Layer("PARALLAX3", 115, new Camera(0.0f, 0.0f, 320f, 200f))
             {
                 aspectReliesOnGameLayer = true,

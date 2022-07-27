@@ -31,7 +31,7 @@ namespace DuckGame
             this.center = new Vec2(10f, 10f);
             this.collisionOffset = new Vec2(-10f, -10f);
             this.collisionSize = new Vec2(20f, 19f);
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._editorName = "Demo Crate";
             this.thickness = 2f;
             this.weight = 10f;

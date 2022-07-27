@@ -62,7 +62,7 @@ namespace DuckGame
             if (FontGDIContext._numCharactersToRender == pNum)
                 return;
             FontGDIContext._numCharactersToRender = pNum;
-           //FontGDIContext._dirty = true;
+            //FontGDIContext._dirty = true;
         }
 
         public static void SetAntiAliasing(bool pAnti)

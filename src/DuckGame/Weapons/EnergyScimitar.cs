@@ -731,7 +731,7 @@ namespace DuckGame
             if (this.duck == null)
                 return;
             this.x = this.duck.x;
-            this._oldDepth = this.depth = - 0.1f;
+            this._oldDepth = this.depth = -0.1f;
             if (!this.isServerForObject || this.duck == null || this.duck.destroyed || !this._canAirFly || this._airFly)
                 return;
             this._upFlyTime = 0.0f;
@@ -812,7 +812,7 @@ namespace DuckGame
                             this.vSpeed = 0.0f;
                             this.lastHSpeed = this._hSpeed;
                             this.lastVSpeed = this._vSpeed;
-                            this.depth = - 0.55f;
+                            this.depth = -0.55f;
                         }
                         else
                         {
@@ -934,9 +934,9 @@ namespace DuckGame
             this._skipAutoPlatforms = this._airFly;
             this._skipPlatforms = this._airFly;
             if (this._airFly || this._stuckInto != null)
-                this.depth = - 0.55f;
+                this.depth = -0.55f;
             else
-                this.depth = - 0.1f;
+                this.depth = -0.1f;
             if (this._stuckInto != null && this._stuckInto is Door && (double)Math.Abs((this._stuckInto as Door)._open) > 0.5)
             {
                 this._stuckInto.Fondle(this);

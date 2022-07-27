@@ -32,7 +32,7 @@ namespace DuckGame
             else
                 this.collisionSize = new Vec2(10f, 8f);
             if (this.background.value)
-                this.depth = - 0.1f;
+                this.depth = -0.1f;
             else
                 this.depth = (Depth)0.1f;
         }
@@ -59,7 +59,7 @@ namespace DuckGame
             {
                 if (this.background.value)
                 {
-                    this.depth = - 0.8f;
+                    this.depth = -0.8f;
                     this.layer = Layer.Game;
                 }
                 else

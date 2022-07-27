@@ -163,7 +163,7 @@ namespace DuckGame
             this._clickPuff.center = new Vec2(0.0f, 12f);
             this._sightHit = new Sprite("laserSightHit");
             this._sightHit.CenterOrigin();
-            this.depth = - 0.1f;
+            this.depth = -0.1f;
             this.infinite = new EditorProperty<bool>(false, this)
             {
                 _tooltip = "Makes gun have infinite ammo."

@@ -464,7 +464,7 @@ namespace DuckGame
         public void DrawThings(bool drawBack = false)
         {
             if (drawBack)
-                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, - 0.8f);
+                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, -0.8f);
             foreach (LSItem lsItem in this._items)
             {
                 if (lsItem.visible)

@@ -23,7 +23,7 @@ namespace DuckGame
             this.thickness = 0.1f;
             this.canPickUp = false;
             this.initLength = init;
-            this.depth = - 0.5f;
+            this.depth = -0.5f;
             this._vinePartSprite = new Sprite("chain")
             {
                 center = new Vec2(8f, 0.0f)
