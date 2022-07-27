@@ -167,7 +167,6 @@ namespace DuckGame
             this.AddCreditLine("YoloCrayolo3");
             this.AddCreditLine("Zloty_Diament");
             this.AddCreditLine("eim64");
-            this.AddCreditLine("Antikore");
             this.AddCreditLine("");
             this.AddCreditLine("");
             this.AddCreditLine("|CREDITSGRAY|@LWINGGRAY@TESTERS@RWINGGRAY@");
@@ -197,14 +196,14 @@ namespace DuckGame
             this.AddCreditLine("Christopher Alan Bell");
             this.AddCreditLine("Koteeevvv");
             this.AddCreditLine("Soh", "NiK0");
-            this.AddCreditLine("cfif126", "kalamari");
+            this.AddCreditLine("kalamari");
             this.AddCreditLine("Mike Timofeev");
             this.AddCreditLine("JYAD (Just Your Average Duck)");
             this.AddCreditLine(" Argo The Rat");
             this.AddCreditLine("Adam Urbina");
             this.AddCreditLine("Leonardo \"Baffo\" Magnani");
             this.AddCreditLine("The Burger Always Wins");
-            this.AddCreditLine("Max32212 B)", "RaV3_past");
+            this.AddCreditLine("RaV3_past");
             this.AddCreditLine("Collin", "|DGPURPLE|Drake");
             this.AddCreditLine("Tater");
             this.AddCreditLine("");
@@ -254,6 +253,7 @@ namespace DuckGame
             this.AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ART, PROGRAMMING, MUSIC@RWINGGRAY@");
             this.AddCreditLine("NiK0");
             this.AddCreditLine("Dan");
+            this.AddCreditLine("Collin");
             this.AddCreditLine("Landon Podbielski");
             this.AddCreditLine("");
             this.AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
