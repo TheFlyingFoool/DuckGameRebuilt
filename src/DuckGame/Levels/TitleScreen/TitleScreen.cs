@@ -93,7 +93,7 @@ namespace DuckGame
         //private bool showSizeNotificationDialogue;
         private bool _fadeBackground;
         private bool _enterLibrary;
-        private bool _enterBuyScreen;
+        //private bool _enterBuyScreen;
         private float extraFade = 1f;
         private bool _startedMusic;
         private float starWait;
@@ -1140,7 +1140,7 @@ namespace DuckGame
             }
             Music.volumeMult = 1f;
             TitleScreen._hasMenusOpen = this.menuOpen;
-            if (!this._enterMultiplayer && !this._enterEditor && !this._enterLibrary && !this._enterBuyScreen)
+            if (!this._enterMultiplayer && !this._enterEditor && !this._enterLibrary) // && !this._enterBuyScreen
             {
                 if ((double)Graphics.fade < 1.0)
                     Graphics.fade += 1f / 1000f;
@@ -1164,8 +1164,8 @@ namespace DuckGame
                         Level.current = Main.editor;
                     else if (this._enterLibrary)
                         Level.current = new DoorRoom();
-                    else if (this._enterBuyScreen)
-                        Level.current = new BuyScreen(Main.currencyType, Main.price);
+                   // else if (this._enterBuyScreen)
+                      //  Level.current = new BuyScreen(Main.currencyType, Main.price);
                 }
             }
             this._pressStartBlink += 0.01f;
@@ -1183,11 +1183,11 @@ namespace DuckGame
                     MonoMain.exit = true;
                     return;
                 }
-                if (InputProfile.active.Pressed("START") && Main.foundPurchaseInfo && Main.isDemo)
-                {
-                    this._enterBuyScreen = true;
-                    this._duck.immobilized = true;
-                }
+                //if (InputProfile.active.Pressed("START") && Main.foundPurchaseInfo && Main.isDemo) free my people no buying here
+                //{
+                //    this._enterBuyScreen = true;
+                //    this._duck.immobilized = true;
+                //}
             }
             if (this._enterCreditsMenuBool.value)
             {

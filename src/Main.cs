@@ -12,6 +12,7 @@ namespace DuckGame
 {
     public class Main : MonoMain
     {
+
         public static bool isDemo = false;
         public static DuckGameEditor editor;
         public static string lastLevel = "";
@@ -20,8 +21,8 @@ namespace DuckGame
         public static int codeNumber = 0;
         private BitmapFont _font;
         public static ulong connectID = 0;
-        public static bool foundPurchaseInfo = false;
-        public static float price = 10f;
+        public static bool foundPurchaseInfo = true;
+        public static float price = 9.99f;//10f; removed SetPurchaseDetails and hardset
         public static string currencyType = "USD";
         public static bool stopForever = false;
         public static bool _gotHook = false;
@@ -122,7 +123,7 @@ namespace DuckGame
             Main.editor = new DuckGameEditor();
             Input.devicesChanged = false;
             TeamSelect2.ControllerLayoutsChanged();
-            Main.SetPurchaseDetails(9.99f, "USD");
+            //Main.SetPurchaseDetails(9.99f, "USD");
             if (Main.connectID != 0UL)
             {
                 Main.SpecialCode = "Joining lobby on startup (" + Main.connectID.ToString() + ")";
