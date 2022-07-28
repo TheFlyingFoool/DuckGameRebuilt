@@ -51,7 +51,7 @@ namespace DuckGame
             {
                 HighlightLevel.didSkip = true;
                 Vote.CloseVoting();
-                Level.current = !Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
+                Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true); //!Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
             }
             if (!this._showHighlight && (double)DuckGame.Graphics.fade > 0.949999988079071)
             {

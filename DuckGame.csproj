@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--Project was exported from assembly: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe-->
   <PropertyGroup>
-	<CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
@@ -77,6 +77,7 @@
     <Prefer32Bit>true</Prefer32Bit>
     <DocumentationFile>
     </DocumentationFile>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x86'">
     <AssemblyName>DuckGameRebuilt</AssemblyName>

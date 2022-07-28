@@ -1171,9 +1171,7 @@ namespace DuckGame
                     string str1 = "NONAME";
                     if (this._name != "")
                     {
-                        if (ParentalControls.RunProfanityCheck(ref this._name) > 0)
-                            ;
-                        str1 = this._name;
+                        str1 = this._name;// ParentalControls.RunProfanityCheck(ref this._name) > 0  
                     }
                     Vec2 pos = new Vec2(this.x + 36f, this.y + 8f);
                     if (!this.isEditing)

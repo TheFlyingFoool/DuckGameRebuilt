@@ -13,7 +13,7 @@ namespace DuckGame
     public class Main : MonoMain
     {
 
-        public static bool isDemo = false;
+        //public static bool isDemo = false;
         public static DuckGameEditor editor;
         public static string lastLevel = "";
         public static string SpecialCode = "";
@@ -31,12 +31,12 @@ namespace DuckGame
 
         public static string GetPriceString() => "|GREEN|" + Main.price.ToString("0.00", CultureInfo.InvariantCulture) + " " + Main.currencyType + "|WHITE|";
 
-        public static void SetPurchaseDetails(float p, string ct)
-        {
-            Main.price = p;
-            Main.currencyType = ct;
-            Main.foundPurchaseInfo = true;
-        }
+        //public static void SetPurchaseDetails(float p, string ct)
+        //{
+        //    Main.price = p;
+        //    Main.currencyType = ct;
+        //    Main.foundPurchaseInfo = true;
+        //}
 
         public static void ResetMatchStuff()
         {
@@ -156,7 +156,7 @@ namespace DuckGame
                 DevConsole.RunCommand(DevConsole.startupCommands[0]);
                 DevConsole.startupCommands.RemoveAt(0);
             }
-            Main.isDemo = false;
+            //Main.isDemo = false;
             RockWeather.TickWeather();
             RandomLevelDownloader.Update();
             if (!NetworkDebugger.enabled)

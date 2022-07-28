@@ -27,10 +27,10 @@ namespace DuckGame
             this._text = thing.editorName;
             this.itemSize.x = Graphics.GetFancyStringWidth(this._text) + 26f;
             this._thingBag = ContentProperties.GetBag(thing.GetType());
-            if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
-                this.greyOut = true;
-            else
-                this.greyOut = false;
+            //if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
+            //    this.greyOut = true;
+            //else
+            this.greyOut = false;
             if (this._thingBag.GetOrDefault("previewPriority", false))
                 this._previewPriority = true;
             this.tooltip = thing.editorTooltip;
@@ -62,8 +62,8 @@ namespace DuckGame
             }
             else
             {
-                if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
-                    return;
+                //if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
+                //    return;
                 if (this._placement)
                 {
                     if (!(Level.current is Editor current))

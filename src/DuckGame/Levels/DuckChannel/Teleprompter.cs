@@ -112,7 +112,7 @@ namespace DuckGame
                 }
                 if (!flag1)
                 {
-                    Main.isDemo = false;
+                    //Main.isDemo = false;
                     this._lines.Clear();
                     this._lines.Add(new DuckStory()
                     {

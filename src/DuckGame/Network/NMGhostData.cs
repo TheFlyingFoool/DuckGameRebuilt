@@ -98,24 +98,24 @@ namespace DuckGame
             }
         }
 
-        private void Compress(BitBuffer pCompress)
-        {
-            MemoryStream memoryStream = new MemoryStream();
-            BinaryWriter binaryWriter = new BinaryWriter(new GZipStream(memoryStream, CompressionMode.Compress));
-            binaryWriter.Write((ushort)pCompress.lengthInBytes);
-            binaryWriter.Write(pCompress.buffer, 0, pCompress.lengthInBytes);
-            binaryWriter.Close();
-            byte[] array = memoryStream.ToArray();
-            this._serializedData.Write((ushort)array.Length);
-            this._serializedData.Write(array, 0, -1);
-        }
+        //private void Compress(BitBuffer pCompress)
+        //{
+        //    MemoryStream memoryStream = new MemoryStream();
+        //    BinaryWriter binaryWriter = new BinaryWriter(new GZipStream(memoryStream, CompressionMode.Compress));
+        //    binaryWriter.Write((ushort)pCompress.lengthInBytes);
+        //    binaryWriter.Write(pCompress.buffer, 0, pCompress.lengthInBytes);
+        //    binaryWriter.Close();
+        //    byte[] array = memoryStream.ToArray();
+        //    this._serializedData.Write((ushort)array.Length);
+        //    this._serializedData.Write(array, 0, -1);
+        //}
 
-        private BitBuffer Decompress(BitBuffer pData)
-        {
-            ushort bytes = pData.ReadUShort();
-            BinaryReader binaryReader = new BinaryReader(new GZipStream(new MemoryStream(pData.ReadPacked(bytes)), CompressionMode.Decompress));
-            return new BitBuffer(binaryReader.ReadBytes(binaryReader.ReadUInt16()));
-        }
+        //private BitBuffer Decompress(BitBuffer pData)
+        //{
+        //    ushort bytes = pData.ReadUShort();
+        //    BinaryReader binaryReader = new BinaryReader(new GZipStream(new MemoryStream(pData.ReadPacked(bytes)), CompressionMode.Decompress));
+        //    return new BitBuffer(binaryReader.ReadBytes(binaryReader.ReadUInt16()));
+        //}
 
         public struct GhostMaskPair
         {

@@ -1,8 +1,5 @@
-<RuleSet Name="Dead Code Rules" Description=" " ToolsVersion="12.0">
-  <Localization ResourceAssembly="Microsoft.VisualStudio.CodeAnalysis.RuleSets.Strings.dll" ResourceBaseName="Microsoft.VisualStudio.CodeAnalysis.RuleSets.Strings.Localized">
-    <Name Resource="HelloWorldRules_Name" />
-    <Description Resource="HelloWorldRules_Description" />
-  </Localization>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Copy of New Rule Set" Description=" " ToolsVersion="17.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1801" Action="Warning" />
     <Rule Id="CA1804" Action="Warning" />

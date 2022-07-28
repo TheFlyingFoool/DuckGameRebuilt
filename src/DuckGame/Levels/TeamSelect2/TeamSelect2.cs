@@ -533,7 +533,7 @@ namespace DuckGame
             this._hostMatchSettingsMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
             foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
             {
-                if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
+                if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
                 {
                     if (matchSetting.id != "partymode")
                         this._hostMatchSettingsMenu.AddMatchSetting(matchSetting, false);
@@ -542,8 +542,8 @@ namespace DuckGame
                 }
             }
             this._hostMatchSettingsMenu.Add(new UIText(" ", Color.White), true);
-            if (!ParentalControls.AreParentalControlsActive())
-                this._hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
+            //if (!ParentalControls.AreParentalControlsActive()) and move the below block back into place
+            this._hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
             this._hostMatchSettingsMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostModifiersMenu)), true);
             this._hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
             this._hostMatchSettingsMenu.Close();
@@ -865,9 +865,9 @@ namespace DuckGame
             {
                 if (!onlineSetting.filterOnly)
                 {
-                    if (onlineSetting.id == "customlevelsenabled" && ParentalControls.AreParentalControlsActive())
-                        str = onlineSetting.id;
-                    else if (onlineSetting.id == "type" && !Network.available)
+                    //if (onlineSetting.id == "customlevelsenabled" && ParentalControls.AreParentalControlsActive())
+                    //    str = onlineSetting.id below was else if
+                    if (onlineSetting.id == "type" && !Network.available)
                     {
                         str = onlineSetting.id;
                     }
@@ -910,8 +910,12 @@ namespace DuckGame
             {
                 foreach (MatchSetting onlineSetting in TeamSelect2.onlineSettings)
                 {
-                    if (!onlineSetting.createOnly && (!(onlineSetting.id == "customlevelsenabled") || !ParentalControls.AreParentalControlsActive()))
-                        this._joinGameMenu.AddMatchSetting(onlineSetting, true);
+                    //if (!onlineSetting.createOnly && (!(onlineSetting.id == "customlevelsenabled") || !ParentalControls.AreParentalControlsActive()))
+                    //    this._joinGameMenu.AddMatchSetting(onlineSetting, true);
+                    if (!onlineSetting.createOnly)
+                    {
+                        this._joinGameMenu.AddMatchSetting(onlineSetting, true, true);
+                    }
                 }
                 this._joinGameMenu.Add(new UIText(" ", Color.White), true);
                 this._joinGameMenu.Add(new UIMenuItemNumber("Ping", field: new FieldBinding(typeof(UIMatchmakerMark2), "searchMode", 0.0f, 2f, 0.1f), valStrings: new List<string>()

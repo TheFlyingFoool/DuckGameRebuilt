@@ -822,7 +822,32 @@ namespace DuckGame
                                     }
                                 }
                                 else
-                                    str6 = lobby.datahash == Network.gameDataHash ? (!(lobby.started == "true") ? (lobby.userCount < lobby.numSlots ? (lobby.lobby == null || !(lobby.type != "2") ? (!lobby.hasLocalMods ? (!(lobby.customLevels != "") || !(lobby.customLevels != "0") || !ParentalControls.AreParentalControlsActive() ? str5 + "Cannot join." : str5 + "This game has blocked content.") : str5 + "This game is using non-workshop mods.") : str5 + "This game is not public.") : str5 + "Lobby is full.") : str5 + "This game is in progress.") : str5 + "Their version is incompatible.";
+                                {
+                                    if (lobby.datahash != Network.gameDataHash)
+                                    {
+                                        str6 = "Their version is incompatible.";
+                                    }
+                                    else if (lobby.started == "true")
+                                    {
+                                        str6 = "This game is in progress.";
+                                    }
+                                    else if (lobby.userCount >= lobby.numSlots)
+                                    {
+                                        str6 = "Lobby is full.";
+                                    }
+                                    else if (lobby.lobby != null && lobby.type != "2")
+                                    {
+                                        str6 = "This game is not public.";
+                                    }
+                                    else if (lobby.hasLocalMods)
+                                    {
+                                        str6 = "This game is using non-workshop mods.";
+                                    }
+                                    else
+                                    {
+                                        str6 = "Cannot join.";
+                                    }
+                                } //removed  ParentalControls.AreParentalControlsActive and unpacked
                                 text2 = str6 + ")";
                                 DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)((double)x1 + (double)this._box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
                             }
@@ -937,11 +962,10 @@ namespace DuckGame
 
             public bool canJoin
             {
-                get
+                get // removed AreParentalControlsActive
                 {
-                    if (!(DG.version == this.version) || Network.gameDataHash != this.datahash && !(ModLoader.modHash != this.modHash) || !(this.started == "false") || this.customLevels != "" && this.customLevels != "0" && ParentalControls.AreParentalControlsActive() || this.hasLocalMods && !(ModLoader.modHash == this.modHash) || this.userCount >= this.numSlots)
-                        return false;
-                    return this.type == "2" || this.lobby == null;
+                    return DG.version == this.version && (Network.gameDataHash == this.datahash || ModLoader.modHash != this.modHash) && this.started == "false" &&
+                        (!this.hasLocalMods || ModLoader.modHash == this.modHash) && this.userCount < this.numSlots && (this.type == "2" || this.lobby == null);
                 }
             }
 

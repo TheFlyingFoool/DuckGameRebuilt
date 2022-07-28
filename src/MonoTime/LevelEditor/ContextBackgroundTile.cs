@@ -39,9 +39,9 @@ namespace DuckGame
             if (this._thing is CustomBackground)
                 this._file = new ContextFile("LOAD FILE...", this, new FieldBinding(_thing, "customBackground0" + ((thing as CustomBackground).customIndex + 1).ToString()), ContextFileType.Background);
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(thing.GetType());
-            if (!Main.isDemo || bag.GetOrDefault("isInDemo", false))
-                return;
-            this.greyOut = true;
+            //if (!Main.isDemo || bag.GetOrDefault("isInDemo", false))
+            //    return;
+            //this.greyOut = true;
         }
 
         public override bool HasOpen() => this.opened;

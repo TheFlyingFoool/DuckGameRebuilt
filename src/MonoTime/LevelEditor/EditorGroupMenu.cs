@@ -22,7 +22,7 @@ namespace DuckGame
             this.itemSize.y = 16f;
             this._root = root;
             if (!this._root)
-                this.greyOut = Main.isDemo || Editor._currentLevelData.metaData.onlineMode;
+                this.greyOut = Editor._currentLevelData.metaData.onlineMode; //Main.isDemo || 
             this._maxNumToDraw = 20;
         }
 
@@ -90,8 +90,8 @@ namespace DuckGame
             foreach (Thing allThing in group.AllThings)
             {
                 IReadOnlyPropertyBag bag = ContentProperties.GetBag(allThing.GetType());
-                if (Main.isDemo && bag.GetOrDefault("isInDemo", false))
-                    this.greyOut = false;
+                //if (Main.isDemo && bag.GetOrDefault("isInDemo", false))
+                //    this.greyOut = false;
                 if (bag.GetOrDefault("isOnlineCapable", true))
                 {
                     this.greyOut = false;
@@ -117,7 +117,7 @@ namespace DuckGame
                                 {
                                     ContextSlider contextSlider = new ContextSlider(allThing.editorName, this, radioBinding, 0.05f, myType: allThing.GetType())
                                     {
-                                        greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false),
+                                        greyOut = false,//Main.isDemo && !bag.GetOrDefault("isInDemo", false),
                                         contextThing = allThing
                                     };
                                     if (bag.GetOrDefault("isOnlineCapable", true))
@@ -127,7 +127,7 @@ namespace DuckGame
                                 }
                                 ContextCheckBox contextCheckBox = new ContextCheckBox(allThing.editorName, this, radioBinding, allThing.GetType())
                                 {
-                                    greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false),
+                                    greyOut = false,//Main.isDemo && !bag.GetOrDefault("isInDemo", false),
                                     contextThing = allThing
                                 };
                                 if (bag.GetOrDefault("isOnlineCapable", true))
@@ -137,7 +137,7 @@ namespace DuckGame
                             }
                             ContextRadio contextRadio = new ContextRadio(allThing.editorName, false, allThing.GetType(), this, radioBinding)
                             {
-                                greyOut = Main.isDemo && !bag.GetOrDefault("isInDemo", false),
+                                greyOut = false,//Main.isDemo && !bag.GetOrDefault("isInDemo", false),
                                 contextThing = allThing
                             };
                             if (bag.GetOrDefault("isOnlineCapable", true))

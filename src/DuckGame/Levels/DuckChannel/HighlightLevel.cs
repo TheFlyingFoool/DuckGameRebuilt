@@ -216,16 +216,16 @@ namespace DuckGame
                 }
             }
             DuckGame.Graphics.fadeAdd = Lerp.Float(DuckGame.Graphics.fadeAdd, 0.0f, 0.01f);
-            if (Main.isDemo && this._skip && !this._firedSkipLogic)
-            {
-                this._firedSkipLogic = true;
-                Vote.CloseVoting();
-                HUD.CloseAllCorners();
-                this.DoSkip();
-            }
+            //if (Main.isDemo && this._skip && !this._firedSkipLogic)
+            //{
+            //    this._firedSkipLogic = true;
+            //    Vote.CloseVoting();
+            //    HUD.CloseAllCorners();
+            //    this.DoSkip();
+            //}
             if ((double)DuckGame.Graphics.fade > 0.990000009536743 && !this._skip && Vote.Passed(VoteType.Skip))
                 this._skip = true;
-            if (this._talker.finished || !HighlightLevel._cancelSkip && this._skip && !Main.isDemo)
+            if (this._talker.finished || !HighlightLevel._cancelSkip && this._skip)// && !Main.isDemo
                 this._done -= 0.04f;
             DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, _done < 0.0 ? 0.0f : 1f, 0.02f);
             if ((double)DuckGame.Graphics.fade < 0.00999999977648258 && (this._talker.finished || this._skip))

@@ -957,7 +957,7 @@ namespace DuckGame
                 if (Profiles.experienceProfile != null)
                 {
                     bool flag7 = true;
-                    if (Network.isActive && this.profile.connection != DuckNetwork.localConnection && (this.profile.ParentalControlsActive || ParentalControls.AreParentalControlsActive() || this.profile.muteRoom))
+                    if (Network.isActive && this.profile.connection != DuckNetwork.localConnection && (this.profile.ParentalControlsActive || this.profile.muteRoom)) // || ParentalControls.AreParentalControlsActive() || 
                         flag7 = false;
                     if (flag7)
                     {

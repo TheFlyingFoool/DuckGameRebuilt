@@ -25,8 +25,8 @@ namespace DuckGame
         {
             get
             {
-                if (Main.isDemo)
-                    return this._filteredThings;
+                //if (Main.isDemo)
+                //    return this._filteredThings;
                 return Editor._currentLevelData.metaData.onlineMode ? this._onlineFilteredThings : this._things;
             }
         }

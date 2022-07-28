@@ -254,7 +254,11 @@ namespace DuckGame
             Network.activeNetwork.core.DisconnectClient(p.connection, new DuckNetErrorInfo(DuckNetError.Banned, ""), true);
         }
 
-        private static bool ShouldKickForCustomContent() => Network.isActive && ParentalControls.AreParentalControlsActive() && (int)TeamSelect2.GetMatchSetting("custommaps").value > 0 && TeamSelect2.customLevels > 0;
+        private static bool ShouldKickForCustomContent() 
+        {
+            bool isActive = Network.isActive;
+            return false;
+        } //=> Network.isActive && ParentalControls.AreParentalControlsActive() && (int)TeamSelect2.GetMatchSetting("custommaps").value > 0 && TeamSelect2.customLevels > 0;
 
         public static void SetMatchSettings(
           bool initialSettings,
@@ -696,24 +700,21 @@ namespace DuckGame
             matchSetting5.prevValue = matchSetting5.value;
             component7.SetFont(f);
             menu.Add(component7, true);
-            if (!ParentalControls.AreParentalControlsActive())
-            {
-                MatchSetting matchSetting6 = TeamSelect2.GetMatchSetting("custommaps");
-                string name7 = matchSetting6.name;
-                string str9 = matchSetting6.value.ToString() + "%";
-                if (matchSetting6.minString != null && matchSetting6.value is int && (int)matchSetting6.value == matchSetting6.min)
-                    str9 = matchSetting6.minString;
-                int startIndex3 = matchSetting6.name.LastIndexOf('|');
-                for (string str10 = matchSetting6.name.Substring(startIndex3, matchSetting6.name.Count<char>() - startIndex3); str10.Length < num1; str10 += " ")
-                    name7 += " ";
-                while (str9.Length < num2)
-                    str9 = " " + str9;
-                string textVal7 = (name7 + " " + str9).Replace("|DGBLUE|", "");
-                UIText component8 = matchSetting6.value.Equals(matchSetting6.prevValue) ? new UIText(textVal7, Colors.Silver) : new UIText(textVal7, Colors.DGBlue);
-                matchSetting6.prevValue = matchSetting6.value;
-                component8.SetFont(f);
-                menu.Add(component8, true);
-            }
+            MatchSetting matchSetting6 = TeamSelect2.GetMatchSetting("custommaps"); //if (!ParentalControls.AreParentalControlsActive()) start of if
+            string name7 = matchSetting6.name;
+            string str9 = matchSetting6.value.ToString() + "%";
+            if (matchSetting6.minString != null && matchSetting6.value is int && (int)matchSetting6.value == matchSetting6.min)
+                str9 = matchSetting6.minString;
+            int startIndex3 = matchSetting6.name.LastIndexOf('|');
+            for (string str10 = matchSetting6.name.Substring(startIndex3, matchSetting6.name.Count<char>() - startIndex3); str10.Length < num1; str10 += " ")
+                name7 += " ";
+            while (str9.Length < num2)
+                str9 = " " + str9;
+            string textVal7 = (name7 + " " + str9).Replace("|DGBLUE|", "");
+            UIText component8 = matchSetting6.value.Equals(matchSetting6.prevValue) ? new UIText(textVal7, Colors.Silver) : new UIText(textVal7, Colors.DGBlue);
+            matchSetting6.prevValue = matchSetting6.value;
+            component8.SetFont(f);
+            menu.Add(component8, true); // end of all code if 
             MatchSetting matchSetting7 = TeamSelect2.GetMatchSetting("workshopmaps");
             string name8 = matchSetting7.name;
             string str11 = matchSetting7.value.ToString() + "%";
@@ -730,38 +731,35 @@ namespace DuckGame
             UIText component10 = new UIText(" ", Color.White);
             component10.SetFont(f);
             menu.Add(component10, true);
-            if (!ParentalControls.AreParentalControlsActive())
-            {
-                string str13 = "CUSTOM LEVELS ";
-                int customLevelCount = Editor.customLevelCount;
-                string str14 = customLevelCount.ToString();
-                if (str14 == "0")
-                    str14 = "NONE";
-                while (str13.Length < num1)
-                    str13 += " ";
-                while (str14.Length < num2)
-                    str14 = " " + str14;
-                string textVal9 = str13 + " " + str14;
-                UIText component11 = customLevelCount == TeamSelect2.prevCustomLevels ? new UIText(textVal9, Colors.Silver) : new UIText(textVal9, Colors.DGBlue);
-                TeamSelect2.prevCustomLevels = customLevelCount;
-                component11.SetFont(f);
-                menu.Add(component11, true);
-                MatchSetting matchSetting8 = TeamSelect2.GetMatchSetting("clientlevelsenabled");
-                string name9 = matchSetting8.name;
-                string str15 = (bool)matchSetting8.value ? "ON" : "OFF";
-                while (name9.Length < num1)
-                    name9 += " ";
-                while (str15.Length < num2)
-                    str15 = " " + str15;
-                string textVal10 = name9 + " " + str15;
-                UIText component12 = matchSetting8.value.Equals(matchSetting8.prevValue) ? new UIText(textVal10, Colors.Silver) : new UIText(textVal10, Colors.DGBlue);
-                matchSetting8.prevValue = matchSetting8.value;
-                component12.SetFont(f);
-                menu.Add(component12, true);
-                UIText component13 = new UIText(" ", Color.White);
-                component13.SetFont(f);
-                menu.Add(component13, true);
-            }
+            string str13 = "CUSTOM LEVELS ";  //if (!ParentalControls.AreParentalControlsActive()) start
+            int customLevelCount = Editor.customLevelCount;
+            string str14 = customLevelCount.ToString();
+            if (str14 == "0")
+                str14 = "NONE";
+            while (str13.Length < num1)
+                str13 += " ";
+            while (str14.Length < num2)
+                str14 = " " + str14;
+            string textVal9 = str13 + " " + str14;
+            UIText component11 = customLevelCount == TeamSelect2.prevCustomLevels ? new UIText(textVal9, Colors.Silver) : new UIText(textVal9, Colors.DGBlue);
+            TeamSelect2.prevCustomLevels = customLevelCount;
+            component11.SetFont(f);
+            menu.Add(component11, true);
+            MatchSetting matchSetting8 = TeamSelect2.GetMatchSetting("clientlevelsenabled");
+            string name9 = matchSetting8.name;
+            string str15 = (bool)matchSetting8.value ? "ON" : "OFF";
+            while (name9.Length < num1)
+                name9 += " ";
+            while (str15.Length < num2)
+                str15 = " " + str15;
+            string textVal10 = name9 + " " + str15;
+            UIText component12 = matchSetting8.value.Equals(matchSetting8.prevValue) ? new UIText(textVal10, Colors.Silver) : new UIText(textVal10, Colors.DGBlue);
+            matchSetting8.prevValue = matchSetting8.value;
+            component12.SetFont(f);
+            menu.Add(component12, true);
+            UIText component13 = new UIText(" ", Color.White);
+            component13.SetFont(f);
+            menu.Add(component13, true); // end of old code if
             int num3 = 0;
             foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
             {
@@ -933,20 +931,24 @@ namespace DuckGame
                 DuckNetwork._core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
                 DuckNetwork._core._matchModifierMenu.Close();
                 DuckNetwork._core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
-                foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
+                foreach (MatchSetting matchSetting in TeamSelect2.matchSettings) // removed ParentalControls.AreParentalControlsActive bs
                 {
-                    if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") && !(matchSetting.id == "clientlevelsenabled") || !ParentalControls.AreParentalControlsActive()))
-                    {
+                    if (!(matchSetting.id == "workshopmaps") || Network.available)
+                    { 
                         if (matchSetting.id != "partymode")
-                            DuckNetwork._core._matchSettingMenu.AddMatchSetting(matchSetting, false);
+                        {
+                            DuckNetwork._core._matchSettingMenu.AddMatchSetting(matchSetting, false, true);
+                        }
                         if (matchSetting.id == "wallmode")
-                            DuckNetwork._core._matchSettingMenu.Add(new UIText(" ", Color.White), true);
+                        {
+                            DuckNetwork._core._matchSettingMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        }
                     }
                 }
                 Main.SpecialCode = "men3";
                 DuckNetwork._core._matchSettingMenu.Add(new UIText(" ", Color.White), true);
-                if (!ParentalControls.AreParentalControlsActive())
-                    DuckNetwork._core._matchSettingMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._levelSelectMenu)), true);
+               
+                DuckNetwork._core._matchSettingMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._levelSelectMenu)), true); // ParentalControls.AreParentalControlsActive()
                 DuckNetwork._core._matchSettingMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._matchModifierMenu)), true);
                 DuckNetwork._core._matchSettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchSettingMenu, core._ducknetMenu));
                 DuckNetwork._core._matchSettingMenu.Close();
@@ -973,7 +975,7 @@ namespace DuckGame
                 DuckNetwork._ducknetUIGroup.Add(settingsInfoWindow, false);
                 DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|VIEW MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, settingsInfoWindow), UIAlign.Left), true);
                 Main.SpecialCode = "men6";
-                if ((bool)TeamSelect2.GetMatchSetting("clientlevelsenabled").value && Network.InLobby() && !ParentalControls.AreParentalControlsActive())
+                if ((bool)TeamSelect2.GetMatchSetting("clientlevelsenabled").value && Network.InLobby()) // removed && !ParentalControls.AreParentalControlsActive()
                 {
                     DuckNetwork._core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, DuckNetwork._core._ducknetMenu);
                     DuckNetwork._core._ducknetMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._ducknetMenu, _core._levelSelectMenu)), true);

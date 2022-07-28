@@ -260,8 +260,18 @@ namespace DuckGame
 
         public bool ParentalControlsActive
         {
-            get => this.connection == null || this.connection == DuckNetwork.localConnection ? ParentalControls.AreParentalControlsActive() : this._parentalControlsActive;
-            set => this._parentalControlsActive = value;
+            get
+            {
+                if (this.connection != null && this.connection != DuckNetwork.localConnection)
+                {
+                    return this._parentalControlsActive;
+                }
+                return false;
+            }
+            set
+            {
+                this._parentalControlsActive = value;
+            }
         }
 
         public BitmapFont font

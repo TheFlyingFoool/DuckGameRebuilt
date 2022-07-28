@@ -561,8 +561,8 @@ namespace DuckGame
                         if (this.isServerForObject)
                         {
                             Team allTeam = this.AllTeams()[_desiredTeamSelection];
-                            if (!Main.isDemo || allTeam.inDemo)
-                                this.SelectTeam();
+                            //if (!Main.isDemo || allTeam.inDemo) that was under this
+                            this.SelectTeam();
                         }
                     }
                     if (_upSlideTo != 0.0 && _upSlide != (double)this._upSlideTo)
@@ -575,8 +575,8 @@ namespace DuckGame
                         if (this.isServerForObject)
                         {
                             Team allTeam = this.AllTeams()[_desiredTeamSelection];
-                            if (!Main.isDemo || allTeam.inDemo)
-                                this.SelectTeam();
+                           //if (!Main.isDemo || allTeam.inDemo) that was under this
+                            this.SelectTeam();
                         }
                     }
                     if (this._selection == HSSelection.ChooseTeam)
@@ -769,19 +769,19 @@ namespace DuckGame
                                             g = this._goldLock;
                                         vec2 = new Vec2(-10f, -10f);
                                     }
-                                    bool flag5 = Main.isDemo && !allTeam.inDemo;
-                                    if (flag5)
-                                        g = this._demoBox;
+                                    //bool flag5 = Main.isDemo && !allTeam.inDemo;
+                                    //if (flag5)
+                                    //    g = this._demoBox;
                                     g.depth = (Depth)0.95f;
                                     g.alpha = this._profile.persona.sprite.alpha;
                                     g.color = Color.White * num7;
                                     g.scale = new Vec2(1f, 1f);
-                                    if (!flag5)
-                                        g.center = new Vec2(16f, 16f) + vec2;
+                                    //if (!flag5) was under
+                                    g.center = new Vec2(16f, 16f) + vec2;
                                     if (index3 > DG.MaxPlayers - 1 && _fade > 0.00999999977648258)
                                     {
-                                        Vec2 pos = Vec2.Zero;
-                                        pos = !flag5 ? new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0 + 1.0));
+                                        //Vec2 pos = Vec2.Zero;
+                                        Vec2 pos = new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)); //!flag5 ? new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0 + 1.0));
                                         Vec2 pixel = Maths.RoundToPixel(pos);
                                         if (index4 != -1 && !flag4 && allTeam.locked)
                                         {

@@ -1302,12 +1302,12 @@ namespace DuckGame
             {
                 if (!this._returnFromArcade)
                     this._duck = null;
-                if (TitleScreen.firstStart && ParentalControls.AreParentalControlsActive())
-                {
-                    MonoMain.pauseMenu = _parentalControlsMenu;
-                    this._parentalControlsMenu.Open();
-                    TitleScreen.firstStart = false;
-                }
+                //if (TitleScreen.firstStart && ParentalControls.AreParentalControlsActive())
+                //{
+                //    MonoMain.pauseMenu = _parentalControlsMenu;
+                //    this._parentalControlsMenu.Open();
+                //    TitleScreen.firstStart = false;
+                //}
                 foreach (Profile defaultProfile in Profiles.defaultProfiles)
                 {
                     if (defaultProfile.inputProfile.JoinGamePressed())
@@ -1323,8 +1323,8 @@ namespace DuckGame
                 }
                 if (this._duck != null)
                 {
-                    if (Main.foundPurchaseInfo && Main.isDemo)
-                        HUD.AddCornerControl(HUDCorner.TopRight, "@START@BUY GAME", this._duck.inputProfile);
+                    //if (Main.foundPurchaseInfo && Main.isDemo)
+                    //    HUD.AddCornerControl(HUDCorner.TopRight, "@START@BUY GAME", this._duck.inputProfile);
                     InputProfile.active = this._duck.profile.inputProfile;
                     this._fadeInFull = true;
                     this._title.fade = true;

@@ -83,7 +83,7 @@ namespace DuckGame
                 roomFlippers = Profile.CalculateLocalFlippers(),
                 flagIndex = Global.data.flag,
                 hasCustomHats = Teams.core.extraTeams.Count > 0,
-                parentalControlsActive = ParentalControls.AreParentalControlsActive()
+                parentalControlsActive = false   //ParentalControls.AreParentalControlsActive()
             };
 
             public void Serialize(BitBuffer pBuffer)

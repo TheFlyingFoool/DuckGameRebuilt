@@ -275,7 +275,7 @@ namespace DuckGame
            if (t.IsAbstract || !t.IsSubclassOf(typeof(PhysicsObject)) || t.GetCustomAttributes(typeof(EditorGroupAttribute), false).Length == 0)
                return false;
            IReadOnlyPropertyBag bag = ContentProperties.GetBag(t);
-           return bag.GetOrDefault("canSpawn", true) && (!Network.isActive || !bag.GetOrDefault("noRandomSpawningOnline", false)) && (!Network.isActive || bag.GetOrDefault("isOnlineCapable", true)) && (Main.isDemo || !bag.GetOrDefault("onlySpawnInDemo", false));
+           return bag.GetOrDefault("canSpawn", true) && (!Network.isActive || !bag.GetOrDefault("noRandomSpawningOnline", false)) && (!Network.isActive || bag.GetOrDefault("isOnlineCapable", true)) && !bag.GetOrDefault("onlySpawnInDemo", false);//(Main.isDemo || !bag.GetOrDefault("onlySpawnInDemo", false));
        }).ToList<System.Type>();
 
         public override BinaryClassChunk Serialize()

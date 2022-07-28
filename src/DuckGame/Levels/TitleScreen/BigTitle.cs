@@ -75,15 +75,15 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Main.isDemo)
-            {
-                this._fartWait -= 0.008f;
-                if (_fartWait < 0.0 && !this._showFart)
-                {
-                    this._showFart = true;
-                    SFX.Play("fart" + Rando.Int(3).ToString());
-                }
-            }
+            //if (Main.isDemo)
+            //{
+            //    this._fartWait -= 0.008f;
+            //    if (_fartWait < 0.0 && !this._showFart)
+            //    {
+            //        this._showFart = true;
+            //        SFX.Play("fart" + Rando.Int(3).ToString());
+            //    }
+            //}
             ++this._wait;
             if (this._fade)
             {
