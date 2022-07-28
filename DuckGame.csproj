@@ -22,20 +22,20 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AssemblyName>DuckGameDebug</AssemblyName>
+    <AssemblyName>DuckGame</AssemblyName>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>.\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <AssemblyName>DuckGameDebug</AssemblyName>
+    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>.\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
@@ -44,8 +44,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|AnyCPU'">
-    <AssemblyName>DuckGameTurbo</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <AssemblyName>DuckGame</AssemblyName>
+    <OutputPath>.\</OutputPath>
     <DefineConstants>TRACE;DuckGameTurbo</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -55,8 +55,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|x86'">
-    <AssemblyName>DuckGameTurbo</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <AssemblyName>DuckGame</AssemblyName>
+    <OutputPath>.\</OutputPath>
     <DefineConstants>TRACE;DuckGameTurbo</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -66,11 +66,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
-    <AssemblyName>DuckGameRebuilt</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <AssemblyName>DuckGame</AssemblyName>
+    <OutputPath>.\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -80,8 +80,8 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x86'">
-    <AssemblyName>DuckGameRebuilt</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <AssemblyName>DuckGame</AssemblyName>
+    <OutputPath>.\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -1715,7 +1715,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if  "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\DuckGameRebuilt.exe"
+if NOT "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\$(Configuration).exe"
+del "$(TargetDir)DuckGame.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>
