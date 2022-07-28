@@ -668,11 +668,11 @@ namespace DuckGame
                 }
                 VirtualTransition.Update();
                 ConnectionStatusUI.Update();
-                if (!this._aiInitialized)
-                {
-                    AI.InitializeLevelPaths();
-                    this._aiInitialized = true;
-                }
+                //if (!this._aiInitialized)
+                //{
+                //    AI.InitializeLevelPaths();
+                //    this._aiInitialized = true;
+                //}
                 if (this.skipCurrentLevelReset)
                     return;
                 Level._core.currentLevel = currentLevel;

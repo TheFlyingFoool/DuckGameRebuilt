@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 
 namespace DuckGame
 {
-    internal class FontGDIContext
+    internal static class FontGDIContext
     {
         private static System.Drawing.Graphics _graphicsContext;
         private static Bitmap _drawingImage;
@@ -39,48 +39,48 @@ namespace DuckGame
         public static Dictionary<string, RasterFont.Data> _fontDatas = new Dictionary<string, RasterFont.Data>();
         private static List<FontGDIContext.FontRange> curFont;
 
-        public static void SetSize(float pSize)
-        {
-            if ((double)pSize == _size)
-                return;
-            FontGDIContext._size = pSize;
-            //FontGDIContext._dirty = true;
-        }
+        //public static void SetSize(float pSize)
+        //{
+        //    if ((double)pSize == _size)
+        //        return;
+        //    FontGDIContext._size = pSize;
+        //    //FontGDIContext._dirty = true;
+        //}
 
-        public static void SetColor(Color pColor)
-        {
-            if (!(FontGDIContext._color != pColor))
-                return;
-            FontGDIContext._color = pColor;
-            //FontGDIContext._dirty = true;
-        }
+        //public static void SetColor(Color pColor)
+        //{
+        //    if (!(FontGDIContext._color != pColor))
+        //        return;
+        //    FontGDIContext._color = pColor;
+        //    //FontGDIContext._dirty = true;
+        //}
 
-        public static int numCharactersToRender => FontGDIContext._numCharactersToRender;
+       // public static int numCharactersToRender => FontGDIContext._numCharactersToRender;
 
-        public void SetNumCharactersToRender(int pNum)
-        {
-            if (FontGDIContext._numCharactersToRender == pNum)
-                return;
-            FontGDIContext._numCharactersToRender = pNum;
-            //FontGDIContext._dirty = true;
-        }
+        //public void SetNumCharactersToRender(int pNum)
+        //{
+        //    if (FontGDIContext._numCharactersToRender == pNum)
+        //        return;
+        //    FontGDIContext._numCharactersToRender = pNum;
+        //    //FontGDIContext._dirty = true;
+        //}
 
-        public static void SetAntiAliasing(bool pAnti)
-        {
-            if (FontGDIContext._antiAliasing == pAnti)
-                return;
-            FontGDIContext._antiAliasing = pAnti;
-            //FontGDIContext._dirty = true;
-            //FontGDIContext._contextDirty = true;
-        }
+        //public static void SetAntiAliasing(bool pAnti)
+        //{
+        //    if (FontGDIContext._antiAliasing == pAnti)
+        //        return;
+        //    FontGDIContext._antiAliasing = pAnti;
+        //    //FontGDIContext._dirty = true;
+        //    //FontGDIContext._contextDirty = true;
+        //}
 
-        public static void SetFontStyle(FontStyle pStyle)
-        {
-            if (FontGDIContext._fontStyle == pStyle)
-                return;
-            FontGDIContext._fontStyle = pStyle;
-            //FontGDIContext._dirty = true;
-        }
+        //public static void SetFontStyle(FontStyle pStyle)
+        //{
+        //    if (FontGDIContext._fontStyle == pStyle)
+        //        return;
+        //    FontGDIContext._fontStyle = pStyle;
+        //    //FontGDIContext._dirty = true;
+        //}
 
         private static StringFormat GetStringFormatting(bool pCenter = false)
         {
@@ -109,20 +109,20 @@ namespace DuckGame
           uint uLastChar,
           [MarshalAs(UnmanagedType.LPArray, SizeConst = 1, ArraySubType = UnmanagedType.LPStruct), Out] FontGDIContext.ABC[] lpabc);
 
-        private static FontGDIContext.ABC GetCharWidthABC(
-          char ch,
-          System.Drawing.Font font,
-          System.Drawing.Graphics gr)
-        {
-            FontGDIContext.ABC[] lpabc = new FontGDIContext.ABC[1];
-            IntPtr hdc = gr.GetHdc();
-            IntPtr hfont = ((System.Drawing.Font)font.Clone()).ToHfont();
-            FontGDIContext.SelectObject(hdc, hfont);
-            FontGDIContext.GetCharABCWidthsW(hdc, ch, ch, lpabc);
-            FontGDIContext.DeleteObject(hfont);
-            gr.ReleaseHdc();
-            return lpabc[0];
-        }
+        //private static FontGDIContext.ABC GetCharWidthABC(
+        //  char ch,
+        //  System.Drawing.Font font,
+        //  System.Drawing.Graphics gr)
+        //{
+        //    FontGDIContext.ABC[] lpabc = new FontGDIContext.ABC[1];
+        //    IntPtr hdc = gr.GetHdc();
+        //    IntPtr hfont = ((System.Drawing.Font)font.Clone()).ToHfont();
+        //    FontGDIContext.SelectObject(hdc, hfont);
+        //    FontGDIContext.GetCharABCWidthsW(hdc, ch, ch, lpabc);
+        //    FontGDIContext.DeleteObject(hfont);
+        //    gr.ReleaseHdc();
+        //    return lpabc[0];
+        //}
 
         [DllImport("gdi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern int SetMapMode(IntPtr hdc, int value);

@@ -416,513 +416,511 @@ namespace DuckGame
             for (int index = 0; index < 300; ++index)
                 this.AddCreditLine("");
             this.AddCreditLine("Cya later!");
-            if (!DG.InitializeDRM())
+            //if (!DG.InitializeDRM())
+            //{
+            //    Level.current = new BetaScreen();
+            //}
+            //else everything below till the end of the method
+            this._starField = new Sprite("background/starField");
+            TeamSelect2.DefaultSettings();
+            if (Network.isActive)
+                Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Returned to title screen."));
+            if (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished)
+                Music.Play("Title");
+            if (GameMode.playedGame)
+                GameMode.playedGame = false;
+            this._optionsGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._optionsMenu = new UIMenu("@WRENCH@OPTIONS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            this._controlConfigMenu = new UIControlConfig(this._optionsMenu, "@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 194f, conString: "@WASD@@SELECT@ADJUST @CANCEL@BACK");
+            this._flagMenu = new UIFlagSelection(this._optionsMenu, "FLAG", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f);
+            this._optionsMenu.Add(new UIMenuItemSlider("SFX Volume", field: new FieldBinding(Options.Data, "sfxVolume"), step: 0.06666667f), true);
+            this._optionsMenu.Add(new UIMenuItemSlider("Music Volume", field: new FieldBinding(Options.Data, "musicVolume"), step: 0.06666667f), true);
+            this._graphicsMenu = Options.CreateGraphicsMenu(this._optionsMenu);
+            this._audioMenu = Options.CreateAudioMenu(this._optionsMenu);
+            this._accessibilityMenu = Options.CreateAccessibilityMenu(this._optionsMenu);
+            this._ttsMenu = Options.tempTTSMenu;
+            this._blockMenu = Options.tempBlockMenu;
+            this._optionsMenu.Add(new UIMenuItemSlider("Rumble Intensity", field: new FieldBinding(Options.Data, "rumbleIntensity"), step: 0.06666667f), true);
+            this._optionsMenu.Add(new UIText(" ", Color.White), true);
+            this._optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Options.Data, "shennanigans")), true);
+            this._optionsMenu.Add(new UIText(" ", Color.White), true);
+            this._optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenuCallFunction(_optionsMenu, _controlConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(UIControlConfig.ResetWarning)), backButton: true), true);
+            this._optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(_optionsMenu, _graphicsMenu), backButton: true), true);
+            this._optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(_optionsMenu, _audioMenu), backButton: true), true);
+            this._cloudConfigMenu = new UIMenu("@WRENCH@SAVE DATA@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            this._cloudDeleteConfirmMenu = new UIMenu("CLEAR SAVE DATA?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@SELECT@SELECT");
+            this._cloudManagerMenu = new UICloudManagement(this._cloudConfigMenu);
+            this._cloudConfigMenu.Add(new UIMenuItemToggle("Enable Steam Cloud", field: new FieldBinding(Options.Data, "cloud")), true);
+            this._cloudConfigMenu.Add(new UIMenuItem("Manage Save Data", new UIMenuActionOpenMenu(_cloudConfigMenu, _cloudManagerMenu)), true);
+            this._cloudConfigMenu.Add(new UIMenuItem("|DGRED|CLEAR ALL SAVE DATA", new UIMenuActionOpenMenu(_cloudConfigMenu, _cloudDeleteConfirmMenu), backButton: true), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText("This will DELETE all data", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText("(Profiles, Options, Levels)", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText("from your Duck Game save!", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText("", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText("Do not do this, unless you're", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText("absolutely sure!", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIText(" ", Colors.DGRed), true);
+            this._cloudDeleteConfirmMenu.Add(new UIMenuItem("|DGRED|DELETE AND RESTART.", new UIMenuActionOpenMenuCallFunction(_cloudDeleteConfirmMenu, _cloudConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(this.CloudDelete))), true);
+            this._cloudDeleteConfirmMenu.Add(new UIMenuItem("|DGGREEN|CANCEL!", new UIMenuActionOpenMenu(_cloudDeleteConfirmMenu, _cloudConfigMenu)), true);
+            this._cloudDeleteConfirmMenu._defaultSelection = 1;
+            this._cloudDeleteConfirmMenu.SetBackFunction(new UIMenuActionOpenMenu(_cloudDeleteConfirmMenu, _cloudConfigMenu));
+            this._cloudDeleteConfirmMenu.Close();
+            this._cloudConfigMenu.Add(new UIText(" ", Colors.DGBlue), true);
+            this._cloudConfigMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_cloudConfigMenu, _optionsMenu), backButton: true), true);
+            this._optionsMenu.Add(new UIText(" ", Color.White), true);
+            if (MonoMain.moddingEnabled)
             {
-                Level.current = new BetaScreen();
+                this._modConfigMenu = new UIModManagement(this._optionsMenu, "@WRENCH@MANAGE MODS@SCREWDRIVER@", Layer.HUD.camera.width, Layer.HUD.camera.height, 550f, conString: "@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK");
+                this._optionsMenu.Add(new UIMenuItem("MANAGE MODS", new UIMenuActionOpenMenu(_optionsMenu, _modConfigMenu), backButton: true), true);
+            }
+            this._optionsMenu.Add(new UIMenuItem("SELECT FLAG", new UIMenuActionOpenMenu(_optionsMenu, _flagMenu), backButton: true), true);
+            this._optionsMenu.Add(new UIText(" ", Color.White), true);
+            if (this._accessibilityMenu != null)
+                this._optionsMenu.Add(new UIMenuItem("USABILITY", new UIMenuActionOpenMenu(_optionsMenu, _accessibilityMenu), backButton: true), true);
+            this._optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(_optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(this.OptionsSaveAndClose)));
+            this._optionsMenu.Close();
+            this._optionsGroup.Add(_optionsMenu, false);
+            this._controlConfigMenu.Close();
+            this._flagMenu.Close();
+            if (MonoMain.moddingEnabled)
+                this._modConfigMenu.Close();
+            this._cloudConfigMenu.Close();
+            this._cloudManagerMenu.Close();
+            this._optionsGroup.Add(_controlConfigMenu, false);
+            this._optionsGroup.Add((_controlConfigMenu as UIControlConfig)._confirmMenu, false);
+            this._optionsGroup.Add((_controlConfigMenu as UIControlConfig)._warningMenu, false);
+            this._optionsGroup.Add(_flagMenu, false);
+            this._optionsGroup.Add(_graphicsMenu, false);
+            this._optionsGroup.Add(_audioMenu, false);
+            if (this._accessibilityMenu != null)
+                this._optionsGroup.Add(_accessibilityMenu, false);
+            if (this._ttsMenu != null)
+                this._optionsGroup.Add(_ttsMenu, false);
+            if (this._blockMenu != null)
+                this._optionsGroup.Add(_blockMenu, false);
+            if (MonoMain.moddingEnabled)
+            {
+                this._optionsGroup.Add(_modConfigMenu, false);
+                this._optionsGroup.Add((_modConfigMenu as UIModManagement)._modSettingsMenu, false);
+                this._optionsGroup.Add((_modConfigMenu as UIModManagement)._editModMenu, false);
+                this._optionsGroup.Add((_modConfigMenu as UIModManagement)._yesNoMenu, false);
+            }
+            this._optionsGroup.Add(_cloudManagerMenu, false);
+            this._optionsGroup.Add(_cloudManagerMenu._deleteMenu, false);
+            this._optionsGroup.Add(_cloudConfigMenu, false);
+            this._optionsGroup.Add(_cloudDeleteConfirmMenu, false);
+            this._optionsGroup.Close();
+            Level.Add(_optionsGroup);
+            this._betaMenu = new UIMenu("@WRENCH@WELCOME TO BETA!@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@OK!");
+            this._betaMenu.Add(new UIImage(new Sprite("message"), UIAlign.Center, 0.25f, 51f), true);
+            this._betaMenu.Close();
+            this._betaMenu._backButton = new UIMenuItem("BACK", new UIMenuActionCloseMenu(_betaMenu), backButton: true);
+            this._betaMenu._isMenu = true;
+            Level.Add(_betaMenu);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f)
+            {
+                isPauseMenu = true
+            };
+            this._mainPauseMenu = new UIMenu("@LWING@DUCK GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            this._quitMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            this._quitMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_quitMenu, _mainPauseMenu)), true);
+            this._quitMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
+            this._quitMenu.Close();
+            this._pauseGroup.Add(_quitMenu, false);
+            this._parentalControlsMenu = new UIMenu("PARENTAL CONTROLS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            this._parentalControlsMenu.Add(new UIText("Certain online features have been", Color.White), true);
+            this._parentalControlsMenu.Add(new UIText("disabled by Parental Controls.", Color.White), true);
+            this._parentalControlsMenu.Add(new UIText("", Color.White), true);
+            this._parentalControlsMenu.Add(new UIMenuItem("OK", new UIMenuActionCloseMenu(this._pauseGroup)), true);
+            this._parentalControlsMenu.Close();
+            this._pauseGroup.Add(_parentalControlsMenu, false);
+            int pMinLength = 50;
+            float num1 = 3f;
+            this._duckGameUpdateMenu = new UIMenu("DUCK GAME 1.5!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
+            UIMenu duckGameUpdateMenu1 = this._duckGameUpdateMenu;
+            UIText component1 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu1.Add(component1, true);
+            UIMenu duckGameUpdateMenu2 = this._duckGameUpdateMenu;
+            UIText component2 = new UIText("Duck Game has received a major update!", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu2.Add(component2, true);
+            UIMenu duckGameUpdateMenu3 = this._duckGameUpdateMenu;
+            UIText component3 = new UIText("Some of the biggest changes include:", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu3.Add(component3, true);
+            UIMenu duckGameUpdateMenu4 = this._duckGameUpdateMenu;
+            UIText component4 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu4.Add(component4, true);
+            UIMenu duckGameUpdateMenu5 = this._duckGameUpdateMenu;
+            UIText component5 = new UIText("-Support for up to 8 players and 4 spectators".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu5.Add(component5, true);
+            UIMenu duckGameUpdateMenu6 = this._duckGameUpdateMenu;
+            UIText component6 = new UIText("-New hats, weapons, equipment and furniture".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu6.Add(component6, true);
+            UIMenu duckGameUpdateMenu7 = this._duckGameUpdateMenu;
+            UIText component7 = new UIText("-New city themed levels".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu7.Add(component7, true);
+            UIMenu duckGameUpdateMenu8 = this._duckGameUpdateMenu;
+            UIText component8 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu8.Add(component8, true);
+            UIMenu duckGameUpdateMenu9 = this._duckGameUpdateMenu;
+            UIText component9 = new UIText("-Custom font support for chat".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu9.Add(component9, true);
+            UIMenu duckGameUpdateMenu10 = this._duckGameUpdateMenu;
+            UIText component10 = new UIText("-4K and custom resolution support".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu10.Add(component10, true);
+            UIMenu duckGameUpdateMenu11 = this._duckGameUpdateMenu;
+            UIText component11 = new UIText("-Host Migration, Invite Links, LAN play".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu11.Add(component11, true);
+            UIMenu duckGameUpdateMenu12 = this._duckGameUpdateMenu;
+            UIText component12 = new UIText("-Major online synchronization improvements".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu12.Add(component12, true);
+            UIMenu duckGameUpdateMenu13 = this._duckGameUpdateMenu;
+            UIText component13 = new UIText("-Major performance improvements".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu13.Add(component13, true);
+            UIMenu duckGameUpdateMenu14 = this._duckGameUpdateMenu;
+            UIText component14 = new UIText("-Hundreds and hundreds of bug fixes".Padded(pMinLength), Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu14.Add(component14, true);
+            UIMenu duckGameUpdateMenu15 = this._duckGameUpdateMenu;
+            UIText component15 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu15.Add(component15, true);
+            UIMenu duckGameUpdateMenu16 = this._duckGameUpdateMenu;
+            UIText component16 = new UIText("Thank you for all your support!", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu16.Add(component16, true);
+            UIMenu duckGameUpdateMenu17 = this._duckGameUpdateMenu;
+            UIText component17 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            duckGameUpdateMenu17.Add(component17, true);
+            this._duckGameUpdateMenu.SetAcceptFunction(new UIMenuActionCloseMenu(this._pauseGroup));
+            this._duckGameUpdateMenu.SetBackFunction(new UIMenuActionCloseMenu(this._pauseGroup));
+            this._duckGameUpdateMenu.Close();
+            this._pauseGroup.Add(_duckGameUpdateMenu, false);
+            this._steamWarningMessage = new UIMenu("Steam Not Connected!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@ I see...");
+            UIMenu steamWarningMessage1 = this._steamWarningMessage;
+            UIText component18 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage1.Add(component18, true);
+            UIMenu steamWarningMessage2 = this._steamWarningMessage;
+            UIText component19 = new UIText("It seems that either you're not logged in", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage2.Add(component19, true);
+            UIMenu steamWarningMessage3 = this._steamWarningMessage;
+            UIText component20 = new UIText("to Steam, or Steam failed to authenticate.", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage3.Add(component20, true);
+            UIMenu steamWarningMessage4 = this._steamWarningMessage;
+            UIText component21 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage4.Add(component21, true);
+            UIMenu steamWarningMessage5 = this._steamWarningMessage;
+            UIText component22 = new UIText("You can still play- but realtime", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage5.Add(component22, true);
+            UIMenu steamWarningMessage6 = this._steamWarningMessage;
+            UIText component23 = new UIText("features like Online Play and the Workshop", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage6.Add(component23, true);
+            UIMenu steamWarningMessage7 = this._steamWarningMessage;
+            UIText component24 = new UIText("will be |DGRED|unavailable|PREV|.", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage7.Add(component24, true);
+            UIMenu steamWarningMessage8 = this._steamWarningMessage;
+            UIText component25 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            steamWarningMessage8.Add(component25, true);
+            this._steamWarningMessage.SetAcceptFunction(new UIMenuActionCloseMenu(this._pauseGroup));
+            this._steamWarningMessage.SetBackFunction(new UIMenuActionCloseMenu(this._pauseGroup));
+            this._steamWarningMessage.Close();
+            this._pauseGroup.Add(_steamWarningMessage, false);
+            this._modsDisabledMenu = new UIMenu("MODS CHANGED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@SELECT@I see...");
+            UIMenu modsDisabledMenu1 = this._modsDisabledMenu;
+            UIText component26 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu1.Add(component26, true);
+            UIMenu modsDisabledMenu2 = this._modsDisabledMenu;
+            UIText component27 = new UIText("To ensure a smooth update, all enabled", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu2.Add(component27, true);
+            UIMenu modsDisabledMenu3 = this._modsDisabledMenu;
+            UIText component28 = new UIText("mods have been temporarily set to |DGRED|disabled|PREV|.", Color.White, heightAdd: -4f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu3.Add(component28, true);
+            UIMenu modsDisabledMenu4 = this._modsDisabledMenu;
+            UIText component29 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu4.Add(component29, true);
+            UIMenu modsDisabledMenu5 = this._modsDisabledMenu;
+            UIText component30 = new UIText("Mod compatibility has been a high priority, and", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu5.Add(component30, true);
+            UIMenu modsDisabledMenu6 = this._modsDisabledMenu;
+            UIText component31 = new UIText("most mods should work no problem with the new version.", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu6.Add(component31, true);
+            UIMenu modsDisabledMenu7 = this._modsDisabledMenu;
+            UIText component32 = new UIText("They can be re-enabled through the |DGORANGE|MANAGE MODS|PREV| menu", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu7.Add(component32, true);
+            UIMenu modsDisabledMenu8 = this._modsDisabledMenu;
+            UIText component33 = new UIText("accessible via the top left options console.", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu8.Add(component33, true);
+            UIMenu modsDisabledMenu9 = this._modsDisabledMenu;
+            UIText component34 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu9.Add(component34, true);
+            UIMenu modsDisabledMenu10 = this._modsDisabledMenu;
+            UIText component35 = new UIText("Some older mods may |DGRED|not|PREV| work...", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu10.Add(component35, true);
+            UIMenu modsDisabledMenu11 = this._modsDisabledMenu;
+            UIText component36 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu11.Add(component36, true);
+            UIMenu modsDisabledMenu12 = this._modsDisabledMenu;
+            UIText component37 = new UIText("Please be mindful of any crashes caused by", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu12.Add(component37, true);
+            UIMenu modsDisabledMenu13 = this._modsDisabledMenu;
+            UIText component38 = new UIText("re-enabling specific mods, and use the '|DGBLUE|-nomods|PREV|'", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu13.Add(component38, true);
+            UIMenu modsDisabledMenu14 = this._modsDisabledMenu;
+            UIText component39 = new UIText("launch option if you run into trouble!", Color.White, heightAdd: (-num1))
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu14.Add(component39, true);
+            UIMenu modsDisabledMenu15 = this._modsDisabledMenu;
+            UIText component40 = new UIText("", Color.White, heightAdd: -3f)
+            {
+                scale = new Vec2(0.5f)
+            };
+            modsDisabledMenu15.Add(component40, true);
+            this._modsDisabledMenu.SetAcceptFunction(new UIMenuActionCloseMenu(this._pauseGroup));
+            this._modsDisabledMenu.SetBackFunction(new UIMenuActionCloseMenu(this._pauseGroup));
+            this._modsDisabledMenu.Close();
+            this._pauseGroup.Add(_modsDisabledMenu, false);
+            UIDivider component41 = new UIDivider(true, 0.8f);
+            component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            this._mainPauseMenu.Add(component41, true);
+            component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup)), true);
+            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._enterCreditsMenuBool), UIAlign.Left), true);
+            component41.leftSection.Add(new UIText("", Color.White), true);
+            component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);
+            Options.openOnClose = this._mainPauseMenu;
+            Options.AddMenus(this._pauseGroup);
+            this._mainPauseMenu.Close();
+            this._pauseGroup.Add(_mainPauseMenu, false);
+            this._pauseGroup.Close();
+            Level.Add(_pauseGroup);
+            this._font = new BitmapFont("biosFont", 8);
+            this._background = new Sprite("title/background");
+            //this._optionsPlatform = new Sprite("title/optionsPlatform")
+            //{
+            //    depth = (Depth)0.9f
+            //};
+            this._rightPlatform = new Sprite("title/rightPlatform")
+            {
+                depth = (Depth)0.9f
+            };
+            this._beamPlatform = new Sprite("title/beamPlatform")
+            {
+                depth = (Depth)0.9f
+            };
+            this._upperMonitor = new Sprite("title/upperMonitor")
+            {
+                depth = (Depth)0.85f
+            };
+            this._airlock = new Sprite("title/airlock")
+            {
+                depth = -0.85f
+            };
+            this._leftPlatform = new Sprite("title/leftPlatform")
+            {
+                depth = (Depth)0.9f
+            };
+            this._optionsTV = new Sprite("title/optionsTV")
+            {
+                depth = -0.9f
+            };
+            this._libraryBookcase = new Sprite("title/libraryBookcase")
+            {
+                depth = -0.9f
+            };
+            this._editorBench = new Sprite("title/editorBench")
+            {
+                depth = -0.9f
+            };
+            this._editorBenchPaint = new Sprite("title/editorBenchPaint")
+            {
+                depth = (Depth)0.9f
+            };
+            this._bigUButton = new Sprite("title/bigUButtonPC");
+            this._bigUButton.CenterOrigin();
+            this._bigUButton.depth = (Depth)0.95f;
+            this._controls = new SpriteMap("title/controlsPC", 100, 11);
+            this._controls.CenterOrigin();
+            this._controls.depth = (Depth)0.95f;
+            this._multiBeam = new MultiBeam(160f, -30f);
+            Level.Add(_multiBeam);
+            this._optionsBeam = new OptionsBeam(28f, -110f);
+            Level.Add(_optionsBeam);
+            this._libraryBeam = new LibraryBeam(292f, -110f);
+            Level.Add(_libraryBeam);
+            this._editorBeam = new EditorBeam(28f, 100f);
+            Level.Add(_editorBeam);
+            for (int index = 0; index < 21; ++index)
+            {
+                SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)
+                {
+                    frame = 3,
+                    layer = Layer.Game,
+                    setLayer = false
+                };
+                this.AddThing(t);
+            }
+            SpriteMap spriteMap = new SpriteMap("duck", 32, 32);
+            this._space = new SpaceBackgroundMenu(-999f, -999f, true, 0.6f)
+            {
+                update = false
+            };
+            Level.Add(_space);
+            this._things.RefreshState();
+            Layer.Game.fade = 0.0f;
+            Layer.Foreground.fade = 0.0f;
+            Level.Add(new Block(120f, 155f, 80f, 30f, PhysicsMaterial.Metal));
+            Level.Add(new Block(134f, 148f, 52f, 30f, PhysicsMaterial.Metal));
+            Level.Add(new Block(0.0f, 61f, 63f, 70f, PhysicsMaterial.Metal));
+            Level.Add(new Block(257f, 61f, 63f, 60f, PhysicsMaterial.Metal));
+            Level.Add(new Spring(90f, 160f, 0.32f));
+            Level.Add(new Spring(229f, 160f, 0.32f));
+            Level.Add(new VerticalDoor(270f, 160f)
+            {
+                filterDefault = true
+            });
+            foreach (Team team in Teams.all)
+            {
+                int num2;
+                int num3 = num2 = 0;
+                team.score = num2;
+                team.prevScoreboardScore = num3;
+            }
+            foreach (Profile prof in Profiles.all)
+            {
+                if (prof.team != null)
+                    prof.team.Leave(prof);
+                prof.inputProfile = null;
+            }
+            InputProfile.ReassignDefaultInputProfiles(true);
+            if (this._arcadeProfile == null)
+            {
+                TeamSelect2.ControllerLayoutsChanged();
+                Teams.Player1.Join(Profiles.DefaultPlayer1);
+                Teams.Player2.Join(Profiles.DefaultPlayer2);
+                Teams.Player3.Join(Profiles.DefaultPlayer3);
+                Teams.Player4.Join(Profiles.DefaultPlayer4);
             }
             else
             {
-                this._starField = new Sprite("background/starField");
-                TeamSelect2.DefaultSettings();
-                if (Network.isActive)
-                    Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Returned to title screen."));
-                if (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished)
-                    Music.Play("Title");
-                if (GameMode.playedGame)
-                    GameMode.playedGame = false;
-                this._optionsGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
-                this._optionsMenu = new UIMenu("@WRENCH@OPTIONS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                this._controlConfigMenu = new UIControlConfig(this._optionsMenu, "@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 194f, conString: "@WASD@@SELECT@ADJUST @CANCEL@BACK");
-                this._flagMenu = new UIFlagSelection(this._optionsMenu, "FLAG", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f);
-                this._optionsMenu.Add(new UIMenuItemSlider("SFX Volume", field: new FieldBinding(Options.Data, "sfxVolume"), step: 0.06666667f), true);
-                this._optionsMenu.Add(new UIMenuItemSlider("Music Volume", field: new FieldBinding(Options.Data, "musicVolume"), step: 0.06666667f), true);
-                this._graphicsMenu = Options.CreateGraphicsMenu(this._optionsMenu);
-                this._audioMenu = Options.CreateAudioMenu(this._optionsMenu);
-                this._accessibilityMenu = Options.CreateAccessibilityMenu(this._optionsMenu);
-                this._ttsMenu = Options.tempTTSMenu;
-                this._blockMenu = Options.tempBlockMenu;
-                this._optionsMenu.Add(new UIMenuItemSlider("Rumble Intensity", field: new FieldBinding(Options.Data, "rumbleIntensity"), step: 0.06666667f), true);
-                this._optionsMenu.Add(new UIText(" ", Color.White), true);
-                this._optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Options.Data, "shennanigans")), true);
-                this._optionsMenu.Add(new UIText(" ", Color.White), true);
-                this._optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenuCallFunction(_optionsMenu, _controlConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(UIControlConfig.ResetWarning)), backButton: true), true);
-                this._optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(_optionsMenu, _graphicsMenu), backButton: true), true);
-                this._optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(_optionsMenu, _audioMenu), backButton: true), true);
-                this._cloudConfigMenu = new UIMenu("@WRENCH@SAVE DATA@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                this._cloudDeleteConfirmMenu = new UIMenu("CLEAR SAVE DATA?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@SELECT@SELECT");
-                this._cloudManagerMenu = new UICloudManagement(this._cloudConfigMenu);
-                this._cloudConfigMenu.Add(new UIMenuItemToggle("Enable Steam Cloud", field: new FieldBinding(Options.Data, "cloud")), true);
-                this._cloudConfigMenu.Add(new UIMenuItem("Manage Save Data", new UIMenuActionOpenMenu(_cloudConfigMenu, _cloudManagerMenu)), true);
-                this._cloudConfigMenu.Add(new UIMenuItem("|DGRED|CLEAR ALL SAVE DATA", new UIMenuActionOpenMenu(_cloudConfigMenu, _cloudDeleteConfirmMenu), backButton: true), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText("This will DELETE all data", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText("(Profiles, Options, Levels)", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText("from your Duck Game save!", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText("", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText("Do not do this, unless you're", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText("absolutely sure!", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIText(" ", Colors.DGRed), true);
-                this._cloudDeleteConfirmMenu.Add(new UIMenuItem("|DGRED|DELETE AND RESTART.", new UIMenuActionOpenMenuCallFunction(_cloudDeleteConfirmMenu, _cloudConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(this.CloudDelete))), true);
-                this._cloudDeleteConfirmMenu.Add(new UIMenuItem("|DGGREEN|CANCEL!", new UIMenuActionOpenMenu(_cloudDeleteConfirmMenu, _cloudConfigMenu)), true);
-                this._cloudDeleteConfirmMenu._defaultSelection = 1;
-                this._cloudDeleteConfirmMenu.SetBackFunction(new UIMenuActionOpenMenu(_cloudDeleteConfirmMenu, _cloudConfigMenu));
-                this._cloudDeleteConfirmMenu.Close();
-                this._cloudConfigMenu.Add(new UIText(" ", Colors.DGBlue), true);
-                this._cloudConfigMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_cloudConfigMenu, _optionsMenu), backButton: true), true);
-                this._optionsMenu.Add(new UIText(" ", Color.White), true);
-                if (MonoMain.moddingEnabled)
-                {
-                    this._modConfigMenu = new UIModManagement(this._optionsMenu, "@WRENCH@MANAGE MODS@SCREWDRIVER@", Layer.HUD.camera.width, Layer.HUD.camera.height, 550f, conString: "@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK");
-                    this._optionsMenu.Add(new UIMenuItem("MANAGE MODS", new UIMenuActionOpenMenu(_optionsMenu, _modConfigMenu), backButton: true), true);
-                }
-                this._optionsMenu.Add(new UIMenuItem("SELECT FLAG", new UIMenuActionOpenMenu(_optionsMenu, _flagMenu), backButton: true), true);
-                this._optionsMenu.Add(new UIText(" ", Color.White), true);
-                if (this._accessibilityMenu != null)
-                    this._optionsMenu.Add(new UIMenuItem("USABILITY", new UIMenuActionOpenMenu(_optionsMenu, _accessibilityMenu), backButton: true), true);
-                this._optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(_optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(this.OptionsSaveAndClose)));
-                this._optionsMenu.Close();
-                this._optionsGroup.Add(_optionsMenu, false);
-                this._controlConfigMenu.Close();
-                this._flagMenu.Close();
-                if (MonoMain.moddingEnabled)
-                    this._modConfigMenu.Close();
-                this._cloudConfigMenu.Close();
-                this._cloudManagerMenu.Close();
-                this._optionsGroup.Add(_controlConfigMenu, false);
-                this._optionsGroup.Add((_controlConfigMenu as UIControlConfig)._confirmMenu, false);
-                this._optionsGroup.Add((_controlConfigMenu as UIControlConfig)._warningMenu, false);
-                this._optionsGroup.Add(_flagMenu, false);
-                this._optionsGroup.Add(_graphicsMenu, false);
-                this._optionsGroup.Add(_audioMenu, false);
-                if (this._accessibilityMenu != null)
-                    this._optionsGroup.Add(_accessibilityMenu, false);
-                if (this._ttsMenu != null)
-                    this._optionsGroup.Add(_ttsMenu, false);
-                if (this._blockMenu != null)
-                    this._optionsGroup.Add(_blockMenu, false);
-                if (MonoMain.moddingEnabled)
-                {
-                    this._optionsGroup.Add(_modConfigMenu, false);
-                    this._optionsGroup.Add((_modConfigMenu as UIModManagement)._modSettingsMenu, false);
-                    this._optionsGroup.Add((_modConfigMenu as UIModManagement)._editModMenu, false);
-                    this._optionsGroup.Add((_modConfigMenu as UIModManagement)._yesNoMenu, false);
-                }
-                this._optionsGroup.Add(_cloudManagerMenu, false);
-                this._optionsGroup.Add(_cloudManagerMenu._deleteMenu, false);
-                this._optionsGroup.Add(_cloudConfigMenu, false);
-                this._optionsGroup.Add(_cloudDeleteConfirmMenu, false);
-                this._optionsGroup.Close();
-                Level.Add(_optionsGroup);
-                this._betaMenu = new UIMenu("@WRENCH@WELCOME TO BETA!@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@OK!");
-                this._betaMenu.Add(new UIImage(new Sprite("message"), UIAlign.Center, 0.25f, 51f), true);
-                this._betaMenu.Close();
-                this._betaMenu._backButton = new UIMenuItem("BACK", new UIMenuActionCloseMenu(_betaMenu), backButton: true);
-                this._betaMenu._isMenu = true;
-                Level.Add(_betaMenu);
-                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f)
-                {
-                    isPauseMenu = true
-                };
-                this._mainPauseMenu = new UIMenu("@LWING@DUCK GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-                this._quitMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                this._quitMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_quitMenu, _mainPauseMenu)), true);
-                this._quitMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
-                this._quitMenu.Close();
-                this._pauseGroup.Add(_quitMenu, false);
-                this._parentalControlsMenu = new UIMenu("PARENTAL CONTROLS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-                this._parentalControlsMenu.Add(new UIText("Certain online features have been", Color.White), true);
-                this._parentalControlsMenu.Add(new UIText("disabled by Parental Controls.", Color.White), true);
-                this._parentalControlsMenu.Add(new UIText("", Color.White), true);
-                this._parentalControlsMenu.Add(new UIMenuItem("OK", new UIMenuActionCloseMenu(this._pauseGroup)), true);
-                this._parentalControlsMenu.Close();
-                this._pauseGroup.Add(_parentalControlsMenu, false);
-                int pMinLength = 50;
-                float num1 = 3f;
-                this._duckGameUpdateMenu = new UIMenu("DUCK GAME 1.5!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
-                UIMenu duckGameUpdateMenu1 = this._duckGameUpdateMenu;
-                UIText component1 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu1.Add(component1, true);
-                UIMenu duckGameUpdateMenu2 = this._duckGameUpdateMenu;
-                UIText component2 = new UIText("Duck Game has received a major update!", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu2.Add(component2, true);
-                UIMenu duckGameUpdateMenu3 = this._duckGameUpdateMenu;
-                UIText component3 = new UIText("Some of the biggest changes include:", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu3.Add(component3, true);
-                UIMenu duckGameUpdateMenu4 = this._duckGameUpdateMenu;
-                UIText component4 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu4.Add(component4, true);
-                UIMenu duckGameUpdateMenu5 = this._duckGameUpdateMenu;
-                UIText component5 = new UIText("-Support for up to 8 players and 4 spectators".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu5.Add(component5, true);
-                UIMenu duckGameUpdateMenu6 = this._duckGameUpdateMenu;
-                UIText component6 = new UIText("-New hats, weapons, equipment and furniture".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu6.Add(component6, true);
-                UIMenu duckGameUpdateMenu7 = this._duckGameUpdateMenu;
-                UIText component7 = new UIText("-New city themed levels".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu7.Add(component7, true);
-                UIMenu duckGameUpdateMenu8 = this._duckGameUpdateMenu;
-                UIText component8 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu8.Add(component8, true);
-                UIMenu duckGameUpdateMenu9 = this._duckGameUpdateMenu;
-                UIText component9 = new UIText("-Custom font support for chat".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu9.Add(component9, true);
-                UIMenu duckGameUpdateMenu10 = this._duckGameUpdateMenu;
-                UIText component10 = new UIText("-4K and custom resolution support".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu10.Add(component10, true);
-                UIMenu duckGameUpdateMenu11 = this._duckGameUpdateMenu;
-                UIText component11 = new UIText("-Host Migration, Invite Links, LAN play".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu11.Add(component11, true);
-                UIMenu duckGameUpdateMenu12 = this._duckGameUpdateMenu;
-                UIText component12 = new UIText("-Major online synchronization improvements".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu12.Add(component12, true);
-                UIMenu duckGameUpdateMenu13 = this._duckGameUpdateMenu;
-                UIText component13 = new UIText("-Major performance improvements".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu13.Add(component13, true);
-                UIMenu duckGameUpdateMenu14 = this._duckGameUpdateMenu;
-                UIText component14 = new UIText("-Hundreds and hundreds of bug fixes".Padded(pMinLength), Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu14.Add(component14, true);
-                UIMenu duckGameUpdateMenu15 = this._duckGameUpdateMenu;
-                UIText component15 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu15.Add(component15, true);
-                UIMenu duckGameUpdateMenu16 = this._duckGameUpdateMenu;
-                UIText component16 = new UIText("Thank you for all your support!", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu16.Add(component16, true);
-                UIMenu duckGameUpdateMenu17 = this._duckGameUpdateMenu;
-                UIText component17 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                duckGameUpdateMenu17.Add(component17, true);
-                this._duckGameUpdateMenu.SetAcceptFunction(new UIMenuActionCloseMenu(this._pauseGroup));
-                this._duckGameUpdateMenu.SetBackFunction(new UIMenuActionCloseMenu(this._pauseGroup));
-                this._duckGameUpdateMenu.Close();
-                this._pauseGroup.Add(_duckGameUpdateMenu, false);
-                this._steamWarningMessage = new UIMenu("Steam Not Connected!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@ I see...");
-                UIMenu steamWarningMessage1 = this._steamWarningMessage;
-                UIText component18 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage1.Add(component18, true);
-                UIMenu steamWarningMessage2 = this._steamWarningMessage;
-                UIText component19 = new UIText("It seems that either you're not logged in", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage2.Add(component19, true);
-                UIMenu steamWarningMessage3 = this._steamWarningMessage;
-                UIText component20 = new UIText("to Steam, or Steam failed to authenticate.", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage3.Add(component20, true);
-                UIMenu steamWarningMessage4 = this._steamWarningMessage;
-                UIText component21 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage4.Add(component21, true);
-                UIMenu steamWarningMessage5 = this._steamWarningMessage;
-                UIText component22 = new UIText("You can still play- but realtime", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage5.Add(component22, true);
-                UIMenu steamWarningMessage6 = this._steamWarningMessage;
-                UIText component23 = new UIText("features like Online Play and the Workshop", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage6.Add(component23, true);
-                UIMenu steamWarningMessage7 = this._steamWarningMessage;
-                UIText component24 = new UIText("will be |DGRED|unavailable|PREV|.", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage7.Add(component24, true);
-                UIMenu steamWarningMessage8 = this._steamWarningMessage;
-                UIText component25 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                steamWarningMessage8.Add(component25, true);
-                this._steamWarningMessage.SetAcceptFunction(new UIMenuActionCloseMenu(this._pauseGroup));
-                this._steamWarningMessage.SetBackFunction(new UIMenuActionCloseMenu(this._pauseGroup));
-                this._steamWarningMessage.Close();
-                this._pauseGroup.Add(_steamWarningMessage, false);
-                this._modsDisabledMenu = new UIMenu("MODS CHANGED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@SELECT@I see...");
-                UIMenu modsDisabledMenu1 = this._modsDisabledMenu;
-                UIText component26 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu1.Add(component26, true);
-                UIMenu modsDisabledMenu2 = this._modsDisabledMenu;
-                UIText component27 = new UIText("To ensure a smooth update, all enabled", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu2.Add(component27, true);
-                UIMenu modsDisabledMenu3 = this._modsDisabledMenu;
-                UIText component28 = new UIText("mods have been temporarily set to |DGRED|disabled|PREV|.", Color.White, heightAdd: -4f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu3.Add(component28, true);
-                UIMenu modsDisabledMenu4 = this._modsDisabledMenu;
-                UIText component29 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu4.Add(component29, true);
-                UIMenu modsDisabledMenu5 = this._modsDisabledMenu;
-                UIText component30 = new UIText("Mod compatibility has been a high priority, and", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu5.Add(component30, true);
-                UIMenu modsDisabledMenu6 = this._modsDisabledMenu;
-                UIText component31 = new UIText("most mods should work no problem with the new version.", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu6.Add(component31, true);
-                UIMenu modsDisabledMenu7 = this._modsDisabledMenu;
-                UIText component32 = new UIText("They can be re-enabled through the |DGORANGE|MANAGE MODS|PREV| menu", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu7.Add(component32, true);
-                UIMenu modsDisabledMenu8 = this._modsDisabledMenu;
-                UIText component33 = new UIText("accessible via the top left options console.", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu8.Add(component33, true);
-                UIMenu modsDisabledMenu9 = this._modsDisabledMenu;
-                UIText component34 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu9.Add(component34, true);
-                UIMenu modsDisabledMenu10 = this._modsDisabledMenu;
-                UIText component35 = new UIText("Some older mods may |DGRED|not|PREV| work...", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu10.Add(component35, true);
-                UIMenu modsDisabledMenu11 = this._modsDisabledMenu;
-                UIText component36 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu11.Add(component36, true);
-                UIMenu modsDisabledMenu12 = this._modsDisabledMenu;
-                UIText component37 = new UIText("Please be mindful of any crashes caused by", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu12.Add(component37, true);
-                UIMenu modsDisabledMenu13 = this._modsDisabledMenu;
-                UIText component38 = new UIText("re-enabling specific mods, and use the '|DGBLUE|-nomods|PREV|'", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu13.Add(component38, true);
-                UIMenu modsDisabledMenu14 = this._modsDisabledMenu;
-                UIText component39 = new UIText("launch option if you run into trouble!", Color.White, heightAdd: (-num1))
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu14.Add(component39, true);
-                UIMenu modsDisabledMenu15 = this._modsDisabledMenu;
-                UIText component40 = new UIText("", Color.White, heightAdd: -3f)
-                {
-                    scale = new Vec2(0.5f)
-                };
-                modsDisabledMenu15.Add(component40, true);
-                this._modsDisabledMenu.SetAcceptFunction(new UIMenuActionCloseMenu(this._pauseGroup));
-                this._modsDisabledMenu.SetBackFunction(new UIMenuActionCloseMenu(this._pauseGroup));
-                this._modsDisabledMenu.Close();
-                this._pauseGroup.Add(_modsDisabledMenu, false);
-                UIDivider component41 = new UIDivider(true, 0.8f);
-                component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
-                this._mainPauseMenu.Add(component41, true);
-                component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup)), true);
-                component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
-                component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._enterCreditsMenuBool), UIAlign.Left), true);
-                component41.leftSection.Add(new UIText("", Color.White), true);
-                component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);
-                Options.openOnClose = this._mainPauseMenu;
-                Options.AddMenus(this._pauseGroup);
-                this._mainPauseMenu.Close();
-                this._pauseGroup.Add(_mainPauseMenu, false);
-                this._pauseGroup.Close();
-                Level.Add(_pauseGroup);
-                this._font = new BitmapFont("biosFont", 8);
-                this._background = new Sprite("title/background");
-                //this._optionsPlatform = new Sprite("title/optionsPlatform")
-                //{
-                //    depth = (Depth)0.9f
-                //};
-                this._rightPlatform = new Sprite("title/rightPlatform")
-                {
-                    depth = (Depth)0.9f
-                };
-                this._beamPlatform = new Sprite("title/beamPlatform")
-                {
-                    depth = (Depth)0.9f
-                };
-                this._upperMonitor = new Sprite("title/upperMonitor")
-                {
-                    depth = (Depth)0.85f
-                };
-                this._airlock = new Sprite("title/airlock")
-                {
-                    depth = -0.85f
-                };
-                this._leftPlatform = new Sprite("title/leftPlatform")
-                {
-                    depth = (Depth)0.9f
-                };
-                this._optionsTV = new Sprite("title/optionsTV")
-                {
-                    depth = -0.9f
-                };
-                this._libraryBookcase = new Sprite("title/libraryBookcase")
-                {
-                    depth = -0.9f
-                };
-                this._editorBench = new Sprite("title/editorBench")
-                {
-                    depth = -0.9f
-                };
-                this._editorBenchPaint = new Sprite("title/editorBenchPaint")
-                {
-                    depth = (Depth)0.9f
-                };
-                this._bigUButton = new Sprite("title/bigUButtonPC");
-                this._bigUButton.CenterOrigin();
-                this._bigUButton.depth = (Depth)0.95f;
-                this._controls = new SpriteMap("title/controlsPC", 100, 11);
-                this._controls.CenterOrigin();
-                this._controls.depth = (Depth)0.95f;
-                this._multiBeam = new MultiBeam(160f, -30f);
-                Level.Add(_multiBeam);
-                this._optionsBeam = new OptionsBeam(28f, -110f);
-                Level.Add(_optionsBeam);
-                this._libraryBeam = new LibraryBeam(292f, -110f);
-                Level.Add(_libraryBeam);
-                this._editorBeam = new EditorBeam(28f, 100f);
-                Level.Add(_editorBeam);
-                for (int index = 0; index < 21; ++index)
-                {
-                    SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)
-                    {
-                        frame = 3,
-                        layer = Layer.Game,
-                        setLayer = false
-                    };
-                    this.AddThing(t);
-                }
-                SpriteMap spriteMap = new SpriteMap("duck", 32, 32);
-                this._space = new SpaceBackgroundMenu(-999f, -999f, true, 0.6f)
-                {
-                    update = false
-                };
-                Level.Add(_space);
-                this._things.RefreshState();
-                Layer.Game.fade = 0.0f;
-                Layer.Foreground.fade = 0.0f;
-                Level.Add(new Block(120f, 155f, 80f, 30f, PhysicsMaterial.Metal));
-                Level.Add(new Block(134f, 148f, 52f, 30f, PhysicsMaterial.Metal));
-                Level.Add(new Block(0.0f, 61f, 63f, 70f, PhysicsMaterial.Metal));
-                Level.Add(new Block(257f, 61f, 63f, 60f, PhysicsMaterial.Metal));
-                Level.Add(new Spring(90f, 160f, 0.32f));
-                Level.Add(new Spring(229f, 160f, 0.32f));
-                Level.Add(new VerticalDoor(270f, 160f)
-                {
-                    filterDefault = true
-                });
-                foreach (Team team in Teams.all)
-                {
-                    int num2;
-                    int num3 = num2 = 0;
-                    team.score = num2;
-                    team.prevScoreboardScore = num3;
-                }
-                foreach (Profile prof in Profiles.all)
-                {
-                    if (prof.team != null)
-                        prof.team.Leave(prof);
-                    prof.inputProfile = null;
-                }
-                InputProfile.ReassignDefaultInputProfiles(true);
-                if (this._arcadeProfile == null)
-                {
-                    TeamSelect2.ControllerLayoutsChanged();
-                    Teams.Player1.Join(Profiles.DefaultPlayer1);
-                    Teams.Player2.Join(Profiles.DefaultPlayer2);
-                    Teams.Player3.Join(Profiles.DefaultPlayer3);
-                    Teams.Player4.Join(Profiles.DefaultPlayer4);
-                }
-                else
-                {
-                    Teams.Player1.Join(this._arcadeProfile);
-                    this._arcadeProfile.inputProfile = this._arcadeInputProfile;
-                }
-                Input.lastActiveProfile = InputProfile.DefaultPlayer1;
-                if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
-                    MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                base.Initialize();
+                Teams.Player1.Join(this._arcadeProfile);
+                this._arcadeProfile.inputProfile = this._arcadeInputProfile;
             }
+            Input.lastActiveProfile = InputProfile.DefaultPlayer1;
+            if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
+                MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+            base.Initialize();
         }
 
         private void Join()

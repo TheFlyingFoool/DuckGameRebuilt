@@ -361,7 +361,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return str1;
@@ -411,7 +411,7 @@ namespace DuckGame
                     Program.crashed = true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             string str1 = "";
@@ -575,7 +575,7 @@ namespace DuckGame
                 {
                     Program.WriteToLog("Crash catcher failed (crashpoint " + num.ToString() + ") with exception: " + ex3.Message + "\n But Also: \n" + str1);
                 }
-                catch (Exception ex4)
+                catch (Exception)
                 {
                     StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                     streamWriter.WriteLine("Failed to write exception to log: " + ex3.Message + "\n");
@@ -613,16 +613,16 @@ namespace DuckGame
             streamWriter.Close();
         }
 
-        private static void UnhandledExceptionTrapperTestServer(
-          object sender,
-          UnhandledExceptionEventArgs e)
-        {
-            string exceptionString = MonoMain.GetExceptionString(e);
-            StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
-            streamWriter.WriteLine(exceptionString + "\n");
-            streamWriter.Close();
-            Environment.Exit(1);
-        }
+        //private static void UnhandledExceptionTrapperTestServer(
+        //  object sender,
+        //  UnhandledExceptionEventArgs e)
+        //{
+        //    string exceptionString = MonoMain.GetExceptionString(e);
+        //    StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
+        //    streamWriter.WriteLine(exceptionString + "\n");
+        //    streamWriter.Close();
+        //    Environment.Exit(1);
+        //}
 
         public static void LogLine(string line)
         {

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace DuckGame
 {
-    internal class TouchScreen
+    internal static class TouchScreen
     {
         private static Dictionary<int, Touch> _touches = new Dictionary<int, Touch>();
         private static List<int> _removeTouches = new List<int>();
@@ -211,16 +211,16 @@ namespace DuckGame
 
         public static bool IsTouchScreenActive() => false;
 
-        private static Vec2 System_FastTransformTouchScreenToCustomCamera(
-          Vec2 touchXY,
-          Camera customCam)
-        {
-            Vec2 customCamera = new Vec2();
-            float num1 = touchXY.x / Graphics.viewport.Width;
-            float num2 = touchXY.y / Graphics.viewport.Height;
-            customCamera.x = num1 * customCam.width;
-            customCamera.y = num2 * customCam.height;
-            return customCamera;
-        }
+        //private static Vec2 System_FastTransformTouchScreenToCustomCamera(
+        //  Vec2 touchXY,
+        //  Camera customCam)
+        //{
+        //    Vec2 customCamera = new Vec2();
+        //    float num1 = touchXY.x / Graphics.viewport.Width;
+        //    float num2 = touchXY.y / Graphics.viewport.Height;
+        //    customCamera.x = num1 * customCam.width;
+        //    customCamera.y = num2 * customCam.height;
+        //    return customCamera;
+        //}
     }
 }

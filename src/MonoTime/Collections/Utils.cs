@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
-    internal class Utils
+    internal static class Utils
     {
         public static List<T> Shuffle<T>(List<T> list)
         {

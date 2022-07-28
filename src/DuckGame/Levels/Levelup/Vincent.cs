@@ -849,7 +849,7 @@ namespace DuckGame
                 string str = Vincent.products[Vincent._selectIndex].description;
                 if (str == "")
                     str = Vincent.products[Vincent._selectIndex].furnitureData != null ? "What a fine piece of furniture." : "What a fine hat.";
-                int type = (int)Vincent.products[Vincent._selectIndex].type;
+                //int type = (int)Vincent.products[Vincent._selectIndex].type;
                 Vincent.Add(str + "^|ORANGE|Part of the '" + Vincent.products[Vincent._selectIndex].group + "' line.|WHITE| " + "|DGGREEN|$" + Convert.ToString(Vincent.products[Vincent._selectIndex].cost));
             }
         }

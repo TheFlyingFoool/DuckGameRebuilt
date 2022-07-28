@@ -2338,15 +2338,11 @@ namespace DuckGame
                 Vec2 selectionDragEnd = this._selectionDragEnd;
                 if (selectionDragEnd.x < (double)selectionDragStart.x)
                 {
-                    float x = selectionDragStart.x;
-                    selectionDragStart.x = selectionDragEnd.x;
-                    selectionDragEnd.x = x;
+                    (selectionDragEnd.x, selectionDragStart.x) = (selectionDragStart.x, selectionDragEnd.x);
                 }
                 if (selectionDragEnd.y < (double)selectionDragStart.y)
                 {
-                    float y = selectionDragStart.y;
-                    selectionDragStart.y = selectionDragEnd.y;
-                    selectionDragEnd.y = y;
+                    (selectionDragEnd.y, selectionDragStart.y) = (selectionDragStart.y, selectionDragEnd.y);
                 }
                 if (this._dragSelectShiftModifier)
                 {
@@ -3330,19 +3326,19 @@ namespace DuckGame
             this.Save();
         }
 
-        private void onLoad(object sender, CancelEventArgs e)
-        {
-            if (e.Cancel)
-                return;
-            string fileName = this._loadForm.FileName;
-            this._saveName = fileName;
-            IEnumerable<DXMLNode> source = DuckXML.Load(fileName).Element("Level").Elements("Objects");
-            if (source == null)
-                return;
-            this.ClearEverything();
-            foreach (DXMLNode element in source.Elements<DXMLNode>("Object"))
-                this.AddObject(Thing.LegacyLoadThing(element));
-        }
+        //private void onLoad(object sender, CancelEventArgs e)
+        //{
+        //    if (e.Cancel)
+        //        return;
+        //    string fileName = this._loadForm.FileName;
+        //    this._saveName = fileName;
+        //    IEnumerable<DXMLNode> source = DuckXML.Load(fileName).Element("Level").Elements("Objects");
+        //    if (source == null)
+        //        return;
+        //    this.ClearEverything();
+        //    foreach (DXMLNode element in source.Elements<DXMLNode>("Object"))
+        //        this.AddObject(Thing.LegacyLoadThing(element));
+        //}
 
         public void LoadLevel(string load)
         {

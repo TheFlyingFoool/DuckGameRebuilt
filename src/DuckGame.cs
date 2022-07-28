@@ -87,7 +87,7 @@ namespace DuckGame
 
         public static void SetVersion(string v) => DG._localID = (ulong)Rando.Long();
 
-        public static bool InitializeDRM() => true;
+        //public static bool InitializeDRM() => true;
 
         public static bool drmFailure => DG._drmFailure;
 

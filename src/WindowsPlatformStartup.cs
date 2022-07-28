@@ -150,7 +150,7 @@ namespace DGWindows
         public static List<string> assemblyLoadStrings = new List<string>();
         //private const int ENUM_CURRENT_SETTINGS = -1;
         //private const int ENUM_REGISTRY_SETTINGS = -2;
-        public static int displayRefreshRate;
+        //public static int displayRefreshRate;
 
         public static WindowsPlatformStartup.MachineType GetDllMachineType(
           string dllPath)
@@ -205,7 +205,7 @@ namespace DGWindows
                             int num = (int)WindowsPlatformStartup.SearchPath(null, pLibrary, null, byte.MaxValue, lpBuffer, out lpFilePart);
                             return lpBuffer.ToString();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                         return pLibrary;
@@ -289,7 +289,7 @@ namespace DGWindows
                         foreach (string str2 in WindowsPlatformStartup.BadFormatExceptionAssembly())
                             str1 = str1 + str2 + "\n";
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                     pLine = "One or more DLL files failed to load. This usually means the file is 64-bit, but it's supposed to be 32-bit:\n" + str1 + "\n\nThere may be an issue with your .NET Framework installation, or with the location/version of some of your Windows DLL files... Please check the 'System.BadImageFormatException' section on the DG common issues page:\nhttps://steamcommunity.com/app/312530/discussions/1/2997675206112505333/\n\n" + pLine;

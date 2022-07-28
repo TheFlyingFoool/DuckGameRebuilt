@@ -4562,7 +4562,7 @@ namespace DuckGame
                         this.depth = -0.55f;
                     this._spriteArms.depth = this.depth + 11;
                     this._bionicArm.depth = this.depth + 11;
-                    this.DrawAIPath();
+                    //this.DrawAIPath();
                     SpriteMap spriteQuack = this._spriteQuack;
                     SpriteMap spriteControlled = this._spriteControlled;
                     SpriteMap sprite = this._sprite;
@@ -4808,12 +4808,12 @@ namespace DuckGame
             this._indicators.Draw();
         }
 
-        private void DrawAIPath()
-        {
-            if (this.ai == null)
-                return;
-            this.ai.Draw();
-        }
+        //private void DrawAIPath()
+        //{
+        //    if (this.ai == null)
+        //        return;
+        //    this.ai.Draw();
+        //}
 
         [Flags]
         private enum ConnectionTrouble

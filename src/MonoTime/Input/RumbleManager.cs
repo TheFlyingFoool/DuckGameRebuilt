@@ -32,7 +32,8 @@ namespace DuckGame
         /// Evaluates whether we're in a "game" setting, in regards to rumble
         /// Either in an actual match level, or in team select 2
         /// </summary>
-        private static bool isInGameForRumble() => Level.core.gameInProgress || Level.current is TeamSelect2;
+        
+        //private static bool isInGameForRumble() => Level.core.gameInProgress || Level.current is TeamSelect2;
 
         /// <summary>
         ///  Add a Rumble Event after all properties have been set.

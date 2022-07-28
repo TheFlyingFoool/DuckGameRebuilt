@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace DuckGame
 {
-    internal class SwitchSixAxis
+    internal static class SwitchSixAxis
     {
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void Startup();

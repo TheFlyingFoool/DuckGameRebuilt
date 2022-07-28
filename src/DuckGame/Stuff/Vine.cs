@@ -175,19 +175,19 @@ namespace DuckGame
             this.Update();
         }
 
-        public void MoveDuck()
-        {
-            Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
-            if ((double)vec2_1.length <= (double)this._rope.properLength)
-                return;
-            vec2_1 = vec2_1.normalized;
-            if (this.duck == null)
-                return;
-            PhysicsObject duck = this.duck;
-            Vec2 position = duck.position;
-            duck.position = this._rope.attach2.position + vec2_1 * this._rope.properLength;
-            Vec2 vec2_2 = duck.position - duck.lastPosition;
-        }
+        //public void MoveDuck()
+        //{
+        //    Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
+        //    if ((double)vec2_1.length <= (double)this._rope.properLength)
+        //        return;
+        //    vec2_1 = vec2_1.normalized;
+        //    if (this.duck == null)
+        //        return;
+        //    PhysicsObject duck = this.duck;
+        //    Vec2 position = duck.position;
+        //    duck.position = this._rope.attach2.position + vec2_1 * this._rope.properLength;
+        //    Vec2 vec2_2 = duck.position - duck.lastPosition;
+        //}
 
         public Vec2 wallPoint => this._wallPoint;
 

@@ -29,9 +29,9 @@ namespace DuckGame
             this._openOnClose = openOnClose;
         }
 
-        private void UnblockUsers()
-        {
-        }
+        //private void UnblockUsers()
+        //{
+        //}
 
         public override void Open()
         {

@@ -106,29 +106,29 @@ namespace DuckGame
 
         public void InitializePaths()
         {
-            this._paths.Clear();
-            foreach (PathNode pathNode1 in Level.current.things[typeof(PathNode)])
-            {
-                List<PathNode> path = AI.GetPath(this, pathNode1);
-                if (path != null)
-                {
-                    float num = 0.0f;
-                    Vec2 vec2 = Vec2.Zero;
-                    foreach (PathNode pathNode2 in path)
-                    {
-                        if (vec2 != Vec2.Zero)
-                            num += (pathNode2.position - vec2).length;
-                        vec2 = pathNode2.position;
-                    }
-                    this._paths[pathNode1] = new AIPath()
-                    {
-                        length = num,
-                        nodes = path
-                    };
-                }
-                else
-                    this._paths[pathNode1] = null;
-            }
+            //this._paths.Clear();
+            //foreach (PathNode pathNode1 in Level.current.things[typeof(PathNode)])
+            //{
+            //    List<PathNode> path = AI.GetPath(this, pathNode1);
+            //    if (path != null)
+            //    {
+            //        float num = 0.0f;
+            //        Vec2 vec2 = Vec2.Zero;
+            //        foreach (PathNode pathNode2 in path)
+            //        {
+            //            if (vec2 != Vec2.Zero)
+            //                num += (pathNode2.position - vec2).length;
+            //            vec2 = pathNode2.position;
+            //        }
+            //        this._paths[pathNode1] = new AIPath()
+            //        {
+            //            length = num,
+            //            nodes = path
+            //        };
+            //    }
+            //    else
+            //        this._paths[pathNode1] = null;
+            //}
         }
 
         public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - (double)to.y <= 64.0 && (double)Math.Abs(from.x - to.x) <= 128.0 && (from.y - (double)to.y <= 8.0 || (double)Math.Abs(from.x - to.x) <= 64.0);
