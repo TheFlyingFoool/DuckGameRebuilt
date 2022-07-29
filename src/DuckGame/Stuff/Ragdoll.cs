@@ -524,9 +524,9 @@ namespace DuckGame
 
         public override bool ShouldUpdate() => false;
 
-        public void ProcessInput(InputProfile input)
-        {
-        }
+        //public void ProcessInput(InputProfile input)
+        //{
+        //}
 
         public float SpecialSolve(PhysicsObject b1, PhysicsObject b2, float dist)
         {

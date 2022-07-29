@@ -140,113 +140,144 @@ namespace DuckGame
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
             {
-                if (args[index] == "+connect_lobby")
+                switch(args[index])
                 {
-                    ++index;
-                    if (args.Count<string>() > index)
-                    {
-                        try
+                    case "+connect_lobby":
+                        ++index;
+                        if (args.Count<string>() > index)
                         {
-                            DuckGame.Main.connectID = Convert.ToUInt64(args[index], CultureInfo.InvariantCulture);
+                            try
+                            {
+                                DuckGame.Main.connectID = Convert.ToUInt64(args[index], CultureInfo.InvariantCulture);
+                            }
+                            catch (Exception)
+                            {
+                                throw new Exception("+connect_lobby format exception (" + args[index] + ")");
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("+connect_lobby format exception (" + args[index] + ")");
-                        }
-                    }
-                }
-                else if (args[index] == "+password")
-                {
-                    ++index;
-                    if (args.Count<string>() > index)
-                        MonoMain.lobbyPassword = args[index];
-                }
-                else if (args[index] == "-debug")
-                    flag = true;
-                else if (args[index] == "-windowedFullscreen")
-                    MonoMain.forceFullscreenMode = 1;
-                else if (args[index] == "-oldschoolFullscreen")
-                    MonoMain.forceFullscreenMode = 2;
-                else if (args[index] == "-testserver")
-                    Program.testServer = true;
-                else if (args[index] == "-nothreading")
-                    MonoMain.enableThreadedLoading = false;
-                else if (args[index] == "-defaultcontrols")
-                    MonoMain.defaultControls = true;
-                else if (args[index] == "-olddefaults")
-                    MonoMain.oldDefaultControls = true;
-                else if (args[index] == "-nofullscreen")
-                    MonoMain.noFullscreen = true;
-                else if (args[index] == "-nosteam")
-                    MonoMain.disableSteam = true;
-                else if (args[index] == "-steam")
-                    MonoMain.launchedFromSteam = true;
-                else if (args[index] == "-loopdebug")
-                    MonoMain.infiniteLoopDebug = true;
-                else if (args[index] == "-nomods")
-                    MonoMain.nomodsMode = true;
-                else if (args[index] == "-linux")
-                {
-                    if (MonoMain.audioModeOverride == AudioMode.None)
+                        break;
+                    case "+password":
+                        ++index;
+                        if (args.Count<string>() > index)
+                            MonoMain.lobbyPassword = args[index];
+                        break;
+                    case "-debug":
+                        flag = true;
+                        break;
+                    case "-windowedFullscreen":
+                        MonoMain.forceFullscreenMode = 1;
+                        break;
+                    case "-oldschoolFullscreen":
+                        MonoMain.forceFullscreenMode = 2;
+                        break;
+                    case "-testserver":
+                        Program.testServer = true;
+                        break;
+                    case "-nothreading":
+                        MonoMain.enableThreadedLoading = false;
+                        break;
+                    case "-defaultcontrols":
+                        MonoMain.defaultControls = true;
+                        break;
+                    case "-olddefaults":
+                        MonoMain.oldDefaultControls = true;
+                        break;
+                    case "-nofullscreen":
+                        MonoMain.noFullscreen = true;
+                        break;
+                    case "-nosteam":
+                        MonoMain.disableSteam = true;
+                        break;
+                    case "-steam":
+                        MonoMain.launchedFromSteam = true;
+                        break;
+                    case "-loopdebug":
+                        MonoMain.infiniteLoopDebug = true;
+                        break;
+                    case "-nomods":
+                        MonoMain.nomodsMode = true;
+                        break;
+                    case "-linux":
+                        if (MonoMain.audioModeOverride == AudioMode.None)
+                            MonoMain.audioModeOverride = AudioMode.Wave;
+                        break;
+                    case "-disableModding":
+                        MonoMain.moddingEnabled = false;
+                        break;
+                    case "-nointro":
+                        MonoMain.noIntro = true;
+                        break;
+                    case "-startineditor":
+                        MonoMain.startInEditor = true;
+                        break;
+                    case "-moddebug":
+                        MonoMain.modDebugging = true;
+                        break;
+                    case "-downloadmods":
+                        MonoMain.downloadWorkshopMods = true;
+                        break;
+                    case "-editsave":
+                        MonoMain.editSave = true;
+                        break;
+                    case "-nodinput":
+                        MonoMain.disableDirectInput = true;
+                        break;
+                    case "-dinputNoTimeout":
+                        MonoMain.dinputNoTimeout = true;
+                        break;
+                    case "-ignoreLegacyLoad":
+                        ModLoader.ignoreLegacyLoad = true;
+                        break;
+                    case "-nocloud":
+                        Cloud.nocloud = true;
+                        break;
+                    case "-cloudnoload":
+                        Cloud.downloadEnabled = false;
+                        break;
+                    case "-cloudnosave":
+                        Cloud.uploadEnabled = false;
+                        break;
+                    case "-netdebug":
+                        MonoMain.networkDebugger = true;
+                        break;
+                    case "-altaudio":
                         MonoMain.audioModeOverride = AudioMode.Wave;
-                }
-                else if (args[index] == "-disableModding")
-                    MonoMain.moddingEnabled = false;
-                else if (args[index] == "-nointro")
-                    MonoMain.noIntro = true;
-                else if (args[index] == "-startineditor")
-                    MonoMain.startInEditor = true;
-                else if (args[index] == "-moddebug")
-                    MonoMain.modDebugging = true;
-                else if (args[index] == "-downloadmods")
-                    MonoMain.downloadWorkshopMods = true;
-                else if (args[index] == "-editsave")
-                    MonoMain.editSave = true;
-                else if (args[index] == "-nodinput")
-                    MonoMain.disableDirectInput = true;
-                else if (args[index] == "-dinputNoTimeout")
-                    MonoMain.dinputNoTimeout = true;
-                else if (args[index] == "-ignoreLegacyLoad")
-                    ModLoader.ignoreLegacyLoad = true;
-                else if (args[index] == "-nocloud")
-                    Cloud.nocloud = true;
-                else if (args[index] == "-cloudnoload")
-                    Cloud.downloadEnabled = false;
-                else if (args[index] == "-cloudnosave")
-                    Cloud.uploadEnabled = false;
-                else if (args[index] == "-netdebug")
-                    MonoMain.networkDebugger = true;
-                else if (args[index] == "-altaudio")
-                    MonoMain.audioModeOverride = AudioMode.Wave;
-                else if (args[index] == "-directaudio")
-                    MonoMain.audioModeOverride = AudioMode.DirectSound;
-                else if (args[index] == "-oldangles")
-                    MonoMain.oldAngles = true;
-                else if (args[index] == "-nohidef")
-                    MonoMain.noHidef = true;
-                else if (args[index] == "-logFileOperations")
-                    MonoMain.logFileOperations = true;
-                else if (args[index] == "-logLevelOperations")
-                    MonoMain.logLevelOperations = true;
-                else if (args[index] == "-recoversave")
-                    MonoMain.recoversave = true;
-                else if (args[index] == "-notimeout")
-                    MonoMain.noConnectionTimeout = true;
-                else if (args[index] == "-command")
-                {
-                    ++index;
-                    if (index < args.Count<string>())
-                        DevConsole.startupCommands.Add(args[index]);
-                }
-                else
-                {
-                    if (args[index] == "-nolaunch")
-                    {
-                        int num = (int)MessageBox.Show("-nolaunch Command Line Option activated! Cancelling launch!");
-                        return;
-                    }
-                    if (args[index] == "-alternateSaveLocation")
-                        Program.alternateSaveLocation = true;
+                        break;
+                    case "-directaudio":
+                        MonoMain.audioModeOverride = AudioMode.DirectSound;
+                        break;
+                    case "-oldangles":
+                        MonoMain.oldAngles = true;
+                        break;
+                    case "-nohidef":
+                        MonoMain.noHidef = true;
+                        break;
+                    case "-logFileOperations":
+                        MonoMain.logFileOperations = true;
+                        break;
+                    case "-logLevelOperations":
+                        MonoMain.logLevelOperations = true;
+                        break;
+                    case "-recoversave":
+                        MonoMain.recoversave = true;
+                        break;
+                    case "-notimeout":
+                        MonoMain.noConnectionTimeout = true;
+                        break;
+                    case "-command":
+                        ++index;
+                        if (index < args.Count<string>())
+                            DevConsole.startupCommands.Add(args[index]);
+                        break;
+                    default:
+                        if (args[index] == "-nolaunch")
+                        {
+                            int num = (int)MessageBox.Show("-nolaunch Command Line Option activated! Cancelling launch!");
+                            return;
+                        }
+                        if (args[index] == "-alternateSaveLocation")
+                            Program.alternateSaveLocation = true;
+                        break;
                 }
             }
             try
@@ -257,7 +288,7 @@ namespace DuckGame
                         MonoMain.audioModeOverride = AudioMode.Wave;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             if (flag)
@@ -296,7 +327,7 @@ namespace DuckGame
                 else
                     Program.steamBuildID = -1;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         label_109:
@@ -422,13 +453,13 @@ namespace DuckGame
                 {
                     str1 = MonoMain.GetExceptionString(pException);
                 }
-                catch (Exception ex1)
+                catch (Exception)
                 {
                     try
                     {
                         str1 = Program.GetExceptionStringMinimal(pException);
                     }
-                    catch (Exception ex2)
+                    catch (Exception)
                     {
                         str1 = pException.ToString();
                     }
@@ -451,14 +482,14 @@ namespace DuckGame
                             MonoMain.CalculateModMemoryOffendersList();
                             str1 = MonoMain.modMemoryOffendersString + str1;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     label_23:
                         str1 = WindowsPlatformStartup.ProcessErrorLine(str1, pException);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 try
@@ -534,7 +565,7 @@ namespace DuckGame
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 num = 4;
@@ -549,7 +580,7 @@ namespace DuckGame
                             Program.SendMessage(Program.main.Window.Handle, 16U, IntPtr.Zero, IntPtr.Zero);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
                 num = 6;

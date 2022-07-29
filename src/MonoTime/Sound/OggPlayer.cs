@@ -197,7 +197,7 @@ namespace DuckGame
                             num = Convert.ToSingle(str2);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         num = 0.0f;
                     }

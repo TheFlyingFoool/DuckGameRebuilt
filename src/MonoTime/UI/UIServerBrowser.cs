@@ -335,7 +335,7 @@ namespace DuckGame
                             {
                                 lobbyData2.numSlots = Convert.ToInt32(lobby.GetLobbyData("numSlots"));
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 lobbyData2.numSlots = 0;
                             }
@@ -349,7 +349,7 @@ namespace DuckGame
                             {
                                 lobbyData2.datahash = Convert.ToInt64(lobby.GetLobbyData("datahash"));
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                             lobbyData2.isGlobalLobby = this.mode == UIServerBrowser.SearchMode.Global;
@@ -389,7 +389,7 @@ namespace DuckGame
                                             }
                                         }
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     {
                                     }
                                 }

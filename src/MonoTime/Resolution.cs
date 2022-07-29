@@ -269,7 +269,7 @@ namespace DuckGame
             {
                 Resolution._screenDPI = Resolution.GetScreenDPI();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Resolution._screenDPI = 120f;
             }
