@@ -14,9 +14,9 @@ namespace DuckGame
     /// </summary>
     internal class WdlResampler
     {
-        private const int WDL_RESAMPLE_MAX_FILTERS = 4;
-        private const int WDL_RESAMPLE_MAX_NCH = 64;
-        private const double PI = 3.14159265358979;
+        //private const int WDL_RESAMPLE_MAX_FILTERS = 4;
+        //private const int WDL_RESAMPLE_MAX_NCH = 64;
+        //private const double PI = 3.14159265358979;
         private double m_sratein;
         private double m_srateout;
         private double m_fracpos;
@@ -642,7 +642,7 @@ namespace DuckGame
                 }
             }
 
-            private double denormal_filter(float x) => (double)x;
+            //private double denormal_filter(float x) => (double)x;
 
             private double denormal_filter(double x) => x;
         }

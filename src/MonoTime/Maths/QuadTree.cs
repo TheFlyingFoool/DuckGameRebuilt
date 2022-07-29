@@ -914,7 +914,7 @@ namespace DuckGame
                 child.GetUniqueChildren(things);
         }
 
-        private int Count() => this._objects.Count;
+        //private int Count() => this._objects.Count;
 
         private void Divide()
         {

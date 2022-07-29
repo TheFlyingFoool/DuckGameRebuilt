@@ -29,11 +29,11 @@ namespace DuckGame
         {
         }
 
-        private void DoStuff(IAsyncResult r)
-        {
-            this.opened = false;
-            Editor.PopFocus();
-        }
+        //private void DoStuff(IAsyncResult r)
+        //{
+        //    this.opened = false;
+        //    Editor.PopFocus();
+        //}
 
         public override void Initialize()
         {

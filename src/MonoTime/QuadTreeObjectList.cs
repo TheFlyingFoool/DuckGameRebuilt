@@ -144,16 +144,16 @@ namespace DuckGame
             return this._staticObjectsByType.TryGetValue(key, out list) ? list : this._emptyList;
         }
 
-        private IEnumerable<Thing> GetIslandObjects(System.Type t, Vec2 pos, float radiusSq)
-        {
-            IEnumerable<Thing> first = new List<Thing>();
-            foreach (CollisionIsland island in this._islands)
-            {
-                if ((double)(island.owner.position - pos).lengthSq - (double)radiusSq < island.radiusCheckSquared)
-                    first = first.Concat<Thing>(island.things);
-            }
-            return first;
-        }
+        //private IEnumerable<Thing> GetIslandObjects(System.Type t, Vec2 pos, float radiusSq)
+        //{
+        //    IEnumerable<Thing> first = new List<Thing>();
+        //    foreach (CollisionIsland island in this._islands)
+        //    {
+        //        if ((double)(island.owner.position - pos).lengthSq - (double)radiusSq < island.radiusCheckSquared)
+        //            first = first.Concat<Thing>(island.things);
+        //    }
+        //    return first;
+        //}
 
         public bool HasStaticObjects(System.Type key) => key == typeof(Thing) || this._staticObjectsByType.ContainsKey(key);
 

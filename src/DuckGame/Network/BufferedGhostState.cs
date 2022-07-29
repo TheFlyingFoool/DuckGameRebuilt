@@ -154,17 +154,17 @@ namespace DuckGame
             this._framesApplied = NetworkConnection.packetsEvery;
         }
 
-        private Vec2 Slerp(Vec2 from, Vec2 to, float step)
-        {
-            if ((double)step == 0.0)
-                return from;
-            if (from == to || (double)step == 1.0)
-                return to;
-            double a = Math.Acos((double)Vec2.Dot(from, to));
-            if (a == 0.0)
-                return to;
-            double num = Math.Sin(a);
-            return (float)(Math.Sin((1.0 - (double)step) * a) / num) * from + (float)(Math.Sin((double)step * a) / num) * to;
-        }
+        //private Vec2 Slerp(Vec2 from, Vec2 to, float step)
+        //{
+        //    if ((double)step == 0.0)
+        //        return from;
+        //    if (from == to || (double)step == 1.0)
+        //        return to;
+        //    double a = Math.Acos((double)Vec2.Dot(from, to));
+        //    if (a == 0.0)
+        //        return to;
+        //    double num = Math.Sin(a);
+        //    return (float)(Math.Sin((1.0 - (double)step) * a) / num) * from + (float)(Math.Sin((double)step * a) / num) * to;
+        //}
     }
 }

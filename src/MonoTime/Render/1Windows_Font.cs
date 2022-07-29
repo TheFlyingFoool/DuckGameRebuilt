@@ -318,21 +318,21 @@ namespace DuckGame
             return FontGDIContext.curFont;
         }
 
-        public static bool CheckIfCharInFont(char character, System.Drawing.Font font)
-        {
-            ushort uint16 = Convert.ToUInt16(character);
-            List<FontGDIContext.FontRange> unicodeRangesForFont = FontGDIContext.GetUnicodeRangesForFont(font);
-            bool flag = false;
-            foreach (FontGDIContext.FontRange fontRange in unicodeRangesForFont)
-            {
-                if (uint16 >= fontRange.Low && uint16 <= fontRange.High)
-                {
-                    flag = true;
-                    break;
-                }
-            }
-            return flag;
-        }
+        //public static bool CheckIfCharInFont(char character, System.Drawing.Font font)
+        //{
+        //    ushort uint16 = Convert.ToUInt16(character);
+        //    List<FontGDIContext.FontRange> unicodeRangesForFont = FontGDIContext.GetUnicodeRangesForFont(font);
+        //    bool flag = false;
+        //    foreach (FontGDIContext.FontRange fontRange in unicodeRangesForFont)
+        //    {
+        //        if (uint16 >= fontRange.Low && uint16 <= fontRange.High)
+        //        {
+        //            flag = true;
+        //            break;
+        //        }
+        //    }
+        //    return flag;
+        //}
 
         public struct ABC
         {

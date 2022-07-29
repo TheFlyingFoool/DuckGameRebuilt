@@ -4300,8 +4300,7 @@ namespace DuckGame
 
         public static Thing GetThing(System.Type t)
         {
-            Thing thing;
-            Editor._thingMap.TryGetValue(t, out thing);
+            Editor._thingMap.TryGetValue(t, out Thing thing);
             return thing;
         }
 

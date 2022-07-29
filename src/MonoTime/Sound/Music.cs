@@ -17,7 +17,7 @@ namespace DuckGame
     {
         private static Dictionary<string, MemoryStream> _songs = new Dictionary<string, MemoryStream>();
         private static Dictionary<string, Queue<string>> _recentSongs = new Dictionary<string, Queue<string>>();
-        private static float _fadeSpeed;
+        //private static float _fadeSpeed;
         private static float _volume = 1f;
         private static float _volumeMult = 1f;
         private static float _masterVolume = 0.65f;
@@ -266,9 +266,9 @@ namespace DuckGame
             Music._currentSong = "";
         }
 
-        public static void FadeOut(float duration) => Music._fadeSpeed = duration / 60f;
+        //public static void FadeOut(float duration) => Music._fadeSpeed = duration / 60f;
 
-        public static void FadeIn(float duration) => Music._fadeSpeed = (float)-((double)duration / 60.0);
+        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-((double)duration / 60.0);
 
         private static void SearchDir(string dir)
         {

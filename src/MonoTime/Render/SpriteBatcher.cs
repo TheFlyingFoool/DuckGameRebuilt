@@ -22,15 +22,15 @@ namespace DuckGame
         /// <summary>
         /// Initialization size for the batch item list and queue.
         /// </summary>
-        private const int InitialBatchSize = 256;
+       // private const int InitialBatchSize = 256;
         /// <summary>
         /// The maximum number of batch items that can be processed per iteration
         /// </summary>
-        private const int MaxBatchSize = 5461;
+        //private const int MaxBatchSize = 5461;
         /// <summary>
         /// Initialization size for the vertex array, in batch units.
         /// </summary>
-        private const int InitialVertexArraySize = 256;
+        //private const int InitialVertexArraySize = 256;
         /// <summary>The list of batch items to process.</summary>
         private readonly List<MTSpriteBatchItem> _batchItemList;
         private readonly List<MTSimpleSpriteBatchItem> _simpleBatchItemList;

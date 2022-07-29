@@ -197,25 +197,25 @@ namespace DuckGame
                 throw new InvalidOperationException("Draw was called, but Begin has not yet been called. Begin must be called successfully before you can call Draw.");
         }
 
-        private void CheckValid(SpriteFont spriteFont, string text)
-        {
-            if (spriteFont == null)
-                throw new ArgumentNullException(nameof(spriteFont));
-            if (text == null)
-                throw new ArgumentNullException(nameof(text));
-            if (!this._beginCalled)
-                throw new InvalidOperationException("DrawString was called, but Begin has not yet been called. Begin must be called successfully before you can call DrawString.");
-        }
+        //private void CheckValid(SpriteFont spriteFont, string text)
+        //{
+        //    if (spriteFont == null)
+        //        throw new ArgumentNullException(nameof(spriteFont));
+        //    if (text == null)
+        //        throw new ArgumentNullException(nameof(text));
+        //    if (!this._beginCalled)
+        //        throw new InvalidOperationException("DrawString was called, but Begin has not yet been called. Begin must be called successfully before you can call DrawString.");
+        //}
 
-        private void CheckValid(SpriteFont spriteFont, StringBuilder text)
-        {
-            if (spriteFont == null)
-                throw new ArgumentNullException(nameof(spriteFont));
-            if (text == null)
-                throw new ArgumentNullException(nameof(text));
-            if (!this._beginCalled)
-                throw new InvalidOperationException("DrawString was called, but Begin has not yet been called. Begin must be called successfully before you can call DrawString.");
-        }
+        //private void CheckValid(SpriteFont spriteFont, StringBuilder text)
+        //{
+        //    if (spriteFont == null)
+        //        throw new ArgumentNullException(nameof(spriteFont));
+        //    if (text == null)
+        //        throw new ArgumentNullException(nameof(text));
+        //    if (!this._beginCalled)
+        //        throw new InvalidOperationException("DrawString was called, but Begin has not yet been called. Begin must be called successfully before you can call DrawString.");
+        //}
 
         public GeometryItem GetGeometryItem() => this._batcher.GetGeometryItem();
 
