@@ -95,6 +95,9 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>DuckGame.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrashWindow">
       <HintPath>lib\CrashWindow.exe</HintPath>
@@ -1713,9 +1716,13 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="DuckGame.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if  "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\DuckGameRebuilt.exe"
+    <PostBuildEvent>if not exist "$(TargetDir)bin\" mkdir  "$(TargetDir)bin\"
+if  "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\DuckGameRebuilt.exe"
 if NOT "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\$(Configuration).exe"
 del "$(TargetDir)DuckGame.exe"</PostBuildEvent>
   </PropertyGroup>

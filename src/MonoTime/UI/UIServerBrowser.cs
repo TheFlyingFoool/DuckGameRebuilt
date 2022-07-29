@@ -681,11 +681,11 @@ namespace DuckGame
                                 this._noImage.texture = this.defaultImageLan;
                             this._noImage.scale = new Vec2(1f, 1f);
                             List<Tex2D> tex2DList = new List<Tex2D>();
-                            string str1 = lobby.name;
+                            string titleString = lobby.name;
                             if (lobby.lobby == null)
-                                str1 = !lobby.dedicated ? str1 + " (LAN)" : str1 + " |DGGREEN|(DEDICATED LAN SERVER)";
+                                titleString += !lobby.dedicated ? " (LAN)" : " |DGGREEN|(DEDICATED LAN SERVER)";
                             else if (lobby.dedicated)
-                                str1 += " |DGGREEN|(DEDICATED SERVER)";
+                                titleString += " |DGGREEN|(DEDICATED SERVER)";
                             string text1 = "|WHITE||GRAY|\n";
                             if (lobby.workshopItems.Count > 0)
                             {
@@ -797,27 +797,26 @@ namespace DuckGame
                             }
                             else
                                 DuckGame.Graphics.Draw(this._noImage, x1 + 2f, y + 2f, (Depth)0.5f);
-                            string text2 = str1 + " (" + Math.Min(lobby.userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
+                            titleString += " (" + Math.Min(lobby.userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
                             if (lobby.hasFriends)
-                                text2 += " |DGGREEN|FRIEND";
+                                titleString += " |DGGREEN|FRIEND";
                             if (lobby.hasPassword)
-                                text2 += " |DGRED|HAS PASSWORD";
+                                titleString += " |DGRED|HAS PASSWORD";
                             if (!lobby.canJoin)
                             {
-                                string str5 = text2 + " |DGRED|(";
-                                string str6;
+                                titleString += " |DGRED|(";
                                 if (lobby.version != DG.version)
                                 {
                                     switch (DuckNetwork.CheckVersion(lobby.version))
                                     {
                                         case NMVersionMismatch.Type.Older:
-                                            str6 = str5 + "They have an older version.";
+                                            titleString += "They have an older version.";
                                             break;
                                         case NMVersionMismatch.Type.Newer:
-                                            str6 = str5 + "They have a newer version.";
+                                            titleString += "They have a newer version.";
                                             break;
                                         default:
-                                            str6 = str5 + "They have a different version.";
+                                            titleString += "They have a different version.";
                                             break;
                                     }
                                 }
@@ -825,30 +824,30 @@ namespace DuckGame
                                 {
                                     if (lobby.datahash != Network.gameDataHash)
                                     {
-                                        str6 = "Their version is incompatible.";
+                                        titleString += "Their version is incompatible.";
                                     }
                                     else if (lobby.started == "true")
                                     {
-                                        str6 = "This game is in progress.";
+                                        titleString += "This game is in progress.";
                                     }
                                     else if (lobby.userCount >= lobby.numSlots)
                                     {
-                                        str6 = "Lobby is full.";
+                                        titleString += "Lobby is full.";
                                     }
                                     else if (lobby.lobby != null && lobby.type != "2")
                                     {
-                                        str6 = "This game is not public.";
+                                        titleString += "This game is not public.";
                                     }
                                     else if (lobby.hasLocalMods)
                                     {
-                                        str6 = "This game is using non-workshop mods.";
+                                        titleString += "This game is using non-workshop mods.";
                                     }
                                     else
                                     {
-                                        str6 = "Cannot join.";
+                                        titleString += "Cannot join.";
                                     }
                                 } //removed  ParentalControls.AreParentalControlsActive and unpacked
-                                text2 = str6 + ")";
+                                titleString += ")";
                                 DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)((double)x1 + (double)this._box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
                             }
                             this._fancyFont.maxWidth = 1000;
@@ -868,7 +867,7 @@ namespace DuckGame
                                 DuckGame.Graphics.Draw(this._globeIcon, (float)((double)x1 + (double)num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
-                            this._fancyFont.Draw(text2, new Vec2((float)((double)x1 + 36.0 + (double)num + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
+                            this._fancyFont.Draw(titleString, new Vec2((float)((double)x1 + 36.0 + (double)num + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
                             if (lobby.version == DG.version)
                                 this._fancyFont.Draw(lobby.version, new Vec2((float)((double)x1 + 430.0 + 10.0), y + 2f), Colors.DGGreen * 0.45f, (Depth)0.5f);
                             else
