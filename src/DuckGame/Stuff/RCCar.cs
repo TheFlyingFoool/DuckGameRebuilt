@@ -94,7 +94,7 @@ namespace DuckGame
                 {
                     range = 55f + Rando.Float(14f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
                 {
                     firedFrom = this
                 };
@@ -144,7 +144,7 @@ namespace DuckGame
             {
                 if (this.isServerForObject)
                 {
-                    if ((double)this.hSpeed > -(double)this._maxSpeed)
+                    if (this.hSpeed > -this._maxSpeed)
                         this.hSpeed -= 0.4f;
                     else
                         this.hSpeed = -this._maxSpeed;
@@ -157,7 +157,7 @@ namespace DuckGame
             {
                 if (this.isServerForObject)
                 {
-                    if ((double)this.hSpeed < _maxSpeed)
+                    if (this.hSpeed < _maxSpeed)
                         this.hSpeed += 0.4f;
                     else
                         this.hSpeed = this._maxSpeed;
@@ -181,7 +181,7 @@ namespace DuckGame
                 this.vSpeed -= 4.8f;
             this._tilt = MathHelper.Lerp(this._tilt, -this.hSpeed, 0.4f);
             this._waveMult = MathHelper.Lerp(this._waveMult, -this.hSpeed, 0.1f);
-            this.angleDegrees = (float)(_tilt * 2.0 + (double)this._wave.value * (_waveMult * (_maxSpeed - (double)Math.Abs(this.hSpeed))));
+            this.angleDegrees = (float)(_tilt * 2.0 + this._wave.value * (_waveMult * (_maxSpeed - Math.Abs(this.hSpeed))));
             if (!this.isServerForObject || !this.isOffBottomOfLevel || this.destroyed)
                 return;
             this.Destroy(new DTFall());

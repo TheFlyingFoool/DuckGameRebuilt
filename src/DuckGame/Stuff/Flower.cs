@@ -125,7 +125,7 @@ namespace DuckGame
                     if (this.framesSinceThrown < 15)
                     {
                         Gun gun = Level.current.NearestThing<Gun>(this.position);
-                        if (gun != null && (double)(gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && (double)this.hSpeed < 0.0 || gun.offDir < 0 && (double)this.hSpeed > 0.0))
+                        if (gun != null && (gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && this.hSpeed < 0.0 || gun.offDir < 0 && this.hSpeed > 0.0))
                         {
                             this._stuck = gun;
                             this._prevBarrelHeat = this._stuck._barrelHeat;

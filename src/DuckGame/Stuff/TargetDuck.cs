@@ -85,7 +85,7 @@ namespace DuckGame
                 ChallengeLevel.allTargetsShot = false;
                 this._autoFireWait = this.autofire.value;
             }
-            if ((double)(float)this.speediness == 0.0)
+            if ((float)this.speediness == 0.0)
                 this.speediness.value = 1f;
             this._waitFire = (float)this.speediness;
             this.UpdateCollision();
@@ -104,16 +104,16 @@ namespace DuckGame
         {
             Vec2 p1 = this.position + new Vec2(offDir * 3, 0f);
             Block block1 = Level.CheckLine<Block>(p1, p1 + new Vec2(16f, 0f));
-            if (block1 != null && block1.solid && (double)t.right > (double)block1.left)
+            if (block1 != null && block1.solid && t.right > block1.left)
                 t.right = block1.left;
             Block block2 = Level.CheckLine<Block>(p1, p1 - new Vec2(16f, 0f));
-            if (block2 != null && block2.solid && (double)t.left < (double)block2.right)
+            if (block2 != null && block2.solid && t.left < block2.right)
                 t.left = block2.right;
             Block block3 = Level.CheckLine<Block>(p1, p1 + new Vec2(0f, -16f));
-            if (block3 != null && block3.solid && (double)t.top < (double)block3.bottom)
+            if (block3 != null && block3.solid && t.top < block3.bottom)
                 t.top = block3.bottom;
             Block block4 = Level.CheckLine<Block>(p1, p1 + new Vec2(0f, 16f));
-            if (block4 == null || !block4.solid || (double)t.bottom <= (double)block4.top)
+            if (block4 == null || !block4.solid || t.bottom <= block4.top)
                 return;
             t.bottom = block4.top;
         }
@@ -235,7 +235,7 @@ namespace DuckGame
                 for (int index = 0; index < 4; ++index)
                 {
                     WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 20f + Rando.Float(16f));
-                    woodDebris.hSpeed = (float)(((double)Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * (double)Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                    woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                     woodDebris.vSpeed = -Rando.Float(1f);
                     Level.Add(woodDebris);
                 }
@@ -255,8 +255,8 @@ namespace DuckGame
             for (int index = 0; index < 2; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                woodDebris.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                woodDebris.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                woodDebris.hSpeed = (float)(-bullet.travelDirNormalized.x * 2.0 * (Rando.Float(1f) + 0.300000011920929));
+                woodDebris.vSpeed = (float)(-bullet.travelDirNormalized.y * 2.0 * (Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
                 Level.Add(woodDebris);
             }
         }
@@ -360,7 +360,7 @@ namespace DuckGame
                 holdObject.PressAction();
                 this._waitFire = (float)this.speediness;
             }
-            if (_waitFire >= (double)(float)this.speediness)
+            if (_waitFire >= (float)this.speediness)
                 return;
             this._waitFire += 0.01f;
         }
@@ -382,7 +382,7 @@ namespace DuckGame
                 if (this._stance != TargetStance.Fly)
                 {
                     this.yscale += this._upSpeed;
-                    if ((double)this.yscale < 1.0)
+                    if (this.yscale < 1.0)
                         return;
                     this.yscale = 1f;
                     this._upSpeed = 0f;
@@ -406,7 +406,7 @@ namespace DuckGame
                 else
                 {
                     this.xscale += this._upSpeed;
-                    if ((double)this.xscale < 1.0)
+                    if (this.xscale < 1.0)
                         return;
                     this.xscale = 1f;
                     this._upSpeed = 0f;
@@ -430,7 +430,7 @@ namespace DuckGame
             else
             {
                 this._timeCount += Maths.IncFrameTimer();
-                if (this._popup && (double)this.time.value != 0.0 && _timeCount >= (double)this.time.value)
+                if (this._popup && this.time.value != 0.0 && _timeCount >= this.time.value)
                 {
                     SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
                     this.PopDown();
@@ -442,7 +442,7 @@ namespace DuckGame
                     if (this._stance != TargetStance.Fly)
                     {
                         this.yscale -= this._upSpeed;
-                        if ((double)this.yscale >= 0.0)
+                        if (this.yscale >= 0.0)
                             return;
                         this.yscale = 0f;
                         this._upSpeed = 0f;
@@ -455,7 +455,7 @@ namespace DuckGame
                     else
                     {
                         this.xscale -= this._upSpeed;
-                        if ((double)this.xscale >= 0.0)
+                        if (this.xscale >= 0.0)
                             return;
                         this.xscale = 0f;
                         this._upSpeed = 0f;
@@ -480,16 +480,16 @@ namespace DuckGame
                 position1 = this.ragdoll.part1.position;
             else if (this._trapped != null)
                 position1 = this._trapped.position;
-            if ((double)(position1 - Level.current.camera.position).length > (double)Level.current.camera.width * 2.0)
+            if ((position1 - Level.current.camera.position).length > Level.current.camera.width * 2.0)
                 return;
             float num = 14f;
-            if (position1.x < (double)Level.current.camera.left + (double)num)
+            if (position1.x < Level.current.camera.left + num)
                 position1.x = Level.current.camera.left + num;
-            if (position1.x > (double)Level.current.camera.right - (double)num)
+            if (position1.x > Level.current.camera.right - num)
                 position1.x = Level.current.camera.right - num;
-            if (position1.y < (double)Level.current.camera.top + (double)num)
+            if (position1.y < Level.current.camera.top + num)
                 position1.y = Level.current.camera.top + num;
-            if (position1.y > (double)Level.current.camera.bottom - (double)num)
+            if (position1.y > Level.current.camera.bottom - num)
                 position1.y = Level.current.camera.bottom - num;
             Vec2 position2 = Layer.HUD.camera.transformInverse(Level.current.camera.transform(position1));
             DuckGame.Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.Black, (Depth)0.8f);

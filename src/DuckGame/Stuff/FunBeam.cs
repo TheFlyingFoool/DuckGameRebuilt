@@ -81,10 +81,10 @@ namespace DuckGame
                     this.graphic.flipH = false;
                     this._beam.depth = this.depth - 2;
                     float x = this._endPoint.x - this.x;
-                    int num = (int)Math.Ceiling((double)x / 16.0);
+                    int num = (int)Math.Ceiling(x / 16.0);
                     for (int index = 0; index < num; ++index)
                     {
-                        this._beam.cutWidth = index != num - 1 ? 0 : 16 - (int)((double)x % 16.0);
+                        this._beam.cutWidth = index != num - 1 ? 0 : 16 - (int)(x % 16.0);
                         Graphics.Draw(_beam, this.x + index * 16, this.y);
                     }
                     this.collisionOffset = new Vec2(-1f, -4f);

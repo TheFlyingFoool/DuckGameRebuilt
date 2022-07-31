@@ -28,7 +28,7 @@ namespace DuckGame
           : base("", xpos, ypos, wide, high)
         {
             float num = 38f;
-            this._capturePosition = new Vec2((float)((double)Layer.HUD.camera.width / 2.0 - (double)num / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 - (double)num / 2.0));
+            this._capturePosition = new Vec2((float)(Layer.HUD.camera.width / 2.0 - num / 2.0), (float)(Layer.HUD.camera.height / 2.0 - num / 2.0));
             this._captureSize = new Vec2(num, num);
             if (resizable)
                 this._captureSize = new Vec2(320f, 180f);
@@ -54,7 +54,7 @@ namespace DuckGame
                 float num = DuckGame.Graphics.width / 320;
                 if (this._resizable)
                 {
-                    this._captureSize += this._captureSize * ((float)-((double)InputProfile.DefaultPlayer1.leftTrigger - (double)InputProfile.DefaultPlayer1.rightTrigger) * 0.1f);
+                    this._captureSize += this._captureSize * ((float)-(InputProfile.DefaultPlayer1.leftTrigger - InputProfile.DefaultPlayer1.rightTrigger) * 0.1f);
                     if (_captureSize.x > 1280.0)
                         this._captureSize.x = 1280f;
                     if (_captureSize.y > 720.0)
@@ -70,7 +70,7 @@ namespace DuckGame
                 Camera camera = new Camera(this._capturePosition.x * num, this._capturePosition.y * num, (int)this._captureSize.x * num, (int)this._captureSize.y * num);
                 DuckGame.Graphics.Clear(Color.Black);
                 Viewport viewport = DuckGame.Graphics.viewport;
-                DuckGame.Graphics.viewport = new Viewport(0, 0, (int)(_captureSize.x * (double)num), (int)(_captureSize.y * (double)num));
+                DuckGame.Graphics.viewport = new Viewport(0, 0, (int)(_captureSize.x * num), (int)(_captureSize.y * num));
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
                 DuckGame.Graphics.Draw(MonoMain.screenCapture, 0f, 0f);
                 DuckGame.Graphics.screen.End();
@@ -96,7 +96,7 @@ namespace DuckGame
         {
             if (!this.open)
                 return;
-            DuckGame.Graphics.DrawRect(new Vec2(this._capturePosition.x - 1f, this._capturePosition.y - 1f), new Vec2((float)(_capturePosition.x + (double)(int)this._captureSize.x + 1.0), (float)(_capturePosition.y + (double)(int)this._captureSize.y + 1.0)), Color.White, (Depth)1f, false);
+            DuckGame.Graphics.DrawRect(new Vec2(this._capturePosition.x - 1f, this._capturePosition.y - 1f), new Vec2((float)(_capturePosition.x + (int)this._captureSize.x + 1.0), (float)(_capturePosition.y + (int)this._captureSize.y + 1.0)), Color.White, (Depth)1f, false);
             if (this._captureTarget == null)
                 return;
             DuckGame.Graphics.Draw(_captureTarget, this._capturePosition, new Rectangle?(new Rectangle(0f, 0f, (int)this._captureSize.x * 4, (int)this._captureSize.y * 4)), Color.White, 0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)1f);

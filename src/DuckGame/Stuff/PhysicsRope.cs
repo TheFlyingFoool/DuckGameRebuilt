@@ -105,7 +105,7 @@ namespace DuckGame
                             lowestVine1.prevVine = this._lowestVine;
                         }
                         this._lowestVine.changeSpeed = false;
-                        if ((double)d.vSpeed > 0.0)
+                        if (d.vSpeed > 0.0)
                             d.vSpeed = 0f;
                         this._lowestVine.UpdateRopeStuff();
                         this._lowestVine.UpdateRopeStuff();
@@ -131,7 +131,7 @@ namespace DuckGame
                         this._lowestVine.prevVine = lowestVine;
                     }
                     this._lowestVine.changeSpeed = false;
-                    if ((double)d.vSpeed > 0.0)
+                    if (d.vSpeed > 0.0)
                         d.vSpeed = 0f;
                     this._lowestVine.UpdateRopeStuff();
                     this._lowestVine.UpdateRopeStuff();
@@ -209,10 +209,10 @@ namespace DuckGame
             {
                 for (int index2 = 1; index2 <= this._divisions; ++index2)
                 {
-                    float num1 = (float)((_nodes[index2].calcPos.x - (double)this._nodes[index2 - 1].calcPos.x) / 100.0);
-                    float num2 = (float)((_nodes[index2].calcPos.y - (double)this._nodes[index2 - 1].calcPos.y) / 100.0);
-                    float num3 = (float)Math.Sqrt((double)num1 * (double)num1 + (double)num2 * (double)num2);
-                    float num4 = (float)(((double)num3 - _lenDiv) * 50.0);
+                    float num1 = (float)((_nodes[index2].calcPos.x - this._nodes[index2 - 1].calcPos.x) / 100.0);
+                    float num2 = (float)((_nodes[index2].calcPos.y - this._nodes[index2 - 1].calcPos.y) / 100.0);
+                    float num3 = (float)Math.Sqrt(num1 * num1 + num2 * num2);
+                    float num4 = (float)((num3 - _lenDiv) * 50.0);
                     this._nodes[index2].calcPos.x -= num1 / num3 * num4;
                     this._nodes[index2].calcPos.y -= num2 / num3 * num4;
                     this._nodes[index2 - 1].calcPos.x += num1 / num3 * num4;
@@ -255,28 +255,28 @@ namespace DuckGame
                 this._nodes[index4].hSpeed = this._nodes[index4].calcPos.x - this._nodes[index4].position.x;
                 this._nodes[index4].vSpeed = this._nodes[index4].calcPos.y - this._nodes[index4].position.y;
                 float num6 = 5f;
-                if ((double)this._nodes[index4].hSpeed > 0.0 && (double)this._nodes[index4].hSpeed > (double)num6)
+                if (this._nodes[index4].hSpeed > 0.0 && this._nodes[index4].hSpeed > num6)
                     this._nodes[index4].hSpeed = num6;
-                if ((double)this._nodes[index4].hSpeed < 0.0 && (double)this._nodes[index4].hSpeed < -(double)num6)
+                if (this._nodes[index4].hSpeed < 0.0 && this._nodes[index4].hSpeed < -num6)
                     this._nodes[index4].hSpeed = -num6;
                 foreach (PhysicsObject physicsObject in Level.CheckPointAll<PhysicsObject>(this._nodes[index4].position))
                 {
-                    if ((double)physicsObject.hSpeed > 0.0 && (double)this._nodes[index4].hSpeed < (double)physicsObject.hSpeed)
+                    if (physicsObject.hSpeed > 0.0 && this._nodes[index4].hSpeed < physicsObject.hSpeed)
                     {
                         this._nodes[index4].hSpeed += physicsObject.hSpeed;
-                        if ((double)Math.Abs(physicsObject.hSpeed) > 2.0)
+                        if (Math.Abs(physicsObject.hSpeed) > 2.0)
                         {
-                            if ((double)Math.Abs(physicsObject.hSpeed) > 4.0)
+                            if (Math.Abs(physicsObject.hSpeed) > 4.0)
                                 flag2 = true;
                             flag1 = true;
                         }
                     }
-                    if ((double)physicsObject.hSpeed < 0.0 && (double)this._nodes[index4].hSpeed > (double)physicsObject.hSpeed)
+                    if (physicsObject.hSpeed < 0.0 && this._nodes[index4].hSpeed > physicsObject.hSpeed)
                     {
                         this._nodes[index4].hSpeed += physicsObject.hSpeed;
-                        if ((double)Math.Abs(physicsObject.hSpeed) > 2.0)
+                        if (Math.Abs(physicsObject.hSpeed) > 2.0)
                         {
-                            if ((double)Math.Abs(physicsObject.hSpeed) > 4.0)
+                            if (Math.Abs(physicsObject.hSpeed) > 4.0)
                                 flag2 = true;
                             flag1 = true;
                         }

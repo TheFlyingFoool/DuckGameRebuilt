@@ -82,10 +82,10 @@ namespace DuckGame
                 this.sinMult += 0.02f;
                 if (sinMult > 1f)
                     this.sinMult = 1f;
-                if (!this._grounded && (double)Math.Abs(this.hSpeed) < 0.2f)
+                if (!this._grounded && Math.Abs(this.hSpeed) < 0.2f)
                 {
                     this.sin += 0.2f;
-                    this.x += (float)(Math.Sin(sin) * 0.5) * this.sinMult;
+                    this.x += (float)(Math.Sin(sin) * 0.5f) * this.sinMult;
                 }
             }
             base.Update();

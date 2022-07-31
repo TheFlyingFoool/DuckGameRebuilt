@@ -46,7 +46,7 @@ namespace DuckGame
             this._parallax.AddZone(2, distance1, speed1);
             this._parallax.AddZone(3, distance1, speed1);
             float distance2 = 0.6f;
-            float num = (float)(((double)distance1 - (double)distance2) / 4.0);
+            float num = (float)((distance1 - distance2) / 4.0);
             float speed2 = 0.6f;
             this._parallax.AddZone(4, distance1 - num * 1f, speed2, true);
             this._parallax.AddZone(5, distance1 - num * 2f, -speed2, true);
@@ -163,7 +163,7 @@ namespace DuckGame
                     Level.activeLevel.backgroundColor = Lerp.ColorSmoothNoAlpha(this._backgroundColor, Color.Black, 0.1f);
                 if (this._scanStage < 2)
                     num = 0f;
-                Rectangle rectangle1 = new Rectangle((int)((1.0 - (double)num) * Resolution.current.x), 0f, Resolution.current.x - (int)((1.0 - (double)num) * Resolution.current.x), Resolution.current.y);
+                Rectangle rectangle1 = new Rectangle((int)((1.0 - num) * Resolution.current.x), 0f, Resolution.current.x - (int)((1.0 - num) * Resolution.current.x), Resolution.current.y);
                 if (this._realBackground != null)
                 {
                     if (rectangle1.width == 0.0)
@@ -309,11 +309,11 @@ namespace DuckGame
                 Graphics.Draw(this._scanner, vec2_1.x, vec2_1.y);
                 float num2 = Math.Abs(this._stick - 0.5f);
                 float num3 = 0.5f - num2;
-                Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)(vec2_1.y - 100.0 + (double)num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
-                Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)(vec2_1.y - 10.0 + 80.0 * (double)num2)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)(vec2_1.y - 100.0 + num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)(vec2_1.y - 10.0 + 80.0 * num2)), Color.Red * num3, 2f, (Depth)0.9f);
                 Vec2 vec2_2 = vec2_1 + new Vec2(0f, _scanner.height);
-                Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)(vec2_2.y + 100.0 - (double)num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
-                Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)(vec2_2.y + 10.0 - 80.0 * (double)num2)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)(vec2_2.y + 100.0 - num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)(vec2_2.y + 10.0 - 80.0 * num2)), Color.Red * num3, 2f, (Depth)0.9f);
                 this._parallax.Update();
                 this._parallax.Draw();
                 Graphics.PopMarker();

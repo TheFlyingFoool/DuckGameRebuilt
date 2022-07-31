@@ -66,7 +66,7 @@ namespace DuckGame
             else
             {
                 this._waitCount += Maths.IncFrameTimer();
-                if (_waitCount < (double)this.wait.value)
+                if (_waitCount < this.wait.value)
                     return;
                 this._waitCount = 0f;
                 this.PopUpItems();
@@ -112,7 +112,7 @@ namespace DuckGame
                 foreach (SequenceItem sequenceItem in sequenceItemList)
                 {
                     float num4 = sequenceItem.likelyhood / (float)num1;
-                    if ((double)num2 > (double)num3 && (double)num2 < (double)num3 + (double)num4)
+                    if (num2 > num3 && num2 < num3 + num4)
                     {
                         sequenceItem.randomMode = true;
                         RandomController.isRand = true;

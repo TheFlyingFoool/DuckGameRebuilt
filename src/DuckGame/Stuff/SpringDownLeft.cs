@@ -30,24 +30,24 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed < 22.0 * _mult)
+                if (with.vSpeed < 22.0 * _mult)
                     with.vSpeed = 22f * this._mult;
                 if (!this.flipHorizontal)
                 {
                     if (this.purple)
                     {
-                        if ((double)with.hSpeed > -7.0)
+                        if (with.hSpeed > -7.0)
                             with.hSpeed = -7f;
                     }
-                    else if ((double)with.hSpeed > -10.0)
+                    else if (with.hSpeed > -10.0)
                         with.hSpeed = -10f;
                 }
                 else if (this.purple)
                 {
-                    if ((double)with.hSpeed < 7.0)
+                    if (with.hSpeed < 7.0)
                         with.hSpeed = 7f;
                 }
-                else if ((double)with.hSpeed < 10.0)
+                else if (with.hSpeed < 10.0)
                     with.hSpeed = 10f;
                 if (with is Gun)
                     (with as Gun).PressAction();

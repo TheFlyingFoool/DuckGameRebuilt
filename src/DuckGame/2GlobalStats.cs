@@ -34,7 +34,7 @@ namespace DuckGame
             get => this._value is int ? (int)this._value : (float)this._value;
             set
             {
-                if (!(this._value is float) || (double)value > (double)(float)this._value)
+                if (!(this._value is float) || value > (float)this._value)
                     this._value = value;
                 Steam.SetStat(this._name, this.valueFloat);
             }
@@ -47,7 +47,7 @@ namespace DuckGame
             if (!Steam.IsInitialized())
                 return;
             float stat = Steam.GetStat(this._name);
-            if ((double)stat <= -99999.0)
+            if (stat <= -99999f)
                 return;
             this._value = stat;
         }
@@ -82,9 +82,9 @@ namespace DuckGame
             return c1;
         }
 
-        public static bool operator <(StatBinding c1, float c2) => (double)c1.valueFloat < (double)c2;
+        public static bool operator <(StatBinding c1, float c2) => c1.valueFloat < c2;
 
-        public static bool operator >(StatBinding c1, float c2) => (double)c1.valueFloat > (double)c2;
+        public static bool operator >(StatBinding c1, float c2) => c1.valueFloat > c2;
 
         public static bool operator <(StatBinding c1, int c2) => c1.valueInt < c2;
 

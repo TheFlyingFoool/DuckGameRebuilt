@@ -27,15 +27,15 @@ namespace DuckGame
         public override void Update()
         {
             Vec2 vec2 = this._control.position - this.position;
-            double length = (double)vec2.length;
+            double length = vec2.length;
             vec2.Normalize();
-            this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._control.position) + 90.0);
+            this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._control.position) + 90.0);
             this.position += vec2 * 8f;
             this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.1f);
             if (length < 48.0 || this._control.destroyed || !this._control.receivingSignal)
                 this._fade = true;
             this.alpha = Lerp.Float(this.alpha, this._fade ? 0f : 1f, 0.1f);
-            if ((double)this.alpha < 0.00999999977648258 && this._fade)
+            if (this.alpha < 0.00999999977648258 && this._fade)
                 Level.Remove(this);
             base.Update();
         }

@@ -53,7 +53,7 @@ namespace DuckGame
             for (int index = 0; index < 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)(((double)Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * (double)Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
@@ -101,7 +101,7 @@ namespace DuckGame
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / (double)this._maxHealth) * 4.0);
+            this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / this._maxHealth) * 4.0);
             if (_hitPoints <= 0.0 && !this._destroyed)
                 this.Destroy(new DTImpact(this));
             this._flip = MathHelper.Lerp(this._flip, this.flipped != 0 ? 1.1f : -0.1f, 0.2f);
@@ -151,9 +151,9 @@ namespace DuckGame
             }
             else
             {
-                this.centerx = (float)(9.0 + 4.0 * _flip * ((double)this.angle > 0.0 ? 1.0 : -1.0));
+                this.centerx = (float)(9.0 + 4.0 * _flip * (this.angle > 0.0 ? 1.0 : -1.0));
                 this.centery = (float)(6.0 + 4.0 * _flip);
-                this.angle = this._flip * (float)(1.5 * ((double)this.angle > 0.0 ? 1.0 : -1.0));
+                this.angle = this._flip * (float)(1.5 * (this.angle > 0.0 ? 1.0 : -1.0));
             }
             this.firstFrame = false;
         }

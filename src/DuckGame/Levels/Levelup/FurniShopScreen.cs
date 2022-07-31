@@ -71,7 +71,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((textVal.Length + str2.Length) * 8 > (double)num)
+                    if ((textVal.Length + str2.Length) * 8 > num)
                     {
                         this._confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
@@ -127,7 +127,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.alpha < 0.01f)
+            if (this.alpha < 0.01f)
                 return;
             Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, Layer.HUD.height - 51f), new Color(20, 20, 20) * this.alpha * 0.7f, -0.9f);
             Vec2 p1 = new Vec2(20f, 8f);

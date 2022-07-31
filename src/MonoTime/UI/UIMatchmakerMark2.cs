@@ -418,7 +418,7 @@ namespace DuckGame
                     float num2 = this.x - 28f;
                     float x = num2 + index * 9 + (float)Math.Round(_scroll);
                     float num3 = num2 + 63f;
-                    double num4 = ((double)x - (double)num2) / ((double)num3 - (double)num2);
+                    double num4 = (x - num2) / (num3 - num2);
                     this._matchmakingSignal.depth = this.depth + 4;
                     if (num4 > -0.100000001490116)
                         this._matchmakingSignal.frame = 0;
@@ -445,7 +445,7 @@ namespace DuckGame
             Graphics.Draw(_signalCrossLocal, this.x - 45f, num1 - 19f);
             this._signalCrossNetwork.depth = this.depth + 2;
             Graphics.Draw(_signalCrossNetwork, this.x + 55f, num1 - 23f);
-            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-((double)this._font.GetWidth(this._caption) / 2.0), -52f), Color.White, Color.Black, this.depth + 2);
+            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-(this._font.GetWidth(this._caption) / 2.0), -52f), Color.White, Color.Black, this.depth + 2);
             this._fancyFont.scale = new Vec2(0.5f);
             int num5 = 0;
             while (this.messages.Count > 10)

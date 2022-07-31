@@ -71,10 +71,10 @@ namespace DuckGame
             float num2 = Resolution.current.y / (float)Graphics.height;
             Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
             this._undergroundRocks.scissor = new Rectangle((int)wallScissor.x, num1 * num2, (int)wallScissor.y, Resolution.current.y - num1);
-            int height = (int)(Vec2.Transform(new Vec2(0f, -10f), Level.current.camera.getMatrix()).y * (double)num2);
+            int height = (int)(Vec2.Transform(new Vec2(0f, -10f), Level.current.camera.getMatrix()).y * num2);
             if (height < 0)
                 height = 0;
-            if (height > (double)Resolution.size.y)
+            if (height > Resolution.size.y)
                 height = (int)Resolution.size.y;
             this._skyline.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, height);
             base.Update();

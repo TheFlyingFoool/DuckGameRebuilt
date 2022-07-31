@@ -139,7 +139,7 @@ namespace DuckGame
                 thing.DoDraw();
             }
             float num1 = this.spectators.Count * 22;
-            float x = (float)((double)this.x - (double)num1 / 2.0 + 10.0);
+            float x = (float)(this.x - num1 / 2.0 + 10.0);
             int num2 = 0;
             foreach (Profile spectator in this.spectators)
             {
@@ -177,7 +177,7 @@ namespace DuckGame
                 Vec2 bob = data.bob;
                 if (bob.y < 0f)
                     bob.y *= 1.6f;
-                Vec2 vec2_3 = vec2_2 + new Vec2(bob.x, (float)(-(double)bob.y * 1.5)) * 4f;
+                Vec2 vec2_3 = vec2_2 + new Vec2(bob.x, (float)(-bob.y * 1.5)) * 4f;
                 data.tilt = Lerp.Vec2Smooth(data.tilt, spectator.netData.Get<Vec2>("spectatorTilt", Vec2.Zero), 0.15f);
                 data.bob = Lerp.Vec2Smooth(data.bob, spectator.netData.Get<Vec2>("spectatorBob", Vec2.Zero), 0.15f);
                 spectator.netData.Get<bool>("quack", false);

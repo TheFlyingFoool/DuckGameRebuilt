@@ -62,7 +62,7 @@ namespace DuckGame
                     SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-5f, 5f), this.y + Rando.Float(-5f, 5f));
                     smallSmoke.vSpeed = Rando.Float(0f, -0.5f);
                     double num2;
-                    float num3 = (float)(num2 = (double)Rando.Float(0.2f, 0.7f));
+                    float num3 = (float)(num2 = Rando.Float(0.2f, 0.7f));
                     smallSmoke.yscale = (float)num2;
                     smallSmoke.xscale = num3;
                     Level.Add(smallSmoke);

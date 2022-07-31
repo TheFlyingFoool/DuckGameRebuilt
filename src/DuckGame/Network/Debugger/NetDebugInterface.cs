@@ -95,17 +95,17 @@ namespace DuckGame
     if (selected.value == null)
     {
         string str3 = str1;
-        int num = (int)((double)pInstance.network.core.averagePing * 1000.0);
+        int num = (int)(pInstance.network.core.averagePing * 1000.0);
         string str4 = num.ToString();
         string str5 = str3 + " |GREEN|(" + str4 + "ms actual)";
-        num = (int)((double)pInstance.network.core.averagePingPeak * 1000.0);
+        num = (int)(pInstance.network.core.averagePingPeak * 1000.0);
         string str6 = num.ToString();
         str2 = str5 + " |YELLOW|(" + str6 + "ms peak)";
     }
     else
     {
         NetworkConnection networkConnection3 = selected.value as NetworkConnection;
-        str2 = str1 + " |GREEN|(" + ((int)((double)networkConnection3.manager.ping * 1000.0)).ToString() + "ms actual)" + " |YELLOW|(" + ((int)((double)networkConnection3.manager.pingPeak * 1000.0)).ToString() + "ms peak)";
+        str2 = str1 + " |GREEN|(" + ((int)(networkConnection3.manager.ping * 1000.0)).ToString() + "ms actual)" + " |YELLOW|(" + ((int)(networkConnection3.manager.pingPeak * 1000.0)).ToString() + "ms peak)";
     }
     return str2;
 })
@@ -157,7 +157,7 @@ namespace DuckGame
         string str9 = str7 + " |RED|(" + networkConnection4.manager.losses.ToString() + " lost)";
         int num = 0;
         if (networkConnection4.manager.losses != 0)
-            num = (int)(networkConnection4.manager.sent / (double)networkConnection4.manager.losses * 100.0);
+            num = (int)(networkConnection4.manager.sent / networkConnection4.manager.losses * 100.0);
         str8 = str9 + " |RED|(" + num.ToString() + "% avg)";
     }
     return str8;

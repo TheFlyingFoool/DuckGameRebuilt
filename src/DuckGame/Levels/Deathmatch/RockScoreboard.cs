@@ -256,9 +256,9 @@ namespace DuckGame
             if (RockScoreboard._sunEnabled)
             {
                 float num = 9f / 16f;
-                this._sunshineTarget = new RenderTarget2D(DuckGame.Graphics.width / 12, (int)(Graphics.width * (double)num) / 12);
-                this._screenTarget = new RenderTarget2D(DuckGame.Graphics.width, (int)(Graphics.width * (double)num));
-                this._pixelTarget = new RenderTarget2D(160, (int)(320.0 * (double)num / 2.0));
+                this._sunshineTarget = new RenderTarget2D(DuckGame.Graphics.width / 12, (int)(Graphics.width * num) / 12);
+                this._screenTarget = new RenderTarget2D(DuckGame.Graphics.width, (int)(Graphics.width * num));
+                this._pixelTarget = new RenderTarget2D(160, (int)(320.0 * num / 2.0));
                 this._sunLayer = new Layer("SUN LAYER", 99999);
                 Layer.Add(this._sunLayer);
                 Thing thing = new SpriteThing(150f, 120f, new Sprite("sun"));
@@ -368,7 +368,7 @@ namespace DuckGame
                         num5 = 27f;
                     else if (num2 % 4 == 3)
                         num5 = 30f;
-                    float num6 = (float)(158.0 - num2 % 4 * (double)num5);
+                    float num6 = (float)(158.0 - num2 % 4 * num5);
                     if (num2 > 3)
                         num6 -= 12f;
                     Depth depth = (Depth)(num6 / 200f);
@@ -431,7 +431,7 @@ namespace DuckGame
                                 this._slots[this._slots.Count - 1].ai._manualQuack = this.GetNetInput((sbyte)profile2.networkIndex);
                             this._slots[this._slots.Count - 1].duck.derpMindControl = false;
                             this._slots[this._slots.Count - 1].duck.mindControl = _slots[_slots.Count - 1].ai;
-                            this._slots[this._slots.Count - 1].rock = new ScoreRock((float)((double)num4 + 18.0 + prevScoreboardScore / (double)num7 * _fieldWidth), ypos, profile2)
+                            this._slots[this._slots.Count - 1].rock = new ScoreRock((float)(num4 + 18.0 + prevScoreboardScore / num7 * _fieldWidth), ypos, profile2)
                             {
                                 planeOfExistence = index,
                                 ignoreGhosting = true
@@ -895,11 +895,11 @@ namespace DuckGame
                 this.sunThing.x = (float)(290.0 + RockWeather.sunPos.x * 8000.0);
                 this.sunThing.y = (float)(10000.0 - RockWeather.sunPos.y * 8000.0);
                 this.rainbowThing.y = this.rainbowThing2.y = (float)(2000.0 + _fieldScroll * 12.0);
-                this.rainbowThing.x = this.rainbowThing2.x = (float)(-(double)this._field.scroll * 15.0 + 6800.0);
+                this.rainbowThing.x = this.rainbowThing2.x = (float)(-this._field.scroll * 15.0 + 6800.0);
                 this.rainbowThing.alpha = this._weather.rainbowLight;
                 this.rainbowThing2.alpha = this._weather.rainbowLight2;
-                this.rainbowThing.visible = (double)this.rainbowThing.alpha > 0.00999999977648258;
-                this.rainbowThing2.visible = (double)this.rainbowThing2.alpha > 0.00999999977648258;
+                this.rainbowThing.visible = this.rainbowThing.alpha > 0.00999999977648258;
+                this.rainbowThing2.visible = this.rainbowThing2.alpha > 0.00999999977648258;
                 RockScoreboard._drawingSunTarget = true;
                 Layer.Game.camera.width = 320f;
                 Layer.Game.camera.height = 180f;
@@ -968,12 +968,12 @@ namespace DuckGame
             this.lowestPoint = 1000f;
             bool flag1 = false;
             this._field.scroll = Lerp.Float(this._field.scroll, this._desiredScroll, 6f);
-            if ((double)this._field.scroll < 297.0)
+            if (this._field.scroll < 297.0)
             {
                 this._field.scroll = 0f;
                 flag1 = true;
             }
-            if ((double)this._field.scroll < 302.0)
+            if (this._field.scroll < 302.0)
                 this._field.scroll = 302f;
             this._fieldForeground.scroll = this._field.scroll;
             this._fieldForeground2.scroll = this._field.scroll;
@@ -1000,12 +1000,12 @@ namespace DuckGame
                 }
                 else if (this._state == ScoreBoardState.MatchOver)
                 {
-                    if (_highestSlot.duck.position.x < (double)this._highestSlot.rock.x - 16.0)
+                    if (_highestSlot.duck.position.x < this._highestSlot.rock.x - 16.0)
                     {
                         this._highestSlot.ai.Release("LEFT");
                         this._highestSlot.ai.Press("RIGHT");
                     }
-                    if (_highestSlot.duck.position.x > (double)this._highestSlot.rock.x + 16.0)
+                    if (_highestSlot.duck.position.x > this._highestSlot.rock.x + 16.0)
                     {
                         this._highestSlot.ai.Release("RIGHT");
                         this._highestSlot.ai.Press("LEFT");
@@ -1016,12 +1016,12 @@ namespace DuckGame
                     {
                         DuckAI subAi = this._highestSlot.subAIs[index];
                         Duck subDuck = this._highestSlot.subDucks[index];
-                        if (subDuck.position.x < (double)this._highestSlot.rock.x - 16.0)
+                        if (subDuck.position.x < this._highestSlot.rock.x - 16.0)
                         {
                             subAi.Release("LEFT");
                             subAi.Press("RIGHT");
                         }
-                        if (subDuck.position.x > (double)this._highestSlot.rock.x + 16.0)
+                        if (subDuck.position.x > this._highestSlot.rock.x + 16.0)
                         {
                             subAi.Release("RIGHT");
                             subAi.Press("LEFT");
@@ -1030,20 +1030,20 @@ namespace DuckGame
                     if (this._focusRock)
                     {
                         this._highestSlot.ai.Release("JUMP");
-                        if ((double)Rando.Float(1f) > 0.980000019073486)
+                        if (Rando.Float(1f) > 0.980000019073486)
                             this._highestSlot.ai.Press("JUMP");
                         for (int index = 0; index < this._highestSlot.subAIs.Count; ++index)
                         {
                             DuckAI subAi = this._highestSlot.subAIs[index];
                             Duck subDuck = this._highestSlot.subDucks[index];
                             subAi.Release("JUMP");
-                            if ((double)Rando.Float(1f) > 0.980000019073486)
+                            if (Rando.Float(1f) > 0.980000019073486)
                                 subAi.Press("JUMP");
                         }
                         if (!this._droppedConfetti)
                         {
                             this._desiredScroll = this._highestSlot.duck.position.x;
-                            if (_desiredScroll >= (double)this._highestSlot.rock.position.x)
+                            if (_desiredScroll >= this._highestSlot.rock.position.x)
                             {
                                 this._desiredScroll = this._highestSlot.rock.position.x;
                                 Crowd.mood = Mood.Extatic;
@@ -1091,7 +1091,7 @@ namespace DuckGame
                             slot.state = RockThrow.PickUpRock;
                         if (slot.state == RockThrow.PickUpRock)
                         {
-                            if (slot.duck.position.x < (double)slot.rock.position.x)
+                            if (slot.duck.position.x < slot.rock.position.x)
                             {
                                 slot.ai.Press("RIGHT");
                             }
@@ -1126,12 +1126,12 @@ namespace DuckGame
                                         slot.duck.ThrowItem();
                                         float num1 = slot.duck.profile.team.rockScore;
                                         int num2 = GameMode.winsPerSet * 2;
-                                        if ((double)num1 > num2 - 2)
+                                        if (num1 > num2 - 2)
                                             num1 = num2 - 2 + Math.Min((slot.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
-                                        float num3 = (float)(slot.startX + 30.0 + (double)num1 / num2 * _fieldWidth) - slot.rock.x;
-                                        slot.rock.vSpeed = (float)(-2.0 - (double)Maths.Clamp(num3 / 300f, 0f, 1f) * 4.0);
+                                        float num3 = (float)(slot.startX + 30.0 + num1 / num2 * _fieldWidth) - slot.rock.x;
+                                        slot.rock.vSpeed = (float)(-2.0 - Maths.Clamp(num3 / 300f, 0f, 1f) * 4.0);
                                         float num4 = Math.Abs(2f * slot.rock.vSpeed) / slot.rock.currentGravity;
-                                        double currentFriction = (double)slot.rock.currentFriction;
+                                        double currentFriction = slot.rock.currentFriction;
                                         float num5 = num3 / num4;
                                         slot.rock.frictionMult = 0f;
                                         slot.rock.grounded = false;
@@ -1195,7 +1195,7 @@ namespace DuckGame
                                         this._field.AddSprite(s);
                                     }
                                     ++slot.slideWait;
-                                    if (slot.slideWait > 3 && (double)slot.rock.hSpeed > 0.0)
+                                    if (slot.slideWait > 3 && slot.rock.hSpeed > 0.0)
                                     {
                                         Sprite s;
                                         switch (RockWeather.weather)
@@ -1248,8 +1248,8 @@ namespace DuckGame
                                 {
                                     int rockScore = slot.duck.profile.team.rockScore;
                                     int num = GameMode.winsPerSet * 2;
-                                    if (!this._misfire && (double)slot.rock.x > slot.startX + 30.0 + rockScore / (double)num * _fieldWidth)
-                                        slot.rock.x = (float)(slot.startX + 30.0 + rockScore / (double)num * _fieldWidth);
+                                    if (!this._misfire && slot.rock.x > slot.startX + 30.0 + rockScore / num * _fieldWidth)
+                                        slot.rock.x = (float)(slot.startX + 30.0 + rockScore / num * _fieldWidth);
                                 }
                             }
                         }
@@ -1271,7 +1271,7 @@ namespace DuckGame
                         {
                             if (slot == this._slots[this._slots.Count - 1])
                                 slot.follow = false;
-                            if (slot.duck.position.x > (double)slot.startX)
+                            if (slot.duck.position.x > slot.startX)
                             {
                                 slot.ai.Press("LEFT");
                             }
@@ -1351,7 +1351,7 @@ namespace DuckGame
                 Network.isServer = isServer;
                 this.controlMessage = -1;
                 DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.02f);
-                if ((double)DuckGame.Graphics.fade < 0.00999999977648258)
+                if (DuckGame.Graphics.fade < 0.00999999977648258)
                 {
                     this._skipFade = false;
                     if (this._mode == ScoreBoardMode.ShowScores)
@@ -1373,9 +1373,9 @@ namespace DuckGame
                                 {
                                     float num8 = slot.duck.profile.team.rockScore;
                                     int num9 = GameMode.winsPerSet * 2;
-                                    if ((double)num8 > num9 - 2)
+                                    if (num8 > num9 - 2)
                                         num8 = num9 - 2 + Math.Min((slot.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
-                                    slot.rock.x = (float)(slot.startX + 30.0 + (double)num8 / num9 * _fieldWidth);
+                                    slot.rock.x = (float)(slot.startX + 30.0 + num8 / num9 * _fieldWidth);
                                     if (RockScoreboard.wallMode && slot.duck.profile.team.rockScore >= GameMode.winsPerSet)
                                         slot.rock.x -= 10f;
                                 }
@@ -1398,7 +1398,7 @@ namespace DuckGame
             if (this._finished)
             {
                 DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.03f);
-                if ((double)DuckGame.Graphics.fade < 0.00999999977648258)
+                if (DuckGame.Graphics.fade < 0.00999999977648258)
                 {
                     foreach (Team team in Teams.all)
                         team.prevScoreboardScore = team.score;
@@ -1493,7 +1493,7 @@ namespace DuckGame
                                 this._cameraFadeVel += 0.01f;
                         }
                         DuckGame.Graphics.fadeAdd += this._cameraFadeVel;
-                        if ((double)DuckGame.Graphics.fadeAdd > 1.0)
+                        if (DuckGame.Graphics.fadeAdd > 1.0)
                         {
                             int width1 = DuckGame.Graphics.width;
                             int height1 = DuckGame.Graphics.height;
@@ -1713,7 +1713,7 @@ namespace DuckGame
                         num2 = 2f;
                         num3 = 1f;
                     }
-                    font.Draw(name, (float)(160.0 - (double)font.GetWidth(name) / 2.0) + num2, 50f + num1 + num3, Color.Black, this._winnerBanner.depth + 1);
+                    font.Draw(name, (float)(160.0 - font.GetWidth(name) / 2.0) + num2, 50f + num1 + num3, Color.Black, this._winnerBanner.depth + 1);
                     font.scale = new Vec2(1f, 1f);
                 }
             }

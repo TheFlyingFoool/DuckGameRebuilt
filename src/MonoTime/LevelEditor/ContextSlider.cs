@@ -104,8 +104,8 @@ namespace DuckGame
                             num1 = Maths.Clamp(TouchScreen.GetTouch().Transform(this.layer.camera).x - this.position.x, 0f, this.itemSize.x);
                         if (this._field.value is List<TypeProbPair>)
                         {
-                            if (_step > 0.0)
-                                num1 = (float)(Math.Round((double)num1 / itemSize.x * 1.0 / _step) * _step / 1.0) * this.itemSize.x;
+                            if (_step > 0f)
+                                num1 = (float)(Math.Round(num1 / itemSize.x * 1f / _step) * _step / 1f) * this.itemSize.x;
                             TypeProbPair typeProbPair1 = null;
                             List<TypeProbPair> typeProbPairList = this._field.value as List<TypeProbPair>;
                             foreach (TypeProbPair typeProbPair2 in typeProbPairList)
@@ -125,8 +125,8 @@ namespace DuckGame
                                 };
                                 typeProbPairList.Add(typeProbPair1);
                             }
-                            typeProbPair1.probability = (float)(0.0 + (double)num1 / itemSize.x * 1.0);
-                            if (typeProbPair1.probability == 0.0)
+                            typeProbPair1.probability = (0f + num1 / itemSize.x * 1f);
+                            if (typeProbPair1.probability == 0f)
                             {
                                 typeProbPairList.Remove(typeProbPair1);
                                 goto label_30;
@@ -137,21 +137,21 @@ namespace DuckGame
                         else
                         {
                             float num2 = Math.Abs(this._field.max - this._field.min);
-                            if (_step > 0.0)
+                            if (_step > 0f)
                                 num1 = Maths.Snap(num1 / this.itemSize.x * num2, this._step) / num2 * this.itemSize.x;
                             if (this._field.value is float)
                             {
-                                this._field.value = (float)((double)this._field.min + (double)num1 / itemSize.x * (double)num2);
+                                this._field.value = (this._field.min + num1 / itemSize.x * num2);
                                 goto label_30;
                             }
                             else if (this._field.value is int)
                             {
-                                this._field.value = (int)Math.Round((double)this._field.min + (double)num1 / itemSize.x * ((double)Math.Abs(this._field.min) + (double)this._field.max));
+                                this._field.value = (int)Math.Round(this._field.min + num1 / itemSize.x * (Math.Abs(this._field.min) + this._field.max));
                                 goto label_30;
                             }
                             else if (this._field.value != null && this._field.value.GetType().IsEnum)
                             {
-                                int index = (int)Math.Round((double)this._field.min + (double)num1 / itemSize.x * ((double)Math.Abs(this._field.min) + (double)this._field.max));
+                                int index = (int)Math.Round(this._field.min + num1 / itemSize.x * (Math.Abs(this._field.min) + this._field.max));
                                 Array values = Enum.GetValues(this._field.value.GetType());
                                 if (index >= 0 && index < values.Length)
                                 {
@@ -298,13 +298,13 @@ namespace DuckGame
             else if (this._hover)
             {
                 this._adjust = true;
-                if ((double)Mouse.scroll > 0.0)
+                if (Mouse.scroll > 0f)
                 {
                     Editor.didUIScroll = true;
                     this.Decrement();
                     ContextMenu._didContextScroll = true;
                 }
-                if ((double)Mouse.scroll < 0.0)
+                if (Mouse.scroll < 0f)
                 {
                     Editor.didUIScroll = true;
                     this.Increment();
@@ -349,31 +349,31 @@ namespace DuckGame
                 num1 = (int)this._field.value;
                 text1 = Enum.GetName(this._field.value.GetType(), this._field.value);
             }
-            if (this._minSpecial != null && (double)num1 == (double)this._field.min)
+            if (this._minSpecial != null && num1 == this._field.min)
                 text1 = this._minSpecial;
             else if (this._time)
                 text1 = MonoMain.TimeString(TimeSpan.FromSeconds((int)num1), 2);
             if (this._adjust)
             {
                 float num2 = this._field.max - this._field.min;
-                float x1 = (float)(4.0 + ((double)num2 - ((double)this._field.max - (double)num1)) / (double)num2 * (itemSize.x - 8.0));
+                float x1 = (4f + (num2 - (this._field.max - num1)) / num2 * (itemSize.x - 8f));
                 float x2 = 0f;
                 float x3 = this.itemSize.x;
                 string text2 = this._text + ": " + text1;
                 Color color = Color.White;
                 if (this._field.value is List<TypeProbPair>)
-                    color = (double)num1 != 0.0 ? ((double)num1 >= 0.3f ? ((double)num1 >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                    color = num1 != 0f ? (num1 >= 0.3f ? (num1 >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                 float num3 = 0.1f;
                 if (Editor.inputMode == EditorInput.Gamepad)
                     num3 = 0.05f;
                 bool flag = false;
                 float stringWidth = Graphics.GetStringWidth(text2);
-                if (position.x + (double)this.itemSize.x + 8.0 + (double)stringWidth > (double)this.layer.width)
+                if (position.x + this.itemSize.x + 8f + stringWidth > this.layer.width)
                     flag = true;
                 if (flag)
                 {
-                    x2 = (float)(-(double)stringWidth - 12.0);
-                    Graphics.DrawString(text2, this.position + new Vec2((float)(-(double)stringWidth - 8.0), 5f), color, (Depth)(0.82f + num3));
+                    x2 = (float)(-stringWidth - 12f);
+                    Graphics.DrawString(text2, this.position + new Vec2((-stringWidth - 8f), 5f), color, (Depth)(0.82f + num3));
                 }
                 else
                 {

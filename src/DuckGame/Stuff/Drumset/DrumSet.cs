@@ -68,7 +68,7 @@ namespace DuckGame
 
         public void ThrowStick()
         {
-            if ((double)Rando.Float(1f) >= 0.5)
+            if (Rando.Float(1f) >= 0.5)
                 Level.Add(new DrumStick(this.x - 5f, this.y - 8f));
             else
                 Level.Add(new DrumStick(this.x + 5f, this.y - 8f));

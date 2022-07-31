@@ -24,7 +24,7 @@ namespace DuckGame
 
         private RenderTarget2D _screenTarget
         {
-            get => (double)this._selector._roomEditor.fade > 0.0 ? this._finalTarget : this._realScreenTarget;
+            get => this._selector._roomEditor.fade > 0f ? this._finalTarget : this._realScreenTarget;
             set => this._realScreenTarget = value;
         }
 
@@ -56,7 +56,7 @@ namespace DuckGame
             DuckGame.Graphics.Clear(Color.Black);
             DuckGame.Graphics.screen = this._batch;
             Camera camera = new Camera(3f, 4f, _screenTarget.width, _screenTarget.height);
-            if ((double)this._selector._roomEditor.fade > 0.0)
+            if (this._selector._roomEditor.fade > 0f)
                 camera = new Camera(3f, 4f, this._screenTarget.width / 4, this._screenTarget.height / 4);
             this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
         }
@@ -67,7 +67,7 @@ namespace DuckGame
             if (!this._flashTransition)
             {
                 Camera camera1 = new Camera(0f, 0f, _screenTarget.width, _screenTarget.height);
-                if ((double)this._selector._roomEditor.fade <= 0.0)
+                if (this._selector._roomEditor.fade <= 0f)
                 {
                     DuckGame.Graphics.SetRenderTarget(this._bloomTarget);
                     DuckGame.Graphics.viewport = new Viewport(0, 0, this._bloomTarget.width, this._bloomTarget.height);

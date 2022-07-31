@@ -41,7 +41,7 @@ namespace DuckGame
 
         //public static void SetSize(float pSize)
         //{
-        //    if ((double)pSize == _size)
+        //    if (pSize == _size)
         //        return;
         //    FontGDIContext._size = pSize;
         //    //FontGDIContext._dirty = true;
@@ -204,7 +204,7 @@ namespace DuckGame
                 return rasterFontData1;
             if (FontGDIContext._fontDatas.Count > 8)
                 FontGDIContext._fontDatas.Clear();
-            if ((double)pSize > 120.0)
+            if (pSize > 120f)
                 pSize = 120f;
             FontGDIContext._size = pSize;
             FontGDIContext._fontStyle = pStyle;
@@ -224,7 +224,7 @@ namespace DuckGame
             FontGDIContext.ABCFloat[] charAbcWidthsRange = FontGDIContext.GetCharABCWidthsRange(char.MinValue, 'ё', FontGDIContext._systemFont, FontGDIContext._graphicsContext);
             FontGDIContext.ABCFloat abcFloat1 = charAbcWidthsRange[87];
             float num2 = abcFloat1.abcB + Math.Abs(abcFloat1.abcA) + Math.Abs(abcFloat1.abcC);
-            float val1 = (int)((double)num2 * Math.Sqrt(FancyBitmapFont._characters.Length) / (double)num2) * (FontGDIContext._systemFont.GetHeight() + 8f);
+            float val1 = (int)(num2 * Math.Sqrt(FancyBitmapFont._characters.Length) / num2) * (FontGDIContext._systemFont.GetHeight() + 8f);
             float num3 = MonoMain.hidef ? Math.Min(val1, 4096f) : Math.Min(val1, 2048f);
             FontGDIContext._drawingImage = new Bitmap((int)num3, (int)num3, PixelFormat.Format32bppPArgb);
             FontGDIContext._graphicsContext = System.Drawing.Graphics.FromImage(_drawingImage);
@@ -257,15 +257,15 @@ namespace DuckGame
                 };
                 float abcB = abcFloat2.abcB;
                 int height = (int)rasterFontData2.fontHeight + 8;
-                float num4 = (float)((double)abcB + (double)Math.Abs(fontCharacterInfo.leading) + (double)Math.Abs(fontCharacterInfo.trailing) + 8.0);
-                if ((double)x + (double)num4 > _drawingImage.Width)
+                float num4 = (abcB + Math.Abs(fontCharacterInfo.leading) + Math.Abs(fontCharacterInfo.trailing) + 8f);
+                if (x + num4 > _drawingImage.Width)
                 {
                     y += height + 2;
                     x = 0f;
                 }
                 fontCharacterInfo.area = new Rectangle(x, y, num4 - 2f, height);
                 rasterFontData2.characters.Add(fontCharacterInfo);
-                FontGDIContext._graphicsContext.DrawString(character.ToString() ?? "", FontGDIContext._systemFont, FontGDIContext._brush, (float)((double)x + fontCharacterInfo.trailing / 2.0 - fontCharacterInfo.leading / 2.0 + (double)abcB / 2.0 + 2.0), y, FontGDIContext.GetStringFormatting());
+                FontGDIContext._graphicsContext.DrawString(character.ToString() ?? "", FontGDIContext._systemFont, FontGDIContext._brush, (x + fontCharacterInfo.trailing / 2f - fontCharacterInfo.leading / 2f + abcB / 2f + 2f), y, FontGDIContext.GetStringFormatting());
                 x += num4;
             }
             FontGDIContext._graphicsContext.Flush();

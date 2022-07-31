@@ -68,7 +68,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._angleOffset = (float)(-(double)this._loadBurst * 0.300000011920929);
+            this._angleOffset = (float)(-this._loadBurst * 0.300000011920929);
             this._loadBurst = Lerp.FloatSmooth(this._loadBurst, 0f, 0.18f);
             if (_loadBurst < 0.100000001490116)
                 this._loadBurst = 0f;

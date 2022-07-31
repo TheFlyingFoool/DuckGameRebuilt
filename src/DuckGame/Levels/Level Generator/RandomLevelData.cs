@@ -273,9 +273,9 @@ namespace DuckGame
                 flag = !flag;
             if (this.mainLoad && Level.symmetry && !(t is ThingContainer))
             {
-                if (Level.leftSymmetry && (double)t.x > 88.0)
+                if (Level.leftSymmetry && t.x > 88.0)
                     return null;
-                if (!Level.leftSymmetry && (double)t.x < 88.0)
+                if (!Level.leftSymmetry && t.x < 88.0)
                     return null;
             }
             if (flag)
@@ -303,7 +303,7 @@ namespace DuckGame
                         }
                         break;
                     default:
-                        t.SetTranslation(new Vec2((float)(-(double)t.x + (192.0 - (double)t.x) - 16.0), 0f));
+                        t.SetTranslation(new Vec2((float)(-t.x + (192.0 - t.x) - 16.0), 0f));
                         goto label_14;
                 }
             }

@@ -70,7 +70,7 @@ namespace DuckGame
             if (this._fade)
             {
                 this.alpha -= 0.1f;
-                if ((double)this.alpha <= 0.0)
+                if (this.alpha <= 0f)
                 {
                     Level.Remove(this);
                     this.alpha = 0f;
@@ -95,7 +95,7 @@ namespace DuckGame
                 this.canPickUp = false;
                 foreach (Duck duck in Level.CheckLineAll<Duck>(new Vec2(this.x - 5f, this.y + 2f), new Vec2(this.x + 5f, this.y + 2f)))
                 {
-                    if (duck.grounded && !duck.crouch && !duck.sliding && (double)duck.bottom <= (double)this.bottom + 2.0 && duck.isServerForObject && (double)Math.Abs(duck.hSpeed) > 2.5)
+                    if (duck.grounded && !duck.crouch && !duck.sliding && duck.bottom <= this.bottom + 2f && duck.isServerForObject && Math.Abs(duck.hSpeed) > 2.5f)
                     {
                         RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
                         duck.Fondle(this);
@@ -108,7 +108,7 @@ namespace DuckGame
                         }
                         else
                             SFX.Play("slip", pitch: Rando.Float(-0.2f, 0.2f));
-                        if ((double)duck.hSpeed < 0.0)
+                        if (duck.hSpeed < 0f)
                             duck.hSpeed -= 1.5f;
                         else
                             duck.hSpeed += 1.5f;

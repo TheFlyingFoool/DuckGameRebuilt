@@ -22,7 +22,7 @@ namespace DuckGame
             get => this.data.fontSize;
             set
             {
-                if ((double)value == data.fontSize)
+                if (value == data.fontSize)
                     return;
                 this.Rebuild(this.data.name, value);
             }

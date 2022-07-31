@@ -243,7 +243,7 @@ namespace DuckGame
                 {
                     this._styleTray.depth = (Depth)0.92f;
                     Graphics.Draw(this._styleTray, this.x + 118f, Layer.HUD.camera.height / 2f);
-                    Vec2 vec2_2 = new Vec2(this.x + 90f, (float)((double)Layer.HUD.camera.height / 2.0 - 80.0));
+                    Vec2 vec2_2 = new Vec2(this.x + 90f, (float)(Layer.HUD.camera.height / 2.0 - 80.0));
                     int num = 0;
                     foreach (Sprite buttonStyle in Input.buttonStyles)
                     {

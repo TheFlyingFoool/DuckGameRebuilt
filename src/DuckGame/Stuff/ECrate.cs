@@ -98,7 +98,7 @@ namespace DuckGame
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / (double)this._maxHealth) * 4f);
+            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / this._maxHealth) * 4f);
             if (_hitPoints <= 0f && !this._destroyed)
                 this.Destroy(new DTImpact(this));
             if (!this._onFire || burnt >= 0.9f)

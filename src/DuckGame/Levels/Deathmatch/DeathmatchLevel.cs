@@ -80,7 +80,7 @@ namespace DuckGame
             int num = 0;
             foreach (Duck duck in this.things[typeof(Duck)])
             {
-                if ((double)duck.x < _p1.x)
+                if (duck.x < _p1.x)
                     this._p1 = duck.position;
                 this._p2 += duck.position;
                 ++num;

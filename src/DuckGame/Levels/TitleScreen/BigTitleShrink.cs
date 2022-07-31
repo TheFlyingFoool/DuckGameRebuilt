@@ -47,7 +47,7 @@ namespace DuckGame
                 this.alpha *= 0.8f;
             if (this.xscale < 1.05f && this._black)
                 Level.Remove(this);
-            if ((double)this.alpha > 0f)
+            if (this.alpha > 0f)
                 return;
             Level.Remove(this);
         }

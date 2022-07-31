@@ -70,9 +70,9 @@ namespace DuckGame
             float num = 1f;
             if (Editor.inputMode == EditorInput.Mouse && this._hover)
             {
-                if ((double)Mouse.scroll > 0.0)
+                if (Mouse.scroll > 0.0)
                     flag2 = true;
-                else if ((double)Mouse.scroll < 0.0)
+                else if (Mouse.scroll < 0.0)
                     flag1 = true;
                 if (Mouse.middle == InputState.Down)
                     num = 0.1f;

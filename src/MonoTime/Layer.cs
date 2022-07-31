@@ -177,7 +177,7 @@ namespace DuckGame
             set => this._blurEffect = value;
         }
 
-        public float barSize => (float)(((double)this.camera.width * (double)DuckGame.Graphics.aspect - (double)this.camera.width * (9.0 / 16.0)) / 2.0);
+        public float barSize => (float)((this.camera.width * DuckGame.Graphics.aspect - this.camera.width * (9.0 / 16.0)) / 2.0);
 
         public Matrix projection { get; set; }
 
@@ -363,7 +363,7 @@ namespace DuckGame
                     this._oldViewport = DuckGame.Graphics.viewport;
                     DuckGame.Graphics.SetRenderTarget(this._target);
                     if (flashAddClearInfluence > 0.0)
-                        DuckGame.Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * (double)DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * (double)DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * (double)DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), this._targetClearColor.a));
+                        DuckGame.Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), this._targetClearColor.a));
                     else
                         DuckGame.Graphics.Clear(this._targetClearColor);
                 }
@@ -419,7 +419,7 @@ namespace DuckGame
                     effect = (Effect)Layer._core._basicEffectFade;
                     effect.Parameters["fade"].SetValue((Vector3)vec3_1);
                 }
-                else if ((double)num2 > 1f / 1000f)
+                else if (num2 > 1f / 1000f)
                 {
                     effect = (Effect)Layer._core._basicEffectAdd;
                     effect.Parameters["add"].SetValue((Vector3)vec3_2);
@@ -433,8 +433,8 @@ namespace DuckGame
             Camera camera = this.camera;
             if (this.target != null & isTargetDraw && !this.targetOnly)
             {
-                this._targetCamera.x = (float)Math.Round((double)this.camera.x - 1f);
-                this._targetCamera.y = (float)Math.Round((double)this.camera.y - 1f);
+                this._targetCamera.x = (float)Math.Round(this.camera.x - 1f);
+                this._targetCamera.y = (float)Math.Round(this.camera.y - 1f);
                 this._targetCamera.width = Math.Max(this.camera.width, Graphics.width);
                 this._targetCamera.height = Math.Max(this.camera.height, Graphics.height);
                 camera = this._targetCamera;
@@ -547,7 +547,7 @@ namespace DuckGame
                                         if (thing is PhysicsObject)
                                         {
                                             float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
-                                            this._dropShadow.alpha = (float)(0.5 - 0.5 * (double)num);
+                                            this._dropShadow.alpha = (float)(0.5 - 0.5 * num);
                                             this._dropShadow.scale = new Vec2(1f - num, 1f - num);
                                             this._dropShadow.depth = thing.depth - 10;
                                             source = new Vec3(position.x, thing.z, 0f);
@@ -591,7 +591,7 @@ namespace DuckGame
                                         if (thing is PhysicsObject)
                                         {
                                             float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
-                                            this._dropShadow.alpha = (float)(0.5 - 0.5 * (double)num);
+                                            this._dropShadow.alpha = (float)(0.5 - 0.5 * num);
                                             this._dropShadow.scale = new Vec2(1f - num, 1f - num);
                                             this._dropShadow.depth = thing.depth - 10;
                                             source = new Vec3(position.x, thing.z, 0f);

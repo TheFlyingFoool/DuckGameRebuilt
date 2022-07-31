@@ -37,7 +37,7 @@ namespace DuckGame
                 this.depth = -0.8f;
             else if (_sinVal > 0.8f && this.depth < 0f)
                 this.depth = (Depth)0.8f;
-            if ((double)this.y < -20f)
+            if (this.y < -20f)
                 Level.Remove(this);
             base.Update();
         }

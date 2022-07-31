@@ -39,7 +39,7 @@ namespace DuckGame
             foreach (Team team in teamList)
             {
                 float y = this.y + 2f + (smallMode ? 12 : 25) * idx;
-                if ((double)Graphics.aspect > 0.589999973773956)
+                if (Graphics.aspect > 0.589999973773956)
                     y += 10f;
                 Level.current.AddThing(new GinormoCard(idx * 1f, new Vec2(300f, y), new Vec2(this.x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
                 ++idx;

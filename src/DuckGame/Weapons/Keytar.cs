@@ -143,7 +143,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.isServerForObject && ((double)Math.Abs(this.hSpeed) > 4.0 || (double)Math.Abs(this.vSpeed) > 4.0) && !this._ruined && this.owner == null)
+            if (this.isServerForObject && (Math.Abs(this.hSpeed) > 4.0 || Math.Abs(this.vSpeed) > 4.0) && !this._ruined && this.owner == null)
                 this._ruined = true;
             base.OnSolidImpact(with, from);
         }
@@ -222,7 +222,7 @@ namespace DuckGame
                 int num1 = this.currentNote;
                 if (preset == this.presets.Length - 1)
                     num1 = (int)Math.Round(currentNote / 2.0);
-                if (notePitch == 0.0 || (num1 != this.prevNote || this.noteSound != null && (double)this.noteSound.Pitch + 1.0 != (double)this.bender / 12.0) && !owner._hovering)
+                if (notePitch == 0.0 || (num1 != this.prevNote || this.noteSound != null && this.noteSound.Pitch + 1.0 != this.bender / 12.0) && !owner._hovering)
                 {
                     if (notePitch != 0.0)
                     {
@@ -258,7 +258,7 @@ namespace DuckGame
                                 Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = (float)((double)this.bender / 12.0 - 1.0);
+                            this.noteSound.Pitch = (float)(this.bender / 12.0 - 1.0);
                     }
                     else
                     {

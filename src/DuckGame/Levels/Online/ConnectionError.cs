@@ -86,7 +86,7 @@ namespace DuckGame
             foreach (string text in source)
             {
                 float stringHeight = Graphics.GetStringHeight(text);
-                Graphics.DrawString(text, new Vec2((float)((double)Layer.HUD.camera.width / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 - (double)stringHeight / 2.0)), Color.White);
+                Graphics.DrawString(text, new Vec2((Layer.HUD.camera.width / 2f - Graphics.GetStringWidth(text) / 2f), (Layer.HUD.camera.height / 2f - stringHeight / 2f)), Color.White);
                 num = stringHeight + 8f;
             }
         }

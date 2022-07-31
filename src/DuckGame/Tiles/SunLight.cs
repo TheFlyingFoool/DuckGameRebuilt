@@ -104,12 +104,12 @@ namespace DuckGame
                 bool flag = false;
                 foreach (Door door in this._doorList)
                 {
-                    if (!this._doors[door] && (double)Math.Abs(door._open) > 0.800000011920929)
+                    if (!this._doors[door] && Math.Abs(door._open) > 0.800000011920929)
                     {
                         this._doors[door] = true;
                         flag = true;
                     }
-                    else if (this._doors[door] && (double)Math.Abs(door._open) < 0.200000002980232)
+                    else if (this._doors[door] && Math.Abs(door._open) < 0.200000002980232)
                     {
                         this._doors[door] = false;
                         flag = true;
@@ -117,12 +117,12 @@ namespace DuckGame
                 }
                 foreach (VerticalDoor verticalDoor in this._verticalDoorList)
                 {
-                    if (!this._verticalDoors[verticalDoor] && (double)Math.Abs(verticalDoor._open) > 0.800000011920929)
+                    if (!this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) > 0.800000011920929)
                     {
                         this._verticalDoors[verticalDoor] = true;
                         flag = true;
                     }
-                    else if (this._verticalDoors[verticalDoor] && (double)Math.Abs(verticalDoor._open) < 0.200000002980232)
+                    else if (this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) < 0.200000002980232)
                     {
                         this._verticalDoors[verticalDoor] = false;
                         flag = true;

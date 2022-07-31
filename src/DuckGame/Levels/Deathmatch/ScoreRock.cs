@@ -102,13 +102,13 @@ namespace DuckGame
                     this._dropShadowPoint.y = block.top;
                 }
             }
-            if (RockScoreboard.wallMode && (double)this.x > 610.0)
+            if (RockScoreboard.wallMode && this.x > 610.0)
             {
                 this.x = 610f;
                 this.hSpeed = -1f;
                 SFX.Play("rockHitGround2", pitch: -0.4f);
             }
-            if (RockScoreboard.wallMode && (double)this.x > 610.0)
+            if (RockScoreboard.wallMode && this.x > 610.0)
             {
                 this.x = 610f;
                 this.hSpeed = -1f;

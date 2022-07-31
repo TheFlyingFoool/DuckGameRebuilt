@@ -30,14 +30,14 @@ namespace DuckGame
         {
             if (this.flipVertical)
             {
-                if ((double)with.vSpeed < -1.0 && (this.offDir > 0 && (double)with.hSpeed < 1.0 || this.offDir < 0 && (double)with.hSpeed >= -1.0))
-                    with.hSpeed = (float)(-(double)with.vSpeed * 1.5) * offDir;
-                else if ((this.offDir < 0 && (double)with.right > (double)this.left + 4.0 || this.offDir > 0 && (double)with.left < (double)this.right - 4.0) && (this.offDir > 0 && (double)with.hSpeed < -1.0 || this.offDir < 0 && (double)with.hSpeed > 1.0) && (double)with.vSpeed < 0.5)
+                if (with.vSpeed < -1.0 && (this.offDir > 0 && with.hSpeed < 1.0 || this.offDir < 0 && with.hSpeed >= -1.0))
+                    with.hSpeed = (float)(-with.vSpeed * 1.5) * offDir;
+                else if ((this.offDir < 0 && with.right > this.left + 4.0 || this.offDir > 0 && with.left < this.right - 4.0) && (this.offDir > 0 && with.hSpeed < -1.0 || this.offDir < 0 && with.hSpeed > 1.0) && with.vSpeed < 0.5)
                     with.vSpeed = Math.Abs(with.hSpeed * 1.6f);
             }
-            else if ((double)with.vSpeed > 1.0 && (this.offDir > 0 && (double)with.hSpeed < 1.0 || this.offDir < 0 && (double)with.hSpeed >= -1.0))
+            else if (with.vSpeed > 1.0 && (this.offDir > 0 && with.hSpeed < 1.0 || this.offDir < 0 && with.hSpeed >= -1.0))
                 with.hSpeed = with.vSpeed * 1.5f * offDir;
-            else if ((this.offDir < 0 && (double)with.right > (double)this.left + 4.0 || this.offDir > 0 && (double)with.left < (double)this.right - 4.0) && (this.offDir > 0 && (double)with.hSpeed < -1.0 || this.offDir < 0 && (double)with.hSpeed > 1.0) && (double)with.vSpeed > -0.5)
+            else if ((this.offDir < 0 && with.right > this.left + 4.0 || this.offDir > 0 && with.left < this.right - 4.0) && (this.offDir > 0 && with.hSpeed < -1.0 || this.offDir < 0 && with.hSpeed > 1.0) && with.vSpeed > -0.5)
                 with.vSpeed = -Math.Abs(with.hSpeed * 1.6f);
             base.OnSoftImpact(with, from);
         }

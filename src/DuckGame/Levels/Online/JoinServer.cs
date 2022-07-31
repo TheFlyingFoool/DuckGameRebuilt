@@ -105,7 +105,7 @@ namespace DuckGame
                     str += ".";
             }
             string text = "Connecting";
-            Graphics.DrawString(text + str, new Vec2((float)((double)Layer.HUD.width / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), (float)((double)Layer.HUD.height / 2.0 - 4.0)), Color.White);
+            Graphics.DrawString(text + str, new Vec2((float)(Layer.HUD.width / 2.0 - Graphics.GetStringWidth(text) / 2.0), (float)(Layer.HUD.height / 2.0 - 4.0)), Color.White);
         }
     }
 }

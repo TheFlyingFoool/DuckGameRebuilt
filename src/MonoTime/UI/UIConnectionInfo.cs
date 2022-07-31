@@ -210,7 +210,7 @@ namespace DuckGame
             int ping;
             if (this._profile.connection != null)
             {
-                ping = this._profile.connection != DuckNetwork.localConnection ? (int)Math.Round((double)this._profile.connection.manager.ping * 1000.0) : 0;
+                ping = this._profile.connection != DuckNetwork.localConnection ? (int)Math.Round(this._profile.connection.manager.ping * 1000.0) : 0;
                 int status = (int)this._profile.connection.status;
             }
             else

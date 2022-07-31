@@ -33,13 +33,13 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (windingVelocity > 1.0)
+            if (windingVelocity > 1f)
                 this.windingVelocity = 1f;
             this.windingVelocity = Lerp.FloatSmooth(this.windingVelocity, 0f, 0.05f);
             if (this.corkObject != null)
             {
-                double num = (double)this.corkObject.WindUp(this.windingVelocity);
-                if (num < 10.0)
+                double num = this.corkObject.WindUp(this.windingVelocity);
+                if (num < 10f)
                 {
                     Level.Remove(corkObject);
                     this.ammo = 1;

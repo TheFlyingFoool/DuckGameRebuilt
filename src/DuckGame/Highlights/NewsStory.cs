@@ -52,15 +52,15 @@ namespace DuckGame
             {
                 if (_impressiveValue - this._awfulValue == 0f)
                     return "";
-                if ((double)this.badRange > 0.2f)
+                if (this.badRange > 0.2f)
                     return "Bad";
-                return (double)this.goodRange > 0.2f ? "Good" : "";
+                return this.goodRange > 0.2f ? "Good" : "";
             }
         }
 
         public float importance => this._importance;
 
-        public float weight => _impressiveValue - (double)this._awfulValue == 0f ? 1f : this.goodRange + this.badRange;
+        public float weight => _impressiveValue - this._awfulValue == 0f ? 1f : this.goodRange + this.badRange;
 
         public float goodRange
         {

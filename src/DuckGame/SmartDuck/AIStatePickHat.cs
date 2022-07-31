@@ -34,10 +34,10 @@
 //                ai.SetTarget(hatConsole.position);
 //                return this;
 //            }
-//            if ((double)(this._target.position - duck.position).length < 10.0 && duck.grounded)
+//            if ((this._target.position - duck.position).length < 10f && duck.grounded)
 //            {
 //                this._wait -= 0.016f;
-//                if (_wait <= 0.0)
+//                if (_wait <= 0f)
 //                {
 //                    if (!this._did1 || !(this._target as HatConsole).box._hatSelector.open)
 //                    {
@@ -45,7 +45,7 @@
 //                        this._did1 = true;
 //                    }
 //                    this._wait2 -= 0.016f;
-//                    if (_wait2 <= 0.0 && (this._target as HatConsole).box._hatSelector.open)
+//                    if (_wait2 <= 0f && (this._target as HatConsole).box._hatSelector.open)
 //                    {
 //                        if (!this._did2)
 //                        {
@@ -53,10 +53,10 @@
 //                            this._did2 = true;
 //                        }
 //                        this._wait3 -= 0.016f;
-//                        if (_wait3 <= 0.0)
+//                        if (_wait3 <= 0f)
 //                        {
 //                            this._wait3 = Rando.Float(0.2f);
-//                            if ((double)Rando.Float(1f) > 0.5)
+//                            if (Rando.Float(1f) > 0.5f)
 //                            {
 //                                if (this._moveLeft > 0)
 //                                {

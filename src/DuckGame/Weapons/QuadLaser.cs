@@ -47,8 +47,8 @@ namespace DuckGame
                 if (this.duck != null)
                 {
                     RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
-                    this.duck.hSpeed = (float)(-(double)this.barrelVector.x * 8.0);
-                    this.duck.vSpeed = (float)(-(double)this.barrelVector.y * 4.0 - 2.0);
+                    this.duck.hSpeed = (float)(-this.barrelVector.x * 8.0);
+                    this.duck.vSpeed = (float)(-this.barrelVector.y * 4.0 - 2.0);
                     quadLaserBullet.responsibleProfile = this.duck.profile;
                 }
             }

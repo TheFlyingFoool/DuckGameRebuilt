@@ -17,14 +17,14 @@ namespace DuckGame
         public override bool Update()
         {
             if (this.numWaitFrames == -1 && !Network.isServer)
-                this.numWaitFrames = this.syncWaitFrames - (int)Math.Min(Math.Min((float)((double)this.connection.manager.ping / 2.0 * 60.0), 30f), syncWaitFrames);
+                this.numWaitFrames = this.syncWaitFrames - (int)Math.Min(Math.Min((float)(this.connection.manager.ping / 2.0 * 60.0), 30f), syncWaitFrames);
             --this.numWaitFrames;
             return this.numWaitFrames <= 0;
         }
 
         protected override void OnSerialize()
         {
-            this.syncWaitFrames = this.numWaitFrames = Math.Min((int)((double)Network.highestPing / 2.0 * 60.0) + 2, 30);
+            this.syncWaitFrames = this.numWaitFrames = Math.Min((int)(Network.highestPing / 2.0 * 60.0) + 2, 30);
             base.OnSerialize();
         }
     }

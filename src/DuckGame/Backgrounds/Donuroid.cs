@@ -43,7 +43,7 @@ namespace DuckGame
                 this._image.color = new Color(0.8f, 0.8f, 0.8f, 1f);
             else
                 this._image.color = Color.White * this._scale;
-            Graphics.Draw(_image, pos.x + this._position.x, (float)(pos.y + (double)this._position.y + Math.Sin(_sin) * (_scale * 2.0)));
+            Graphics.Draw(_image, pos.x + this._position.x, (float)(pos.y + this._position.y + Math.Sin(_sin) * (_scale * 2.0)));
             this._sin += 0.01f;
         }
     }

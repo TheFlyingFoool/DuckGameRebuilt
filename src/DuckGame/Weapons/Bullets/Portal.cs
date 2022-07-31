@@ -69,10 +69,10 @@ namespace DuckGame
             if (autoBlock1 != null)
             {
                 Vec2 topLeft = autoBlock1.topLeft;
-                if (topLeft.y < (double)door.bottom)
+                if (topLeft.y < door.bottom)
                     topLeft.y = door.bottom;
                 float hi = autoBlock1.bottom - topLeft.y;
-                if ((double)hi < 8.0)
+                if (hi < 8.0)
                     hi = 8f;
                 door.collision.Add(new Block(topLeft.x, topLeft.y, autoBlock1.width, hi));
             }
@@ -80,10 +80,10 @@ namespace DuckGame
             if (autoBlock2 != null)
             {
                 Vec2 bottomLeft = autoBlock1.bottomLeft;
-                if (bottomLeft.y > (double)door.top)
+                if (bottomLeft.y > door.top)
                     bottomLeft.y = door.top;
                 float hi = bottomLeft.y - autoBlock2.top;
-                if ((double)hi < 8.0)
+                if (hi < 8.0)
                     hi = 8f;
                 door.collision.Add(new Block(bottomLeft.x, bottomLeft.y - hi, autoBlock2.width, hi));
             }
@@ -151,12 +151,12 @@ namespace DuckGame
                 door.Update();
                 foreach (PortalDrawTransformer portalDrawTransformer in this._inPortal)
                 {
-                    if (door.isLeft && (double)portalDrawTransformer.thing.x < door.center.x)
+                    if (door.isLeft && portalDrawTransformer.thing.x < door.center.x)
                     {
                         Thing thing = portalDrawTransformer.thing;
                         thing.position += (this.GetOtherDoor(door).center - door.center);
                     }
-                    else if (!door.isLeft && (double)portalDrawTransformer.thing.x > door.center.x)
+                    else if (!door.isLeft && portalDrawTransformer.thing.x > door.center.x)
                     {
                         Thing thing = portalDrawTransformer.thing;
                         thing.position += (this.GetOtherDoor(door).center - door.center);

@@ -335,7 +335,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)Graphics.fade > 0.9f && Input.Pressed("START") && !NetworkDebugger.enabled)
+            if (Graphics.fade > 0.9f && Input.Pressed("START") && !NetworkDebugger.enabled)
             {
                 this._pauseGroup.Open();
                 this._pauseMenu.Open();
@@ -357,7 +357,7 @@ namespace DuckGame
                 if (this._quit.value)
                 {
                     Graphics.fade -= 0.04f;
-                    if ((double)Graphics.fade >= 0.01f)
+                    if (Graphics.fade >= 0.01f)
                         return;
                     Level.current = new TitleScreen();
                 }
@@ -556,12 +556,12 @@ namespace DuckGame
         //        if (team.numMembers == 2)
         //        {
         //            float num = 18.82353f;
-        //            position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
+        //            position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
         //        }
         //        else if (team.numMembers == 3)
         //        {
         //            float num = 9.411764f;
-        //            position.x = (float)((double)teamSpawn1.position.x - 16.0 + (double)num * (double)index);
+        //            position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
         //        }
         //        Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index]);
         //        duck.offDir = teamSpawn1.offDir;

@@ -67,7 +67,7 @@ namespace DuckGame
                 while (true)
                 {
                     bool flag = false;
-                    if ((double)val + (double)num3 > (double)length)
+                    if (val + num3 > length)
                     {
                         num3 = length - Maths.Clamp(val, 0f, 99f);
                         flag = true;

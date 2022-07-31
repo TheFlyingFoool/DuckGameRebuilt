@@ -62,13 +62,13 @@ namespace DuckGame
                     FluidPuddle fluidPuddle = new FluidPuddle(this.x, b.top, b);
                     Level.Add(fluidPuddle);
                     float num = 0f;
-                    while ((double)fluidPuddle.CalculateDepth() < (int)this.deep * 8)
+                    while (fluidPuddle.CalculateDepth() < (int)this.deep * 8)
                     {
                         FluidData fluidType = this.GetFluidType();
                         fluidType.amount = 0.5f;
                         fluidPuddle.Feed(fluidType);
                         float depth = fluidPuddle.CalculateDepth();
-                        if ((double)Math.Abs(num - depth) < 1.0 / 1000.0)
+                        if (Math.Abs(num - depth) < 1.0 / 1000.0)
                         {
                             Level.Remove(this);
                             break;

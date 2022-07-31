@@ -68,17 +68,17 @@ namespace DuckGame
             if (RandomLevelDownloader.numSinceLowRating > 3)
             {
                 RandomLevelDownloader.numSinceLowRating = 0;
-                if ((double)Rando.Float(1f) > 0.800000011920929)
+                if (Rando.Float(1f) > 0.800000011920929)
                     num %= 100;
             }
             else
             {
                 num %= 12;
-                if ((double)Rando.Float(1f) > 0.800000011920929)
+                if (Rando.Float(1f) > 0.800000011920929)
                     num %= 30;
             }
             RandomLevelDownloader._orderMode = RandomLevelDownloader.numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
-            if ((double)Rando.Float(1f) > 0.699999988079071)
+            if (Rando.Float(1f) > 0.699999988079071)
             {
                 switch (Rando.Int(5))
                 {

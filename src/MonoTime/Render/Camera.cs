@@ -38,7 +38,7 @@ namespace DuckGame
             get => this._position.x;
             set
             {
-                if (_position.x == (double)value)
+                if (_position.x == value)
                     return;
                 this._position.x = value;
                 this._dirty = true;
@@ -50,7 +50,7 @@ namespace DuckGame
             get => this._position.y;
             set
             {
-                if (_position.y == (double)value)
+                if (_position.y == value)
                     return;
                 this._position.y = value;
                 this._dirty = true;
@@ -124,7 +124,7 @@ namespace DuckGame
             get => this._size.x;
             set
             {
-                if (_size.x == (double)value)
+                if (_size.x == value)
                     return;
                 this._size.x = value;
                 this._dirty = true;
@@ -136,7 +136,7 @@ namespace DuckGame
             get => this._size.y;
             set
             {
-                if (_size.y == (double)value)
+                if (_size.y == value)
                     return;
                 this._size.y = value;
                 this._dirty = true;
@@ -167,9 +167,9 @@ namespace DuckGame
 
         public Camera(float xval, float yval, float wval = -1f, float hval = -1f)
         {
-            if ((double)wval < 0.0)
+            if (wval < 0f)
                 wval = 320f;
-            if ((double)hval < 0.0)
+            if (hval < 0f)
                 hval = 320f * DuckGame.Graphics.aspect;
             this.x = xval;
             this.y = yval;
@@ -227,10 +227,10 @@ namespace DuckGame
             if (!this._dirty)
             {
                 viewport = DuckGame.Graphics.viewport;
-                if (viewport.Width == (double)this._viewSize.x)
+                if (viewport.Width == this._viewSize.x)
                 {
                     viewport = DuckGame.Graphics.viewport;
-                    if (viewport.Height == (double)this._viewSize.y)
+                    if (viewport.Height == this._viewSize.y)
                         goto label_4;
                 }
             }

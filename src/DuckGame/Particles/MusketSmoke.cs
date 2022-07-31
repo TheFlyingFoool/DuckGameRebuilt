@@ -71,7 +71,7 @@ namespace DuckGame
             this.x += this.move.x;
             this.y += this.move.y;
             this.xscale -= 0.005f;
-            if ((double)this.xscale >= 0.1f)
+            if (this.xscale >= 0.1f)
                 return;
             Level.Remove(this);
         }

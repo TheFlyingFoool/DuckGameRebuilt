@@ -100,10 +100,10 @@ namespace DuckGame
                     (with as PhysicsObject).modFric = true;
                 }
             }
-            else if (Graphics.frame - this.lastHitFrame > 5L && (double)with.totalImpactPower > 2.5 && (double)with.impactPowerV > 0.5)
+            else if (Graphics.frame - this.lastHitFrame > 5L && with.totalImpactPower > 2.5 && with.impactPowerV > 0.5)
             {
                 this.lastHitFrame = Graphics.frame;
-                int num = (int)((double)with.totalImpactPower * 0.5);
+                int num = (int)(with.totalImpactPower * 0.5);
                 if (num > 4)
                     num = 4;
                 if (num < 2)

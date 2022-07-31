@@ -48,25 +48,25 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)Rando.Float(2f) < 0.3f)
+            if (Rando.Float(2f) < 0.3f)
                 this.vSpeed += Rando.Float(3.5f) - 2f;
-            if ((double)Rando.Float(9f) < 0.1f)
+            if (Rando.Float(9f) < 0.1f)
                 this.vSpeed += Rando.Float(3.1f) - 3f;
-            if ((double)Rando.Float(14f) < 0.1f)
+            if (Rando.Float(14f) < 0.1f)
                 this.vSpeed += Rando.Float(4f) - 5f;
-            if ((double)Rando.Float(25f) < 0.1f)
+            if (Rando.Float(25f) < 0.1f)
                 this.vSpeed += Rando.Float(6f) - 7f;
             Level.Add(SmallSmoke.New(this.x, this.y));
-            if ((double)this.hSpeed > 0f)
+            if (this.hSpeed > 0f)
                 this._sprite.angleDegrees = 90f;
-            else if ((double)this.hSpeed < 0f)
+            else if (this.hSpeed < 0f)
                 this._sprite.angleDegrees = -90f;
             base.Update();
         }
 
         public override void OnImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!this.isServerForObject || with == this._owner || with is Gun || (double)with.weight < 5.0)
+            if (!this.isServerForObject || with == this._owner || with is Gun || with.weight < 5.0)
                 return;
             if (with is PhysicsObject)
             {

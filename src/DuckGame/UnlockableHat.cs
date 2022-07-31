@@ -86,25 +86,25 @@ namespace DuckGame
             DuckGame.Graphics.Draw(this._team.hat, this._team.hat.frame, x1 + hatPoint.x, y1 + hatPoint.y);
             if (this._team.hat.texture.textureName == "hats/devhat" && this._cape == null)
             {
-                this._hat = new TeamHat(x1 + hatPoint.x, (float)((double)y1 + hatPoint.y + 5.0), Teams.GetTeam("CAPTAIN"));
+                this._hat = new TeamHat(x1 + hatPoint.x, (float)(y1 + hatPoint.y + 5.0), Teams.GetTeam("CAPTAIN"));
                 this._cape = new Cape(x1 + hatPoint.x, y1 + hatPoint.y, _hat);
                 this._cape.SetCapeTexture((Texture2D)Content.Load<Tex2D>("hats/devCape"));
             }
             if (this._team.hat.texture.textureName == "hats/moonwalker" && this._cape == null)
             {
-                this._hat = new TeamHat(x1 + hatPoint.x, (float)((double)y1 + hatPoint.y + 5.0), Teams.GetTeam("MOONWALK"));
+                this._hat = new TeamHat(x1 + hatPoint.x, (float)(y1 + hatPoint.y + 5.0), Teams.GetTeam("MOONWALK"));
                 this._cape = new Cape(x1 + hatPoint.x, y1 + hatPoint.y, _hat);
                 this._cape.SetCapeTexture((Texture2D)Content.Load<Tex2D>("hats/moonCape"));
             }
             if (this._team.hat.texture.textureName == "hats/royalty" && this._cape == null)
             {
-                this._hat = new TeamHat(x1 + hatPoint.x, (float)((double)y1 + hatPoint.y + 5.0), Teams.GetTeam("MAJESTY"));
+                this._hat = new TeamHat(x1 + hatPoint.x, (float)(y1 + hatPoint.y + 5.0), Teams.GetTeam("MAJESTY"));
                 this._cape = new Cape(x1 + hatPoint.x, y1 + hatPoint.y, _hat);
                 this._cape.SetCapeTexture((Texture2D)Content.Load<Tex2D>("hats/royalCape"));
             }
             if (this._cape == null)
                 return;
-            this._hat.position = new Vec2(x1 + hatPoint.x, (float)((double)y1 + hatPoint.y + 5.0));
+            this._hat.position = new Vec2(x1 + hatPoint.x, (float)(y1 + hatPoint.y + 5.0));
             this._cape.depth = depth + 2;
             this._cape.Update();
             this._cape.Draw();

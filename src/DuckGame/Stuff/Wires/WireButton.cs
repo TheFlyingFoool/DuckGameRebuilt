@@ -136,7 +136,7 @@ namespace DuckGame
                 if (physicsObject == null)
                 {
                     this.releaseHold += Maths.IncFrameTimer();
-                    if (releaseHold > (double)this.holdTime.value)
+                    if (releaseHold > this.holdTime.value)
                     {
                         SFX.Play("click");
                         this._sprite.frame = 0;

@@ -36,12 +36,12 @@ namespace DuckGame
                 if (team.numMembers == 2)
                 {
                     float num = 18.82353f;
-                    position.x = (float)(teamSpawn1.position.x - 16.0 + (double)num * index);
+                    position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
                 }
                 else if (team.numMembers == 3)
                 {
                     float num = 9.411764f;
-                    position.x = (float)(teamSpawn1.position.x - 16.0 + (double)num * index);
+                    position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
                 }
                 Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index])
                 {

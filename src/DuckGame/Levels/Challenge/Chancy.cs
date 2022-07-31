@@ -135,7 +135,7 @@ namespace DuckGame
             if (Level.CheckLine<Block>(duckPos, duckPos + new Vec2(36f, 0f), out position) != null)
             {
                 position.x -= 8f;
-                if ((double)(position - duckPos).length > 16.0)
+                if ((position - duckPos).length > 16f)
                 {
                     p1_1 = position;
                     flag1 = true;
@@ -223,7 +223,7 @@ namespace DuckGame
       };
             if (Chancy._save == null)
             {
-                if ((double)challengeSkillIndex > 0.75)
+                if (challengeSkillIndex > 0.75f)
                     stringList = new List<string>()
           {
             "You could do this one easy.",
@@ -241,7 +241,7 @@ namespace DuckGame
             }
             else if (Chancy._save != null && Chancy._save.trophy > TrophyType.Gold)
             {
-                if ((double)challengeSkillIndex > 0.75)
+                if (challengeSkillIndex > 0.75f)
                     stringList = new List<string>()
           {
             "Just never good enough huh?",
@@ -443,7 +443,7 @@ namespace DuckGame
                 DuckGame.Graphics.Clear(Color.Transparent);
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
                 string challengeBestString = Chancy.GetChallengeBestString(Chancy._save, Chancy.activeChallenge);
-                Chancy._font.Draw(challengeBestString, new Vec2((int)Math.Round(_bestTextTarget.width / 2.0 - (double)Chancy._font.GetWidth(challengeBestString) / 2.0), 0f), Color.Black * 0.7f);
+                Chancy._font.Draw(challengeBestString, new Vec2((int)Math.Round(_bestTextTarget.width / 2f - Chancy._font.GetWidth(challengeBestString) / 2f), 0f), Color.Black * 0.7f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
             }
@@ -452,12 +452,12 @@ namespace DuckGame
             {
                 Chancy._waitAfterLine -= 0.03f;
                 Chancy._talkMove += 0.75f;
-                if (_talkMove > 1.0)
+                if (_talkMove > 1f)
                 {
                     Chancy.frame = 0;
                     Chancy._talkMove = 0f;
                 }
-                if (_waitAfterLine <= 0.0)
+                if (_waitAfterLine <= 0f)
                 {
                     Chancy._lineProgress.Clear();
                     Chancy._currentLine = Chancy._lines[0];
@@ -681,12 +681,12 @@ namespace DuckGame
                 foreach (ChallengeData challengeData in chancyChallenges)
                 {
                     Chancy._font.Draw(challengeData.name, vec2_1 + new Vec2(19f, 12f + num), Colors.DGRed, (Depth)0.85f);
-                    Vec2 vec2_2 = vec2_1 + new Vec2(12f, (float)(12.0 + (double)num + 4.0));
+                    Vec2 vec2_2 = vec2_1 + new Vec2(12f, (12f + num + 4f));
                     if (index == Chancy._challengeSelection)
                     {
                         Chancy._pencil.depth = (Depth)0.9f;
                         DuckGame.Graphics.Draw(Chancy._pencil, vec2_2.x, vec2_2.y);
-                        DuckGame.Graphics.DrawLine(vec2_1 + new Vec2(19f, (float)(12.0 + (double)num + 8.5)), vec2_1 + new Vec2(19f + Chancy._font.GetWidth(challengeData.name), (float)(12.0 + (double)num + 8.5)), Colors.SuperDarkBlueGray, depth: ((Depth)0.9f));
+                        DuckGame.Graphics.DrawLine(vec2_1 + new Vec2(19f, (12f + num + 8.5f)), vec2_1 + new Vec2(19f + Chancy._font.GetWidth(challengeData.name), (float)(12f + num + 8.5f)), Colors.SuperDarkBlueGray, depth: ((Depth)0.9f));
                     }
                     ChallengeSaveData saveData = Profiles.active[0].GetSaveData(Chancy._chancyChallenges[index].levelID);
                     if (saveData != null && saveData.trophy > TrophyType.Baseline)
@@ -701,7 +701,7 @@ namespace DuckGame
             }
             if (_challengeLerp < 0.01f && _chancyLerp < 0.01f)
                 return;
-            Vec2 vec2_3 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp)));
+            Vec2 vec2_3 = new Vec2((100f * (1f - _chancyLerp)), (100f * (1f - _chancyLerp)));
             Vec2 vec2_4 = new Vec2(280f, 20f);
             Vec2 vec2_5 = new Vec2(20f, 132f) + vec2_3;
             DuckGame.Graphics.DrawRect(vec2_5 + new Vec2(-2f, 0f), vec2_5 + vec2_4 + new Vec2(2f, 0f), Color.Black);
@@ -710,7 +710,7 @@ namespace DuckGame
             {
                 float stringWidth = DuckGame.Graphics.GetStringWidth(Chancy._lineProgress[index1].text);
                 float y = vec2_5.y + 2f + num1 * 9;
-                float x = (float)(vec2_5.x + vec2_4.x / 2.0 - (double)stringWidth / 2.0);
+                float x = (vec2_5.x + vec2_4.x / 2f - stringWidth / 2f);
                 for (int index2 = Chancy._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     DuckGame.Graphics.DrawString(Chancy._lineProgress[index1].segments[index2].text, new Vec2(x, y), Chancy._lineProgress[index1].segments[index2].color, (Depth)0.85f);
@@ -721,7 +721,7 @@ namespace DuckGame
             if (_challengeLerp > 0.01f && Chancy._challengeData != null)
             {
                 vec2_1 = new Vec2(40f, 28f);
-                vec2_1 = new Vec2((float)(_challengeLerp * 240.0 - 200.0), 28f);
+                vec2_1 = new Vec2((_challengeLerp * 240f - 200f), 28f);
                 Chancy.challengePaper.depth = (Depth)0.8f;
                 DuckGame.Graphics.Draw(Chancy.challengePaper, vec2_1.x, vec2_1.y);
                 Chancy._paperclip.depth = (Depth)0.92f;

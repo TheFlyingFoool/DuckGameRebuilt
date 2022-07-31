@@ -74,14 +74,14 @@ namespace DuckGame
                 }
                 if (waveSpeed > 0.1f)
                     this.waveSpeed = 0.1f;
-                if (waveSpeed > 0.0)
+                if (waveSpeed > 0f)
                     this.waveSpeed -= 0.01f;
                 else
                     this.waveSpeed = 0f;
                 this.lastDesiredSway = this.desiredSway;
                 if (this.parentThing is ChaingunBullet parentThing2)
                     this.desiredSway += parentThing2.sway * 0.7f;
-                this.desiredSway += (float)Math.Sin(wave + (double)this.waveAdd) * this.shake;
+                this.desiredSway += (float)Math.Sin(wave + this.waveAdd) * this.shake;
                 this.sway = MathHelper.Lerp(this.sway, this.desiredSway, 1f);
                 this.position.x += this.sway;
             }

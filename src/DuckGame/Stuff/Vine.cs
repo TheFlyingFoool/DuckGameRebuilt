@@ -65,7 +65,7 @@ namespace DuckGame
                 int num2 = 0;
                 foreach (VineSection vineSection in points)
                 {
-                    vineSection.lowestSection = num2 + (int)Math.Round(vineSection.length / (double)num1 * sectionIndex);
+                    vineSection.lowestSection = num2 + (int)Math.Round(vineSection.length / num1 * sectionIndex);
                     num2 = vineSection.lowestSection;
                 }
                 return points;
@@ -178,7 +178,7 @@ namespace DuckGame
         //public void MoveDuck()
         //{
         //    Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
-        //    if ((double)vec2_1.length <= (double)this._rope.properLength)
+        //    if (vec2_1.length <= this._rope.properLength)
         //        return;
         //    vec2_1 = vec2_1.normalized;
         //    if (this.duck == null)
@@ -247,9 +247,9 @@ namespace DuckGame
                 this.gravMultiplier = 1f;
             }
             Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
-            if ((double)this._rope.properLength < 0.0)
+            if (this._rope.properLength < 0.0)
                 this._rope.properLength = vec2_1.length;
-            if ((double)vec2_1.length <= (double)this._rope.properLength)
+            if (vec2_1.length <= this._rope.properLength)
                 return;
             Vec2 normalized = vec2_1.normalized;
             if (this.duck != null)

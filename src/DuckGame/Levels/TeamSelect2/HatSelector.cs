@@ -148,9 +148,9 @@ namespace DuckGame
                 if (this.fakefade)
                     return 1f;
                 float fadeVal = this._fade;
-                if ((double)this._profileSelector.fade > 0.0)
+                if (this._profileSelector.fade > 0.0)
                     fadeVal = 1f;
-                if ((double)this._roomEditor.fade > 0.0)
+                if (this._roomEditor.fade > 0.0)
                     fadeVal = 1f;
                 return fadeVal;
             }
@@ -551,9 +551,9 @@ namespace DuckGame
                         }
                         this._prevDesiredTeam = _desiredTeamSelection;
                     }
-                    if (_slideTo != 0.0 && _slide != (double)this._slideTo)
+                    if (_slideTo != 0.0 && _slide != this._slideTo)
                         this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
-                    else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
+                    else if (_slideTo != 0.0 && _slide == this._slideTo)
                     {
                         this._slide = 0f;
                         this._slideTo = 0f;
@@ -565,9 +565,9 @@ namespace DuckGame
                             this.SelectTeam();
                         }
                     }
-                    if (_upSlideTo != 0.0 && _upSlide != (double)this._upSlideTo)
+                    if (_upSlideTo != 0.0 && _upSlide != this._upSlideTo)
                         this._upSlide = Lerp.Float(this._upSlide, this._upSlideTo, 0.1f);
-                    else if (_upSlideTo != 0.0 && _upSlide == (double)this._upSlideTo)
+                    else if (_upSlideTo != 0.0 && _upSlide == this._upSlideTo)
                     {
                         this._upSlide = 0f;
                         this._upSlideTo = 0f;
@@ -700,13 +700,13 @@ namespace DuckGame
                             {
                                 int plus = index2 - 3 + (index1 - 2) * 5;
                                 float x = (this.x + 2f + index2 * 22 + -this._slide * 20f);
-                                float num3 = (float)((double)this.y + 37f + -(double)this._upSlide * 20f);
+                                float num3 = (float)(this.y + 37f + -this._upSlide * 20f);
                                 int index3 = this.TeamIndexAdd(_teamSelection, plus);
                                 if (index3 == 3)
                                     index3 = this.ControllerNumber();
                                 Team allTeam = this.AllTeams()[index3];
                                 float num4 = (this.x + (this.x + 2f + 154f - (this.x + 2f)) / 2f - 9f);
-                                float num5 = Maths.Clamp((float)((50.0 - (double)Math.Abs(x - num4)) / 50f), 0f, 1f);
+                                float num5 = Maths.Clamp((float)((50.0 - Math.Abs(x - num4)) / 50f), 0f, 1f);
                                 float num6 = (Maths.NormalizeSection(num5, 0.9f, 1f) * 0.8f + 0.2f);
                                 if (num5 < 0.5f)
                                     num6 = Maths.NormalizeSection(num5, 0.1f, 0.2f) * 0.3f;
@@ -744,7 +744,7 @@ namespace DuckGame
                                         num7 = _upSlide <= 0f ? 0f : Math.Abs(this._upSlide) * num7;
                                         break;
                                 }
-                                if ((double)num7 >= 0.01f)
+                                if (num7 >= 0.01f)
                                 {
                                     this._profile.persona.sprite.alpha = this._fade;
                                     this._profile.persona.sprite.color = Color.White;
@@ -781,7 +781,7 @@ namespace DuckGame
                                     if (index3 > DG.MaxPlayers - 1 && _fade > 0.01f)
                                     {
                                         //Vec2 pos = Vec2.Zero;
-                                        Vec2 pos = new Vec2(x, (num3 + num1 + index1 * 20 - 20f)); //!flag5 ? new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0 + 1.0));
+                                        Vec2 pos = new Vec2(x, (num3 + num1 + index1 * 20 - 20f)); //!flag5 ? new Vec2(x, (float)(num3 + num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)(num3 + num1 + index1 * 20 - 20.0 + 1.0));
                                         Vec2 pixel = Maths.RoundToPixel(pos);
                                         if (index4 != -1 && !flag4 && allTeam.locked)
                                         {
@@ -818,7 +818,7 @@ namespace DuckGame
                         if (this._selection == HSSelection.ChooseTeam)
                         {
                             string text = "<              >";
-                            Vec2 pixel = Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._font.GetWidth(text) / 2.0), this.y + 60f + num1));
+                            Vec2 pixel = Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text) / 2.0), this.y + 60f + num1));
                             this._font.Draw(text, pixel.x, pixel.y, Color.White, (Depth)0.95f);
                         }
                         string name = this._profile.team.name;
@@ -838,7 +838,7 @@ namespace DuckGame
                             text1 = "UNKNOWN";
                         this._font.scale = new Vec2(1f, 1f);
                         float width = this._font.GetWidth(text1);
-                        Vec2 pixel1 = Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)width / 2.0), this.y + 25f + num1));
+                        Vec2 pixel1 = Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - width / 2.0), this.y + 25f + num1));
                         this._font.Draw(text1, pixel1.x, pixel1.y, Color.LimeGreen * (this._selection == HSSelection.ChooseTeam ? 1f : 0.6f), (Depth)0.95f);
                         DuckGame.Graphics.DrawLine(pixel1 + new Vec2(-10f, 4f), pixel1 + new Vec2(width + 10f, 4f), Color.White * 0.1f, 2f, (Depth)0.93f);
                         this._font.Draw("@SELECT@", this.x + 4f, this.y + 79f, new Color(180, 180, 180), (Depth)0.95f, this.profileInput);
@@ -939,27 +939,27 @@ namespace DuckGame
                         this._screen.BeginDraw();
                         this._font.scale = new Vec2(1f, 1f);
                         string text2 = "@LWING@CUSTOM DUCK@RWING@";
-                        this._font.Draw(text2, Maths.RoundToPixel(new Vec2((float)((double)this.width / 2.0 - (double)this._font.GetWidth(text2) / 2.0), 10f)), Color.White, (Depth)0.95f);
+                        this._font.Draw(text2, Maths.RoundToPixel(new Vec2((float)(this.width / 2.0 - this._font.GetWidth(text2) / 2.0), 10f)), Color.White, (Depth)0.95f);
                         string text3 = !Profiles.IsDefault(this._profile) ? this._profile.name : "PICK PROFILE";
-                        Vec2 pixel2 = Maths.RoundToPixel(new Vec2((float)((double)this.width / 2.0 - (double)this._font.GetWidth(text3) / 2.0), 39f));
+                        Vec2 pixel2 = Maths.RoundToPixel(new Vec2((float)(this.width / 2.0 - this._font.GetWidth(text3) / 2.0), 39f));
                         this._font.Draw(text3, pixel2, Colors.MenuOption * (this._mainSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
                         if (this._mainSelection == 1)
                             DuckGame.Graphics.Draw(this._contextArrow, pixel2.x - 8f, pixel2.y);
                         if (flag1)
                         {
                             string text4 = "@RAINBOWICON@EDIT ROOM";
-                            Vec2 pixel3 = Maths.RoundToPixel(new Vec2((float)((double)this.width / 2.0 - (double)this._font.GetWidth(text4) / 2.0), 48f));
+                            Vec2 pixel3 = Maths.RoundToPixel(new Vec2((float)(this.width / 2.0 - this._font.GetWidth(text4) / 2.0), 48f));
                             this._font.Draw(text4, pixel3, this._editRoomDisabled ? Colors.SuperDarkBlueGray : Colors.MenuOption * (this._mainSelection == 2 ? 1f : 0.6f), (Depth)0.95f, colorSymbols: true);
                             if (this._mainSelection == 2)
                                 DuckGame.Graphics.Draw(this._contextArrow, pixel3.x - 8f, pixel3.y);
                         }
                         string text5 = this._profile.team.hasHat ? "|LIME|" + this._profile.team.GetNameForDisplay() + "|MENUORANGE| HAT" : "|MENUORANGE|CHOOSE HAT";
-                        Vec2 pixel4 = Maths.RoundToPixel(new Vec2((float)((double)this.width / 2.0 - (double)this._font.GetWidth(text5) / 2.0), 30f));
+                        Vec2 pixel4 = Maths.RoundToPixel(new Vec2((float)(this.width / 2.0 - this._font.GetWidth(text5) / 2.0), 30f));
                         this._font.Draw(text5, pixel4, Color.White * (this._mainSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
                         if (this._mainSelection == 0)
                             DuckGame.Graphics.Draw(this._contextArrow, pixel4.x - 8f, pixel4.y);
                         string text6 = "EXIT";
-                        Vec2 pixel5 = Maths.RoundToPixel(new Vec2((float)((double)this.width / 2.0 - (double)this._font.GetWidth(text6) / 2.0), 50 + (flag1 ? 12 : 9)));
+                        Vec2 pixel5 = Maths.RoundToPixel(new Vec2((float)(this.width / 2.0 - this._font.GetWidth(text6) / 2.0), 50 + (flag1 ? 12 : 9)));
                         this._font.Draw(text6, pixel5, Colors.MenuOption * (_mainSelection == (flag1 ? 3 : 2) ? 1f : 0.6f), (Depth)0.95f);
                         if (_mainSelection == (flag1 ? 3 : 2))
                             DuckGame.Graphics.Draw(this._contextArrow, pixel5.x - 8f, pixel5.y);
@@ -1006,7 +1006,7 @@ namespace DuckGame
                         DuckGame.Graphics.Draw(this._blind, (this.x + 4f + 14f - index * (9f * _blindLerp)), this.y + 1f);
                     }
                     float num = Math.Max((float)((_blindLerp - 0.5) * 2f), 0f);
-                    if ((double)num > 0.01f)
+                    if (num > 0.01f)
                     {
                         if (this._gettingXP)
                         {
@@ -1028,7 +1028,7 @@ namespace DuckGame
                 if (this._editingRoom)
                     this.fakefade = true;
             }
-            if ((double)this.fadeVal < 0.01f || this._roomEditor._mode == REMode.Place)
+            if (this.fadeVal < 0.01f || this._roomEditor._mode == REMode.Place)
                 return;
             DuckGame.Graphics.Draw(_screen.target, this.position + new Vec2(3f, 3f), new Rectangle?(), new Color(this._screen.darken, this._screen.darken, this._screen.darken) * this.fadeVal, 0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)0.82f);
             this._selectBorder.alpha = this.fadeVal;

@@ -342,7 +342,7 @@ namespace DuckGame
             this.heat = -1f;
             if (this._containedThing != null && this._containedThing is Holdable)
             {
-                if ((double)(this._containedThing as MaterialThing).weight > (double)this.weight)
+                if ((this._containedThing as MaterialThing).weight > this.weight)
                     this.weight = (this._containedThing as MaterialThing).weight;
                 (this._containedThing as MaterialThing).heat = -1f;
                 (this._containedThing as Holdable).UpdateMaterial();

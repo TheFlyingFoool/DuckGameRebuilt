@@ -116,7 +116,7 @@ namespace DuckGame
                 Vec2 vec2_2 = new Vec2(-7f, -2f);
                 Vec2 vec2_3 = new Vec2(4f, 14f);
                 Vec2 vec2_4 = new Vec2(-2f, -7f);
-                float num = (float)Math.Abs(Math.Sin((double)this.angle));
+                float num = (float)Math.Abs(Math.Sin(this.angle));
                 this.collisionSize = vec2_1 * (1f - num) + vec2_3 * num;
                 this.collisionOffset = vec2_2 * (1f - num) + vec2_4 * num;
                 this.prevAngle = this.angle;
@@ -164,7 +164,7 @@ namespace DuckGame
                 this.previousThings.Clear();
                 foreach (PhysicsObject physicsObject in physicsObjects)
                 {
-                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && (double)Math.Abs(physicsObject.bottom - this.bottom) <= 6.0)
+                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - this.bottom) <= 6.0)
                     {
                         if (physicsObject.isServerForObject)
                             flag1 = true;
@@ -208,7 +208,7 @@ namespace DuckGame
                 }
                 foreach (Duck key in duckList2)
                     this._ducksOnMine.Remove(key);
-                if ((double)addWeight < _holdingWeight & flag1 && flag2)
+                if (addWeight < _holdingWeight & flag1 && flag2)
                 {
                     Thing.Fondle(this, DuckNetwork.localConnection);
                     if (!this._armed)
@@ -216,7 +216,7 @@ namespace DuckGame
                     else
                         this._timer = -1f;
                 }
-                if (this._armed && (double)addWeight > _holdingWeight)
+                if (this._armed && addWeight > _holdingWeight)
                 {
                     if (!this._clicked && duck != null)
                         ++duck.profile.stats.minesSteppedOn;
@@ -246,7 +246,7 @@ namespace DuckGame
                 if (t != this)
                 {
                     Vec2 vec2 = t.position - this.position;
-                    float num1 = (float)(1.0 - (double)Math.Min(vec2.length, 22f) / 22.0);
+                    float num1 = (float)(1.0 - Math.Min(vec2.length, 22f) / 22.0);
                     float num2 = num1 * 4f;
                     vec2.Normalize();
                     t.hSpeed += num2 * vec2.x;
@@ -300,7 +300,7 @@ namespace DuckGame
             {
                 float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, y - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, y - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
         }
 

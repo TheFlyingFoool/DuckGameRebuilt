@@ -88,10 +88,10 @@ namespace DuckGame
             }
             set
             {
-                double num = (double)Math.Abs(value.x);
+                double num = Math.Abs(value.x);
                 if (value.x <= -9000.0)
                     return;
-                if (this.hoverSpawner == null || this._lastReceivedPosition != value || (double)(this._lastReceivedPosition - this.position).length > 25.0)
+                if (this.hoverSpawner == null || this._lastReceivedPosition != value || (this._lastReceivedPosition - this.position).length > 25.0)
                     this.position = value;
                 this._lastReceivedPosition = value;
             }
@@ -316,7 +316,7 @@ namespace DuckGame
 
         public virtual void UpdateMaterial()
         {
-            if (this.material == null && burnt >= (double)this.charThreshold)
+            if (this.material == null && burnt >= this.charThreshold)
             {
                 this.material = new MaterialCharred();
                 SFX.Play("flameExplode");

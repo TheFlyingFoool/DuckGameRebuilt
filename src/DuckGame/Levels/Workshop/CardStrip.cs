@@ -136,7 +136,7 @@ namespace DuckGame
             if (this._cards.Count > 0)
             {
                 vec2_2 = new Vec2(this._cards[0].width, this._cards[0].height);
-                vec2_1 = new Vec2((float)((double)this.x - (vec2_2.x + 4.0) + _indexSlide * (vec2_2.x + 4.0)), y);
+                vec2_1 = new Vec2((this.x - (vec2_2.x + 4f) + _indexSlide * (vec2_2.x + 4f)), y);
             }
             int num1 = 0;
             for (int index = this._levelIndex - 1; index < this._levelIndex + (this._numCardsPerScreen + 1); ++index)
@@ -147,7 +147,7 @@ namespace DuckGame
                     float num2 = 1f;
                     if (num1 == this._numCardsPerScreen + 1)
                         num2 = Math.Abs(this._indexSlide);
-                    else if (num1 == this._numCardsPerScreen && _indexSlide > 0.0)
+                    else if (num1 == this._numCardsPerScreen && _indexSlide > 0f)
                     {
                         num2 = 1f - Math.Abs(this._indexSlide);
                     }
@@ -159,7 +159,7 @@ namespace DuckGame
                                 num2 = Math.Abs(this._indexSlide);
                                 break;
                             case 1:
-                                if (_indexSlide < 0.0)
+                                if (_indexSlide < 0f)
                                 {
                                     num2 = 1f - Math.Abs(this._indexSlide);
                                     break;
@@ -169,7 +169,7 @@ namespace DuckGame
                     }
                     Vec2 position = vec2_1;
                     int num3 = !this._selected ? 0 : (index == this._selectedCardIndex ? 1 : 0);
-                    double alpha = (double)num2;
+                    double alpha = num2;
                     card.Draw(position, num3 != 0, (float)alpha);
                 }
                 vec2_1.x += vec2_2.x + 4f;

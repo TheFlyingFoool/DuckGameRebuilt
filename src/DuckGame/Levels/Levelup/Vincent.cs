@@ -108,9 +108,9 @@ namespace DuckGame
         {
             float num1 = Rando.Float(1f) - Profiles.experienceProfile.GetNumFurnitures(t1.index) * 1f;
             float num2 = Rando.Float(1f) - Profiles.experienceProfile.GetNumFurnitures(t2.index) * 1f;
-            if ((double)num1 > (double)num2)
+            if (num1 > num2)
                 return 1;
-            return (double)num1 < (double)num2 ? -1 : 0;
+            return num1 < num2 ? -1 : 0;
         }
 
         public static void Open(DayType t)
@@ -263,9 +263,9 @@ namespace DuckGame
                         };
                         vincentProduct.originalCost = vincentProduct.furnitureData.price;
                         vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5);
-                        if ((double)Rando.Float(1f) > 0.949999988079071)
+                        if (Rando.Float(1f) > 0.949999988079071)
                             vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4.0);
-                        if (vincentProduct.furnitureData.name == "ROUND TABLE" && (double)Rando.Float(1f) > 0.5)
+                        if (vincentProduct.furnitureData.name == "ROUND TABLE" && Rando.Float(1f) > 0.5)
                         {
                             Vincent.Add("|POINT|Oh baby, is that one of them ROUND tables??");
                             Vincent.Add("|CONCERNED| Can I buy it from you?|SHOW| I'm so tired of square tables...");
@@ -1346,7 +1346,7 @@ namespace DuckGame
             {
                 float stringWidth = DuckGame.Graphics.GetStringWidth(Vincent._lineProgress[index1].text);
                 float y = vec2_4.y + 2f + num * 9;
-                float x = (float)(vec2_4.x + vec2_3.x / 2.0 - (double)stringWidth / 2.0);
+                float x = (float)(vec2_4.x + vec2_3.x / 2.0 - stringWidth / 2.0);
                 for (int index2 = Vincent._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     Vincent._descriptionFont.Draw(Vincent._lineProgress[index1].segments[index2].text, new Vec2(x, y), Vincent._lineProgress[index1].segments[index2].color, (Depth)0.97f);
@@ -1578,7 +1578,7 @@ namespace DuckGame
                 Vec2 vec2_6 = new Vec2(226f, 11f);
                 DuckGame.Graphics.DrawRect(p1, p1 + vec2_6, Color.Black, (Depth)0.96f);
                 string name = Vincent.products[index].name;
-                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - (double)DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
+                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
                 Vincent._tail.depth = (Depth)0.5f;
                 Vincent._tail.alpha = Vincent.alpha;
                 Vincent._tail.flipH = false;

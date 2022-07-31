@@ -90,7 +90,7 @@ namespace DuckGame
                         transportingDuck.autoExitDoorFrames = 0;
                     }
                 }
-                if ((double)Math.Abs(transportingDuck.x - this.x) < 3.0 && transportingDuck.wallDoorAI != null)
+                if (Math.Abs(transportingDuck.x - this.x) < 3.0 && transportingDuck.wallDoorAI != null)
                 {
                     transportingDuck.hSpeed *= 0.5f;
                     transportingDuck.moveLock = true;
@@ -98,9 +98,9 @@ namespace DuckGame
                 }
                 else if (transportingDuck.wallDoorAI != null)
                 {
-                    if ((double)transportingDuck.x > (double)this.x + 2.0)
+                    if (transportingDuck.x > this.x + 2.0)
                         transportingDuck.wallDoorAI.Press("LEFT");
-                    if ((double)transportingDuck.x < (double)this.x - 2.0)
+                    if (transportingDuck.x < this.x - 2.0)
                         transportingDuck.wallDoorAI.Press("RIGHT");
                 }
                 if (transportingDuck.transportDoor != null)

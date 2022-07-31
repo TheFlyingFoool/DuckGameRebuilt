@@ -29,12 +29,12 @@
 //        {
 //            if (!this._fading)
 //            {
-//                if ((double)Graphics.fade < 1.0)
+//                if (Graphics.fade < 1f)
 //                    Graphics.fade += 0.03f;
 //                else
 //                    Graphics.fade = 1f;
 //            }
-//            else if ((double)Graphics.fade > 0.0)
+//            else if (Graphics.fade > 0f)
 //            {
 //                Graphics.fade -= 0.03f;
 //            }
@@ -55,18 +55,18 @@
 //                return;
 //            string text1 = "|DGYELLOW|HEY!";
 //            float ypos1 = 55f;
-//            this._font.Draw(text1, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text1) / 2.0), ypos1, Color.White);
+//            this._font.Draw(text1, (layer.width / 2f - this._font.GetWidth(text1) / 2f), ypos1, Color.White);
 //            if (!this._drmSuccess)
 //            {
 //                float ypos2 = ypos1 + 10f;
 //                string text2 = "|WHITE|Woah! DRM is enabled since this is a pre release build.\nMake sure you're connected to steam, and that you're\nSupposed to have this build!";
-//                this._font.Draw(text2, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text2) / 2.0), ypos2, Color.White);
+//                this._font.Draw(text2, (layer.width / 2f - this._font.GetWidth(text2) / 2f), ypos2, Color.White);
 //            }
 //            else if (DG.buildExpired)
 //            {
 //                float ypos3 = ypos1 + 10f;
 //                string text3 = "|WHITE|Sorry, this build was a limited beta build.\nIt appears to have expired X(.\nShould be easy to get around, or the game\nshould be out on steam now, go get it!";
-//                this._font.Draw(text3, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text3) / 2.0), ypos3, Color.White);
+//                this._font.Draw(text3, (layer.width / 2f - this._font.GetWidth(text3) / 2f), ypos3, Color.White);
 //            }
 //            else
 //            {
@@ -74,9 +74,9 @@
 //                    return;
 //                float ypos4 = ypos1 + 15f;
 //                string text4 = "|WHITE|This is a near final release of |RED|DUCK GAME|WHITE|!\n|WHITE|Some stuff is still getting finished up, so\nplease bear with me |PINK|{|WHITE|.";
-//                this._font.Draw(text4, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text4) / 2.0), ypos4, Color.White);
+//                this._font.Draw(text4, (float)(layer.width / 2f - this._font.GetWidth(text4) / 2f), ypos4, Color.White);
 //                string text5 = "|WHITE|Press @START@ to continue...";
-//                this._bigFont.Draw(text5, new Vec2((float)((double)layer.width / 2.0 - (double)this._bigFont.GetWidth(text5) / 2.0), ypos4 + 55f), Color.White);
+//                this._bigFont.Draw(text5, new Vec2((layer.width / 2f - this._bigFont.GetWidth(text5) / 2f), ypos4 + 55f), Color.White);
 //            }
 //        }
 //    }

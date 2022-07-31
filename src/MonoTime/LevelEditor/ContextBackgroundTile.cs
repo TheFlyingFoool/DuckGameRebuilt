@@ -66,10 +66,10 @@ namespace DuckGame
                 if (this.greyOut)
                     num = 0.3f;
                 if (this._hover && !this.greyOut)
-                    DuckGame.Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
-                DuckGame.Graphics.DrawFancyString(this._text, this.position + new Vec2(2f, 4f), Color.White * num, (Depth)0.85f);
+                    Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
+                Graphics.DrawFancyString(this._text, this.position + new Vec2(2f, 4f), Color.White * num, (Depth)0.85f);
                 this._contextArrow.color = Color.White * num;
-                DuckGame.Graphics.Draw(this._contextArrow, (float)((double)this.x + itemSize.x - 11.0), this.y + 3f, (Depth)0.85f);
+                Graphics.Draw(this._contextArrow, (this.x + itemSize.x - 11f), this.y + 3f, (Depth)0.85f);
             }
             if (this.opened)
             {
@@ -163,17 +163,17 @@ namespace DuckGame
                     this._selectedIndex = num1 - 1;
                 }
                 Editor current = Level.current as Editor;
-                this._hoverPos.x = (float)Math.Round(_hoverPos.x / (double)graphic.w) * graphic.w;
-                this._hoverPos.y = (float)Math.Round(_hoverPos.y / (double)graphic.h) * graphic.h;
-                if ((this._file == null || !this._file.hover) && _hoverPos.x >= 0.0 && _hoverPos.x < (double)graphic.texture.width && _hoverPos.y >= 0.0 && _hoverPos.y < (double)graphic.texture.height)
+                this._hoverPos.x = (float)Math.Round(_hoverPos.x / graphic.w) * graphic.w;
+                this._hoverPos.y = (float)Math.Round(_hoverPos.y / graphic.h) * graphic.h;
+                if ((this._file == null || !this._file.hover) && _hoverPos.x >= 0f && _hoverPos.x < graphic.texture.width && _hoverPos.y >= 0f && _hoverPos.y < graphic.texture.height)
                 {
                     DuckGame.Graphics.DrawRect(this._hoverPos + p1, this._hoverPos + p1 + new Vec2(graphic.w + 2, graphic.h + 2), Color.Lime * 0.8f, (Depth)0.8f, false);
                     if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed || Editor.inputMode == EditorInput.Gamepad && Input.Pressed("SELECT") && !this.justOpened || Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None)
                     {
                         if (this._thing is BackgroundTile)
-                            (this._thing as BackgroundTile).frame = (int)(_hoverPos.x / (double)graphic.w + _hoverPos.y / (double)graphic.h * (graphic.texture.width / graphic.w));
+                            (this._thing as BackgroundTile).frame = (int)(_hoverPos.x / graphic.w + _hoverPos.y / graphic.h * (graphic.texture.width / graphic.w));
                         else
-                            graphic.frame = (int)(_hoverPos.x / (double)graphic.w + _hoverPos.y / (double)graphic.h * (graphic.texture.width / graphic.w));
+                            graphic.frame = (int)(_hoverPos.x / graphic.w + _hoverPos.y / graphic.h * (graphic.texture.width / graphic.w));
                         current.placementType = this._thing;
                         current.placementType = this._thing;
                         if (!this.floatMode || Editor.inputMode == EditorInput.Gamepad)

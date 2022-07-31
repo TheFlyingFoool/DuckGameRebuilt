@@ -37,7 +37,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Graphics.Draw(this._button, this.x, (float)((double)this.y + 2.0 - _hit * 4.0));
+            Graphics.Draw(this._button, this.x, (float)(this.y + 2.0 - _hit * 4.0));
         }
     }
 }

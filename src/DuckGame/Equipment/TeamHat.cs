@@ -244,7 +244,7 @@ namespace DuckGame
             this._prevFrame = this._sprite.frame;
             if (this.destroyed)
                 this.alpha -= 0.05f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             if (_quackWait > 0.0)
                 this._quackWait -= Maths.IncFrameTimer();
@@ -276,7 +276,7 @@ namespace DuckGame
 
         public override void OpenHat()
         {
-            if (this.duck == null || (double)this.duck.z != 0.0)
+            if (this.duck == null || this.duck.z != 0.0)
                 return;
             if (this.team != null && this.team.metadata != null)
             {
@@ -289,7 +289,7 @@ namespace DuckGame
                 if (this._addedParticles == null)
                     this._addedParticles = new List<TeamHat.CustomParticle>();
                 int num1 = this.team.metadata.ParticleCount.value;
-                Vec2 vec2_1 = new Vec2((float)(-(double)this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), (float)(-(double)this.team.metadata.ParticleEmitShapeSize.value.y / 2.0));
+                Vec2 vec2_1 = new Vec2((float)(-this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), (float)(-this.team.metadata.ParticleEmitShapeSize.value.y / 2.0));
                 Vec2 vec2_2 = new Vec2(this.team.metadata.ParticleEmitShapeSize.value.x / 2f, this.team.metadata.ParticleEmitShapeSize.value.y / 2f);
                 Vec2 vec2_3 = this.team.metadata.ParticleEmitterOffset.value;
                 for (int index1 = 0; index1 < num1; ++index1)
@@ -298,7 +298,7 @@ namespace DuckGame
                     if (team.metadata.ParticleEmitShape.value.x == 1.0)
                     {
                         float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2.0 ? index1 * (360f / num1) : Rando.Float(360f));
-                        Vec2 vec2_4 = new Vec2((float)Math.Cos((double)rad) * (this.team.metadata.ParticleEmitShapeSize.value.x / 2f), (float)-Math.Sin((double)rad) * (this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                        Vec2 vec2_4 = new Vec2((float)Math.Cos(rad) * (this.team.metadata.ParticleEmitShapeSize.value.x / 2f), (float)-Math.Sin(rad) * (this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
                         if (team.metadata.ParticleEmitShape.value.y == 1.0)
                             pPosition += vec2_4 * Rando.Float(1f);
                         else
@@ -308,18 +308,18 @@ namespace DuckGame
                     {
                         if (team.metadata.ParticleEmitShape.value.y == 0.0)
                         {
-                            float num2 = (double)Rando.Float(1f) >= 0.5 ? 1f : -1f;
-                            if ((double)Rando.Float(1f) >= 0.5)
-                                pPosition += new Vec2(this.team.metadata.ParticleEmitShapeSize.value.x * num2, Rando.Float((float)(-(double)this.team.metadata.ParticleEmitShapeSize.value.y / 2.0), this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                            float num2 = Rando.Float(1f) >= 0.5 ? 1f : -1f;
+                            if (Rando.Float(1f) >= 0.5)
+                                pPosition += new Vec2(this.team.metadata.ParticleEmitShapeSize.value.x * num2, Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.y / 2.0), this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
                             else
-                                pPosition += new Vec2(Rando.Float((float)(-(double)this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), this.team.metadata.ParticleEmitShapeSize.value.x / 2f), this.team.metadata.ParticleEmitShapeSize.value.y * num2);
+                                pPosition += new Vec2(Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), this.team.metadata.ParticleEmitShapeSize.value.x / 2f), this.team.metadata.ParticleEmitShapeSize.value.y * num2);
                         }
                         else if (team.metadata.ParticleEmitShape.value.y == 1.0)
-                            pPosition += new Vec2(Rando.Float((float)(-(double)this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), this.team.metadata.ParticleEmitShapeSize.value.x / 2f), Rando.Float((float)(-(double)this.team.metadata.ParticleEmitShapeSize.value.y / 2.0), this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                            pPosition += new Vec2(Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), this.team.metadata.ParticleEmitShapeSize.value.x / 2f), Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.y / 2.0), this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
                         else if (team.metadata.ParticleEmitShape.value.y == 2.0)
                         {
                             float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2.0 ? index1 * (360f / num1) : Rando.Float(360f));
-                            Vec2 vec2_5 = new Vec2((float)Math.Cos((double)rad) * 100f, (float)-Math.Sin((double)rad) * 100f);
+                            Vec2 vec2_5 = new Vec2((float)Math.Cos(rad) * 100f, (float)-Math.Sin(rad) * 100f);
                             Vec2 zero = Vec2.Zero;
                             for (int index2 = 0; index2 < 4; ++index2)
                             {
@@ -515,11 +515,11 @@ namespace DuckGame
                     this._fade = Lerp.Float(this._fade, this.frame == 1 ? 1f : 0f, 0.1f);
                     if (_fade > 0.00999999977648258)
                     {
-                        this._specialSprite.alpha = (float)((double)this.alpha * 0.699999988079071 * (0.5 + (double)this._wave.normalized * 0.5)) * this._fade;
+                        this._specialSprite.alpha = (float)(this.alpha * 0.699999988079071 * (0.5 + this._wave.normalized * 0.5)) * this._fade;
                         this._specialSprite.scale = this.scale;
                         this._specialSprite.depth = this.depth - 10;
                         this._specialSprite.angle += 0.02f;
-                        float num = (float)(0.800000011920929 + (double)this._wave.normalized * 0.200000002980232);
+                        float num = (float)(0.800000011920929 + this._wave.normalized * 0.200000002980232);
                         this._specialSprite.scale = new Vec2(num, num);
                         Vec2 vec2 = this.Offset(new Vec2(2f, 4f));
                         DuckGame.Graphics.Draw(this._specialSprite, vec2.x, vec2.y);
@@ -653,7 +653,7 @@ namespace DuckGame
                     return;
                 this.graphic.texture = (Tex2D)this.animationFrames[(int)this._currentAnimationFrame % this.animationFrames.Count];
                 this._currentAnimationFrame += this.animationSpeed;
-                if (this.animationLoop || _currentAnimationFrame < (double)this.animationFrames.Count)
+                if (this.animationLoop || _currentAnimationFrame < this.animationFrames.Count)
                     return;
                 this._currentAnimationFrame = this.animationFrames.Count - 1;
             }

@@ -48,7 +48,7 @@ namespace DuckGame
                    }
                    return false;
                });
-                if ((double)this.Distance(holdable) >= 16.0)
+                if (this.Distance(holdable) >= 16.0)
                     return;
                 Level.Add(SmallSmoke.New(this.position.x, this.position.y));
                 Level.Add(SmallSmoke.New(this.position.x, this.position.y));

@@ -51,14 +51,14 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - (hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < _fluidLevel)
+            if (1.0 - (hitPos.y - this.top) / (this.bottom - this.top) < _fluidLevel)
             {
                 this.thickness = 2f;
                 Vec2 off = hitPos - this.position;
                 bool flag = false;
                 foreach (FluidStream hole in this._holes)
                 {
-                    if ((double)(hole.offset - off).length < 2.0)
+                    if ((hole.offset - off).length < 2.0)
                     {
                         hole.offset = off;
                         hole.holeThickness += 0.5f;
@@ -87,7 +87,7 @@ namespace DuckGame
             bool flag = false;
             foreach (FluidStream hole in this._holes)
             {
-                if ((double)(hole.offset - off).length < 2.0)
+                if ((hole.offset - off).length < 2.0)
                 {
                     hole.offset = off;
                     hole.holeThickness += 0.5f;
@@ -115,8 +115,8 @@ namespace DuckGame
                     hole.DoUpdate();
                     hole.position = this.Offset(hole.offset);
                     hole.sprayAngle = this.OffsetLocal(hole.startSprayAngle);
-                    float num1 = (float)(1.0 - (hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
-                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num1 < _fluidLevel)
+                    float num1 = (float)(1.0 - (hole.offset.y - this.topLocal) / (this.bottomLocal - this.topLocal));
+                    if (hole.x > this.left - 2.0 && hole.x < this.right + 2.0 && num1 < _fluidLevel)
                     {
                         float num2 = Maths.Clamp(this._fluidLevel - num1, 0.1f, 1f) * 0.0012f * hole.holeThickness;
                         FluidData fluid = this._fluid;

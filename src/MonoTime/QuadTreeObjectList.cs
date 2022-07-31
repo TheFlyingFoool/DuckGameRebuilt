@@ -38,7 +38,7 @@ namespace DuckGame
             List<CollisionIsland> islands = new List<CollisionIsland>();
             foreach (CollisionIsland island in this._islands)
             {
-                if (!island.willDie && (double)(point - island.owner.position).lengthSq < island.radiusSquared)
+                if (!island.willDie && (point - island.owner.position).lengthSq < island.radiusSquared)
                     islands.Add(island);
             }
             return islands;
@@ -49,7 +49,7 @@ namespace DuckGame
             List<CollisionIsland> forCollisionCheck = new List<CollisionIsland>();
             foreach (CollisionIsland island in this._islands)
             {
-                if (!island.willDie && (double)(point - island.owner.position).lengthSq < island.radiusCheckSquared)
+                if (!island.willDie && (point - island.owner.position).lengthSq < island.radiusCheckSquared)
                     forCollisionCheck.Add(island);
             }
             return forCollisionCheck;
@@ -59,7 +59,7 @@ namespace DuckGame
         {
             foreach (CollisionIsland island in this._islands)
             {
-                if (!island.willDie && island != ignore && (double)(point - island.owner.position).lengthSq < island.radiusSquared)
+                if (!island.willDie && island != ignore && (point - island.owner.position).lengthSq < island.radiusSquared)
                     return island;
             }
             return null;
@@ -149,7 +149,7 @@ namespace DuckGame
         //    IEnumerable<Thing> first = new List<Thing>();
         //    foreach (CollisionIsland island in this._islands)
         //    {
-        //        if ((double)(island.owner.position - pos).lengthSq - (double)radiusSq < island.radiusCheckSquared)
+        //        if ((island.owner.position - pos).lengthSq - radiusSq < island.radiusCheckSquared)
         //            first = first.Concat<Thing>(island.things);
         //    }
         //    return first;

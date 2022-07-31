@@ -1149,7 +1149,7 @@ namespace DuckGame
             MemoryStream compressedLevelData = DuckNetwork.compressedLevelData;
             long length1 = compressedLevelData.Length;
             int offset = 0;
-            Math.Ceiling(length1 / (double)val2);
+            Math.Ceiling((double)(length1 / val2));
             compressedLevelData.Position = 0L;
             Send.Message(new NMLevelDataHeader(session, (int)length1, DuckNetwork.compressedLevelName), c);
             while (offset != length1)
@@ -1197,7 +1197,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((textVal.Length + str2.Length) * 8 > (double)num)
+                    if ((textVal.Length + str2.Length) * 8 > num)
                     {
                         DuckNetwork._uhOhMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
@@ -3127,12 +3127,12 @@ namespace DuckGame
                 DuckNetwork._core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
                 if (DuckNetwork._core._chatFont is RasterFont)
                     DuckNetwork._core._chatFont.scale = new Vec2(0.5f);
-                float x = (float)((double)DuckNetwork._core._chatFont.GetWidth(chatMessage.text) + (double)num7 + 8.0 * (double)chatScale);
+                float x = (float)(DuckNetwork._core._chatFont.GetWidth(chatMessage.text) + num7 + 8.0 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
                     if (DuckNetwork._core._chatFont is RasterFont)
                     {
-                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * (double)RasterFont.fontScaleFactor / 10.0);
+                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
                         x += 6f * num8;
                     }
                     else

@@ -70,7 +70,7 @@ namespace DuckGame
                     {
                         this.notePitch = (float)(num / 12.0 + 0.00999999977648258);
                         this.handPitch = this.notePitch;
-                        if (notePitch != (double)this.prevNotePitch)
+                        if (notePitch != this.prevNotePitch)
                         {
                             this.prevNotePitch = 0f;
                             if (this.noteSound != null)
@@ -83,7 +83,7 @@ namespace DuckGame
                     else
                         this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : this.handPitch + 0.01f;
                 }
-                if (notePitch != (double)this.prevNotePitch)
+                if (notePitch != this.prevNotePitch)
                 {
                     if (notePitch != 0.0)
                     {

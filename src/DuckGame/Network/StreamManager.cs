@@ -81,7 +81,7 @@ namespace DuckGame
 
         public void LogPing(float pingVal)
         {
-            if ((double)pingVal < 0.0)
+            if (pingVal < 0.0)
                 pingVal = 0f;
             this._previousPings[this._currentPing % 32] = pingVal;
             ++this._currentPing;
@@ -89,7 +89,7 @@ namespace DuckGame
             for (int index = 0; index < 32; ++index)
                 num += this._previousPings[index];
             this._ping = num / 32f;
-            if (_ping <= (double)this._pingPeak)
+            if (_ping <= this._pingPeak)
                 return;
             this._pingPeak = this._ping;
         }
@@ -502,7 +502,7 @@ namespace DuckGame
                             }
                             if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {
-                                int num = (int)((double)MathHelper.Clamp(this.ping, 0.064f, 1f) * 60.0) + 1;
+                                int num = (int)(MathHelper.Clamp(this.ping, 0.064f, 1f) * 60.0) + 1;
                                 if (unacknowledgedMessage.serializedData.lengthInBytes > 500)
                                     num += 30;
                                 if (unacknowledgedMessage.lastTransmitted + num > Graphics.frame)

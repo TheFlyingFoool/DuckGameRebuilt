@@ -42,8 +42,8 @@ namespace DuckGame
         {
             this.position.x = xpos;
             this.position.y = ypos;
-            this.hSpeed = (float)(-(double)hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(-1f, 1f);
-            this.vSpeed = (float)(-(double)hitAngle.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+            this.hSpeed = (float)(-hitAngle.x * 2.0 * (Rando.Float(1f) + 0.300000011920929)) - Rando.Float(-1f, 1f);
+            this.vSpeed = (float)(-hitAngle.y * 2.0 * (Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
             this._bounceEfficiency = 0.6f;
             this.depth = (Depth)0.9f;
             this._killSpeed = killSpeed;
@@ -54,7 +54,7 @@ namespace DuckGame
         public override void Update()
         {
             this.alpha -= this._killSpeed;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             base.Update();
         }

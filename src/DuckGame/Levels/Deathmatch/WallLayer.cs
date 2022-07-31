@@ -62,7 +62,7 @@ namespace DuckGame
 
         public override void Begin(bool transparent, bool isTargetDraw = false)
         {
-            Vec3 vec3_1 = new Vec3((float)((double)DuckGame.Graphics.fade * _fade * (1.0 - _darken))) * this.colorMul;
+            Vec3 vec3_1 = new Vec3((float)(DuckGame.Graphics.fade * _fade * (1.0 - _darken))) * this.colorMul;
             Vec3 vec3_2 = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(DuckGame.Graphics.flashAddRenderValue) + new Vec3(DuckGame.Graphics.fadeAddRenderValue) - new Vec3(this.darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             if (_darken > 0.0)

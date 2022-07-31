@@ -29,10 +29,10 @@ namespace DuckGame
             get
             {
                 if (this.slotIndex == 0)
-                    return (float)(-(double)this.duck.position.x * 0.665000021457672 + 100.0);
+                    return (float)(-this.duck.position.x * 0.665000021457672 + 100.0);
                 if (this.slotIndex == 1)
-                    return (float)(-(double)this.duck.position.x * 0.665000021457672 + 100.0);
-                return (float)(-(double)this.duck.position.x * 0.665000021457672 + 100.0);
+                    return (float)(-this.duck.position.x * 0.665000021457672 + 100.0);
+                return (float)(-this.duck.position.x * 0.665000021457672 + 100.0);
             }
         }
     }

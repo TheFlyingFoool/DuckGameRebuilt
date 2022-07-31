@@ -35,15 +35,15 @@ namespace DuckGame
 
         protected static Vec2 Slerp(Vec2 from, Vec2 to, float step)
         {
-            if ((double)step == 0.0)
+            if (step == 0f)
                 return from;
-            if (from == to || (double)step == 1.0)
+            if (from == to || step == 1f)
                 return to;
-            double a = Math.Acos((double)Vec2.Dot(from, to));
-            if (a == 0.0)
+            double a = Math.Acos(Vec2.Dot(from, to));
+            if (a == 0f)
                 return to;
             double num = Math.Sin(a);
-            return (float)(Math.Sin((1.0 - (double)step) * a) / num) * from + (float)(Math.Sin((double)step * a) / num) * to;
+            return (float)(Math.Sin((1f - step) * a) / num) * from + (float)(Math.Sin(step * a) / num) * to;
         }
     }
 }

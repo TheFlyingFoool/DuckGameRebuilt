@@ -62,7 +62,7 @@
 //            if (this._fade)
 //            {
 //                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.02f);
-//                if ((double)Graphics.fade > 0.0)
+//                if (Graphics.fade > 0f)
 //                    return;
 //                Main.isDemo = this._demo;
 //                Level.current = new TitleScreen();
@@ -104,21 +104,21 @@
 //                this._payScreen.depth = (Depth)0.5f;
 //                this._moneyType.depth = (Depth)0.6f;
 //                Graphics.Draw(this._payScreen, layer.width / 2f, layer.height / 2f);
-//                Graphics.Draw(_moneyType, (float)((double)layer.width / 2.0 - 79.0), (float)((double)layer.height / 2.0 - 23.0));
+//                Graphics.Draw(_moneyType, (float)(layer.width / 2f - 79f), (layer.height / 2f - 23f));
 //                string text1 = "Buy Game (" + this._currencyCharacter + this._price.ToString("0.00", CultureInfo.InvariantCulture) + ")";
-//                this._font.Draw(text1, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text1) / 2.0 + 15.0), (float)((double)layer.height / 2.0 - 18.0), Color.White, (Depth)0.8f);
+//                this._font.Draw(text1, (layer.width / 2f - this._font.GetWidth(text1) / 2f + 15f), (layer.height / 2f - 18f), Color.White, (Depth)0.8f);
 //                if (this._buy)
 //                {
-//                    Vec2 p1 = new Vec2((float)((double)layer.width / 2.0 - this._payScreen.width / 2 + 6.0), (float)((double)layer.height / 2.0 - 25.0));
+//                    Vec2 p1 = new Vec2((layer.width / 2f - this._payScreen.width / 2 + 6f), (float)(layer.height / 2f - 25f));
 //                    Graphics.DrawRect(p1, p1 + new Vec2(_payScreen.width - 11.5f, 22f), Color.White, (Depth)0.9f, false);
 //                }
 //                else
 //                {
-//                    Vec2 p1 = new Vec2((float)((double)layer.width / 2.0 - this._payScreen.width / 2 + 6.0), (float)((double)layer.height / 2.0 + 3.0));
+//                    Vec2 p1 = new Vec2((layer.width / 2f - this._payScreen.width / 2 + 6f), (layer.height / 2f + 3f));
 //                    Graphics.DrawRect(p1, p1 + new Vec2(_payScreen.width - 11.5f, 22f), Color.White, (Depth)0.9f, false);
 //                }
 //                string text2 = "PLAY DEMO";
-//                this._font.Draw(text2, (float)((double)layer.width / 2.0 - (double)this._font.GetWidth(text2) / 2.0 + 12.0), (float)((double)layer.height / 2.0 + 10.0), Color.White, (Depth)0.8f);
+//                this._font.Draw(text2, (layer.width / 2f - this._font.GetWidth(text2) / 2f + 12f), (layer.height / 2f + 10f), Color.White, (Depth)0.8f);
 //            }
 //            base.PostDrawLayer(layer);
 //        }

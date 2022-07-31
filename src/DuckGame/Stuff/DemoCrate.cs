@@ -52,7 +52,7 @@ namespace DuckGame
             {
                 float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add(new ExplosionPart(pPosition.x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, pPosition.y - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(pPosition.x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, pPosition.y - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
             for (int index = 0; index < 5; ++index)
             {
@@ -62,7 +62,7 @@ namespace DuckGame
                 Level.Add(smallSmoke);
             }
             for (int index = 0; index < 3; ++index)
-                Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6.0 - 3.0 + (double)Rando.Float(6f) - index * 1.0))
+                Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                 {
                     move = {
             x = (Rando.Float(0.6f) - 0.3f),
@@ -72,7 +72,7 @@ namespace DuckGame
             for (int index = 0; index < 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(pPosition.x - 8f + Rando.Float(16f), pPosition.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)(((double)Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * (double)Rando.Float(3f) + Math.Sign(pFlyX) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(pFlyX) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
@@ -105,7 +105,7 @@ namespace DuckGame
                 {
                     range = this.baseExplosionRange - 20f + Rando.Float(18f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
                 {
                     firedFrom = this
                 };
@@ -142,7 +142,7 @@ namespace DuckGame
             if (!this._onFire || burnt >= 0.9f)
                 return;
             float num = 1f - this.burnt;
-            if (_hitPoints > (double)num * _maxHealth)
+            if (_hitPoints > num * _maxHealth)
                 this._hitPoints = num * this._maxHealth;
             this._sprite.color = new Color(num, num, num);
         }

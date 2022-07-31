@@ -114,26 +114,26 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-            this.vertexTL.Position.X = (float)((double)x + (double)dx * (double)cos - (double)dy * (double)sin);
-            this.vertexTL.Position.Y = (float)((double)y + (double)dx * (double)sin + (double)dy * (double)cos);
+            this.vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
+            this.vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);
             this.vertexTL.Position.Z = this.Depth;
             this.vertexTL.Color = (Microsoft.Xna.Framework.Color)color;
             this.vertexTL.TextureCoordinate.X = texCoordTL.x;
             this.vertexTL.TextureCoordinate.Y = texCoordTL.y;
-            this.vertexTR.Position.X = (float)((double)x + ((double)dx + (double)w) * (double)cos - (double)dy * (double)sin);
-            this.vertexTR.Position.Y = (float)((double)y + ((double)dx + (double)w) * (double)sin + (double)dy * (double)cos);
+            this.vertexTR.Position.X = (float)(x + (dx + w) * cos - dy * sin);
+            this.vertexTR.Position.Y = (float)(y + (dx + w) * sin + dy * cos);
             this.vertexTR.Position.Z = this.Depth;
             this.vertexTR.Color = (Microsoft.Xna.Framework.Color)color;
             this.vertexTR.TextureCoordinate.X = texCoordBR.x;
             this.vertexTR.TextureCoordinate.Y = texCoordTL.y;
-            this.vertexBL.Position.X = (float)((double)x + (double)dx * (double)cos - ((double)dy + (double)h) * (double)sin);
-            this.vertexBL.Position.Y = (float)((double)y + (double)dx * (double)sin + ((double)dy + (double)h) * (double)cos);
+            this.vertexBL.Position.X = (float)(x + dx * cos - (dy + h) * sin);
+            this.vertexBL.Position.Y = (float)(y + dx * sin + (dy + h) * cos);
             this.vertexBL.Position.Z = this.Depth;
             this.vertexBL.Color = (Microsoft.Xna.Framework.Color)color;
             this.vertexBL.TextureCoordinate.X = texCoordTL.x;
             this.vertexBL.TextureCoordinate.Y = texCoordBR.y;
-            this.vertexBR.Position.X = (float)((double)x + ((double)dx + (double)w) * (double)cos - ((double)dy + (double)h) * (double)sin);
-            this.vertexBR.Position.Y = (float)((double)y + ((double)dx + (double)w) * (double)sin + ((double)dy + (double)h) * (double)cos);
+            this.vertexBR.Position.X = (float)(x + (dx + w) * cos - (dy + h) * sin);
+            this.vertexBR.Position.Y = (float)(y + (dx + w) * sin + (dy + h) * cos);
             this.vertexBR.Position.Z = this.Depth;
             this.vertexBR.Color = (Microsoft.Xna.Framework.Color)color;
             this.vertexBR.TextureCoordinate.X = texCoordBR.x;

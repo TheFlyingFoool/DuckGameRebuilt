@@ -105,7 +105,7 @@ namespace DuckGame
             this.reset();
         }
 
-        public void clock(float f) => this.ticksPerSample = (float)((double)f / 16.0 / 44100.0);
+        public void clock(float f) => this.ticksPerSample = (float)(f / 16.0 / 44100.0);
 
         public void reset()
         {

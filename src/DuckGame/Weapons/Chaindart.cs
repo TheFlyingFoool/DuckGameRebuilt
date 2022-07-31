@@ -169,7 +169,7 @@ namespace DuckGame
             if (this._topBullet != null)
             {
                 this._topBullet.DoUpdate();
-                int num = (int)(ammo / (double)this.bulletsTillRemove);
+                int num = (int)(ammo / this.bulletsTillRemove);
                 if (num < this.numHanging)
                 {
                     this._topBullet = this._topBullet.childThing as ChaingunBullet;
@@ -184,22 +184,22 @@ namespace DuckGame
                 if (litBy != null && litBy.data.heat > 0.5)
                     this.OnBurn(this.barrelPosition, litBy);
             }
-            this._fireWait = (float)(0.649999976158142 + (double)Maths.NormalizeSection(this._barrelHeat, 5f, 9f) * 3.0) + Rando.Float(0.25f);
-            if (_barrelHeat > 10.0)
+            this._fireWait = (0.65f + Maths.NormalizeSection(this._barrelHeat, 5f, 9f) * 3f) + Rando.Float(0.25f);
+            if (_barrelHeat > 10f)
                 this._barrelHeat = 10f;
             this._barrelHeat -= 0.005f;
-            if (_barrelHeat < 0.0)
+            if (_barrelHeat < 0f)
                 this._barrelHeat = 0f;
             if (!this.burntOut)
             {
                 this._sprite.speed = this._spin;
                 this._tip.speed = this._spin;
-                if (_spin > 0.0)
+                if (_spin > 0f)
                     this._spin -= 0.01f;
                 else
                     this._spin = 0f;
                 this.spinAmount += this._spin;
-                this.barrelInsertOffset = new Vec2(0f, (float)(2.0 + Math.Sin(spinAmount / 9.0 * 3.14000010490417) * 2.0));
+                this.barrelInsertOffset = new Vec2(0f, (float)(2.0 + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
             }
             base.Update();
             if (this._topBullet == null)
@@ -212,7 +212,7 @@ namespace DuckGame
 
         public override void Fire()
         {
-            if (burnt >= 1.0 || this.burntOut)
+            if (burnt >= 1f || this.burntOut)
                 SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
             else
                 base.Fire();

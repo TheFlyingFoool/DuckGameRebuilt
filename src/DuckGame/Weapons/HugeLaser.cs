@@ -240,7 +240,7 @@ namespace DuckGame
             float num3 = Maths.NormalizeSection(this._tip.alpha, 0.75f, 1f);
             float num4 = Maths.NormalizeSection(this._tip.alpha, 0.9f, 1f);
             float num5 = Maths.NormalizeSection(this._tip.alpha, 0.8f, 1f) * 0.5f;
-            if ((double)num1 <= 0.0)
+            if (num1 <= 0.0)
                 return;
             Vec2 p1 = this.Offset(this.barrelOffset);
             Vec2 p2 = this.Offset(this.barrelOffset + new Vec2(num1 * 1200f, 0f));

@@ -45,7 +45,7 @@ namespace DuckGame
             this.position.x = xpos;
             this.position.y = ypos;
             this.hSpeed = -4f - Rando.Float(3f);
-            this.vSpeed = (float)-((double)Rando.Float(1.5f) + 1.0);
+            this.vSpeed = (float)-(Rando.Float(1.5f) + 1.0);
             this._sprite.frame = Rando.Int(4);
             this._bounceEfficiency = 0.3f;
         }

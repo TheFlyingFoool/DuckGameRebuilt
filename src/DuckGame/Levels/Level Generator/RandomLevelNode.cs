@@ -359,9 +359,9 @@ namespace DuckGame
                 }
                 if (symmetricVal && !LevelGenerator.openAirMode)
                 {
-                    if (num == 2 && (double)Rando.Float(1f) < 0.300000011920929)
+                    if (num == 2 && Rando.Float(1f) < 0.300000011920929)
                         symmetricVal = false;
-                    else if (num == 1 && (double)Rando.Float(1f) < 0.800000011920929)
+                    else if (num == 1 && Rando.Float(1f) < 0.800000011920929)
                         symmetricVal = false;
                     else if (num == 1 && tile.right && (this.right == null || this.right.right == null))
                         symmetricVal = false;

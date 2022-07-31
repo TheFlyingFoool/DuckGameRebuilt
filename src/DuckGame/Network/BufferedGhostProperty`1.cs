@@ -30,13 +30,13 @@ namespace DuckGame
 
         public override void Apply(float lerp)
         {
-            if ((double)lerp < 1.0)
+            if (lerp < 1f)
             {
                 if (this.binding is CompressedVec2Binding)
                 {
                     Vec2 typed = this.binding.getTyped<Vec2>();
                     Vec2 to = (Vec2)this.value;
-                    if ((double)(typed - to).lengthSq > 1024.0)
+                    if ((typed - to).lengthSq > 1024f)
                         this.binding.setTyped<Vec2>(to);
                     else
                         this.binding.setTyped<Vec2>(Lerp.Vec2Smooth(typed, to, lerp));

@@ -128,7 +128,7 @@ namespace DuckGame
             this.hSpeed *= 0.95f;
             if (this._sprite.currentAnimation != "puff")
                 this._sprite.SetAnimation("puff");
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0f)
                 Level.Remove(this);
             this.x += this.hSpeed;
             this.y += this.vSpeed;
@@ -137,14 +137,14 @@ namespace DuckGame
         public override void Draw()
         {
             float num1 = (float)Math.Sin(_distPulse);
-            float num2 = (float)-(Math.Sin(_orbitInc) * (double)num1) * this.s1;
+            float num2 = (float)-(Math.Sin(_orbitInc) * num1) * this.s1;
             float num3 = (float)Math.Cos(_orbitInc) * num1 * this.s1;
             this._sprite.imageIndex = this._sprite.imageIndex;
             this._sprite.depth = this.depth;
             this._sprite.scale = new Vec2(this.s1);
             this._sprite.center = this.center;
             this._sprite.alpha = this.alpha;
-            this._sprite.color = new Color(byte.MaxValue, byte.MaxValue, byte.MaxValue, (byte)((double)this.alpha * byte.MaxValue));
+            this._sprite.color = new Color(byte.MaxValue, byte.MaxValue, byte.MaxValue, (byte)(this.alpha * byte.MaxValue));
             this._sprite.color = Color.White * this.alpha;
             Graphics.Draw(_sprite, this.x + num2, this.y + num3);
             this._sprite2.frame = 0;
@@ -153,7 +153,7 @@ namespace DuckGame
             this._sprite2.depth = -0.5f;
             this._sprite2.scale = this._sprite.scale;
             this._sprite2.center = this.center;
-            double num4 = (double)Rando.Float(0.2f);
+            double num4 = Rando.Float(0.2f);
             this._sprite2.color = this._sprite.color;
             Graphics.Draw(_sprite2, this.x + num2, this.y + num3);
         }

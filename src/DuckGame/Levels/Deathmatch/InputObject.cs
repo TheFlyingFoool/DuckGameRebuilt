@@ -106,7 +106,7 @@ namespace DuckGame
                         }
                         slot.ai._manualQuack = this.inputProfile;
                         slot.duck.manualQuackPitch = true;
-                        slot.duck.quackPitch = (byte)((double)this.leftTrigger * byte.MaxValue);
+                        slot.duck.quackPitch = (byte)(this.leftTrigger * byte.MaxValue);
                     }
                 }
             }

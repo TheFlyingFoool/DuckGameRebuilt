@@ -137,7 +137,7 @@ namespace DuckGame
                             this._font.Draw(text, vec2_2 + vec2_3 + new Vec2(2f, 2f), Color.White, (Depth)(num4 + 0.1f));
                             DuckGame.Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(1f, 1f), vec2_2 + vec2_3 + new Vec2(this._font.GetWidth(text) + 6f, 8f), Color.Black * 0.7f, (Depth)(num4 + 0.05f));
                             vec2_2.x += vec2_1.x;
-                            if (vec2_2.x + (double)vec2_1.x <= (double)Layer.HUD.width)
+                            if (vec2_2.x + vec2_1.x <= Layer.HUD.width)
                                 ++num2;
                             else
                                 break;

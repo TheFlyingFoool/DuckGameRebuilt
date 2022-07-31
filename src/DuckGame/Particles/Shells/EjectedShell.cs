@@ -15,7 +15,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.hSpeed = -4f - Rando.Float(3f);
-            this.vSpeed = (float)-((double)Rando.Float(1.5f) + 1.0);
+            this.vSpeed = (float)-(Rando.Float(1.5f) + 1.0);
             this._sprite = new SpriteMap(shellSprite, 16, 16);
             this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);

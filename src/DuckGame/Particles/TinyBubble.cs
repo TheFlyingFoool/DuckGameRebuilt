@@ -40,14 +40,14 @@ namespace DuckGame
             this.position.y += this.vSpeed;
             this.hSpeed = Lerp.Float(this.hSpeed, 0f, 0.1f);
             this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.1f);
-            if ((double)this.y < _minY - 4.0)
+            if (this.y < _minY - 4.0)
                 this.alpha -= 0.025f;
-            if ((double)this.y < _minY - 8.0)
+            if (this.y < _minY - 8.0)
                 this.alpha = 0f;
-            if ((double)this.y >= _minY)
+            if (this.y >= _minY)
                 return;
             this.alpha -= 0.025f;
-            if ((double)this.alpha >= 0.0)
+            if (this.alpha >= 0.0)
                 return;
             Level.Remove(this);
         }

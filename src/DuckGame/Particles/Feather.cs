@@ -56,7 +56,7 @@ namespace DuckGame
             this.position.y = ypos;
             this.alpha = 1f;
             this.hSpeed = Rando.Float(6f) - 3f;
-            this.vSpeed = (float)((double)Rando.Float(2f) - 1.0 - 1.0);
+            this.vSpeed = (float)(Rando.Float(2f) - 1.0 - 1.0);
             this._sprite = who.featherSprite.CloneMap();
             this._sprite.SetAnimation("feather");
             this._sprite.frame = Rando.Int(3);
@@ -72,15 +72,15 @@ namespace DuckGame
         {
             if (this._rested)
                 return;
-            if ((double)this.hSpeed > 0f)
+            if (this.hSpeed > 0f)
                 this.hSpeed -= 0.1f;
-            if ((double)this.hSpeed < 0f)
+            if (this.hSpeed < 0f)
                 this.hSpeed += 0.1f;
-            if ((double)this.hSpeed < 0.1f && (double)this.hSpeed > -0.1f)
+            if (this.hSpeed < 0.1f && this.hSpeed > -0.1f)
                 this.hSpeed = 0f;
-            if ((double)this.vSpeed < 1f)
+            if (this.vSpeed < 1f)
                 this.vSpeed += 0.06f;
-            if ((double)this.vSpeed < 0f)
+            if (this.vSpeed < 0f)
             {
                 this._sprite.speed = 0f;
                 if (Level.CheckPoint<Block>(this.x, this.y - 7f) != null)

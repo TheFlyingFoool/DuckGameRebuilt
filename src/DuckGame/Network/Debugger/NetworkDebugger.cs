@@ -343,7 +343,7 @@ namespace DuckGame
                 NetworkDebugger._currentIndex = index1;
                 NetworkDebugger.LockInstance(instance1);
                 bool flag1 = false;
-                if (NetworkDebugger._lastRect == NetworkDebugger._currentIndex || instance1.rect.Contains(Mouse.mousePos) || (double)Math.Abs(DuckGame.Graphics.width / 2 - Mouse.mousePos.x) < 32.0 && (double)Math.Abs(DuckGame.Graphics.height / 2 - Mouse.mousePos.y) < 32.0)
+                if (NetworkDebugger._lastRect == NetworkDebugger._currentIndex || instance1.rect.Contains(Mouse.mousePos) || Math.Abs(DuckGame.Graphics.width / 2 - Mouse.mousePos.x) < 32.0 && Math.Abs(DuckGame.Graphics.height / 2 - Mouse.mousePos.y) < 32.0)
                 {
                     NetworkDebugger._lastRect = NetworkDebugger._currentIndex;
                     InputProfile.active = InputProfile.DefaultPlayer1;
@@ -683,10 +683,10 @@ namespace DuckGame
         {
             if (!NetworkDebugger._sentPulse.ContainsKey(key) || !NetworkDebugger._sentPulse[key].ContainsKey(to))
                 return 0f;
-            if ((double)NetworkDebugger._sentPulse[key][to] > 1.0)
+            if (NetworkDebugger._sentPulse[key][to] > 1.0)
                 NetworkDebugger._sentPulse[key][to] = 1f;
             NetworkDebugger._sentPulse[key][to] -= 0.1f;
-            if ((double)NetworkDebugger._sentPulse[key][to] < 0.0)
+            if (NetworkDebugger._sentPulse[key][to] < 0.0)
                 NetworkDebugger._sentPulse[key][to] = 0f;
             return NetworkDebugger._sentPulse[key][to];
         }
@@ -704,10 +704,10 @@ namespace DuckGame
         {
             if (!NetworkDebugger._receivedPulse.ContainsKey(key) || !NetworkDebugger._receivedPulse[key].ContainsKey(from))
                 return 0f;
-            if ((double)NetworkDebugger._receivedPulse[key][from] > 1.0)
+            if (NetworkDebugger._receivedPulse[key][from] > 1.0)
                 NetworkDebugger._receivedPulse[key][from] = 1f;
             NetworkDebugger._receivedPulse[key][from] -= 0.1f;
-            if ((double)NetworkDebugger._receivedPulse[key][from] < 0.0)
+            if (NetworkDebugger._receivedPulse[key][from] < 0.0)
                 NetworkDebugger._receivedPulse[key][from] = 0f;
             return NetworkDebugger._receivedPulse[key][from];
         }
@@ -771,7 +771,7 @@ namespace DuckGame
             Vec2 p1_2 = new Vec2(p1_1.x + (size.x - 12f), p1_1.y + num3 * (size.y - num6));
             Vec2 p2_2 = new Vec2(p1_1.x + size.x, p1_1.y + num3 * (size.y - num6) + num6);
             bool flag = false;
-            if ((double)Mouse.xConsole > p1_2.x && (double)Mouse.xConsole < p2_2.x && (double)Mouse.yConsole > p1_2.y && (double)Mouse.yConsole < p2_2.y)
+            if (Mouse.xConsole > p1_2.x && Mouse.xConsole < p2_2.x && Mouse.yConsole > p1_2.y && Mouse.yConsole < p2_2.y)
             {
                 if (Mouse.left == InputState.Pressed)
                 {
@@ -785,20 +785,20 @@ namespace DuckGame
             {
                 Vec2 vec2_1 = this.mouseClickPos[index] - Mouse.positionConsole;
                 Vec2 vec2_2 = this.mouseClickTop[index] - vec2_1;
-                if (vec2_2.y < (double)p1_1.y)
+                if (vec2_2.y < p1_1.y)
                     vec2_2.y = p1_1.y;
-                if (vec2_2.y > p2_1.y - (double)num6)
+                if (vec2_2.y > p2_1.y - num6)
                     vec2_2.y = p2_1.y - num6;
-                NetworkDebugger.logsScroll[index] = (int)Math.Round((vec2_2.y - (double)p1_1.y) / (size.y - (double)num6) * num2);
+                NetworkDebugger.logsScroll[index] = (int)Math.Round((vec2_2.y - p1_1.y) / (size.y - num6) * num2);
             }
             if (Mouse.left == InputState.Released)
                 this.scrollerDrag[index] = false;
             DuckGame.Graphics.DrawRect(p1_2, p2_2, Color.White * (flag || this.scrollerDrag[index] ? 0.8f : 0.5f), (Depth)0.82f);
-            if ((double)Mouse.xConsole > p1_1.x && (double)Mouse.xConsole < p2_1.x && (double)Mouse.yConsole > p1_1.y && (double)Mouse.yConsole < p2_1.y)
+            if (Mouse.xConsole > p1_1.x && Mouse.xConsole < p2_1.x && Mouse.yConsole > p1_1.y && Mouse.yConsole < p2_1.y)
             {
-                if ((double)Mouse.scroll > 0.0)
+                if (Mouse.scroll > 0.0)
                     NetworkDebugger.logsScroll[index] += 5;
-                else if ((double)Mouse.scroll < 0.0)
+                else if (Mouse.scroll < 0.0)
                     NetworkDebugger.logsScroll[index] -= 5;
             }
             if (NetworkDebugger.logsScroll[index] < 0)

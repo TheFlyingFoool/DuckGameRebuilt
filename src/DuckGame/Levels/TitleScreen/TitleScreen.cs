@@ -1000,11 +1000,11 @@ namespace DuckGame
                         color = Colors.DGBlue;
                     else if (this.cpick == 2)
                         color = Colors.DGGreen;
-                    if ((double)Rando.Float(1f) > 0.995000004768372)
+                    if (Rando.Float(1f) > 0.995000004768372)
                         color = Colors.DGPink;
                     this.particles.Add(new StarParticle()
                     {
-                        pos = new Vec2(0f, (int)((double)Rando.Float(0f, 150f) / 1.0)),
+                        pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1.0)),
                         speed = new Vec2(Rando.Float(0.5f, 1f), 0f),
                         color = color,
                         flicker = Rando.Float(100f, 230f)
@@ -1041,7 +1041,7 @@ namespace DuckGame
                 this._duck.immobilized = true;
                 this._duck.enablePhysics = false;
                 Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
-                if ((double)Graphics.fade < 0.00999999977648258)
+                if (Graphics.fade < 0.00999999977648258)
                 {
                     Level.current.Clear();
                     Level.current = new ArcadeLevel(Content.GetLevelID("arcade"));
@@ -1053,7 +1053,7 @@ namespace DuckGame
                 {
                     this._duck.immobilized = true;
                     this._duck.updatePhysics = false;
-                    if ((double)this.camera.x < 140.0)
+                    if (this.camera.x < 140.0)
                     {
                         this.flashDissipationSpeed = 0.08f;
                         Graphics.flashAdd = 2f;
@@ -1068,7 +1068,7 @@ namespace DuckGame
                         {
                             if (!this._startedMusic)
                                 Music.volumeMult = Lerp.Float(Music.volumeMult, 0f, 3f / 500f);
-                            if ((double)Layer.Parallax.camera.y > -12.0)
+                            if (Layer.Parallax.camera.y > -12.0)
                             {
                                 this.camera.y += 0.064f;
                                 Layer.Parallax.camera.y -= 0.08f;
@@ -1083,7 +1083,7 @@ namespace DuckGame
                                 }
                                 if (creditsScroll > 939.0)
                                 {
-                                    if ((double)Layer.Parallax.camera.y > -22.0)
+                                    if (Layer.Parallax.camera.y > -22.0)
                                     {
                                         this.camera.y += 0.064f;
                                         Layer.Parallax.camera.y -= 0.08f;
@@ -1110,7 +1110,7 @@ namespace DuckGame
                 if (this._duck != null)
                 {
                     this._duck.updatePhysics = true;
-                    if ((double)this._duck.x > 324.0)
+                    if (this._duck.x > 324.0)
                         this._enterArcade = true;
                 }
                 if (this.quittingCredits)
@@ -1140,7 +1140,7 @@ namespace DuckGame
             TitleScreen._hasMenusOpen = this.menuOpen;
             if (!this._enterMultiplayer && !this._enterEditor && !this._enterLibrary) // && !this._enterBuyScreen
             {
-                if ((double)Graphics.fade < 1.0)
+                if (Graphics.fade < 1.0)
                     Graphics.fade += 1f / 1000f;
                 else
                     Graphics.fade = 1f;
@@ -1148,7 +1148,7 @@ namespace DuckGame
             else
             {
                 Graphics.fade -= 0.05f;
-                if ((double)Graphics.fade <= 0.0)
+                if (Graphics.fade <= 0.0)
                 {
                     Graphics.fade = 0f;
                     Music.Stop();
@@ -1274,7 +1274,7 @@ namespace DuckGame
                 {
                     this._fadeIn = true;
                     this._title = new BigTitle();
-                    this._title.x = (float)((double)Layer.HUD.camera.width / 2.0 - this._title.graphic.w / 2 + 3.0);
+                    this._title.x = (float)(Layer.HUD.camera.width / 2.0 - this._title.graphic.w / 2 + 3.0);
                     this._title.y = Layer.HUD.camera.height / 2f;
                     this.AddThing(_title);
                     this._title.fade = true;
@@ -1290,7 +1290,7 @@ namespace DuckGame
                     InputProfile.active = this._duck.profile.inputProfile;
                 }
                 Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                if ((double)Graphics.fade > 0.990000009536743)
+                if (Graphics.fade > 0.990000009536743)
                 {
                     Graphics.fade = 1f;
                     this._returnFromArcade = false;
@@ -1336,7 +1336,7 @@ namespace DuckGame
                 if (this._title == null)
                 {
                     this._title = new BigTitle();
-                    this._title.x = (float)((double)Layer.HUD.camera.width / 2.0 - this._title.graphic.w / 2 + 3.0);
+                    this._title.x = (float)(Layer.HUD.camera.width / 2.0 - this._title.graphic.w / 2 + 3.0);
                     this._title.y = Layer.HUD.camera.height / 2f;
                     this.AddThing(_title);
                 }
@@ -1437,18 +1437,18 @@ namespace DuckGame
                     foreach (List<string> stringList in this.creditsRoll)
                     {
                         float num2 = num1 + (200f - this.creditsScroll);
-                        if ((double)num2 >= -11.0 && (double)num2 < 200.0)
+                        if (num2 >= -11.0 && num2 < 200.0)
                         {
                             if (stringList.Count == 1)
                             {
                                 float stringWidth = Graphics.GetStringWidth(stringList[0]);
-                                Graphics.DrawStringColoredSymbols(stringList[0], new Vec2((float)(490.0 - (double)stringWidth / 2.0), num1 + (200f - this.creditsScroll)), Color.White, (Depth)1f);
+                                Graphics.DrawStringColoredSymbols(stringList[0], new Vec2((float)(490.0 - stringWidth / 2.0), num1 + (200f - this.creditsScroll)), Color.White, (Depth)1f);
                             }
                             else
                             {
-                                double stringWidth1 = (double)Graphics.GetStringWidth(stringList[0]);
+                                double stringWidth1 = Graphics.GetStringWidth(stringList[0]);
                                 Graphics.DrawStringColoredSymbols(stringList[0], new Vec2(347f, num1 + (200f - this.creditsScroll)), Color.White, (Depth)1f);
-                                double stringWidth2 = (double)Graphics.GetStringWidth(stringList[1]);
+                                double stringWidth2 = Graphics.GetStringWidth(stringList[1]);
                                 Graphics.DrawStringColoredSymbols(stringList[1], new Vec2(507f, num1 + (200f - this.creditsScroll)), Color.White, (Depth)1f);
                             }
                         }
@@ -1460,9 +1460,9 @@ namespace DuckGame
             else if (layer == Layer.Parallax)
             {
                 float num = 0f;
-                if ((double)this.camera.y > 4.0)
+                if (this.camera.y > 4.0)
                 {
-                    this._starField.alpha = num + (float)(((double)this.camera.y - 4.0) / 13.0) - this.extraFade * 0.7f;
+                    this._starField.alpha = num + (float)((this.camera.y - 4.0) / 13.0) - this.extraFade * 0.7f;
                     Graphics.Draw(this._starField, 0f, layer.camera.y - 58f, -0.99f);
                 }
             }
@@ -1472,18 +1472,18 @@ namespace DuckGame
                 {
                     float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
                     float num4 = 0.2f;
-                    if ((double)this.camera.y > 0.0)
+                    if (this.camera.y > 0.0)
                         num4 += this.camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)(((double)num4 + (double)num3 * 0.600000023841858) * (0.300000011920929 + (1.0 - extraFade) * 0.699999988079071)), -0.3f);
+                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.600000023841858) * (0.300000011920929 + (1.0 - extraFade) * 0.699999988079071)), -0.3f);
                     float num5 = 0.1f;
-                    if ((double)this.camera.y > 0.0)
+                    if (this.camera.y > 0.0)
                         num5 += this.camera.y / 52f;
                     Vec2 pos = particle.pos;
                     int num6 = 4;
                     for (int index = 0; index < num6; ++index)
                     {
                         float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / (double)num6) * num5) * (float)(0.300000011920929 + (1.0 - extraFade) * 0.699999988079071), depth: (-0.4f));
+                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.300000011920929 + (1.0 - extraFade) * 0.699999988079071), depth: (-0.4f));
                         pos.x -= num7;
                     }
                 }

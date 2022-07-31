@@ -41,7 +41,7 @@ namespace DuckGame
             }
         }
 
-        public int GetProfileScore() => (int)Math.Round((double)Maths.Clamp((float)((double)this.CalculateProfileScore() * 0.300000011920929 * 250.0), -50f, 200f));
+        public int GetProfileScore() => (int)Math.Round(Maths.Clamp((float)(this.CalculateProfileScore() * 0.300000011920929 * 250.0), -50f, 200f));
 
         public string GetCoolnessString() => this._hotnessStrings[(int)Math.Floor((Maths.Clamp(this.GetProfileScore(), -50, 200) + 50) / 250.0 * 8.98999977111816)];
 
@@ -125,7 +125,7 @@ namespace DuckGame
                 --this.unloyalFans;
                 return true;
             }
-            if (this.loyalFans > 0 && (double)Rando.Float(3f) < (double)awesomeness)
+            if (this.loyalFans > 0 && Rando.Float(3f) < awesomeness)
             {
                 this.MakeFanUnloyal();
                 if (loyal)
@@ -153,7 +153,7 @@ namespace DuckGame
                 --this.unloyalFans;
                 return true;
             }
-            if (this.loyalFans > 0 && (double)Rando.Float(3f) < (double)Math.Abs(awfulness))
+            if (this.loyalFans > 0 && Rando.Float(3f) < Math.Abs(awfulness))
             {
                 this.MakeFanUnloyal();
                 if (loyal)
@@ -218,7 +218,7 @@ namespace DuckGame
             float num5 = num1 + num4;
             if (num4 > 0f)
                 num3 += num4;
-            else if ((double)num4 < 0f)
+            else if (num4 < 0f)
                 num2 += num4;
             statContributionList.Add(new StatContribution()
             {
@@ -240,11 +240,11 @@ namespace DuckGame
             int num7 = this.timesKilled;
             if (num7 < 1)
                 num7 = 1;
-            float num8 = (float)Math.Log(1f + kills / (double)num7) * 0.4f;
+            float num8 = (float)Math.Log(1f + kills / num7) * 0.4f;
             float num9 = num6 + num8;
-            if ((double)num8 > 0f)
+            if (num8 > 0f)
                 num3 += num8;
-            else if ((double)num8 < 0f)
+            else if (num8 < 0f)
                 num2 += num8;
             statContributionList.Add(new StatContribution()
             {
@@ -255,7 +255,7 @@ namespace DuckGame
             float num11 = num9 + num10;
             if (num10 > 0f)
                 num3 += num10;
-            else if ((double)num10 < 0f)
+            else if (num10 < 0f)
                 num2 += num10;
             statContributionList.Add(new StatContribution()
             {
@@ -296,11 +296,11 @@ namespace DuckGame
                 amount = num16
             });
             if (this.bulletsFired > 0)
-                num16 = (float)(bulletsThatHit / (double)this.bulletsFired * 0.2f - 0.1f);
+                num16 = (float)(bulletsThatHit / this.bulletsFired * 0.2f - 0.1f);
             float num18 = num17 + num16;
-            if ((double)num16 > 0f)
+            if (num16 > 0f)
                 num3 += num16;
-            else if ((double)num16 < 0f)
+            else if (num16 < 0f)
                 num2 += num16;
             statContributionList.Add(new StatContribution()
             {
@@ -386,7 +386,7 @@ namespace DuckGame
                     float num32 = 0.5f;
                     float r;
                     float g;
-                    if ((double)num30 < 0f)
+                    if (num30 < 0f)
                     {
                         r = num31 + Math.Abs(num30) * 0.5f;
                         g = num32 - Math.Abs(num30) * 0.5f;

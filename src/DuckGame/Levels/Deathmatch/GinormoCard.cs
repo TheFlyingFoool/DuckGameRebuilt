@@ -122,7 +122,7 @@ namespace DuckGame
                 if (hat.texture.width > 16.0)
                     hat.frame = 1;
                 if (this._smallMode)
-                    DuckGame.Graphics.Draw(hat, hat.frame, (float)((double)x + hatPoint.x - 8.0), (float)((double)y + hatPoint.y - 8.0));
+                    DuckGame.Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8.0), (float)(y + hatPoint.y - 8.0));
                 else
                     DuckGame.Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
                 hat.color = Color.White;

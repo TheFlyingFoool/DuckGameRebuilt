@@ -65,7 +65,7 @@ namespace DuckGame
         public void Feed(FluidData dat)
         {
             float to = Maths.Clamp(dat.amount * 200f, 0.1f, 2f);
-            if ((double)to > _maxSpeedMul)
+            if (to > _maxSpeedMul)
                 this._maxSpeedMul = Lerp.Float(this._maxSpeedMul, to, 0.1f);
             this._lastFluid = new Fluid(this.x, this.y, (this._sprayAngle * ((2f + (float)Math.Sin(_fluctuate) * 0.5f) * this._speedMul) + new Vec2(this.hSpeed * 0f, this.vSpeed * 0f)) * this.streamSpeedMultiplier, dat, this._lastFluid);
             Level.Add(_lastFluid);

@@ -36,7 +36,7 @@ namespace DuckGame
                 this.y += this._vel;
                 this._alph -= 0.1f;
                 this.alpha = Math.Min(this._alph, 1f);
-                if ((double)this.alpha <= 0.0)
+                if (this.alpha <= 0.0)
                     Level.Remove(this);
             }
             base.Update();

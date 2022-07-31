@@ -93,7 +93,7 @@ namespace DuckGame
                 this.layer.scissor = this.scissor;
             if (position.y > 0.0)
                 this.position.y = 0f;
-            if (this.restrictBottom && position.y + (double)this._sprite.texture.height < (double)Layer.Parallax.camera.bottom)
+            if (this.restrictBottom && position.y + this._sprite.texture.height < Layer.Parallax.camera.bottom)
                 this.position.y = Layer.Parallax.camera.bottom - _sprite.texture.height;
             for (int index = 0; index < this._hRepeat; ++index)
             {

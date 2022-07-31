@@ -127,15 +127,15 @@ namespace DuckGame
                 case 51:
                 case 53:
                 case 58:
-                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
-                    this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
+                    this.collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
+                    this.collisionOffset = new Vec2((-this.verticalWidth / 2f), -8f);
                     break;
                 case 37:
                 case 43:
                 case 45:
                 case 52:
                 case 60:
-                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
                     this.collisionOffset = new Vec2(-8f, -8f);
                     break;
                 case 40:
@@ -143,7 +143,7 @@ namespace DuckGame
                 case 49:
                 case 50:
                     this.collisionSize = new Vec2(this.verticalWidth, 16f);
-                    this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
+                    this.collisionOffset = new Vec2((-this.verticalWidth / 2f), -8f);
                     break;
                 default:
                     this.collisionSize = new Vec2(16f, 16f);

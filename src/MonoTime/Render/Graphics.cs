@@ -361,7 +361,7 @@ namespace DuckGame
         {
             DuckGame.Graphics._biosFont.scale = new Vec2(scale);
             text = text.ToUpperInvariant();
-            double width = (double)DuckGame.Graphics._biosFont.GetWidth(text, thinButtons);
+            double width = DuckGame.Graphics._biosFont.GetWidth(text, thinButtons);
             DuckGame.Graphics._biosFont.scale = new Vec2(1f);
             return (float)width;
         }
@@ -384,7 +384,7 @@ namespace DuckGame
         {
             DuckGame.Graphics._fancyBiosFont.scale = new Vec2(scale);
             text = text.ToUpperInvariant();
-            double width = (double)DuckGame.Graphics._fancyBiosFont.GetWidth(text, thinButtons);
+            double width = DuckGame.Graphics._fancyBiosFont.GetWidth(text, thinButtons);
             DuckGame.Graphics._fancyBiosFont.scale = new Vec2(1f);
             return (float)width;
         }
@@ -401,13 +401,13 @@ namespace DuckGame
             frame.bottomRight = Vec2.Lerp(item.bottomRight, lerpTo.bottomRight, dist);
             float num1 = item.rotation % 360f;
             float num2 = lerpTo.rotation % 360f;
-            if ((double)num1 > 180.0)
+            if (num1 > 180.0)
                 num1 -= 360f;
-            else if ((double)num1 < -180.0)
+            else if (num1 < -180.0)
                 num1 += 360f;
-            if ((double)num2 > 180.0)
+            if (num2 > 180.0)
                 num2 -= 360f;
-            else if ((double)num2 < -180.0)
+            else if (num2 < -180.0)
                 num2 += 360f;
             frame.rotation = MathHelper.Lerp(num1, num2, dist);
             frame.color = Color.Lerp(item.color, lerpTo.color, dist);
@@ -470,8 +470,8 @@ namespace DuckGame
             }
             if (DuckGame.Graphics.doSnap)
             {
-                position.x = (float)Math.Round(position.x * (double)DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
-                position.y = (float)Math.Round(position.y * (double)DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
+                position.x = (float)Math.Round(position.x * DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
+                position.y = (float)Math.Round(position.y * DuckGame.Graphics.snap) / DuckGame.Graphics.snap;
             }
             if (effects == SpriteEffects.FlipHorizontally)
                 origin.x = (sourceRectangle.HasValue ? sourceRectangle.Value.width : texture.w) - origin.x;
@@ -581,7 +581,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             p1 = new Vec2(p1.x, p1.y);
             p2 = new Vec2(p2.x, p2.y);
-            float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
+            float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
             float length = (p1 - p2).length;
             DuckGame.Graphics.Draw(DuckGame.Graphics._blank, p1, new Rectangle?(), col, rotation, new Vec2(0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
         }
@@ -598,13 +598,13 @@ namespace DuckGame
             Vec2 vec2_1 = p1;
             Vec2 vec2_2 = p2 - p1;
             float length = vec2_2.length;
-            int num = (int)((double)length / (double)dotLength);
+            int num = (int)(length / dotLength);
             vec2_2.Normalize();
             bool flag = false;
             for (int index = 0; index < num; ++index)
             {
                 Vec2 vec2_3 = vec2_1 + vec2_2 * dotLength;
-                if ((double)(vec2_3 - p1).length > (double)length)
+                if ((vec2_3 - p1).length > length)
                     vec2_3 = p2;
                 if (!flag)
                     DuckGame.Graphics.DrawLine(new Vec2(vec2_1.x, vec2_1.y), new Vec2(vec2_3.x, vec2_3.y), col, width, depth);
@@ -625,7 +625,7 @@ namespace DuckGame
             for (int index = 0; index < iterations; ++index)
             {
                 float rad = Maths.DegToRad(360f / (iterations - 1) * index);
-                Vec2 vec2_2 = new Vec2((float)Math.Cos((double)rad) * radius, (float)-Math.Sin((double)rad) * radius);
+                Vec2 vec2_2 = new Vec2((float)Math.Cos(rad) * radius, (float)-Math.Sin(rad) * radius);
                 if (index > 0)
                     DuckGame.Graphics.DrawLine(pos + vec2_2, pos + vec2_1, col, width, depth);
                 vec2_1 = vec2_2;
@@ -645,7 +645,7 @@ namespace DuckGame
             {
                 p1 = new Vec2(p1.x, p1.y);
                 p2 = new Vec2(p2.x, p2.y);
-                float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
+                float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
                 float x = (p1 - p2).length / texture.width;
                 DuckGame.Graphics.Draw(texture, p1, new Rectangle?(), col, rotation, new Vec2(0f, texture.height / 2), new Vec2(x, width), SpriteEffects.None, depth);
             }
@@ -653,7 +653,7 @@ namespace DuckGame
             {
                 p1 = new Vec2(p1.x, p1.y);
                 p2 = new Vec2(p2.x, p2.y);
-                float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
+                float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
                 float length = (p1 - p2).length;
                 DuckGame.Graphics.Draw(texture, p1, new Rectangle?(), col, rotation, new Vec2(0f, texture.height / 2), new Vec2(length, width), SpriteEffects.None, depth);
             }
@@ -670,7 +670,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             if (filled)
             {
-                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, p1, new Rectangle?(), col, 0f, Vec2.Zero, new Vec2((float)-(p1.x - (double)p2.x), (float)-(p1.y - (double)p2.y)), SpriteEffects.None, depth);
+                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, p1, new Rectangle?(), col, 0f, Vec2.Zero, new Vec2((float)-(p1.x - p2.x), (float)-(p1.y - p2.y)), SpriteEffects.None, depth);
             }
             else
             {
@@ -694,7 +694,7 @@ namespace DuckGame
             Vec2 vec2 = new Vec2(r.Right, r.Bottom);
             if (filled)
             {
-                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, position, new Rectangle?(), col, 0f, Vec2.Zero, new Vec2((float)-(position.x - (double)vec2.x), (float)-(position.y - (double)vec2.y)), SpriteEffects.None, depth);
+                DuckGame.Graphics.Draw(DuckGame.Graphics._blank2, position, new Rectangle?(), col, 0f, Vec2.Zero, new Vec2((float)-(position.x - vec2.x), (float)-(position.y - vec2.y)), SpriteEffects.None, depth);
             }
             else
             {
@@ -847,7 +847,7 @@ namespace DuckGame
         {
             get
             {
-                if ((double)Resolution.current.aspect > 1.8f)
+                if (Resolution.current.aspect > 1.8f)
                     return true;
                 return !(Level.current is XMLLevel) && !(Level.current is Editor);
             }
@@ -1101,21 +1101,21 @@ namespace DuckGame
 
         public static Rectangle ClipRectangle(Rectangle r, Rectangle clipTo)
         {
-            if (r.x > (double)clipTo.Right)
+            if (r.x > clipTo.Right)
                 r.x = clipTo.Right - r.width;
-            if (r.y > (double)clipTo.Bottom)
+            if (r.y > clipTo.Bottom)
                 r.y = clipTo.Bottom - r.height;
-            if (r.x < (double)clipTo.Left)
+            if (r.x < clipTo.Left)
                 r.x = clipTo.Left;
-            if (r.y < (double)clipTo.Top)
+            if (r.y < clipTo.Top)
                 r.y = clipTo.Top;
             if (r.x < 0f)
                 r.x = 0f;
             if (r.y < 0f)
                 r.y = 0f;
-            if (r.x + (double)r.width > clipTo.x + (double)clipTo.width)
+            if (r.x + r.width > clipTo.x + clipTo.width)
                 r.width = clipTo.Right - r.x;
-            if (r.y + (double)r.height > clipTo.y + (double)clipTo.height)
+            if (r.y + r.height > clipTo.y + clipTo.height)
                 r.height = clipTo.Bottom - r.y;
             if (r.width < 0f)
                 r.width = 0f;

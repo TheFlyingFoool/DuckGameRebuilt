@@ -1267,7 +1267,7 @@ namespace DuckGame
                             a = _defaultCopy.value;
                         if (this.randomizerX != Vec2.Zero)
                             a = Rando.Float(_value * this.randomizerX.x, _value * this.randomizerX.y);
-                        return (int)Math.Round((double)a);
+                        return (int)Math.Round(a);
                     }
                     set => this._value = value;
                 }
@@ -1296,11 +1296,11 @@ namespace DuckGame
                         if (this._value == Vec2.MaxValue && this._defaultCopy != null)
                             vec2 = this._defaultCopy.value;
                         if (this.randomizerX != Vec2.Zero)
-                            vec2.x = (float)Math.Round((double)Rando.Float(this._value.x * this.randomizerX.x, this._value.x * this.randomizerX.y));
+                            vec2.x = (float)Math.Round(Rando.Float(this._value.x * this.randomizerX.x, this._value.x * this.randomizerX.y));
                         if (this.randomizerY == Vec2.MaxValue)
                             vec2.y = vec2.x;
                         else if (this.randomizerY != Vec2.Zero)
-                            vec2.y = (float)Math.Round((double)Rando.Float(this._value.y * this.randomizerY.x, this._value.y * this.randomizerY.y));
+                            vec2.y = (float)Math.Round(Rando.Float(this._value.y * this.randomizerY.x, this._value.y * this.randomizerY.y));
                         return vec2;
                     }
                     set => this._value = value;

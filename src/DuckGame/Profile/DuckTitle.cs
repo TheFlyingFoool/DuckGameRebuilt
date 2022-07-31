@@ -114,7 +114,7 @@ namespace DuckGame
                 if ((string)keyValuePair.Key.GetValue(p.stats, null) == keyValuePair.Value)
                     ++num6;
             }
-            return (float)(((double)num2 + num4 + num6) / ((double)num1 + num3 + num5));
+            return (float)((num2 + num4 + num6) / (num1 + num3 + num5));
         }
 
         public void UpdateTitles()

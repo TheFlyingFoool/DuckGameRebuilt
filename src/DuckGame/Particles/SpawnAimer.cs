@@ -63,7 +63,7 @@ namespace DuckGame
             this.distOut = Lerp.FloatSmooth(this.distOut, 16f, 0.08f, 1.2f);
             this.distLen = Lerp.FloatSmooth(this.distLen, 10f, 0.08f, 1.2f);
             this.rot = Lerp.FloatSmooth(this.rot, 45f, 0.08f, 1.1f);
-            if ((double)Math.Abs(this.rot - 45f) < 20.0)
+            if (Math.Abs(this.rot - 45f) < 20.0)
             {
                 this.streamAlpha -= 0.03f;
                 if (streamAlpha < 0.0)
@@ -73,7 +73,7 @@ namespace DuckGame
             Vec2 targetPos = this.targetPos;
             this.aimerScale = this.layer.camera.width / Layer.HUD.width;
             this.position = Lerp.Vec2Smooth(this.position, targetPos, 0.2f);
-            if ((double)(this.position - targetPos).length > 16.0)
+            if ((this.position - targetPos).length > 16.0)
                 this.prevPos.Add(this.position);
             this.sizeWaver += 0.2f;
         }
@@ -88,9 +88,9 @@ namespace DuckGame
             for (int index = 0; index < 4; ++index)
             {
                 float deg = this.rot + index * 90f;
-                Vec2 vec2 = new Vec2((float)Math.Cos((double)Maths.DegToRad(deg)), (float)-Math.Sin((double)Maths.DegToRad(deg)));
+                Vec2 vec2 = new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)-Math.Sin(Maths.DegToRad(deg)));
                 Graphics.DrawLine(this.position + vec2 * distOut, this.position + vec2 * (distOut + this.distLen * this.aimerScale), this._color * this.alpha, this._thickness * this.aimerScale, (Depth)0.9f);
-                Graphics.DrawLine(this.position + vec2 * (distOut - 1f * this.aimerScale), this.position + vec2 * (float)((double)distOut + 1.0 * aimerScale + distLen * (double)this.aimerScale), Color.Black, (this._thickness + 2f) * this.aimerScale, (Depth)0.8f);
+                Graphics.DrawLine(this.position + vec2 * (distOut - 1f * this.aimerScale), this.position + vec2 * (float)(distOut + 1.0 * aimerScale + distLen * this.aimerScale), Color.Black, (this._thickness + 2f) * this.aimerScale, (Depth)0.8f);
             }
             if (streamAlpha <= 0.00999999977648258)
                 return;

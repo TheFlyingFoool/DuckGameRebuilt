@@ -76,7 +76,7 @@ namespace DuckGame
                     if (this._flash)
                     {
                         Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 1f, 0.2f);
-                        if ((double)Graphics.flashAdd > 0.990000009536743)
+                        if (Graphics.flashAdd > 0.990000009536743)
                         {
                             this._wrapped = !this._wrapped;
                             if (!this._wrapped)
@@ -121,17 +121,17 @@ namespace DuckGame
                 string text1 = "@LWING@MEMENTO@RWING@";
                 if (this._furni.name == "VOODOO VINCENT")
                     text1 = "@LWING@XP SKIP@RWING@";
-                Vec2 vec2_1 = new Vec2((float)-((double)this._font.GetWidth(text1) / 2.0), -42f);
+                Vec2 vec2_1 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -42f);
                 this._font.DrawOutline(text1, this.position + vec2_1, Color.White, Color.Black, this.depth + 2);
                 string text2 = "} " + this._furni.name + " }";
                 if (this._furni.name.Length >= 15)
                     text2 = this._furni.name;
                 this._fancyFont.scale = new Vec2(1f, 1f);
-                Vec2 vec2_2 = new Vec2((float)-((double)this._fancyFont.GetWidth(text2) / 2.0), -25f);
+                Vec2 vec2_2 = new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0), -25f);
                 this._fancyFont.DrawOutline(text2, this.position + vec2_2, Colors.DGYellow, Color.Black, this.depth + 2);
                 this._fancyFont.scale = new Vec2(0.5f, 0.5f);
                 string description = this._furni.description;
-                Vec2 vec2_3 = new Vec2((float)-((double)this._fancyFont.GetWidth(description) / 2.0), 38f);
+                Vec2 vec2_3 = new Vec2((float)-(this._fancyFont.GetWidth(description) / 2.0), 38f);
                 this._fancyFont.DrawOutline(description, this.position + vec2_3, Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
                 this._furni.Draw(this.position + new Vec2(0f, 10f), this.depth + 4, this._furni.name == "PHOTO" ? 1 : (this._furni.name == "EASEL" ? 6 : 0));
             }

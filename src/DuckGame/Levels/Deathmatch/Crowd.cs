@@ -259,9 +259,9 @@ namespace DuckGame
                 {
                     ++num4;
                     float profileScore = profile.endOfRoundStats.CalculateProfileScore();
-                    if ((double)profileScore < (double)num2)
+                    if (profileScore < num2)
                         num2 = profileScore;
-                    else if ((double)profileScore > (double)num3)
+                    else if (profileScore > num3)
                         num3 = profileScore;
                     num1 += profileScore;
                     floatList.Add(profileScore);
@@ -278,9 +278,9 @@ namespace DuckGame
                         for (int index = 0; index < floatList.Count; ++index)
                         {
                             float awesomeness = floatList[index] - num5;
-                            if ((double)awesomeness > 0.5)
+                            if (awesomeness > 0.5)
                                 awesomeness = 0.5f;
-                            if ((double)awesomeness < -0.5)
+                            if (awesomeness < -0.5)
                                 awesomeness = -0.5f;
                             crowdDuck.TryChangingAllegiance(profileList[index], awesomeness);
                         }
@@ -301,7 +301,7 @@ namespace DuckGame
 
         public static FanNum GetFan()
         {
-            if (Crowd.extraFans > 0 && (double)Rando.Float(1f) > 0.5)
+            if (Crowd.extraFans > 0 && Rando.Float(1f) > 0.5)
             {
                 --Crowd.extraFans;
                 return null;
@@ -372,7 +372,7 @@ namespace DuckGame
                 else if (Rando.Int(1000000) == 1)
                     str = "www.wonthelp.info";
                 Profile p = null;
-                if ((double)Rando.Float(1f) > 0.5)
+                if (Rando.Float(1f) > 0.5)
                 {
                     List<Team> winning = Teams.winning;
                     if (winning.Count > 0)
@@ -384,7 +384,7 @@ namespace DuckGame
                     }
                 }
                 List<CrowdDuck> availableRow = Crowd.GetAvailableRow(str.Length, p, rowOnly);
-                if ((double)Rando.Float(1f) > 0.959999978542328 && availableRow != null)
+                if (Rando.Float(1f) > 0.959999978542328 && availableRow != null)
                 {
                     int num = 0;
                     foreach (CrowdDuck crowdDuck in availableRow)

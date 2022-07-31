@@ -25,7 +25,7 @@ namespace DuckGame
             this._tileset = "pineTileset";
             this.depth = -0.55f;
             this._snowFall = new SpriteMap("snowFall", 8, 24);
-            this._snowFall.AddAnimation("fall", (float)(0.200000002980232 + (double)Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
+            this._snowFall.AddAnimation("fall", (float)(0.200000002980232 + Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
             this._snowFall.AddAnimation("idle", 0.4f, false, new int[1]);
             this._snowFall.SetAnimation("idle");
             this._snowFall.center = new Vec2(4f, 0f);
@@ -67,7 +67,7 @@ namespace DuckGame
                 if (snowWait <= 0.0)
                 {
                     this.snowWait = Rando.Float(2f, 3f);
-                    if ((double)Rando.Float(1f) > 0.920000016689301)
+                    if (Rando.Float(1f) > 0.920000016689301)
                         Level.Add(new SnowFallParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }
@@ -81,7 +81,7 @@ namespace DuckGame
                 this._snowFall.depth = -0.1f;
                 this._snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.400000005960464 + 0.200000002980232));
                 this._snowFall.alpha = (float)(1.0 - _snowFall.frame / 5.0 * 1.0);
-                Graphics.Draw(_snowFall, this.x, (float)((double)this.y - 7.0 + _snowFall.frame / 5.0 * 3.0));
+                Graphics.Draw(_snowFall, this.x, (float)(this.y - 7.0 + _snowFall.frame / 5.0 * 3.0));
             }
             if (this._snowFall.currentAnimation != "idle" && (this.edge || this._snowFall.frame == 1 && !this.didChange))
             {

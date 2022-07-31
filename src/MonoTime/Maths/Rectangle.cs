@@ -71,13 +71,13 @@ namespace DuckGame
 
         public Rectangle(Vec2 tl, Vec2 br)
         {
-            if (tl.x > (double)br.x)
+            if (tl.x > br.x)
             {
                 float x = br.x;
                 br.x = tl.x;
                 tl.x = x;
             }
-            if (tl.y > (double)br.y)
+            if (tl.y > br.y)
             {
                 float y = br.y;
                 br.y = tl.y;
@@ -93,7 +93,7 @@ namespace DuckGame
 
         public static implicit operator Rectangle(Microsoft.Xna.Framework.Rectangle r) => new Rectangle(r.X, r.Y, r.Width, r.Height);
 
-        public bool Contains(Vec2 position) => position.x >= (double)this.x && position.y >= (double)this.y && position.x <= x + (double)this.width && position.y <= y + (double)this.height;
+        public bool Contains(Vec2 position) => position.x >= this.x && position.y >= this.y && position.x <= x + this.width && position.y <= y + this.height;
 
         public Rectangle GetQuadrant(int pQuadrantStartingWithTLClockwise)
         {

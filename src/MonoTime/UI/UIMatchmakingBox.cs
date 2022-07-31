@@ -113,7 +113,7 @@ namespace DuckGame
             DevConsole.Log("|PURPLE|LOBBY    |DGYELLOW|CHANGE STATE " + s.ToString(), Color.White);
             if (s == MatchmakingState.Waiting)
                 return;
-            if ((double)wait == 0.0)
+            if (wait == 0.0)
             {
                 this.OnStateChange(s);
             }
@@ -590,7 +590,7 @@ namespace DuckGame
                 if (_newStatusWait <= 0.0)
                 {
                     this._newStatusWait = 1f;
-                    while ((double)this._fancyFont.GetWidth(this._newStatusList[0]) > 100.0)
+                    while (this._fancyFont.GetWidth(this._newStatusList[0]) > 100.0)
                         this._newStatusList[0] = this._newStatusList[0].Substring(0, this._newStatusList[0].Length - 1);
                     this._statusList.Add(this._newStatusList[0]);
                     if (this._statusList.Count > 7)
@@ -622,7 +622,7 @@ namespace DuckGame
                     float num1 = this.x - 28f;
                     float x = num1 + index * 9 + (float)Math.Round(_scroll);
                     float num2 = num1 + 63f;
-                    double num3 = ((double)x - (double)num1) / ((double)num2 - (double)num1);
+                    double num3 = (x - num1) / (num2 - num1);
                     this._matchmakingSignal.depth = this.depth + 4;
                     if (num3 > -0.100000001490116)
                         this._matchmakingSignal.frame = 0;
@@ -649,7 +649,7 @@ namespace DuckGame
             Graphics.Draw(_signalCrossLocal, this.x - 35f, this.y - 19f);
             this._signalCrossNetwork.depth = this.depth + 2;
             Graphics.Draw(_signalCrossNetwork, this.x + 45f, this.y - 23f);
-            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-((double)this._font.GetWidth(this._caption) / 2.0), -42f), Color.White, Color.Black, this.depth + 2);
+            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-(this._font.GetWidth(this._caption) / 2.0), -42f), Color.White, Color.Black, this.depth + 2);
             this._fancyFont.scale = new Vec2(0.5f);
             int num4 = 0;
             int num5 = 0;

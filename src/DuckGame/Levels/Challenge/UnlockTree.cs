@@ -48,7 +48,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)this.alpha < 0.00999999977648258)
+            if (this.alpha < 0.00999999977648258)
                 return;
             Duck duck = Level.First<Duck>();
             InputProfile inputProfile = InputProfile.DefaultPlayer1;
@@ -180,7 +180,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.alpha < 0.00999999977648258)
+            if (this.alpha < 0.00999999977648258)
                 return;
             int num1;
             if (this._desiredLayer < this._topLayer)
@@ -215,7 +215,7 @@ namespace DuckGame
                     color1 = new Color(40, 40, 40);
                     num5 = unlockData1 == this._selected ? 0.8f : 0.2f;
                 }
-                color1 = new Color((byte)(color1.r * (double)num5), (byte)(color1.g * (double)num5), (byte)(color1.b * (double)num5));
+                color1 = new Color((byte)(color1.r * num5), (byte)(color1.g * num5), (byte)(color1.b * num5));
                 float num6 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index1 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index1 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
                 Vec2 p1 = new Vec2(vec2_1.x + num6, vec2_1.y + num4 * 60);
                 this._box.depth = (Depth)0.1f;
@@ -260,7 +260,7 @@ namespace DuckGame
                                 color2 = Color.DarkRed;
                             if (!unlockData2.AllParentsUnlocked(Profiles.active[0]))
                                 color2 = new Color(90, 90, 90);
-                            color2 = new Color((byte)(color2.r * (double)num7), (byte)(color2.g * (double)num7), (byte)(color2.b * (double)num7));
+                            color2 = new Color((byte)(color2.r * num7), (byte)(color2.g * num7), (byte)(color2.b * num7));
                             float num8 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index2 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index2 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
                             p1 = new Vec2(vec2_1.x + num8, vec2_1.y + num4 * 60);
                             Graphics.DrawLine(p1, p1 + new Vec2(0f, 30f), color2 * this.alpha, 6f, -0.2f);
@@ -273,7 +273,7 @@ namespace DuckGame
                             }
                             else
                                 color3 = Color.Green;
-                            color3 = new Color((byte)(color3.r * (double)num7), (byte)(color3.g * (double)num7), (byte)(color3.b * (double)num7));
+                            color3 = new Color((byte)(color3.r * num7), (byte)(color3.g * num7), (byte)(color3.b * num7));
                             for (int index3 = 0; index3 < collection.Count; ++index3)
                             {
                                 UnlockData unlockData3 = collection[index3];
@@ -282,14 +282,14 @@ namespace DuckGame
                                     float num9 = collection.Count != 1 ? (collection.Count != 2 ? index3 * (vec2_2.x / (collection.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index3 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
                                     Vec2 vec2_3 = new Vec2(vec2_1.x + num9, vec2_1.y + (num4 + 1) * 60);
                                     float num10 = 0f;
-                                    if (vec2_3.x < (double)p1.x)
+                                    if (vec2_3.x < p1.x)
                                         num10 = -3f;
-                                    else if (vec2_3.x > (double)p1.x)
+                                    else if (vec2_3.x > p1.x)
                                         num10 = 3f;
                                     float num11 = 0f;
-                                    if (vec2_3.x < (double)p1.x)
+                                    if (vec2_3.x < p1.x)
                                         num11 = 3f;
-                                    else if (vec2_3.x > (double)p1.x)
+                                    else if (vec2_3.x > p1.x)
                                         num11 = -3f;
                                     Graphics.DrawLine(new Vec2(vec2_3.x + num10, p1.y + 30f), new Vec2(p1.x + num11, p1.y + 30f), color3 * this.alpha, 6f, (Depth)(float)((this._selected == unlockData2 ? 0.100000001490116 : 0.0) - 0.200000002980232));
                                     Graphics.DrawLine(new Vec2(vec2_3.x, p1.y + 30f), new Vec2(vec2_3.x, vec2_3.y), color3 * this.alpha, 6f, (Depth)(float)((this._selected == unlockData2 ? 0.100000001490116 : 0.0) - 0.200000002980232));

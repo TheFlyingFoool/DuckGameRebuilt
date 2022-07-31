@@ -72,18 +72,18 @@ namespace DuckGame
         public static Vec2 Calculate(Vec2 start, Vec2 end, float lerp, float arcSizeMult = 1f)
         {
             Vec2 vec2_1 = (start + end) / 2f;
-            if (end.x == (double)start.x)
+            if (end.x == start.x)
             {
-                vec2_1.x = end.y <= (double)start.y ? start.x + 6f * arcSizeMult : start.x - 6f * arcSizeMult;
+                vec2_1.x = end.y <= start.y ? start.x + 6f * arcSizeMult : start.x - 6f * arcSizeMult;
                 arcSizeMult *= 0.2f;
             }
-            vec2_1.y = end.y <= (double)start.y ? end.y - 16f * arcSizeMult : start.y - 22f * arcSizeMult;
+            vec2_1.y = end.y <= start.y ? end.y - 16f * arcSizeMult : start.y - 22f * arcSizeMult;
             List<Vec2> vec2List = Curve.Bezier(8, start, vec2_1, end);
             float num1 = 0f;
             for (int index = 1; index < vec2List.Count; ++index)
                 num1 += (vec2List[index] - vec2List[index - 1]).length;
-            double num2 = (double)num1 / vec2List.Count;
-            int index1 = (int)Math.Floor((double)lerp * vec2List.Count) + 1;
+            double num2 = num1 / vec2List.Count;
+            int index1 = (int)Math.Floor(lerp * vec2List.Count) + 1;
             if (index1 >= vec2List.Count)
                 return end;
             Vec2 vec2_2 = vec2List[index1 - 1];

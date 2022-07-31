@@ -19,7 +19,7 @@ namespace DuckGame
         public bool canBeDrag = true;
         public Vec2 originalPosition;
 
-        public bool drag => this.canBeDrag && this.data != null && (double)(this.data.touchXY - this.originalPosition).length > 25.0;
+        public bool drag => this.canBeDrag && this.data != null && (this.data.touchXY - this.originalPosition).length > 25.0;
 
         public Vec2 positionCamera => this.data == null ? Vec2.Zero : this.Transform(Level.current.camera);
 
@@ -40,8 +40,8 @@ namespace DuckGame
             Vec2 vec2_2 = this.Transform(pCamera);
             if (vec2_2 != new Vec2(-1f, -1f))
             {
-                vec2_2.x = (float)Math.Round(vec2_2.x / (double)pCellSize) * pCellSize;
-                vec2_2.y = (float)Math.Round(vec2_2.y / (double)pCellSize) * pCellSize;
+                vec2_2.x = (float)Math.Round(vec2_2.x / pCellSize) * pCellSize;
+                vec2_2.y = (float)Math.Round(vec2_2.y / pCellSize) * pCellSize;
             }
             return vec2_2;
         }

@@ -169,7 +169,7 @@ namespace DuckGame
                     }
                 }
             }
-            if ((double)(float)this.respect != 0.0 && (double)Challenges.GetChallengeSkillIndex() < (double)(float)this.respect)
+            if ((float)this.respect != 0f && Challenges.GetChallengeSkillIndex() < (float)this.respect)
                 return false;
             return (int)this.requirement <= 0 || Challenges.GetNumTrophies(Profiles.active[0]) >= (int)this.requirement;
         }
@@ -271,7 +271,7 @@ namespace DuckGame
                 Duck duck = Level.Nearest<Duck>(this.x, this.y);
                 if (duck != null)
                 {
-                    if (duck.grounded && (double)(duck.position - this.position).length < 20.0)
+                    if (duck.grounded && (duck.position - this.position).length < 20f)
                     {
                         this._hoverFade = Lerp.Float(this._hoverFade, 1f, 0.1f);
                         this.hover = true;
@@ -305,17 +305,17 @@ namespace DuckGame
                     if (levelData != null && levelData.previewData.preview != null)
                     {
                         Tex2D texture = (Tex2D)Editor.StringToTexture(levelData.previewData.preview);
-                        Vec2 vec2 = new Vec2(this.x - 28f, (float)((double)this.y + 30.0 - texture.width / 8.0 - 6.0));
+                        Vec2 vec2 = new Vec2(this.x - 28f, (this.y + 30f - texture.width / 8f - 6f));
                         switch (index)
                         {
                             case 1:
-                                vec2 = new Vec2((float)((double)this.x + 28.0 - texture.width / 8.0), (float)((double)this.y + 30.0 - texture.width / 8.0 - 6.0));
+                                vec2 = new Vec2((float)(this.x + 28f - texture.width / 8f), (this.y + 30f - texture.width / 8f - 6f));
                                 break;
                             case 2:
-                                vec2 = new Vec2(this.x - (float)(texture.width / 8.0 / 2.0), (float)((double)this.y + 30.0 - texture.width / 8.0));
+                                vec2 = new Vec2(this.x - (float)(texture.width / 8f / 2f), (this.y + 30f - texture.width / 8f));
                                 break;
                         }
-                        DuckGame.Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((float)(vec2.x + texture.width / 8.0 + 0.5), (float)(vec2.y + texture.height / 8.0 + 0.5)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
+                        DuckGame.Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((vec2.x + texture.width / 8f + 0.5f), (vec2.y + texture.height / 8f + 0.5f)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
                         DuckGame.Graphics.Draw(texture, vec2.x, vec2.y, 0.125f, 0.125f, (Depth)(index == 2 ? 0.99f : 0.85f));
                     }
                 }

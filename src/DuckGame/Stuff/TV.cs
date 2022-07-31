@@ -136,7 +136,7 @@ namespace DuckGame
                 duck = this._owner.owner as Duck;
             if (duck != null)
             {
-                if ((double)duck.vSpeed < -1.0 && prevVSpeed > 0.0 && !duck.tvJumped)
+                if (duck.vSpeed < -1.0 && prevVSpeed > 0.0 && !duck.tvJumped)
                     this.fakeGrounded = true;
                 this.jumpReady = this.jumpReady || duck.grounded || this.fakeGrounded || duck._vine != null;
                 this.prevVSpeed = duck.vSpeed;

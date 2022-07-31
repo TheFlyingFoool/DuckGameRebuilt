@@ -38,8 +38,8 @@ namespace DuckGame
 
         public static Depth operator -(Depth c1, int c2) => c1.Add(-c2);
 
-        public static bool operator <(Depth c1, float c2) => c1.value < (double)c2;
+        public static bool operator <(Depth c1, float c2) => c1.value < c2;
 
-        public static bool operator >(Depth c1, float c2) => c1.value > (double)c2;
+        public static bool operator >(Depth c1, float c2) => c1.value > c2;
     }
 }

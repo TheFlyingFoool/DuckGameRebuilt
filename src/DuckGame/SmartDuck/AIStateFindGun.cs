@@ -40,7 +40,7 @@
 //            }
 //            else if (this._target is ItemBox)
 //            {
-//                if ((double)Math.Abs(this._target.x - duck.x) < 8.0)
+//                if (Math.Abs(this._target.x - duck.x) < 8f)
 //                {
 //                    ai.locomotion.Jump(15);
 //                    return new AIStateWait(Rando.Float(0.8f, 1f));
@@ -48,7 +48,7 @@
 //            }
 //            else if (this._target.owner != null && this._target.owner != duck)
 //                this._target = null;
-//            else if ((double)(this._target.position - duck.position).length < 18.0)
+//            else if ((this._target.position - duck.position).length < 18f)
 //            {
 //                ai.Press("GRAB");
 //            }

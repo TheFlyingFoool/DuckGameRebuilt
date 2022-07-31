@@ -85,10 +85,10 @@ namespace DuckGame
             this._stats.Add(new LockerStat("CONVERSIONS: " + Change.ToString(profile.stats.conversions), Color.Orange));
             this._stats.Add(new LockerStat("", Color.Red));
             this._stats.Add(new LockerStat("TIME SPENT", Color.White));
-            this._stats.Add(new LockerStat("IN NET: " + TimeSpan.FromSeconds((double)profile.stats.timeInNet).ToString("hh\\:mm\\:ss"), Color.Orange));
-            this._stats.Add(new LockerStat("ON FIRE: " + TimeSpan.FromSeconds((double)profile.stats.timeOnFire).ToString("hh\\:mm\\:ss"), Color.Orange));
+            this._stats.Add(new LockerStat("IN NET: " + TimeSpan.FromSeconds(profile.stats.timeInNet).ToString("hh\\:mm\\:ss"), Color.Orange));
+            this._stats.Add(new LockerStat("ON FIRE: " + TimeSpan.FromSeconds(profile.stats.timeOnFire).ToString("hh\\:mm\\:ss"), Color.Orange));
             this._stats.Add(new LockerStat("BRAINWASHED: " + TimeSpan.FromSeconds(profile.stats.timesMindControlled).ToString("hh\\:mm\\:ss"), Color.Orange));
-            this._stats.Add(new LockerStat("MOUTH OPEN: " + TimeSpan.FromSeconds((double)profile.stats.timeWithMouthOpen).ToString("hh\\:mm\\:ss"), Color.Orange));
+            this._stats.Add(new LockerStat("MOUTH OPEN: " + TimeSpan.FromSeconds(profile.stats.timeWithMouthOpen).ToString("hh\\:mm\\:ss"), Color.Orange));
             base.Initialize();
         }
 

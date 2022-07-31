@@ -30,7 +30,7 @@ namespace DuckGame
             foreach (string option in this._options)
             {
                 float width = this._font.GetWidth(option);
-                if ((double)width > (double)num)
+                if (width > num)
                     num = width;
             }
             this._menuWidth = num + 80f;
@@ -43,7 +43,7 @@ namespace DuckGame
             foreach (string option in this._options)
             {
                 float width = this._font.GetWidth(option);
-                this._font.Draw(option, (float)(Graphics.width / 2.0 - (double)width / 2.0), this.y + 30f + num * 60, Color.White);
+                this._font.Draw(option, (float)(Graphics.width / 2.0 - width / 2.0), this.y + 30f + num * 60, Color.White);
                 ++num;
             }
         }

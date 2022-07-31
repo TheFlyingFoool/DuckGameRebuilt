@@ -70,7 +70,7 @@ namespace DuckGame
             if (_hitPoints <= 0.0)
                 return false;
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - (hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < _fluidLevel)
+            if (1.0 - (hitPos.y - this.top) / (this.bottom - this.top) < _fluidLevel)
             {
                 this.thickness = 2f;
                 this.MakeHole(hitPos, bullet.travelDirNormalized);
@@ -87,7 +87,7 @@ namespace DuckGame
             bool flag = false;
             foreach (FluidStream hole in this._holes)
             {
-                if ((double)(hole.offset - off).length < 2.0)
+                if ((hole.offset - off).length < 2.0)
                 {
                     hole.offset = off;
                     hole.holeThickness += 0.5f;
@@ -107,7 +107,7 @@ namespace DuckGame
             bool flag = false;
             foreach (FluidStream hole in this._holes)
             {
-                if ((double)(hole.offset - off).length < 2.0)
+                if ((hole.offset - off).length < 2.0)
                 {
                     hole.offset = off;
                     hole.holeThickness += 0.5f;
@@ -185,8 +185,8 @@ namespace DuckGame
                     hole.DoUpdate();
                     hole.position = this.Offset(hole.offset);
                     hole.sprayAngle = this.OffsetLocal(hole.startSprayAngle);
-                    float num3 = (float)(1.0 - (hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
-                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num3 < _fluidLevel)
+                    float num3 = (float)(1.0 - (hole.offset.y - this.topLocal) / (this.bottomLocal - this.topLocal));
+                    if (hole.x > this.left - 2.0 && hole.x < this.right + 2.0 && num3 < _fluidLevel)
                     {
                         float num4 = Maths.Clamp(this._fluidLevel - num3, 0.1f, 1f);
                         FluidData fluid = this._fluid;
@@ -218,17 +218,17 @@ namespace DuckGame
         {
             float num1 = 1f - this._fluidLevel;
             float num2 = (float)(0.600000023841858 + (1.0 - burnt) * 0.400000005960464);
-            this.graphic.color = new Color((byte)(150.0 * (double)num2), (byte)(150.0 * (double)num2), (byte)(150.0 * (double)num2));
+            this.graphic.color = new Color((byte)(150.0 * num2), (byte)(150.0 * num2), (byte)(150.0 * num2));
             base.Draw();
             if (_hitPoints <= 0.0)
                 return;
-            this.graphic.color = new Color((byte)(byte.MaxValue * (double)num2), (byte)(byte.MaxValue * (double)num2), (byte)(byte.MaxValue * (double)num2));
+            this.graphic.color = new Color((byte)(byte.MaxValue * num2), (byte)(byte.MaxValue * num2), (byte)(byte.MaxValue * num2));
             this.graphic.angle = this.angle;
             this.graphic.depth = this.depth + 1;
             this.graphic.scale = this.scale;
             float y = num1 * graphic.height;
             this.graphic.center = this.center - new Vec2(0f, (int)y);
-            Graphics.Draw(this.graphic, this.x, this.y, new Rectangle(0f, (int)y, graphic.w, (int)(graphic.h - (double)y)));
+            Graphics.Draw(this.graphic, this.x, this.y, new Rectangle(0f, (int)y, graphic.w, (int)(graphic.h - y)));
         }
     }
 }

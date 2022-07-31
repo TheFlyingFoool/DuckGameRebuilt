@@ -26,7 +26,7 @@ namespace DuckGame
         {
             this.xscale = Lerp.Float(this.xscale, this.maxSize, 0.04f);
             this.yscale = this.xscale;
-            if ((double)this.xscale <= maxSize)
+            if (this.xscale <= maxSize)
                 Level.Remove(this);
             base.Update();
         }

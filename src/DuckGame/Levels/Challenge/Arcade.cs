@@ -305,7 +305,7 @@ namespace DuckGame
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
                     this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == (double)this._followCam.viewSize) && (double)this._hud.alpha == 0.0 && (double)Layer.Game.fade == 1.0)
+                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         this._followCam.manualViewSize = -1f;
@@ -328,7 +328,7 @@ namespace DuckGame
                     this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
                     this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
                     this._unlockMachineWait = 1f;
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == (double)this._followCam.viewSize) && (double)this._hud.alpha == 0.0 && (double)Layer.Game.fade == 1.0)
+                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         this._followCam.manualViewSize = -1f;
@@ -342,7 +342,7 @@ namespace DuckGame
                     Music.volume = Lerp.Float(Music.volume, 0f, 0.01f);
                     this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.02f);
                     this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
-                    if ((double)this._hud.alpha == 0.0)
+                    if (this._hud.alpha == 0f)
                         flag = true;
                 }
                 if (this._desiredState == ArcadeState.UnlockScreen)
@@ -354,7 +354,7 @@ namespace DuckGame
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 1f, 0.08f);
-                        if (_followCam.manualViewSize < 3.0 && (double)this._unlockScreen.alpha == 1.0 && (double)Layer.Game.fade == 0.0)
+                        if (_followCam.manualViewSize < 3f && this._unlockScreen.alpha == 1f && Layer.Game.fade == 0f)
                             flag = true;
                     }
                 }
@@ -440,7 +440,7 @@ namespace DuckGame
                     object obj = null;
                     foreach (ArcadeMachine challenge in this._challenges)
                     {
-                        double length = (double)(this._duck.position - challenge.position).length;
+                        double length = (this._duck.position - challenge.position).length;
                         if (challenge.hover)
                         {
                             obj = challenge;

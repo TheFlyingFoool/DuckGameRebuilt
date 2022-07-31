@@ -27,12 +27,12 @@ namespace DuckGame
         {
             if (!this._fading)
             {
-                if ((double)Graphics.fade < 1.0)
+                if (Graphics.fade < 1f)
                     Graphics.fade += 0.013f;
                 else
                     Graphics.fade = 1f;
             }
-            else if ((double)Graphics.fade > 0.0)
+            else if (Graphics.fade > 0f)
             {
                 Graphics.fade -= 0.013f;
             }
@@ -42,7 +42,7 @@ namespace DuckGame
                 Level.current = new AdultSwimLogo();
             }
             this._wait -= 3f / 500f;
-            if (_wait >= 0.0 && !Input.Pressed("START") && !Input.Pressed("SELECT"))
+            if (_wait >= 0f && !Input.Pressed("START") && !Input.Pressed("SELECT"))
                 return;
             this._fading = true;
         }

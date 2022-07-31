@@ -189,7 +189,7 @@ namespace DuckGame
                         {
                             if (thing1 is PhysicsObject)
                             {
-                                if ((double)thing1.hSpeed > 0.0)
+                                if (thing1.hSpeed > 0.0)
                                     thing1.position.x = this._link.position.x + 8f;
                                 else
                                     thing1.position.x = this._link.position.x - 8f;
@@ -197,10 +197,10 @@ namespace DuckGame
                         }
                         else if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.vSpeed > 0.0)
-                                thing1.position.y = this._link.position.y + ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                            if (thing1.vSpeed > 0.0)
+                                thing1.position.y = this._link.position.y + ((float)(thing1.height / 2.0 + 6.0) + num2);
                             else
-                                thing1.position.y = this._link.position.y - ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                                thing1.position.y = this._link.position.y - ((float)(thing1.height / 2.0 + 6.0) + num2);
                         }
                     }
                     else
@@ -210,7 +210,7 @@ namespace DuckGame
                         {
                             if (thing1 is PhysicsObject)
                             {
-                                if ((double)thing1.hSpeed > 0.0)
+                                if (thing1.hSpeed > 0.0)
                                     thing1.position.x = this._link.position.x + 8f;
                                 else
                                     thing1.position.x = this._link.position.x - 8f;
@@ -218,24 +218,24 @@ namespace DuckGame
                         }
                         else if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.vSpeed > 0.0)
-                                thing1.position.y = this._link.position.y + ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                            if (thing1.vSpeed > 0.0)
+                                thing1.position.y = this._link.position.y + ((float)(thing1.height / 2.0 + 6.0) + num2);
                             else
-                                thing1.position.y = this._link.position.y - ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                                thing1.position.y = this._link.position.y - ((float)(thing1.height / 2.0 + 6.0) + num2);
                         }
                     }
                     if (!this.horizontal.value)
                     {
-                        if ((double)thing1.bottom > (double)this._link.bottom)
+                        if (thing1.bottom > this._link.bottom)
                             thing1.bottom = this._link.bottom;
-                        if ((double)thing1.top < (double)this._link.top)
+                        if (thing1.top < this._link.top)
                             thing1.top = this._link.top;
                     }
                     else
                     {
-                        if ((double)thing1.right > (double)this._link.right)
+                        if (thing1.right > this._link.right)
                             thing1.right = this._link.right;
-                        if ((double)thing1.left < (double)this._link.left)
+                        if (thing1.left < this._link.left)
                             thing1.left = this._link.left;
                     }
                 }
@@ -254,7 +254,7 @@ namespace DuckGame
                             thing1.position.y = this._link.position.y;
                         if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.hSpeed > 0.0)
+                            if (thing1.hSpeed > 0.0)
                                 thing1.position.x = this._link.position.x + 8f;
                             else
                                 thing1.position.x = this._link.position.x - 8f;
@@ -266,7 +266,7 @@ namespace DuckGame
                             thing1.position.x = this._link.position.x;
                         if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.vSpeed > 0.0)
+                            if (thing1.vSpeed > 0.0)
                                 thing1.position.y = this._link.position.y + 8f;
                             else
                                 thing1.position.y = this._link.position.y - 8f;
@@ -323,9 +323,9 @@ namespace DuckGame
             {
                 Color purple = Color.Purple;
                 if ((bool)this.noduck)
-                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 2f), new Vec2(this.x - 5f, this.y + 2f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 2f), new Vec2(this.x - 5f, this.y + 2f), Color.Yellow * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
-                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 4f), new Vec2(this.x - 5f, this.y + 4f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 4f), new Vec2(this.x - 5f, this.y + 4f), purple * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 this._top.angleDegrees = 90f;
                 this._bottom.angleDegrees = 90f;
                 this._top.depth = this.depth + 1;
@@ -342,15 +342,15 @@ namespace DuckGame
                     this._arrow.angleDegrees = -90f;
                 else if (this.direction == 3)
                     this._arrow.angleDegrees = 90f;
-                Graphics.Draw(this._arrow, (float)((double)this.x - 8.0 + (int)this.teleHeight * 16 / 2 + (double)(float)this._float * 2.0), this.y);
+                Graphics.Draw(this._arrow, (float)(this.x - 8.0 + (int)this.teleHeight * 16 / 2 + (float)this._float * 2.0), this.y);
             }
             else
             {
                 Color purple = Color.Purple;
                 if ((bool)this.noduck)
-                    Graphics.DrawRect(new Vec2(this.x - 2f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x - 2f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
-                    Graphics.DrawRect(new Vec2(this.x - 4f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x - 4f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 this._top.angle = 0f;
                 this._bottom.angle = 0f;
                 this._top.depth = this.depth + 1;
@@ -367,7 +367,7 @@ namespace DuckGame
                     this._arrow.angleDegrees = -90f;
                 else if (this.direction == 3)
                     this._arrow.angleDegrees = 90f;
-                Graphics.Draw(this._arrow, this.x, (float)((double)this.y + 8.0 - (int)this.teleHeight * 16 / 2 + (double)(float)this._float * 2.0));
+                Graphics.Draw(this._arrow, this.x, (float)(this.y + 8.0 - (int)this.teleHeight * 16 / 2 + (float)this._float * 2.0));
             }
         }
 

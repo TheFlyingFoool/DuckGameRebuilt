@@ -141,8 +141,8 @@ namespace DuckGame
             int num2 = 0;
             float num3 = 0f;
             float num4 = 10f;
-            float num5 = (float)((double)this.x - (double)this.width / 2.0 + 8.0);
-            float num6 = (float)((double)this.y - (double)this.height / 2.0 + 8.0);
+            float num5 = (float)(this.x - this.width / 2.0 + 8.0);
+            float num6 = (float)(this.y - this.height / 2.0 + 8.0);
             for (int index = 0; index < this.numFlags; ++index)
             {
                 int num7 = index % 16;

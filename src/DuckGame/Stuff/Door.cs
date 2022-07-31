@@ -327,13 +327,13 @@ namespace DuckGame
                 Thing thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
                 if (thing == null)
                 {
-                    thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(32f, 0f), this._bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && (double)Math.Abs(d.hSpeed) > 4.0);
+                    thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(32f, 0f), this._bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4.0);
                     flag2 = true;
                 }
                 if (thing != null)
                 {
                     (thing as Duck).Fondle(this);
-                    if ((double)thing.x < (double)this.x)
+                    if (thing.x < this.x)
                     {
                         this._coll.Clear();
                         Level.CheckRectAll<PhysicsObject>(this._topRight, this._bottomRight + new Vec2(10f, 0f), this._coll);
@@ -341,7 +341,7 @@ namespace DuckGame
                         this._jam = 1f;
                         foreach (PhysicsObject t2 in this._coll)
                         {
-                            if (!(t2 is TeamHat) && !(t2 is Duck) && (double)t2.weight > 3.0 && t2.owner == null && (!(t2 is Holdable) || (t2 as Holdable).hoverSpawner == null))
+                            if (!(t2 is TeamHat) && !(t2 is Duck) && t2.weight > 3.0 && t2.owner == null && (!(t2 is Holdable) || (t2 as Holdable).hoverSpawner == null))
                             {
                                 if (t2 is RagdollPart)
                                 {
@@ -405,9 +405,9 @@ namespace DuckGame
                                 else
                                 {
                                     float num = Maths.Clamp((t3.right - this.left) / 14f, -1f, 0f);
-                                    if ((double)num > -0.1f)
+                                    if (num > -0.1f)
                                         num = -0.1f;
-                                    if (_jam < (double)num)
+                                    if (_jam < num)
                                     {
                                         if (_open != 0f && t3 is Gun)
                                         {
@@ -451,7 +451,7 @@ namespace DuckGame
             {
                 if (!(t4 is TeamHat) && (t4 is Duck || !this._jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)
                 {
-                    if (!(t4 is Duck) && (double)this.weight < 3.0)
+                    if (!(t4 is Duck) && this.weight < 3.0)
                     {
                         if (_open < -0.0)
                         {
@@ -464,9 +464,9 @@ namespace DuckGame
                             t4.hSpeed = -3f;
                         }
                     }
-                    if (_open < -0.0 && t4 != null && (t4 is Duck || (double)t4.right > _topLeft.x - 10.0 && (double)t4.left < _topRight.x))
+                    if (_open < -0.0 && t4 != null && (t4 is Duck || t4.right > _topLeft.x - 10.0 && t4.left < _topRight.x))
                         flag1 = true;
-                    if (_open > 0.0 && t4 != null && (t4 is Duck || (double)t4.left < _topRight.x + 10.0 && (double)t4.right > _topLeft.x))
+                    if (_open > 0.0 && t4 != null && (t4 is Duck || t4.left < _topRight.x + 10.0 && t4.right > _topLeft.x))
                         flag1 = true;
                 }
             }
@@ -521,7 +521,7 @@ namespace DuckGame
                 if (_openForce > 0.1f)
                     this._openForce = 0.1f;
             }
-            if (_jam < 0f && _open < (double)this._jam)
+            if (_jam < 0f && _open < this._jam)
             {
                 if (!this._jammed)
                 {
@@ -564,7 +564,7 @@ namespace DuckGame
             {
                 this.collisionSize = new Vec2(this.colWide, 32f);
                 this.solid = true;
-                this.collisionOffset = new Vec2((float)(-(double)this.colWide / 2f), -24f);
+                this.collisionOffset = new Vec2((float)(-this.colWide / 2f), -24f);
                 this.depth = -0.5f;
             }
             if (_hitPoints <= 0f && !this._destroyed)

@@ -49,7 +49,7 @@ namespace DuckGame
           float amount1,
           float amount2)
         {
-            return (float)((double)value1 + ((double)value2 - (double)value1) * (double)amount1 + ((double)value3 - (double)value1) * (double)amount2);
+            return (float)(value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2);
         }
 
         /// <summary>
@@ -68,9 +68,9 @@ namespace DuckGame
           float value4,
           float amount)
         {
-            double num1 = (double)amount * (double)amount;
-            double num2 = num1 * (double)amount;
-            return (float)(0.5 * (2.0 * (double)value2 + ((double)value3 - (double)value1) * (double)amount + (2.0 * (double)value1 - 5.0 * (double)value2 + 4.0 * (double)value3 - (double)value4) * num1 + (3.0 * (double)value2 - (double)value1 - 3.0 * (double)value3 + (double)value4) * num2));
+            double num1 = amount * amount;
+            double num2 = num1 * amount;
+            return (float)(0.5 * (2.0 * value2 + (value3 - value1) * amount + (2.0 * value1 - 5.0 * value2 + 4.0 * value3 - value4) * num1 + (3.0 * value2 - value1 - 3.0 * value3 + value4) * num2));
         }
 
         /// <summary>Restricts a value to be within a specified range.</summary>
@@ -80,8 +80,8 @@ namespace DuckGame
         /// <returns>The clamped value.</returns>
         public static float Clamp(float value, float min, float max)
         {
-            value = (double)value > (double)max ? max : value;
-            value = (double)value < (double)min ? min : value;
+            value = value > max ? max : value;
+            value = value < min ? min : value;
             return value;
         }
 
@@ -119,14 +119,14 @@ namespace DuckGame
           float tangent2,
           float amount)
         {
-            double num1 = (double)value1;
-            double num2 = (double)value2;
-            double num3 = (double)tangent1;
-            double num4 = (double)tangent2;
-            double num5 = (double)amount;
+            double num1 = value1;
+            double num2 = value2;
+            double num3 = tangent1;
+            double num4 = tangent2;
+            double num5 = amount;
             double num6 = num5 * num5 * num5;
             double num7 = num5 * num5;
-            return (double)amount != 0.0 ? ((double)amount != 1.0 ? (float)((2.0 * num1 - 2.0 * num2 + num4 + num3) * num6 + (3.0 * num2 - 3.0 * num1 - 2.0 * num3 - num4) * num7 + num3 * num5 + num1) : value2) : value1;
+            return amount != 0.0 ? (amount != 1.0 ? (float)((2.0 * num1 - 2.0 * num2 + num4 + num3) * num6 + (3.0 * num2 - 3.0 * num1 - 2.0 * num3 - num4) * num7 + num3 * num5 + num1) : value2) : value1;
         }
 
         /// <summary>Linearly interpolates between two values.</summary>
@@ -190,10 +190,10 @@ namespace DuckGame
         /// <returns>The new angle, in radians.</returns>
         public static float WrapAngle(float angle)
         {
-            angle = (float)Math.IEEERemainder((double)angle, 6.28318548202515);
-            if ((double)angle <= -3.14159274101257)
+            angle = (float)Math.IEEERemainder(angle, 6.28318548202515);
+            if (angle <= -3.14159274101257)
                 angle += 6.283185f;
-            else if ((double)angle > 3.14159274101257)
+            else if (angle > 3.14159274101257)
                 angle -= 6.283185f;
             return angle;
         }

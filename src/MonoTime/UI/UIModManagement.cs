@@ -407,13 +407,13 @@ namespace DuckGame
                             if (this._updateTextBox != null)
                             {
                                 Editor.hoverTextBox = false;
-                                this._updateTextBox.position = new Vec2((float)((double)this._box.x - (double)this._box.halfWidth + 16.0), (float)((double)this._box.y - (double)this._box.halfHeight + 48.0));
+                                this._updateTextBox.position = new Vec2((float)(this._box.x - this._box.halfWidth + 16.0), (float)(this._box.y - this._box.halfHeight + 48.0));
                                 this._updateTextBox.size = new Vec2(this._box.width - 32f, this._box.height - 80f);
-                                this._updateTextBox._maxLines = (int)(_updateTextBox.size.y / (double)this._fancyFont.characterHeight);
+                                this._updateTextBox._maxLines = (int)(_updateTextBox.size.y / this._fancyFont.characterHeight);
                                 this._updateTextBox.Update();
                                 float stringWidth = Graphics.GetStringWidth(this._updateButtonText, scale: 2f);
                                 float height = Graphics.GetStringHeight(this._updateButtonText) * 2f;
-                                this._updateButton = new Rectangle(this._box.x - stringWidth / 2f, (float)((double)this._box.y + (double)this._box.halfHeight - 24.0), stringWidth, height);
+                                this._updateButton = new Rectangle(this._box.x - stringWidth / 2f, (float)(this._box.y + this._box.halfHeight - 24.0), stringWidth, height);
                                 if (this._updateButton.Contains(Mouse.position) && Mouse.left == InputState.Pressed)
                                 {
                                     this._needsUpdateNotes = false;
@@ -533,7 +533,7 @@ namespace DuckGame
                                 this._hoverIndex += 10;
                             if (this._hoverIndex < 0)
                                 this._hoverIndex = 0;
-                            if ((double)(this._oldPos - Mouse.positionScreen).lengthSq > 200.0)
+                            if ((this._oldPos - Mouse.positionScreen).lengthSq > 200.0)
                                 this._gamepadMode = false;
                         }
                         else
@@ -545,12 +545,12 @@ namespace DuckGame
                                     this._draggingScrollbar = true;
                                     this._oldPos = Mouse.position;
                                 }
-                                if ((double)Mouse.scroll > 0.0)
+                                if (Mouse.scroll > 0.0)
                                 {
                                     this._scrollItemOffset += 5;
                                     this._hoverIndex += 5;
                                 }
-                                else if ((double)Mouse.scroll < 0.0)
+                                else if (Mouse.scroll < 0.0)
                                 {
                                     this._scrollItemOffset -= 5;
                                     this._hoverIndex -= 5;
@@ -571,7 +571,7 @@ namespace DuckGame
                                     this.scrollBarOffset = this.scrollBarScrollableHeight;
                                 else if (this.scrollBarOffset < 0)
                                     this.scrollBarOffset = 0;
-                                this._scrollItemOffset = (int)((this._mods.Count - this._maxModsToShow) * (double)(scrollBarOffset / (float)this.scrollBarScrollableHeight));
+                                this._scrollItemOffset = (int)((this._mods.Count - this._maxModsToShow) * (scrollBarOffset / (float)this.scrollBarScrollableHeight));
                             }
                             if (Input.Pressed("ANY"))
                             {
@@ -613,7 +613,7 @@ namespace DuckGame
             }
         }
 
-        private Rectangle ScrollBarBox() => new Rectangle((float)((double)this._box.x + (double)this._box.halfWidth - 12.0 + 1.0), (float)((double)this._box.y - (double)this._box.halfHeight + 1.0) + scrollBarOffset, 10f, 32f);
+        private Rectangle ScrollBarBox() => new Rectangle((float)(this._box.x + this._box.halfWidth - 12.0 + 1.0), (float)(this._box.y - this._box.halfHeight + 1.0) + scrollBarOffset, 10f, 32f);
 
         public override void Draw()
         {
@@ -660,8 +660,8 @@ namespace DuckGame
                         base.Draw();
                         return;
                     }
-                    this.scrollBarTop = (int)((double)this._box.y - (double)this._box.halfHeight + 1.0 + 16.0);
-                    this.scrollBarBottom = (int)((double)this._box.y + (double)this._box.halfHeight - 1.0 - 16.0);
+                    this.scrollBarTop = (int)(this._box.y - this._box.halfHeight + 1.0 + 16.0);
+                    this.scrollBarBottom = (int)(this._box.y + this._box.halfHeight - 1.0 - 16.0);
                     this.scrollBarScrollableHeight = this.scrollBarBottom - this.scrollBarTop;
                     if (this.fixView)
                     {
@@ -669,8 +669,8 @@ namespace DuckGame
                         Layer.HUD.camera.height *= 2f;
                         this.fixView = false;
                     }
-                    Graphics.DrawRect(new Vec2(this._box.x - this._box.halfWidth, this._box.y - this._box.halfHeight), new Vec2((float)((double)this._box.x + (double)this._box.halfWidth - 12.0 - 2.0), this._box.y + this._box.halfHeight), Color.Black, (Depth)0.4f);
-                    Graphics.DrawRect(new Vec2((float)((double)this._box.x + (double)this._box.halfWidth - 12.0), this._box.y - this._box.halfHeight), new Vec2(this._box.x + this._box.halfWidth, this._box.y + this._box.halfHeight), Color.Black, (Depth)0.4f);
+                    Graphics.DrawRect(new Vec2(this._box.x - this._box.halfWidth, this._box.y - this._box.halfHeight), new Vec2((float)(this._box.x + this._box.halfWidth - 12.0 - 2.0), this._box.y + this._box.halfHeight), Color.Black, (Depth)0.4f);
+                    Graphics.DrawRect(new Vec2((float)(this._box.x + this._box.halfWidth - 12.0), this._box.y - this._box.halfHeight), new Vec2(this._box.x + this._box.halfWidth, this._box.y + this._box.halfHeight), Color.Black, (Depth)0.4f);
                     Rectangle r = this.ScrollBarBox();
                     Graphics.DrawRect(r, this._draggingScrollbar || r.Contains(Mouse.position) ? Color.LightGray : Color.Gray, (Depth)0.5f);
                     for (int index1 = 0; index1 < this._maxModsToShow; ++index1)
@@ -681,9 +681,9 @@ namespace DuckGame
                             float x = this._box.x - this._box.halfWidth;
                             float y = this._box.y - this._box.halfHeight + 36 * index1;
                             if (this._transferItem == null && this._hoverIndex == index2)
-                                Graphics.DrawRect(new Vec2(x, y), new Vec2((float)((double)x + (double)this._box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.45f);
+                                Graphics.DrawRect(new Vec2(x, y), new Vec2((float)(x + this._box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.45f);
                             else if ((index2 & 1) != 0)
-                                Graphics.DrawRect(new Vec2(x, y), new Vec2((float)((double)x + (double)this._box.width - 14.0), y + 36f), Color.White * 0.1f, (Depth)0.45f);
+                                Graphics.DrawRect(new Vec2(x, y), new Vec2((float)(x + this._box.width - 14.0), y + 36f), Color.White * 0.1f, (Depth)0.45f);
                             Mod mod = this._mods[index2];
                             if (mod != null)
                             {
@@ -702,7 +702,7 @@ namespace DuckGame
                                         this._noImage.texture = previewTexture;
                                         this._noImage.scale = new Vec2(32f / previewTexture.width);
                                     }
-                                    Graphics.DrawRect(new Vec2(x + 2f, y + 2f), new Vec2((float)((double)x + 36.0 - 2.0), (float)((double)y + 36.0 - 2.0)), Color.Gray, (Depth)0.44f, false, 2f);
+                                    Graphics.DrawRect(new Vec2(x + 2f, y + 2f), new Vec2((float)(x + 36.0 - 2.0), (float)(y + 36.0 - 2.0)), Color.Gray, (Depth)0.44f, false, 2f);
                                     Graphics.Draw(this._noImage, x + 2f, y + 2f, (Depth)0.5f);
                                     string str1 = "#" + index2.ToString() + ": ";
                                     if (mod.configuration.error != null)
@@ -712,7 +712,7 @@ namespace DuckGame
                                         str1 += "|DGRED|";
                                     }
                                     if (mod.configuration.error != null || mod.configuration.disabled)
-                                        Graphics.DrawRect(new Vec2(x, y), new Vec2((float)((double)x + (double)this._box.width - 14.0), y + 36f), Color.Black * 0.4f, (Depth)0.85f);
+                                        Graphics.DrawRect(new Vec2(x, y), new Vec2((float)(x + this._box.width - 14.0), y + 36f), Color.Black * 0.4f, (Depth)0.85f);
                                     bool flag = mod.configuration.modType == ModConfiguration.Type.Reskin || mod.configuration.isExistingReskinMod;
                                     string str2;
                                     if (!mod.configuration.loaded)
@@ -727,7 +727,7 @@ namespace DuckGame
                                         str2 += "|DGPURPLE| (Map Pack)";
                                     else if (mod.configuration.modType == ModConfiguration.Type.HatPack)
                                         str2 += "|DGPURPLE| (Hat Pack)";
-                                    this._fancyFont.Draw(str2 + (mod.configuration.disabled ? "|DGRED| (Disabled)" : "|DGGREEN| (Enabled)"), new Vec2((float)((double)x + 36.0 + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
+                                    this._fancyFont.Draw(str2 + (mod.configuration.disabled ? "|DGRED| (Disabled)" : "|DGGREEN| (Enabled)"), new Vec2((float)(x + 36.0 + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
                                     Graphics.Draw(!mod.configuration.isWorkshop ? _localIcon : this._steamIcon, x + 36f, y + 2.5f, (Depth)0.5f);
                                     if (mod.configuration.error != null && (mod.configuration.disabled || mod is ErrorMod))
                                     {
@@ -761,7 +761,7 @@ namespace DuckGame
                             break;
                     }
                     if (this._awaitingChanges)
-                        Graphics.DrawString("Restart required for some changes to take effect!", new Vec2((float)((double)this.x - (double)this.halfWidth + 128.0), (float)((double)this.y - (double)this.halfHeight + 8.0)), Color.Red, (Depth)0.6f);
+                        Graphics.DrawString("Restart required for some changes to take effect!", new Vec2((float)(this.x - this.halfWidth + 128.0), (float)(this.y - this.halfHeight + 8.0)), Color.Red, (Depth)0.6f);
                     if (this._transferItem != null)
                     {
                         Graphics.DrawRect(new Rectangle(this._box.x - this._box.halfWidth, this._box.y - this._box.halfHeight, this._box.width, this._box.height), Color.Black * 0.9f, (Depth)0.7f);
@@ -794,9 +794,9 @@ namespace DuckGame
                             if (uploadProgress.bytesTotal != 0UL)
                             {
                                 float amount = uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
-                                str = str + " (" + ((int)((double)amount * 100.0)).ToString() + "%)";
-                                Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, this._box.width - 16f, 16f), Color.LightGray, (Depth)0.8f);
-                                Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, Lerp.FloatSmooth(0f, this._box.width - 16f, amount), 16f), Color.Green, (Depth)0.8f);
+                                str = str + " (" + ((int)(amount * 100.0)).ToString() + "%)";
+                                Graphics.DrawRect(new Rectangle((float)(this._box.x - this._box.halfWidth + 8.0), this._box.y - 8f, this._box.width - 16f, 16f), Color.LightGray, (Depth)0.8f);
+                                Graphics.DrawRect(new Rectangle((float)(this._box.x - this._box.halfWidth + 8.0), this._box.y - 8f, Lerp.FloatSmooth(0f, this._box.width - 16f, amount), 16f), Color.Green, (Depth)0.8f);
                             }
                             text = str + "...";
                         }
@@ -809,7 +809,7 @@ namespace DuckGame
                             Graphics.DrawString(this._updateButtonText, new Vec2(this._updateButton.x, this._updateButton.y), this._updateButton.Contains(Mouse.position) ? Color.Yellow : Color.White, (Depth)0.9f, scale: 2f);
                         }
                         float stringWidth = Graphics.GetStringWidth(text, scale: 2f);
-                        Graphics.DrawString(text, new Vec2(this._box.x - stringWidth / 2f, (float)((double)this._box.y - (double)this._box.halfHeight + 24.0)), Color.White, (Depth)0.8f, scale: 2f);
+                        Graphics.DrawString(text, new Vec2(this._box.x - stringWidth / 2f, (float)(this._box.y - this._box.halfHeight + 24.0)), Color.White, (Depth)0.8f, scale: 2f);
                     }
                 }
             }

@@ -95,7 +95,7 @@ namespace DuckGame
             if (this.Group_Wait.value && this._up.Count != 0 || this._up.Count >= (int)this.Max_Up && (int)this.Max_Up != 0)
                 return;
             this._waitCount += Maths.IncFrameTimer();
-            if (_waitCount < (double)this.Delay.value)
+            if (_waitCount < this.Delay.value)
                 return;
             this.PopUpItems();
             this._waitCount = 0f;
@@ -204,7 +204,7 @@ namespace DuckGame
                 foreach (SequenceItem sequenceItem in sequenceItemList)
                 {
                     float num5 = sequenceItem.likelyhood / (float)num2;
-                    if ((double)num3 > (double)num4 && (double)num3 < (double)num4 + (double)num5)
+                    if (num3 > num4 && num3 < num4 + num5)
                     {
                         sequenceItem.randomMode = true;
                         sequenceItem.Activate();

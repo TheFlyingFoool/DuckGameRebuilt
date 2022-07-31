@@ -873,7 +873,7 @@ namespace DuckGame
                             {
                                 Vec2 textureSize = DuckGame.Content.GetTextureSize(name);
                                 Tex2D tex2D;
-                                if (textureSize != Vec2.Zero && (texture2D.Width != (double)textureSize.x || texture2D.Height != (double)textureSize.y))
+                                if (textureSize != Vec2.Zero && (texture2D.Width != textureSize.x || texture2D.Height != textureSize.y))
                                     tex2D = new BigBoyTex2D(texture2D, name, DuckGame.Content._currentTextureIndex)
                                     {
                                         scaleFactor = (textureSize.x / texture2D.Width)

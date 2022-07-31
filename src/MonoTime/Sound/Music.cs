@@ -73,7 +73,7 @@ namespace DuckGame
 
         public static string pendingSong => Music._pendingSong;
 
-        public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)((double)Music._musicPlayer.Platform_GetProgress() * Music._musicPlayer.Platform_GetLengthInMilliseconds()));
+        public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(Music._musicPlayer.Platform_GetProgress() * Music._musicPlayer.Platform_GetLengthInMilliseconds()));
 
         public static bool finished => Music._musicPlayer.State == SoundState.Stopped;
 
@@ -152,7 +152,7 @@ namespace DuckGame
                     }
                     else if (stringQueue.Contains(str1))
                     {
-                        if ((double)Rando.Float(1f) > 0.25)
+                        if (Rando.Float(1f) > 0.25)
                         {
                             stringList1.Remove(str1);
                             if (stringList1.Count > 0)
@@ -268,7 +268,7 @@ namespace DuckGame
 
         //public static void FadeOut(float duration) => Music._fadeSpeed = duration / 60f;
 
-        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-((double)duration / 60.0);
+        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-(duration / 60.0);
 
         private static void SearchDir(string dir)
         {

@@ -822,7 +822,7 @@ namespace DuckGame
                     float num12 = num10 >= 0.5f ? 1f : 0f;
                     Color color4 = data[index3 + index2 * t.width];
                     float num13 = 1f;
-                    if ((double)num12 > 0f)
+                    if (num12 > 0f)
                         num13 = 0.9f;
                     if (color4.r == 0)
                         data[index3 + index2 * t.width] = new Color(0, 0, 0, 0);
@@ -834,8 +834,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            float num14 = (double)num13 != 1.0 ? 1f : 0.9f;
-                            if ((double)num11 > 0.0)
+                            float num14 = num13 != 1.0 ? 1f : 0.9f;
+                            if (num11 > 0.0)
                                 data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.6f * num14), (byte)(color1.g * 0.6f * num14), (byte)(color1.b * 0.6f * num14));
                             else
                                 data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.6f * num14), (byte)(color2.g * 0.6f * num14), (byte)(color2.b * 0.6f * num14));
@@ -858,12 +858,12 @@ namespace DuckGame
                     }
                     else if (color4.r < byte.MaxValue)
                     {
-                        if ((double)num11 > 0.0)
+                        if (num11 > 0.0)
                             data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.6f * num13), (byte)(color2.g * 0.6f * num13), (byte)(color2.b * 0.6f * num13));
                         else
                             data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.6f * num13), (byte)(color1.g * 0.6f * num13), (byte)(color1.b * 0.6f * num13));
                     }
-                    else if ((double)num11 > 0.0)
+                    else if (num11 > 0.0)
                         data[index3 + index2 * t.width] = new Color((byte)(color2.r * num13), (byte)(color2.g * num13), (byte)(color2.b * num13));
                     else
                         data[index3 + index2 * t.width] = new Color((byte)(color1.r * num13), (byte)(color1.g * num13), (byte)(color1.b * num13));
@@ -987,8 +987,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            float num13 = (double)num12 != 1f ? 1f : 0.9f;
-                            if ((double)num10 > 0f)
+                            float num13 = num12 != 1f ? 1f : 0.9f;
+                            if (num10 > 0f)
                                 data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.6f * num13), (byte)(color1.g * 0.6f * num13), (byte)(color1.b * 0.6f * num13));
                             else
                                 data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.6f * num13), (byte)(color2.g * 0.6f * num13), (byte)(color2.b * 0.6f * num13));
@@ -1002,8 +1002,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            float num14 = (double)num12 != 1.0 ? 1f : 0.9f;
-                            if ((double)num10 > 0.0)
+                            float num14 = num12 != 1.0 ? 1f : 0.9f;
+                            if (num10 > 0.0)
                                 data[index3 + index2 * t.width] = new Color((byte)(color1.r * num14), (byte)(color1.g * num14), (byte)(color1.b * num14));
                             else
                                 data[index3 + index2 * t.width] = new Color((byte)(color2.r * num14), (byte)(color2.g * num14), (byte)(color2.b * num14));
@@ -1011,12 +1011,12 @@ namespace DuckGame
                     }
                     else if (color4.r < byte.MaxValue)
                     {
-                        if ((double)num10 > 0f)
+                        if (num10 > 0f)
                             data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.6f * num12), (byte)(color2.g * 0.6f * num12), (byte)(color2.b * 0.6f * num12));
                         else
                             data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.6f * num12), (byte)(color1.g * 0.6f * num12), (byte)(color1.b * 0.6f * num12));
                     }
-                    else if ((double)num10 > 0f)
+                    else if (num10 > 0f)
                         data[index3 + index2 * t.width] = new Color((byte)(color2.r * num12), (byte)(color2.g * num12), (byte)(color2.b * num12));
                     else
                         data[index3 + index2 * t.width] = new Color((byte)(color1.r * num12), (byte)(color1.g * num12), (byte)(color1.b * num12));
@@ -1154,7 +1154,7 @@ namespace DuckGame
                 if (!flag2)
                     break;
             }
-            return (byte)((byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | ((double)Options.Data.rumbleIntensity > 0.0 ? 1 : 0));
+            return (byte)((byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | (Options.Data.rumbleIntensity > 0.0 ? 1 : 0));
         }
 
         public bool switchStatus => (flippers & 1U) > 0U;

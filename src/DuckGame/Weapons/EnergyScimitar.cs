@@ -139,7 +139,7 @@ namespace DuckGame
                 WireMount owner = this.owner as WireMount;
                 foreach (MaterialThing materialThing in Level.CheckRectAll<Block>(this.position + new Vec2(-8f, -8f), this.position + new Vec2(8f, 8f)))
                     this.clip.Add(materialThing);
-                float pAngleDegrees = (float)(-(double)this.angleDegrees - 90.0 - 180.0);
+                float pAngleDegrees = (float)(-this.angleDegrees - 90.0 - 180.0);
                 this.owner = null;
                 owner._containedThing = null;
                 this.StartFlying(pAngleDegrees);
@@ -165,12 +165,12 @@ namespace DuckGame
                 {
                     if (this._airFly)
                     {
-                        if ((double)this.vSpeed < -4.0)
+                        if (this.vSpeed < -4.0)
                         {
                             this.collisionOffset = new Vec2(0f, -4f);
                             this.collisionSize = new Vec2(6f, 8f);
                         }
-                        else if ((double)this.vSpeed > 4.0)
+                        else if (this.vSpeed > 4.0)
                         {
                             this.collisionOffset = new Vec2(-5f, -4f);
                             this.collisionSize = new Vec2(6f, 8f);
@@ -197,11 +197,11 @@ namespace DuckGame
                     this.PerformAirSpin();
                     flag1 = true;
                 }
-                else if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2.0 || !this.grounded)
+                else if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2.0 || !this.grounded)
                 {
                     if (!this.grounded && Level.CheckRect<Block>(this.position + new Vec2(-6f, -6f), this.position + new Vec2(6f, -2f)) != null)
                         flag2 = true;
-                    if (!flag2 && !this._grounded && (Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 8f)) == null || (double)this.vSpeed < 0.0 || this._airFly))
+                    if (!flag2 && !this._grounded && (Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 8f)) == null || this.vSpeed < 0.0 || this._airFly))
                     {
                         this.PerformAirSpin();
                         flag1 = true;
@@ -212,7 +212,7 @@ namespace DuckGame
                 this._throwSpin %= 360f;
                 if (flag2)
                 {
-                    if ((double)Math.Abs(this._throwSpin - 90f) < (double)Math.Abs(this._throwSpin + 90f))
+                    if (Math.Abs(this._throwSpin - 90f) < Math.Abs(this._throwSpin + 90f))
                         this._throwSpin = Lerp.Float(this._throwSpin, 90f, 16f);
                     else
                         this._throwSpin = Lerp.Float(-90f, 0f, 16f);
@@ -240,7 +240,7 @@ namespace DuckGame
                 this.collisionSize = new Vec2(4f, 4f);
                 this._throwSpin = 0f;
                 this._wasLifted = true;
-                this._blocking = this.duck.crouch && (double)Math.Abs(this.duck.hSpeed) < 2.0;
+                this._blocking = this.duck.crouch && Math.Abs(this.duck.hSpeed) < 2.0;
                 if (this.duck.inputProfile.Pressed("UP") && !this.duck.inputProfile.Pressed("JUMP") && (this._stance == EnergyScimitar.Stance.Drag || this._stance == EnergyScimitar.Stance.Intermediate) && !this.duck.sliding)
                     this._stance = EnergyScimitar.Stance.SwingUp;
                 if (this.duck.crouch && !this.duck.sliding && this.duck.inputProfile.Pressed("LEFT"))
@@ -270,7 +270,7 @@ namespace DuckGame
                 }
                 if (this.duck.inputProfile.Pressed("DOWN") && this.duck.grounded)
                     this._stance = EnergyScimitar.Stance.Drag;
-                if ((double)Math.Abs(this.duck.hSpeed) > 1.0)
+                if (Math.Abs(this.duck.hSpeed) > 1.0)
                 {
                     if (this.dragSpeedBonus)
                     {
@@ -390,7 +390,7 @@ namespace DuckGame
                     }
                 }
                 this._lerpedAngle = Lerp.FloatSmooth(this._lerpedAngle, this._swordAngle, 0.25f + this._lerpBoost);
-                this._stanceReady = (double)Math.Abs(this._lerpedAngle - this._swordAngle) < 25.0;
+                this._stanceReady = Math.Abs(this._lerpedAngle - this._swordAngle) < 25.0;
                 this._stanceCounter += Maths.IncFrameTimer();
                 this._swingDif = Math.Min(Math.Abs(this._lerpedAngle - this._swordAngle), 35f);
                 if (this._timeSincePress > 25)
@@ -550,11 +550,11 @@ namespace DuckGame
             {
                 this.Fondle(with);
                 Vec2 vec1 = Maths.AngleToVec(Maths.DegToRad(this._airFlyAngle));
-                this.hSpeed = this.lastHSpeed = (float)(-(double)vec1.x * 3.0);
-                this.vSpeed = this.lastVSpeed = (float)(-(double)vec1.y * 3.0);
+                this.hSpeed = this.lastHSpeed = (float)(-vec1.x * 3.0);
+                this.vSpeed = this.lastVSpeed = (float)(-vec1.y * 3.0);
                 Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad((with as EnergyScimitar)._airFlyAngle));
-                with.hSpeed = with.lastHSpeed = (float)(-(double)vec2.x * 3.0);
-                with.vSpeed = with.lastVSpeed = (float)(-(double)vec2.y * 3.0);
+                with.hSpeed = with.lastHSpeed = (float)(-vec2.x * 3.0);
+                with.vSpeed = with.lastVSpeed = (float)(-vec2.y * 3.0);
                 this.Shing();
                 (with as EnergyScimitar).Shing();
             }
@@ -572,7 +572,7 @@ namespace DuckGame
                     offset = this.position - duck.ragdoll.part2.position
                 });
             }
-            else if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && (double)this.vSpeed > 0.0)
+            else if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && this.vSpeed > 0.0)
             {
                 if (with is Nubber)
                     return;
@@ -638,7 +638,7 @@ namespace DuckGame
         private void UpdateAirDirection()
         {
             if (this.offDir < 0)
-                this._throwSpin = (float)(-(double)this._airFlyAngle + 180.0);
+                this._throwSpin = (float)(-this._airFlyAngle + 180.0);
             else
                 this._throwSpin = -this._airFlyAngle;
         }
@@ -792,8 +792,8 @@ namespace DuckGame
                 {
                     if (materialThing is EnergyScimitar.ScimiPlatform)
                     {
-                        this.hSpeed = this.lastHSpeed = (float)(-(double)vec2.x * 3.0);
-                        this.vSpeed = this.lastHSpeed = (float)(-(double)vec2.y * 3.0);
+                        this.hSpeed = this.lastHSpeed = (float)(-vec2.x * 3.0);
+                        this.vSpeed = this.lastHSpeed = (float)(-vec2.y * 3.0);
                     }
                     else
                     {
@@ -816,8 +816,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            this.vSpeed = (float)(-(double)this.vSpeed * 0.25);
-                            this.hSpeed = (float)(-(double)this.hSpeed * 0.25);
+                            this.vSpeed = (float)(-this.vSpeed * 0.25);
+                            this.hSpeed = (float)(-this.hSpeed * 0.25);
                         }
                     }
                 }
@@ -921,7 +921,7 @@ namespace DuckGame
 
         public override bool Sprung(Thing pSpringer)
         {
-            this.StartFlying((float)(-(double)pSpringer.angleDegrees - 90.0 - 180.0));
+            this.StartFlying((float)(-pSpringer.angleDegrees - 90.0 - 180.0));
             return false;
         }
 
@@ -937,7 +937,7 @@ namespace DuckGame
                 this.depth = -0.55f;
             else
                 this.depth = -0.1f;
-            if (this._stuckInto != null && this._stuckInto is Door && (double)Math.Abs((this._stuckInto as Door)._open) > 0.5)
+            if (this._stuckInto != null && this._stuckInto is Door && Math.Abs((this._stuckInto as Door)._open) > 0.5)
             {
                 this._stuckInto.Fondle(this);
                 this.enablePhysics = true;
@@ -997,7 +997,7 @@ namespace DuckGame
                 }
                 this._timeSincePickedUp += Maths.IncFrameTimer();
                 if (this._stance == EnergyScimitar.Stance.Drag && this.duck != null)
-                    this._glow = (double)Math.Abs(this.duck.hSpeed) > 1.0 ? 0.35f : 0f;
+                    this._glow = Math.Abs(this.duck.hSpeed) > 1.0 ? 0.35f : 0f;
                 if (this.grounded)
                     this._canAirFly = true;
                 this._timeTillPulse -= Maths.IncFrameTimer();
@@ -1105,8 +1105,8 @@ namespace DuckGame
                         vec2 += this.OffsetLocal(new Vec2(0f, -num2 / _walls.Count));
                         wall.position = vec2;
                         float num3 = 1f - Math.Min(this._stanceCounter / 0.25f, 1f);
-                        wall.collisionSize = new Vec2((float)(6.0 + (double)num3 * 8.0), 6f);
-                        wall.collisionOffset = new Vec2((float)(-3.0 - (double)num3 * 4.0), -3f);
+                        wall.collisionSize = new Vec2((float)(6.0 + num3 * 8.0), 6f);
+                        wall.collisionOffset = new Vec2((float)(-3.0 - num3 * 4.0), -3f);
                     }
                 }
                 else
@@ -1129,7 +1129,7 @@ namespace DuckGame
             float num4 = Math.Min(this._glow, 1f);
             float to1 = Math.Min(Math.Abs(this._lastAngleHum - this.angle), 1f);
             this._angleWhoom = Lerp.FloatSmooth(this._angleWhoom, to1, 0.2f);
-            this._humAmount = Lerp.FloatSmooth(this._humAmount, Math.Min((float)((double)Math.Min(Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed), 5f) / 10f + (double)to1 * 2f + 0.25f + (double)num4 * 0.3f) * this._glow, 0.75f), 0.2f);
+            this._humAmount = Lerp.FloatSmooth(this._humAmount, Math.Min((float)(Math.Min(Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed), 5f) / 10f + to1 * 2f + 0.25f + num4 * 0.3f) * this._glow, 0.75f), 0.2f);
             this._humAmount = Math.Min(this._humAmount + this._dragRand * 0.2f, 1f);
             if (this._hum != null)
                 this._hum.volume = this._humAmount;
@@ -1137,10 +1137,10 @@ namespace DuckGame
             {
                 float val2_1 = 800f;
                 float val2_2 = 400f;
-                float num5 = (float)(1.0 - (double)Math.Min(Math.Max((this.level.camera.position - this.position).length, val2_2) - val2_2, val2_1) / (double)val2_1);
+                float num5 = (float)(1.0 - Math.Min(Math.Max((this.level.camera.position - this.position).length, val2_2) - val2_2, val2_1) / val2_1);
                 if (this._hum != null)
                     this._hum.volume *= num5;
-                if (this.isServerForObject && this.visible && ((double)this.x < level.topLeft.x - 1000.0 || (double)this.x > level.bottomRight.x + 1000.0) && this.owner == null && !this.inPipe)
+                if (this.isServerForObject && this.visible && (this.x < level.topLeft.x - 1000.0 || this.x > level.bottomRight.x + 1000.0) && this.owner == null && !this.inPipe)
                     Level.Remove(this);
             }
             this._extraOffset = new Vec2(0f, -num1);
@@ -1169,7 +1169,7 @@ namespace DuckGame
                 else
                     to2 = 0f;
                 if (this._stance == EnergyScimitar.Stance.Drag && this.duck != null)
-                    this._glow = (double)Math.Abs(this.duck.hSpeed) > 1.0 ? 0.35f : 0f;
+                    this._glow = Math.Abs(this.duck.hSpeed) > 1.0 ? 0.35f : 0f;
                 this._glow = Lerp.Float(this._glow, to2, 0.1f);
             }
             else
@@ -1192,7 +1192,7 @@ namespace DuckGame
             this._platform.position = new Vec2(-99999f, -99999f);
             if (!this.stuck)
                 return;
-            if ((double)Math.Abs(this.barrelStartPos.y - this.barrelPosition.y) < 6.0)
+            if (Math.Abs(this.barrelStartPos.y - this.barrelPosition.y) < 6.0)
             {
                 this._platform.solid = true;
                 this._platform.enablePhysics = true;
@@ -1294,7 +1294,7 @@ namespace DuckGame
             {
                 int index3 = this.historyIndex(0);
                 int index4 = this.historyIndex(2);
-                this.addHistory((float)((this._lastAngles[index3] + (double)this._lastAngles[index4]) / 2.0), (this._lastPositions[index3] + this._lastPositions[index4]) / 2f);
+                this.addHistory((float)((this._lastAngles[index3] + this._lastAngles[index4]) / 2.0), (this._lastPositions[index3] + this._lastPositions[index4]) / 2f);
             }
             if (this._lastSize <= 8)
                 return;

@@ -253,11 +253,11 @@ namespace DuckGame
             this._spring.depth = this.depth - 5;
             this._spring.center = new Vec2(4f, 7f);
             this._spring.angleDegrees = Maths.PointDirection(this.position + this._posOffset, this.springPos) - 90f;
-            this._spring.yscale = (float)((position.y + (double)this._posOffset.y - springPos.y) / 8.0);
+            this._spring.yscale = (float)((position.y + this._posOffset.y - springPos.y) / 8.0);
             this._spring.flipH = this.offDir < 0;
-            if ((double)this._spring.yscale > 1.20000004768372)
+            if (this._spring.yscale > 1.20000004768372)
                 this._spring.yscale = 1.2f;
-            if ((double)this._spring.yscale < -1.20000004768372)
+            if (this._spring.yscale < -1.20000004768372)
                 this._spring.yscale = -1.2f;
             this._spring.alpha = this.alpha;
             Graphics.Draw(this._spring, vec2.x, vec2.y);

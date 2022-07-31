@@ -360,8 +360,8 @@ namespace DuckGame
             this.Organize();
             if (Network.isActive && !GhostManager.inGhostLoop)
                 GhostManager.context.MakeGhost(this);
-            if ((double)Math.Abs(this.hSpeed) < 0.200000002980232)
-                this.hSpeed = NetRand.Float(0.3f, 1f) * ((double)NetRand.Float(1f) >= 0.5 ? 1f : -1f);
+            if (Math.Abs(this.hSpeed) < 0.200000002980232)
+                this.hSpeed = NetRand.Float(0.3f, 1f) * (NetRand.Float(1f) >= 0.5 ? 1f : -1f);
             float num1 = this._slide ? 1f : 1.05f;
             float num2 = this._slide ? 1f : 0.95f;
             this._part1.hSpeed = this.hSpeed * num1;
@@ -427,7 +427,7 @@ namespace DuckGame
                 this.active = false;
                 this.visible = false;
                 this.owner = null;
-                if ((double)this.y > -1000.0)
+                if (this.y > -1000.0)
                 {
                     this.y = -9999f;
                     this._part1.y = -9999f;
@@ -498,7 +498,7 @@ namespace DuckGame
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(body1.hSpeed, body1.vSpeed);
             Vec2 vec2_4 = new Vec2(body2.hSpeed, body2.vSpeed);
-            double num3 = (double)Vec2.Dot(vec2_4 - vec2_3, vec2_2);
+            double num3 = Vec2.Dot(vec2_4 - vec2_3, vec2_2);
             float num4 = num2 - num1;
             float num5 = 2.1f;
             float num6 = 2.1f;
@@ -506,8 +506,8 @@ namespace DuckGame
                 num5 = 6f;
             else if (body2 == this.part1 && this.jetting)
                 num6 = 6f;
-            double num7 = (double)num4;
-            float num8 = (float)((num3 + num7) / ((double)num5 + (double)num6));
+            double num7 = num4;
+            float num8 = (float)((num3 + num7) / (num5 + num6));
             Vec2 vec2_5 = vec2_2 * num8;
             Vec2 vec2_6 = vec2_3 + vec2_5 * num5;
             Vec2 vec2_7 = vec2_4 - vec2_5 * num6;
@@ -535,14 +535,14 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = b2.position - b1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 0.0001f)
+            if (num2 < 0.0001f)
                 num2 = 0.0001f;
-            if ((double)num2 < (double)num1)
+            if (num2 < num1)
                 return 0f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(thing1.hSpeed, thing1.vSpeed);
             Vec2 vec2_4 = new Vec2(thing2.hSpeed, thing2.vSpeed);
-            double num3 = (double)Vec2.Dot(vec2_4 - vec2_3, vec2_2);
+            double num3 = Vec2.Dot(vec2_4 - vec2_3, vec2_2);
             float num4 = num2 - num1;
             float num5 = 2.5f;
             float num6 = 2.1f;
@@ -565,8 +565,8 @@ namespace DuckGame
                 num5 = !this._zekeBear ? 10f : 4f;
             else if (thing2 is RagdollPart)
                 num6 = !this._zekeBear ? 10f : 4f;
-            double num7 = (double)num4;
-            float num8 = (float)((num3 + num7) / ((double)num5 + (double)num6));
+            double num7 = num4;
+            float num8 = (float)((num3 + num7) / (num5 + num6));
             Vec2 vec2_5 = vec2_2 * num8;
             Vec2 vec2_6 = vec2_3 + vec2_5 * num5;
             vec2_4 -= vec2_5 * num6;
@@ -574,9 +574,9 @@ namespace DuckGame
             thing1.vSpeed = vec2_6.y;
             thing2.hSpeed = vec2_4.x;
             thing2.vSpeed = vec2_4.y;
-            if (thing1 is ChainLink && (double)(thing2.position - thing1.position).length > (double)num1 * 12.0)
+            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
                 thing1.position = this.position;
-            if (thing2 is ChainLink && (double)(thing2.position - thing1.position).length > (double)num1 * 12.0)
+            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
                 thing2.position = this.position;
             return num8;
         }
@@ -587,21 +587,21 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = stuck - b1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 0.0001f)
+            if (num2 < 0.0001f)
                 num2 = 0.0001f;
-            if ((double)num2 < (double)num1)
+            if (num2 < num1)
                 return 0f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(thing.hSpeed, thing.vSpeed);
             Vec2 vec2_4 = new Vec2(0f, 0f);
-            double num3 = (double)Vec2.Dot(vec2_4 - vec2_3, vec2_2);
+            double num3 = Vec2.Dot(vec2_4 - vec2_3, vec2_2);
             float num4 = num2 - num1;
             float num5 = 2.5f;
             float num6 = 2.1f;
             if (thing is RagdollPart)
                 num5 = !this._zekeBear ? 10f : 4f;
-            double num7 = (double)num4;
-            float num8 = (float)((num3 + num7) / ((double)num5 + (double)num6));
+            double num7 = num4;
+            float num8 = (float)((num3 + num7) / (num5 + num6));
             Vec2 vec2_5 = vec2_2 * num8;
             Vec2 vec2_6 = vec2_3 + vec2_5 * num5;
             Vec2 vec2_7 = vec2_4 - vec2_5 * num6;
@@ -665,7 +665,7 @@ namespace DuckGame
             if (this._zekeBear)
                 this.partSep = 4f;
             Vec2 vec2_1 = this._part1.position - this._part3.position;
-            if ((double)vec2_1.length > partSep * 5.0)
+            if (vec2_1.length > partSep * 5.0)
             {
                 if (this._part1.owner != null)
                 {
@@ -699,30 +699,30 @@ namespace DuckGame
             this.Solve(_part1, _part3, this.partSep * 2f);
             if (this._part1.owner is Duck && this._part3.owner is Duck)
             {
-                double num1 = (double)this.SpecialSolve(_part3, this._part1.owner as Duck, 16f);
-                double num2 = (double)this.SpecialSolve(_part1, this._part3.owner as Duck, 16f);
+                double num1 = this.SpecialSolve(_part3, this._part1.owner as Duck, 16f);
+                double num2 = this.SpecialSolve(_part1, this._part3.owner as Duck, 16f);
             }
             if (this.tongueStuck != Vec2.Zero && this.captureDuck != null)
             {
                 Vec2 vec2_5 = this.tongueStuck + new Vec2(captureDuck.offDir * -4, -6f);
                 if (this._part1.owner is Duck)
                 {
-                    double num3 = (double)this.SpecialSolve(_part3, this._part1.owner as Duck, 16f);
-                    double num4 = (double)this.SpecialSolve(_part1, vec2_5, 16f);
+                    double num3 = this.SpecialSolve(_part3, this._part1.owner as Duck, 16f);
+                    double num4 = this.SpecialSolve(_part1, vec2_5, 16f);
                 }
                 if (this._part3.owner is Duck)
                 {
-                    double num5 = (double)this.SpecialSolve(_part1, this._part3.owner as Duck, 16f);
-                    double num6 = (double)this.SpecialSolve(_part3, vec2_5, 16f);
+                    double num5 = this.SpecialSolve(_part1, this._part3.owner as Duck, 16f);
+                    double num6 = this.SpecialSolve(_part3, vec2_5, 16f);
                 }
                 vec2_1 = this.part1.position - vec2_5;
-                if ((double)vec2_1.length > 4.0)
+                if (vec2_1.length > 4.0)
                 {
-                    double num = (double)this.SpecialSolve(_part1, vec2_5, 4f);
+                    double num = this.SpecialSolve(_part1, vec2_5, 4f);
                     vec2_1 = vec2_5 - this.part1.position;
                     Vec2 normalized = vec2_1.normalized;
                     vec2_1 = this.part1.position - vec2_5;
-                    if ((double)vec2_1.length > 12.0)
+                    if (vec2_1.length > 12.0)
                         this.part1.position = Lerp.Vec2Smooth(this.part1.position, vec2_5, 0.2f);
                 }
             }
@@ -822,7 +822,7 @@ namespace DuckGame
                 }
             }
             bool flag = false;
-            if (this.captureDuck.HasEquipment(typeof(FancyShoes)) && (double)Math.Abs(this._part1.x - this._part3.x) < 9.0 && (double)this._part1.y < (double)this._part3.y)
+            if (this.captureDuck.HasEquipment(typeof(FancyShoes)) && Math.Abs(this._part1.x - this._part3.x) < 9.0 && this._part1.y < this._part3.y)
                 flag = true;
             if (this.tongueStuckThing != null && this.tongueStuckThing.removeFromLevel)
             {

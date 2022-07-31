@@ -118,7 +118,7 @@ namespace DuckGame
         public void Update()
         {
             bool flag = false;
-            if ((double)Mouse.x > _position.x && (double)Mouse.y > _position.y && (double)Mouse.x < _position.x + (double)this._size.x && (double)Mouse.y < _position.y + (double)this._size.y)
+            if (Mouse.x > _position.x && Mouse.y > _position.y && Mouse.x < _position.x + this._size.x && Mouse.y < _position.y + this._size.y)
             {
                 flag = true;
                 Editor.hoverTextBox = true;

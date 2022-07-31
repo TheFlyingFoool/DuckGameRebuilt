@@ -90,7 +90,7 @@ namespace DuckGame
             else
                 Graphics.DrawString(this._text, this.position + new Vec2(4f, 5f), color, (Depth)0.85f);
             this._radioButton.depth = (Depth)0.9f;
-            this._radioButton.x = (float)((double)this.x + itemSize.x - 16.0);
+            this._radioButton.x = (this.x + itemSize.x - 16f);
             this._radioButton.y = this.y;
             this._radioButton.frame = this._selected ? 1 : 0;
             this._radioButton.color = color;

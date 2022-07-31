@@ -71,12 +71,12 @@ namespace DuckGame
                 this.angleDegrees = this._throwSpin;
                 bool flag1 = false;
                 bool flag2 = false;
-                if (((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2.0 || !this.grounded) && gravMultiplier > 0.0 && !flag2 && !this._grounded)
+                if ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2.0 || !this.grounded) && gravMultiplier > 0.0 && !flag2 && !this._grounded)
                 {
                     if (this.offDir > 0)
-                        this._throwSpin += (float)(((double)Math.Abs(this.hSpeed * 2f) + (double)Math.Abs(this.vSpeed)) * 1.0 + 5.0);
+                        this._throwSpin += (float)((Math.Abs(this.hSpeed * 2f) + Math.Abs(this.vSpeed)) * 1.0 + 5.0);
                     else
-                        this._throwSpin -= (float)(((double)Math.Abs(this.hSpeed * 2f) + (double)Math.Abs(this.vSpeed)) * 1.0 + 5.0);
+                        this._throwSpin -= (float)((Math.Abs(this.hSpeed * 2f) + Math.Abs(this.vSpeed)) * 1.0 + 5.0);
                     flag1 = true;
                 }
                 if (!flag1 | flag2)
@@ -85,7 +85,7 @@ namespace DuckGame
                     if (_throwSpin < 0.0)
                         this._throwSpin += 360f;
                     if (flag2)
-                        this._throwSpin = (double)Math.Abs(this._throwSpin - 90f) >= (double)Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
+                        this._throwSpin = Math.Abs(this._throwSpin - 90f) >= Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
                     else if (_throwSpin > 90.0 && _throwSpin < 270.0)
                     {
                         this._throwSpin = Lerp.Float(this._throwSpin, 180f, 14f);

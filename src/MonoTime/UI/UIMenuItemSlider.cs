@@ -28,7 +28,7 @@ namespace DuckGame
                 align = UIAlign.Left
             };
             component1.leftSection.Add(component2, true);
-            UIProgressBar component3 = new UIProgressBar((double)step < 0.0526315793395042 ? 26f : 30f, 7f, field, step)
+            UIProgressBar component3 = new UIProgressBar(step < 0.0526315793395042 ? 26f : 30f, 7f, field, step)
             {
                 align = UIAlign.Right
             };
@@ -58,7 +58,7 @@ namespace DuckGame
                     return;
                 num = Maths.Clamp((float)this._field.value + this._step, this._field.min, this._field.max);
             }
-            if ((double)num != (double)(float)this._field.value)
+            if (num != (float)this._field.value)
                 SFX.Play("textLetter", 0.7f);
             this._field.value = num;
         }

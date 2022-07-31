@@ -43,7 +43,7 @@ namespace DuckGame
             for (int index = 0; index < 8; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = ((double)Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f);
+                woodDebris.hSpeed = (Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }

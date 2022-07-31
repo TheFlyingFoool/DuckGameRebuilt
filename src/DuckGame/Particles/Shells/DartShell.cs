@@ -31,11 +31,11 @@ namespace DuckGame
         {
             base.Update();
             this.angle += this._rotSpeed;
-            if ((double)this.vSpeed < 0.0 || this._grounded)
+            if (this.vSpeed < 0.0 || this._grounded)
                 this._die = true;
             if (this._die)
                 this.alpha -= 0.05f;
-            if ((double)this.alpha > 0.0)
+            if (this.alpha > 0.0)
                 return;
             Level.Remove(this);
         }

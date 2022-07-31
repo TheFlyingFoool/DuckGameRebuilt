@@ -99,7 +99,7 @@ namespace DuckGame
                 this._lerpNum = (int)((_count / this._maxCount) * _lerpColors.Count - 0.01f);
                 int num = this._maxCount / this._lerpColors.Count;
                 this._currentColor = Color.Lerp(this._currentColor, this._lerpColors[this._lerpNum], 0.1f);
-                this._currentColor.a = (byte)(_alpha * (double)byte.MaxValue);
+                this._currentColor.a = (byte)(_alpha * byte.MaxValue);
                 this._alpha -= 0.02f;
                 if (_alpha < 0f)
                     this._alpha = 0f;

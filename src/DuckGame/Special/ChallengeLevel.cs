@@ -223,7 +223,7 @@ namespace DuckGame
             if (this._fading)
             {
                 DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.05f);
-                if ((double)DuckGame.Graphics.fade >= 0.01f)
+                if (Graphics.fade >= 0.01f)
                     return;
                 if (this._validityTest)
                 {
@@ -257,7 +257,7 @@ namespace DuckGame
                         this._restarting = true;
                 }
                 this._waitFade -= 0.04f;
-                if (!this._didFade && _waitFade <= 0f && (double)DuckGame.Graphics.fade < 1f)
+                if (!this._didFade && _waitFade <= 0f && DuckGame.Graphics.fade < 1f)
                     DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.04f);
                 else if (this._restarting)
                 {
@@ -739,11 +739,11 @@ namespace DuckGame
                     text = "";
                 float width = this._font.GetWidth(text);
                 float num = 1f;
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) - num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) - num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) - num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) + num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) + num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) - num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) + num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) + num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0), Color.White, (Depth)1f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) - num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) - num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) - num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) + num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) + num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) - num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) + num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) + num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f), (Layer.HUD.camera.height / 2f - this._font.height / 2f), Color.White, (Depth)1f);
             }
             base.PostDrawLayer(layer);
         }

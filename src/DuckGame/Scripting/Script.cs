@@ -137,11 +137,11 @@ namespace DuckGame
             return title != null ? title.previousOwner : "";
         }
 
-        public static float sin(float val) => (float)Math.Sin((double)val);
+        public static float sin(float val) => (float)Math.Sin(val);
 
-        public static float cos(float val) => (float)Math.Cos((double)val);
+        public static float cos(float val) => (float)Math.Cos(val);
 
-        public static float round(float val) => (float)Math.Round((double)val);
+        public static float round(float val) => (float)Math.Round(val);
 
         public static float toFloat(int val) => val;
 
@@ -156,14 +156,14 @@ namespace DuckGame
             if (wow > Global.data.highestNewsCast)
                 Global.data.highestNewsCast = wow;
             int num1 = 60;
-            int num2 = 250 + (int)(Global.data.highestNewsCast * (double)Rando.Float(0.1f, 0.25f));
+            int num2 = 250 + (int)(Global.data.highestNewsCast * Rando.Float(0.1f, 0.25f));
             if (wow < num1)
                 wow = num1;
             if (wow > num2)
                 wow = num2;
             wow -= num1;
             float num3 = wow / (float)(num2 - num1);
-            return Script._highlightRatings[(int)Math.Round((double)num3 * (Script._highlightRatings.Count - 1))];
+            return Script._highlightRatings[(int)Math.Round(num3 * (Script._highlightRatings.Count - 1))];
         }
 
         public static string highlightRating()
@@ -218,7 +218,7 @@ namespace DuckGame
                 ScriptObject scriptObject = Script.stat(val);
                 if (scriptObject != null)
                     num2 = Change.ToSingle(scriptObject.objectProperty.GetValue(scriptObject.obj, null)) * (scriptObject.negative ? -1f : 1f);
-                if ((double)num2 > (double)num1)
+                if (num2 > num1)
                     num1 = num2;
             }
             return num1;
@@ -246,7 +246,7 @@ namespace DuckGame
                         num2 = Change.ToSingle(scriptObject.objectProperty.GetValue(scriptObject.obj, null)) * (scriptObject.negative ? -1f : 1f);
                 }
                 Script.activeProfile = activeProfile;
-                if ((double)num2 > (double)num1)
+                if (num2 > num1)
                 {
                     num1 = num2;
                     profile1 = profile2;

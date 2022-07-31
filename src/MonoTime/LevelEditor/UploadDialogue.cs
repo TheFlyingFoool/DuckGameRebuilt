@@ -26,8 +26,8 @@ namespace DuckGame
             this.depth = (Depth)0.95f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             this.position = vec2_1 + new Vec2(4f, 20f);
             this.itemSize = new Vec2(490f, 16f);
             this._root = true;
@@ -60,13 +60,13 @@ namespace DuckGame
             }
             float num1 = 300f;
             float num2 = 80f;
-            Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             Vec2 vec2_3 = vec2_1 + new Vec2(18f, 28f);
             Vec2 vec2_4 = new Vec2(120f, 40f);
             Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f);
             Vec2 vec2_6 = new Vec2(120f, 40f);
-            this._hoverOk = (double)Mouse.x > vec2_3.x && (double)Mouse.x < vec2_3.x + (double)vec2_4.x && (double)Mouse.y > vec2_3.y && (double)Mouse.y < vec2_3.y + (double)vec2_4.y;
+            this._hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
             if (!Editor.tookInput && Input.Pressed("MENULEFT"))
                 --this._selectedIndex;
             else if (!Editor.tookInput && Input.Pressed("MENURIGHT"))
@@ -85,8 +85,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 300f;
             float num2 = 60f;
-            Vec2 p1_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 p2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 p1_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 p2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             Graphics.DrawRect(p1_1, p2, new Color(70, 70, 70), this.depth, false);
             Graphics.DrawRect(p1_1, p2, new Color(30, 30, 30), this.depth - 1);
             Graphics.DrawRect(p1_1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), this.depth + 1);

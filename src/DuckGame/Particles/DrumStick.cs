@@ -25,7 +25,7 @@ namespace DuckGame
             this.angle += 0.6f;
             this.y += this.vSpeed;
             this.vSpeed += 0.2f;
-            if ((double)this.y <= _startY)
+            if (this.y <= _startY)
                 return;
             Level.Remove(this);
         }

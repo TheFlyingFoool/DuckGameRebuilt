@@ -56,7 +56,7 @@ namespace DuckGame
         public override void Update()
         {
             this._netGunGuage.frame = 4 - Math.Min(this.ammo + 1, 4);
-            if ((double)this._barrelSteam.speed > 0.0 && this._barrelSteam.finished)
+            if (this._barrelSteam.speed > 0.0 && this._barrelSteam.finished)
                 this._barrelSteam.speed = 0f;
             base.Update();
         }
@@ -64,7 +64,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if ((double)this._barrelSteam.speed > 0.0)
+            if (this._barrelSteam.speed > 0.0)
             {
                 this._barrelSteam.alpha = 0.6f;
                 this.Draw(_barrelSteam, new Vec2(9f, 1f));

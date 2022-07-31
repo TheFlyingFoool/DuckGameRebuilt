@@ -290,7 +290,7 @@ namespace DuckGame
                 if (this._goBack)
                 {
                     this._lerpOffset = Lerp.Float(this._lerpOffset, this._oldLerpOffset, 8f);
-                    if (_lerpOffset == (double)this._oldLerpOffset)
+                    if (_lerpOffset == this._oldLerpOffset)
                     {
                         this._goBack = false;
                         this._viewing = null;
@@ -310,7 +310,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.alpha <= 0.01f || this._activeChallengeGroup == null)
+            if (this.alpha <= 0.01f || this._activeChallengeGroup == null)
                 return;
             float ypos = 16f;
             string nameForDisplay = this._activeChallengeGroup.GetNameForDisplay();

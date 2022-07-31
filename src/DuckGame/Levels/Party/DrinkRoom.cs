@@ -30,7 +30,7 @@ namespace DuckGame
             if (Input.Pressed("MENU2"))
                 this._fade = true;
             Graphics.fade = Lerp.Float(Graphics.fade, this._fade ? 0f : 1f, 0.1f);
-            if (this._fade && (double)Graphics.fade < 0.01f)
+            if (this._fade && Graphics.fade < 0.01f)
                 Level.current = this._next;
             base.Update();
         }

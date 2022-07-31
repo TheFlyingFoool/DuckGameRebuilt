@@ -53,13 +53,13 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2(-99999f, -99999f);
             foreach (Block block in this._blocks)
             {
-                if ((double)block.left < vec2_1.x)
+                if (block.left < vec2_1.x)
                     vec2_1.x = block.left;
-                if ((double)block.right > vec2_2.x)
+                if (block.right > vec2_2.x)
                     vec2_2.x = block.right;
-                if ((double)block.top < vec2_1.y)
+                if (block.top < vec2_1.y)
                     vec2_1.y = block.top;
-                if ((double)block.bottom > vec2_2.y)
+                if (block.bottom > vec2_2.y)
                     vec2_2.y = block.bottom;
                 this.physicsMaterial = block.physicsMaterial;
                 this.thickness = block.thickness;

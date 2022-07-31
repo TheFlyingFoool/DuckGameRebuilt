@@ -32,10 +32,10 @@ namespace DuckGame
             if (h1.PickupPriority() == h2.PickupPriority())
             {
                 Vec2 vec2 = h1.position - this._duck.position;
-                double length1 = (double)vec2.length;
+                double length1 = vec2.length;
                 vec2 = h2.position - this._duck.position;
-                double length2 = (double)vec2.length;
-                return length1 - length2 < -2.0 ? -1 : 1;
+                double length2 = vec2.length;
+                return length1 - length2 < -2f ? -1 : 1;
             }
             return h1.PickupPriority() < h2.PickupPriority() ? -1 : 1;
         }

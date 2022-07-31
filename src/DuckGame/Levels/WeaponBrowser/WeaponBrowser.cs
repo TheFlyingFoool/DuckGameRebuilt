@@ -57,7 +57,7 @@
 //                }
 //                else
 //                {
-//                    if ((textVal.Length + str3.Length) * 8 > (double)num)
+//                    if ((textVal.Length + str3.Length) * 8 > num)
 //                    {
 //                        component4.Add(new UIText(textVal, Color.White), true);
 //                        textVal = "";

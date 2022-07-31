@@ -63,7 +63,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             p1 = new Vec2(p1.x, p1.y);
             p2 = new Vec2(p2.x, p2.y);
-            float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
+            float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
             float length = (p1 - p2).length;
             this.batch.Draw(this._blank, (Vector2)p1, new Microsoft.Xna.Framework.Rectangle?(), (Microsoft.Xna.Framework.Color)col, rotation, (Vector2)new Vec2(0f, 0.5f), (Vector2)new Vec2(length, width), SpriteEffects.None, 1f);
         }
@@ -118,8 +118,8 @@ namespace DuckGame
                 this._currentMaxSize = num2;
             else
                 this._currentMaxSize -= 2;
-            NetGraph._biosFont.Draw(this.batch, "in: " + (this._currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / (double)this._packets.Count / 8.0)).ToString() + " avg", p1_1.x, (float)(p1_1.y - 9.0), Color.White);
-            NetGraph._biosFont.Draw(this.batch, "fps: " + this.fps.ToString() + "    ping: " + ((int)(ping * 1000.0)).ToString() + "ms", p1_1.x, (float)(p1_1.y + (double)this._maxHeightPerPacket + 8.0), Color.White);
+            NetGraph._biosFont.Draw(this.batch, "in: " + (this._currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / this._packets.Count / 8.0)).ToString() + " avg", p1_1.x, (float)(p1_1.y - 9.0), Color.White);
+            NetGraph._biosFont.Draw(this.batch, "fps: " + this.fps.ToString() + "    ping: " + ((int)(ping * 1000.0)).ToString() + "ms", p1_1.x, (float)(p1_1.y + this._maxHeightPerPacket + 8.0), Color.White);
         }
 
         public void DrawChart(Vec2 pos)
@@ -175,8 +175,8 @@ namespace DuckGame
                 NetGraph.numAckBytes = 0;
                 NetGraph.numFrames = 0;
             }
-            DuckGame.Graphics.DrawString("in: " + (this._currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / (double)this._packets.Count / 8.0)).ToString() + " avg", new Vec2(pos.x, pos.y - 9f), Color.White, (Depth)0.9f);
-            DuckGame.Graphics.DrawString("fps: " + this.fps.ToString() + "    ping: " + ((int)(ping * 1000.0)).ToString() + "ms     bytes out:" + NetGraph.avgBytes.ToString("0.00") + " hdr:" + NetGraph.avgHeaderBytes.ToString("0.00") + " ack:" + NetGraph.avgAckBytes.ToString("0.00") + " gst:" + NetGraph.avgGhostBytes.ToString("0.00"), new Vec2(pos.x, (float)(pos.y + (double)this._maxHeightPerPacket + 8.0)), Color.White, (Depth)0.9f);
+            DuckGame.Graphics.DrawString("in: " + (this._currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / this._packets.Count / 8.0)).ToString() + " avg", new Vec2(pos.x, pos.y - 9f), Color.White, (Depth)0.9f);
+            DuckGame.Graphics.DrawString("fps: " + this.fps.ToString() + "    ping: " + ((int)(ping * 1000.0)).ToString() + "ms     bytes out:" + NetGraph.avgBytes.ToString("0.00") + " hdr:" + NetGraph.avgHeaderBytes.ToString("0.00") + " ack:" + NetGraph.avgAckBytes.ToString("0.00") + " gst:" + NetGraph.avgGhostBytes.ToString("0.00"), new Vec2(pos.x, (float)(pos.y + this._maxHeightPerPacket + 8.0)), Color.White, (Depth)0.9f);
         }
 
         public void PreUpdate()

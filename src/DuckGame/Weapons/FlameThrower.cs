@@ -94,12 +94,12 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = null;
-            if ((double)this._barrelFlame.speed > 0.0)
+            if (this._barrelFlame.speed > 0.0)
             {
                 this._barrelFlame.alpha = 0.9f;
                 this.Draw(_barrelFlame, new Vec2(11f, 1f));
             }
-            this._can.frame = (int)((1.0 - ammo / (double)this._maxAmmo) * 15.0);
+            this._can.frame = (int)((1.0 - ammo / this._maxAmmo) * 15.0);
             this.Draw(_can, new Vec2(this.barrelOffset.x - 11f, this.barrelOffset.y + 4f));
             Graphics.material = material;
         }

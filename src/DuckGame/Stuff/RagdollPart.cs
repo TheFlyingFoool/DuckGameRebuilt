@@ -284,7 +284,7 @@ namespace DuckGame
                 }
             }
             Feather feather = Feather.New(0f, 0f, this._persona);
-            feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
+            feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = hitPos;
             Level.Add(feather);
@@ -337,11 +337,11 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._doll.captureDuck != null && !this._doll.captureDuck.dead && (this.part == 0 || this.part == 1) && (double)this.totalImpactPower > 5.0 && _doll.captureDuck.quack < 0.25)
+            if (this._doll.captureDuck != null && !this._doll.captureDuck.dead && (this.part == 0 || this.part == 1) && this.totalImpactPower > 5.0 && _doll.captureDuck.quack < 0.25)
             {
                 this._doll.captureDuck.Swear();
                 float intensityToSet = Math.Min(this.totalImpactPower * 0.01f, 1f);
-                if ((double)intensityToSet > 0.0500000007450581)
+                if (intensityToSet > 0.0500000007450581)
                     RumbleManager.AddRumbleEvent(this._doll.captureDuck.profile, new RumbleEvent(intensityToSet, 0.05f, 0.6f));
             }
             base.OnSolidImpact(with, from);
@@ -376,7 +376,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this._doll == null || (double)this.y > Level.activeLevel.lowestPoint + 1000.0 && this.isOffBottomOfLevel)
+            if (this._doll == null || this.y > Level.activeLevel.lowestPoint + 1000.0 && this.isOffBottomOfLevel)
                 return;
             this.UpdateLastReasonablePosition(this.position);
             if (this.clipFrames > 0)
@@ -474,19 +474,19 @@ namespace DuckGame
             FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(this.position + new Vec2(0f, 4f));
             if (fluidPuddle != null)
             {
-                if ((double)this.y + 4.0 - (double)fluidPuddle.top > 8.0)
+                if (this.y + 4.0 - fluidPuddle.top > 8.0)
                 {
                     this.gravMultiplier = -0.5f;
                     this.grounded = false;
                 }
                 else
                 {
-                    if ((double)this.y + 4.0 - (double)fluidPuddle.top < 3.0)
+                    if (this.y + 4.0 - fluidPuddle.top < 3.0)
                     {
                         this.gravMultiplier = 0.2f;
                         this.grounded = true;
                     }
-                    else if ((double)this.y + 4.0 - (double)fluidPuddle.top > 4.0)
+                    else if (this.y + 4.0 - fluidPuddle.top > 4.0)
                     {
                         this.gravMultiplier = -0.2f;
                         this.grounded = true;
@@ -505,14 +505,14 @@ namespace DuckGame
                 if (this.isServerForObject)
                 {
                     if (this.offDir < 0)
-                        this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
+                        this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
                     else
-                        this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) - 90.0);
+                        this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) - 90.0);
                 }
             }
             if (this._part == 3 && this.connect != null)
             {
-                this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this.connect.position) + 180.0);
+                this.angleDegrees = (float)(-Maths.PointDirection(this.position, this.connect.position) + 180.0);
                 this.depth = this.connect.depth + 2;
             }
             this.visible = this._part != 2;
@@ -540,7 +540,7 @@ namespace DuckGame
             Vec2 position = this.position;
             Vec2 vec2_1 = this.position - this._joint.position;
             float num1 = vec2_1.length;
-            if ((double)num1 > 8.0)
+            if (num1 > 8.0)
                 num1 = 8f;
             this.position = this._joint.position + vec2_1.normalized * num1;
             if (this._part == 0 && this._doll != null && this._doll.captureDuck != null && (this._doll.captureDuck.quack > 0 || this.doll != null && this.doll.tongueStuck != Vec2.Zero))
@@ -561,7 +561,7 @@ namespace DuckGame
                     flag = true;
                     num2 = 1f;
                 }
-                if ((double)num2 > 0.0500000007450581 | flag)
+                if (num2 > 0.0500000007450581 | flag)
                 {
                     Vec2 vec2_4 = this.position - (this.position - this._joint.position).normalized * 3f;
                     if (flag)
@@ -635,9 +635,9 @@ namespace DuckGame
             }
             float angleDegrees = this.angleDegrees;
             if (this.offDir < 0)
-                this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
+                this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
             else
-                this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, this._joint.position) - 90.0);
+                this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) - 90.0);
             base.Draw();
             this.angleDegrees = angleDegrees;
             this.graphic = graphic1;

@@ -127,7 +127,7 @@ namespace DuckGame
             if (this._topBullet != null)
             {
                 this._topBullet.DoUpdate();
-                int num = (int)(ammo / (double)this.bulletsTillRemove);
+                int num = (int)(ammo / this.bulletsTillRemove);
                 if (num < this.numHanging)
                 {
                     this._topBullet = this._topBullet.childThing as ChaingunBullet;

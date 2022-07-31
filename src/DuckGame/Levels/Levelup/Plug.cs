@@ -268,7 +268,7 @@ namespace DuckGame
             {
                 float width = Plug._font.GetWidth(Plug._lineProgress[index1].text);
                 float y = vec2_3.y + 2f + num * 9;
-                float x = (float)(vec2_3.x + vec2_2.x / 2.0 - (double)width / 2.0);
+                float x = (float)(vec2_3.x + vec2_2.x / 2.0 - width / 2.0);
                 for (int index2 = Plug._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     Plug._font.Draw(Plug._lineProgress[index1].segments[index2].text, new Vec2(x, y), Plug._lineProgress[index1].segments[index2].color, (Depth)0.98f);

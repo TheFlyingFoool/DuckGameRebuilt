@@ -193,7 +193,7 @@ namespace DuckGame
         }
 
         public Color(float r, float g, float b, float a)
-          : this((byte)((double)MathHelper.Clamp(r, 0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(g, 0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(b, 0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(a, 0f, 1f) * byte.MaxValue))
+          : this((byte)(MathHelper.Clamp(r, 0f, 1f) * byte.MaxValue), (byte)(MathHelper.Clamp(g, 0f, 1f) * byte.MaxValue), (byte)(MathHelper.Clamp(b, 0f, 1f) * byte.MaxValue), (byte)(MathHelper.Clamp(a, 0f, 1f) * byte.MaxValue))
         {
         }
 

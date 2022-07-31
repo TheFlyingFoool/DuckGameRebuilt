@@ -55,7 +55,7 @@ namespace DuckGame
                         vSpeed = vec2.y
                     };
                     --this.ammo;
-                    this._guage.frame = 3 - (int)(ammo / (double)this._maxAmmo * 4.0);
+                    this._guage.frame = 3 - (int)(ammo / this._maxAmmo * 4.0);
                     Level.Add(extinguisherSmoke);
                 }
                 this._smoke = !this._smoke;

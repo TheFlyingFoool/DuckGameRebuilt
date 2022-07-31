@@ -12,7 +12,7 @@ namespace DuckGame
         public WaterParticle(float xpos, float ypos, Vec2 hitAngle)
           : base(xpos, ypos)
         {
-            this.hSpeed = (float)(-(double)hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
+            this.hSpeed = (float)(-hitAngle.x * 2.0 * (Rando.Float(1f) + 0.300000011920929));
         }
 
         public override void Update()
@@ -22,7 +22,7 @@ namespace DuckGame
             this.x += this.hSpeed;
             this.y += this.vSpeed;
             this.alpha -= 0.06f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             base.Update();
         }

@@ -46,7 +46,7 @@ namespace DuckGame
         {
             get
             {
-                float num = (float)(rect.width / (double)this.layerCore._console.camera.width * 0.5);
+                float num = (float)(rect.width / this.layerCore._console.camera.width * 0.5);
                 return new Rectangle(this.rect.x * num, this.rect.y * num, this.rect.width * num, this.rect.height * num);
             }
         }

@@ -206,30 +206,30 @@ namespace DuckGame
             if (updatePrev)
                 signal.prevPosition = signal.position;
             float overshoot;
-            if (signal.travel.position.x < (double)signal.position.x)
+            if (signal.travel.position.x < signal.position.x)
             {
                 signal.position.x -= travelSpeed;
                 overshoot = signal.travel.position.x - signal.position.x;
             }
-            else if (signal.travel.position.x > (double)signal.position.x)
+            else if (signal.travel.position.x > signal.position.x)
             {
                 signal.position.x += travelSpeed;
                 overshoot = signal.position.x - signal.travel.position.x;
             }
-            else if (signal.travel.position.y > (double)signal.position.y)
+            else if (signal.travel.position.y > signal.position.y)
             {
                 signal.position.y += travelSpeed;
                 overshoot = signal.position.y - signal.travel.position.y;
             }
-            else if (signal.travel.position.y < (double)signal.position.y)
+            else if (signal.travel.position.y < signal.position.y)
             {
                 signal.position.y -= travelSpeed;
                 overshoot = signal.travel.position.y - signal.position.y;
             }
             else
                 overshoot = 0f;
-            signal.life -= (float)((double)travelSpeed / 16.0 * 0.00999999977648258);
-            if ((double)overshoot >= 0.0 && signal.life > 0.0)
+            signal.life -= (float)(travelSpeed / 16.0 * 0.00999999977648258);
+            if (overshoot >= 0.0 && signal.life > 0.0)
                 this.Emit(signal, overshoot, signal.signalType);
             if (signal.life > 0.0)
                 return;
@@ -243,7 +243,7 @@ namespace DuckGame
             foreach (WireConnection connection2 in this._connections)
             {
                 float lengthSq = (connection2.position - pos).lengthSq;
-                if ((double)lengthSq < (double)num)
+                if (lengthSq < num)
                 {
                     num = lengthSq;
                     connection1 = connection2;

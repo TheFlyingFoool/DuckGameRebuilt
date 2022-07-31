@@ -103,7 +103,7 @@ namespace DuckGame
                         return;
                     }
                     this._triggerHeld = true;
-                    if ((double)this._controlledDuck.x < (double)owner.x)
+                    if (this._controlledDuck.x < owner.x)
                         owner.offDir = -1;
                     else
                         owner.offDir = 1;

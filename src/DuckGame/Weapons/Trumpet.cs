@@ -66,12 +66,12 @@ namespace DuckGame
                         this.currentPitch = 0;
                     if (owner.inputProfile.Pressed("RAGDOLL"))
                         this.currentPitch = 1;
-                    if ((double)owner.inputProfile.leftTrigger > 0.5 && !this.leftPressed)
+                    if (owner.inputProfile.leftTrigger > 0.5 && !this.leftPressed)
                     {
                         this.currentPitch = 2;
                         this.leftPressed = true;
                     }
-                    if ((double)owner.inputProfile.rightTrigger > 0.5 && !this.rightPressed)
+                    if (owner.inputProfile.rightTrigger > 0.5 && !this.rightPressed)
                     {
                         this.currentPitch = 3;
                         this.rightPressed = true;
@@ -82,13 +82,13 @@ namespace DuckGame
                         this.currentPitch = -1;
                     if (owner.inputProfile.Released("RAGDOLL") && this.currentPitch == 1)
                         this.currentPitch = -1;
-                    if ((double)owner.inputProfile.leftTrigger <= 0.5)
+                    if (owner.inputProfile.leftTrigger <= 0.5)
                     {
                         if (this.currentPitch == 2 && this.leftPressed)
                             this.currentPitch = -1;
                         this.leftPressed = false;
                     }
-                    if ((double)owner.inputProfile.rightTrigger <= 0.5)
+                    if (owner.inputProfile.rightTrigger <= 0.5)
                     {
                         if (this.currentPitch == 3 && this.rightPressed)
                             this.currentPitch = -1;
@@ -96,7 +96,7 @@ namespace DuckGame
                     }
                     this.notePitch = this.currentPitch < 0 || this._raised ? 0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
                 }
-                if (notePitch != (double)this.prevNotePitch)
+                if (notePitch != this.prevNotePitch)
                 {
                     if (notePitch != 0.0)
                     {
@@ -117,7 +117,7 @@ namespace DuckGame
                             Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - (double)this.hitPitch) * 0.00999999977648258), -1f, 1f);
+                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - this.hitPitch) * 0.00999999977648258), -1f, 1f);
                     }
                     else if (this.noteSound != null)
                     {

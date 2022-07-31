@@ -139,19 +139,19 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed > -22.0 * _mult)
+                if (with.vSpeed > -22.0 * _mult)
                     with.vSpeed = -22f * this._mult;
                 if (with is RagdollPart)
                 {
-                    if ((double)Math.Abs(with.hSpeed) < 0.100000001490116)
-                        with.hSpeed = (double)Rando.Float(1f) >= 0.5 ? 1.3f : -1.3f;
+                    if (Math.Abs(with.hSpeed) < 0.100000001490116)
+                        with.hSpeed = Rando.Float(1f) >= 0.5 ? 1.3f : -1.3f;
                     else
                         with.hSpeed *= Rando.Float(1.1f, 1.4f);
                 }
                 if (with is Mine)
                 {
-                    if ((double)Math.Abs(with.hSpeed) < 0.100000001490116)
-                        with.hSpeed = (double)Rando.Float(1f) >= 0.5 ? 1.2f : -1.2f;
+                    if (Math.Abs(with.hSpeed) < 0.100000001490116)
+                        with.hSpeed = Rando.Float(1f) >= 0.5 ? 1.2f : -1.2f;
                     else
                         with.hSpeed *= Rando.Float(1.1f, 1.2f);
                 }

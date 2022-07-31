@@ -140,7 +140,7 @@ namespace DuckGame
                 num1 += instance.Volume;
             int count = this._instances.Count;
             float num2 = num1 / (count > 0 ? count : 1f);
-            this._volume = Lerp.Float(this._volume, (float)((double)num2 * 0.7f + Maths.Clamp(this._instances.Count, 0, 4) / 4f * (double)num2 * 0.3f), 0.05f);
+            this._volume = Lerp.Float(this._volume, (float)(num2 * 0.7f + Maths.Clamp(this._instances.Count, 0, 4) / 4f * num2 * 0.3f), 0.05f);
             if (this._state != SoundState.Playing)
                 return;
             if (this._playCount > 1)
@@ -150,7 +150,7 @@ namespace DuckGame
                 if (this._single.State != SoundState.Stopped)
                 {
                     this._single.Volume = Lerp.Float(this._single.Volume, 0f, 0.05f);
-                    if ((double)this._single.Volume < 0.02f)
+                    if (this._single.Volume < 0.02f)
                     {
                         this._single.Volume = 0f;
                         this._single.Stop();

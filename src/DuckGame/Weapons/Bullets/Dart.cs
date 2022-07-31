@@ -31,7 +31,7 @@ namespace DuckGame
             this._owner = owner;
             this.breakForce = 1f;
             this._stickTime = 2f + Rando.Float(0.8f);
-            if ((double)Rando.Float(1f) > 0.949999988079071)
+            if (Rando.Float(1f) > 0.949999988079071)
                 this._stickTime += Rando.Float(15f);
             this.angle = fireAngle;
             if (owner == null)
@@ -51,7 +51,7 @@ namespace DuckGame
                     angle = this.angle
                 };
                 Level.Add(dartShell);
-                dartShell.hSpeed = (float)((0.5 + (double)Rando.Float(0.3f)) * -(double)this._sprite.flipMultH);
+                dartShell.hSpeed = (float)((0.5 + Rando.Float(0.3f)) * -this._sprite.flipMultH);
                 Level.Remove(this);
                 return true;
             }

@@ -80,7 +80,7 @@ namespace DuckGame
             }
             if (this.destroyed)
                 this.alpha -= 0.05f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             base.Update();
             if (this._equippedDuck != null && this._equippedDuck._trapped != null)

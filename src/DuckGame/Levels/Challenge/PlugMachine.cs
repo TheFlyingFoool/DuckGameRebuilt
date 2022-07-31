@@ -62,7 +62,7 @@ namespace DuckGame
             Duck duck = Level.Nearest<Duck>(p);
             if (duck != null)
             {
-                if (duck.grounded && (double)(duck.position - p).length < 16f)
+                if (duck.grounded && (duck.position - p).length < 16f)
                 {
                     this._hoverFade = Lerp.Float(this._hoverFade, 1f, 0.2f);
                     this.hover = true;

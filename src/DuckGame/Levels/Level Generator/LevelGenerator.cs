@@ -221,7 +221,7 @@ namespace DuckGame
                 length1 = Rando.Float(1f) <= 0.6f ? 3 : 2;
             if (varhigh == 0)
             {
-                double num = (double)Rando.Float(1f);
+                double num = Rando.Float(1f);
                 if (num > 0.85f && length1 == 3)
                     ;
                 length2 = num <= 0.45f ? 3 : 2;

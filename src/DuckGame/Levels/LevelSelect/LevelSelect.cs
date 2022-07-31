@@ -326,7 +326,7 @@ namespace DuckGame
                 {
                     HUD.CloseAllCorners();
                     Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.04f);
-                    if ((double)Graphics.fade >= 0.01f)
+                    if (Graphics.fade >= 0.01f)
                         return;
                     this.isClosed = true;
                 }

@@ -157,9 +157,9 @@ namespace DuckGame
                 this.duck.frictionMult = 1f;
                 this.duck.gravMultiplier = 1f;
                 this.duck._double = false;
-                if ((double)this.duck.vSpeed < 0.0 && this.duck.framesSinceJump > 3)
+                if (this.duck.vSpeed < 0.0 && this.duck.framesSinceJump > 3)
                     this.duck.vSpeed *= 1.75f;
-                if ((double)this.duck.vSpeed >= duck.jumpSpeed * 0.949999988079071 && (double)Math.Abs(this.duck.vSpeed) + (double)Math.Abs(this.duck.hSpeed) < 2.0)
+                if (this.duck.vSpeed >= duck.jumpSpeed * 0.949999988079071 && Math.Abs(this.duck.vSpeed) + Math.Abs(this.duck.hSpeed) < 2.0)
                 {
                     SFX.Play("jump", 0.5f);
                     this.duck.vSpeed = this.duck.jumpSpeed;
@@ -217,7 +217,7 @@ namespace DuckGame
                     this._grappleTravel = bullet.travelDirNormalized;
                     num = (p1 - this._wallPoint).length;
                 }
-                if ((double)num < _grappleLength - 2.0 && (double)num <= _grappleDist + 16.0)
+                if (num < _grappleLength - 2.0 && num <= _grappleDist + 16.0)
                 {
                     this._lastHit = this._wallPoint;
                     this._canGrab = true;
@@ -289,11 +289,11 @@ namespace DuckGame
                     this.duck.frictionMult = 1f;
                     this.duck.gravMultiplier = 1f;
                 }
-                if ((double)this._rope.properLength > 0.0)
+                if (this._rope.properLength > 0.0)
                 {
-                    if (this.duck.inputProfile.Down("UP") && (double)this._rope.properLength >= 16.0)
+                    if (this.duck.inputProfile.Down("UP") && this._rope.properLength >= 16.0)
                         this._rope.properLength -= 2f;
-                    if (this.duck.inputProfile.Down("DOWN") && (double)this._rope.properLength <= 256.0)
+                    if (this.duck.inputProfile.Down("DOWN") && this._rope.properLength <= 256.0)
                         this._rope.properLength += 2f;
                     this._rope.properLength = Maths.Clamp(this._rope.properLength, 16f, 256f);
                 }
@@ -308,9 +308,9 @@ namespace DuckGame
                 this.gravMultiplier = 1f;
             }
             Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
-            if ((double)this._rope.properLength < 0.0)
+            if (this._rope.properLength < 0.0)
                 this._rope.properLength = this._rope.startLength = vec2_1.length;
-            if ((double)vec2_1.length <= (double)this._rope.properLength)
+            if (vec2_1.length <= this._rope.properLength)
                 return;
             vec2_1 = vec2_1.normalized;
             if (this.duck != null)

@@ -487,7 +487,7 @@ namespace DuckGame
                 this._quitMenu.opened = true;
                 contextMenu1 = this._quitMenu;
             }
-            if (contextMenu1 == null || (double)contextMenu1.y + contextMenu1.menuSize.y <= (double)this.layer.camera.height - 4.0)
+            if (contextMenu1 == null || contextMenu1.y + contextMenu1.menuSize.y <= this.layer.camera.height - 4f)
                 return;
             this.isPushingUp = true;
             float y = contextMenu1.y;

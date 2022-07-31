@@ -498,7 +498,7 @@ namespace DuckGame
         {
             if (this.bitOffset != 0)
                 return BitConverter.ToSingle(this.ReadPacked(4), 0);
-            double single = (double)BitConverter.ToSingle(this._buffer, this.position);
+            double single = BitConverter.ToSingle(this._buffer, this.position);
             this.position += 4;
             return (float)single;
         }

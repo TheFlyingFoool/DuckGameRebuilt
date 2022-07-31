@@ -740,7 +740,7 @@ namespace DuckGame
                 {
                     foreach (KeyValuePair<Duck, float> keyValuePair in mine.ducksOnMine)
                     {
-                        if (!keyValuePair.Key.dead && (double)keyValuePair.Value > 5.0 && keyValuePair.Key.profile != null && (!Network.isActive || keyValuePair.Key.profile.connection == DuckNetwork.localConnection))
+                        if (!keyValuePair.Key.dead && keyValuePair.Value > 5.0 && keyValuePair.Key.profile != null && (!Network.isActive || keyValuePair.Key.profile.connection == DuckNetwork.localConnection))
                         {
                             Global.GiveAchievement("mine");
                             break;
@@ -836,7 +836,7 @@ namespace DuckGame
                 else if (this._waitAfterSpawnDings == 3)
                     text = "";
                 float width = this._font.GetWidth(text);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0), Color.White);
+                this._font.Draw(text, (float)(Layer.HUD.camera.width / 2.0 - width / 2.0), (float)(Layer.HUD.camera.height / 2.0 - this._font.height / 2.0), Color.White);
             }
             if (!this._validityTest || this._waitAfterSpawnDings <= 0 || _fontFade >= 0.5)
                 return;
@@ -844,7 +844,7 @@ namespace DuckGame
             string text1 = "WIN THE MATCH";
             float width1 = this._font.GetWidth(text1);
             this._font.alpha = (float)((Math.Sin(_pulse) + 1.0) / 2.0);
-            this._font.Draw(text1, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width1 / 2.0), (float)((double)Layer.HUD.camera.height - (double)this._font.height - 16.0), Color.Red);
+            this._font.Draw(text1, (float)(Layer.HUD.camera.width / 2.0 - width1 / 2.0), (float)(Layer.HUD.camera.height - this._font.height - 16.0), Color.Red);
         }
     }
 }

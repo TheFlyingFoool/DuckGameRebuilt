@@ -205,12 +205,12 @@ namespace DuckGame
                         this._trapTime -= 0.028f;
                         if (this.owner == null)
                         {
-                            if ((double)Math.Abs(this.hSpeed) < 1.0 && this._framesSinceTransfer > 30)
+                            if (Math.Abs(this.hSpeed) < 1.0 && this._framesSinceTransfer > 30)
                                 this._duckOwner.Fondle(this);
                             this.vSpeed -= Rando.Float(0.8f, 1.1f);
-                            if (this._duckOwner.inputProfile.Down("LEFT") && (double)this.hSpeed > -1.0)
+                            if (this._duckOwner.inputProfile.Down("LEFT") && this.hSpeed > -1.0)
                                 this.hSpeed -= Rando.Float(0.6f, 0.8f);
-                            if (this._duckOwner.inputProfile.Down("RIGHT") && (double)this.hSpeed < 1.0)
+                            if (this._duckOwner.inputProfile.Down("RIGHT") && this.hSpeed < 1.0)
                                 this.hSpeed += Rando.Float(0.6f, 0.8f);
                         }
                     }
@@ -264,7 +264,7 @@ namespace DuckGame
                 Vec2 stickSlowLerp = this._stickSlowLerp;
                 stickSlowLerp.y *= -1f;
                 int num2 = 0;
-                double length = (double)stickLerp.length;
+                double length = stickLerp.length;
                 if (length > 0.5)
                     num2 = 72;
                 Graphics.Draw(this._duckOwner._spriteQuack, this._duckOwner._sprite.imageIndex + num2, this.x + num1, this.y - 8f);

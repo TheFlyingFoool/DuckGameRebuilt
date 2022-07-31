@@ -22,7 +22,7 @@ namespace DuckGame
             this._plasma = new Sprite("arcade/plasma");
             this.camera = new Camera();
             this._plasmaMaterial = new MaterialPlasma();
-            this._target = new RenderTarget2D(320, (int)(320.0 * (double)DuckGame.Graphics.aspect));
+            this._target = new RenderTarget2D(320, (int)(320.0 * DuckGame.Graphics.aspect));
             this.visible = false;
         }
 
@@ -43,7 +43,7 @@ namespace DuckGame
             Graphics.currentLayer = this;
             Graphics.SetRenderTarget(this._target);
             Viewport viewport = Graphics.viewport;
-            Graphics.viewport = new Viewport(0, 0, 320, (int)(320f * (double)Graphics.aspect));
+            Graphics.viewport = new Viewport(0, 0, 320, (int)(320f * Graphics.aspect));
             this.Begin(false, false);
             this._plasma.depth = -0.9f;
             this._plasma.alpha = 1f;

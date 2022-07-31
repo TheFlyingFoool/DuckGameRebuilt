@@ -488,7 +488,7 @@ namespace DuckGame
                         return DayType.ToyDay;
                 }
             }
-            return Unlockables.lockedItems.Count > 18 || Unlockables.lockedItems.Count > 14 && (double)num2 > 0.200000002980232 || Unlockables.lockedItems.Count > 10 && (double)num2 > 0.300000011920929 || Unlockables.lockedItems.Count > 5 && (double)num2 > 0.5 || Unlockables.lockedItems.Count > 0 && (double)num2 > 0.75 ? DayType.HintDay : DayType.Empty;
+            return Unlockables.lockedItems.Count > 18 || Unlockables.lockedItems.Count > 14 && num2 > 0.200000002980232 || Unlockables.lockedItems.Count > 10 && num2 > 0.300000011920929 || Unlockables.lockedItems.Count > 5 && num2 > 0.5 || Unlockables.lockedItems.Count > 0 && num2 > 0.75 ? DayType.HintDay : DayType.Empty;
         }
 
         private bool IsVinceDay(DayType d) => d == DayType.Special || d == DayType.PawnDay || d == DayType.ImportDay || d == DayType.SaleDay || d == DayType.Shop || d == DayType.HintDay;
@@ -812,7 +812,7 @@ namespace DuckGame
                     }
                     this._levelSlideWait = 0f;
                     Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 1f, 0.1f);
-                    if ((double)Graphics.fadeAdd < 1.0)
+                    if (Graphics.fadeAdd < 1.0)
                         return;
                     this._didSlide = false;
                     this._currentLevel = this._desiredLevel;
@@ -848,7 +848,7 @@ namespace DuckGame
                 else
                 {
                     Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
-                    if ((double)Graphics.fadeAdd > 0.00999999977648258)
+                    if (Graphics.fadeAdd > 0.00999999977648258)
                         return;
                 }
                 if (!this._talking)
@@ -1219,7 +1219,7 @@ namespace DuckGame
                                             this._dayTake = 0f;
                                             --this._roundsPlayed;
                                         }
-                                        this._dayProgress = (float)(1.0 - _roundsPlayed / (double)this._startRoundsPlayed);
+                                        this._dayProgress = (float)(1.0 - _roundsPlayed / this._startRoundsPlayed);
                                         this.time += 0.08f;
                                     }
                                     if (time >= 1.0)
@@ -1564,7 +1564,7 @@ namespace DuckGame
                             }
                         }
                         int count = this._particles.Count;
-                        this._particles.RemoveAll(part => (double)(part.position - part.target).lengthSq < 64.0);
+                        this._particles.RemoveAll(part => (part.position - part.target).lengthSq < 64.0);
                         if (this._particles.Count != count)
                             this._firstParticleIn = true;
                         if (this._xpValue >= DuckNetwork.GetLevel(this._desiredLevel + 1).xpRequired && this._currentLevel != 20)
@@ -1644,7 +1644,7 @@ namespace DuckGame
                 x1 = 1f;
             }
             this._font.scale = vec2_2;
-            Vec2 vec2_3 = new Vec2((float)-((double)this._font.GetWidth(text1) / 2.0), num3 - 50f);
+            Vec2 vec2_3 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), num3 - 50f);
             this._font.DrawOutline(text1, this.position + vec2_3 + new Vec2(x1, y1), Color.White, Color.Black, this.depth + 2);
             this._font.scale = new Vec2(1f, 1f);
             this._lev.depth = this.depth + 2;
@@ -1671,7 +1671,7 @@ namespace DuckGame
             int num5 = 0;
             if (this._currentLevel > 0)
                 num5 = DuckNetwork.GetLevel(this._currentLevel).xpRequired;
-            int num6 = (int)Math.Round(xpRequired1 * (_xpValue / (double)xpRequired1));
+            int num6 = (int)Math.Round((double)(xpRequired1 * (_xpValue / xpRequired1)));
             int xpRequired2 = DuckNetwork.GetLevel(9999).xpRequired;
             if (num6 > xpRequired2)
                 num6 = xpRequired2;
@@ -1694,7 +1694,7 @@ namespace DuckGame
             if (this._currentLevel >= 7)
                 num8 = -1f;
             this._fancyFont.DrawOutline(text2, this.position + new Vec2(num8 - 8f, num3 - 31f) - new Vec2(this._fancyFont.GetWidth(text2), 0f), Colors.DGYellow, Color.Black, this.depth + 2);
-            if ((double)num7 < 0.0234999991953373)
+            if (num7 < 0.0234999991953373)
                 num7 = 0.0235f;
             float num9 = num4 * num7;
             this._xpBar.depth = this.depth + 2;
@@ -1708,7 +1708,7 @@ namespace DuckGame
             Graphics.Draw(this._xpBar, vec2_4.x + (num9 - 2f), vec2_4.y + num3, new Rectangle(3f, 0f, 3f, 6f));
             int x2 = 0;
             this._barFront.depth = this.depth + 10;
-            if ((double)num9 < 13.0)
+            if (num9 < 13.0)
                 x2 = 13 - (int)num9;
             this._barHeat += Math.Abs(this._lastFill - num7) * 8f;
             if (_barHeat > 1.0)
@@ -1724,8 +1724,8 @@ namespace DuckGame
                     num11 = 149f;
                 if (this._currentLevel >= 4)
                     num11 = 122f;
-                float num12 = (float)Math.Floor((double)num11 * (double)num10);
-                if ((double)num12 < 2.0)
+                float num12 = (float)Math.Floor(num11 * num10);
+                if (num12 < 2.0)
                     num12 = 2f;
                 this._gachaBar.depth = this.depth + 2;
                 this._gachaBar.xscale = 1f;
@@ -1737,16 +1737,16 @@ namespace DuckGame
                 this._gachaBar.xscale = 1f;
                 Graphics.Draw(this._gachaBar, vec2_5.x + (num12 - 2f), vec2_5.y + num3, new Rectangle(3f, 0f, 3f, 3f));
                 this._duckCoin.frame = 0;
-                this._duckCoin.alpha = (float)(1.0 - (double)Math.Max(this._coinLerp - 0.5f, 0f) * 2.0);
+                this._duckCoin.alpha = (float)(1.0 - Math.Max(this._coinLerp - 0.5f, 0f) * 2.0);
                 this._duckCoin.depth = (Depth)0.9f;
-                Graphics.Draw(_duckCoin, (float)(vec2_5.x + ((double)num11 - 2.0) + 15.0), (float)(vec2_5.y + (double)num3 - 8.0 - _coinLerp * 18.0));
+                Graphics.Draw(_duckCoin, (float)(vec2_5.x + (num11 - 2.0) + 15.0), (float)(vec2_5.y + num3 - 8.0 - _coinLerp * 18.0));
             }
             if (this._currentLevel >= 4)
             {
                 float num13 = _sandwichValue / (float)this.sandwichNeed;
                 float num14 = 154f;
                 float num15 = num14 * num13;
-                if ((double)num15 < 2.0)
+                if (num15 < 2.0)
                     num15 = 2f;
                 this._sandwichBar.depth = this.depth + 2;
                 this._sandwichBar.xscale = 1f;
@@ -1770,8 +1770,8 @@ namespace DuckGame
                         num17 -= 10f;
                 }
                 float x3 = Math.Max(val1, 0f);
-                if ((double)x3 < _sandwich.width)
-                    Graphics.Draw(this._sandwich, (float)(vec2_6.x + ((double)num14 - 2.0) + 12.0 + (double)num17 + (double)x3 + 1.0), (float)(vec2_6.y + (double)num3 - 16.0) + num16, new Rectangle(x3, 0f, _sandwich.width - x3, _sandwich.height), (Depth)0.88f);
+                if (x3 < _sandwich.width)
+                    Graphics.Draw(this._sandwich, (float)(vec2_6.x + (num14 - 2.0) + 12.0 + num17 + x3 + 1.0), (float)(vec2_6.y + num3 - 16.0) + num16, new Rectangle(x3, 0f, _sandwich.width - x3, _sandwich.height), (Depth)0.88f);
             }
             if (this._currentStat.Key != null)
             {
@@ -1781,8 +1781,8 @@ namespace DuckGame
                 this._fancyFont.DrawOutline(this._currentStat.Value.num == 0 ? this._currentStat.Key : this._currentStat.Value.num.ToString() + " " + this._currentStat.Key, vec2_1 + new Vec2(-(this._addXPBar.width / 2) + 4, -2f), Color.White, Color.Black, this.depth - 10);
                 Vec2 p1 = vec2_1 + new Vec2(-(this._addXPBar.width / 2) + 2, -7.5f);
                 Graphics.DrawLine(p1, p1 + new Vec2((this._addXPBar.width - 5) * this._drain, 0f), Color.Lime, depth: (this._addXPBar.depth + 2));
-                string text3 = ((int)(_currentStat.Value.xp * (double)this._drain)).ToString() + "|DGBLUE|XP";
-                this._fancyFont.DrawOutline(text3, vec2_1 + new Vec2((float)(this._addXPBar.width / 2 - (double)this._fancyFont.GetWidth(text3) - 4.0), -2f), Colors.DGGreen, Color.Black, this.depth - 10);
+                string text3 = ((int)(_currentStat.Value.xp * this._drain)).ToString() + "|DGBLUE|XP";
+                this._fancyFont.DrawOutline(text3, vec2_1 + new Vec2((float)(this._addXPBar.width / 2 - this._fancyFont.GetWidth(text3) - 4.0), -2f), Colors.DGGreen, Color.Black, this.depth - 10);
             }
             foreach (XPPlus particle in this._particles)
             {
@@ -1840,14 +1840,14 @@ namespace DuckGame
                     this._littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
                     this._littleMan.depth = (Depth)0.85f;
                     this._littleMan.yscale = 1f;
-                    this.littleManPos = new Vec2(this.x + num8, (float)((double)this.y - 29.0 + (double)num3 + 4.0) + num21);
+                    this.littleManPos = new Vec2(this.x + num8, (float)(this.y - 29.0 + num3 + 4.0) + num21);
                     if (!this._inTaxi)
                     {
                         Graphics.Draw(_littleMan, this.littleManPos.x, this.littleManPos.y, new Rectangle(0f, 4 + num21, 16f, 12 - num21));
                         Graphics.Draw(_littleMan, this.x + num8, this.y - 29f + num3 - num20, new Rectangle(0f, 0f, 16f, 4 + num21));
                         Vec2 center = this._littleMan.center;
                         this._littleMan.yscale = num20;
-                        Graphics.Draw(_littleMan, this.x + num8, (float)((double)this.y - 29.0 + ((double)num3 - (double)num20) + 4.0) + num21, new Rectangle(0f, 4 + num21, 16f, 1f));
+                        Graphics.Draw(_littleMan, this.x + num8, (float)(this.y - 29.0 + (num3 - num20) + 4.0) + num21, new Rectangle(0f, 4 + num21, 16f, 1f));
                         this._littleMan.center = center;
                     }
                 }
@@ -1855,7 +1855,7 @@ namespace DuckGame
                 string talkLine = this._talkLine;
                 if (this._talkLine.Length > 0)
                 {
-                    Vec2 vec2_8 = new Vec2((float)((double)this.x + (double)num8 + 16.0), this.y - 28f + num3);
+                    Vec2 vec2_8 = new Vec2((float)(this.x + num8 + 16.0), this.y - 28f + num3);
                     this._talkBubble.xscale = 1f;
                     Graphics.Draw(this._talkBubble, vec2_8.x, vec2_8.y, new Rectangle(0f, 0f, 8f, 8f));
                     float num23 = Graphics.GetStringWidth(talkLine) - 5f;
@@ -1865,8 +1865,8 @@ namespace DuckGame
                     Graphics.Draw(this._talkBubble, vec2_8.x + 8f, vec2_8.y + y2, new Rectangle(5f, 10f, 1f, 2f));
                     this._talkBubble.xscale = 1f;
                     Graphics.Draw(this._talkBubble, vec2_8.x, vec2_8.y + (y2 - 2f), new Rectangle(0f, 8f, 8f, 4f));
-                    Graphics.Draw(this._talkBubble, (float)(vec2_8.x + (double)num23 + 8.0), vec2_8.y + (y2 - 2f), new Rectangle(8f, 8f, 4f, 4f));
-                    Graphics.Draw(this._talkBubble, (float)(vec2_8.x + (double)num23 + 8.0), vec2_8.y, new Rectangle(8f, 0f, 4f, 4f));
+                    Graphics.Draw(this._talkBubble, (float)(vec2_8.x + num23 + 8.0), vec2_8.y + (y2 - 2f), new Rectangle(8f, 8f, 4f, 4f));
+                    Graphics.Draw(this._talkBubble, (float)(vec2_8.x + num23 + 8.0), vec2_8.y, new Rectangle(8f, 0f, 4f, 4f));
                     Graphics.DrawRect(vec2_8 + new Vec2(5f, 2f), vec2_8 + new Vec2(num23 + 11f, y2), Color.White, (Depth)0.9f);
                     Graphics.DrawLine(vec2_8 + new Vec2(4.5f, 5f), vec2_8 + new Vec2(4.5f, y2 - 1f), Color.Black, depth: ((Depth)0.9f));
                     Graphics.DrawLine(vec2_8 + new Vec2(11.5f + num23, 4f), vec2_8 + new Vec2(11.5f + num23, y2 - 1f), Color.Black, depth: ((Depth)0.9f));
@@ -1894,9 +1894,9 @@ namespace DuckGame
                     if (index == 5)
                     {
                         this._duckCoin.frame = 1;
-                        this._duckCoin.alpha = (float)(1.0 - (double)Math.Max(this._coinLerp2 - 0.5f, 0f) * 2.0);
+                        this._duckCoin.alpha = (float)(1.0 - Math.Max(this._coinLerp2 - 0.5f, 0f) * 2.0);
                         this._duckCoin.depth = (Depth)0.99f;
-                        Graphics.Draw(_duckCoin, this.x + 30f + num26, (float)((double)this.y - 15.0 + (double)num27 + (double)num24 - _coinLerp2 * 18.0));
+                        Graphics.Draw(_duckCoin, this.x + 30f + num26, (float)(this.y - 15.0 + num27 + num24 - _coinLerp2 * 18.0));
                     }
                 }
                 Rando.generator = random;
@@ -1904,18 +1904,18 @@ namespace DuckGame
             if (this._currentLevel >= 7)
             {
                 this._milk.depth = (Depth)0.7f;
-                this._milk.frame = (int)(_milkValue / (double)this.milkNeed * 15.0);
+                this._milk.frame = (int)(_milkValue / this.milkNeed * 15.0);
                 Graphics.Draw(_milk, this.x + 26f, this.y - 33f);
                 Vec2 vec2_9 = this.position + new Vec2(-88f, 44f);
                 int num28 = 0;
                 foreach (Sprite littleEgg in this.littleEggs)
                 {
                     littleEgg.depth = (Depth)0.85f;
-                    Graphics.Draw(littleEgg, (float)(vec2_9.x + (double)(num28 * 23) - 3.0), vec2_9.y - 3f);
+                    Graphics.Draw(littleEgg, (float)(vec2_9.x + (num28 * 23) - 3.0), vec2_9.y - 3f);
                     this._littleMan.frame = UILevelBox.LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
                     this._littleMan.depth = (Depth)0.9f;
                     this._littleMan.yscale = 1f;
-                    Graphics.Draw(_littleMan, (float)(vec2_9.x + (double)(num28 * 23) + 3.0), vec2_9.y + 1f);
+                    Graphics.Draw(_littleMan, (float)(vec2_9.x + (num28 * 23) + 3.0), vec2_9.y + 1f);
                     ++num28;
                 }
             }
@@ -1955,7 +1955,7 @@ namespace DuckGame
                 Rando.generator = random;
                 for (int index = 0; index < Profiles.experienceProfile.currentDay; ++index)
                 {
-                    double num30 = (double)Rando.Float(1f);
+                    double num30 = Rando.Float(1f);
                 }
                 Math.Floor(Profiles.experienceProfile.currentDay / 5.0);
                 for (int index = 0; index < 5; ++index)
@@ -1964,7 +1964,7 @@ namespace DuckGame
                     if (index == 0)
                         num31 += 0.1f;
                     float num32 = Rando.Float(-0.1f, 0.1f);
-                    int num33 = (int)(((double)num32 + 0.100000001490116) / 0.200000002980232 * 10.0);
+                    int num33 = (int)((num32 + 0.100000001490116) / 0.200000002980232 * 10.0);
                     if (this._popDay && index == 0 && _dayFallAway != 0.0)
                         this._weekDays.angle = this._ranRot;
                     else if (this._currentLevel < 6)
@@ -1976,7 +1976,7 @@ namespace DuckGame
                     float num34 = 0f;
                     if (index == 0)
                         num34 = this._dayFallAway * 100f;
-                    float num35 = (float)(-(double)this._dayScroll * 26.0);
+                    float num35 = (float)(-this._dayScroll * 26.0);
                     if (index == 0)
                     {
                         this._circle.depth = (Depth)(0.85f + num31);
@@ -1996,7 +1996,7 @@ namespace DuckGame
                         this._days.depth = (Depth)(0.84f + num31);
                         this._days.frame = (int)day;
                         this._days.angle = this._weekDays.angle;
-                        Graphics.Draw(_days, this.position.x - 71f + index * 28 + num35, (float)(position.y + (double)num29 + 33.0) + num34);
+                        Graphics.Draw(_days, this.position.x - 71f + index * 28 + num35, (float)(position.y + num29 + 33.0) + num34);
                     }
                 }
                 Rando.generator = generator;
@@ -2067,7 +2067,7 @@ namespace DuckGame
                 }
                 if (this._overrideSlide != null)
                     text6 = this._overrideSlide;
-                this._bigFont.Draw(text6, new Vec2((float)(_intermissionSlide * (320.0 + (double)Layer.HUD.width / 2.0 - (double)this._bigFont.GetWidth(text6) / 2.0) - 320.0), num36 + 18f), Color.White, (Depth)0.99f);
+                this._bigFont.Draw(text6, new Vec2((float)(_intermissionSlide * (320.0 + Layer.HUD.width / 2.0 - this._bigFont.GetWidth(text6) / 2.0) - 320.0), num36 + 18f), Color.White, (Depth)0.99f);
             }
             this._lastFill = num7;
             if (UILevelBox._confirmMenu == null)

@@ -171,7 +171,7 @@ namespace DuckGame
             if (!this.receivingPress && this.isServerForObject)
             {
                 Vec2 vec2 = this.Offset(this.barrelOffset);
-                double radians = (double)this.barrelAngle + (double)Rando.Float(-0.1f, 0.1f);
+                double radians = this.barrelAngle + Rando.Float(-0.1f, 0.1f);
                 CannonGrenade t = new CannonGrenade(vec2.x, vec2.y)
                 {
                     _pin = false,

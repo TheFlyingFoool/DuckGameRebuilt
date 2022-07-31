@@ -48,7 +48,7 @@ namespace DuckGame
         {
             if (Level.current.simulatePhysics)
                 this._spawnWait += 0.0166666f;
-            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && _spawnWait >= (double)this.spawnTime)
+            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && _spawnWait >= this.spawnTime)
             {
                 if (initialDelay > 0.0)
                 {

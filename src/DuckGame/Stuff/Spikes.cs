@@ -49,11 +49,11 @@ namespace DuckGame
             float num = 1f;
             if (from != this._killImpact)
                 return;
-            if (from == ImpactedFrom.Left && (double)with.hSpeed > (double)num)
+            if (from == ImpactedFrom.Left && with.hSpeed > num)
                 with.Destroy(new DTImpale(this));
-            if (from == ImpactedFrom.Right && (double)with.hSpeed < -(double)num)
+            if (from == ImpactedFrom.Right && with.hSpeed < -num)
                 with.Destroy(new DTImpale(this));
-            if (from == ImpactedFrom.Top && (double)with.vSpeed > (double)num && (duck == null || !duck.HasEquipment(typeof(Boots))))
+            if (from == ImpactedFrom.Top && with.vSpeed > num && (duck == null || !duck.HasEquipment(typeof(Boots))))
             {
                 bool flag = true;
                 if (with is PhysicsObject)
@@ -78,7 +78,7 @@ namespace DuckGame
                 if (flag)
                     with.Destroy(new DTImpale(this));
             }
-            if (from != ImpactedFrom.Bottom || (double)with.vSpeed >= -(double)num || duck != null && duck.HasEquipment(typeof(Helmet)))
+            if (from != ImpactedFrom.Bottom || with.vSpeed >= -num || duck != null && duck.HasEquipment(typeof(Helmet)))
                 return;
             with.Destroy(new DTImpale(this));
         }

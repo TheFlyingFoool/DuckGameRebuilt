@@ -111,9 +111,9 @@ namespace DuckGame
             {
                 float num = this._waitFire * this._waitFire;
                 Vec2 barrelPosition = (this.holdObject as Gun).barrelPosition;
-                Vec2 p1_1 = barrelPosition + new Vec2(0f, (float)(-(double)num * 64.0));
+                Vec2 p1_1 = barrelPosition + new Vec2(0f, (float)(-num * 64.0));
                 Vec2 p1_2 = barrelPosition + new Vec2(0f, num * 64f);
-                float amount = (float)(1.0 - (double)Math.Min(this._waitFire, 0.08f) / 0.0799999982118607);
+                float amount = (float)(1.0 - Math.Min(this._waitFire, 0.08f) / 0.0799999982118607);
                 Color color = Lerp.ColorSmooth(Color.White, Color.Red, amount);
                 Graphics.DrawLine(p1_1, p1_1 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
                 Graphics.DrawLine(p1_2, p1_2 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);

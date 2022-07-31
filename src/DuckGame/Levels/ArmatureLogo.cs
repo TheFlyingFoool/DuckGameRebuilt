@@ -25,12 +25,12 @@
 //        {
 //            if (!this._fading)
 //            {
-//                if ((double)Graphics.fade < 1.0)
+//                if (Graphics.fade < 1f)
 //                    Graphics.fade += 0.013f;
 //                else
 //                    Graphics.fade = 1f;
 //            }
-//            else if ((double)Graphics.fade > 0.0)
+//            else if (Graphics.fade > 0f)
 //            {
 //                Graphics.fade -= 0.013f;
 //            }
@@ -40,7 +40,7 @@
 //                Level.current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
 //            }
 //            this._wait -= 3f / 500f;
-//            if (_wait >= 0.0 && !Input.Pressed("START") && !Input.Pressed("SELECT"))
+//            if (_wait >= 0f && !Input.Pressed("START") && !Input.Pressed("SELECT"))
 //                return;
 //            this._fading = true;
 //        }
@@ -51,7 +51,7 @@
 //                return;
 //            float num = 0.25f;
 //            this._logo.scale = new Vec2(num, num);
-//            Graphics.Draw(this._logo, (float)(160.0 - this._logo.width / 2 * (double)num), (float)(90.0 - this._logo.height / 2 * (double)num));
+//            Graphics.Draw(this._logo, (float)(160f - this._logo.width / 2 * num), (90f - this._logo.height / 2 * num));
 //        }
 //    }
 //}

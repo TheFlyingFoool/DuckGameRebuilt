@@ -32,7 +32,7 @@ namespace DuckGame
         public override void Update()
         {
             this.alpha -= 0.01f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             base.Update();
         }

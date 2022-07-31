@@ -194,7 +194,7 @@ namespace DuckGame
             }
             else
                 this._sprite.frame = 0;
-            this._sprite.frame += (int)((1.0 - _hitPoints / (double)this._maxHealth) * 3.5);
+            this._sprite.frame += (int)((1.0 - _hitPoints / this._maxHealth) * 3.5);
             base.Draw();
         }
 

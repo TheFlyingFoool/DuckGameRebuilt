@@ -111,12 +111,12 @@ namespace DuckGame
             {
                 Vec2 position = this.position;
                 Vec2 netLerpPosition = this.netLerpPosition;
-                if ((double)(position - netLerpPosition).lengthSq > 2048.0 || (double)(position - netLerpPosition).lengthSq < 1.0)
+                if ((position - netLerpPosition).lengthSq > 2048.0 || (position - netLerpPosition).lengthSq < 1.0)
                     this.position = netLerpPosition;
                 else
                     this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
             }
-            else if (Network.isActive && ((double)this.y < Level.current.highestPoint - 200.0 || (double)this.y > Level.current.lowestPoint + 200.0))
+            else if (Network.isActive && (this.y < Level.current.highestPoint - 200.0 || this.y > Level.current.lowestPoint + 200.0))
             {
                 Level.Remove(this);
             }
@@ -131,14 +131,14 @@ namespace DuckGame
                     if (_life < 0.0)
                     {
                         this.alpha -= 0.1f;
-                        if ((double)this.alpha < 0.0)
+                        if (this.alpha < 0.0)
                             Level.Remove(this);
                     }
                 }
                 if (this._foreverGrounded)
                 {
                     this._grounded = true;
-                    if ((double)Rando.Float(250f) < 1.0 - _sticky)
+                    if (Rando.Float(250f) < 1.0 - _sticky)
                     {
                         this._foreverGrounded = false;
                         this._grounded = false;
@@ -147,13 +147,13 @@ namespace DuckGame
                 }
                 if (!this._grounded)
                 {
-                    if ((double)this.hSpeed > 0.0)
+                    if (this.hSpeed > 0.0)
                         this.hSpeed -= this._airFriction;
-                    if ((double)this.hSpeed < 0.0)
+                    if (this.hSpeed < 0.0)
                         this.hSpeed += this._airFriction;
-                    if ((double)this.hSpeed < _airFriction && (double)this.hSpeed > -(double)this._airFriction)
+                    if (this.hSpeed < _airFriction && this.hSpeed > -this._airFriction)
                         this.hSpeed = 0f;
-                    if ((double)this.vSpeed < 4.0)
+                    if (this.vSpeed < 4.0)
                         this.vSpeed += 0.1f * this._gravMult;
                     if (float.IsNaN(this.hSpeed))
                         this.hSpeed = 0f;
@@ -168,28 +168,28 @@ namespace DuckGame
                     if (thing != null)
                     {
                         this._touchedFloor = true;
-                        if (this._bounceSound != "" && ((double)Math.Abs(this.vSpeed) > 1.0 || (double)Math.Abs(this.hSpeed) > 1.0))
+                        if (this._bounceSound != "" && (Math.Abs(this.vSpeed) > 1.0 || Math.Abs(this.hSpeed) > 1.0))
                             SFX.Play(this._bounceSound, 0.5f, Rando.Float(0.2f) - 0.1f);
-                        if ((double)this.vSpeed > 0.0 && (double)thing.top > (double)this.y)
+                        if (this.vSpeed > 0.0 && thing.top > this.y)
                         {
-                            this.vSpeed = (float)-((double)this.vSpeed * _bounceEfficiency);
+                            this.vSpeed = (float)-(this.vSpeed * _bounceEfficiency);
                             this._hit = true;
-                            if ((double)Math.Abs(this.vSpeed) < 0.5)
+                            if (Math.Abs(this.vSpeed) < 0.5)
                             {
                                 this.vSpeed = 0f;
                                 this._grounded = true;
                             }
                         }
-                        else if ((double)this.vSpeed < 0.0 && (double)thing.bottom < (double)this.y)
+                        else if (this.vSpeed < 0.0 && thing.bottom < this.y)
                         {
-                            this.vSpeed = (float)-((double)this.vSpeed * _bounceEfficiency);
+                            this.vSpeed = (float)-(this.vSpeed * _bounceEfficiency);
                             this._hit = true;
                         }
-                        if ((double)this.hSpeed > 0.0 && (double)thing.left > (double)this.x)
+                        if (this.hSpeed > 0.0 && thing.left > this.x)
                         {
-                            this.hSpeed = (float)-((double)this.hSpeed * _bounceEfficiency);
+                            this.hSpeed = (float)-(this.hSpeed * _bounceEfficiency);
                             this._hit = true;
-                            if (_sticky > 0.0 && (double)Rando.Float(1f) < _sticky)
+                            if (_sticky > 0.0 && Rando.Float(1f) < _sticky)
                             {
                                 this.hSpeed = 0f;
                                 this.vSpeed = 0f;
@@ -197,11 +197,11 @@ namespace DuckGame
                                 this._stickDir = 1f;
                             }
                         }
-                        else if ((double)this.hSpeed < 0.0 && (double)thing.right < (double)this.x)
+                        else if (this.hSpeed < 0.0 && thing.right < this.x)
                         {
-                            this.hSpeed = (float)-((double)this.hSpeed * _bounceEfficiency);
+                            this.hSpeed = (float)-(this.hSpeed * _bounceEfficiency);
                             this._hit = true;
-                            if (_sticky > 0.0 && (double)Rando.Float(1f) < _sticky)
+                            if (_sticky > 0.0 && Rando.Float(1f) < _sticky)
                             {
                                 this.hSpeed = 0f;
                                 this.vSpeed = 0f;

@@ -142,7 +142,7 @@ namespace DuckGame
             {
                 if (this._decoderSong != null)
                 {
-                    if ((double)this.volume != 0.0)
+                    if (this.volume != 0.0)
                     {
                         int count = Math.Min(176400, this._totalSamplesToDecode - this._samplesDecoded);
                         if (count > 0)
@@ -202,7 +202,7 @@ namespace DuckGame
                         num = 0f;
                     }
                     this._activeSong = new VorbisReader(ogg, false);
-                    this._replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((double)(100f * (float)Math.Pow(10.0, (double)num / 20.0)) / 100.0 * 1.89999997615814)));
+                    this._replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10.0, num / 20.0)) / 100.0 * 1.89999997615814)));
                     this.Thread_Decoder_LoadNewSong();
                     this.Thread_Decoder_DecodeChunk();
                 }
@@ -280,7 +280,7 @@ namespace DuckGame
                 lock (this._decoderDataMutex)
                 {
                     this.Thread_Decoder_LoadNewSong();
-                    if ((double)this.volume == 0.0 || !this._valid || this._decoderSong == null)
+                    if (this.volume == 0.0 || !this._valid || this._decoderSong == null)
                     {
                         for (int index = 0; index < _buffer.Count<byte>(); ++index)
                             this._buffer[index] = 0;

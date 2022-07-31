@@ -51,7 +51,7 @@
 //                    if (to != null)
 //                    {
 //                        AIPath path = pathNode.GetPath(to);
-//                        if (path != null && path.length < (double)num)
+//                        if (path != null && path.length < num)
 //                        {
 //                            num = path.length;
 //                            obj = (T)(object)thing;
@@ -77,7 +77,7 @@
 //                if (to != null)
 //                {
 //                    AIPath path = pathNode.GetPath(to);
-//                    if (path != null && path.nodes.Count > 0 && path.length < (double)num && AI.CanReach(path.nodes.Last<PathNode>(), thing2))
+//                    if (path != null && path.nodes.Count > 0 && path.length < num && AI.CanReach(path.nodes.Last<PathNode>(), thing2))
 //                    {
 //                        num = path.length;
 //                        thing1 = thing2;
@@ -93,9 +93,9 @@
 //            list.Sort((a, b) =>
 //           {
 //               Vec2 vec2 = a.position - pos;
-//               double lengthSq1 = (double)vec2.lengthSq;
+//               double lengthSq1 = vec2.lengthSq;
 //               vec2 = b.position - pos;
-//               double lengthSq2 = (double)vec2.lengthSq;
+//               double lengthSq2 = vec2.lengthSq;
 //               return lengthSq1 >= lengthSq2 ? 1 : -1;
 //           });
 //            PathNode pathNode = null;
@@ -118,7 +118,7 @@
 //                if (!(thing1 is PhysicsObject))
 //                {
 //                    Thing thing2 = thing1 as Thing;
-//                    if (highest == null || (double)thing2.y < (double)highest.y)
+//                    if (highest == null || thing2.y < highest.y)
 //                        highest = thing2;
 //                }
 //            }
@@ -137,7 +137,7 @@
 //                        continue;
 //                    default:
 //                        Thing thing2 = thing1 as Thing;
-//                        if (highestNotGlass == null || (double)thing2.y < (double)highestNotGlass.y)
+//                        if (highestNotGlass == null || thing2.y < highestNotGlass.y)
 //                        {
 //                            highestNotGlass = thing2;
 //                            continue;
@@ -168,7 +168,7 @@
 //                {
 //                    if (parent == null)
 //                        parent = pathNode;
-//                    else if (pathNode.cost + (double)pathNode.heuristic < parent.cost + (double)parent.heuristic)
+//                    else if (pathNode.cost + pathNode.heuristic < parent.cost + parent.heuristic)
 //                        parent = pathNode;
 //                }
 //                if (parent != null)
@@ -198,7 +198,7 @@
 //                            else
 //                            {
 //                                float cost = PathNode.CalculateCost(link2, parent);
-//                                if ((double)cost < link2.cost)
+//                                if (cost < link2.cost)
 //                                {
 //                                    link2.cost = cost;
 //                                    link2.parent = parent;

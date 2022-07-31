@@ -94,13 +94,13 @@ namespace DuckGame
             if (this.floor)
             {
                 this.collisionSize = new Vec2(num, 6f);
-                this.collisionOffset = new Vec2((float)(-(double)num + 16.0), -2f);
+                this.collisionOffset = new Vec2((float)(-num + 16.0), -2f);
                 this._sprite.angleDegrees = -90f;
             }
             else
             {
                 this.collisionSize = new Vec2(6f, num);
-                this.collisionOffset = new Vec2(-3f, (float)(-(double)num + 8.0));
+                this.collisionOffset = new Vec2(-3f, (float)(-num + 8.0));
                 this._sprite.angle = 0f;
             }
             this._sprite.yscale = num;
@@ -158,7 +158,7 @@ namespace DuckGame
                 {
                     GlassParticle glassParticle = new GlassParticle(this.x - 4f + Rando.Float(8f), this.y - 16f + Rando.Float(32f), Vec2.Zero, this.tint.value)
                     {
-                        hSpeed = ((double)Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f),
+                        hSpeed = (Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f),
                         vSpeed = -Rando.Float(1f)
                     };
                     Level.Add(glassParticle);
@@ -195,13 +195,13 @@ namespace DuckGame
             if (!this._hasGlass)
                 return base.Hit(bullet, hitPos);
             this._enter = hitPos + bullet.travelDirNormalized;
-            if (_enter.x < (double)this.x && _enter.x < (double)this.left + 2.0)
+            if (_enter.x < this.x && _enter.x < this.left + 2.0)
                 this._enter.x = this.left;
-            else if (_enter.x > (double)this.x && _enter.x > (double)this.right - 2.0)
+            else if (_enter.x > this.x && _enter.x > this.right - 2.0)
                 this._enter.x = this.right;
-            if (_enter.y < (double)this.y && _enter.y < (double)this.top + 2.0)
+            if (_enter.y < this.y && _enter.y < this.top + 2.0)
                 this._enter.y = this.top;
-            else if (_enter.y > (double)this.y && _enter.y > (double)this.bottom - 2.0)
+            else if (_enter.y > this.y && _enter.y > this.bottom - 2.0)
                 this._enter.y = this.bottom;
             if (hitPoints <= 0.0)
                 return false;
@@ -223,13 +223,13 @@ namespace DuckGame
                 return;
             this._hits.Add(this._enter);
             Vec2 vec2 = exitPos - bullet.travelDirNormalized;
-            if (vec2.x < (double)this.x && vec2.x < (double)this.left + 2.0)
+            if (vec2.x < this.x && vec2.x < this.left + 2.0)
                 vec2.x = this.left;
-            else if (vec2.x > (double)this.x && vec2.x > (double)this.right - 2.0)
+            else if (vec2.x > this.x && vec2.x > this.right - 2.0)
                 vec2.x = this.right;
-            if (vec2.y < (double)this.y && vec2.y < (double)this.top + 2.0)
+            if (vec2.y < this.y && vec2.y < this.top + 2.0)
                 vec2.y = this.top;
-            else if (vec2.y > (double)this.y && vec2.y > (double)this.bottom - 2.0)
+            else if (vec2.y > this.y && vec2.y > this.bottom - 2.0)
                 vec2.y = this.bottom;
             this._hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
@@ -247,7 +247,7 @@ namespace DuckGame
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             with.Fondle(this);
-            if (this.floor && (double)with.top > (double)this.top && (double)this.CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
+            if (this.floor && with.top > this.top && this.CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
             {
                 if (with is Duck duck)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
@@ -256,7 +256,7 @@ namespace DuckGame
             else
             {
                 float num = Math.Abs(with.hSpeed) + Math.Abs(with.vSpeed);
-                if (!this.destroyed && (double)num > 1.5)
+                if (!this.destroyed && num > 1.5)
                 {
                     ++this.shakeTimes;
                     if (this.isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
@@ -288,7 +288,7 @@ namespace DuckGame
         public override void Update()
         {
             this._shake.Update();
-            this.breakForce = (float)(6.0 * (hitPoints / (double)this.maxHealth));
+            this.breakForce = (float)(6.0 * (hitPoints / this.maxHealth));
             if (hitPoints <= 0.0)
                 this.Destroy(new DTImpact(null));
             base.Update();
@@ -308,7 +308,7 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 zero = Vec2.Zero;
-            float num1 = (float)((double)(float)this._shake * _shakeVal * 0.800000011920929);
+            float num1 = (float)((float)this._shake * _shakeVal * 0.800000011920929);
             if (this.floor)
                 zero.y = num1;
             else
@@ -330,13 +330,13 @@ namespace DuckGame
                 this.alpha = 0.7f;
                 if (this.floor)
                 {
-                    Graphics.Draw(this._sprite, (float)((double)this.x - (double)num2 + 16.0), this.y + 4f);
-                    Graphics.Draw(this._borderSprite, (float)((double)this.x - (double)num2 + 16.0), this.y + 4f);
+                    Graphics.Draw(this._sprite, (float)(this.x - num2 + 16.0), this.y + 4f);
+                    Graphics.Draw(this._borderSprite, (float)(this.x - num2 + 16.0), this.y + 4f);
                 }
                 else
                 {
-                    Graphics.Draw(this._sprite, this.x - 3f, (float)((double)this.y - (double)num2 + 8.0));
-                    Graphics.Draw(this._borderSprite, this.x - 3f, (float)((double)this.y - (double)num2 + 8.0));
+                    Graphics.Draw(this._sprite, this.x - 3f, (float)(this.y - num2 + 8.0));
+                    Graphics.Draw(this._borderSprite, this.x - 3f, (float)(this.y - num2 + 8.0));
                 }
                 for (int index = 0; index < this._hits.Count; index += 2)
                 {
@@ -350,10 +350,10 @@ namespace DuckGame
             if (this.floor)
             {
                 if (this.bars.value)
-                    Graphics.Draw(this._barSprite, (float)((double)this.x - (double)num2 + 16.0), this.y + 5f);
+                    Graphics.Draw(this._barSprite, (float)(this.x - num2 + 16.0), this.y + 5f);
             }
             else if (this.bars.value)
-                Graphics.Draw(this._barSprite, this.x - 4f, (float)((double)this.y - (double)num2 + 8.0));
+                Graphics.Draw(this._barSprite, this.x - 4f, (float)(this.y - num2 + 8.0));
             base.Draw();
         }
     }

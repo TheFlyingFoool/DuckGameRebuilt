@@ -84,7 +84,7 @@ namespace DuckGame
                         Level.Add(new JetpackSmoke(vec2_1.x, vec2_1.y));
                         this.angle = angle;
                         Vec2 vec2_2 = physicsObject1.velocity;
-                        if ((double)vec2_2.length < 7f)
+                        if (vec2_2.length < 7f)
                         {
                             RagdollPart ragdollPart = physicsObject1 as RagdollPart;
                             ragdollPart.addWeight = 0.2f;

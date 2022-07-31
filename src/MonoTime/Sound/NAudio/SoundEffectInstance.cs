@@ -230,12 +230,12 @@ namespace DuckGame
             if (this._data == null)
                 return;
             pProgress = Maths.Clamp(pProgress, 0f, 1f);
-            this._position = (int)((double)pProgress * _data.data.Length);
+            this._position = (int)(pProgress * _data.data.Length);
         }
 
         public float Platform_GetProgress() => this._data == null ? 1f : _position / (float)this._data.data.Length;
 
-        public int Platform_GetLengthInMilliseconds() => this._data == null ? 0 : (int)(this._data.data.Length * 4 / (double)this.WaveFormat.AverageBytesPerSecond) * 500;
+        public int Platform_GetLengthInMilliseconds() => this._data == null ? 0 : (int)(this._data.data.Length * 4 / this.WaveFormat.AverageBytesPerSecond) * 500;
 
         public class PitchShiftProvider : ISampleProvider
         {
@@ -257,7 +257,7 @@ namespace DuckGame
                 if (pitch < 0.0)
                 {
                 }
-                this._resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, -(double)this.pitch));
+                this._resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, -this.pitch));
                 return this._resampler.Read(buffer, offset, count);
             }
         }

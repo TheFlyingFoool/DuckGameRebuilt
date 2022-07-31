@@ -192,7 +192,7 @@ namespace DuckGame
             if (this._skipResize)
                 return;
             float lerpMult = this.lerpMult;
-            if ((double)this.lerpSpeed > 0.9f)
+            if (this.lerpSpeed > 0.9f)
                 this.lerpMult = 1.8f;
             this.border += ((_lerpBorder - this.border) * (this.lerpSpeed * 16f * _lerpMult)) * this._speed;
             if (this.immediate)
@@ -217,12 +217,12 @@ namespace DuckGame
                         if (key.overfollow > 0f)
                             amount = key.overfollow;
                         Vec2 vec2 = (key.cameraPosition - prevPosition) * 24f;
-                        if ((double)vec2.length > 100f)
+                        if (vec2.length > 100f)
                             vec2 = vec2.normalized * 100f;
                         Vec2 to = key.cameraPosition + vec2;
                         current = Lerp.Vec2Smooth(current, to, amount);
                     }
-                    if ((double)(prevPosition - current).length > 2500f && !this._allowWarps)
+                    if ((prevPosition - current).length > 2500f && !this._allowWarps)
                     {
                         current.x = prevPosition.x;
                         current.y = prevPosition.y;
@@ -232,13 +232,13 @@ namespace DuckGame
                 }
                 else
                     this._prevPositions[key] = key.cameraPosition;
-                if (current.x < (double)num1)
+                if (current.x < num1)
                     num1 = current.x;
-                if (current.x > (double)num2)
+                if (current.x > num2)
                     num2 = current.x;
-                if (current.y < (double)num3)
+                if (current.y < num3)
                     num3 = current.y;
-                if (current.y > (double)num4)
+                if (current.y > num4)
                     num4 = current.y;
                 zero += current;
             }
@@ -282,7 +282,7 @@ namespace DuckGame
             float num12 = Resolution.current.x / (float)Resolution.current.y;
             float num13 = Math.Abs(num8 - num9);
             float num14 = Math.Abs(num6 - num7);
-            if ((double)this.lerpSpeed > 0.9f)
+            if (this.lerpSpeed > 0.9f)
             {
                 num13 = Level.current.bottomRight.x - Level.current.topLeft.x;
                 num14 = Level.current.bottomRight.y - Level.current.topLeft.y;
@@ -320,7 +320,7 @@ namespace DuckGame
                 this._center.x = num10;
                 this._center.y = num11;
             }
-            if ((double)this.lerpSpeed > 0.9f && this._startCentered)
+            if (this.lerpSpeed > 0.9f && this._startCentered)
             {
                 this._center.x = ((Level.current.bottomRight.x + Level.current.topLeft.x) / 2f);
                 this._center.y = ((Level.current.bottomRight.y + Level.current.topLeft.y) / 2f);

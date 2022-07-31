@@ -317,7 +317,7 @@ namespace DuckGame
                     text = "0" + text;
                 if (DevConsole._raster != null)
                 {
-                    DevConsole._raster.maxWidth = (int)((double)num4 - 35f * _tray.scale.x);
+                    DevConsole._raster.maxWidth = (int)(num4 - 35f * _tray.scale.x);
                     DevConsole._raster.singleLine = true;
                     DevConsole._raster.enforceWidthByWord = false;
                     DevConsole._raster.Draw(text, 4f * DevConsole._tray.scale.x, (num3 - num5 + 2f), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);

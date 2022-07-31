@@ -65,7 +65,7 @@ namespace DuckGame
                     {
                         this.notePitch = (float)(num / 12.0 + 0.00999999977648258);
                         this.handPitch = this.notePitch;
-                        if (notePitch != (double)this.prevNotePitch)
+                        if (notePitch != this.prevNotePitch)
                         {
                             this.prevNotePitch = 0f;
                             if (this.noteSound != null)
@@ -78,7 +78,7 @@ namespace DuckGame
                     else
                         this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : this.handPitch + 0.01f;
                 }
-                if (notePitch != (double)this.prevNotePitch)
+                if (notePitch != this.prevNotePitch)
                 {
                     if (notePitch != 0.0)
                     {
@@ -94,7 +94,7 @@ namespace DuckGame
                             Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - (double)this.hitPitch) * 0.100000001490116), -1f, 1f);
+                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - this.hitPitch) * 0.100000001490116), -1f, 1f);
                     }
                     else if (this.noteSound != null)
                     {
