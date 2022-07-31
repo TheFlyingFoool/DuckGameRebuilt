@@ -51,14 +51,14 @@ namespace DuckGame
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
             this.weight = 8f;
-            this._spinUp = SFX.Get("chaingunSpinUp");
-            this._spinDown = SFX.Get("chaingunSpinDown");
             this._holdOffset = new Vec2(0f, 2f);
             this.editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
         }
 
         public override void Initialize()
         {
+            this._spinUp = SFX.Get("chaingunSpinUp");
+            this._spinDown = SFX.Get("chaingunSpinDown");
             base.Initialize();
             this._bullets = new ChaingunBullet(this.x, this.y)
             {
