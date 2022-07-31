@@ -125,36 +125,36 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (hitWait > 0.0)
+            if (hitWait > 0f)
                 this.hitWait -= 0.1f;
             else
-                this.hitWait = 0.0f;
+                this.hitWait = 0f;
             this._alternate = !this._alternate;
-            this._scanner.alpha = (float)(0.400000005960464 + (double)this._wave.normalized * 0.600000023841858);
-            this._projector.alpha = (float)(0.400000005960464 + (double)this._wave.normalized * 0.600000023841858) * this._projectorAlpha;
+            this._scanner.alpha = (float)(0.4f + (double)this._wave.normalized * 0.6f);
+            this._projector.alpha = (float)(0.4f + (double)this._wave.normalized * 0.6f) * this._projectorAlpha;
             this._double = Maths.CountDown(this._double, 0.15f);
             this._glitch = Maths.CountDown(this._glitch, 0.1f);
-            if ((double)Rando.Float(1f) < 0.00999999977648258)
+            if ((double)Rando.Float(1f) < 0.01f)
             {
                 this._glitch = 0.3f;
                 this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
                 this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5;
+                this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5f;
             }
-            if ((double)Rando.Float(1f) < 0.00499999988824129)
+            if ((double)Rando.Float(1f) < 0.005f)
             {
                 this._glitch = 0.3f;
                 this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
                 this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5;
+                this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5f;
                 this._useWave = !this._useWave;
             }
-            if ((double)Rando.Float(1f) < 0.00800000037997961)
+            if (Rando.Float(1f) < 0.008f)
             {
                 this._glitch = 0.3f;
                 this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
                 this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5;
+                this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5f;
                 this._useWave = !this._useWave;
                 this._double = 0.6f + Rando.Float(0.6f);
             }
@@ -173,26 +173,26 @@ namespace DuckGame
                         vec2 = this.position - holdable.position;
                         num = vec2.length;
                     }
-                    if ((double)num < 24.0)
+                    if (num < 24f)
                         this._hoverItem = holdable;
                 }
             }
-            else if ((double)Math.Abs(this._hoverItem.hSpeed) + (double)Math.Abs(this._hoverItem.vSpeed) > 2.0 || (double)(this._hoverItem.position - this.position).length > 25.0)
+            else if (Math.Abs(this._hoverItem.hSpeed) + Math.Abs(this._hoverItem.vSpeed) > 2f || (this._hoverItem.position - this.position).length > 25f)
             {
                 this.BreakHoverBond();
             }
             else
             {
-                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0.0f, (float)(-12.0 - _hoverItem.collisionSize.y / 2.0 + (double)(float)this._projectionWave * 2.0)), 0.2f);
-                this._hoverItem.vSpeed = 0.0f;
-                this._hoverItem.gravMultiplier = 0.0f;
+                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0f, (float)(-12f - _hoverItem.collisionSize.y / 2f + (double)(float)this._projectionWave * 2f)), 0.2f);
+                this._hoverItem.vSpeed = 0f;
+                this._hoverItem.gravMultiplier = 0f;
             }
             foreach (Duck duck in this._level.things[typeof(Duck)])
             {
                 if (!duck.dead)
                 {
                     vec2 = duck.position - this.position;
-                    if ((double)vec2.length < 64.0)
+                    if ((double)vec2.length < 64f)
                     {
                         this._close.Add(duck.profile);
                         this._closeGlitch = false;
@@ -204,14 +204,14 @@ namespace DuckGame
             {
                 if (this._close.Count == 1)
                     this._closeIndex = 0;
-                else if (this._close.Count > 1 && index == this._closeIndex && _closeWait <= 0.0)
+                else if (this._close.Count > 1 && index == this._closeIndex && _closeWait <= 0f)
                 {
                     this._closeIndex = (this._closeIndex + 1) % this._close.Count;
                     this._closeWait = 1f;
                     this._glitch = 0.3f;
                     this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
                     this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                    this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5;
+                    this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
                     this._useWave = !this._useWave;
                     this._double = 0.6f + Rando.Float(0.6f);
                     break;
@@ -227,7 +227,7 @@ namespace DuckGame
                     this._glitch = 0.3f;
                     this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
                     this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                    this._projectorGlitch.flipH = (double)Rando.Float(1f) > 0.5;
+                    this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
                     this._useWave = !this._useWave;
                     this._double = 0.6f + Rando.Float(0.6f);
                     this._closeGlitch = true;
@@ -274,7 +274,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    this._none.alpha = (float)(0.200000002980232 + (double)this._projectionFlashWave.normalized * 0.200000002980232 + _glitch * 1.0) * this._projectorAlpha;
+                    this._none.alpha = (0.2f + this._projectionFlashWave.normalized * 0.2f + _glitch * 1f) * this._projectorAlpha;
                     Graphics.Draw(this._none, this.x - this._double * 2f, this.y - 16f - num);
                     Graphics.Draw(this._none, this.x + this._double * 2f, this.y - 16f - num);
                 }
@@ -295,19 +295,19 @@ namespace DuckGame
                 Graphics.Draw(this._none, this.x, this.y - 16f - num);
             if (this._currentProjection != null && this._served.Contains(this._close[this._closeIndex]))
             {
-                this._none.alpha = (float)(0.200000002980232 + (double)this._projectionFlashWave.normalized * 0.200000002980232 + _glitch * 1.0) * this._projectorAlpha;
+                this._none.alpha = (float)(0.2f + (double)this._projectionFlashWave.normalized * 0.2f + _glitch * 1f) * this._projectorAlpha;
                 Graphics.Draw(this._none, this.x, this.y - 16f - num, this.depth + 5);
             }
-            if (_glitch <= 0.0)
+            if (_glitch <= 0f)
                 return;
             Graphics.Draw(this._projectorGlitch, this.x, this.y - 16f);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (from == ImpactedFrom.Bottom && hitWait == 0.0 && with.isServerForObject)
+            if (from == ImpactedFrom.Bottom && hitWait == 0f && with.isServerForObject)
                 with.Fondle(this);
-            if (!this.isServerForObject || !with.isServerForObject || from != ImpactedFrom.Bottom || hitWait != 0.0)
+            if (!this.isServerForObject || !with.isServerForObject || from != ImpactedFrom.Bottom || hitWait != 0f)
                 return;
             this.hitWait = 1f;
             switch (with)

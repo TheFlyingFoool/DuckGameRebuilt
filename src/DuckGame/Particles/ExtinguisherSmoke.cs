@@ -97,7 +97,7 @@ namespace DuckGame
             this._moveWave2.Update();
             this._orbitInc += this._rotSpeed;
             this._distPulse += this._distPulseSpeed;
-            if (_life < 0.300000011920929)
+            if (_life < 0.3f)
                 this.xscale = this.yscale = Maths.LerpTowards(this.xscale, 0.1f, 0.015f);
             else if (this._grounded)
                 this.xscale = this.yscale = Maths.LerpTowards(this.xscale, this._fullScale, 0.01f);
@@ -115,10 +115,10 @@ namespace DuckGame
                 {
                     this._groundedTime += 0.01f;
                     ExtinguisherSmoke extinguisherSmoke = Level.CheckCircle<ExtinguisherSmoke>(new Vec2(this.x, this.y + 4f), 6f);
-                    if (extinguisherSmoke != null && _groundedTime < extinguisherSmoke._groundedTime - 0.100000001490116)
+                    if (extinguisherSmoke != null && _groundedTime < extinguisherSmoke._groundedTime - 0.1f)
                         extinguisherSmoke.y -= 0.1f;
                 }
-                if (_life < 0.0 && this._sprite.currentAnimation != "puff")
+                if (_life < 0f && this._sprite.currentAnimation != "puff")
                     this._sprite.SetAnimation("puff");
                 if (this._sprite.currentAnimation == "puff" && this._sprite.finished)
                     Level.Remove(this);

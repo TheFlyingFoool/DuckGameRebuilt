@@ -184,8 +184,8 @@ namespace DuckGame
 
         public void PullEngine()
         {
-            float pitch = (bool)this.souped ? 0.3f : 0.0f;
-            if (!this._flooded && _gas > 0.0 && (_warmUp > 0.5 || _engineResistance < 1.0))
+            float pitch = (bool)this.souped ? 0.3f : 0f;
+            if (!this._flooded && _gas > 0.0 && (_warmUp > 0.5f || _engineResistance < 1f))
             {
                 SFX.Play("chainsawFire");
                 this._started = true;
@@ -193,24 +193,24 @@ namespace DuckGame
                 for (int index = 0; index < 2; ++index)
                     Level.Add(SmallSmoke.New(this.x + offDir * 4, this.y + 5f));
                 this._flooded = false;
-                this._flood = 0.0f;
+                this._flood = 0f;
             }
             else
             {
-                if (this._flooded && _gas > 0.0)
+                if (this._flooded && _gas > 0f)
                 {
                     SFX.Play("chainsawFlooded", 0.9f, Rando.Float(-0.2f, 0.2f));
                     this._engineSpin = 1.6f;
                 }
                 else
                 {
-                    if (_gas == 0.0 || (double)Rando.Float(1f) > 0.300000011920929)
+                    if (_gas == 0.0 || (double)Rando.Float(1f) > 0.3f)
                         SFX.Play("chainsawPull", pitch: pitch);
                     else
                         SFX.Play("chainsawFire", pitch: pitch);
                     this._engineSpin = 0.8f;
                 }
-                if ((double)Rando.Float(1f) > 0.800000011920929)
+                if (Rando.Float(1f) > 0.8f)
                 {
                     this._flooded = false;
                     this._flood = 0.0f;
@@ -260,23 +260,23 @@ namespace DuckGame
             if ((bool)this.souped)
                 num1 = 1.3f;
             if (this._swordSwing.finished)
-                this._swordSwing.speed = 0.0f;
+                this._swordSwing.speed = 0f;
             if (this._hitWait > 0)
                 --this._hitWait;
             ++this._framesExisting;
             if (this._framesExisting > 100)
                 this._framesExisting = 100;
-            float pitch = (bool)this.souped ? 0.3f : 0.0f;
-            this._sound.lerpVolume = !this._started || this._throttle ? 0.0f : 0.6f;
+            float pitch = (bool)this.souped ? 0.3f : 0f;
+            this._sound.lerpVolume = !this._started || this._throttle ? 0f : 0.6f;
             this._sound.pitch = pitch;
             if (this.isServerForObject && this.duck != null)
-                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent((float)(_engineSpin / 4.0 / 12.0 + (this._started ? 0.0199999995529652 : 0.0)), 0.05f, 0.0f));
+                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent((float)(_engineSpin / 4f / 12f + (this._started ? 0.02f : 0f)), 0.05f, 0f));
             if (this._started)
             {
                 this._warmUp += 1f / 1000f;
-                if (_warmUp > 1.0)
+                if (_warmUp > 1f)
                     this._warmUp = 1f;
-                if (!this._puffClick && (double)(float)this._idleWave > 0.899999976158142)
+                if (!this._puffClick && this._idleWave > 0.9f)
                 {
                     this._skipSmoke = !this._skipSmoke;
                     if (this._throttle || !this._skipSmoke)
@@ -286,17 +286,17 @@ namespace DuckGame
                         this._puffClick = true;
                     }
                 }
-                else if (this._puffClick && (double)(float)this._idleWave < 0.0)
+                else if (this._puffClick && (double)(float)this._idleWave < 0f)
                     this._puffClick = false;
                 if (this._pullState < 0)
                 {
-                    float num2 = (float)(1.0 + (double)Maths.NormalizeSection(this._engineSpin, 1f, 2f) * 2.0);
+                    float num2 = (float)(1.0 + (double)Maths.NormalizeSection(this._engineSpin, 1f, 2f) * 2f);
                     float num3 = (float)this._idleWave;
                     if ((double)num2 > 1.0)
                         num3 = (float)this._spinWave;
-                    this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(0.0f, (float)(2.0 + (double)num3 * (double)num2)), 0.23f);
-                    this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, (float)(2.0 + (double)num3 * (double)num2)), 0.23f);
-                    this._rotSway = (float)((double)this._idleWave.normalized * (double)(Maths.NormalizeSection(this._engineSpin, 1f, 2f) * 3f) * 0.0299999993294477);
+                    this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(0.0f, (2f + num3 * num2)), 0.23f);
+                    this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, (2f + num3 * num2)), 0.23f);
+                    this._rotSway = (this._idleWave.normalized * (Maths.NormalizeSection(this._engineSpin, 1f, 2f) * 3f) * 0.03f);
                 }
                 else
                     this._rotSway = 0.0f;
@@ -329,24 +329,24 @@ namespace DuckGame
                     if (this._throttle)
                     {
                         this._throttle = false;
-                        if (_engineSpin > 1.70000004768372)
+                        if (_engineSpin > 1.7f)
                             SFX.Play("chainsawBladeRevDown", 0.5f, pitch);
                     }
-                    this._engineSpin = Lerp.FloatSmooth(this._engineSpin, 0.0f, 0.1f);
+                    this._engineSpin = Lerp.FloatSmooth(this._engineSpin, 0f, 0.1f);
                     this._releasedSincePull = true;
                 }
             }
             else
             {
                 this._warmUp -= 1f / 1000f;
-                if (_warmUp < 0.0)
-                    this._warmUp = 0.0f;
+                if (_warmUp < 0f)
+                    this._warmUp = 0f;
                 this._releasedSincePull = false;
                 this._throttle = false;
             }
             this._bladeSound.lerpSpeed = 0.1f;
-            this._throttleWait = Lerp.Float(this._throttleWait, this._throttle ? 1f : 0.0f, 0.07f);
-            this._bladeSound.lerpVolume = _throttleWait > 0.959999978542328 ? 0.6f : 0.0f;
+            this._throttleWait = Lerp.Float(this._throttleWait, this._throttle ? 1f : 0f, 0.07f);
+            this._bladeSound.lerpVolume = _throttleWait > 0.96f ? 0.6f : 0.0f;
             if (this._struggling)
                 this._bladeSound.lerpVolume = 0.0f;
             this._bladeSoundLow.lerpVolume = _throttleWait <= 0.959999978542328 || !this._struggling ? 0.0f : 0.6f;
@@ -384,7 +384,7 @@ namespace DuckGame
                     this._animRot = Lerp.FloatSmooth(this._animRot, -0.4f, 0.15f);
                     this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-2f, -2f), 0.25f);
                     this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(-4f, 4f), 0.23f);
-                    if (_animRot <= -0.349999994039536)
+                    if (_animRot <= -0.35f)
                     {
                         this._animRot = -0.4f;
                         this._pullState = 1;
@@ -398,7 +398,7 @@ namespace DuckGame
                     this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(2f, 3f), 0.23f);
                     this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-4f, -2f), 0.23f);
                     this._animRot = Lerp.FloatSmooth(this._animRot, -0.5f, 0.07f);
-                    if (_animRot < -0.449999988079071)
+                    if (_animRot < -0.45f)
                     {
                         this._animRot = -0.5f;
                         this._pullState = 2;
@@ -415,7 +415,7 @@ namespace DuckGame
                             this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(0.0f, 2f + this._idleWave.normalized), 0.23f);
                             this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f + this._idleWave.normalized), 0.23f);
                             this._animRot = Lerp.FloatSmooth(this._animRot, 0.0f, 0.1f);
-                            if (_animRot > -0.0700000002980232)
+                            if (_animRot > -0.07f)
                             {
                                 this._animRot = 0.0f;
                                 this._pullState = -1;
@@ -426,7 +426,7 @@ namespace DuckGame
                             this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(-4f, 4f), 0.24f);
                             this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-2f, -2f), 0.24f);
                             this._animRot = Lerp.FloatSmooth(this._animRot, -0.4f, 0.12f);
-                            if (_animRot > -0.439999997615814)
+                            if (_animRot > -0.44f)
                             {
                                 this._releasePull = false;
                                 this._animRot = -0.4f;

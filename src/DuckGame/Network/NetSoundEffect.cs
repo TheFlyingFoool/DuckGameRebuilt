@@ -265,23 +265,23 @@ namespace DuckGame
             }
         }
 
-        public void Play(float vol = 1f, float pit = 0.0f)
+        public void Play(float vol = 1f, float pit = 0f)
         {
             this.PlaySound(vol, pit);
             ++this._index;
             this._localIndex = this._index;
         }
 
-        private void PlaySound(float vol = 1f, float pit = 0.0f)
+        private void PlaySound(float vol = 1f, float pit = 0f)
         {
             if (this.function != null)
                 this.function();
             vol *= this.volume;
             pit += this.pitch;
             pit += Rando.Float(this.pitchVariationLow, this.pitchVariationHigh);
-            if ((double)pit < -1.0)
+            if (pit < -1f)
                 pit = -1f;
-            if ((double)pit > 1.0)
+            if (pit > 1f)
                 pit = 1f;
             if (this._sounds.Count <= 0)
                 return;
@@ -290,7 +290,7 @@ namespace DuckGame
             string str = "";
             if (this.appendBinding != null)
                 str = ((byte)this.appendBinding.value).ToString();
-            if (this._rareSounds.Count > 0 && (double)Rando.Float(1f) > 0.899999976158142)
+            if (this._rareSounds.Count > 0 && Rando.Float(1f) > 0.9f)
                 SFX.Play(this._rareSounds[Rando.Int(this._rareSounds.Count - 1)] + str, vol, pit);
             else
                 SFX.Play(this._sounds[Rando.Int(this._sounds.Count - 1)] + str, vol, pit);

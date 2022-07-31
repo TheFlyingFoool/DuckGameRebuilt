@@ -52,7 +52,7 @@ namespace DuckGame
             this.depth = (Depth)0.6f;
             this.graphic.color = Color.Black;
             this.centery = this.graphic.height / 2;
-            this.alpha = 0.0f;
+            this.alpha = 0f;
             this.layer = Layer.HUD;
             this._currentColor = this._lerpColors[0];
         }
@@ -88,7 +88,7 @@ namespace DuckGame
             if (this._fade)
             {
                 this.alpha -= 0.05f;
-                if ((double)this.alpha >= 0.0)
+                if (this.alpha >= 0f)
                     return;
                 Level.Remove(this);
             }
@@ -96,13 +96,13 @@ namespace DuckGame
             {
                 if (this._wait <= 30 || this._count >= this._maxCount)
                     return;
-                this._lerpNum = (int)((double)(_count / (float)this._maxCount) * _lerpColors.Count - 0.00999999977648258);
+                this._lerpNum = (int)((_count / this._maxCount) * _lerpColors.Count - 0.01f);
                 int num = this._maxCount / this._lerpColors.Count;
                 this._currentColor = Color.Lerp(this._currentColor, this._lerpColors[this._lerpNum], 0.1f);
                 this._currentColor.a = (byte)(_alpha * (double)byte.MaxValue);
                 this._alpha -= 0.02f;
-                if (_alpha < 0.0)
-                    this._alpha = 0.0f;
+                if (_alpha < 0f)
+                    this._alpha = 0f;
                 ++this._count;
             }
         }

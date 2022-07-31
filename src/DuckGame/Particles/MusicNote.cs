@@ -35,7 +35,7 @@ namespace DuckGame
                 this._color = Color.GreenYellow;
             this._dir = dir;
             float num2 = 1f;
-            if ((double)Rando.Float(1f) <= 0.5)
+            if (Rando.Float(1f) <= 0.5f)
                 num2 = -1f;
             this._sin = new SinWaveManualUpdate(0.03f + Rando.Float(0.1f), num2 * 6.283185f);
             this._size = 3f + Rando.Float(6f);
@@ -51,10 +51,10 @@ namespace DuckGame
             Vec2 scale = this.scale;
             scale.x = scale.y = Lerp.Float(scale.x, 1f, 0.05f);
             this.scale = scale;
-            if (this.scale.x <= 0.899999976158142)
+            if (this.scale.x <= 0.9f)
                 return;
             this.alpha -= 0.01f;
-            if ((double)this.alpha > 0.0)
+            if ((double)this.alpha > 0f)
                 return;
             Level.Remove(this);
         }

@@ -72,7 +72,7 @@ namespace DuckGame
             get => this._position.x + this.width / 2f;
             set
             {
-                if ((double)this.centerX == (double)value)
+                if (this.centerX == value)
                     return;
                 this._position.x = value - this.width / 2f;
                 this._dirty = true;
@@ -84,7 +84,7 @@ namespace DuckGame
             get => this._position.y + this.height / 2f;
             set
             {
-                if ((double)this.centerY == (double)value)
+                if (this.centerY == value)
                     return;
                 this._position.y = value - this.height / 2f;
                 this._dirty = true;
@@ -93,7 +93,7 @@ namespace DuckGame
 
         public float aspect => this.width / this.height;
 
-        public virtual bool sixteenNine => (double)Math.Abs(this.aspect - 1.777778f) < 0.0199999995529652;
+        public virtual bool sixteenNine => Math.Abs(this.aspect - 1.777778f) < 0.02f;
 
         public void InitializeToScreenAspect()
         {

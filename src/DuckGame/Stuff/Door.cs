@@ -191,8 +191,8 @@ namespace DuckGame
                 for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
                 {
                     WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                    woodDebris.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                    woodDebris.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                    woodDebris.hSpeed = (-bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));
+                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                     Level.Add(woodDebris);
                 }
                 SFX.Play("woodHit");
@@ -201,7 +201,7 @@ namespace DuckGame
             {
                 this._hitPoints -= this.damageMultiplier * 4f;
                 ++this.damageMultiplier;
-                if (_hitPoints <= 0.0 && !this.destroyed)
+                if (_hitPoints <= 0f && !this.destroyed)
                     this.Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);
@@ -210,11 +210,11 @@ namespace DuckGame
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
-                woodDebris.hSpeed = (float)(bullet.travelDirNormalized.x * 3.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                woodDebris.vSpeed = (float)(bullet.travelDirNormalized.y * 3.0 * ((double)Rando.Float(1f) + 0.300000011920929) - ((double)Rando.Float(2f) - 1.0));
+                woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
+                woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
                 Level.Add(woodDebris);
             }
         }
@@ -309,7 +309,7 @@ namespace DuckGame
             this._removeMines.Clear();
             foreach (KeyValuePair<Mine, float> mine in this._mines)
             {
-                if ((double)mine.Value < 0.0 && _open > (double)mine.Value || (double)mine.Value >= 0.0 && _open < (double)mine.Value)
+                if (mine.Value < 0f && _open > mine.Value || mine.Value >= 0f && _open < mine.Value)
                 {
                     mine.Key.addWeight = 0.0f;
                     this._removeMines.Add(mine.Key);
@@ -321,7 +321,7 @@ namespace DuckGame
                 this._mines.Remove(removeMine);
             bool flag1 = false;
             PhysicsObject t1 = null;
-            if (_open < 0.899999976158142 && _open > -0.899999976158142)
+            if (_open < 0.9f && _open > -0.9f)
             {
                 bool flag2 = false;
                 Thing thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(18f, 0.0f), this._bottomRight + new Vec2(18f, 0.0f), d => !(d is TargetDuck));
@@ -350,12 +350,12 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    float num = Maths.Clamp((float)(((double)t2.left - _bottomRight.x) / 14.0), 0.0f, 1f);
-                                    if ((double)num < 0.100000001490116)
+                                    float num = Maths.Clamp(((t2.left - _bottomRight.x) / 14f), 0f, 1f);
+                                    if (num < 0.1f)
                                         num = 0.1f;
-                                    if (_jam > (double)num)
+                                    if (_jam > num)
                                     {
-                                        if (_open != 0.0 && t2 is Gun)
+                                        if (_open != 0f && t2 is Gun)
                                         {
                                             if (t2 is Mine key && !key.pin && !this._mines.ContainsKey(key))
                                                 this._mines[key] = this._open;
@@ -390,12 +390,12 @@ namespace DuckGame
                     else
                     {
                         this._coll.Clear();
-                        Level.CheckRectAll<PhysicsObject>(this._topLeft - new Vec2(10f, 0.0f), this._bottomLeft, this._coll);
+                        Level.CheckRectAll<PhysicsObject>(this._topLeft - new Vec2(10f, 0f), this._bottomLeft, this._coll);
                         bool flag4 = true;
                         this._jam = -1f;
                         foreach (PhysicsObject t3 in this._coll)
                         {
-                            if (!(t3 is TeamHat) && !(t3 is Duck) && (double)t3.weight > 3.0 && t3.owner == null && (!(t3 is Holdable) || (t3 as Holdable).hoverSpawner == null))
+                            if (!(t3 is TeamHat) && !(t3 is Duck) && t3.weight > 3f && t3.owner == null && (!(t3 is Holdable) || (t3 as Holdable).hoverSpawner == null))
                             {
                                 if (t3 is RagdollPart)
                                 {
@@ -404,12 +404,12 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    float num = Maths.Clamp((float)(((double)t3.right - (double)this.left) / 14.0), -1f, 0.0f);
-                                    if ((double)num > -0.100000001490116)
+                                    float num = Maths.Clamp((t3.right - this.left) / 14f, -1f, 0f);
+                                    if ((double)num > -0.1f)
                                         num = -0.1f;
                                     if (_jam < (double)num)
                                     {
-                                        if (_open != 0.0 && t3 is Gun)
+                                        if (_open != 0f && t3 is Gun)
                                         {
                                             if (t3 is Mine key && !key.pin && !this._mines.ContainsKey(key))
                                                 this._mines[key] = this._open;
@@ -473,24 +473,24 @@ namespace DuckGame
             this._jiggle = Maths.CountDown(this._jiggle, 0.08f);
             if (!flag1)
             {
-                if (_openForce > 1.0)
+                if (_openForce > 1f)
                     this._openForce = 1f;
-                if (_openForce < -1.0)
+                if (_openForce < -1f)
                     this._openForce = -1f;
-                if (_openForce > 0.0399999991059303)
+                if (_openForce > 0.04f)
                     this._openForce -= 0.04f;
-                else if (_openForce < -0.0399999991059303)
+                else if (_openForce < -0.04f)
                     this._openForce += 0.04f;
-                else if (_openForce > -0.0599999986588955 && _openForce < 0.0599999986588955)
-                    this._openForce = 0.0f;
+                else if (_openForce > -0.06f && _openForce < 0.06f)
+                    this._openForce = 0f;
             }
             this._open += this._openForce;
-            if ((double)Math.Abs(this._open) > 0.5 && !this._opened)
+            if (Math.Abs(this._open) > 0.5f && !this._opened)
             {
                 this._opened = true;
                 SFX.Play("doorOpen", Rando.Float(0.8f, 0.9f), Rando.Float(-0.1f, 0.1f));
             }
-            else if ((double)Math.Abs(this._open) < 0.100000001490116 && this._opened)
+            else if (Math.Abs(this._open) < 0.1f && this._opened)
             {
                 this._opened = false;
                 SFX.Play("doorClose", Rando.Float(0.5f, 0.6f), Rando.Float(-0.1f, 0.1f));
@@ -499,7 +499,7 @@ namespace DuckGame
                 this._open = 1f;
             if (_open < -1.0)
                 this._open = -1f;
-            if (_jam > 0.0 && _open > (double)this._jam)
+            if (_jam > 0f && _open > this._jam)
             {
                 if (!this._jammed)
                 {
@@ -518,10 +518,10 @@ namespace DuckGame
                     }
                 }
                 this._open = this._jam;
-                if (_openForce > 0.100000001490116)
+                if (_openForce > 0.1f)
                     this._openForce = 0.1f;
             }
-            if (_jam < 0.0 && _open < (double)this._jam)
+            if (_jam < 0f && _open < (double)this._jam)
             {
                 if (!this._jammed)
                 {
@@ -540,40 +540,40 @@ namespace DuckGame
                     }
                 }
                 this._open = this._jam;
-                if (_openForce < -0.100000001490116)
+                if (_openForce < -0.1f)
                     this._openForce = -0.1f;
             }
-            if (_open > 0.0)
+            if (_open > 0f)
             {
                 this._sprite.flipH = false;
-                this._sprite.frame = (int)(_open * 15.0);
+                this._sprite.frame = (int)(_open * 15f);
             }
             else
             {
                 this._sprite.flipH = true;
-                this._sprite.frame = (int)((double)Math.Abs(this._open) * 15.0);
+                this._sprite.frame = (int)(Math.Abs(this._open) * 15f);
             }
             if (this._sprite.frame > 9)
             {
-                this.collisionSize = new Vec2(0.0f, 0.0f);
+                this.collisionSize = new Vec2(0f, 0f);
                 this.solid = false;
-                this.collisionOffset = new Vec2(0.0f, -999999f);
+                this.collisionOffset = new Vec2(0f, -999999f); // ok landon
                 this.depth = -0.7f;
             }
             else
             {
                 this.collisionSize = new Vec2(this.colWide, 32f);
                 this.solid = true;
-                this.collisionOffset = new Vec2((float)(-(double)this.colWide / 2.0), -24f);
+                this.collisionOffset = new Vec2((float)(-(double)this.colWide / 2f), -24f);
                 this.depth = -0.5f;
             }
-            if (_hitPoints <= 0.0 && !this._destroyed)
+            if (_hitPoints <= 0f && !this._destroyed)
                 this.Destroy(new DTImpact(this));
-            if (_openForce == 0.0)
-                this._open = Maths.LerpTowards(this._open, 0.0f, 0.1f);
-            if (_open == 0.0)
+            if (_openForce == 0f)
+                this._open = Maths.LerpTowards(this._open, 0f, 0.1f);
+            if (_open == 0f)
                 this._jammed = false;
-            float num1 = (float)(_hitPoints / (double)this._maxHealth * 0.200000002980232 + 0.800000011920929);
+            float num1 = (_hitPoints / this._maxHealth * 0.2f + 0.8f);
             this._sprite.color = new Color(num1, num1, num1);
         }
 

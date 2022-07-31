@@ -441,7 +441,7 @@ namespace DuckGame
                     {
                         this._gettingXP = true;
                         UILevelBox pauseMenu = MonoMain.pauseMenu as UILevelBox;
-                        this._gettingXPCompletion = (float)((pauseMenu._dayProgress + (double)pauseMenu._xpProgress) / 2.0 * 0.699999988079071);
+                        this._gettingXPCompletion = ((pauseMenu._dayProgress + pauseMenu._xpProgress) / 2f * 0.7f);
                     }
                     else
                     {
@@ -494,7 +494,7 @@ namespace DuckGame
                     flag1 = false;
                 if (!this._open)
                 {
-                    if (_fade < 0.00999999977648258 && this._closing)
+                    if (_fade < 0.01f && this._closing)
                     {
                         this._closing = false;
                         if (this._box != null)
@@ -509,7 +509,7 @@ namespace DuckGame
                 else
                 {
                     this._lcdFlashInc += Rando.Float(0.3f, 0.6f);
-                    this._lcdFlash = (float)(0.899999976158142 + (Math.Sin(_lcdFlashInc) + 1.0) / 2.0 * 0.100000001490116);
+                    this._lcdFlash = (0.9f + (float)(Math.Sin(_lcdFlashInc) + 1f) / 2f * 0.1f);
                     if (this._prevDesiredTeam != _desiredTeamSelection && !this.isServerForObject)
                     {
                         if (this.TeamIndexAddSpecial(_desiredTeamSelection, 5) == this._prevDesiredTeam)
@@ -699,41 +699,41 @@ namespace DuckGame
                             for (int index2 = 0; index2 < 7; ++index2)
                             {
                                 int plus = index2 - 3 + (index1 - 2) * 5;
-                                float x = (float)((double)this.x + 2.0 + index2 * 22 + -(double)this._slide * 20.0);
-                                float num3 = (float)((double)this.y + 37.0 + -(double)this._upSlide * 20.0);
+                                float x = (this.x + 2f + index2 * 22 + -this._slide * 20f);
+                                float num3 = (float)((double)this.y + 37f + -(double)this._upSlide * 20f);
                                 int index3 = this.TeamIndexAdd(_teamSelection, plus);
                                 if (index3 == 3)
                                     index3 = this.ControllerNumber();
                                 Team allTeam = this.AllTeams()[index3];
-                                float num4 = (float)((double)this.x + ((double)this.x + 2.0 + 154.0 - (double)(this.x + 2f)) / 2.0 - 9.0);
-                                float num5 = Maths.Clamp((float)((50.0 - (double)Math.Abs(x - num4)) / 50.0), 0.0f, 1f);
-                                float num6 = (float)((double)Maths.NormalizeSection(num5, 0.9f, 1f) * 0.800000011920929 + 0.200000002980232);
-                                if ((double)num5 < 0.5)
+                                float num4 = (this.x + (this.x + 2f + 154f - (this.x + 2f)) / 2f - 9f);
+                                float num5 = Maths.Clamp((float)((50.0 - (double)Math.Abs(x - num4)) / 50f), 0f, 1f);
+                                float num6 = (Maths.NormalizeSection(num5, 0.9f, 1f) * 0.8f + 0.2f);
+                                if (num5 < 0.5f)
                                     num6 = Maths.NormalizeSection(num5, 0.1f, 0.2f) * 0.3f;
-                                float num7 = Maths.NormalizeSection(num5, 0.0f, 0.1f) * 0.3f;
+                                float num7 = Maths.NormalizeSection(num5, 0f, 0.1f) * 0.3f;
                                 switch (index1)
                                 {
                                     case 0:
                                         num3 -= num5 * 3f;
-                                        num7 = _upSlide >= 0.0 ? 0.0f : Math.Abs(this._upSlide) * num7;
+                                        num7 = _upSlide >= 0f ? 0f : Math.Abs(this._upSlide) * num7;
                                         break;
                                     case 1:
                                         num3 -= num5 * 3f;
-                                        if (_upSlide > 0.0)
+                                        if (_upSlide > 0f)
                                         {
                                             num7 = (1f - Math.Abs(this._upSlide)) * num7;
                                             break;
                                         }
                                         break;
                                     case 2:
-                                        float num8 = num3 - (float)((double)num5 * 4.0 * (1.0 - (double)Math.Abs(this._upSlide)));
-                                        num3 = _upSlide <= 0.0 ? num8 + num5 * 4f * Math.Abs(this._upSlide) : num8 - num5 * 3f * Math.Abs(this._upSlide);
+                                        float num8 = num3 - (num5 * 4f * (1f - Math.Abs(this._upSlide)));
+                                        num3 = _upSlide <= 0f ? num8 + num5 * 4f * Math.Abs(this._upSlide) : num8 - num5 * 3f * Math.Abs(this._upSlide);
                                         num7 = Maths.NormalizeSection(num5, 0.9f, 1f) * 0.7f + num7;
                                         break;
                                     case 3:
                                         float num9 = Math.Max(0.0f, this._upSlide);
-                                        num3 += (float)((double)num5 * 4.0 * (1.0 - (double)num9) + -(double)num5 * 4.0 * (double)num9);
-                                        if (_upSlide < 0.0)
+                                        num3 += (num5 * 4f * (1f - num9) + -num5 * 4f * num9);
+                                        if (_upSlide < 0f)
                                         {
                                             num7 = (1f - Math.Abs(this._upSlide)) * num7;
                                             break;
@@ -741,10 +741,10 @@ namespace DuckGame
                                         break;
                                     case 4:
                                         num3 += num5 * 4f;
-                                        num7 = _upSlide <= 0.0 ? 0.0f : Math.Abs(this._upSlide) * num7;
+                                        num7 = _upSlide <= 0f ? 0f : Math.Abs(this._upSlide) * num7;
                                         break;
                                 }
-                                if ((double)num7 >= 0.00999999977648258)
+                                if ((double)num7 >= 0.01f)
                                 {
                                     this._profile.persona.sprite.alpha = this._fade;
                                     this._profile.persona.sprite.color = Color.White;
@@ -778,10 +778,10 @@ namespace DuckGame
                                     g.scale = new Vec2(1f, 1f);
                                     //if (!flag5) was under
                                     g.center = new Vec2(16f, 16f) + vec2;
-                                    if (index3 > DG.MaxPlayers - 1 && _fade > 0.00999999977648258)
+                                    if (index3 > DG.MaxPlayers - 1 && _fade > 0.01f)
                                     {
                                         //Vec2 pos = Vec2.Zero;
-                                        Vec2 pos = new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)); //!flag5 ? new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0 + 1.0));
+                                        Vec2 pos = new Vec2(x, (num3 + num1 + index1 * 20 - 20f)); //!flag5 ? new Vec2(x, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)((double)num3 + (double)num1 + index1 * 20 - 20.0 + 1.0));
                                         Vec2 pixel = Maths.RoundToPixel(pos);
                                         if (index4 != -1 && !flag4 && allTeam.locked)
                                         {
@@ -993,25 +993,25 @@ namespace DuckGame
             this.fakefade = false;
             if (Network.isActive && this._box.profile != null && this._box.profile.connection != DuckNetwork.localConnection)
             {
-                this._blindLerp = Lerp.Float(this._blindLerp, this._editingRoom || this._gettingXP ? 1f : 0.0f, 0.05f);
-                if (_blindLerp > 0.00999999977648258)
+                this._blindLerp = Lerp.Float(this._blindLerp, this._editingRoom || this._gettingXP ? 1f : 0f, 0.05f);
+                if (_blindLerp > 0.01f)
                 {
                     for (int index = 0; index < 8; ++index)
                     {
-                        this._blind.yscale = Math.Max(0.0f, Math.Min((float)(_blindLerp * 3.0 - index * 0.0500000007450581), 1f));
-                        this._blind.depth = (Depth)(float)(0.910000026226044 + index * 0.00800000037997961);
+                        this._blind.yscale = Math.Max(0.0f, Math.Min((float)(_blindLerp * 3.0 - index * 0.05f), 1f));
+                        this._blind.depth = (Depth)(float)(0.91f + index * 0.008f);
                         this._blind.flipH = false;
-                        DuckGame.Graphics.Draw(this._blind, (float)((double)this.x - 3.0 + index * (9.0 * _blindLerp)), this.y + 1f);
+                        DuckGame.Graphics.Draw(this._blind, (this.x - 3f + index * (9f * _blindLerp)), this.y + 1f);
                         this._blind.flipH = true;
-                        DuckGame.Graphics.Draw(this._blind, (float)((double)this.x + 4.0 + 140.0 - index * (9.0 * _blindLerp)), this.y + 1f);
+                        DuckGame.Graphics.Draw(this._blind, (this.x + 4f + 14f - index * (9f * _blindLerp)), this.y + 1f);
                     }
-                    float num = Math.Max((float)((_blindLerp - 0.5) * 2.0), 0.0f);
-                    if ((double)num > 0.00999999977648258)
+                    float num = Math.Max((float)((_blindLerp - 0.5) * 2f), 0f);
+                    if ((double)num > 0.01f)
                     {
                         if (this._gettingXP)
                         {
                             this._gettingXPBoard.depth = (Depth)0.99f;
-                            this._gettingXPBoard.frame = (int)Math.Round(_gettingXPCompletion * 9.0);
+                            this._gettingXPBoard.frame = (int)Math.Round(_gettingXPCompletion * 9f);
                             DuckGame.Graphics.Draw(_gettingXPBoard, this.x + 71f, this.y + 43f * num);
                             this._boardLoader.depth = (Depth)0.995f;
                             DuckGame.Graphics.Draw(_boardLoader, this.x + 94f, this.y + 52f * num);
@@ -1028,15 +1028,15 @@ namespace DuckGame
                 if (this._editingRoom)
                     this.fakefade = true;
             }
-            if ((double)this.fadeVal < 0.00999999977648258 || this._roomEditor._mode == REMode.Place)
+            if ((double)this.fadeVal < 0.01f || this._roomEditor._mode == REMode.Place)
                 return;
-            DuckGame.Graphics.Draw(_screen.target, this.position + new Vec2(3f, 3f), new Rectangle?(), new Color(this._screen.darken, this._screen.darken, this._screen.darken) * this.fadeVal, 0.0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)0.82f);
+            DuckGame.Graphics.Draw(_screen.target, this.position + new Vec2(3f, 3f), new Rectangle?(), new Color(this._screen.darken, this._screen.darken, this._screen.darken) * this.fadeVal, 0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)0.82f);
             this._selectBorder.alpha = this.fadeVal;
             this._selectBorder.depth = (Depth)0.85f;
-            DuckGame.Graphics.Draw(this._selectBorder, this.x - 1f, this.y, new Rectangle(0.0f, 0.0f, 4f, _selectBorder.height));
-            DuckGame.Graphics.Draw(this._selectBorder, (float)((double)this.x - 1.0 + _selectBorder.width - 4.0), this.y, new Rectangle(this._selectBorder.width - 4, 0.0f, 4f, _selectBorder.height));
-            DuckGame.Graphics.Draw(this._selectBorder, (float)((double)this.x - 1.0 + 4.0), this.y, new Rectangle(4f, 0.0f, this._selectBorder.width - 8, 4f));
-            DuckGame.Graphics.Draw(this._selectBorder, (float)((double)this.x - 1.0 + 4.0), this.y + (this._selectBorder.height - 25), new Rectangle(4f, this._selectBorder.height - 25, this._selectBorder.width - 8, 25f));
+            DuckGame.Graphics.Draw(this._selectBorder, this.x - 1f, this.y, new Rectangle(0f, 0f, 4f, _selectBorder.height));
+            DuckGame.Graphics.Draw(this._selectBorder, (this.x - 1f + _selectBorder.width - 4f), this.y, new Rectangle(this._selectBorder.width - 4, 0f, 4f, _selectBorder.height));
+            DuckGame.Graphics.Draw(this._selectBorder, (this.x - 1f + 4f), this.y, new Rectangle(4f, 0f, this._selectBorder.width - 8, 4f));
+            DuckGame.Graphics.Draw(this._selectBorder, (this.x - 1f + 4f), this.y + (this._selectBorder.height - 25), new Rectangle(4f, this._selectBorder.height - 25, this._selectBorder.width - 8, 25f));
             string firstWord = this._firstWord;
             this._font.scale = new Vec2(1f, 1f);
             this._font.Draw(firstWord, this.x + 25f, this.y + 79f, new Color(163, 206, 39) * this.fadeVal * this._lcdFlash, (Depth)0.9f);

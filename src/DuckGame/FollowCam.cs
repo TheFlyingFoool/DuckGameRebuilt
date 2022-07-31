@@ -192,9 +192,9 @@ namespace DuckGame
             if (this._skipResize)
                 return;
             float lerpMult = this.lerpMult;
-            if ((double)this.lerpSpeed > 0.899999976158142)
+            if ((double)this.lerpSpeed > 0.9f)
                 this.lerpMult = 1.8f;
-            this.border += (float)((_lerpBorder - (double)this.border) * ((double)this.lerpSpeed * 16.0 * _lerpMult)) * this._speed;
+            this.border += ((_lerpBorder - this.border) * (this.lerpSpeed * 16f * _lerpMult)) * this._speed;
             if (this.immediate)
                 this.border = this._lerpBorder;
             float num1 = 99999f;
@@ -211,18 +211,18 @@ namespace DuckGame
                 if (this._prevPositions.ContainsKey(key))
                 {
                     Vec2 prevPosition = this._prevPositions[key];
-                    if (this._overFollow || FollowCam.boost || key.overfollow > 0.0)
+                    if (this._overFollow || FollowCam.boost || key.overfollow > 0f)
                     {
                         float amount = 0.3f;
-                        if (key.overfollow > 0.0)
+                        if (key.overfollow > 0f)
                             amount = key.overfollow;
                         Vec2 vec2 = (key.cameraPosition - prevPosition) * 24f;
-                        if ((double)vec2.length > 100.0)
+                        if ((double)vec2.length > 100f)
                             vec2 = vec2.normalized * 100f;
                         Vec2 to = key.cameraPosition + vec2;
                         current = Lerp.Vec2Smooth(current, to, amount);
                     }
-                    if ((double)(prevPosition - current).length > 2500.0 && !this._allowWarps)
+                    if ((double)(prevPosition - current).length > 2500f && !this._allowWarps)
                     {
                         current.x = prevPosition.x;
                         current.y = prevPosition.y;
@@ -249,50 +249,50 @@ namespace DuckGame
             float y = Level.current.bottomRight.y;
             float x1 = Level.current.topLeft.x;
             float x2 = Level.current.bottomRight.x;
-            if ((double)num4 > (double)y)
+            if (num4 > y)
             {
                 num4 = y;
-                if ((double)num3 > (double)num4)
+                if (num3 > num4)
                     num3 = num4;
             }
-            if ((double)num3 < (double)num5)
+            if (num3 < num5)
             {
                 num3 = num5;
-                if ((double)num4 < (double)num3)
+                if (num4 < num3)
                     num4 = num3;
             }
-            if ((double)num1 < (double)x1)
+            if (num1 < x1)
             {
                 num1 = x1;
-                if ((double)num2 < (double)num1)
+                if (num2 < num1)
                     num2 = num1;
             }
-            if ((double)num2 > (double)x2)
+            if (num2 > x2)
             {
                 num2 = x2;
-                if ((double)num1 > (double)num2)
+                if (num1 > num2)
                     num1 = num2;
             }
             float num6 = num3 - this.border;
             float num7 = num4 + this.border;
             float num8 = num1 - this.border;
             float num9 = num2 + this.border;
-            float num10 = (float)(((double)num8 + (double)num9) / 2.0);
-            float num11 = (float)(((double)num6 + (double)num7) / 2.0);
+            float num10 = ((num8 + num9) / 2f);
+            float num11 = ((num6 + num7) / 2f);
             float num12 = Resolution.current.x / (float)Resolution.current.y;
             float num13 = Math.Abs(num8 - num9);
             float num14 = Math.Abs(num6 - num7);
-            if ((double)this.lerpSpeed > 0.899999976158142)
+            if ((double)this.lerpSpeed > 0.9f)
             {
                 num13 = Level.current.bottomRight.x - Level.current.topLeft.x;
                 num14 = Level.current.bottomRight.y - Level.current.topLeft.y;
             }
-            float num15 = (double)num14 <= (double)num13 / (double)num12 ? num13 / num12 : num14;
+            float num15 = num14 <= num13 / num12 ? num13 / num12 : num14;
             if (!flag && this.woteFrame)
                 num15 = this._prevViewSize;
             else
                 this._prevViewSize = num15;
-            this._viewSize += (float)(((double)num15 - _viewSize) * ((double)this.lerpSpeed * _lerpMult * _speed));
+            this._viewSize += ((num15 - _viewSize) * (this.lerpSpeed * _lerpMult * _speed));
             if (this.immediate)
                 this._viewSize = num15;
             float num16 = this._viewSize;
@@ -300,7 +300,7 @@ namespace DuckGame
                 num16 = this.manualViewSize;
             this.width = num16 * num12;
             this.height = num16;
-            this._lerpBorder = Maths.Clamp((float)((double)Math.Min(this.width, 740f) / 740.0 * (90.0 * _zoomMult)), this.minSize * this._zoomMult, 90f * this._zoomMult);
+            this._lerpBorder = Maths.Clamp((float)(Math.Min(this.width, 740f) / 740f * (90f * _zoomMult)), this.minSize * this._zoomMult, 90f * this._zoomMult);
             if (!flag && this.woteFrame)
             {
                 num10 = this._prevCenterMoveX;
@@ -313,29 +313,29 @@ namespace DuckGame
             }
             if (!flag)
                 this.woteFrame = true;
-            this._center.x += (float)(((double)num10 - _center.x) * ((double)this.lerpSpeed * _lerpMult));
-            this._center.y += (float)(((double)num11 - _center.y) * ((double)this.lerpSpeed * _lerpMult));
+            this._center.x += ((num10 - _center.x) * (this.lerpSpeed * _lerpMult));
+            this._center.y += ((num11 - _center.y) * (this.lerpSpeed * _lerpMult));
             if (this.immediate)
             {
                 this._center.x = num10;
                 this._center.y = num11;
             }
-            if ((double)this.lerpSpeed > 0.899999976158142 && this._startCentered)
+            if ((double)this.lerpSpeed > 0.9f && this._startCentered)
             {
-                this._center.x = (float)((Level.current.bottomRight.x + (double)Level.current.topLeft.x) / 2.0);
-                this._center.y = (float)((Level.current.bottomRight.y + (double)Level.current.topLeft.y) / 2.0);
+                this._center.x = ((Level.current.bottomRight.x + Level.current.topLeft.x) / 2f);
+                this._center.y = ((Level.current.bottomRight.y + Level.current.topLeft.y) / 2f);
             }
             this.x = this._center.x - this.width / 2f;
             this.y = this._center.y - this.height / 2f;
-            if ((double)this.x < hardLimitLeft)
+            if (this.x < hardLimitLeft)
                 this.x = this.hardLimitLeft;
-            if ((double)this.right > hardLimitRight)
+            if (this.right > hardLimitRight)
                 this.x = this.hardLimitRight - this.width;
-            if ((double)this.y < hardLimitTop)
+            if (this.y < hardLimitTop)
                 this.y = this.hardLimitTop;
-            if ((double)this.bottom > hardLimitBottom)
+            if (this.bottom > hardLimitBottom)
                 this.y = this.hardLimitBottom - this.height;
-            if (_lerpSpeed > 0.899999976158142)
+            if (_lerpSpeed > 0.9f)
                 this._lerpSpeed = 0.05f;
             this.lerpMult = lerpMult;
             FollowCam.boost = false;

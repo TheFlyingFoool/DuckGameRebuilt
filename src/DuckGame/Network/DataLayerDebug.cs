@@ -24,18 +24,18 @@ namespace DuckGame
             {
                 this.sendingDuplicate = true;
                 this.SendPacket(sendData, connection);
-                if ((double)connection.debuggerContext.duplicate > 0.400000005960464 && (double)Rando.Float(1f) < (double)connection.debuggerContext.duplicate)
+                if (connection.debuggerContext.duplicate > 0.4f && Rando.Float(1f) < connection.debuggerContext.duplicate)
                     this.SendPacket(sendData, connection);
-                if ((double)connection.debuggerContext.duplicate > 0.800000011920929 && (double)Rando.Float(1f) < (double)connection.debuggerContext.duplicate)
+                if ((double)connection.debuggerContext.duplicate > 0.8f && (double)Rando.Float(1f) < (double)connection.debuggerContext.duplicate)
                     this.SendPacket(sendData, connection);
                 this.sendingDuplicate = false;
             }
             float num = connection.debuggerContext.CalculateLatency();
             if (connection.debuggerContext.lagSpike > 0)
                 num = 1f / 1000f;
-            if ((double)num == 3.40282346638529E+38)
+            if (num == 3.4E+38f)
                 return null;
-            if ((double)num <= 0.0)
+            if (num <= 0f)
                 return this._impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
             connection.debuggerContext.packets.Add(new DataLayerDebug.BadConnection.DelayedPacket()
             {
@@ -95,10 +95,10 @@ namespace DuckGame
                         return float.MaxValue;
                     num += Rando.Float(2f, 4f);
                 }
-                return (float)((double)this.latency + 0.0 - 0.0160000007599592) + Rando.Float(-this.jitter, this.jitter) + num;
+                return (float)((double)this.latency + 0f - 0.016f) + Rando.Float(-this.jitter, this.jitter) + num;
             }
 
-            public bool CalculateLoss() => (double)this.loss != 0.0 && (double)Rando.Float(1f) < (double)this.loss;
+            public bool CalculateLoss() => (double)this.loss != 0f && (double)Rando.Float(1f) < (double)this.loss;
 
             public bool Update(NCNetworkImplementation pNetwork)
             {

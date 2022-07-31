@@ -77,7 +77,7 @@ namespace DuckGame
 
         public void TryChangingAllegiance(Profile to, float awesomeness)
         {
-            if ((double)awesomeness > 0.100000001490116 && (double)Rando.Float(1f) < (double)awesomeness)
+            if (awesomeness > 0.1f && (double)Rando.Float(1f) < awesomeness)
             {
                 if (this.loyalty != null)
                 {
@@ -92,7 +92,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        if ((double)awesomeness <= 0.150000005960464 || (double)Rando.Float(1.1f) >= (double)awesomeness)
+                        if (awesomeness <= 0.15f || (double)Rando.Float(1.1f) >= awesomeness)
                             return;
                         to.stats.MakeFanLoyal();
                         this.newLoyal = true;
@@ -106,7 +106,7 @@ namespace DuckGame
             }
             else
             {
-                if ((double)awesomeness >= -0.100000001490116 || (double)Rando.Float(1f) >= (double)Math.Abs(awesomeness) || this.loyalty != to || !this.loyalty.stats.FanConsidersLeaving(awesomeness, this.loyal))
+                if (awesomeness >= -0.1f || Rando.Float(1f) >= Math.Abs(awesomeness) || this.loyalty != to || !this.loyalty.stats.FanConsidersLeaving(awesomeness, this.loyal))
                     return;
                 if (this.loyal)
                     this.newLoyal = false;
@@ -143,11 +143,11 @@ namespace DuckGame
             int totalFans = Crowd.totalFans;
             int _max = 3;
             if (dist <= 20)
-                _max += (int)(totalFans * 0.0799999982118607);
+                _max += (int)(totalFans * 0.08f);
             if (dist > 20)
-                _max = 2 + (int)(totalFans * 0.0199999995529652);
+                _max = 2 + (int)(totalFans * 0.02f);
             if (dist > 30)
-                _max = 1 + (int)(totalFans * 0.00999999977648258);
+                _max = 1 + (int)(totalFans * 0.01f);
             if (Crowd.totalFans < 1)
                 _max = 0;
             ++Crowd.fansUsed;
@@ -206,7 +206,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-(this._sprite.w / 2), -(this._sprite.h / 2));
             this.center = new Vec2(0.0f, spriteMap.h);
             this.collisionOffset = new Vec2(this.collisionOffset.x, -this._sprite.h);
-            this.depth = (Depth)(float)(0.300000011920929 - row * 0.0500000007450581);
+            this.depth = (Depth)(0.3f - row * 0.05f);
             this.layer = Layer.Background;
             this._letterSign = new Sprite("letterSign");
             this._letterSign.CenterOrigin();
@@ -214,13 +214,13 @@ namespace DuckGame
             this._font = new BitmapFont("biosFont", 8);
             this._loveSign = new Sprite("loveSign");
             this._loveSign.CenterOrigin();
-            this._loveSign.depth = (Depth)(float)(0.319999992847443 - row * 0.0500000007450581);
+            this._loveSign.depth = (Depth)(0.32f - row * 0.05f);
             this._sucksSign = new Sprite("sucksSign");
             this._sucksSign.CenterOrigin();
-            this._sucksSign.depth = (Depth)(float)(0.319999992847443 - row * 0.0500000007450581);
+            this._sucksSign.depth = (Depth)(0.32f - row * 0.05f);
             this._suckSign = new Sprite("suckSign");
             this._suckSign.CenterOrigin();
-            this._suckSign.depth = (Depth)(float)(0.319999992847443 - row * 0.0500000007450581);
+            this._suckSign.depth = (Depth)(0.32f - row * 0.05f);
         }
 
         public override void Initialize() => base.Initialize();
@@ -235,13 +235,13 @@ namespace DuckGame
                 this._sprite.SetAnimation("cheer");
             else if (this._mood == Mood.Extatic)
                 this._sprite.SetAnimation("scream");
-            if (_hatThrowTime > 0.0)
+            if (_hatThrowTime > 0f)
             {
                 this._hatThrowTime -= 0.01f;
             }
             else
             {
-                if (_hatThrowTime <= -0.5)
+                if (_hatThrowTime <= -0.5f)
                     return;
                 this._lastLoyalty = this._loyalty;
                 if (this._lastLoyalty == null)
@@ -260,7 +260,7 @@ namespace DuckGame
             this._sprite.texture = this._originalSprite.texture;
             if (!this._empty && this._letter != null)
             {
-                float num = (float)(Math.Sin(_letterSway + _letterNumber * 0.100000001490116) * 2.0 + 4.0);
+                float num = (float)(Math.Sin(_letterSway + _letterNumber * 0.1f) * 2f + 4f);
                 this._letterSway += 0.1f;
                 if (this._letter.Length == 1)
                 {

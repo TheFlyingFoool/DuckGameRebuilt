@@ -35,19 +35,19 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._move = Lerp.Float(this._move, 0.0f, 0.04f);
-            if (_move <= 0.00999999977648258)
+            this._move = Lerp.Float(this._move, 0f, 0.04f);
+            if (_move <= 0.01f)
                 this._move += 1.570796f;
             if (_length > (double)this.dist)
                 this.show = false;
-            this._alphaFade = Lerp.Float(this._alphaFade, this.show ? 1f : 0.0f, 0.1f);
+            this._alphaFade = Lerp.Float(this._alphaFade, this.show ? 1f : 0f, 0.1f);
             this._length = this._startLength * (float)Math.Sin(_move);
-            this.alpha = (float)(1.0 - _length / (double)this._startLength) * this._alphaFade;
-            if ((double)this.alpha < 0.00999999977648258)
+            this.alpha = (1f - _length / this._startLength) * this._alphaFade;
+            if ((double)this.alpha < 0.01f)
                 return;
             this.position = this._attach.barrelPosition + this._attach.barrelVector * this._length;
             Vec2 vec2 = this._attach.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-            Graphics.DrawLine(this.position + vec2 * 7f, this.position - vec2 * 7f, Color.Blue * this.alpha, (float)(1.0 + (1.0 - _length / (double)this._startLength) * 4.0), (Depth)0.9f);
+            Graphics.DrawLine(this.position + vec2 * 7f, this.position - vec2 * 7f, Color.Blue * this.alpha, (1f + (1f - _length / this._startLength) * 4f), (Depth)0.9f);
         }
     }
 }

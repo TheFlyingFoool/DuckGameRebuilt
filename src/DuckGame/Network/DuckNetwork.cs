@@ -2048,7 +2048,7 @@ namespace DuckGame
                                         }
                                         profile2.netData.Set<Vec2>("spectatorTongue", profile2.inputProfile.rightStick);
                                         Vec2 pValue = Vec2.Zero;
-                                        if ((double)profile2.inputProfile.leftStick.length < 0.0500000007450581)
+                                        if (profile2.inputProfile.leftStick.length < 0.05f)
                                         {
                                             if (profile2.inputProfile.Down("LEFT"))
                                                 pValue += new Vec2(-1f, 0.0f);
@@ -3142,12 +3142,12 @@ namespace DuckGame
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));
                 Vec2 p2 = p1 + new Vec2(x, y);
                 DuckGame.Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * num4, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
-                float num9 = (float)(0.300000011920929 + chatMessage.text.Length * 0.00700000021606684);
-                if ((double)num9 > 0.5)
+                float num9 = (0.3f + chatMessage.text.Length * 0.007f);
+                if (num9 > 0.5f)
                     num9 = 0.5f;
-                if (chatMessage.slide > 0.800000011920929)
+                if (chatMessage.slide > 0.8f)
                     chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f, 0.1f, 1.1f);
-                else if (chatMessage.slide > 0.5)
+                else if (chatMessage.slide > 0.5f)
                     chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f + num9, 0.1f, 1.1f);
                 chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
                 Color color = Color.White;

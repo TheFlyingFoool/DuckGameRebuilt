@@ -21,7 +21,7 @@ namespace DuckGame
         private Thing _lighting;
         private DustSparkleEffect _dust;
 
-        public override Vec2 cameraPosition => this.position + new Vec2(-16f, 0.0f);
+        public override Vec2 cameraPosition => this.position + new Vec2(-16f, 0f);
 
         public PlugMachine(float xpos, float ypos)
           : base(xpos, ypos)
@@ -58,18 +58,18 @@ namespace DuckGame
 
         public override void Update()
         {
-            Vec2 p = this.position + new Vec2(-20f, 0.0f);
+            Vec2 p = this.position + new Vec2(-20f, 0f);
             Duck duck = Level.Nearest<Duck>(p);
             if (duck != null)
             {
-                if (duck.grounded && (double)(duck.position - p).length < 16.0)
+                if (duck.grounded && (double)(duck.position - p).length < 16f)
                 {
                     this._hoverFade = Lerp.Float(this._hoverFade, 1f, 0.2f);
                     this.hover = true;
                 }
                 else
                 {
-                    this._hoverFade = Lerp.Float(this._hoverFade, 0.0f, 0.2f);
+                    this._hoverFade = Lerp.Float(this._hoverFade, 0f, 0.2f);
                     this.hover = false;
                 }
             }
@@ -94,10 +94,10 @@ namespace DuckGame
                 this._screen.depth = this.depth + 5;
                 Graphics.Draw(_screen, this.x - 9f, this.y - 7f);
                 this._hoverSprite.alpha = Lerp.Float(this._hoverSprite.alpha, this._hoverFade, 0.05f);
-                if ((double)this._hoverSprite.alpha > 0.00999999977648258)
+                if (this._hoverSprite.alpha > 0.01f)
                 {
                     this._hoverSprite.depth = this.depth + 6;
-                    Graphics.Draw(this._hoverSprite, (float)((double)this.x + vec2.x - 1.0), (float)((double)this.y + vec2.y - 1.0));
+                    Graphics.Draw(this._hoverSprite, (this.x + vec2.x - 1f), (this.y + vec2.y - 1f));
                 }
             }
             base.Draw();

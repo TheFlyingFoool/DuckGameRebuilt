@@ -100,7 +100,7 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = b2.position - b1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 9.99999974737875E-05)
+            if ((double)num2 < 0.0001f)
                 num2 = 0.0001f;
             if ((double)num2 < (double)num1)
                 return 0.0f;

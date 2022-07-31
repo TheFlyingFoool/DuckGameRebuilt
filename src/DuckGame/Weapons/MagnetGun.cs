@@ -94,24 +94,24 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._waveMult = Lerp.Float(this._waveMult, 0.0f, 0.1f);
+            this._waveMult = Lerp.Float(this._waveMult, 0f, 0.1f);
             if (this.isServerForObject)
-                this._magnetActive = this.action && _power > 0.00999999977648258;
+                this._magnetActive = this.action && _power > 0.01f;
             if (this._magnetActive)
                 this._waveMult = 1f;
             if (this.isServerForObject && this._magnetActive && !this.prevMagActive)
                 this._power -= 0.01f;
             this.prevMagActive = this._magnetActive;
-            if ((double)this._beamSound.Volume > 0.00999999977648258 && this._beamSound.State != SoundState.Playing)
+            if ((double)this._beamSound.Volume > 0.01f && this._beamSound.State != SoundState.Playing)
                 this._beamSound.Play();
-            else if ((double)this._beamSound.Volume < 0.00999999977648258 && this._beamSound.State == SoundState.Playing)
+            else if ((double)this._beamSound.Volume < 0.01f && this._beamSound.State == SoundState.Playing)
                 this._beamSound.Stop();
-            this._beamSound.Volume = Maths.LerpTowards(this._beamSound.Volume, this._magnetActive ? 0.1f : 0.0f, 0.1f);
+            this._beamSound.Volume = Maths.LerpTowards(this._beamSound.Volume, this._magnetActive ? 0.1f : 0f, 0.1f);
             if (_power > 1.0)
                 this._power = 1f;
-            if (_power < 0.0)
-                this._power = 0.0f;
-            this._beamSound.Pitch = _power >= 0.5 ? 0.0f : this._power - 0.5f;
+            if (_power < 0f)
+                this._power = 0f;
+            this._beamSound.Pitch = _power >= 0.5f ? 0f : this._power - 0.5f;
             if (this.isServerForObject && (this.duck == null && this.grounded || this.duck != null && this.duck.grounded || this.infinite.value))
                 this._power = 1f;
             Vec2 p1_1 = this.Offset(this.barrelOffset);
@@ -132,7 +132,7 @@ namespace DuckGame
                 if (this._grabbed == null && this._stuck == null)
                 {
                     Holdable holdable1 = null;
-                    float val1 = 0.0f;
+                    float val1 = 0f;
                     Vec2 vec2_1 = this.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                     Vec2 normalized1 = vec2_1.normalized;
                     for (int index = 0; index < 3; ++index)
@@ -162,9 +162,9 @@ namespace DuckGame
                     this._hasRay = false;
                     if (holdable1 != null && Level.CheckLine<Block>(p1_1, holdable1.position) == null)
                     {
-                        float num = (float)((1.0 - (double)Math.Min(val1, this._ammoType.range) / _ammoType.range) * 0.800000011920929);
+                        float num = ((1f - Math.Min(val1, this._ammoType.range) / _ammoType.range) * 0.8f);
                         Duck duck = holdable1.owner as Duck;
-                        if (duck != null && !(duck.holdObject is MagnetGun) && (double)num > 0.300000011920929)
+                        if (duck != null && !(duck.holdObject is MagnetGun) && num > 0.3f)
                         {
                             if (!(holdable1 is Equipment) || holdable1.equippedDuck == null)
                             {
@@ -231,7 +231,7 @@ namespace DuckGame
                             this.attachIndex += 1;
                         }
                     }
-                    else if (this.isServerForObject && this._stuck == null && ((double)Math.Abs(this.angle) < 0.0500000007450581 || (double)Math.Abs(this.angle) > 1.5))
+                    else if (this.isServerForObject && this._stuck == null && (Math.Abs(this.angle) < 0.05f || Math.Abs(this.angle) > 1.5f))
                     {
                         Vec2 position = this.owner.position;
                         if (this.duck.sliding)
@@ -243,13 +243,13 @@ namespace DuckGame
                         if (block != null && block.physicsMaterial == PhysicsMaterial.Metal)
                         {
                             vec2_1 = block.position - position;
-                            float num = (float)((1.0 - (double)Math.Min(vec2_1.length, this._ammoType.range) / _ammoType.range) * 0.800000011920929);
+                            float num = ((1f - Math.Min(vec2_1.length, this._ammoType.range) / _ammoType.range) * 0.8f);
                             Vec2 vec2_2 = hitPos - this.duck.position;
                             double length = (double)vec2_2.length;
                             vec2_2.Normalize();
                             this.owner.hSpeed += vec2_2.x * num;
                             this.owner.vSpeed += vec2_2.y * num;
-                            if (length < 20.0)
+                            if (length < 20f)
                             {
                                 this._stuck = block;
                                 RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));

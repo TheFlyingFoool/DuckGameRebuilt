@@ -153,15 +153,15 @@ namespace DuckGame
 
         public override void DrawHoverInfo()
         {
-            float num = 0.0f;
+            float num = 0f;
             foreach (TypeProbPair contain in this.contains)
             {
-                if (contain.probability > 0.0)
+                if (contain.probability > 0f)
                 {
                     Color white = Color.White;
-                    Color color = contain.probability != 0.0 ? (contain.probability >= 0.300000011920929 ? (contain.probability >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                    Color color = contain.probability != 0f ? (contain.probability >= 0.3f ? (contain.probability >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                     string text = contain.type.Name + ": " + contain.probability.ToString("0.000");
-                    Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text, scale: 0.5f) / 2.0), (float)-(16.0 + (double)num)), color, (Depth)0.9f, scale: 0.5f);
+                    Graphics.DrawString(text, this.position + new Vec2((-Graphics.GetStringWidth(text, scale: 0.5f) / 2f), -(16f + num)), color, (Depth)0.9f, scale: 0.5f);
                     num += 4f;
                 }
             }

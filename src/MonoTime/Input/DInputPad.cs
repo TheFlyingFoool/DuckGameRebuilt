@@ -489,9 +489,9 @@ namespace DuckGame
                     padState.buttons |= PadButton.DPadDown;
                 padState.sticks.left = new Vec2(state.leftX, state.leftY * -1f);
                 padState.sticks.right = new Vec2(state.rightX, -state.rightY);
-                if ((double)padState.sticks.left.Length() < 0.100000001490116)
+                if (padState.sticks.left.Length() < 0.1f)
                     padState.sticks.left = Vec2.Zero;
-                if ((double)padState.sticks.right.Length() < 0.100000001490116)
+                if (padState.sticks.right.Length() < 0.1f)
                     padState.sticks.right = Vec2.Zero;
                 if (state.leftZ > 0.0)
                     padState.triggers.left = state.leftZ;
@@ -538,9 +538,9 @@ namespace DuckGame
                     padState.buttons |= PadButton.DPadDown;
                 padState.sticks.left = new Vec2(state.leftX, state.leftY * -1f);
                 padState.sticks.right = new Vec2(state.leftZ, -state.rightZ);
-                if ((double)padState.sticks.left.Length() < 0.100000001490116)
+                if (padState.sticks.left.Length() < 0.1f)
                     padState.sticks.left = Vec2.Zero;
-                if ((double)padState.sticks.right.Length() < 0.100000001490116)
+                if (padState.sticks.right.Length() < 0.1f)
                     padState.sticks.right = Vec2.Zero;
             }
             return padState;

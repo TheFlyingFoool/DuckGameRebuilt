@@ -310,7 +310,7 @@ namespace DuckGame
             if (spreadExtinguisherSmoke > 0.0)
             {
                 this.spreadExtinguisherSmoke -= 0.15f;
-                if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2.0)
+                if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2f)
                 {
                     ++this.extWait;
                     if (this.extWait >= 3)
@@ -321,18 +321,18 @@ namespace DuckGame
                         };
                         Level.current.AddThing(t);
                         t.hSpeed += this.hSpeed * Rando.Float(0.2f, 0.3f);
-                        t.vSpeed = Rando.Float(-0.1f, 0.0f);
+                        t.vSpeed = Rando.Float(-0.1f, 0f);
                         t.vSpeed -= Math.Abs(this.vSpeed) * Rando.Float(0.05f, 0.1f);
                         this.extWait = 0;
                     }
                 }
             }
-            if (heat > 0.0)
+            if (heat > 0f)
                 this.heat -= this.coolingFactor;
-            else if (heat < -0.00999999977648258)
+            else if (heat < -0.01f)
                 this.heat += this.coolingFactor;
             else
-                this.heat = 0.0f;
+                this.heat = 0f;
             if (this.isServerForObject && this._onFire)
                 this.UpdateOnFire();
             base.DoUpdate();
@@ -364,7 +364,7 @@ namespace DuckGame
         {
             if (this.physicsMaterial == PhysicsMaterial.Metal)
             {
-                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
+                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
                 hitPos -= bullet.travelDirNormalized;
                 for (int index = 0; index < 3; ++index)
                     Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
@@ -410,11 +410,11 @@ namespace DuckGame
         {
         }
 
-        public virtual void AddFire() => Level.Add(SmallFire.New(Rando.Float((float)(((double)this.left - (double)this.x) * 0.699999988079071), (float)(((double)this.right - (double)this.x) * 0.699999988079071)), Rando.Float((float)(((double)this.top - (double)this.y) * 0.699999988079071), (float)(((double)this.bottom - (double)this.y) * 0.699999988079071)), 0.0f, 0.0f, stick: this));
+        public virtual void AddFire() => Level.Add(SmallFire.New(Rando.Float(((this.left - this.x) * 0.7f), ((this.right - this.x) * 0.7f)), Rando.Float(((this.top - this.y) * 0.7f), ((this.bottom - this.y) * 0.7f)), 0f, 0f, stick: this));
 
         protected virtual bool OnBurn(Vec2 firePosition, Thing litBy)
         {
-            if (flammable < 1.0 / 1000.0)
+            if (flammable < 1f / 1000f)
                 return false;
             if (!this._onFire)
                 SFX.Play("ignite", 0.7f, Rando.Float(0.3f) - 0.3f);
@@ -425,16 +425,16 @@ namespace DuckGame
 
         public virtual void DoHeatUp(float val, Vec2 location)
         {
-            bool flag = heat < 0.0;
-            if (!flag || (double)val > 0.0)
+            bool flag = heat < 0f;
+            if (!flag || (double)val > 0f)
             {
                 this.heat += val;
                 if (heat > 1.5)
                     this.heat = 1.5f;
-                if (!flag && heat < 0.0)
-                    this.heat = 0.0f;
+                if (!flag && heat < 0f)
+                    this.heat = 0f;
             }
-            if ((double)val <= 0.0)
+            if ((double)val <= 0f)
                 return;
             this.HeatUp(location);
         }
@@ -447,7 +447,7 @@ namespace DuckGame
 
         public virtual void DoFreeze(float val, Vec2 location)
         {
-            if ((double)val < 0.0)
+            if ((double)val < 0f)
                 val = -val;
             this.heat -= val;
             if (heat < -1.5)

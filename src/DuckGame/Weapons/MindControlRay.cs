@@ -182,7 +182,7 @@ namespace DuckGame
 
         public void ControlDuck(Duck d)
         {
-            if (d == null || _canConvert > 0.00999999977648258 || d.dead)
+            if (d == null || _canConvert > 0.01f || d.dead)
                 return;
             this.LoseControl();
             if (!(this.owner is Duck owner) || owner == d)
@@ -230,7 +230,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            this._beamTime = 0.0f;
+            this._beamTime = 0f;
             this._beamTimer.SetToEnd();
         }
 

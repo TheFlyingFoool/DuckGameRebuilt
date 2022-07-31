@@ -38,12 +38,12 @@ namespace DuckGame
             this.alpha = ArcadeHUD.alphaVal + Chancy.alpha;
             this.y += this._fallSpeed;
             this._horSpeed += Rando.Float(-0.1f, 0.1f);
-            if (_horSpeed < -0.300000011920929)
+            if (_horSpeed < -0.3f)
                 this._horSpeed = -0.3f;
-            else if (_horSpeed > 0.300000011920929)
+            else if (_horSpeed > 0.3f)
                 this._horSpeed = 0.3f;
             this.x += this._horSpeed;
-            if ((double)this.y <= 200.0)
+            if (this.y <= 200f)
                 return;
             Level.Remove(this);
         }

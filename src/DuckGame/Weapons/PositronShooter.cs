@@ -96,13 +96,13 @@ namespace DuckGame
             this._barrelOffsetTL = new Vec2(27f, 4f);
             this._fireSound = "laserRifle";
             this._fullAuto = true;
-            this._fireWait = 0.0f;
+            this._fireWait = 0f;
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
             this._holdOffset = new Vec2(-4f, -2f);
             this._flare = new SpriteMap("laserFlareOrange", 16, 16)
             {
-                center = new Vec2(0.0f, 8f)
+                center = new Vec2(0f, 8f)
             };
             this.editorTooltip = "A futuristic weapon from the WORLD OF TOMORROW!";
         }
@@ -112,7 +112,7 @@ namespace DuckGame
             if (this._bursting)
             {
                 this._burstWait = Maths.CountDown(this._burstWait, 0.16f);
-                if (_burstWait <= 0.0)
+                if (_burstWait <= 0f)
                 {
                     this._burstWait = 1f;
                     if (this.isServerForObject)
@@ -124,20 +124,20 @@ namespace DuckGame
                             Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         this.firedBullets.Clear();
                     }
-                    this._wait = 0.0f;
+                    this._wait = 0f;
                     ++this._burstNum;
                 }
                 if (this._burstNum == 3)
                 {
                     this._burstNum = 0;
-                    this._burstWait = 0.0f;
+                    this._burstWait = 0f;
                     this._bursting = false;
                     this._wait = this._fireWait;
                 }
             }
-            if (_windVelocity > 0.300000011920929)
+            if (_windVelocity > 0.3f)
                 this._windVelocity = 0.3f;
-            this._windVelocity = Lerp.Float(this._windVelocity, 0.0f, 0.0035f);
+            this._windVelocity = Lerp.Float(this._windVelocity, 0f, 0.0035f);
             if (this._noteIndex <= this._notes.Count)
             {
                 this._wind += this._windVelocity;
@@ -150,7 +150,7 @@ namespace DuckGame
                         ++this._noteIndex;
                     }
                     else
-                        this._windVelocity = 0.0f;
+                        this._windVelocity = 0f;
                     ++this._prevInc;
                 }
             }
@@ -187,25 +187,25 @@ namespace DuckGame
             {
                 float num = _noteIndex / (float)this._notes.Count;
                 this._ammoType.range = 1000f;
-                this._ammoType.bulletSpeed = (float)(1.0 + (double)num * 20.0);
-                this._ammoType.affectedByGravity = (double)num < 0.600000023841858;
+                this._ammoType.bulletSpeed = (1f + num * 20f);
+                this._ammoType.affectedByGravity = num < 0.6f;
                 this._ammoType.accuracy = num;
-                this._ammoType.bulletThickness = (float)(0.200000002980232 + (double)num * 0.300000011920929);
+                this._ammoType.bulletThickness = (0.2f + num * 0.3f);
                 this._ammoType.penetration = 0.5f;
                 this._fireSound = "awfulLaser";
                 this._ammoType.bulletSpeed -= 0.5f;
-                if ((double)num > 0.100000001490116)
+                if (num > 0.1f)
                 {
                     this._ammoType.bulletSpeed += 0.5f;
                     this._ammoType.penetration = 1f;
                     this._fireSound = "phaserSmall";
                 }
-                if ((double)num > 0.300000011920929)
+                if (num > 0.3f)
                 {
                     this._ammoType.penetration = 2f;
                     this._fireSound = "phaserMedium";
                 }
-                if ((double)num > 0.75)
+                if (num > 0.75f)
                 {
                     this._ammoType.penetration = 4f;
                     this._fireSound = "laserRifle";
@@ -228,7 +228,7 @@ namespace DuckGame
                             this.hSpeed += offDir * 3f;
                             this.vSpeed -= 3f;
                             this._winding = false;
-                            this._windVelocity = 0.0f;
+                            this._windVelocity = 0f;
                         }
                         else
                         {

@@ -190,7 +190,7 @@ namespace DuckGame
             else if (!DeathmatchLevel._started)
             {
                 this._waitAfterSpawn -= 0.05f;
-                if (_waitAfterSpawn > 0.0)
+                if (_waitAfterSpawn > 0f)
                     return;
                 if (Network.isServer && Network.isActive && this._waitAfterSpawnDings == 0)
                     Send.Message(new NMGetReady());
@@ -209,7 +209,7 @@ namespace DuckGame
             else
             {
                 this._fontFade -= 0.1f;
-                if (_fontFade >= 0.0)
+                if (_fontFade >= 0f)
                     return;
                 this._fontFade = 0.0f;
             }
@@ -217,7 +217,7 @@ namespace DuckGame
 
         public override void PostDrawLayer(Layer layer)
         {
-            if (layer == Layer.HUD && this._waitAfterSpawnDings > 0 && _fontFade > 0.00999999977648258)
+            if (layer == Layer.HUD && this._waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
                 this._font.scale = new Vec2(2f, 2f);
                 this._font.alpha = this._fontFade;
@@ -227,7 +227,7 @@ namespace DuckGame
                 else if (this._waitAfterSpawnDings == 3)
                     text = "";
                 float width = this._font.GetWidth(text);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0), Color.White);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f), (Layer.HUD.camera.height / 2f - this._font.height / 2f), Color.White);
             }
             base.PostDrawLayer(layer);
         }

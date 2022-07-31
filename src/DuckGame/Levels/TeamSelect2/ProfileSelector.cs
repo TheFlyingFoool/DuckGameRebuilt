@@ -537,7 +537,7 @@ namespace DuckGame
                 this._mode = PSMode.SelectProfile;
                 this._open = false;
                 this._selector.fade = 1f;
-                this._fade = 0.0f;
+                this._fade = 0f;
                 this._selector.screen.DoFlashTransition();
             }
             SFX.Play("consoleSelect", 0.4f);
@@ -551,10 +551,10 @@ namespace DuckGame
         {
             if (this._selector.screen.transitioning)
                 return;
-            this._takenFlash = Lerp.Float(this._takenFlash, 0.0f, 0.02f);
+            this._takenFlash = Lerp.Float(this._takenFlash, 0f, 0.02f);
             if (!this._open)
             {
-                if (_fade >= 0.00999999977648258 || !this._closing)
+                if (_fade >= 0.01f || !this._closing)
                     return;
                 this._closing = false;
             }
@@ -562,7 +562,7 @@ namespace DuckGame
             {
                 this._open = false;
                 this._selector.fade = 1f;
-                this._fade = 0.0f;
+                this._fade = 0f;
                 this._selector.screen.DoFlashTransition();
                 this._desiredMode = PSMode.SelectProfile;
                 SFX.Play("consoleCancel", 0.4f);
@@ -574,7 +574,7 @@ namespace DuckGame
                     this._selector.screen.DoFlashTransition();
                     this._mode = this._desiredMode;
                 }
-                if (_fade > 0.899999976158142 && this._mode != PSMode.CreateProfile && this._mode != PSMode.EditProfile && this._mode != PSMode.EditControls && this._mode != PSMode.EditControlsConfirm && this._desiredSelectorPosition == this._selectorPosition)
+                if (_fade > 0.9f && this._mode != PSMode.CreateProfile && this._mode != PSMode.EditProfile && this._mode != PSMode.EditControls && this._mode != PSMode.EditControlsConfirm && this._desiredSelectorPosition == this._selectorPosition)
                 {
                     if (this._inputProfile.Down("MENUUP"))
                     {
@@ -1355,7 +1355,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (_fade < 0.00999999977648258)
+            if (_fade < 0.01f)
                 return;
             if (this._mode == PSMode.EditControlsConfirm)
             {

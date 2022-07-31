@@ -175,7 +175,7 @@ namespace DuckGame
             if (this._topLeftCorner == null || this._topRightCorner == null)
                 return 999999f;
             float num = this._topLeftCorner.corner.y + 8f;
-            if (_topRightCorner.corner.y > (double)num)
+            if (_topRightCorner.corner.y > num)
                 num = this._topRightCorner.corner.y + 8f;
             return this.DistanceToFeedAmount((this._leftCorner.corner.y - num) * this._collisionSize.x);
         }
@@ -189,21 +189,21 @@ namespace DuckGame
             if (this._rightCorner != null && (double)this.right > _rightCorner.corner.x && !this._rightCorner.wallCorner)
             {
                 float feedAmount = this.DistanceToFeedAmount(this.right - this._rightCorner.corner.x);
-                this.x -= (float)(((double)this.right - _rightCorner.corner.x) / 2.0);
+                this.x -= ((this.right - _rightCorner.corner.x) / 2f);
                 if (this._rightStream == null)
-                    this._rightStream = new FluidStream(this._rightCorner.corner.x - 2f, this.y, new Vec2(1f, 0.0f), 1f);
+                    this._rightStream = new FluidStream(this._rightCorner.corner.x - 2f, this.y, new Vec2(1f, 0f), 1f);
                 this._rightStream.position.y = this.y - this._collisionOffset.y;
                 this._rightStream.position.x = this._rightCorner.corner.x + 2f;
                 this._rightStream.Feed(this.data.Take(feedAmount));
             }
             this._wide = this.FeedAmountToDistance(this.data.amount);
             float num1 = this._wide + 4f;
-            this._collisionOffset.x = (float)-((double)num1 / 2.0);
+            this._collisionOffset.x = -(num1 / 2f);
             this._collisionSize.x = num1;
             if (this._leftCorner != null && (double)this.left < _leftCorner.corner.x && !this._leftCorner.wallCorner)
             {
                 float feedAmount = this.DistanceToFeedAmount(this._leftCorner.corner.x - this.left);
-                this.x += (float)((_leftCorner.corner.x - (double)this.left) / 2.0);
+                this.x += ((_leftCorner.corner.x - this.left) / 2f);
                 if (this._leftStream == null)
                     this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0.0f), 1f);
                 this._leftStream.position.y = this.y - this._collisionOffset.y;
@@ -212,14 +212,14 @@ namespace DuckGame
             }
             this._wide = this.FeedAmountToDistance(this.data.amount);
             float num2 = this._wide + 4f;
-            this._collisionOffset.x = (float)-((double)num2 / 2.0);
+            this._collisionOffset.x = (float)-((double)num2 / 2f);
             this._collisionSize.x = num2;
         }
 
         public float CalculateDepth()
         {
-            double distance = (double)this.FeedAmountToDistance(this.data.amount);
-            if (_wide == 0.0)
+            double distance = this.FeedAmountToDistance(this.data.amount);
+            if (_wide == 0f)
                 this._wide = 1f / 1000f;
             double wide = _wide;
             return Maths.Clamp((float)(distance / wide), 1f, 99999f);
@@ -227,7 +227,7 @@ namespace DuckGame
 
         public void PrepareFloaters()
         {
-            if (collisionSize.y <= 10.0)
+            if (collisionSize.y <= 10f)
                 return;
             foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -8f), this.topRight + new Vec2(0.0f, -8f)))
             {
@@ -240,17 +240,17 @@ namespace DuckGame
         {
             ++this._framesSinceFeed;
             this.fluidWave += 0.1f;
-            if (data.amount < 9.99999974737875E-05)
+            if (data.amount < 0.0001f)
                 Level.Remove(this);
-            if (collisionSize.y > 10.0)
+            if (collisionSize.y > 10f)
             {
                 ++this.bubbleWait;
                 if (this.bubbleWait > Rando.Int(15, 25))
                 {
-                    for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16.0); ++index)
+                    for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16f); ++index)
                     {
-                        if ((double)Rando.Float(1f) > 0.850000023841858)
-                            Level.Add(new TinyBubble(this.left + index * 16 + Rando.Float(-4f, 4f), this.bottom + Rando.Float(-4f), 0.0f, this.top + 10f));
+                        if (Rando.Float(1f) > 0.85f)
+                            Level.Add(new TinyBubble(this.left + index * 16 + Rando.Float(-4f, 4f), this.bottom + Rando.Float(-4f), 0f, this.top + 10f));
                     }
                     this.bubbleWait = 0;
                 }
@@ -260,12 +260,12 @@ namespace DuckGame
                     physicsObject.sleeping = false;
             }
             FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(this.left, this.y), new Vec2(this.right, this.y), this);
-            if (fluidPuddle != null && fluidPuddle.data.amount < (double)this.data.amount)
+            if (fluidPuddle != null && fluidPuddle.data.amount < this.data.amount)
             {
                 fluidPuddle.active = false;
                 float num1 = Math.Min(fluidPuddle.left, this.left);
                 float num2 = Math.Max(fluidPuddle.right, this.right);
-                this.x = num1 + (float)(((double)num2 - (double)num1) / 2.0);
+                this.x = num1 + ((num2 - num1) / 2f);
                 this.Feed(fluidPuddle.data);
                 Level.Remove(fluidPuddle);
             }
@@ -279,8 +279,8 @@ namespace DuckGame
                 this._rightStream.Update();
                 this._rightStream.onFire = this.onFire;
             }
-            double distance = (double)this.FeedAmountToDistance(this.data.amount);
-            if (_wide == 0.0)
+            double distance = this.FeedAmountToDistance(this.data.amount);
+            if (_wide == 0f)
                 this._wide = 1f / 1000f;
             double wide = _wide;
             float num = Maths.Clamp((float)(distance / wide), 1f, 99999f);
@@ -353,31 +353,31 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color) * this.data.transparent, this._collisionSize.y, (Depth)0.9f);
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), this.position + new Vec2(this._collisionOffset.x, (float)(collisionOffset.y / 2.0 + 0.5)), new Color(this.data.color), this._collisionSize.y, -0.99f);
+            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), this.position + new Vec2(this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), new Color(this.data.color) * this.data.transparent, this._collisionSize.y, (Depth)0.9f);
+            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), this.position + new Vec2(this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), new Color(this.data.color), this._collisionSize.y, -0.99f);
             if (this._lightRect != null)
             {
                 this._lightRect.position = this.topLeft;
                 this._lightRect.size = new Vec2(this.width, this.height);
             }
-            int num1 = (int)Math.Ceiling(_collisionSize.x / 16.0);
+            int num1 = (int)Math.Ceiling(_collisionSize.x / 16f);
             float num2 = this._collisionSize.x / num1;
             if (this._onFire)
             {
                 while (this._surfaceFire.Count < num1)
                     this.AddFire();
-                float num3 = 0.0f;
-                if (_collisionSize.y > 2.0)
+                float num3 = 0f;
+                if (_collisionSize.y > 2f)
                     num3 = 2f;
                 for (int index = 0; index < num1; ++index)
                 {
                     this._surfaceFire[index].alpha = this.alpha;
                     this._surfaceFire[index].yscale = this._fireRise;
                     this._surfaceFire[index].depth = this.depth + 1;
-                    Graphics.Draw(this._surfaceFire[index], (float)((double)this.left + 8.0 + index * (double)num2), (float)((double)this.y + _collisionOffset.y + 1.0) - num3);
+                    Graphics.Draw(this._surfaceFire[index], (this.left + 8f + index * num2), (this.y + _collisionOffset.y + 1f) - num3);
                 }
             }
-            if (this._lava != null && collisionSize.y > 2.0)
+            if (this._lava != null && collisionSize.y > 2f)
             {
                 bool flag = false;
                 for (int index = 0; index < num1; ++index)
@@ -389,7 +389,7 @@ namespace DuckGame
                     SpriteMap spriteMap = g;
                     spriteMap.depth += index;
                     g.alpha = 1f;
-                    Graphics.DrawWithoutUpdate(g, (float)Math.Round((double)this.left + 8.0 + index * (double)num2), (float)((double)this.y + _collisionOffset.y - 4.5));
+                    Graphics.DrawWithoutUpdate(g, (float)Math.Round(this.left + 8f + index * num2), (this.y + _collisionOffset.y - 4.5f));
                     flag = !flag;
                 }
                 this._lava.UpdateFrame();

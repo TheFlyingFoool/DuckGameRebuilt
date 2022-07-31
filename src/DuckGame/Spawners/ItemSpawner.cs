@@ -378,12 +378,12 @@ namespace DuckGame
                 float num = 0.0f;
                 foreach (TypeProbPair typeProbPair in this.possible)
                 {
-                    if (typeProbPair.probability > 0.0)
+                    if (typeProbPair.probability > 0f)
                     {
                         Color white = Color.White;
-                        Color color = typeProbPair.probability != 0.0 ? (typeProbPair.probability >= 0.300000011920929 ? (typeProbPair.probability >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                        Color color = typeProbPair.probability != 0f ? (typeProbPair.probability >= 0.3f ? (typeProbPair.probability >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                         string text = typeProbPair.type.Name + ": " + typeProbPair.probability.ToString("0.000");
-                        Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text, scale: 0.5f) / 2.0), (float)-(16.0 + (double)num)), color, (Depth)0.9f, scale: 0.5f);
+                        Graphics.DrawString(text, this.position + new Vec2((-Graphics.GetStringWidth(text, scale: 0.5f) / 2f), -(16f + num)), color, (Depth)0.9f, scale: 0.5f);
                         num += 4f;
                     }
                 }
@@ -393,7 +393,7 @@ namespace DuckGame
                 string text = "EMPTY";
                 if (this.contains != null)
                     text = this.contains.Name;
-                Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+                Graphics.DrawString(text, this.position + new Vec2((-Graphics.GetStringWidth(text) / 2f), -16f), Color.White, (Depth)0.9f);
             }
         }
 

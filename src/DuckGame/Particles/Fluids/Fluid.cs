@@ -48,8 +48,8 @@ namespace DuckGame
           float thickMult = 1f)
           : base(xpos, ypos)
         {
-            this.hSpeed = (float)(-(double)hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-            this.vSpeed = (float)(-(double)hitAngle.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+            this.hSpeed = (-hitAngle.x * 2f * (Rando.Float(1f) + 0.3f));
+            this.vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
             this.hSpeed = hitAngle.x;
             this.vSpeed = hitAngle.y;
             this._bounceEfficiency = 0.6f;
@@ -71,10 +71,10 @@ namespace DuckGame
             if (this._fire != null)
                 this._fire.position = this.position;
             this._life = 1f;
-            if (_thickness < 4.0 || (double)Math.Abs(this.vSpeed) < 1.5)
+            if (_thickness < 4f || (double)Math.Abs(this.vSpeed) < 1.5)
                 this.live -= 0.01f;
             this._thickness = Lerp.FloatSmooth(this.startThick, 0.1f, 1f - this.live);
-            if (live < 0.0 || this._grounded && (double)Math.Abs(this.vSpeed) < 0.100000001490116)
+            if (live < 0f || this._grounded && (double)Math.Abs(this.vSpeed) < 0.1f)
             {
                 Level.Remove(this);
                 this.active = false;
@@ -112,7 +112,7 @@ namespace DuckGame
                 if (this._stream == null)
                     return;
                 float num = Math.Abs(this.hSpeed - this._stream.hSpeed);
-                if ((double)Math.Abs(this.x - this._stream.x) * (double)num <= 40.0 && (double)Math.Abs(this.vSpeed - this._stream.vSpeed) <= 1.89999997615814 && (double)num <= 1.89999997615814)
+                if (Math.Abs(this.x - this._stream.x) * num <= 40f && Math.Abs(this.vSpeed - this._stream.vSpeed) <= 1.9f && num <= 1.9f)
                     return;
                 this.BreakStream();
             }

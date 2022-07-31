@@ -122,7 +122,7 @@ namespace DuckGame
                         thing.ghostType = Editor.IDToType[thing.GetType()];
                     }
                 }
-                PyramidBackground pyramidBackground = new PyramidBackground(0.0f, 0.0f)
+                PyramidBackground pyramidBackground = new PyramidBackground(0f, 0f)
                 {
                     visible = false
                 };

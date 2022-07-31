@@ -253,7 +253,7 @@ namespace DuckGame
             if (this._entering)
             {
                 Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                if ((double)Graphics.fade > 0.990000009536743)
+                if (Graphics.fade > 0.99f)
                 {
                     this._entering = false;
                     Graphics.fade = 1f;
@@ -365,7 +365,7 @@ namespace DuckGame
                 else
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
-                    if ((double)Graphics.fade > 0.00999999977648258)
+                    if (Graphics.fade > 0.01f)
                         return;
                     Chancy.StopShowingChallengeList();
                     if (this.editor != null)
@@ -871,7 +871,7 @@ namespace DuckGame
                 else
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
-                    if ((double)Graphics.fade < 0.00999999977648258)
+                    if ((double)Graphics.fade < 0.01f)
                     {
                         this._hud.launchChallenge = true;
                         this._hud.selected = new ChallengeCard(0.0f, 0.0f, Chancy.activeChallenge);

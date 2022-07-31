@@ -50,24 +50,24 @@ namespace DuckGame
         {
             get
             {
-                if (_impressiveValue - (double)this._awfulValue == 0.0)
+                if (_impressiveValue - this._awfulValue == 0f)
                     return "";
-                if ((double)this.badRange > 0.200000002980232)
+                if ((double)this.badRange > 0.2f)
                     return "Bad";
-                return (double)this.goodRange > 0.200000002980232 ? "Good" : "";
+                return (double)this.goodRange > 0.2f ? "Good" : "";
             }
         }
 
         public float importance => this._importance;
 
-        public float weight => _impressiveValue - (double)this._awfulValue == 0.0 ? 1f : this.goodRange + this.badRange;
+        public float weight => _impressiveValue - (double)this._awfulValue == 0f ? 1f : this.goodRange + this.badRange;
 
         public float goodRange
         {
             get
             {
                 float num = Math.Abs(this._impressiveValue - this._awfulValue);
-                return _impressiveValue < (double)this._awfulValue ? Maths.Clamp((float)((_impressiveValue + (double)num / 2.0 - (_impressiveValue + (double)this._value)) * 2.0) / num, 0.0f, 99f) : Maths.Clamp((float)((_value - (double)num / 2.0) / (_impressiveValue - (double)num / 2.0)), 0.0f, 99f);
+                return _impressiveValue < this._awfulValue ? Maths.Clamp(((_impressiveValue + num / 2f - (_impressiveValue + this._value)) * 2f) / num, 0f, 99f) : Maths.Clamp(((_value - num / 2f) / (_impressiveValue - num / 2f)), 0f, 99f);
             }
         }
 
@@ -76,7 +76,7 @@ namespace DuckGame
             get
             {
                 float num = Math.Abs(this._impressiveValue - this._awfulValue);
-                return _impressiveValue < (double)this._awfulValue ? Maths.Clamp((float)((_value - (double)num / 2.0) / (_awfulValue - (double)num / 2.0)), 0.0f, 99f) : Maths.Clamp((float)((_awfulValue + (double)num / 2.0 - (_awfulValue + (double)this._value)) * 2.0) / num, 0.0f, 99f);
+                return _impressiveValue < this._awfulValue ? Maths.Clamp(((_value - num / 2f) / (_awfulValue - num / 2f)), 0f, 99f) : Maths.Clamp(((_awfulValue + num / 2f - (_awfulValue + this._value)) * 2) / num, 0f, 99f);
             }
         }
 
@@ -91,7 +91,7 @@ namespace DuckGame
 
         public void DoCalculate(List<Team> teams)
         {
-            this._value = 0.0f;
+            this._value = 0f;
             this._storyName = null;
             this.name = null;
             this.name2 = null;

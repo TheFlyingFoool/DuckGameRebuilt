@@ -325,14 +325,14 @@ namespace DuckGame
                 if (this._exiting)
                 {
                     HUD.CloseAllCorners();
-                    DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0.0f, 0.04f);
-                    if ((double)DuckGame.Graphics.fade >= 0.00999999977648258)
+                    Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.04f);
+                    if ((double)Graphics.fade >= 0.01f)
                         return;
                     this.isClosed = true;
                 }
                 else
                 {
-                    DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.04f);
+                    Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.04f);
                     if (Input.Pressed("MENUUP"))
                     {
                         if (this._selectedItem > 0)

@@ -142,8 +142,8 @@ namespace DuckGame
                 this._quit = true;
                 HUD.CloseAllCorners();
             }
-            DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, this._quit ? 0.0f : 1f, 0.05f);
-            if ((double)DuckGame.Graphics.fade >= 0.00999999977648258 || !this._quit)
+            Graphics.fade = Lerp.Float(Graphics.fade, this._quit ? 0f : 1f, 0.05f);
+            if (Graphics.fade >= 0.01f || !this._quit)
                 return;
             Level.current = new DoorRoom();
         }
@@ -155,7 +155,7 @@ namespace DuckGame
             if (layer == Layer.HUD)
             {
                 this._album.depth = -0.8f;
-                DuckGame.Graphics.Draw(this._album, 0.0f, 0.0f);
+                DuckGame.Graphics.Draw(this._album, 0f, 0f);
                 this._screen.depth = -0.6f;
                 if (this._pages.Count > 0)
                 {
@@ -167,7 +167,7 @@ namespace DuckGame
                         {
                             Vec2 vec2 = new Vec2(160f, 40 + num * 10);
                             string name = stat.name;
-                            DuckGame.Graphics.DrawString(name, vec2 + new Vec2((float)(-(double)DuckGame.Graphics.GetStringWidth(name) / 2.0), 0.0f), stat.color, (Depth)0.5f);
+                            Graphics.DrawString(name, vec2 + new Vec2((-Graphics.GetStringWidth(name) / 2f), 0f), stat.color, (Depth)0.5f);
                             ++num;
                         }
                     }

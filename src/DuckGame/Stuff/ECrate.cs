@@ -86,7 +86,7 @@ namespace DuckGame
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized));
         }
 
@@ -94,17 +94,17 @@ namespace DuckGame
         {
             this._colorFlux.Update();
             base.Update();
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1f)
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / (double)this._maxHealth) * 4.0);
-            if (_hitPoints <= 0.0 && !this._destroyed)
+            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / (double)this._maxHealth) * 4f);
+            if (_hitPoints <= 0f && !this._destroyed)
                 this.Destroy(new DTImpact(this));
-            if (!this._onFire || burnt >= 0.899999976158142)
+            if (!this._onFire || burnt >= 0.9f)
                 return;
             float num = 1f - this.burnt;
-            if (_hitPoints > (double)num * _maxHealth)
+            if (_hitPoints > num * _maxHealth)
                 this._hitPoints = num * this._maxHealth;
             this._sprite.color = new Color(num, num, num);
         }
@@ -113,15 +113,15 @@ namespace DuckGame
         {
             base.Draw();
             this._light.depth = this.depth + 1;
-            float num1 = (float)((double)(this._hitPoints / this._maxHealth) * 0.699999988079071 + 0.300000011920929);
+            float num1 = ((this._hitPoints / this._maxHealth) * 0.7f + 0.3f);
             float g = 1f;
             float num2 = 1f;
-            if (_hitPoints < _maxHealth / 2.0)
+            if (_hitPoints < _maxHealth / 2f)
             {
-                g = 0.0f;
+                g = 0f;
                 num2 = 0.4f;
             }
-            this._light.color = new Color(1f - g, g, 0.2f) * Maths.Clamp(num2 + this._colorFlux.normalized * (1f - num2), 0.0f, 1f);
+            this._light.color = new Color(1f - g, g, 0.2f) * Maths.Clamp(num2 + this._colorFlux.normalized * (1f - num2), 0f, 1f);
             Graphics.Draw(this._light, this.x, this.y);
         }
     }

@@ -256,7 +256,7 @@ namespace DuckGame
                 if (this._spikeDrag && this.dragSpeedBonus)
                 {
                     this._dragRand += Rando.Float(Math.Abs(this.duck.hSpeed)) * 0.1f;
-                    if (Rando.Int(30) == 0 && _dragRand > 0.100000001490116)
+                    if (Rando.Int(30) == 0 && _dragRand > 0.1f)
                         this.duck.Swear();
                 }
                 if (!this.duck.grounded && this.duck.inputProfile.Pressed("DOWN") && this._stance != EnergyScimitar.Stance.Drag)
@@ -349,7 +349,7 @@ namespace DuckGame
                     {
                         this._swordAngle = 130f;
                         this.handAngle = Maths.DegToRad(this._swordAngle) * offDir;
-                        this._holdOffset = new Vec2(-22f, 0.0f);
+                        this._holdOffset = new Vec2(-22f, 0f);
                         this.handOffset = new Vec2(7f, -7f);
                         this._swordFlip = this.offDir >= 0;
                         this.handFlip = true;
@@ -358,8 +358,8 @@ namespace DuckGame
                     {
                         this._swordAngle = 25f;
                         this.handAngle = Maths.DegToRad(this._swordAngle) * offDir;
-                        this._holdOffset = new Vec2((float)(_swingDif * 0.550000011920929 - 2.0), -4f);
-                        this.handOffset = new Vec2((float)(2.0 + _swingDif * 0.349999994039536), -3f);
+                        this._holdOffset = new Vec2((_swingDif * 0.55f - 2f), -4f);
+                        this.handOffset = new Vec2((2f + _swingDif * 0.35f), -3f);
                         this._swordFlip = this.offDir < 0;
                     }
                 }
@@ -368,8 +368,8 @@ namespace DuckGame
                     if (this.duck._hovering)
                     {
                         this._swordAngle = 40f;
-                        this._holdOffset = new Vec2(0.0f, 8f);
-                        this.handOffset = new Vec2(2f, 0.0f);
+                        this._holdOffset = new Vec2(0f, 8f);
+                        this.handOffset = new Vec2(2f, 0f);
                         this._swordFlip = this.offDir < 0;
                     }
                     else if (this._blocking)
@@ -384,8 +384,8 @@ namespace DuckGame
                     {
                         this._swordAngle = 80f;
                         this.handAngle = Maths.DegToRad(this._swordAngle) * offDir;
-                        this._holdOffset = new Vec2(0.0f, (float)(-2.0 - _swingDif * 0.550000011920929));
-                        this.handOffset = new Vec2((float)(0.0 + _swingDif * 0.349999994039536), 3f);
+                        this._holdOffset = new Vec2(0.0f, (float)(-2.0 - _swingDif * 0.55f));
+                        this.handOffset = new Vec2((float)(0.0 + _swingDif * 0.35f), 3f);
                         this._swordFlip = this.offDir < 0;
                     }
                 }
@@ -408,13 +408,13 @@ namespace DuckGame
             }
             else
             {
-                if ((double)this.vSpeed < -0.100000001490116)
+                if (this.vSpeed < -0.1f)
                     this.StartFlying(TileConnection.Up);
-                if ((double)this.vSpeed > 0.100000001490116)
+                if (this.vSpeed > 0.1f)
                     this.StartFlying(TileConnection.Down);
-                if ((double)this.hSpeed < -0.100000001490116)
+                if (this.hSpeed < -0.1f)
                     this.StartFlying(TileConnection.Left);
-                if ((double)this.hSpeed <= 0.100000001490116)
+                if (this.hSpeed <= 0.1f)
                     return;
                 this.StartFlying(TileConnection.Right);
             }
@@ -489,7 +489,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._platform = new EnergyScimitar.ScimiPlatform(0.0f, 0.0f, 20f, 8f, this);
+            this._platform = new EnergyScimitar.ScimiPlatform(0f, 0f, 20f, 8f, this);
             this._platform.solid = false;
             this._platform.enablePhysics = false;
             this._platform.center = new Vec2(10f, 4f);
@@ -498,7 +498,7 @@ namespace DuckGame
             Level.Add(_platform);
             this._hum = new LoopingSound("scimiHum")
             {
-                volume = 0.0f
+                volume = 0f
             };
             this._humAmount = 0.0f;
             this._hum.lerpSpeed = 1f;
@@ -521,7 +521,7 @@ namespace DuckGame
 
         public void Pulse()
         {
-            if (_timeTillPulse >= 0.0)
+            if (_timeTillPulse >= 0f)
                 return;
             this._timeTillPulse = 0.2f;
             SFX.Play("scimiSurge", 0.8f, Rando.Float(-0.2f, 0.2f));
@@ -651,8 +651,8 @@ namespace DuckGame
             if (this._airFly)
             {
                 Vec2 vec = Maths.AngleToVec(Maths.DegToRad(this._airFlyAngle));
-                this.offDir = vec.x < -0.100000001490116 ? (sbyte)-1 : (sbyte)1;
-                if ((double)Math.Abs(vec.x) < 0.200000002980232 && vec.y < 0.0)
+                this.offDir = vec.x < -0.1f ? (sbyte)-1 : (sbyte)1;
+                if (Math.Abs(vec.x) < 0.2f && vec.y < 0f)
                 {
                     this._upFlyTime += Maths.IncFrameTimer();
                     if (_upFlyTime > 2.0)
@@ -665,21 +665,21 @@ namespace DuckGame
                     this.vSpeed = vec.y * this._airFlySpeed;
                 }
                 this._impactThreshold = 0.01f;
-                this._bouncy = 0.0f;
+                this._bouncy = 0f;
                 this.hMax = this._airFlySpeed;
                 this.vMax = this._airFlySpeed;
                 this._lerpedAngle = 90f;
-                this.gravMultiplier = 0.0f;
+                this.gravMultiplier = 0f;
             }
             else
             {
                 this._impactThreshold = 0.3f;
                 this._bouncy = 0.5f;
                 this.hMax = 12f;
-                if ((double)this.hSpeed > 0.0)
-                    this._throwSpin += (float)(((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed)) * 2.0 + 4.0);
+                if (this.hSpeed > 0f)
+                    this._throwSpin += ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2f + 4f);
                 else
-                    this._throwSpin -= (float)(((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed)) * 2.0 + 4.0);
+                    this._throwSpin -= ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2f + 4f);
             }
         }
 
@@ -698,7 +698,7 @@ namespace DuckGame
                     this.StartFlying(180f, pThrown);
                     break;
                 case TileConnection.Right:
-                    this.StartFlying(0.0f, pThrown);
+                    this.StartFlying(0f, pThrown);
                     break;
                 case TileConnection.Up:
                     this.StartFlying(90f, pThrown);
@@ -715,7 +715,7 @@ namespace DuckGame
                 return;
             this._wasLifted = true;
             this._airFly = true;
-            this._upFlyTime = 0.0f;
+            this._upFlyTime = 0f;
             this._airFlyAngle = pAngleDegrees;
             if (pThrown)
                 this.TravelThroughAir(-0.5f);
@@ -945,14 +945,14 @@ namespace DuckGame
             }
             this.ammo = 999;
             this.UpdateStance();
-            if (_glow < 0.400000005960464)
+            if (_glow < 0.4f)
                 this._glowTime = 0;
-            if (this.duck != null && (_glow > 0.400000005960464 || this._glowTime > 0 && this._glowTime < 4))
+            if (this.duck != null && (_glow > 0.4f || this._glowTime > 0 && this._glowTime < 4))
             {
                 ++this._glowTime;
                 foreach (Bullet bullet1 in Level.current.things[typeof(Bullet)])
                 {
-                    Vec2 vec2 = this.barrelStartPos + this.OffsetLocal(new Vec2(8f, 0.0f));
+                    Vec2 vec2 = this.barrelStartPos + this.OffsetLocal(new Vec2(8f, 0f));
                     Vec2 barrelPosition = this.barrelPosition;
                     bool flag = Collision.LineIntersect(vec2 + this.velocity, barrelPosition + this.velocity, bullet1.start, bullet1.start + bullet1.travelDirNormalized * bullet1.bulletSpeed);
                     if (!flag)
@@ -997,14 +997,14 @@ namespace DuckGame
                 }
                 this._timeSincePickedUp += Maths.IncFrameTimer();
                 if (this._stance == EnergyScimitar.Stance.Drag && this.duck != null)
-                    this._glow = (double)Math.Abs(this.duck.hSpeed) > 1.0 ? 0.35f : 0.0f;
+                    this._glow = (double)Math.Abs(this.duck.hSpeed) > 1.0 ? 0.35f : 0f;
                 if (this.grounded)
                     this._canAirFly = true;
                 this._timeTillPulse -= Maths.IncFrameTimer();
                 if (this.owner != null)
                 {
                     this.gravMultiplier = 1f;
-                    if (_glow > 0.400000005960464 && _timeSincePickedUp > 0.25 && this.duck != null)
+                    if (_glow > 0.4f && _timeSincePickedUp > 0.25f && this.duck != null)
                     {
                         Vec2 barrelStartPos = this.barrelStartPos;
                         Vec2 p2_1 = this.barrelStartPos + new Vec2(this.duck.hSpeed * 2f, this.duck.vSpeed);
@@ -1014,13 +1014,13 @@ namespace DuckGame
                         {
                             if (t != this && t.owner != this.duck)
                             {
-                                if (t.owner == null && t._airFly && t.offDir != duck.offDir && ((double)Math.Abs(t.hSpeed) > 2.0 && Collision.Line(this.barrelStartPos, this.barrelPosition, new Rectangle(t.x + t.hSpeed, t.y - 8f, Math.Abs(t.hSpeed), 16f)) || (double)Math.Abs(t.vSpeed) > 2.0 && Collision.Line(this.barrelStartPos, this.barrelPosition, new Rectangle(t.x - 8f, t.y + t.vSpeed, 16f, Math.Abs(t.vSpeed)))))
+                                if (t.owner == null && t._airFly && t.offDir != duck.offDir && (Math.Abs(t.hSpeed) > 2f && Collision.Line(this.barrelStartPos, this.barrelPosition, new Rectangle(t.x + t.hSpeed, t.y - 8f, Math.Abs(t.hSpeed), 16f)) || Math.Abs(t.vSpeed) > 2f && Collision.Line(this.barrelStartPos, this.barrelPosition, new Rectangle(t.x - 8f, t.y + t.vSpeed, 16f, Math.Abs(t.vSpeed)))))
                                 {
                                     this.Fondle(t);
                                     t.ReverseFlyDirection();
                                     this.Shing();
                                 }
-                                if (t.owner is Duck && t._glow > 0.400000005960464 && (Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, t.barrelStartPos, t.barrelPosition) || Collision.LineIntersect(barrelStartPos, p2_1, t.barrelStartPos, t.barrelPosition) || Collision.LineIntersect(barrelPosition, p2_2, t.barrelStartPos, t.barrelPosition)) && _timeSinceBlast > 0.150000005960464)
+                                if (t.owner is Duck && t._glow > 0.4f && (Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, t.barrelStartPos, t.barrelPosition) || Collision.LineIntersect(barrelStartPos, p2_1, t.barrelStartPos, t.barrelPosition) || Collision.LineIntersect(barrelPosition, p2_2, t.barrelStartPos, t.barrelPosition)) && _timeSinceBlast > 0.15f)
                                 {
                                     Duck owner = t.owner as Duck;
                                     this.duck.x -= this.duck.hSpeed;
@@ -1113,12 +1113,12 @@ namespace DuckGame
                 {
                     if (this.stuck)
                         this._didOwnerSwitchLogic = false;
-                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0.0f, this._stuckInto != null ? -25f : -14f));
+                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0f, this._stuckInto != null ? -25f : -14f));
                     foreach (EnergyScimitar.Blocker wall in this._walls)
                     {
-                        vec2 += this.OffsetLocal(new Vec2(0.0f, 18f / _walls.Count));
+                        vec2 += this.OffsetLocal(new Vec2(0f, 18f / _walls.Count));
                         wall.position = vec2;
-                        wall.solid = _stanceCounter < 0.150000005960464;
+                        wall.solid = _stanceCounter < 0.15f;
                     }
                 }
                 this._lastBarrelPos = this.barrelPosition;
@@ -1129,7 +1129,7 @@ namespace DuckGame
             float num4 = Math.Min(this._glow, 1f);
             float to1 = Math.Min(Math.Abs(this._lastAngleHum - this.angle), 1f);
             this._angleWhoom = Lerp.FloatSmooth(this._angleWhoom, to1, 0.2f);
-            this._humAmount = Lerp.FloatSmooth(this._humAmount, Math.Min((float)((double)Math.Min(Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed), 5f) / 10.0 + (double)to1 * 2.0 + 0.25 + (double)num4 * 0.300000011920929) * this._glow, 0.75f), 0.2f);
+            this._humAmount = Lerp.FloatSmooth(this._humAmount, Math.Min((float)((double)Math.Min(Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed), 5f) / 10f + (double)to1 * 2f + 0.25f + (double)num4 * 0.3f) * this._glow, 0.75f), 0.2f);
             this._humAmount = Math.Min(this._humAmount + this._dragRand * 0.2f, 1f);
             if (this._hum != null)
                 this._hum.volume = this._humAmount;
@@ -1251,8 +1251,8 @@ namespace DuckGame
             this._blade.alpha = this.alpha;
             this._blade.color = Color.Lerp(Color.White, Color.Red, this.heat);
             this.swordColor = Color.Lerp(this.properColor, Color.Red, this.heat);
-            if (_glow > 1.0)
-                this._blade.scale = new Vec2((float)(1.0 + (_glow - 1.0) * 0.0299999993294477), 1f);
+            if (_glow > 1f)
+                this._blade.scale = new Vec2((1f + (_glow - 1f) * 0.03f), 1f);
             else
                 this._blade.scale = new Vec2(1f);
             this._bladeTrail.yscale = this._blade.yscale + num1;
@@ -1261,7 +1261,7 @@ namespace DuckGame
             Depth depth = this.depth;
             this._bladeTrail.color = this.swordColor;
             this.graphic.color = Color.White;
-            if (_glow > 0.5)
+            if (_glow > 0.5f)
             {
                 float num2 = this.angle;
                 float num3 = 1f;
@@ -1269,7 +1269,7 @@ namespace DuckGame
                 for (int idx = 0; idx < 7; ++idx)
                 {
                     Vec2 current1 = Vec2.Zero;
-                    float current2 = 0.0f;
+                    float current2 = 0f;
                     for (int index1 = 0; index1 < 4 && this._lastSize > idx; ++index1)
                     {
                         int index2 = this.historyIndex(idx);
@@ -1283,7 +1283,7 @@ namespace DuckGame
                         if (this.owner != null)
                             vec2 += this.owner.velocity * 0.5f;
                         this._bladeTrail.angle = num2;
-                        this._bladeTrail.alpha = Math.Min(Math.Max((float)((_humAmount - 0.100000001490116) * 4.0), 0.0f), 1f) * 0.7f;
+                        this._bladeTrail.alpha = Math.Min(Math.Max((float)((_humAmount - 0.1f) * 4f), 0f), 1f) * 0.7f;
                         Graphics.Draw(this._bladeTrail, vec2.x, vec2.y, this.depth - 2);
                     }
                     num3 -= 0.15f;

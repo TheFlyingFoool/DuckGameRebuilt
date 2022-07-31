@@ -79,12 +79,12 @@ namespace DuckGame
         {
             bool hover = this.hover;
             Duck duck = Level.Nearest<Duck>(this.x, this.y);
-            this.hover = duck != null && (double)(duck.position - (this.position + new Vec2(8f, 0.0f))).length < 16.0;
+            this.hover = duck != null && (duck.position - (this.position + new Vec2(8f, 0f))).length < 16f;
             if (!hover && this.hover)
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@PROFILE");
             else if (hover && !this.hover)
                 HUD.CloseAllCorners();
-            this._consoleFade = Lerp.Float(this._consoleFade, this.hover ? 1f : 0.0f, 0.1f);
+            this._consoleFade = Lerp.Float(this._consoleFade, this.hover ? 1f : 0f, 0.1f);
             base.Update();
         }
 
@@ -106,14 +106,14 @@ namespace DuckGame
                 else if (this._selectConsole.imageIndex == 2)
                 {
                     this._light.visible = false;
-                    this._consoleFlash.alpha = 0.0f;
+                    this._consoleFlash.alpha = 0f;
                 }
             }
             this._consoleFlash.depth = this.depth + 10;
             Graphics.Draw(this._consoleFlash, this.x + 9f, this.y + 7f);
             this._base.depth = this.depth - 10;
             Graphics.Draw(this._base, this.x + 3f, this.y + 13f);
-            if (_consoleFade > 0.00999999977648258)
+            if (_consoleFade > 0.01f)
             {
                 this._consoleHighlight.depth = this.depth + 5;
                 this._consoleHighlight.alpha = this._consoleFade;

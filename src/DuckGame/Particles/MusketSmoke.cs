@@ -52,17 +52,17 @@ namespace DuckGame
         {
             this.angle += this._angleInc;
             this.xscale += this._scaleInc;
-            if (_fastGrow > 0.0)
+            if (_fastGrow > 0f)
             {
                 this._fastGrow -= 0.05f;
                 this.xscale += 0.05f;
             }
-            if (fly.x > 0.00999999977648258 || fly.x < -0.00999999977648258)
+            if (fly.x > 0.01f || fly.x < -0.01f)
             {
                 this.x += this.fly.x;
                 this.fly.x *= 0.9f;
             }
-            if (fly.y > 0.00999999977648258 || fly.y < -0.00999999977648258)
+            if (fly.y > 0.01f || fly.y < -0.01f)
             {
                 this.y += this.fly.y;
                 this.fly.y *= 0.9f;
@@ -71,7 +71,7 @@ namespace DuckGame
             this.x += this.move.x;
             this.y += this.move.y;
             this.xscale -= 0.005f;
-            if ((double)this.xscale >= 0.100000001490116)
+            if ((double)this.xscale >= 0.1f)
                 return;
             Level.Remove(this);
         }

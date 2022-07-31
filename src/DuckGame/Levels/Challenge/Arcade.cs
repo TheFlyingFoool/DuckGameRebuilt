@@ -263,8 +263,8 @@ namespace DuckGame
                 }
                 else
                 {
-                    Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.02f);
-                    if ((double)Graphics.fade <= 0.00999999977648258)
+                    Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.02f);
+                    if (Graphics.fade <= 0.01f)
                         Level.current = new TitleScreen();
                 }
             }
@@ -279,14 +279,14 @@ namespace DuckGame
                 bool flag = false;
                 if (this._desiredState == ArcadeState.ViewChallenge)
                 {
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0.0f, 0.1f);
+                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0f, 0.1f);
                     this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, 2f, 0.16f);
-                    if (_followCam.manualViewSize < 30.0)
+                    if (_followCam.manualViewSize < 30f)
                     {
-                        Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.08f);
-                        Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.08f);
+                        Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
+                        Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         this._hud.alpha = Lerp.Float(this._hud.alpha, 1f, 0.08f);
-                        if (_followCam.manualViewSize < 3.0 && (double)this._hud.alpha == 1.0 && (double)Layer.Game.fade == 0.0)
+                        if (_followCam.manualViewSize < 3f && this._hud.alpha == 1f && Layer.Game.fade == 0f)
                             flag = true;
                     }
                 }

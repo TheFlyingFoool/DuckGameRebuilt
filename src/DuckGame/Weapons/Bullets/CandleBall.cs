@@ -19,7 +19,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._sprite = new SpriteMap("candleBall", 16, 16);
-            this._sprite.AddAnimation("burn", (float)(0.400000005960464 + (double)Rando.Float(0.2f)), true, 0, 1);
+            this._sprite.AddAnimation("burn", (0.4f + Rando.Float(0.2f)), true, 0, 1);
             this._sprite.SetAnimation("burn");
             this._sprite.imageIndex = Rando.Int(4);
             this.graphic = _sprite;
@@ -59,18 +59,18 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)Rando.Float(2f) < 0.300000011920929)
+            if (Rando.Float(2f) < 0.3f)
                 this.vSpeed += Rando.Float(3.5f) - 2f;
-            if ((double)Rando.Float(9f) < 0.100000001490116)
+            if (Rando.Float(9f) < 0.1f)
                 this.vSpeed += Rando.Float(3.1f) - 3f;
-            if ((double)Rando.Float(14f) < 0.100000001490116)
+            if (Rando.Float(14f) < 0.1f)
                 this.vSpeed += Rando.Float(4f) - 5f;
-            if ((double)Rando.Float(25f) < 0.100000001490116)
+            if (Rando.Float(25f) < 0.1f)
                 this.vSpeed += Rando.Float(6f) - 7f;
             Level.Add(SmallSmoke.New(this.x, this.y));
-            if ((double)this.hSpeed > 0.0)
+            if (this.hSpeed > 0f)
                 this._sprite.angleDegrees = 90f;
-            else if ((double)this.hSpeed < 0.0)
+            else if (this.hSpeed < 0f)
                 this._sprite.angleDegrees = -90f;
             base.Update();
         }

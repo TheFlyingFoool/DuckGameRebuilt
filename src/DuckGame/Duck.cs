@@ -615,11 +615,11 @@ namespace DuckGame
             set => this._lives = value;
         }
 
-        public float holdingWeight => this.holdObject == null ? 0.0f : this.holdObject.weight;
+        public float holdingWeight => this.holdObject == null ? 0f : this.holdObject.weight;
 
         public override float weight
         {
-            get => (float)(_weight + (double)this.holdingWeight * 0.400000005960464 + (this.sliding || this.crouch ? 16.0 : 0.0));
+            get => (_weight + this.holdingWeight * 0.4f + (this.sliding || this.crouch ? 16f : 0f));
             set => this._weight = value;
         }
 
@@ -2171,15 +2171,15 @@ namespace DuckGame
             }
             else
             {
-                float num = 0.0f;
+                float num = 0f;
                 if (this.profile.team != null && this.profile.team.name == "Sailors")
                     num += 0.1f;
-                if ((double)Rando.Float(1f) < 0.0299999993294477 + (double)this.profile.funslider * 0.0450000017881393 + (double)num)
+                if (Rando.Float(1f) < 0.03f + this.profile.funslider * 0.045f + num)
                 {
                     SFX.Play("quackBleep", 0.8f, Rando.Float(-0.05f, 0.05f));
                     Event.Log(new SwearingEvent(this.profile, this.profile));
                 }
-                else if ((double)Rando.Float(1f) < 0.5)
+                else if (Rando.Float(1f) < 0.5f)
                     SFX.Play("cutOffQuack", pitch: Rando.Float(-0.05f, 0.05f));
                 else
                     SFX.Play("cutOffQuack2", pitch: Rando.Float(-0.05f, 0.05f));
@@ -2194,14 +2194,14 @@ namespace DuckGame
                 if (this.isServerForObject)
                     this._netScream.Play();
             }
-            else if ((double)Rando.Float(1f) < 0.0299999993294477 + (double)this.profile.funslider * 0.0450000017881393)
+            else if (Rando.Float(1f) < 0.03f + this.profile.funslider * 0.045f)
             {
                 SFX.Play("quackBleep", 0.9f);
                 Event.Log(new SwearingEvent(this.profile, this.profile));
             }
-            else if ((double)Rando.Float(1f) < 0.5)
+            else if (Rando.Float(1f) < 0.5f)
                 SFX.Play("quackYell03");
-            else if ((double)Rando.Float(1f) < 0.5)
+            else if (Rando.Float(1f) < 0.5f)
                 SFX.Play("quackYell02");
             else
                 SFX.Play("quackYell01");
@@ -2887,8 +2887,8 @@ namespace DuckGame
                     }
                     else
                     {
-                        num3 = Maths.NormalizeSection(Math.Abs(Math.Min(this.inputProfile.leftStick.x, 0.0f)), 0.2f, 0.9f);
-                        if ((double)num3 > 0.00999999977648258)
+                        num3 = Maths.NormalizeSection(Math.Abs(Math.Min(this.inputProfile.leftStick.x, 0f)), 0.2f, 0.9f);
+                        if (num3 > 0.01f)
                         {
                             if (this._leftPressedFrame == 0)
                                 this._leftPressedFrame = (int)DuckGame.Graphics.frame;
@@ -2905,8 +2905,8 @@ namespace DuckGame
                     }
                     else
                     {
-                        num4 = Maths.NormalizeSection(Math.Max(this.inputProfile.leftStick.x, 0.0f), 0.2f, 0.9f);
-                        if ((double)num4 > 0.00999999977648258)
+                        num4 = Maths.NormalizeSection(Math.Max(this.inputProfile.leftStick.x, 0f), 0.2f, 0.9f);
+                        if ((double)num4 > 0.01f)
                         {
                             if (this._rightPressedFrame == 0)
                                 this._rightPressedFrame = (int)DuckGame.Graphics.frame;
@@ -2917,9 +2917,9 @@ namespace DuckGame
                     bool flag2 = Options.Data.oldAngleCode;
                     if (!this.isServerForObject && this.inputProfile != null)
                         flag2 = this.inputProfile.oldAngles;
-                    if ((double)num3 < 0.00999999977648258 && this.onFire && this.offDir == 1)
+                    if (num3 < 0.01f && this.onFire && this.offDir == 1)
                         num4 = 1f;
-                    if ((double)num4 < 0.00999999977648258 && this.onFire && this.offDir == -1)
+                    if (num4 < 0.01f && this.onFire && this.offDir == -1)
                         num3 = 1f;
                     if (this.grappleMul)
                     {
@@ -2928,13 +2928,13 @@ namespace DuckGame
                     }
                     if (DevConsole.qwopMode && Level.current is GameLevel)
                     {
-                        if ((double)num3 > 0.0)
+                        if (num3 > 0f)
                             this.offDir = -1;
-                        else if ((double)num4 > 0.0)
+                        else if (num4 > 0f)
                             this.offDir = 1;
                         if (this._walkTime == 0)
                         {
-                            num4 = num3 = 0.0f;
+                            num4 = num3 = 0f;
                         }
                         else
                         {
@@ -3008,24 +3008,24 @@ namespace DuckGame
                     if (!this._moveLock)
                     {
                         this.strafing = this.inputProfile.Down("STRAFE");
-                        if ((double)num3 > 0.00999999977648258 && !this.crouch | flag3)
+                        if (num3 > 0.01f && !this.crouch | flag3)
                         {
-                            if ((double)this.hSpeed > -(double)this.maxrun * (double)num3)
+                            if (this.hSpeed > -this.maxrun * num3)
                             {
                                 this.hSpeed -= num1;
-                                if ((double)this.hSpeed < -(double)this.maxrun * (double)num3)
+                                if (this.hSpeed < -this.maxrun * num3)
                                     this.hSpeed = -this.maxrun * num3;
                             }
                             //this._heldLeft = true;
                             if (!this.strafing && !flag3 && (flag2 || this._leftPressedFrame > this._rightPressedFrame))
                                 this.offDir = -1;
                         }
-                        if ((double)num4 > 0.00999999977648258 && !this.crouch | flag3)
+                        if (num4 > 0.01f && !this.crouch | flag3)
                         {
-                            if ((double)this.hSpeed < maxrun * (double)num4)
+                            if (this.hSpeed < maxrun * num4)
                             {
                                 this.hSpeed += num1;
-                                if ((double)this.hSpeed > maxrun * (double)num4)
+                                if (this.hSpeed > maxrun * num4)
                                     this.hSpeed = this.maxrun * num4;
                             }
                             //this._heldRight = true;
@@ -3135,7 +3135,7 @@ namespace DuckGame
                             }
                         }
                         bool flag5 = false;
-                        if (flag4 && (double)Math.Abs(this.hSpeed) < 0.200000002980232 && this.inputProfile.Down("DOWN") && (double)Math.Abs(this.hSpeed) < 0.200000002980232 && this.inputProfile.Down("DOWN"))
+                        if (flag4 && Math.Abs(this.hSpeed) < 0.2f && this.inputProfile.Down("DOWN") && Math.Abs(this.hSpeed) < 0.2f && this.inputProfile.Down("DOWN"))
                         {
                             foreach (IPlatform platform1 in Level.CheckLineAll<IPlatform>(this.bottomLeft + new Vec2(0.1f, 1f), this.bottomRight + new Vec2(-0.1f, 1f)))
                             {
@@ -3272,7 +3272,7 @@ namespace DuckGame
                         }
                         if (!flag7 && !this.HasJumpModEquipment() && this._groundValid <= 0)
                         {
-                            bool flag11 = !this.crouch && (double)this.holdingWeight <= 5.0 && (this.pipeOut <= 0 || (double)this.vSpeed > -0.100000001490116);
+                            bool flag11 = !this.crouch && this.holdingWeight <= 5f && (this.pipeOut <= 0 || this.vSpeed > -0.1f);
                             if (!this._hovering && this.inputProfile.Pressed("JUMP"))
                             {
                                 if (section1 != null)
@@ -3286,9 +3286,9 @@ namespace DuckGame
                                     this._flapFrame = 0;
                                 }
                             }
-                            if (flag11 && this._hovering && (double)this.vSpeed >= 0.0)
+                            if (flag11 && this._hovering && (double)this.vSpeed >= 0f)
                             {
-                                if ((double)this.vSpeed > 1.0)
+                                if ((double)this.vSpeed > 1f)
                                     this.vSpeed = 1f;
                                 this.vSpeed -= 0.15f;
                             }
@@ -3314,9 +3314,9 @@ namespace DuckGame
                                     this.crouch = true;
                                 if (!this.disableCrouch && !this.crouchCancel)
                                 {
-                                    if (this.grounded && (double)Math.Abs(this.hSpeed) > 1.0)
+                                    if (this.grounded && Math.Abs(this.hSpeed) > 1f)
                                     {
-                                        if (!this.sliding && slideBuildup < -0.300000011920929)
+                                        if (!this.sliding && slideBuildup < -0.3f)
                                         {
                                             this.slideBuildup = 0.4f;
                                             this.didFireSlide = true;
@@ -3341,7 +3341,7 @@ namespace DuckGame
                             if (slideBuildup > 0.0 || !this.sliding || !this.didFireSlide)
                             {
                                 this.slideBuildup -= Maths.IncFrameTimer();
-                                if (slideBuildup <= -0.600000023841858)
+                                if (slideBuildup <= -0.6f)
                                     this.slideBuildup = -0.6f;
                             }
                         }
@@ -3764,9 +3764,9 @@ namespace DuckGame
                     ++Global.data.secondsUnderwater.valueInt;
                 }
                 this._bubbleWait += Rando.Float(0.015f, 0.017f);
-                if ((double)Rando.Float(1f) > 0.990000009536743)
+                if (Rando.Float(1f) > 0.99f)
                     this._bubbleWait += 0.5f;
-                if (_bubbleWait > 1.0)
+                if (_bubbleWait > 1f)
                 {
                     this._bubbleWait = Rando.Float(0.2f);
                     this.EmitBubbles(1, 1f);
@@ -3791,9 +3791,9 @@ namespace DuckGame
                     this.firstCalc = false;
                     this.lastCalc = profileScore;
                 }
-                if ((double)Math.Abs(this.lastCalc - profileScore) > 0.00499999988824129)
+                if (Math.Abs(this.lastCalc - profileScore) > 0.005f)
                 {
-                    int c = (int)Math.Round(((double)profileScore - lastCalc) / 0.00499999988824129);
+                    int c = (int)Math.Round((profileScore - lastCalc) / 0.005f);
                     if (this.plus == null || this.plus.removeFromLevel)
                     {
                         this.plus = new CoolnessPlus(this.x, this.y, this, c);
@@ -3948,11 +3948,11 @@ namespace DuckGame
                 Level.Add(SmallSmoke.New(this.x, (float)((double)this.y + (double)Rando.Float(-3f, 3f) + 16.0)));
             }
             this._prevRagdoll = this.ragdoll;
-            if (kick > 0.0)
+            if (kick > 0f)
                 this.kick -= 0.1f;
             else
-                this.kick = 0.0f;
-            this._sprite.speed = (float)(0.100000001490116 + (double)Math.Abs(this.hSpeed) / maxrun * 0.100000001490116);
+                this.kick = 0f;
+            this._sprite.speed = (0.1f + Math.Abs(this.hSpeed) / maxrun * 0.1f);
             this._sprite.flipH = this.offDir < 0;
             if (!this.swinging)
                 this.UpdateAnimation();
@@ -4001,19 +4001,19 @@ namespace DuckGame
         {
             get
             {
-                if (this.holdObject != null && holdObject.heat < -0.0500000007450581 || this.holstered != null && holstered.heat < -0.0500000007450581)
+                if (this.holdObject != null && holdObject.heat < -0.05f || this.holstered != null && holstered.heat < -0.05f)
                     return true;
-                return this.skewered != null && skewered.heat < -0.0500000007450581;
+                return this.skewered != null && skewered.heat < -0.05f;
             }
         }
 
         public override void HeatUp(Vec2 location)
         {
-            if (this.holdObject != null && holdObject.heat < -0.0500000007450581)
+            if (this.holdObject != null && holdObject.heat < -0.05f)
                 this.holdObject.DoHeatUp(0.03f, location);
-            else if (this.holstered != null && holstered.heat < -0.0500000007450581)
+            else if (this.holstered != null && holstered.heat < -0.05f)
                 this.holstered.DoHeatUp(0.03f, location);
-            else if (this.skewered != null && skewered.heat < -0.0500000007450581)
+            else if (this.skewered != null && skewered.heat < -0.05f)
                 this.skewered.DoHeatUp(0.03f, location);
             base.HeatUp(location);
         }
@@ -4032,7 +4032,7 @@ namespace DuckGame
                     else
                         SFX.Play("quackYell0" + Change.ToString(Rando.Int(2) + 1), pitch: (Rando.Float(0.3f) - 0.3f));
                     SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
-                    if ((double)Rando.Float(1f) < 0.100000001490116)
+                    if ((double)Rando.Float(1f) < 0.1f)
                         this.AddCoolness(-1);
                     Event.Log(new LitOnFireEvent(litBy?.responsibleProfile, this.profile));
                     ++this.profile.stats.timesLitOnFire;
@@ -4041,7 +4041,7 @@ namespace DuckGame
                     if (this.ragdoll == null)
                     {
                         for (int index = 0; index < 5; ++index)
-                            Level.Add(SmallFire.New(Rando.Float(12f) - 6f, Rando.Float(16f) - 8f, 0.0f, 0.0f, stick: this));
+                            Level.Add(SmallFire.New(Rando.Float(12f) - 6f, Rando.Float(16f) - 8f, 0f, 0f, stick: this));
                     }
                 }
                 this.onFire = true;
@@ -4072,7 +4072,7 @@ namespace DuckGame
                     if (this._sizzle == null)
                         this._sizzle = SFX.Play("sizzle", 0.6f, looped: true);
                     this._handHeat += 0.016f;
-                    if (_handHeat > 0.400000005960464)
+                    if (_handHeat > 0.4f)
                     {
                         if (this.handSmokeWait <= 0)
                         {
@@ -4082,7 +4082,7 @@ namespace DuckGame
                         }
                         --this.handSmokeWait;
                     }
-                    if (_handHeat > 1.10000002384186)
+                    if (_handHeat > 1.1f)
                     {
                         this._sizzle.Stop();
                         this.Scream();
@@ -4596,16 +4596,16 @@ namespace DuckGame
                                 tounge.y = 0.0f;
                             if (this.offDir > 0)
                             {
-                                if (tounge.x < -0.300000011920929)
+                                if (tounge.x < -0.3f)
                                     tounge.x = -0.3f;
-                                if (tounge.x > 0.400000005960464)
+                                if (tounge.x > 0.4f)
                                     tounge.x = 0.4f;
                             }
                             else
                             {
-                                if (tounge.x < -0.400000005960464)
+                                if (tounge.x < -0.4f)
                                     tounge.x = -0.4f;
-                                if (tounge.x > 0.300000011920929)
+                                if (tounge.x > 0.3f)
                                     tounge.x = 0.3f;
                             }
                         }
@@ -4615,9 +4615,9 @@ namespace DuckGame
                                 tounge.x = 0.0f;
                             if (this.offDir < 0 && tounge.x > 0.0)
                                 tounge.x = 0.0f;
-                            if (tounge.y < -0.300000011920929)
+                            if (tounge.y < -0.3f)
                                 tounge.y = -0.3f;
-                            if (tounge.y > 0.400000005960464)
+                            if (tounge.y > 0.4f)
                                 tounge.y = 0.4f;
                         }
                         this._stickLerp = Lerp.Vec2Smooth(this._stickLerp, tounge, 0.2f);
@@ -4631,7 +4631,7 @@ namespace DuckGame
                         if (length > 0.5)
                             num10 = 72;
                         DuckGame.Graphics.Draw(this._mindControl == null || !this._derpMindControl ? this._spriteQuack : this._spriteControlled, this._sprite.imageIndex + num10, this.x, this.y + this.verticalOffset, this.xscale, this.yscale);
-                        if (length > 0.0500000007450581)
+                        if (length > 0.05f)
                         {
                             Vec2 vec2_1 = this.position + new Vec2(0.0f, 1f);
                             if (this.sliding)
@@ -4959,7 +4959,7 @@ namespace DuckGame
                         {
                             pOffset = pPos + pOffset;
                             Vec2 normalized = (pOffset - vec2_2).normalized;
-                            DuckGame.Graphics.DrawTexturedLine(Duck.ConnectionIndicators._rainbowGradient.texture, vec2_2 - normalized, pOffset + normalized, Color.White * num3, (float)(0.300000011920929 + 0.600000023841858 * (double)num3), (Depth)0.85f);
+                            DuckGame.Graphics.DrawTexturedLine(Duck.ConnectionIndicators._rainbowGradient.texture, vec2_2 - normalized, pOffset + normalized, Color.White * num3, (0.3f + 0.6f * num3), (Depth)0.85f);
                         }
                         flag = true;
                         vec2_2 = new Vec2(pPos.x + x, pPos.y + y);
@@ -5040,18 +5040,18 @@ namespace DuckGame
                         this.wait = 1f;
                         this.activeLerp = 1f;
                     }
-                    this.bloop = Lerp.FloatSmooth(this.bloop, 0.0f, 0.21f);
-                    if (bloop >= 0.100000001490116)
+                    this.bloop = Lerp.FloatSmooth(this.bloop, 0f, 0.21f);
+                    if (bloop >= 0.1f)
                         return;
                     this.bloop = 0.0f;
                 }
 
                 public void Draw(Vec2 pPos, Vec2 pOffset)
                 {
-                    if ((double)(this.drawPos - pOffset).length > 16.0)
+                    if ((double)(this.drawPos - pOffset).length > 16f)
                         this.drawPos = pOffset;
                     this.drawPos = Lerp.Vec2Smooth(this.drawPos, pOffset, 0.4f);
-                    this.sprite.scale = new Vec2((float)(1.0 + bloop * 0.600000023841858), (float)(1.0 + bloop * 0.349999994039536));
+                    this.sprite.scale = new Vec2((float)(1.0 + bloop * 0.6f), (float)(1.0 + bloop * 0.35f));
                     this.sprite.depth = (Depth)0.9f;
                     DuckGame.Graphics.Draw(sprite, pPos.x + this.drawPos.x, pPos.y + this.drawPos.y);
                 }

@@ -99,12 +99,12 @@ namespace DuckGame
             }
             else
             {
-                if ((double)this._effect.Volume > 0.00999999977648258 && this._effect.State != SoundState.Playing)
+                if (this._effect.Volume > 0.01f && this._effect.State != SoundState.Playing)
                 {
                     this._effect.Play();
                     this._startLevel = Level.current;
                 }
-                else if ((double)this._effect.Volume < 0.00999999977648258 && this._effect.State == SoundState.Playing)
+                else if (this._effect.Volume < 0.01f && this._effect.State == SoundState.Playing)
                     this._effect.Stop();
                 this._effect.Volume = Maths.LerpTowards(this._effect.Volume, this._lerpVolume, this._lerpSpeed);
             }

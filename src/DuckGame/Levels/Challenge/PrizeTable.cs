@@ -121,19 +121,19 @@ namespace DuckGame
                 if (this.hoverChancyChallenge)
                     this._hoverSprite.alpha = Lerp.Float(this._hoverSprite.alpha, 1f, 0.05f);
                 else
-                    this._hoverSprite.alpha = Lerp.Float(this._hoverSprite.alpha, 0.0f, 0.05f);
-                if ((double)this._hoverSprite.alpha > 0.00999999977648258)
+                    this._hoverSprite.alpha = Lerp.Float(this._hoverSprite.alpha, 0f, 0.05f);
+                if (this._hoverSprite.alpha > 0.01f)
                 {
-                    this._hoverSprite.depth = (Depth)0.0f;
+                    this._hoverSprite.depth = (Depth)0f;
                     this._hoverSprite.flipH = Chancy.body.flipH;
                     if (this._hoverSprite.flipH)
-                        Graphics.Draw(this._hoverSprite, (float)((double)this.x + vec2.x + 1.0), (float)((double)this.y + vec2.y - 1.0));
+                        Graphics.Draw(this._hoverSprite, (this.x + vec2.x + 1f), (this.y + vec2.y - 1f));
                     else
-                        Graphics.Draw(this._hoverSprite, (float)((double)this.x + vec2.x - 1.0), (float)((double)this.y + vec2.y - 1.0));
+                        Graphics.Draw(this._hoverSprite, (this.x + vec2.x - 1f), (this.y + vec2.y - 1f));
                 }
             }
             base.Draw();
-            if (_hoverFade <= 0.0)
+            if (_hoverFade <= 0f)
                 return;
             this._outline.alpha = this._hoverFade;
             Graphics.Draw(this._outline, this.x + 1f, this.y);

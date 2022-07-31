@@ -32,19 +32,19 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._tracer || _bulletDistance <= 0.100000001490116)
+            if (this._tracer || _bulletDistance <= 0.1f)
                 return;
             float length = (this.drawStart - this.drawEnd).length;
-            float val = 0.0f;
-            float num1 = (float)(1.0 / ((double)length / 8.0));
-            float num2 = 0.0f;
+            float val = 0f;
+            float num1 = (1f / (length / 8f));
+            float num2 = 0f;
             float num3 = 8f;
             while (true)
             {
                 bool flag = false;
                 if ((double)val + (double)num3 > (double)length)
                 {
-                    num3 = length - Maths.Clamp(val, 0.0f, 99f);
+                    num3 = length - Maths.Clamp(val, 0f, 99f);
                     flag = true;
                 }
                 num2 += num1;

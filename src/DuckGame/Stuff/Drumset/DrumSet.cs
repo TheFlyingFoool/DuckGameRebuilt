@@ -215,7 +215,7 @@ namespace DuckGame
                         if (this.duck != null)
                             RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
                         ++this.hitsSinceThrow;
-                        if (hits * 0.0199999995529652 > (double)Rando.Float(1f) && (double)Rando.Float(1f) > 0.949999988079071 && this.hitsSinceThrow > 10)
+                        if (hits * 0.02f > Rando.Float(1f) && Rando.Float(1f) > 0.95f && this.hitsSinceThrow > 10)
                         {
                             if (Network.isActive)
                                 this._netThrowStick.Play();

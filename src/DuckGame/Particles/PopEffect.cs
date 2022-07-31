@@ -11,7 +11,7 @@ namespace DuckGame
 {
     public class PopEffect : Thing
     {
-        private List<PopEffect.PopEffectPart> parts = new List<PopEffect.PopEffectPart>();
+        private List<PopEffectPart> parts = new List<PopEffectPart>();
         private SpriteMap _sprite;
 
         public PopEffect(float xpos, float ypos)
@@ -24,7 +24,7 @@ namespace DuckGame
             for (int index = 0; index < num1; ++index)
             {
                 float num2 = 360f / num1 * index;
-                this.parts.Add(new PopEffect.PopEffectPart()
+                this.parts.Add(new PopEffectPart()
                 {
                     scale = Rando.Float(0.6f, 1f),
                     rot = Maths.DegToRad(num2 + Rando.Float(-10f, 10f))
@@ -38,7 +38,7 @@ namespace DuckGame
         {
             this.xscale -= 0.24f;
             this.yscale = this.xscale;
-            if ((double)this.xscale >= 0.00999999977648258)
+            if (this.xscale >= 0.01f)
                 return;
             Level.Remove(this);
         }

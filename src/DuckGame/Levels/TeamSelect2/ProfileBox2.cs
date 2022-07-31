@@ -630,12 +630,12 @@ namespace DuckGame
                 this._currentMessage = 0;
                 Vec2 vec2 = this._duck.position - this._consolePos;
                 bool flag2 = (double)vec2.length < 20.0;
-                this._consoleFade = Lerp.Float(this._consoleFade, flag2 ? 1f : 0.0f, 0.1f);
+                this._consoleFade = Lerp.Float(this._consoleFade, flag2 ? 1f : 0f, 0.1f);
                 if (this._teamSelect != null & flag2)
                 {
                     this._currentMessage = 4;
                     this._duck.canFire = false;
-                    if (this._duck.isServerForObject && this.doorIsOpen && this._inputProfile.Pressed("SHOOT") && !this._hatSelector.open && (double)this._hatSelector.fade < 0.00999999977648258)
+                    if (this._duck.isServerForObject && this.doorIsOpen && this._inputProfile.Pressed("SHOOT") && !this._hatSelector.open && this._hatSelector.fade < 0.01f)
                     {
                         this._duck.immobilized = true;
                         this._hatSelector.Open(this._playerProfile);
@@ -645,7 +645,7 @@ namespace DuckGame
                 }
                 else
                     this._duck.canFire = true;
-                if (this._hatSelector.hat != null && (double)this._hatSelector.hat.alpha < 0.00999999977648258 && !this._duck.HasEquipment(_hatSelector.hat))
+                if (this._hatSelector.hat != null && this._hatSelector.hat.alpha < 0.01f && !this._duck.HasEquipment(_hatSelector.hat))
                 {
                     this._hatSelector.hat.alpha = 1f;
                     this._duck.Equip(_hatSelector.hat, false);
@@ -735,15 +735,15 @@ namespace DuckGame
             }
             if (this._turret != null)
                 this._turret._friendly = this.duck;
-            this._doorX = Maths.LerpTowards(this._doorX, flag3 ? 83f : 0.0f, 4f);
+            this._doorX = Maths.LerpTowards(this._doorX, flag3 ? 83f : 0f, 4f);
             if (Network.isActive && (this.profile.networkStatus == DuckNetStatus.Disconnected && this._prevStatus != DuckNetStatus.Disconnected || this.profile.slotType == SlotType.Spectator) || _doorX == 0.0 && _prevDoorX != 0.0)
                 this.OnDoorClosed();
             if (this._playerActive && this.controllerIndex > 3 && !(Level.current.camera is FollowCam))
                 TeamSelect2.growCamera = true;
             if (this._currentMessage != this._tutorialMessages.frame)
             {
-                this._screenFade = Maths.LerpTowards(this._screenFade, 0.0f, 0.15f);
-                if (_screenFade < 0.00999999977648258)
+                this._screenFade = Maths.LerpTowards(this._screenFade, 0f, 0.15f);
+                if (_screenFade < 0.01f)
                     this._tutorialMessages.frame = this._currentMessage;
             }
             else
@@ -753,7 +753,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._hatSelector != null && (double)this._hatSelector.fadeVal > 0.899999976158142 && this._hatSelector._roomEditor._mode != REMode.Place)
+            if (this._hatSelector != null && (double)this._hatSelector.fadeVal > 0.9f && this._hatSelector._roomEditor._mode != REMode.Place)
             {
                 this._projector.visible = false;
                 if (this._duck == null)
@@ -765,14 +765,14 @@ namespace DuckGame
                 if (this._duck != null)
                     this._duck.mindControl = null;
                 this._projector.visible = true;
-                if (_tooManyPulse > 0.00999999977648258)
-                    Graphics.DrawStringOutline("ROOM FULL", this.position + new Vec2(0.0f, 36f), Color.Red * this._tooManyPulse, Color.Black * this._tooManyPulse, (Depth)0.95f, scale: 2f);
-                if (_noMorePulse > 0.00999999977648258)
-                    Graphics.DrawStringOutline(" NO MORE ", this.position + new Vec2(0.0f, 36f), Color.Red * this._noMorePulse, Color.Black * this._noMorePulse, (Depth)0.95f, scale: 2f);
-                this._tooManyPulse = Lerp.Float(this._tooManyPulse, 0.0f, 0.05f);
-                this._noMorePulse = Lerp.Float(this._noMorePulse, 0.0f, 0.05f);
+                if (_tooManyPulse > 0.01f)
+                    Graphics.DrawStringOutline("ROOM FULL", this.position + new Vec2(0f, 36f), Color.Red * this._tooManyPulse, Color.Black * this._tooManyPulse, (Depth)0.95f, scale: 2f);
+                if (_noMorePulse > 0.01f)
+                    Graphics.DrawStringOutline(" NO MORE ", this.position + new Vec2(0f, 36f), Color.Red * this._noMorePulse, Color.Black * this._noMorePulse, (Depth)0.95f, scale: 2f);
+                this._tooManyPulse = Lerp.Float(this._tooManyPulse, 0f, 0.05f);
+                this._noMorePulse = Lerp.Float(this._noMorePulse, 0f, 0.05f);
                 bool flag1 = this.profile.networkStatus != 0;
-                if (_doorX < 82.0)
+                if (_doorX < 82f)
                 {
                     Sprite sprite1 = this._doorLeft;
                     Sprite sprite2 = this._doorRight;
@@ -798,10 +798,10 @@ namespace DuckGame
                     Sprite doorRightBlank = this._doorRightBlank;
                     if (this.rightRoom)
                     {
-                        Rectangle sourceRectangle1 = new Rectangle((int)this._doorX, 0.0f, doorLeftBlank.width, _doorLeft.height);
+                        Rectangle sourceRectangle1 = new Rectangle((int)this._doorX, 0f, doorLeftBlank.width, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, this.x - 1f, this.y, sourceRectangle1);
-                        Rectangle sourceRectangle2 = new Rectangle((int)-(double)this._doorX, 0.0f, _doorRight.width, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, (float)((double)this.x - 1.0 + 68.0), this.y, sourceRectangle2);
+                        Rectangle sourceRectangle2 = new Rectangle((int)-(double)this._doorX, 0f, _doorRight.width, _doorRight.height);
+                        Graphics.Draw(doorRightBlank, (float)((double)this.x - 1f + 68f), this.y, sourceRectangle2);
                         if (_doorX == 0.0)
                         {
                             this._fontSmall.depth = doorLeftBlank.depth + 10;
@@ -849,11 +849,11 @@ namespace DuckGame
                                 float x = this.x + 10f;
                                 Graphics.DrawRect(new Vec2(x, this.y + 35f), new Vec2(x + num, this.y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                 string text1 = "WAITING FOR";
-                                this._fontSmall.Draw(text1, new Vec2((float)((double)x + (double)num / 2.0 - (double)this._fontSmall.GetWidth(text1) / 2.0), this.y + 36f), Color.White, doorLeftBlank.depth + 30);
+                                this._fontSmall.Draw(text1, new Vec2((x + num / 2f - this._fontSmall.GetWidth(text1) / 2f), this.y + 36f), Color.White, doorLeftBlank.depth + 30);
                                 string text2 = this.profile.nameUI;
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
-                                this._fontSmall.Draw(text2, new Vec2((float)((double)x + (double)num / 2.0 - (double)this._fontSmall.GetWidth(text2) / 2.0), this.y + 44f), Color.White, doorLeftBlank.depth + 30);
+                                this._fontSmall.Draw(text2, new Vec2((x + num / 2f - this._fontSmall.GetWidth(text2) / 2f), this.y + 44f), Color.White, doorLeftBlank.depth + 30);
                             }
                             else if (flag6)
                             {
@@ -875,9 +875,9 @@ namespace DuckGame
                     }
                     else
                     {
-                        Rectangle sourceRectangle3 = new Rectangle((int)this._doorX, 0.0f, _doorLeft.width, _doorLeft.height);
+                        Rectangle sourceRectangle3 = new Rectangle((int)this._doorX, 0f, _doorLeft.width, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, this.x, this.y, sourceRectangle3);
-                        Rectangle sourceRectangle4 = new Rectangle((int)-(double)this._doorX, 0.0f, _doorRight.width, _doorRight.height);
+                        Rectangle sourceRectangle4 = new Rectangle((int)-(double)this._doorX, 0f, _doorRight.width, _doorRight.height);
                         Graphics.Draw(doorRightBlank, this.x + 68f, this.y, sourceRectangle4);
                         if (_doorX == 0.0)
                         {
@@ -987,7 +987,7 @@ namespace DuckGame
                                     furniture1 = furniture2;
                                 else if (furniture2.type != FurnitureType.Font)
                                 {
-                                    furniture2.sprite.depth = (Depth)(float)(furniture2.deep * (1.0 / 1000.0) - 0.560000002384186);
+                                    furniture2.sprite.depth = (Depth)(furniture2.deep * (1f / 1000f) - 0.56f);
                                     furniture2.sprite.frame = furniturePosition.variation;
                                     Vec2 pos = new Vec2(furniturePosition.x, furniturePosition.y);
                                     furniture2.sprite.flipH = furniturePosition.flip;
@@ -1192,10 +1192,10 @@ namespace DuckGame
                     else if (this._selectConsole.imageIndex == 1)
                         this._consoleFlash.alpha = 0.1f;
                     else if (this._selectConsole.imageIndex == 2)
-                        this._consoleFlash.alpha = 0.0f;
+                        this._consoleFlash.alpha = 0f;
                     Graphics.Draw(this._consoleFlash, this._consolePos.x + 9f, this._consolePos.y + 7f);
                     Graphics.Draw(_selectConsole, this._consolePos.x, this._consolePos.y);
-                    if (_consoleFade > 0.00999999977648258)
+                    if (_consoleFade > 0.01f)
                     {
                         this._consoleHighlight.alpha = this._consoleFade;
                         Graphics.Draw(this._consoleHighlight, this._consolePos.x, this._consolePos.y);
@@ -1246,8 +1246,8 @@ namespace DuckGame
                             Graphics.Draw(this._onlineIcon, (int)this.x + 72, this.y + 19f, (Depth)num2);
                     }
                     this._font.depth = (Depth)0.6f;
-                    float num4 = 0.0f;
-                    float num5 = 0.0f;
+                    float num4 = 0f;
+                    float num5 = 0f;
                     Vec2 vec2 = new Vec2(1f, 1f);
                     if (currentDisplayName.Length > 9)
                     {
@@ -1264,8 +1264,8 @@ namespace DuckGame
                     this._font.scale = vec2;
                     if (this._hatSelector._roomEditor._mode == REMode.Place)
                     {
-                        float num6 = 0.0f;
-                        float num7 = 0.0f;
+                        float num6 = 0f;
+                        float num7 = 0f;
                         string text = "PLAYER 1";
                         float num8 = 47f;
                         this.x += num8;
@@ -1314,7 +1314,7 @@ namespace DuckGame
                     else
                     {
                         this._playerProfile.font.scale = vec2;
-                        this._playerProfile.font.Draw(currentDisplayName, (float)((double)this.x + 94.0 - (double)this._playerProfile.font.GetWidth(currentDisplayName) / 2.0) - num5, this.y + 75f + num4, Color.White, (Depth)0.7f);
+                        this._playerProfile.font.Draw(currentDisplayName, (this.x + 94f - this._playerProfile.font.GetWidth(currentDisplayName) / 2f) - num5, this.y + 75f + num4, Color.White, (Depth)0.7f);
                         this._font.scale = new Vec2(1f, 1f);
                     }
                 }
@@ -1327,10 +1327,10 @@ namespace DuckGame
                     else if (this._selectConsole.imageIndex == 1)
                         this._consoleFlash.alpha = 0.1f;
                     else if (this._selectConsole.imageIndex == 2)
-                        this._consoleFlash.alpha = 0.0f;
+                        this._consoleFlash.alpha = 0f;
                     Graphics.Draw(this._consoleFlash, this._consolePos.x + 9f, this._consolePos.y + 7f);
                     Graphics.Draw(_selectConsole, this._consolePos.x, this._consolePos.y);
-                    if (_consoleFade > 0.00999999977648258)
+                    if (_consoleFade > 0.01f)
                     {
                         this._consoleHighlight.alpha = this._consoleFade;
                         Graphics.Draw(this._consoleHighlight, this._consolePos.x, this._consolePos.y);
@@ -1381,8 +1381,8 @@ namespace DuckGame
                     }
                     this._font.depth = (Depth)0.6f;
                     this._aButton.position = new Vec2(this.x + 39f, this.y + 71f);
-                    float num12 = 0.0f;
-                    float num13 = 0.0f;
+                    float num12 = 0f;
+                    float num13 = 0f;
                     Vec2 vec2 = new Vec2(1f, 1f);
                     if (currentDisplayName.Length > 9)
                     {
@@ -1399,8 +1399,8 @@ namespace DuckGame
                     if (this._hatSelector._roomEditor._mode == REMode.Place && Profiles.experienceProfile != null)
                     {
                         string text = "PLAYER 1";
-                        float num14 = 0.0f;
-                        float num15 = 0.0f;
+                        float num14 = 0f;
+                        float num15 = 0f;
                         Furniture furniture6 = this._hatSelector._roomEditor.CurFurni();
                         if (furniture6.type == FurnitureType.Font)
                         {

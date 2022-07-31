@@ -21,7 +21,7 @@ namespace DuckGame
             this.graphic = new Sprite("mindBolt");
             this.center = new Vec2(8f, 8f);
             this.scale = new Vec2(0.1f, 0.1f);
-            this.alpha = 0.0f;
+            this.alpha = 0f;
         }
 
         public override void Update()
@@ -32,13 +32,13 @@ namespace DuckGame
             Vec2 vec2 = position - this.position;
             double length = (double)vec2.length;
             vec2.Normalize();
-            this.angleDegrees = (float)(-(double)Maths.PointDirection(this.position, position) + 90.0);
+            this.angleDegrees = (-Maths.PointDirection(this.position, position) + 90f);
             this.position += vec2 * 4f;
             this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.05f);
-            if (length < 48.0 || this._controlledDuck.mindControl == null)
+            if (length < 48f || this._controlledDuck.mindControl == null)
                 this._fade = true;
-            this.alpha = Lerp.Float(this.alpha, this._fade ? 0.0f : 1f, 0.1f);
-            if ((double)this.alpha < 0.00999999977648258 && this._fade)
+            this.alpha = Lerp.Float(this.alpha, this._fade ? 0f : 1f, 0.1f);
+            if (this.alpha < 0.01f && this._fade)
                 Level.Remove(this);
             base.Update();
         }

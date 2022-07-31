@@ -369,12 +369,12 @@ namespace DuckGame
                 }
                 if (!isTargetDraw)
                 {
-                    if (DuckGame.Graphics.currentRenderTarget != null)
+                    if (Graphics.currentRenderTarget != null)
                     {
-                        if (!DuckGame.Graphics.currentRenderTarget.depth)
+                        if (!Graphics.currentRenderTarget.depth)
                             goto label_14;
                     }
-                    DuckGame.Graphics.device.Clear(ClearOptions.DepthBuffer, (Microsoft.Xna.Framework.Color)Color.Black, 1f, 0);
+                    Graphics.device.Clear(ClearOptions.DepthBuffer, (Microsoft.Xna.Framework.Color)Color.Black, 1f, 0);
                 }
             }
             catch (Exception ex)
@@ -382,10 +382,10 @@ namespace DuckGame
                 DevConsole.Log("|DGRED|Layer.Begin exception: " + ex.Message);
             }
         label_14:
-            DuckGame.Graphics.ResetSpanAdjust();
+            Graphics.ResetSpanAdjust();
             Effect effect = (Effect)Layer._core._basicEffect;
-            Vec3 vec3_1 = new Vec3((float)((double)DuckGame.Graphics.fade * _fade * (1.0 - _darken))) * this.colorMul;
-            Vec3 vec3_2 = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(DuckGame.Graphics.flashAddRenderValue) * this.flashAddInfluence + new Vec3(DuckGame.Graphics.fadeAddRenderValue) - new Vec3(this.darken);
+            Vec3 vec3_1 = new Vec3((Graphics.fade * _fade * (1f - _darken))) * this.colorMul;
+            Vec3 vec3_2 = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * this.flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(this.darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             vec3_2 *= vec3_1;
             if (this == Layer.Game)
@@ -393,12 +393,12 @@ namespace DuckGame
                 Layer.kGameLayerFade = vec3_1;
                 Layer.kGameLayerAdd = vec3_2;
             }
-            if (_darken > 0.0)
+            if (_darken > 0f)
                 this._darken -= 0.15f;
-            else if (_darken < 0.0)
+            else if (_darken < 0f)
                 this._darken += 0.15f;
-            if ((double)Math.Abs(this._darken) < 0.159999996423721)
-                this._darken = 0.0f;
+            if (Math.Abs(this._darken) < 0.16f)
+                this._darken = 0f;
             if (this._effect != null)
             {
                 effect = this._effect;
@@ -408,7 +408,7 @@ namespace DuckGame
             else
             {
                 float num2 = vec3_2.LengthSquared();
-                if (vec3_1 != Vec3.One && (double)num2 > 1.0 / 1000.0)
+                if (vec3_1 != Vec3.One && num2 > 1f / 1000f)
                 {
                     effect = (Effect)Layer._core._basicEffectFadeAdd;
                     effect.Parameters["fade"].SetValue((Vector3)vec3_1);
@@ -419,7 +419,7 @@ namespace DuckGame
                     effect = (Effect)Layer._core._basicEffectFade;
                     effect.Parameters["fade"].SetValue((Vector3)vec3_1);
                 }
-                else if ((double)num2 > 1.0 / 1000.0)
+                else if ((double)num2 > 1f / 1000f)
                 {
                     effect = (Effect)Layer._core._basicEffectAdd;
                     effect.Parameters["add"].SetValue((Vector3)vec3_2);
@@ -433,8 +433,8 @@ namespace DuckGame
             Camera camera = this.camera;
             if (this.target != null & isTargetDraw && !this.targetOnly)
             {
-                this._targetCamera.x = (float)Math.Round((double)this.camera.x - 1.0);
-                this._targetCamera.y = (float)Math.Round((double)this.camera.y - 1.0);
+                this._targetCamera.x = (float)Math.Round((double)this.camera.x - 1f);
+                this._targetCamera.y = (float)Math.Round((double)this.camera.y - 1f);
                 this._targetCamera.width = Math.Max(this.camera.width, Graphics.width);
                 this._targetCamera.height = Math.Max(this.camera.height, Graphics.height);
                 camera = this._targetCamera;
@@ -472,22 +472,22 @@ namespace DuckGame
         public void End(bool transparent, bool isTargetDraw = false)
         {
             this._batch.End();
-            DuckGame.Graphics.screen = null;
-            DuckGame.Graphics.currentLayer = null;
+            Graphics.screen = null;
+            Graphics.currentLayer = null;
             if (isTargetDraw & transparent && this._target != null)
             {
-                DuckGame.Graphics.SetRenderTarget(this._oldRenderTarget);
-                DuckGame.Graphics.viewport = this._oldViewport;
+                Graphics.SetRenderTarget(this._oldRenderTarget);
+                Graphics.viewport = this._oldViewport;
             }
             if (!this.allowTallAspect)
                 return;
-            DuckGame.Graphics.RestoreOldViewport();
+            Graphics.RestoreOldViewport();
         }
 
         public virtual void Draw(bool transparent, bool isTargetDraw = false)
         {
-            if (currentSpanOffset > 10000.0)
-                this.currentSpanOffset = 0.0f;
+            if (currentSpanOffset > 10000f)
+                this.currentSpanOffset = 0f;
             if (!transparent && Layer.ignoreTransparent || isTargetDraw && this.slaveTarget != null || this.target != null && !isTargetDraw && this.targetOnly)
                 return;
             if (Network.isActive && this == Layer.Game)
@@ -503,7 +503,7 @@ namespace DuckGame
                 Color color = new Color(1f * this._targetFade, 1f * this._targetFade, 1f * this._targetFade, 1f);
                 Vec2 vec2 = new Vec2(Math.Max(this.camera.width, Graphics.width), Math.Max(this.camera.height, Graphics.height));
                 DuckGame.Graphics.skipReplayRender = true;
-                DuckGame.Graphics.Draw(target, position, new Rectangle?(), color, 0.0f, Vec2.Zero, new Vec2(vec2.x / target.width, vec2.y / target.height), SpriteEffects.None, (Depth)1f);
+                DuckGame.Graphics.Draw(target, position, new Rectangle?(), color, 0f, Vec2.Zero, new Vec2(vec2.x / target.width, vec2.y / target.height), SpriteEffects.None, (Depth)1f);
                 if (this.name == "LIGHTING")
                 {
                     if (VirtualTransition.core._scanStage == 1)
@@ -542,7 +542,7 @@ namespace DuckGame
                                         source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                         thing.position = new Vec2(source.x, source.y - thing.centery);
                                         thing.DoDraw();
-                                        DuckGame.Graphics.material = null;
+                                        Graphics.material = null;
                                         thing.position = position;
                                         if (thing is PhysicsObject)
                                         {
@@ -552,12 +552,12 @@ namespace DuckGame
                                             this._dropShadow.depth = thing.depth - 10;
                                             source = new Vec3(position.x, thing.z, 0.0f);
                                             source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                            DuckGame.Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
+                                            Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
                                         }
                                     }
                                     else
                                         thing.DoDraw();
-                                    DuckGame.Graphics.material = null;
+                                    Graphics.material = null;
                                 }
                             }
                         }
@@ -568,7 +568,7 @@ namespace DuckGame
                                 if (thing.visible)
                                 {
                                     thing.DoDraw();
-                                    DuckGame.Graphics.material = null;
+                                    Graphics.material = null;
                                 }
                             }
                         }
@@ -586,7 +586,7 @@ namespace DuckGame
                                         source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                         thing.position = new Vec2(source.x, source.y - thing.centery);
                                         thing.DoDraw();
-                                        DuckGame.Graphics.material = null;
+                                        Graphics.material = null;
                                         thing.position = position;
                                         if (thing is PhysicsObject)
                                         {
@@ -596,12 +596,12 @@ namespace DuckGame
                                             this._dropShadow.depth = thing.depth - 10;
                                             source = new Vec3(position.x, thing.z, 0.0f);
                                             source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                            DuckGame.Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
+                                            Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
                                         }
                                     }
                                     else
                                         thing.DoDraw();
-                                    DuckGame.Graphics.material = null;
+                                    Graphics.material = null;
                                 }
                             }
                             if (DevConsole.showCollision)
@@ -613,13 +613,13 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (Layer.ignoreTransparent)
+                        if (ignoreTransparent)
                         {
                             foreach (Thing thing in opaque)
                             {
                                 if (thing.visible)
                                     thing.DoDraw();
-                                DuckGame.Graphics.material = null;
+                                Graphics.material = null;
                             }
                             StaticRenderer.RenderLayer(this);
                         }
@@ -639,18 +639,18 @@ namespace DuckGame
             }
             if (Network.isActive && Network.inputDelayFrames > 0 && this == Layer.Game)
             {
-                DuckGame.Graphics.drawCalls.Enqueue(DuckGame.Graphics.currentFrameCalls);
-                if (DuckGame.Graphics.drawCalls.Count > 0)
+                Graphics.drawCalls.Enqueue(Graphics.currentFrameCalls);
+                if (Graphics.drawCalls.Count > 0)
                 {
-                    List<DrawCall> drawCallList = DuckGame.Graphics.drawCalls.Peek();
-                    if (DuckGame.Graphics.drawCalls.Count > Network.inputDelayFrames)
-                        DuckGame.Graphics.drawCalls.Dequeue();
+                    List<DrawCall> drawCallList = Graphics.drawCalls.Peek();
+                    if (Graphics.drawCalls.Count > Network.inputDelayFrames)
+                        Graphics.drawCalls.Dequeue();
                     foreach (DrawCall drawCall in drawCallList)
                     {
                         if (drawCall.material != null)
-                            DuckGame.Graphics.screen.DrawWithMaterial(drawCall.texture, drawCall.position, drawCall.sourceRect, drawCall.color, drawCall.rotation, drawCall.origin, drawCall.scale, drawCall.effects, drawCall.depth, drawCall.material);
+                            Graphics.screen.DrawWithMaterial(drawCall.texture, drawCall.position, drawCall.sourceRect, drawCall.color, drawCall.rotation, drawCall.origin, drawCall.scale, drawCall.effects, drawCall.depth, drawCall.material);
                         else
-                            DuckGame.Graphics.screen.Draw(drawCall.texture, drawCall.position, drawCall.sourceRect, drawCall.color, drawCall.rotation, drawCall.origin, drawCall.scale, drawCall.effects, drawCall.depth);
+                            Graphics.screen.Draw(drawCall.texture, drawCall.position, drawCall.sourceRect, drawCall.color, drawCall.rotation, drawCall.origin, drawCall.scale, drawCall.effects, drawCall.depth);
                     }
                 }
             }

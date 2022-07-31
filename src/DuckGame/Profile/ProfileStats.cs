@@ -214,11 +214,11 @@ namespace DuckGame
             float num3 = 0.0f;
             float num4 = 0.0f;
             if (this.timesSpawned > 0)
-                num4 = (float)(matchesWon / (double)this.timesSpawned * 0.400000005960464);
+                num4 = (matchesWon / this.timesSpawned * 0.4f);
             float num5 = num1 + num4;
-            if ((double)num4 > 0.0)
+            if (num4 > 0f)
                 num3 += num4;
-            else if ((double)num4 < 0.0)
+            else if ((double)num4 < 0f)
                 num2 += num4;
             statContributionList.Add(new StatContribution()
             {
@@ -226,11 +226,11 @@ namespace DuckGame
                 amount = num4
             });
             if (this.gamesPlayed > 0)
-                num4 = (float)(trophiesWon / (double)this.gamesPlayed * 0.400000005960464);
+                num4 = (trophiesWon / this.gamesPlayed * 0.4f);
             float num6 = num5 + num4;
-            if ((double)num4 > 0.0)
+            if (num4 > 0f)
                 num3 += num4;
-            else if ((double)num4 < 0.0)
+            else if (num4 < 0f)
                 num2 += num4;
             statContributionList.Add(new StatContribution()
             {
@@ -240,55 +240,55 @@ namespace DuckGame
             int num7 = this.timesKilled;
             if (num7 < 1)
                 num7 = 1;
-            float num8 = (float)Math.Log(1.0 + kills / (double)num7) * 0.4f;
+            float num8 = (float)Math.Log(1f + kills / (double)num7) * 0.4f;
             float num9 = num6 + num8;
-            if ((double)num8 > 0.0)
+            if ((double)num8 > 0f)
                 num3 += num8;
-            else if ((double)num8 < 0.0)
+            else if ((double)num8 < 0f)
                 num2 += num8;
             statContributionList.Add(new StatContribution()
             {
                 name = "KDR",
                 amount = num8
             });
-            float num10 = (float)(Maths.Clamp((DateTime.Now - this.lastPlayed).Days, 0, 60) / 60.0 * 0.5);
+            float num10 = (float)(Maths.Clamp((DateTime.Now - this.lastPlayed).Days, 0, 60) / 60f * 0.5f);
             float num11 = num9 + num10;
-            if ((double)num10 > 0.0)
+            if (num10 > 0f)
                 num3 += num10;
-            else if ((double)num10 < 0.0)
+            else if ((double)num10 < 0f)
                 num2 += num10;
             statContributionList.Add(new StatContribution()
             {
                 name = "LVE",
                 amount = num10
             });
-            float num12 = (float)Math.Log(1.0 + quacks * 9.99999974737875E-05) * 0.4f;
+            float num12 = (float)Math.Log(1.0 + quacks * 0.0001f) * 0.4f;
             float num13 = num11 + num12;
-            if ((double)num12 > 0.0)
+            if (num12 > 0f)
                 num3 += num12;
-            else if ((double)num12 < 0.0)
+            else if (num12 < 0f)
                 num2 += num12;
             statContributionList.Add(new StatContribution()
             {
                 name = "CHR",
                 amount = num12
             });
-            float num14 = (float)Math.Log(0.75 + coolness * 0.025000000372529);
+            float num14 = (float)Math.Log(0.75f + coolness * 0.025f);
             float num15 = num13 + num14;
-            if ((double)num14 > 0.0)
+            if (num14 > 0f)
                 num3 += num14;
-            else if ((double)num14 < 0.0)
+            else if (num14 < 0f)
                 num2 += num14;
             statContributionList.Add(new StatContribution()
             {
                 name = "COO",
                 amount = num14
             });
-            float num16 = (float)Math.Log(1.0 + bulletsFired * 9.99999974737875E-05);
+            float num16 = (float)Math.Log(1f + bulletsFired * 0.0001f);
             float num17 = num15 + num16;
-            if ((double)num16 > 0.0)
+            if (num16 > 0f)
                 num3 += num16;
-            else if ((double)num16 < 0.0)
+            else if (num16 < 0f)
                 num2 += num16;
             statContributionList.Add(new StatContribution()
             {
@@ -296,97 +296,97 @@ namespace DuckGame
                 amount = num16
             });
             if (this.bulletsFired > 0)
-                num16 = (float)(bulletsThatHit / (double)this.bulletsFired * 0.200000002980232 - 0.100000001490116);
+                num16 = (float)(bulletsThatHit / (double)this.bulletsFired * 0.2f - 0.1f);
             float num18 = num17 + num16;
-            if ((double)num16 > 0.0)
+            if ((double)num16 > 0f)
                 num3 += num16;
-            else if ((double)num16 < 0.0)
+            else if ((double)num16 < 0f)
                 num2 += num16;
             statContributionList.Add(new StatContribution()
             {
                 name = "ACC",
                 amount = num16
             });
-            float num19 = (float)Math.Log(1.0 + disarms * 0.000500000023748726) * 0.5f;
+            float num19 = (float)Math.Log(1f + disarms * 0.0005f) * 0.5f;
             float num20 = num18 + num19;
-            if ((double)num19 > 0.0)
+            if (num19 > 0f)
                 num3 += num19;
-            else if ((double)num19 < 0.0)
+            else if (num19 < 0f)
                 num2 += num19;
             statContributionList.Add(new StatContribution()
             {
                 name = "DSM",
                 amount = num19
             });
-            float num21 = -(float)(Math.Log(1.0 + (this.timesLitOnFire + this.timesMindControlled + this.timesNetted + this.timesDisarmed + this.minesSteppedOn + this.fallDeaths) * 0.000500000023748726) * 0.5);
+            float num21 = (float)-(Math.Log(1f + (this.timesLitOnFire + this.timesMindControlled + this.timesNetted + this.timesDisarmed + this.minesSteppedOn + this.fallDeaths) * 0.0005f) * 0.5f);
             float num22 = num20 + num21;
-            if ((double)num21 > 0.0)
+            if (num21 > 0f)
                 num3 += num21;
-            else if ((double)num21 < 0.0)
+            else if (num21 < 0f)
                 num2 += num21;
             statContributionList.Add(new StatContribution()
             {
                 name = "BAD",
                 amount = num21
             });
-            float num23 = (float)(-(Maths.Clamp((DateTime.Now - this.lastWon).Days, 0, 60) / 60.0) * 0.300000011920929);
+            float num23 = (float)(-(Maths.Clamp((DateTime.Now - this.lastWon).Days, 0, 60) / 60f) * 0.3f);
             float num24 = num22 + num23;
-            if ((double)num23 > 0.0)
+            if (num23 > 0f)
                 num3 += num23;
-            else if ((double)num23 < 0.0)
+            else if (num23 < 0f)
                 num2 += num23;
             statContributionList.Add(new StatContribution()
             {
                 name = "LOS",
                 amount = num23
             });
-            float num25 = (float)Math.Log(1.0 + timesJumped * 9.99999974737875E-05) * 0.2f;
+            float num25 = (float)Math.Log(1f + timesJumped * 0.0001f) * 0.2f;
             float num26 = num24 + num25;
-            if ((double)num25 > 0.0)
+            if (num25 > 0f)
                 num3 += num25;
-            else if ((double)num25 < 0.0)
+            else if (num25 < 0f)
                 num2 += num25;
             statContributionList.Add(new StatContribution()
             {
                 name = "JMP",
                 amount = num25
             });
-            float num27 = (float)Math.Log(1.0 + (double)this.timeWithMouthOpen * (1.0 / 1000.0)) * 0.5f;
+            float num27 = (float)Math.Log(1f + this.timeWithMouthOpen * (1f / 1000f)) * 0.5f;
             float num28 = num26 + num27;
-            if ((double)num27 > 0.0)
+            if (num27 > 0f)
                 num3 += num27;
-            else if ((double)num27 < 0.0)
+            else if (num27 < 0f)
                 num2 += num27;
             statContributionList.Add(new StatContribution()
             {
                 name = "MTH",
                 amount = num27
             });
-            float num29 = (float)Math.Log(1.0 + timesSwore) * 0.5f;
+            float num29 = (float)Math.Log(1f + timesSwore) * 0.5f;
             float profileScore = num28 + num29;
-            if ((double)num29 > 0.0)
+            if (num29 > 0f)
                 num3 += num29;
-            else if ((double)num29 < 0.0)
+            else if (num29 < 0f)
                 num2 += num29;
             statContributionList.Add(new StatContribution()
             {
                 name = "SWR",
                 amount = num29
             });
-            if (log && (double)profileScore != 0.0)
+            if (log && profileScore != 0f)
             {
                 foreach (StatContribution statContribution in statContributionList)
                 {
-                    float num30 = 0.0f;
-                    if (statContribution.amount != 0.0)
-                        num30 = statContribution.amount <= 0.0 ? (float)((double)Math.Abs(statContribution.amount) / (double)Math.Abs(num2) * ((double)Math.Abs(num2) / ((double)num3 + (double)Math.Abs(num2)))) : (float)((double)Math.Abs(statContribution.amount) / (double)Math.Abs(num3) * ((double)num3 / ((double)num3 + (double)Math.Abs(num2))));
-                    if (statContribution.amount < 0.0)
+                    float num30 = 0f;
+                    if (statContribution.amount != 0f)
+                        num30 = statContribution.amount <= 0f ? (Math.Abs(statContribution.amount) / Math.Abs(num2) * (Math.Abs(num2) / (num3 + Math.Abs(num2)))) : (Math.Abs(statContribution.amount) / Math.Abs(num3) * (num3 / (num3 + Math.Abs(num2))));
+                    if (statContribution.amount < 0f)
                         num30 = -num30;
                     float num31 = 0.5f;
                     float num32 = 0.5f;
                     float r;
                     float g;
-                    if ((double)num30 < 0.0)
+                    if ((double)num30 < 0f)
                     {
                         r = num31 + Math.Abs(num30) * 0.5f;
                         g = num32 - Math.Abs(num30) * 0.5f;
@@ -396,7 +396,7 @@ namespace DuckGame
                         g = num32 + Math.Abs(num30) * 0.5f;
                         r = num31 - Math.Abs(num30) * 0.5f;
                     }
-                    DevConsole.Log(statContribution.name + ": " + (num30 * 100f).ToString("0.000") + "%", new Color(r, g, 0.0f), 1f);
+                    DevConsole.Log(statContribution.name + ": " + (num30 * 100f).ToString("0.000") + "%", new Color(r, g, 0f), 1f);
                 }
             }
             return profileScore;

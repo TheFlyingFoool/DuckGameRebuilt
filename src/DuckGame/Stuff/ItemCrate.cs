@@ -295,15 +295,15 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && this.owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                woodDebris.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                woodDebris.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                woodDebris.hSpeed = (-bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));
+                woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(woodDebris);
             }
             SFX.Play("woodHit");
@@ -315,7 +315,7 @@ namespace DuckGame
             }
             this._hitPoints -= this.damageMultiplier;
             this.damageMultiplier += 2f;
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0f)
             {
                 if (bullet.isLocal)
                     Thing.SuperFondle(this, DuckNetwork.localConnection);

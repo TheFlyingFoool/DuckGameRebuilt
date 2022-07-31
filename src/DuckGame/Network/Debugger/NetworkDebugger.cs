@@ -822,15 +822,15 @@ namespace DuckGame
                         DCLine line = lines.ElementAt<DCLine>(num8 + num7);
                         DevConsole.DrawLine(pos1, line, this.logTimes, this.logSections);
                         Color col = DCLine.ColorForSection(line.section);
-                        col.r = (byte)(col.r * 0.100000001490116);
-                        col.g = (byte)(col.g * 0.100000001490116);
-                        col.b = (byte)(col.b * 0.100000001490116);
+                        col.r = (byte)(col.r * 0.1f);
+                        col.g = (byte)(col.g * 0.1f);
+                        col.b = (byte)(col.b * 0.1f);
                         if (line.line.Contains("@error"))
                         {
                             col = Color.Red;
-                            col.r = (byte)(col.r * 0.300000011920929);
-                            col.g = (byte)(col.g * 0.300000011920929);
-                            col.b = (byte)(col.b * 0.300000011920929);
+                            col.r = (byte)(col.r * 0.3f);
+                            col.g = (byte)(col.g * 0.3f);
+                            col.b = (byte)(col.b * 0.3f);
                         }
                         DuckGame.Graphics.DrawRect(pos1 + new Vec2(-4f, -1f), new Vec2(p2_1.x - 14f, pos1.y + 9f), col, (Depth)0.85f);
                         if (line.frames + num9 > 0)

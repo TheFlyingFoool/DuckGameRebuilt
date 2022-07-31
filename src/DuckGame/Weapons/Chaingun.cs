@@ -114,9 +114,9 @@ namespace DuckGame
             if (!this._spinning)
                 return;
             this._spinning = false;
-            this._spinUp.Volume = 0.0f;
+            this._spinUp.Volume = 0f;
             this._spinUp.Stop();
-            if (_spin <= 0.899999976158142)
+            if (_spin <= 0.9f)
                 return;
             this._spinDown.Volume = 1f;
             this._spinDown.Play();
@@ -136,20 +136,20 @@ namespace DuckGame
                 }
                 this.numHanging = num;
             }
-            this._fireWait = (float)(0.699999988079071 + (double)Maths.NormalizeSection(this._barrelHeat, 5f, 9f) * 5.0);
-            if (_barrelHeat > 11.0)
+            this._fireWait = (0.7f + Maths.NormalizeSection(this._barrelHeat, 5f, 9f) * 5f);
+            if (_barrelHeat > 11f)
                 this._barrelHeat = 11f;
             this._barrelHeat -= 0.005f;
-            if (_barrelHeat < 0.0)
-                this._barrelHeat = 0.0f;
+            if (_barrelHeat < 0f)
+                this._barrelHeat = 0f;
             this._sprite.speed = this._spin;
             this._tip.speed = this._spin;
             this.spinAmount += this._spin;
-            this.barrelInsertOffset = new Vec2(0.0f, (float)(2.0 + Math.Sin(spinAmount / 9.0 * 3.14000010490417) * 2.0));
-            if (_spin > 0.0)
+            this.barrelInsertOffset = new Vec2(0f, (2f + (float)Math.Sin(spinAmount / 9f * 3.14f) * 2f));
+            if (_spin > 0f)
                 this._spin -= 0.01f;
             else
-                this._spin = 0.0f;
+                this._spin = 0f;
             base.Update();
             if (this._topBullet == null)
                 return;
@@ -167,7 +167,7 @@ namespace DuckGame
             this._tip.flipH = this.graphic.flipH;
             this._tip.center = this.graphic.center;
             this._tip.depth = this.depth + 1;
-            this._tip.alpha = Math.Min((float)(_barrelHeat * 1.5 / 10.0), 1f);
+            this._tip.alpha = (float)Math.Min((_barrelHeat * 1.5 / 10f), 1f);
             this._tip.angle = this.angle;
             Graphics.Draw(_tip, this.x, this.y);
             if (this._topBullet != null)

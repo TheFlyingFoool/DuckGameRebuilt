@@ -55,8 +55,8 @@ namespace DuckGame
         {
             this.position.x = xpos;
             this.position.y = ypos;
-            this.hSpeed = (float)(-(double)hitAngle.x * 1.5) * Rando.Float(-2f, 2f);
-            this.vSpeed = (float)(-(double)hitAngle.y * 2.0 * ((double)Rando.Float(1f) - 0.300000011920929)) - Rando.Float(1f);
+            this.hSpeed = (-hitAngle.x * 1.5f) * Rando.Float(-2f, 2f);
+            this.vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) - 0.3f)) - Rando.Float(1f);
             this.hSpeed *= 1.5f;
             this.vSpeed *= 1.5f;
             this._bounceEfficiency = 0.1f;
@@ -68,7 +68,7 @@ namespace DuckGame
             this.life = Rando.Float(0.8f, 1f);
             this.sin = Rando.Float(3.14f);
             this._gravMult = 0.3f;
-            this.sinMult = 0.0f;
+            this.sinMult = 0f;
             this.onlyDieWhenGrounded = true;
         }
 
@@ -77,12 +77,12 @@ namespace DuckGame
             this.hSpeed *= 0.95f;
             this.vSpeed *= 0.96f;
             this.life -= 0.03f;
-            if (life <= 0.0)
+            if (life <= 0f)
             {
                 this.sinMult += 0.02f;
-                if (sinMult > 1.0)
+                if (sinMult > 1f)
                     this.sinMult = 1f;
-                if (!this._grounded && (double)Math.Abs(this.hSpeed) < 0.200000002980232)
+                if (!this._grounded && (double)Math.Abs(this.hSpeed) < 0.2f)
                 {
                     this.sin += 0.2f;
                     this.x += (float)(Math.Sin(sin) * 0.5) * this.sinMult;

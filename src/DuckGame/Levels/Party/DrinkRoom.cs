@@ -29,8 +29,8 @@ namespace DuckGame
         {
             if (Input.Pressed("MENU2"))
                 this._fade = true;
-            Graphics.fade = Lerp.Float(Graphics.fade, this._fade ? 0.0f : 1f, 0.1f);
-            if (this._fade && (double)Graphics.fade < 0.00999999977648258)
+            Graphics.fade = Lerp.Float(Graphics.fade, this._fade ? 0f : 1f, 0.1f);
+            if (this._fade && (double)Graphics.fade < 0.01f)
                 Level.current = this._next;
             base.Update();
         }
@@ -45,14 +45,14 @@ namespace DuckGame
                 if (drinks > 0)
                 {
                     string text = p.name + " |WHITE|drinks |RED|" + drinks.ToString();
-                    Graphics.DrawString(text, new Vec2((float)((double)Layer.HUD.camera.width / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), y), p.persona.colorUsable);
+                    Graphics.DrawString(text, new Vec2((Layer.HUD.camera.width / 2f - Graphics.GetStringWidth(text) / 2f), y), p.persona.colorUsable);
                     y += 9f;
                     flag = true;
                 }
                 foreach (PartyPerks perk in Party.GetPerks(p))
                 {
                     string text = p.name + " |WHITE|gets |GREEN|" + perk.ToString();
-                    Graphics.DrawString(text, new Vec2((float)((double)Layer.HUD.camera.width / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), y), p.persona.colorUsable);
+                    Graphics.DrawString(text, new Vec2((Layer.HUD.camera.width / 2f - Graphics.GetStringWidth(text) / 2f), y), p.persona.colorUsable);
                     y += 9f;
                     flag = true;
                 }

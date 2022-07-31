@@ -55,7 +55,7 @@ namespace DuckGame
                 Level.Remove(this);
                 return true;
             }
-            if (this._stuck && _stickTime > 0.400000005960464)
+            if (this._stuck && _stickTime > 0.4f)
                 this._stickTime = 0.4f;
             return false;
         }

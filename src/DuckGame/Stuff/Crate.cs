@@ -103,8 +103,8 @@ namespace DuckGame
             for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                woodDebris.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                woodDebris.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
+                woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(woodDebris);
             }
             SFX.Play("woodHit");
@@ -129,11 +129,11 @@ namespace DuckGame
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
-                woodDebris.hSpeed = (float)(bullet.travelDirNormalized.x * 3.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                woodDebris.vSpeed = (float)(bullet.travelDirNormalized.y * 3.0 * ((double)Rando.Float(1f) + 0.300000011920929) - ((double)Rando.Float(2f) - 1.0));
+                woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
+                woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
                 Level.Add(woodDebris);
             }
         }
@@ -141,17 +141,17 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1f)
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / (double)this._maxHealth) * 4.0);
-            if (_hitPoints <= 0.0 && !this._destroyed)
+            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / this._maxHealth) * 4f);
+            if (_hitPoints <= 0f && !this._destroyed)
                 this.Destroy(new DTImpact(this));
-            if (!this._onFire || _burnt >= 0.899999976158142)
+            if (!this._onFire || _burnt >= 0.9f)
                 return;
             float num = 1f - this.burnt;
-            if (_hitPoints > (double)num * _maxHealth)
+            if (_hitPoints > num * _maxHealth)
                 this._hitPoints = num * this._maxHealth;
             this._sprite.color = new Color(num, num, num);
         }

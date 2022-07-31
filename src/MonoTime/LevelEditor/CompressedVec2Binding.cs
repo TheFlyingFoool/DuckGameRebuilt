@@ -21,9 +21,9 @@ namespace DuckGame
 
         public static int GetCompressedVec2(Vec2 val, int range = 2147483647)
         {
-            if ((double)Math.Abs(val.x) < 1.0000000116861E-07)
+            if (Math.Abs(val.x) < 1E-07f)
                 val.x = 0.0f;
-            if ((double)Math.Abs(val.y) < 1.0000000116861E-07)
+            if (Math.Abs(val.y) < 1E-07f)
                 val.y = 0.0f;
             if (range != int.MaxValue)
             {

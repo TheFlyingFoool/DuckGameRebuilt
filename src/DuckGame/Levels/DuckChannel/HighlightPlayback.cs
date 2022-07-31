@@ -46,36 +46,36 @@ namespace DuckGame
                 this._skip = true;
             if (this._skip)
                 this._fadeOut = true;
-            DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, this._fadeOut ? 0.0f : 1f, 0.02f);
-            if ((double)DuckGame.Graphics.fade < 0.00999999977648258 && this._skip)
+            Graphics.fade = Lerp.Float(Graphics.fade, this._fadeOut ? 0f : 1f, 0.02f);
+            if ((double)Graphics.fade < 0.01f && this._skip)
             {
                 HighlightLevel.didSkip = true;
                 Vote.CloseVoting();
                 Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true); //!Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
             }
-            if (!this._showHighlight && (double)DuckGame.Graphics.fade > 0.949999988079071)
+            if (!this._showHighlight && Graphics.fade > 0.95f)
             {
                 this._waitToShow -= 0.02f;
-                if (_waitToShow <= 0.0)
+                if (_waitToShow <= 0f)
                 {
-                    this._waitToShow = 0.0f;
+                    this._waitToShow = 0f;
                     this._fadeOut = true;
                 }
             }
-            if ((double)DuckGame.Graphics.fade < 0.00999999977648258 && !this._showHighlight && this._fadeOut)
+            if (Graphics.fade < 0.01f && !this._showHighlight && this._fadeOut)
             {
                 this._fadeOut = false;
                 this._showHighlight = true;
             }
-            if (this._showHighlight && (double)DuckGame.Graphics.fade > 0.949999988079071)
+            if (this._showHighlight && (double)Graphics.fade > 0.95f)
                 this._keepPaused -= 0.03f;
             if (this._currentHighlight >= 0 && !this._highlights[this._currentHighlight].finished)
                 return;
             this._endWait -= 0.03f;
-            if (_endWait > 0.0)
+            if (_endWait > 0f)
                 return;
             this._fadeOut = true;
-            if ((double)DuckGame.Graphics.fade >= 0.00999999977648258)
+            if ((double)Graphics.fade >= 0.01f)
                 return;
             int highlight = this._currentHighlight - 1;
             if (this._currentHighlight <= 0)
@@ -98,10 +98,10 @@ namespace DuckGame
         {
             if (!this._showHighlight || this._currentHighlight < 0)
                 return;
-            if (_keepPaused > 0.0)
+            if (_keepPaused > 0f)
                 this._highlights[this._currentHighlight].frame = this._highlights[this._currentHighlight].startFrame + 5;
             this._highlights[this._currentHighlight].RenderFrame();
-            if (_keepPaused > 0.0 || this._highlights[this._currentHighlight].finished)
+            if (_keepPaused > 0f || this._highlights[this._currentHighlight].finished)
                 return;
             this._highlights[this._currentHighlight].UpdateFrame();
             this._highlights[this._currentHighlight].IncrementFrame();
@@ -109,12 +109,12 @@ namespace DuckGame
 
         public override void AfterDrawLayers()
         {
-            if (_keepPaused <= 0.0 || this._currentHighlight < 0)
+            if (_keepPaused <= 0f || this._currentHighlight < 0)
                 return;
             DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
             this._font.scale = new Vec2(8f, 8f);
-            double width = (double)this._font.GetWidth(Change.ToString(this._currentHighlight + 1));
-            double height = (double)this._font.height;
+            double width = this._font.GetWidth(Change.ToString(this._currentHighlight + 1));
+            double height = this._font.height;
             this._numbers.frame = 4 - this._currentHighlight;
             this._numbers.depth = (Depth)1f;
             this._numbers.scale = new Vec2(4f, 4f);

@@ -93,7 +93,7 @@ namespace DuckGame
                                 return tile1;
                             tile2 = tiles.First<RandomLevelData>();
                         }
-                        else if (tile2.chance != 1.0 && (double)Rando.Float(1f) > (double)chance)
+                        else if (tile2.chance != 1f && Rando.Float(1f) > chance)
                         {
                             tile1 = tile2;
                             tiles.Remove(tile2);
@@ -102,7 +102,7 @@ namespace DuckGame
                         }
                         if (tile2 != null)
                         {
-                            if (tile2.chance == 1.0 && (double)Rando.Float(1f) < 0.300000011920929 && num1 < 4)
+                            if (tile2.chance == 1f && Rando.Float(1f) < 0.3f && num1 < 4)
                             {
                                 tile1 = tile2;
                                 ++num1;
@@ -212,27 +212,27 @@ namespace DuckGame
             Rando.generator = new Random(seed);
             varwide = 0;
             varhigh = 0;
-            LevelGenerator.openAirMode = (double)Rando.Float(1f) > 0.75;
+            LevelGenerator.openAirMode = Rando.Float(1f) > 0.75f;
             bool flag = false;
             LevelGenerator._used.Clear();
             int length1 = varwide;
             int length2 = varhigh;
             if (varwide == 0)
-                length1 = (double)Rando.Float(1f) <= 0.600000023841858 ? 3 : 2;
+                length1 = Rando.Float(1f) <= 0.6f ? 3 : 2;
             if (varhigh == 0)
             {
                 double num = (double)Rando.Float(1f);
-                if (num > 0.850000023841858 && length1 == 3)
+                if (num > 0.85f && length1 == 3)
                     ;
-                length2 = num <= 0.449999988079071 ? 3 : 2;
+                length2 = num <= 0.45f ? 3 : 2;
             }
             if (flag)
                 length1 = length2 = 3;
             genX = Rando.Int(length1 - 2);
             genY = Rando.Int(length2 - 2);
-            if ((double)Rando.Float(1f) > 0.75)
+            if (Rando.Float(1f) > 0.75f)
                 ++genX;
-            if ((double)Rando.Float(1f) > 0.75)
+            if (Rando.Float(1f) > 0.75f)
                 ++genY;
             bool symmetricVal = true;
             if (symmetricVal)
@@ -258,14 +258,14 @@ namespace DuckGame
             }
             else
             {
-                if (length1 == 3 && (double)Rando.Float(1f) < 0.5)
+                if (length1 == 3 && Rando.Float(1f) < 0.5f)
                     genX = 1;
-                if (length2 == 3 && (double)Rando.Float(1f) < 0.5)
+                if (length2 == 3 && Rando.Float(1f) < 0.5f)
                     genY = 1;
             }
             if (length1 == 1)
             {
-                length1 = (double)Rando.Float(1f) > 0.5 ? 2 : 3;
+                length1 = Rando.Float(1f) > 0.5f ? 2 : 3;
                 genX = 0;
                 genY = 1;
             }

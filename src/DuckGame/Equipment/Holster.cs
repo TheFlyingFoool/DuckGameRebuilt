@@ -273,14 +273,14 @@ namespace DuckGame
                         {
                             Holdable containedObject = this.containedObject;
                             vec2_1 = this.equippedDuck.velocity;
-                            int num = (double)vec2_1.length < 0.0500000007450581 ? 1 : 0;
+                            int num = vec2_1.length < 0.05f ? 1 : 0;
                             containedObject.solid = num != 0;
                         }
                         else
                         {
                             Holdable containedObject = this.containedObject;
                             vec2_1 = this.velocity;
-                            int num = (double)vec2_1.length < 0.0500000007450581 ? 1 : 0;
+                            int num = vec2_1.length < 0.05f ? 1 : 0;
                             containedObject.solid = num != 0;
                         }
                         this.containedObject.grounded = true;
@@ -411,7 +411,7 @@ namespace DuckGame
                     Vec2 vec2 = this.Offset(new Vec2(num - 11f, -3f));
                     Graphics.Draw(this._chain, vec2.x, vec2.y);
                     this._lock.angleDegrees = this._chainSway;
-                    this._chainSwayVel -= (float)(((double)this._lock.angleDegrees - (this.owner != null ? (double)this.owner.hSpeed : (double)this.hSpeed) * 10.0) * 0.100000001490116);
+                    this._chainSwayVel -= ((this._lock.angleDegrees - (this.owner != null ? this.owner.hSpeed : this.hSpeed) * 10f) * 0.1f);
                     this._chainSwayVel *= 0.95f;
                     this._chainSway += this._chainSwayVel;
                     this._lock.depth = this._underPart.depth + 2;
@@ -420,7 +420,7 @@ namespace DuckGame
                 }
                 if (!(this.containedObject is RagdollPart) || !Network.isActive)
                     this._containedObject.Draw();
-                if (afterDrawAngle <= -99999.0)
+                if (afterDrawAngle <= -99999f)
                     return;
                 this._containedObject.angleDegrees = this.afterDrawAngle;
             }
@@ -434,9 +434,9 @@ namespace DuckGame
                     vec2 = this.Offset(new Vec2(-9f, -2f));
                 this._chain.center = new Vec2(3f, 3f);
                 Graphics.Draw(this._chain, vec2.x, vec2.y);
-                this.Offset(new Vec2(0.0f, -8f));
+                this.Offset(new Vec2(0f, -8f));
                 this._chain.angleDegrees = 90f + this._chainSway;
-                this._chainSwayVel -= (float)(((double)this._chain.angleDegrees - (90.0 + (this.owner != null ? (double)this.owner.hSpeed : (double)this.hSpeed) * 10.0)) * 0.100000001490116);
+                this._chainSwayVel -= ((this._chain.angleDegrees - (90f + (this.owner != null ? this.owner.hSpeed : this.hSpeed) * 10f)) * 0.1f);
                 this._chainSwayVel *= 0.95f;
                 this._chainSway += this._chainSwayVel;
             }

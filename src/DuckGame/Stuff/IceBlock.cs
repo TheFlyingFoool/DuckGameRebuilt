@@ -155,8 +155,8 @@ namespace DuckGame
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);
                 Level.Add(glassParticle);
-                glassParticle.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                glassParticle.vSpeed = (float)(-(double)bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                glassParticle.hSpeed = (-bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));
+                glassParticle.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(glassParticle);
             }
             SFX.Play("glassHit", 0.6f);
@@ -172,7 +172,7 @@ namespace DuckGame
             {
                 this.breakPoints -= this.damageMultiplier;
                 this.damageMultiplier += 2f;
-                if (breakPoints <= 0.0)
+                if (breakPoints <= 0f)
                     this.Destroy(new DTShot(bullet));
                 --this.vSpeed;
                 this.hSpeed += bullet.travelDirNormalized.x;
@@ -183,14 +183,14 @@ namespace DuckGame
 
         public override bool Hurt(float points)
         {
-            if (carved >= 0.0)
+            if (carved >= 0f)
                 this.carved += points * 0.05f;
             return true;
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             Level.Remove(this);
             SFX.Play("glassHit");
             Vec2 hitAngle = Vec2.Zero;
@@ -200,8 +200,8 @@ namespace DuckGame
             {
                 GlassParticle glassParticle = new GlassParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), hitAngle);
                 Level.Add(glassParticle);
-                glassParticle.hSpeed = (float)(hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                glassParticle.vSpeed = (float)(hitAngle.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                glassParticle.hSpeed = (hitAngle.x * 2f * (Rando.Float(1f) + 0.3f));
+                glassParticle.vSpeed = (hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(glassParticle);
             }
             for (int index = 0; index < 5; ++index)
@@ -221,8 +221,8 @@ namespace DuckGame
             {
                 GlassParticle glassParticle = new GlassParticle(exitPos.x, exitPos.y, bullet.travelDirNormalized);
                 Level.Add(glassParticle);
-                glassParticle.hSpeed = (float)(bullet.travelDirNormalized.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-                glassParticle.vSpeed = (float)(bullet.travelDirNormalized.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+                glassParticle.hSpeed = (bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));
+                glassParticle.vSpeed = (bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(glassParticle);
             }
         }
@@ -236,7 +236,7 @@ namespace DuckGame
             this._containedThing.active = true;
             this._containedThing.material = null;
             this._containedThing.visible = true;
-            this._containedThing.velocity = this.velocity + new Vec2(0.0f, -2f);
+            this._containedThing.velocity = this.velocity + new Vec2(0f, -2f);
             if (this.duck == null)
                 return;
             this.duck.GiveHoldable(this._containedThing as Holdable);
@@ -245,7 +245,7 @@ namespace DuckGame
         public override void HeatUp(Vec2 location)
         {
             this._hitPoints -= 0.01f;
-            if (_hitPoints < 0.0500000007450581)
+            if (_hitPoints < 0.05f)
             {
                 Level.Remove(this);
                 this._destroyed = true;
@@ -256,7 +256,7 @@ namespace DuckGame
                     water.amount = 1f / 1000f;
                     Fluid fluid = new Fluid(this.x + Rando.Int(-6, 6), this.y + Rando.Int(-6, 6), Vec2.Zero, water)
                     {
-                        hSpeed = (float)(index / 16.0 - 0.5) * Rando.Float(0.3f, 0.4f),
+                        hSpeed = (index / 16f - 0.5f) * Rando.Float(0.3f, 0.4f),
                         vSpeed = Rando.Float(-1.5f, 0.5f)
                     };
                     Level.Add(fluid);

@@ -14,8 +14,8 @@ namespace DuckGame
         public GlassParticle(float xpos, float ypos, Vec2 hitAngle, int tint = -1)
           : base(xpos, ypos)
         {
-            this.hSpeed = (float)(-(double)hitAngle.x * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929));
-            this.vSpeed = (float)(-(double)hitAngle.y * 2.0 * ((double)Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+            this.hSpeed = -hitAngle.x * 2f * (Rando.Float(1f) + 0.3f);
+            this.vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
             this._bounceEfficiency = 0.6f;
             this._tint = tint;
         }
@@ -23,7 +23,7 @@ namespace DuckGame
         public override void Update()
         {
             this.alpha -= 0.01f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0f)
                 Level.Remove(this);
             base.Update();
         }

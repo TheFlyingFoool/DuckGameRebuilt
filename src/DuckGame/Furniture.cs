@@ -202,9 +202,9 @@ namespace DuckGame
                         float y = 0.39f * g.scale.x;
                         for (int index = 0; index < 30; ++index)
                         {
-                            float num2 = (float)Math.Sin(Graphics.frame / 10.0 + index * 0.180000007152557);
+                            float num2 = (float)Math.Sin(Graphics.frame / 10f + index * 0.18f);
                             Vec2 vec2 = pos + new Vec2((g.flipH ? -2f : 2f) * g.scale.x, -9f * g.scale.y);
-                            DuckGame.Graphics.Draw(flag.texture, vec2 + new Vec2((float)(index * 2 * (double)y * (g.flipH ? -1.0 : 1.0)), (float)((double)num2 * 1.39999997615814 * (index / 51.0))), new Rectangle?(new Rectangle(index * 2, 0.0f, 3f, 41f)), Color.White, 0.0f, Vec2.Zero, g.flipH ? new Vec2(-y, y) : new Vec2(y), SpriteEffects.None, depth - 2);
+                            DuckGame.Graphics.Draw(flag.texture, vec2 + new Vec2((float)(index * 2 * (double)y * (g.flipH ? -1f : 1f)), (float)((double)num2 * 1.4f * (index / 51f))), new Rectangle?(new Rectangle(index * 2, 0f, 3f, 41f)), Color.White, 0f, Vec2.Zero, g.flipH ? new Vec2(-y, y) : new Vec2(y), SpriteEffects.None, depth - 2);
                         }
                     }
                 }

@@ -47,11 +47,11 @@ namespace DuckGame
             }
             else
             {
-                if ((double)Rando.Float(1f) > 0.850000023841858)
+                if (Rando.Float(1f) > 0.85f)
                     this.lockframes = Rando.Int(2, 12);
-                if ((double)Rando.Float(1f) > 0.200000002980232)
-                    this.amount = Lerp.Float(this.amount, 0.0f, 0.05f);
-                if ((double)Rando.Float(1f) <= 0.980000019073486)
+                if (Rando.Float(1f) > 0.2f)
+                    this.amount = Lerp.Float(this.amount, 0f, 0.05f);
+                if (Rando.Float(1f) <= 0.98f)
                     return;
                 this.amount += 0.3f;
             }

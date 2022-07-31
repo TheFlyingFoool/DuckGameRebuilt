@@ -32,11 +32,11 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 0.100000001490116)
+            if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.1f)
                 this.angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(this.hSpeed, this.vSpeed));
             if (this.isServerForObject)
             {
-                if (this.grounded && (double)Math.Abs(this.vSpeed) + (double)Math.Abs(this.hSpeed) <= 0.200000002980232)
+                if (this.grounded && Math.Abs(this.vSpeed) + Math.Abs(this.hSpeed) <= 0.2f)
                     this.alpha -= 0.2f;
                 if ((double)this.alpha <= 0.0)
                     Level.Remove(this);

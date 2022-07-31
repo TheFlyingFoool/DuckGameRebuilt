@@ -699,32 +699,32 @@ namespace DuckGame
                 num10 = 1;
                 num11 = 0;
             }
-            float x8 = (float)((double)x7 - num6 + 0.16666667163372);
-            float y2 = (float)((double)y1 - num7 + 0.16666667163372);
-            float z2 = (float)((double)z1 - num8 + 0.16666667163372);
-            float x9 = (float)((double)x7 - num9 + 0.333333343267441);
-            float y3 = (float)((double)y1 - num10 + 0.333333343267441);
-            float z3 = (float)((double)z1 - num11 + 0.333333343267441);
-            float x10 = (float)((double)x7 - 1.0 + 0.5);
-            float y4 = (float)((double)y1 - 1.0 + 0.5);
-            float z4 = (float)((double)z1 - 1.0 + 0.5);
+            float x8 = (x7 - num6 + 0.16666667f);
+            float y2 = (y1 - num7 + 0.16666667f);
+            float z2 = (z1 - num8 + 0.16666667f);
+            float x9 = (x7 - num9 + 0.33333334f);
+            float y3 = (y1 - num10 + 0.33333334f);
+            float z3 = (z1 - num11 + 0.33333334f);
+            float x10 = (x7 - 1f + 0.5f);
+            float y4 = (y1 - 1.0f + 0.5f);
+            float z4 = (z1 - 1.0f + 0.5f);
             int num12 = Noise.Mod(x4, 256);
             int num13 = Noise.Mod(x5, 256);
             int index = Noise.Mod(x6, 256);
-            float num14 = (float)(0.600000023841858 - (double)x7 * (double)x7 - (double)y1 * (double)y1 - (double)z1 * (double)z1);
+            float num14 = (0.6f - x7 * x7 - y1 * y1 - z1 * z1);
             float num15;
-            if ((double)num14 < 0.0)
+            if ((double)num14 < 0f)
             {
-                num15 = 0.0f;
+                num15 = 0f;
             }
             else
             {
                 float num16 = num14 * num14;
                 num15 = num16 * num16 * Noise.grad(Noise.perm[num12 + Noise.perm[num13 + Noise.perm[index]]], x7, y1, z1);
             }
-            float num17 = (float)(0.600000023841858 - (double)x8 * (double)x8 - (double)y2 * (double)y2 - (double)z2 * (double)z2);
+            float num17 = (0.6f - x8 * x8 - y2 * y2 - z2 * z2);
             float num18;
-            if ((double)num17 < 0.0)
+            if (num17 < 0f)
             {
                 num18 = 0.0f;
             }
@@ -733,29 +733,29 @@ namespace DuckGame
                 float num19 = num17 * num17;
                 num18 = num19 * num19 * Noise.grad(Noise.perm[num12 + num6 + Noise.perm[num13 + num7 + Noise.perm[index + num8]]], x8, y2, z2);
             }
-            float num20 = (float)(0.600000023841858 - (double)x9 * (double)x9 - (double)y3 * (double)y3 - (double)z3 * (double)z3);
+            float num20 = (0.6f - x9 * x9 - y3 * y3 - z3 * z3);
             float num21;
             if ((double)num20 < 0.0)
             {
-                num21 = 0.0f;
+                num21 = 0f;
             }
             else
             {
                 float num22 = num20 * num20;
                 num21 = num22 * num22 * Noise.grad(Noise.perm[num12 + num9 + Noise.perm[num13 + num10 + Noise.perm[index + num11]]], x9, y3, z3);
             }
-            float num23 = (float)(0.600000023841858 - (double)x10 * (double)x10 - (double)y4 * (double)y4 - (double)z4 * (double)z4);
+            float num23 = (0.6f - x10 * x10 - y4 * y4 - z4 * z4);
             float num24;
-            if ((double)num23 < 0.0)
+            if ((double)num23 < 0f)
             {
-                num24 = 0.0f;
+                num24 = 0f;
             }
             else
             {
                 float num25 = num23 * num23;
                 num24 = num25 * num25 * Noise.grad(Noise.perm[num12 + 1 + Noise.perm[num13 + 1 + Noise.perm[index + 1]]], x10, y4, z4);
             }
-            return (float)(32.0 * ((double)num15 + (double)num18 + (double)num21 + (double)num24));
+            return (32f * (num15 + num18 + num21 + num24));
         }
 
         public static void Seed(int value)
@@ -787,7 +787,7 @@ namespace DuckGame
             int num1 = hash & 7;
             float num2 = num1 < 4 ? x : y;
             float num3 = num1 < 4 ? y : x;
-            return (float)(((num1 & 1) != 0 ? -(double)num2 : (double)num2) + ((num1 & 2) != 0 ? -2.0 * (double)num3 : 2.0 * (double)num3));
+            return (((num1 & 1) != 0 ? -num2 : num2) + ((num1 & 2) != 0 ? -2f * num3 : 2f * num3));
         }
 
         private static float grad(int hash, float x, float y, float z)
@@ -795,7 +795,7 @@ namespace DuckGame
             int num1 = hash & 15;
             float num2 = num1 < 8 ? x : y;
             float num3 = num1 < 4 ? y : (num1 == 12 || num1 == 14 ? x : z);
-            return (float)(((num1 & 1) != 0 ? -(double)num2 : (double)num2) + ((num1 & 2) != 0 ? -(double)num3 : (double)num3));
+            return (((num1 & 1) != 0 ? -num2 : num2) + ((num1 & 2) != 0 ? -num3 : num3));
         }
 
         private static float grad(int hash, float x, float y, float z, float t)
@@ -804,7 +804,7 @@ namespace DuckGame
             float num2 = num1 < 24 ? x : y;
             float num3 = num1 < 16 ? y : z;
             float num4 = num1 < 8 ? z : t;
-            return (float)(((num1 & 1) != 0 ? -(double)num2 : (double)num2) + ((num1 & 2) != 0 ? -(double)num3 : (double)num3) + ((num1 & 4) != 0 ? -(double)num4 : (double)num4));
+            return (((num1 & 1) != 0 ? -num2 : num2) + ((num1 & 2) != 0 ? -num3 : num3) + ((num1 & 4) != 0 ? -num4 : num4));
         }
     }
 }

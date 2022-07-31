@@ -142,10 +142,10 @@ namespace DuckGame
         {
             float num1 = this.alpha * (this.hover ? 1f : 0.6f) * this._alphaMul;
             this._font.alpha = num1;
-            DuckGame.Graphics.DrawRect(this.position, this.position + new Vec2(258f, this._size), Color.White * num1, (Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303), false);
+            DuckGame.Graphics.DrawRect(this.position, this.position + new Vec2(258f, this._size), Color.White * num1, (Depth)(0.8f + (double)num1 * 0.04f), false);
             if (this._save.trophy != TrophyType.Baseline)
             {
-                this._medalRibbon.depth = (Depth)(float)(0.810000002384186 + (double)num1 * 0.0399999991059303);
+                this._medalRibbon.depth = (Depth)(0.81f + num1 * 0.04f);
                 this._medalRibbon.color = new Color(num1, num1, num1);
                 this._medalRibbon.alpha = ArcadeHUD.alphaVal;
                 if (this._save.trophy == TrophyType.Bronze)
@@ -162,18 +162,18 @@ namespace DuckGame
             }
             else if (!this._unlocked)
             {
-                this._medalRibbon.depth = (Depth)(float)(0.810000002384186 + (double)num1 * 0.0399999991059303);
+                this._medalRibbon.depth = (Depth)(0.81f + num1 * 0.04f);
                 this._medalRibbon.color = new Color(num1, num1, num1);
                 this._medalRibbon.frame = 5;
                 DuckGame.Graphics.Draw(_medalRibbon, this.position.x, this.position.y);
             }
             this._thumb.alpha = num1;
-            this._thumb.depth = (Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303);
+            this._thumb.depth = (Depth)(0.8f + num1 * 0.04f);
             this._thumb.frame = this._unlocked ? 1 : 0;
             if (this._unlocked && this._preview != null)
             {
                 this._preview.alpha = num1;
-                this._preview.depth = (Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303);
+                this._preview.depth = (Depth)(0.8f + (double)num1 * 0.04f);
                 DuckGame.Graphics.Draw(_preview, this.x + 2f, this.y + 2f);
             }
             else
@@ -191,11 +191,11 @@ namespace DuckGame
             this._fancyFont.alpha = num1;
             this._fancyFont.xscale = this._fancyFont.yscale = 0.75f;
             this._fancyFont.Draw(str2, this.x + 41f, this.y + 12f, c1, (Depth)1f);
-            if (_dataAlpha <= 0.00999999977648258)
+            if (_dataAlpha <= 0.01f)
                 return;
             float num2 = this._dataAlpha * num1;
-            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: ((Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303)));
-            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 64f), this.position + new Vec2(258f, 64f), Color.White * num2, depth: ((Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303)));
+            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
+            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 64f), this.position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
             this._font.alpha = num2;
             Color color = new Color(245, 165, 36);
             Color c2 = Colors.DGRed;
@@ -210,9 +210,9 @@ namespace DuckGame
             else if (this._save.trophy == TrophyType.Developer)
                 c2 = Colors.Developer;
             this._fancyFont.Draw("|DGBLUE|" + this._challenge.goal, this.x + 6f, this.y + 45f, Color.White, (Depth)1f);
-            this._font.Draw(Chancy.GetChallengeBestString(this._save, this._challenge), this.x + 6f, (float)((double)this.y + 45.0 + 9.0), c2, (Depth)1f);
+            this._font.Draw(Chancy.GetChallengeBestString(this._save, this._challenge), this.x + 6f, (float)(this.y + 45f + 9f), c2, (Depth)1f);
             bool flag1 = false;
-            this._medalNoRibbon.depth = (Depth)(float)(0.800000011920929 + (double)num1 * 0.0399999991059303);
+            this._medalNoRibbon.depth = (Depth)(0.8f + (double)num1 * 0.04f);
             this._medalNoRibbon.alpha = num2;
             this._medalNoRibbon.frame = 2;
             float x = this.x + 6f;

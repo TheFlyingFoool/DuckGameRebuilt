@@ -1215,15 +1215,15 @@ namespace DuckGame
                 {
                     if (pTerm[index] == lowerInvariant[index])
                     {
-                        similarity += 0.100000001490116 * (double)num;
+                        similarity += 0.1f * num;
                         ++num;
                     }
                     else
-                        similarity -= 0.0500000007450581 * (double)num;
+                        similarity -= 0.05f * num;
                 }
                 if (lowerInvariant.Contains(pTerm))
-                    similarity += 0.600000023841858;
-                if (similarity > 0.25)
+                    similarity += 0.6f;
+                if (similarity > 0.25f)
                     pCurrentTerms.Add(new ContextMenu.SearchPair()
                     {
                         relevance = similarity,

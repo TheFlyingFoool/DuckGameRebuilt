@@ -178,7 +178,7 @@ namespace DuckGame
                         };
                 }
                 int totalFansThisGame = Profile.totalFansThisGame;
-                int max = (int)(20.0 + Profile.totalFansThisGame * 0.100000001490116);
+                int max = (int)(20f + Profile.totalFansThisGame * 0.1f);
                 if (max > 36)
                     max = 36;
                 if (max < 0)
@@ -323,12 +323,12 @@ namespace DuckGame
                     if (fanNumList.Count == 1)
                         goto label_14;
                 }
-                while (Math.Min(fanNum.loyalFans, 100) / 100.0 * 0.5 + (double)Rando.Float(0.5f) >= (double)Rando.Float(1f));
+                while (Math.Min(fanNum.loyalFans, 100) / 100f * 0.5f + Rando.Float(0.5f) >= Rando.Float(1f));
                 fanNumList.Remove(fanNum);
             }
         label_14:
             Profile profile = fanNum.profile;
-            if (fanNum.loyalFans > 0 && fanNum.unloyalFans == 0 | (double)Rando.Float(1f) > 0.300000011920929)
+            if (fanNum.loyalFans > 0 && fanNum.unloyalFans == 0 | Rando.Float(1f) > 0.3f)
             {
                 --fanNum.loyalFans;
                 return new FanNum()

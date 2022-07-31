@@ -247,47 +247,47 @@ namespace DuckGame
                     scale = new Vec2(2f, 2f)
                 };
             }
-            if (_core.alpha <= 0.00999999977648258)
+            if (_core.alpha <= 0.01f)
                 return;
             DevConsole.InitializeFont();
             if (DevConsole._tray == null)
                 return;
             DevConsole._tray.alpha = DevConsole._core.alpha;
-            DevConsole._tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280.0 * 2.0) / 2.0) * 2f) * (DevConsole.consoleScale + 1) / 2f;
+            DevConsole._tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280f * 2f) / 2f) * 2f) * (DevConsole.consoleScale + 1) / 2f;
             DevConsole._tray.depth = (Depth)0.75f;
-            int num1 = (int)((double)Layer.core._console.camera.height * dimensions.y / (16.0 * _tray.scale.y)) - 2;
-            int num2 = (int)((double)Layer.core._console.camera.width * dimensions.x / (16.0 * _tray.scale.x)) - 2;
-            Graphics.Draw(DevConsole._tray, 0.0f, 0.0f, new Rectangle(0.0f, 0.0f, 18f, 18f));
-            Graphics.Draw(DevConsole._tray, 0.0f, (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)), new Rectangle(0.0f, DevConsole._tray.height - 18, 18f, 18f));
-            Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)), (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)), new Rectangle(DevConsole._tray.width - 114, DevConsole._tray.height - 18, 114f, 18f));
+            int num1 = (int)(Layer.core._console.camera.height * dimensions.y / (16f * _tray.scale.y)) - 2;
+            int num2 = (int)(Layer.core._console.camera.width * dimensions.x / (16f * _tray.scale.x)) - 2;
+            Graphics.Draw(DevConsole._tray, 0f, 0f, new Rectangle(0f, 0f, 18f, 18f));
+            Graphics.Draw(DevConsole._tray, 0f, (float)(18.0 * _tray.scale.y + num1 * (16f * _tray.scale.y)), new Rectangle(0f, DevConsole._tray.height - 18, 18f, 18f));
+            Graphics.Draw(DevConsole._tray, (float)(18f * _tray.scale.x + (num2 - 6) * (16f * _tray.scale.x)), (float)(18f * _tray.scale.y + num1 * (16f * _tray.scale.y)), new Rectangle(DevConsole._tray.width - 114, DevConsole._tray.height - 18, 114f, 18f));
             for (int index = 0; index < num2; ++index)
             {
-                Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), 0.0f, new Rectangle(16f, 0.0f, 16f, 18f));
+                Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + 16f * _tray.scale.x * index), 0f, new Rectangle(16f, 0f, 16f, 18f));
                 if (index < num2 - 6)
-                    Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)), new Rectangle(16f, DevConsole._tray.height - 18, 16f, 18f));
+                    Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + 16f * _tray.scale.x * index), (18f * _tray.scale.y + num1 * (16f * _tray.scale.y)), new Rectangle(16f, DevConsole._tray.height - 18, 16f, 18f));
             }
-            Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), 0.0f, new Rectangle(DevConsole._tray.width - 18, 0.0f, 18f, 18f));
+            Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + num2 * (16f * _tray.scale.x)), 0f, new Rectangle(DevConsole._tray.width - 18, 0f, 18f, 18f));
             for (int index = 0; index < num1; ++index)
             {
-                Graphics.Draw(DevConsole._tray, 0.0f, (float)(18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index), new Rectangle(0.0f, 18f, 18f, 16f));
-                Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), (float)(18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index), new Rectangle(DevConsole._tray.width - 18, 18f, 18f, 16f));
+                Graphics.Draw(DevConsole._tray, 0f, (18f * _tray.scale.y + 16f * _tray.scale.y * index), new Rectangle(0f, 18f, 18f, 16f));
+                Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + num2 * (16f * _tray.scale.x)), (18f * _tray.scale.y + 16f * _tray.scale.y * index), new Rectangle(DevConsole._tray.width - 18, 18f, 18f, 16f));
             }
-            Graphics.DrawRect(Vec2.Zero, new Vec2((float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x) + _tray.scale.y * 4.0), (num1 + 2) * (16f * DevConsole._tray.scale.y)), Color.Black * 0.8f * DevConsole._core.alpha, (Depth)0.7f);
+            Graphics.DrawRect(Vec2.Zero, new Vec2((18f * _tray.scale.x + num2 * (1f * _tray.scale.x) + _tray.scale.y * 4f), (num1 + 2) * (16f * DevConsole._tray.scale.y)), Color.Black * 0.8f * DevConsole._core.alpha, (Depth)0.7f);
             DevConsole._core.fancyFont.scale = new Vec2(DevConsole._tray.scale.x / 2f);
             DevConsole._core.fancyFont.depth = (Depth)0.98f;
             DevConsole._core.fancyFont.alpha = DevConsole._core.alpha;
-            float num3 = (float)((num1 + 1) * 16 * (double)DevConsole._tray.scale.y + 5.0 * _tray.scale.y);
+            float num3 = ((num1 + 1) * 16 * DevConsole._tray.scale.y + 5f * _tray.scale.y);
             float num4 = (num2 + 2) * (16f * DevConsole._tray.scale.x);
             string version = DG.version;
-            DevConsole._core.fancyFont.Draw(version, new Vec2((float)(82.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)), num3 + 7f * DevConsole._tray.scale.y), new Color(62, 114, 122), (Depth)0.98f);
+            DevConsole._core.fancyFont.Draw(version, new Vec2((float)(82f * _tray.scale.x + (num2 - 6) * (16f * _tray.scale.x)), num3 + 7f * DevConsole._tray.scale.y), new Color(62, 114, 122), (Depth)0.98f);
             DevConsole._core.cursorPosition = Math.Min(Math.Max(DevConsole._core.cursorPosition, 0), DevConsole._core.typing.Length);
             if (DevConsole._raster != null)
             {
                 DevConsole._raster.scale = new Vec2(0.5f);
                 DevConsole._raster.alpha = DevConsole._core.alpha;
-                DevConsole._raster.Draw(DevConsole._core.typing, 4f * DevConsole._tray.scale.x, (float)((double)num3 + _tray.scale.y * 8.0 - _raster.characterHeight * (double)DevConsole._raster.scale.y / 2.0), Color.White, (Depth)0.9f);
-                Vec2 p1 = new Vec2((float)((double)DevConsole._raster.GetWidth(DevConsole._core.typing.Substring(0, DevConsole._core.cursorPosition)) + 4.0 * _tray.scale.x + 1.0), num3 + 6f * DevConsole._tray.scale.y);
-                Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * DevConsole._tray.scale.x), Color.White, depth: ((Depth)1f));
+                DevConsole._raster.Draw(DevConsole._core.typing, 4f * DevConsole._tray.scale.x, (num3 + _tray.scale.y * 8f - _raster.characterHeight * DevConsole._raster.scale.y / 2f), Color.White, (Depth)0.9f);
+                Vec2 p1 = new Vec2((DevConsole._raster.GetWidth(DevConsole._core.typing.Substring(0, DevConsole._core.cursorPosition)) + 4f * _tray.scale.x + 1f), num3 + 6f * DevConsole._tray.scale.y);
+                Graphics.DrawLine(p1, p1 + new Vec2(0f, 4f * DevConsole._tray.scale.x), Color.White, depth: ((Depth)1f));
             }
             else
             {
@@ -295,21 +295,21 @@ namespace DuckGame
                 DevConsole._core.font.alpha = DevConsole._core.alpha;
                 DevConsole._core.font.Draw(DevConsole._core.typing, 4f * DevConsole._tray.scale.x, num3 + 6f * DevConsole._tray.scale.y, Color.White, (Depth)0.9f);
                 Vec2 p1 = new Vec2(DevConsole._core.font.GetWidth(DevConsole._core.typing.Substring(0, DevConsole._core.cursorPosition)) + 4f * DevConsole._tray.scale.x, num3 + 6f * DevConsole._tray.scale.y);
-                Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * DevConsole._tray.scale.x), Color.White, 2f, (Depth)1f);
+                Graphics.DrawLine(p1, p1 + new Vec2(0f, 4f * DevConsole._tray.scale.x), Color.White, 2f, (Depth)1f);
             }
             int index1 = DevConsole._core.lines.Count - 1 - DevConsole._core.viewOffset;
             float num5 = 0.0f;
             DevConsole._core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4.0), 1.0));
             float num6 = DevConsole._core.font.scale.x / 2f;
             float num7 = 18f * num6;
-            float num8 = (float)(20.0 * (_core.font.scale.x * 2.0));
+            float num8 = (20f * (_core.font.scale.x * 2f));
             if (DevConsole._raster != null)
             {
                 num7 = (DevConsole._raster.characterHeight - 2) * DevConsole._raster.scale.y;
                 num5 = num7;
                 num8 = DevConsole._raster.GetWidth("0000  ");
             }
-            for (int index2 = 0; index2 < ((double)num3 - 2.0 * _tray.scale.y) / (double)num7 - 1.0 && index1 >= 0; ++index2)
+            for (int index2 = 0; index2 < (num3 - 2f * _tray.scale.y) / num7 - 1f && index1 >= 0; ++index2)
             {
                 DCLine dcLine = DevConsole._core.lines.ElementAt<DCLine>(index1);
                 string text = index1.ToString();
@@ -317,20 +317,20 @@ namespace DuckGame
                     text = "0" + text;
                 if (DevConsole._raster != null)
                 {
-                    DevConsole._raster.maxWidth = (int)((double)num4 - 35.0 * _tray.scale.x);
+                    DevConsole._raster.maxWidth = (int)((double)num4 - 35f * _tray.scale.x);
                     DevConsole._raster.singleLine = true;
                     DevConsole._raster.enforceWidthByWord = false;
-                    DevConsole._raster.Draw(text, 4f * DevConsole._tray.scale.x, (float)((double)num3 - (double)num5 + 2.0), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
-                    DevConsole._raster.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (float)((double)num3 - (double)num5 + 2.0), dcLine.color, (Depth)0.9f);
+                    DevConsole._raster.Draw(text, 4f * DevConsole._tray.scale.x, (num3 - num5 + 2f), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
+                    DevConsole._raster.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (num3 - num5 + 2f), dcLine.color, (Depth)0.9f);
                     num5 += num7;
                 }
                 else
                 {
-                    DevConsole._core.font.maxWidth = (int)((double)num4 - 35.0 * _tray.scale.x);
+                    DevConsole._core.font.maxWidth = (int)(num4 - 35f * _tray.scale.x);
                     DevConsole._core.font.singleLine = true;
                     DevConsole._core.font.enforceWidthByWord = false;
-                    DevConsole._core.font.Draw(text, 4f * DevConsole._tray.scale.x, (float)((double)num3 - 18.0 * (double)num6 - (double)num5 + 2.0), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
-                    DevConsole._core.font.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (float)((double)num3 - 18.0 * (double)num6 - (double)num5 + 2.0), dcLine.color * 0.8f, (Depth)0.9f);
+                    DevConsole._core.font.Draw(text, 4f * DevConsole._tray.scale.x, (num3 - 18f * num6 - num5 + 2f), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
+                    DevConsole._core.font.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (num3 - 18f * num6 - num5 + 2f), dcLine.color * 0.8f, (Depth)0.9f);
                     num5 += 18f * num6;
                 }
                 --index1;
@@ -1913,14 +1913,14 @@ namespace DuckGame
             });
             DevConsole.AddCommand(new CMD("downpour", cmd =>
            {
-               float num1 = (float)(Level.current.bottomRight.x - (double)Level.current.topLeft.x + 128.0);
+               float num1 = (Level.current.bottomRight.x - Level.current.topLeft.x + 128f);
                int num2 = 10;
                for (int index1 = 0; index1 < 10; ++index1)
                {
                    for (int index2 = 0; index2 < num2; ++index2)
                    {
                        PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
-                       randomItem.position = Level.current.topLeft + new Vec2((float)((double)num1 / num2 * index2 + (double)Rando.Float(sbyte.MinValue, 128f) - 64.0), Level.current.topLeft.y - 2000f - 512 * index1 + Rando.Float(-256f, 256f));
+                       randomItem.position = Level.current.topLeft + new Vec2((num1 / num2 * index2 + Rando.Float(sbyte.MinValue, 128f) - 64f), Level.current.topLeft.y - 2000f - 512 * index1 + Rando.Float(-256f, 256f));
                        Level.Add(randomItem);
                    }
                }

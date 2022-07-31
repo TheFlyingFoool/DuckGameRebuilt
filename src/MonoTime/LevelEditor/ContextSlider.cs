@@ -362,7 +362,7 @@ namespace DuckGame
                 string text2 = this._text + ": " + text1;
                 Color color = Color.White;
                 if (this._field.value is List<TypeProbPair>)
-                    color = (double)num1 != 0.0 ? ((double)num1 >= 0.300000011920929 ? ((double)num1 >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                    color = (double)num1 != 0.0 ? ((double)num1 >= 0.3f ? ((double)num1 >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                 float num3 = 0.1f;
                 if (Editor.inputMode == EditorInput.Gamepad)
                     num3 = 0.05f;
@@ -395,7 +395,7 @@ namespace DuckGame
                     Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), this.depth);
                 Color color = Color.White;
                 if (this._field.value is List<TypeProbPair>)
-                    color = (double)num1 != 0.0 ? ((double)num1 >= 0.300000011920929 ? ((double)num1 >= 0.699999988079071 ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                    color = num1 != 0.0 ? (num1 >= 0.3f ? (num1 >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                 Graphics.DrawString(this._text, this.position + new Vec2(2f, 5f), color, (Depth)0.82f);
                 Graphics.DrawString(text1, this.position + new Vec2(this.itemSize.x - 4f - Graphics.GetStringWidth(text1), 5f), Color.White, (Depth)0.82f);
             }

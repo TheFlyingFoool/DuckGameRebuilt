@@ -97,7 +97,7 @@ namespace DuckGame
             if (this._flashTransition)
             {
                 this._darken -= 0.2f;
-                if (_darken < 0.200000002980232)
+                if (_darken < 0.2f)
                     this._flashTransition = false;
             }
             if (this._flashTransition)

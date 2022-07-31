@@ -16,10 +16,10 @@ namespace DuckGame
         public Ember(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.vSpeed = (float)-(0.200000002980232 + (double)Rando.Float(0.7f));
+            this.vSpeed = -(0.2f + Rando.Float(0.7f));
             this.hSpeed = Rando.Float(0.4f) - 0.2f;
-            this._col = (double)Rando.Float(1f) >= 0.400000005960464 ? ((double)Rando.Float(1f) >= 0.400000005960464 ? Color.Gray : Color.Orange) : Color.Yellow;
-            if ((double)Rando.Float(1f) < 0.200000002980232)
+            this._col = Rando.Float(1f) >= 0.4f ? (Rando.Float(1f) >= 0.4f ? Color.Gray : Color.Orange) : Color.Yellow;
+            if (Rando.Float(1f) < 0.2f)
                 this._initialLife += Rando.Float(10f);
             this.alpha = 0.7f;
         }
@@ -31,10 +31,10 @@ namespace DuckGame
             this.position.x += this.hSpeed;
             this.position.y += this.vSpeed;
             this._initialLife -= 0.1f;
-            if (_initialLife >= 0.0)
+            if (_initialLife >= 0f)
                 return;
             this.alpha -= 0.025f;
-            if ((double)this.alpha >= 0.0)
+            if ((double)this.alpha >= 0f)
                 return;
             Level.Remove(this);
         }

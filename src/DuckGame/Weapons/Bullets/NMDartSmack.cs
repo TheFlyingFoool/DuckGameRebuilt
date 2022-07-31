@@ -35,7 +35,7 @@ namespace DuckGame
                 return;
             if (duck.holdObject is Grenade)
                 duck.forceFire = true;
-            if ((double)Rando.Float(1f) > 0.600000023841858)
+            if (Rando.Float(1f) > 0.6f)
                 duck.Swear();
             duck.Disarm(null);
         }

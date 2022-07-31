@@ -257,7 +257,7 @@ namespace DuckGame
                         return "";
                 }
             }
-            if (_recentLevels.Count > stringList1.Count * 0.800000011920929)
+            if (_recentLevels.Count > stringList1.Count * 0.8f)
                 Deathmatch._recentLevels.Clear();
             List<string> stringList2 = new List<string>();
             stringList2.AddRange(stringList1);
@@ -288,12 +288,12 @@ namespace DuckGame
                         stringList1.Remove(str);
                         str = "";
                     }
-                    else if (!TeamSelect2.eightPlayersActive && Deathmatch._eightPlayerNonRestrictedLevels.Contains(str) && (double)Rando.Float(1f) > 0.200000002980232)
+                    else if (!TeamSelect2.eightPlayersActive && Deathmatch._eightPlayerNonRestrictedLevels.Contains(str) && Rando.Float(1f) > 0.2f)
                     {
                         stringList1.Remove(str);
                         str = "";
                     }
-                    else if (!Deathmatch._rareLevels.Contains(str) || (double)Rando.Float(1f) > 0.75)
+                    else if (!Deathmatch._rareLevels.Contains(str) || Rando.Float(1f) > 0.75f)
                     {
                         if (Deathmatch._recentLevels.Contains(str))
                         {
@@ -302,7 +302,7 @@ namespace DuckGame
                                 stringList1.Remove(str);
                                 str = "";
                             }
-                            else if ((double)Rando.Float(1f) < 0.949999988079071)
+                            else if (Rando.Float(1f) < 0.95f)
                             {
                                 stringList1.Remove(str);
                                 str = "";
@@ -335,7 +335,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)Graphics.fade > 0.899999976158142 && Input.Pressed("START") && !NetworkDebugger.enabled)
+            if ((double)Graphics.fade > 0.9f && Input.Pressed("START") && !NetworkDebugger.enabled)
             {
                 this._pauseGroup.Open();
                 this._pauseMenu.Open();
@@ -357,7 +357,7 @@ namespace DuckGame
                 if (this._quit.value)
                 {
                     Graphics.fade -= 0.04f;
-                    if ((double)Graphics.fade >= 0.00999999977648258)
+                    if ((double)Graphics.fade >= 0.01f)
                         return;
                     Level.current = new TitleScreen();
                 }
@@ -473,7 +473,7 @@ namespace DuckGame
                         }
                         this._addedPoints = true;
                     }
-                    if (_deadTimer < 0.100000001490116 && !Deathmatch._endedHighlights)
+                    if (_deadTimer < 0.1f && !Deathmatch._endedHighlights)
                     {
                         Deathmatch._endedHighlights = true;
                         Highlights.FinishRound();
@@ -500,22 +500,22 @@ namespace DuckGame
                                 foreach (Profile activeProfile in team.activeProfiles)
                                     Party.AddRandomPerk(activeProfile);
                             }
-                            else if (team.score < 2 && (double)Rando.Float(1f) > 0.300000011920929)
+                            else if (team.score < 2 && Rando.Float(1f) > 0.3f)
                             {
                                 foreach (Profile activeProfile in team.activeProfiles)
                                     Party.AddRandomPerk(activeProfile);
                             }
-                            else if (team.score < 5 && (double)Rando.Float(1f) > 0.600000023841858)
+                            else if (team.score < 5 && Rando.Float(1f) > 0.6f)
                             {
                                 foreach (Profile activeProfile in team.activeProfiles)
                                     Party.AddRandomPerk(activeProfile);
                             }
-                            else if (team.score < 7 && (double)Rando.Float(1f) > 0.850000023841858)
+                            else if (team.score < 7 && Rando.Float(1f) > 0.85f)
                             {
                                 foreach (Profile activeProfile in team.activeProfiles)
                                     Party.AddRandomPerk(activeProfile);
                             }
-                            else if (team.score < num && (double)Rando.Float(1f) > 0.899999976158142)
+                            else if (team.score < num && Rando.Float(1f) > 0.9f)
                             {
                                 foreach (Profile activeProfile in team.activeProfiles)
                                     Party.AddRandomPerk(activeProfile);

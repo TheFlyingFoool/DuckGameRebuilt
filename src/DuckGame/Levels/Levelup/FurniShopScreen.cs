@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override bool visible
         {
-            get => (double)this.alpha >= 0.00999999977648258 && base.visible;
+            get => this.alpha >= 0.01f && base.visible;
             set => base.visible = value;
         }
 
@@ -127,14 +127,14 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.alpha < 0.00999999977648258)
+            if ((double)this.alpha < 0.01f)
                 return;
             Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, Layer.HUD.height - 51f), new Color(20, 20, 20) * this.alpha * 0.7f, -0.9f);
             Vec2 p1 = new Vec2(20f, 8f);
             Vec2 vec2 = new Vec2(226f, 11f);
             Graphics.DrawRect(p1, p1 + vec2, Color.Black, (Depth)0.96f);
             string text = "what a name";
-            Graphics.DrawString(text, p1 + new Vec2((float)((vec2.x - 27.0) / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), 2f), new Color(163, 206, 39) * this.alpha, (Depth)0.97f);
+            Graphics.DrawString(text, p1 + new Vec2(((vec2.x - 27f) / 2f - Graphics.GetStringWidth(text) / 2f), 2f), new Color(163, 206, 39) * this.alpha, (Depth)0.97f);
             this._tail.depth = (Depth)0.5f;
             this._tail.alpha = this.alpha;
             this._tail.flipH = false;

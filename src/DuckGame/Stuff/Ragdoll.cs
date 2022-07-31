@@ -493,7 +493,7 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = body2.position - body1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 9.99999974737875E-05)
+            if (num2 < 0.0001f)
                 num2 = 0.0001f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(body1.hSpeed, body1.vSpeed);
@@ -535,7 +535,7 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = b2.position - b1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 9.99999974737875E-05)
+            if ((double)num2 < 0.0001f)
                 num2 = 0.0001f;
             if ((double)num2 < (double)num1)
                 return 0.0f;
@@ -587,7 +587,7 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = stuck - b1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 9.99999974737875E-05)
+            if ((double)num2 < 0.0001f)
                 num2 = 0.0001f;
             if ((double)num2 < (double)num1)
                 return 0.0f;

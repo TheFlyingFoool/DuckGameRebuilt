@@ -32,9 +32,9 @@ namespace DuckGame
                 alpha = 0.9f,
                 depth = -0.8f
             };
-            this._selectBeam.center = new Vec2(this._selectBeam.w / 2, 0.0f);
+            this._selectBeam.center = new Vec2(this._selectBeam.w / 2, 0f);
             this.depth = (Depth)0.5f;
-            this._collisionOffset = new Vec2((float)-(this._selectBeam.w / 2 * 0.800000011920929), 0.0f);
+            this._collisionOffset = new Vec2((float)-(this._selectBeam.w / 2 * 0.8f), 0f);
             this._collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
             this.center = new Vec2(this._selectBeam.w / 2);
             this.layer = Layer.Background;
@@ -45,7 +45,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._selectBeam.color = new Color(0.3f, (float)(0.300000011920929 + (double)this._wave2.normalized * 0.200000002980232), (float)(0.5 + (double)this._wave.normalized * 0.300000011920929)) * (1f + this._flash);
+            this._selectBeam.color = new Color(0.3f, (float)(0.3f + (double)this._wave2.normalized * 0.2f), (float)(0.5 + (double)this._wave.normalized * 0.3f)) * (1f + this._flash);
             this._flash = Maths.CountDown(this._flash, 0.1f);
             this._spawnWait -= 0.025f;
             if (_spawnWait < 0.0)

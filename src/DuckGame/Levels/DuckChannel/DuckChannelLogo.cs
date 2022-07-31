@@ -77,7 +77,7 @@ namespace DuckGame
                     this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 0.0f, 0.1f, 1.1f);
                     this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 0.0f, 0.1f, 1.1f);
                     this._fiveLerp = Lerp.FloatSmooth(this._fiveLerp, 0.0f, 0.1f, 1.1f);
-                    if (_duckLerp < 0.00999999977648258)
+                    if (_duckLerp < 0.01f)
                         this._playSwipe = false;
                 }
                 for (int index = 0; index < this._swipeLines.Count; ++index)
@@ -90,9 +90,9 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 vec2_1 = new Vec2(10f, 12f);
-            Vec2 vec2_2 = new Vec2((float)(-200.0 * (1.0 - _duckLerp)), 0.0f);
-            Vec2 vec2_3 = new Vec2((float)(200.0 * (1.0 - _channelLerp)), 0.0f);
-            Vec2 vec2_4 = new Vec2((float)(300.0 * (1.0 - _channelLerp)), 0.0f);
+            Vec2 vec2_2 = new Vec2((-200f * (1f - _duckLerp)), 0f);
+            Vec2 vec2_3 = new Vec2((200f * (1f - _channelLerp)), 0f);
+            Vec2 vec2_4 = new Vec2((300f * (1f - _channelLerp)), 0f);
             this._duck.depth = (Depth)0.85f;
             Graphics.Draw(this._duck, vec2_1.x + 80f + vec2_2.x, vec2_1.y + 60f + vec2_2.y);
             this._channel.depth = (Depth)0.86f;

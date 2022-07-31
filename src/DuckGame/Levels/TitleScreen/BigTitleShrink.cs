@@ -40,14 +40,14 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._size += (float)((0.980000019073486 - _size) * 0.0799999982118607);
+            this._size += (0.98f - _size) * 0.078f;
             this.xscale = this._size;
             this.yscale = this._size;
-            if ((double)this.xscale < 1.10000002384186)
+            if (this.xscale < 1.1f)
                 this.alpha *= 0.8f;
-            if ((double)this.xscale < 1.04999995231628 && this._black)
+            if (this.xscale < 1.05f && this._black)
                 Level.Remove(this);
-            if ((double)this.alpha > 0.0)
+            if ((double)this.alpha > 0f)
                 return;
             Level.Remove(this);
         }

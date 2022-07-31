@@ -47,7 +47,7 @@ namespace DuckGame
         public override void Update()
         {
             this.graphic.flipH = this.offDir <= 0;
-            if ((double)this.alpha > 0.100000001490116)
+            if (this.alpha > 0.1f)
             {
                 foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(this.topLeft, this.bottomRight))
                 {

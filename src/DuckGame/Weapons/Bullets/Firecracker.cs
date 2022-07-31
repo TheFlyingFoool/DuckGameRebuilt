@@ -98,8 +98,8 @@ namespace DuckGame
             if (Network.isActive)
                 Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
             Level.Add(SmallSmoke.New(this.x, this.y));
-            if ((double)Rando.Float(1f) < 0.100000001490116)
-                Level.Add(SmallFire.New(this.x, this.y, 0.0f, 0.0f, firedFrom: this));
+            if ((double)Rando.Float(1f) < 0.1f)
+                Level.Add(SmallFire.New(this.x, this.y, 0f, 0f, firedFrom: this));
             Level.Remove(this);
         }
     }

@@ -80,7 +80,7 @@ namespace DuckGame
                 this._aimAngle = Lerp.Float(this._aimAngle, this._rising ? 0.4f : 0.0f, 0.05f);
                 this._aimWait = 0;
             }
-            if (this._rising && _aimAngle > 0.344999998807907)
+            if (this._rising && _aimAngle > 0.345f)
                 this.OnReleaseAction();
             if (this.held)
                 this.center = new Vec2(11f, 2f);
@@ -93,14 +93,14 @@ namespace DuckGame
                     if (this._loadState == 3)
                         this.loaded = true;
                     this._loadState = -1;
-                    this._angleOffset = 0.0f;
+                    this._angleOffset = 0f;
                     this._posOffset = Vec2.Zero;
                     this.handOffset = Vec2.Zero;
-                    this._aimAngle = 0.0f;
-                    this._angleOffset2 = 0.0f;
+                    this._aimAngle = 0f;
+                    this._angleOffset2 = 0f;
                 }
-                this._posOffset = this._loadState <= 0 || this._loadState >= 4 ? Lerp.Vec2(this._posOffset, new Vec2(0.0f, 0.0f), 0.24f) : Lerp.Vec2(this._posOffset, new Vec2(2f, 2f), 0.2f);
-                this._angleOffset2 = this._loadState < 2 || this._loadState >= 3 ? Lerp.Float(this._angleOffset2, 0.0f, 0.02f) : Lerp.Float(this._angleOffset2, -0.17f, 0.04f);
+                this._posOffset = this._loadState <= 0 || this._loadState >= 4 ? Lerp.Vec2(this._posOffset, new Vec2(0f, 0f), 0.24f) : Lerp.Vec2(this._posOffset, new Vec2(2f, 2f), 0.2f);
+                this._angleOffset2 = this._loadState < 2 || this._loadState >= 3 ? Lerp.Float(this._angleOffset2, 0f, 0.02f) : Lerp.Float(this._angleOffset2, -0.17f, 0.04f);
                 if (this._loadState == 0)
                 {
                     if (Network.isActive)
@@ -114,7 +114,7 @@ namespace DuckGame
                 }
                 else if (this._loadState == 1)
                 {
-                    if (_angleOffset < 0.159999996423721)
+                    if (_angleOffset < 0.16f)
                         this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.11f);
                     else
                         ++this._loadState;
@@ -142,7 +142,7 @@ namespace DuckGame
                     if (handOffset.x <= 0.0)
                     {
                         ++this._loadState;
-                        this.handOffset.x = 0.0f;
+                        this.handOffset.x = 0f;
                         if (Network.isActive)
                         {
                             if (this.isServerForObject)
@@ -154,9 +154,9 @@ namespace DuckGame
                 }
                 else if (this._loadState == 4)
                 {
-                    if (_angleOffset > 0.0299999993294477)
+                    if (_angleOffset > 0.03f)
                     {
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.09f);
+                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.09f);
                     }
                     else
                     {

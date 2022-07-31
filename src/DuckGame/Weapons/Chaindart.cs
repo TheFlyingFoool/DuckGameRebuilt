@@ -133,9 +133,9 @@ namespace DuckGame
             if (!this._spinning)
                 return;
             this._spinning = false;
-            this._spinUp.Volume = 0.0f;
+            this._spinUp.Volume = 0f;
             this._spinUp.Stop();
-            if (_spin <= 0.899999976158142)
+            if (_spin <= 0.9f)
                 return;
             this._spinDown.Volume = 1f;
             this._spinDown.Play();

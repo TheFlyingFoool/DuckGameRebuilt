@@ -1327,14 +1327,14 @@ namespace DuckGame
                                     (this._placementMenu as EditorGroupMenu).UpdateGrayout();
                                     this._onlineSettingChanged = false;
                                 }
-                                DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, this._quitting ? 0.0f : 1f, 0.02f);
-                                if (this._quitting && (double)DuckGame.Graphics.fade < 0.00999999977648258)
+                                DuckGame.Graphics.fade = Lerp.Float(Graphics.fade, this._quitting ? 0f : 1f, 0.02f);
+                                if (this._quitting && DuckGame.Graphics.fade < 0.01f)
                                 {
                                     this._quitting = false;
                                     Editor.active = false;
                                     Level.current = new TitleScreen();
                                 }
-                                if ((double)DuckGame.Graphics.fade < 0.949999988079071)
+                                if ((double)DuckGame.Graphics.fade < 0.95f)
                                     return;
                                 Layer placementLayer = this.GetLayerOrOverride(this._placementType);
                                 switch (Editor.inputMode)
@@ -1353,7 +1353,7 @@ namespace DuckGame
                                 }
                                 if (this._cursorMode == CursorMode.Normal && (Keyboard.Down(Keys.RightShift) || Keyboard.Down(Keys.LeftShift)))
                                 {
-                                    Vec2 vec2 = new Vec2(0.0f, 0.0f);
+                                    Vec2 vec2 = new Vec2(0f, 0f);
                                     if (Keyboard.Pressed(Keys.Up))
                                         vec2.y -= 16f;
                                     if (Keyboard.Pressed(Keys.Down))
@@ -1392,12 +1392,12 @@ namespace DuckGame
                                     Editor._input = InputProfile.active;
                                 if (this._prevEditTilePos != this._editTilePos)
                                 {
-                                    if (_editTilePos.x < 0.0)
-                                        this._editTilePos.x = 0.0f;
+                                    if (_editTilePos.x < 0f)
+                                        this._editTilePos.x = 0f;
                                     if (_editTilePos.x >= (double)Editor._procTilesWide)
                                         this._editTilePos.x = Editor._procTilesWide - 1;
-                                    if (_editTilePos.y < 0.0)
-                                        this._editTilePos.y = 0.0f;
+                                    if (_editTilePos.y < 0f)
+                                        this._editTilePos.y = 0f;
                                     if (_editTilePos.y >= (double)Editor._procTilesHigh)
                                         this._editTilePos.y = Editor._procTilesHigh - 1;
                                     if (this._currentMapNode != null)
@@ -1455,7 +1455,7 @@ namespace DuckGame
                                     while (true)
                                     {
                                         this._currentMapNode = LevelGenerator.MakeLevel(tile, this._pathEast && this._pathWest, this._procSeed, type, Editor._procTilesWide, Editor._procTilesHigh, this._loadPosX, this._loadPosY);
-                                        this._procDrawOffset = new Vec2(0.0f, 0.0f);
+                                        this._procDrawOffset = new Vec2(0f, 0f);
                                         this._procContext = new GameContext();
                                         this._procContext.ApplyStates();
                                         level = new Level

@@ -90,12 +90,12 @@ namespace DuckGame
                 RumbleManager.AddRumbleEvent(this.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
                 for (int index = 0; index < 12; ++index)
                 {
-                    float num2 = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                    float num2 = (index * 30f - 10f) + Rando.Float(20f);
                     ATShrapnel type = new ATShrapnel
                     {
                         range = 25f + Rando.Float(10f)
                     };
-                    Level.Add(new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num2)) * 8.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num2)) * 8.0), type, num2)
+                    Level.Add(new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num2)) * 8f), this.y - (float)(Math.Sin(Maths.DegToRad(num2)) * 8f), type, num2)
                     {
                         firedFrom = this
                     });
@@ -123,7 +123,7 @@ namespace DuckGame
             {
                 if (index < this._numTrail)
                 {
-                    float num = (float)((1.0 - index / 16.0) * _fadeVal * 0.800000011920929);
+                    float num = ((1f - index / 16f) * _fadeVal * 0.8f);
                     Graphics.DrawLine(new Vec2(this._trail[index - 1].x, this._trail[index - 1].y), new Vec2(this._trail[index].x, this._trail[index].y), Color.White * num);
                 }
             }

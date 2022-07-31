@@ -111,7 +111,7 @@ namespace DuckGame
             this.overlayLayer.view = Layer.Game.view;
             this.overlayLayer.camera = Layer.Game.camera;
             this.boardLightingLayer.colorAdd = new Vec3(1f - RockWeather.lightOpacity);
-            this._lighting.frame = RockWeather.lightOpacity <= 0.00999999977648258 ? 0 : 1;
+            this._lighting.frame = RockWeather.lightOpacity <= 0.01f ? 0 : 1;
             this._board.depth = this.depth;
             DuckGame.Graphics.Draw(this._board, this.x, this.y - 12f);
             DuckGame.Graphics.Draw(this._boardBottom, this.x, this.y + 58f);

@@ -31,16 +31,16 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 0.100000001490116)
+            if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.1f)
                 this.angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(this.hSpeed, this.vSpeed));
-            if (this.grounded && (double)Math.Abs(this.vSpeed) + (double)Math.Abs(this.hSpeed) <= 0.0)
+            if (this.grounded && Math.Abs(this.vSpeed) + Math.Abs(this.hSpeed) <= 0f)
                 this.alpha -= 0.2f;
-            if ((double)this.alpha <= 0.0)
+            if (this.alpha <= 0f)
                 Level.Remove(this);
             if (!this.onFire && Level.CheckRect<SmallFire>(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), this) != null)
             {
                 this.onFire = true;
-                Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
+                Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
             }
             base.Update();
         }

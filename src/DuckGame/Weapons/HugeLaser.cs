@@ -243,10 +243,10 @@ namespace DuckGame
             if ((double)num1 <= 0.0)
                 return;
             Vec2 p1 = this.Offset(this.barrelOffset);
-            Vec2 p2 = this.Offset(this.barrelOffset + new Vec2(num1 * 1200f, 0.0f));
-            Graphics.DrawLine(p1, p2, new Color((float)((double)this._tip.alpha * 0.699999988079071 + 0.300000011920929), this._tip.alpha, this._tip.alpha) * (0.3f + num5), (float)(1.0 + (double)num2 * 12.0));
-            Graphics.DrawLine(p1, p2, Color.Red * (0.2f + num5), (float)(1.0 + (double)num3 * 28.0));
-            Graphics.DrawLine(p1, p2, Color.Red * (0.1f + num5), (float)(0.200000002980232 + (double)num4 * 40.0));
+            Vec2 p2 = this.Offset(this.barrelOffset + new Vec2(num1 * 1200f, 0f));
+            Graphics.DrawLine(p1, p2, new Color((this._tip.alpha * 0.7f + 0.3f), this._tip.alpha, this._tip.alpha) * (0.3f + num5), (1f + num2 * 12f));
+            Graphics.DrawLine(p1, p2, Color.Red * (0.2f + num5), (1f + num3 * 28f));
+            Graphics.DrawLine(p1, p2, Color.Red * (0.1f + num5), (0.2f + num4 * 40f));
         }
 
         public override void OnPressAction()
@@ -261,9 +261,9 @@ namespace DuckGame
                 this._chargeSound.Volume = 1f;
                 this._chargeSound.Play();
                 this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0.0f;
+                this._unchargeSound.Volume = 0f;
                 this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0.0f;
+                this._unchargeSoundShort.Volume = 0f;
             }
             else
             {

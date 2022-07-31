@@ -59,7 +59,7 @@ namespace DuckGame
             if (this._thrown && this.owner == null)
             {
                 this._thrown = false;
-                if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 0.400000005960464)
+                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.4f)
                     this.angleDegrees = 180f;
             }
             if (!this._pin && this.owner == null && !this._fade)
@@ -113,7 +113,7 @@ namespace DuckGame
                         else
                             duck.hSpeed += 1.5f;
                         duck.vSpeed -= 2.5f;
-                        this.hSpeed = (float)(-(double)duck.hSpeed * 0.400000005960464);
+                        this.hSpeed = -duck.hSpeed * 0.4f;
                         this.friction = 0.05f;
                         this.weight = 0.01f;
                         duck.crippleTimer = 1.5f;

@@ -131,9 +131,9 @@ namespace DuckGame
                     Vec2 vec2 = this.Offset(this.barrelOffset);
                     for (int index = 0; index < 6; ++index)
                     {
-                        CampingSmoke campingSmoke = new CampingSmoke((float)(barrelPosition.x - 8.0 + (double)Rando.Float(8f) + offDir * 8.0), this.barrelPosition.y - 8f + Rando.Float(8f))
+                        CampingSmoke campingSmoke = new CampingSmoke((barrelPosition.x - 8f + Rando.Float(8f) + offDir * 8f), this.barrelPosition.y - 8f + Rando.Float(8f))
                         {
-                            depth = (Depth)(float)(0.899999976158142 + index * (1.0 / 1000.0))
+                            depth = (Depth)(float)(0.9f + index * (1f / 1000f))
                         };
                         if (index < 3)
                             campingSmoke.move -= this.barrelVector * Rando.Float(0.05f);

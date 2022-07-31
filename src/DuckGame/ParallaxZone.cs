@@ -39,15 +39,15 @@ namespace DuckGame
 
         public void RenderSprites(Vec2 position)
         {
-            float num = (float)(0.400000005960464 + _ypos * 0.00999999977648258);
+            float num = (0.4f + _ypos * 0.01f);
             foreach (Sprite sprite1 in this._sprites)
             {
                 Sprite sprite2 = sprite1;
                 sprite2.position += position;
                 sprite1.position.x += this.scroll;
-                if (sprite1.position.x < -200.0 * wrapMul)
+                if (sprite1.position.x < -200f * wrapMul)
                     sprite1.position.x += 500f * this.wrapMul;
-                if (sprite1.position.x > 450.0 * wrapMul)
+                if (sprite1.position.x > 450f * wrapMul)
                     sprite1.position.x -= 500f * this.wrapMul;
                 sprite1.depth = (Depth)num;
                 Graphics.Draw(sprite1, sprite1.x, sprite1.y);
@@ -61,9 +61,9 @@ namespace DuckGame
                 Thing thing2 = thing1;
                 thing2.position += position;
                 thing1.position.x += this.scroll;
-                if (thing1.position.x < -200.0)
+                if (thing1.position.x < -200f)
                     thing1.position.x += 500f;
-                if (thing1.position.x > 450.0)
+                if (thing1.position.x > 450f)
                     thing1.position.x -= 500f;
                 thing1.depth = (Depth)num;
                 thing1.Update();

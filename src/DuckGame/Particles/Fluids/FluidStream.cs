@@ -67,12 +67,12 @@ namespace DuckGame
             float to = Maths.Clamp(dat.amount * 200f, 0.1f, 2f);
             if ((double)to > _maxSpeedMul)
                 this._maxSpeedMul = Lerp.Float(this._maxSpeedMul, to, 0.1f);
-            this._lastFluid = new Fluid(this.x, this.y, (this._sprayAngle * ((float)(2.0 + Math.Sin(_fluctuate) * 0.5) * this._speedMul) + new Vec2(this.hSpeed * 0.0f, this.vSpeed * 0.0f)) * this.streamSpeedMultiplier, dat, this._lastFluid);
+            this._lastFluid = new Fluid(this.x, this.y, (this._sprayAngle * ((2f + (float)Math.Sin(_fluctuate) * 0.5f) * this._speedMul) + new Vec2(this.hSpeed * 0f, this.vSpeed * 0f)) * this.streamSpeedMultiplier, dat, this._lastFluid);
             Level.Add(_lastFluid);
             this._framesSinceFluid = 0;
-            if (dat.flammable > 0.5 && this.onFire && this._framesSinceFire > 12 && (double)Rando.Float(1f) < 0.119999997317791 * dat.flammable)
+            if (dat.flammable > 0.5f && this.onFire && this._framesSinceFire > 12 && Rando.Float(1f) < 0.12f * dat.flammable)
             {
-                SmallFire smallFire = SmallFire.New(this._lastFluid.x, this._lastFluid.y, 0.0f, 0.0f);
+                SmallFire smallFire = SmallFire.New(this._lastFluid.x, this._lastFluid.y, 0f, 0f);
                 this._lastFluid.fire = smallFire;
                 Level.Add(smallFire);
                 this._framesSinceFire = 0;

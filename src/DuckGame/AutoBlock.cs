@@ -300,7 +300,7 @@ namespace DuckGame
             {
                 FluidData data = f.data;
                 data.amount = num2;
-                Fluid fluid = new Fluid(f.left + 8f + index * 8, (float)((double)f.top - 4.0 + Math.Sin(index * 0.699999988079071) * 2.0), new Vec2(0.0f, 1f), data)
+                Fluid fluid = new Fluid(f.left + 8f + index * 8, (f.top - 4f + (float)Math.Sin(index * 0.7f) * 2f), new Vec2(0f, 1f), data)
                 {
                     vSpeed = -2f
                 };

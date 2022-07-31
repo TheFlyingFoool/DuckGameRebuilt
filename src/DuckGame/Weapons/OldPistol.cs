@@ -57,7 +57,7 @@ namespace DuckGame
                 if (this._loadState == 3)
                     this.loaded = true;
                 this._loadState = -1;
-                this._angleOffset = 0.0f;
+                this._angleOffset = 0f;
                 this.handOffset = Vec2.Zero;
             }
             if (this._loadState == 0)
@@ -73,7 +73,7 @@ namespace DuckGame
             }
             else if (this._loadState == 1)
             {
-                if (_angleOffset < 0.159999996423721)
+                if (_angleOffset < 0.16f)
                     this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.08f);
                 else
                     ++this._loadState;
@@ -81,7 +81,7 @@ namespace DuckGame
             else if (this._loadState == 2)
             {
                 this.handOffset.y -= 0.28f;
-                if (handOffset.y >= -4.0)
+                if (handOffset.y >= -4f)
                     return;
                 ++this._loadState;
                 this.ammo = 2;
@@ -101,7 +101,7 @@ namespace DuckGame
                 if (handOffset.y < 0.0)
                     return;
                 ++this._loadState;
-                this.handOffset.y = 0.0f;
+                this.handOffset.y = 0f;
                 if (Network.isActive)
                 {
                     if (!this.isServerForObject)
@@ -115,7 +115,7 @@ namespace DuckGame
             {
                 if (this._loadState != 4)
                     return;
-                if (_angleOffset > 0.0399999991059303)
+                if (_angleOffset > 0.04f)
                 {
                     this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.08f);
                 }

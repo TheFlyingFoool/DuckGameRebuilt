@@ -505,8 +505,9 @@ namespace DuckGame
                 num1 = 320;
             if (this._adapterW > 1920)
                 num1 = 1920;
-            float num2 = _adapterH / (float)this._adapterW;
-            if ((double)num2 < 0.560000002384186)
+            // I'm not messing with this
+            float num2 = (float)_adapterH / (float)this._adapterW;
+            if (num2 < 0.56f)
             {
                 num2 = 9f / 16f;
                 this._adapterH = (int)(_adapterW * (double)num2);

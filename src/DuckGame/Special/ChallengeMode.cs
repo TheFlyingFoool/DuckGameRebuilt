@@ -126,7 +126,7 @@ namespace DuckGame
                 else
                 {
                     bool flag4 = this.reverseTimeLimit;
-                    if (eligibleTrophy.timeRequirement != 0 && (int)ChallengeLevel.timer.elapsed.TotalSeconds >= eligibleTrophy.timeRequirement && (eligibleTrophy.type == TrophyType.Baseline || Math.Abs(ChallengeLevel.timer.elapsed.TotalSeconds - eligibleTrophy.timeRequirement) > 0.00999999977648258) && (eligibleTrophy.timeRequirementMilliseconds == 0 || (int)Math.Round(ChallengeLevel.timer.elapsed.TotalSeconds % 1.0 * 100.0) > eligibleTrophy.timeRequirementMilliseconds))
+                    if (eligibleTrophy.timeRequirement != 0 && (int)ChallengeLevel.timer.elapsed.TotalSeconds >= eligibleTrophy.timeRequirement && (eligibleTrophy.type == TrophyType.Baseline || Math.Abs(ChallengeLevel.timer.elapsed.TotalSeconds - eligibleTrophy.timeRequirement) > 0.01f) && (eligibleTrophy.timeRequirementMilliseconds == 0 || (int)Math.Round(ChallengeLevel.timer.elapsed.TotalSeconds % 1f * 100f) > eligibleTrophy.timeRequirementMilliseconds))
                     {
                         flag2 = false;
                         flag4 = !this.reverseTimeLimit;

@@ -323,13 +323,13 @@ namespace DuckGame
                 for (int index = 0; index < 3; ++index)
                     Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
             }
-            else if (this.material == null && heat > 0.100000001490116 && this.physicsMaterial == PhysicsMaterial.Metal)
+            else if (this.material == null && heat > 0.1f && this.physicsMaterial == PhysicsMaterial.Metal)
                 this.material = new MaterialRedHot(this);
-            else if (this.material == null && heat < -0.100000001490116)
+            else if (this.material == null && heat < -0.1f)
                 this.material = new MaterialFrozen(this);
             if (this.material is MaterialRedHot)
             {
-                if (heat < 0.100000001490116)
+                if (heat < 0.1f)
                     this.material = null;
                 else
                     (this.material as MaterialRedHot).intensity = Math.Min(this.heat - 0.1f, 1f);
@@ -338,7 +338,7 @@ namespace DuckGame
             {
                 if (!(this.material is MaterialFrozen))
                     return;
-                if (heat > -0.100000001490116)
+                if (heat > -0.1f)
                     this.material = null;
                 else
                     (this.material as MaterialFrozen).intensity = Math.Min(Math.Abs(this.heat) - 0.1f, 1f);

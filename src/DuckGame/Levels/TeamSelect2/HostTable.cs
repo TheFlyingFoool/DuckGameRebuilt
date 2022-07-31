@@ -148,14 +148,14 @@ namespace DuckGame
                 if (data.beverage != num3)
                 {
                     data.beverageLerp = Lerp.FloatSmooth(data.beverageLerp, 1f, 0.2f, 1.1f);
-                    if (data.beverageLerp >= 1.0)
+                    if (data.beverageLerp >= 1f)
                         data.beverage = num3;
                 }
                 else
                 {
-                    data.beverageLerp = Lerp.FloatSmooth(data.beverageLerp, 0.0f, 0.2f, 1.1f);
-                    if (data.beverageLerp < 0.0500000007450581)
-                        data.beverageLerp = 0.0f;
+                    data.beverageLerp = Lerp.FloatSmooth(data.beverageLerp, 0f, 0.2f, 1.1f);
+                    if (data.beverageLerp < 0.05f)
+                        data.beverageLerp = 0f;
                 }
                 bool flag = num2 >= this.spectators.Count / 2;
                 if (spectator.netData.Get<bool>("spectatorFlip", false))
@@ -163,19 +163,19 @@ namespace DuckGame
                 if (data.beverage != -1)
                 {
                     this._beverage.frame = data.beverage;
-                    float num4 = (float)(num2 * num2 * 5.40416526794434 % 1.0 * 7.0);
+                    float num4 = (num2 * num2 * 5.4041653f % 1f * 7f);
                     int num5 = 1;
                     if (num2 == 1 || num2 == 2)
                         num5 = 0;
-                    Graphics.Draw(_beverage, (float)((double)x - (double)num4 + (num2 >= this.spectators.Count / 2 ? 5.0 : -16.0)), (float)((double)this.y - 15.0 + 16.0 * data.beverageLerp) + num5, data.beverageLerp < 0.0500000007450581 ? this.depth + 1 : this.depth - 1);
+                    Graphics.Draw(_beverage, (x - num4 + (num2 >= this.spectators.Count / 2 ? 5f : -16f)), (this.y - 15f + 16f * data.beverageLerp) + num5, data.beverageLerp < 0.05f ? this.depth + 1 : this.depth - 1);
                 }
                 if (spectator == DuckNetwork.hostProfile)
                     Graphics.Draw(this._crown, x, this.y + 2f, this.depth + 2);
                 Vec2 vec2_1 = new Vec2(x, this.y - 2f);
-                vec2_1 += new Vec2(data.tilt.x, (float)(-(double)data.tilt.y * 0.25)) * 4f;
+                vec2_1 += new Vec2(data.tilt.x, (-data.tilt.y * 0.25f)) * 4f;
                 Vec2 vec2_2 = vec2_1;
                 Vec2 bob = data.bob;
-                if (bob.y < 0.0)
+                if (bob.y < 0f)
                     bob.y *= 1.6f;
                 Vec2 vec2_3 = vec2_2 + new Vec2(bob.x, (float)(-(double)bob.y * 1.5)) * 4f;
                 data.tilt = Lerp.Vec2Smooth(data.tilt, spectator.netData.Get<Vec2>("spectatorTilt", Vec2.Zero), 0.15f);
@@ -183,7 +183,7 @@ namespace DuckGame
                 spectator.netData.Get<bool>("quack", false);
                 if (data.duck != null)
                 {
-                    data.duck.position = vec2_3 + new Vec2(0.0f, -5f);
+                    data.duck.position = vec2_3 + new Vec2(0f, -5f);
                     data.duck.offDir = flag ? (sbyte)-1 : (sbyte)1;
                 }
                 this._chair.flipH = flag;

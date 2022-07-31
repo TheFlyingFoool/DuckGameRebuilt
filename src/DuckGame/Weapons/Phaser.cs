@@ -47,7 +47,7 @@ namespace DuckGame
         {
             if (this.owner == null || this.ammo <= 0)
             {
-                this._charge = 0.0f;
+                this._charge = 0f;
                 this._chargeLevel = 0;
             }
             this._chargeFade = Lerp.Float(this._chargeFade, _chargeLevel / 3f, 0.06f);
@@ -61,11 +61,11 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (_chargeFade <= 0.00999999977648258)
+            if (_chargeFade <= 0.01f)
                 return;
             float alpha = this.alpha;
-            this.alpha = (float)((_chargeFade * 0.600000023841858 + _chargeFade * (double)this._chargeWaver.normalized * 0.400000005960464) * 0.800000011920929);
-            this.Draw(_phaserCharge, new Vec2((float)(3.0 + _chargeFade * (double)(float)this._chargeWaver * 0.5), -4f), -1);
+            this.alpha = ((_chargeFade * 0.6f + _chargeFade * this._chargeWaver.normalized * 0.4f) * 0.8f);
+            this.Draw(_phaserCharge, new Vec2((3f + _chargeFade * this._chargeWaver * 0.5f), -4f), -1);
             this.alpha = alpha;
         }
 
@@ -74,18 +74,18 @@ namespace DuckGame
             if (this.ammo <= 0)
                 return;
             this._charge += 0.03f;
-            if (_charge > 1.0)
+            if (_charge > 1f)
                 this._charge = 1f;
             if (this._chargeLevel == 0)
                 this._chargeLevel = 1;
-            else if (_charge > 0.400000005960464 && this._chargeLevel == 1)
+            else if (_charge > 0.4f && this._chargeLevel == 1)
             {
                 this._chargeLevel = 2;
                 SFX.Play("phaserCharge02", 0.5f);
             }
             else
             {
-                if (_charge <= 0.800000011920929 || this._chargeLevel != 2)
+                if (_charge <= 0.8f || this._chargeLevel != 2)
                     return;
                 this._chargeLevel = 3;
                 SFX.Play("phaserCharge03", 0.6f);
@@ -99,10 +99,10 @@ namespace DuckGame
             if (this.owner != null)
             {
                 this._ammoType.range = _chargeLevel * 80f;
-                this._ammoType.bulletThickness = (float)(0.200000002980232 + _charge * 0.400000005960464);
+                this._ammoType.bulletThickness = (float)(0.2f + _charge * 0.4f);
                 this._ammoType.penetration = _chargeLevel;
-                this._ammoType.accuracy = (float)(0.400000005960464 + _charge * 0.5);
-                this._ammoType.bulletSpeed = (float)(8.0 + _charge * 10.0);
+                this._ammoType.accuracy = (float)(0.4f + _charge * 0.5f);
+                this._ammoType.bulletSpeed = (float)(8f + _charge * 10f);
                 if (this._chargeLevel == 1)
                 {
                     if (this.duck != null)
@@ -122,7 +122,7 @@ namespace DuckGame
                     this._fireSound = "phaserLarge";
                 }
                 this.Fire();
-                this._charge = 0.0f;
+                this._charge = 0f;
                 this._chargeLevel = 0;
             }
             base.OnReleaseAction();

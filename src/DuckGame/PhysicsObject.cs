@@ -649,7 +649,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (flag4 && (double)vSpeed > 1.0 && (double)Math.Abs(this.vSpeed) < 0.00999999977648258)
+                    if (flag4 && (double)vSpeed > 1 && (double)Math.Abs(this.vSpeed) < 0.01f)
                     {
                         Level.Add(new WaterSplash(this.x, this.bottom, this._curFluid));
                         SFX.Play("littleSplash", Rando.Float(0.8f, 0.9f), Rando.Float(-0.2f, 0.2f));
@@ -674,14 +674,14 @@ namespace DuckGame
 
         public void DoFloat()
         {
-            if (buoyancy > 0.0)
+            if (buoyancy > 0f)
             {
-                FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(this.position + new Vec2(0.0f, 4f));
+                FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(this.position + new Vec2(0f, 4f));
                 if (fluidPuddle != null)
                 {
-                    if (this.onlyFloatInLava && fluidPuddle.data.heat < 0.5)
+                    if (this.onlyFloatInLava && fluidPuddle.data.heat < 0.5f)
                         return;
-                    if ((double)this.y + 4.0 - (double)fluidPuddle.top > 8.0)
+                    if (this.y + 4f - (double)fluidPuddle.top > 8f)
                     {
                         this.modifiedGravForFloat = true;
                         this.gravMultiplier = -0.5f;
@@ -689,13 +689,13 @@ namespace DuckGame
                     }
                     else
                     {
-                        if ((double)this.y + 4.0 - (double)fluidPuddle.top < 3.0)
+                        if (this.y + 4f - fluidPuddle.top < 3f)
                         {
                             this.modifiedGravForFloat = true;
                             this.gravMultiplier = 0.2f;
                             this.grounded = true;
                         }
-                        else if ((double)this.y + 4.0 - (double)fluidPuddle.top > 4.0)
+                        else if (this.y + 4f - fluidPuddle.top > 4f)
                         {
                             this.gravMultiplier = -0.2f;
                             this.grounded = true;
@@ -729,44 +729,44 @@ namespace DuckGame
                     {
                         this.x = with.left + (this.x - this.right);
                         this.SolidImpact(with, from);
-                        if ((double)this.hSpeed > -(double)this.hSpeed * (double)this.bouncy)
+                        if (this.hSpeed > -this.hSpeed * this.bouncy)
                         {
                             this.hSpeed = -this.hSpeed * this.bouncy;
-                            if ((double)Math.Abs(this.hSpeed) < 0.100000001490116)
-                                this.hSpeed = 0.0f;
+                            if (Math.Abs(this.hSpeed) < 0.1f)
+                                this.hSpeed = 0f;
                         }
                     }
                     if (from == ImpactedFrom.Left)
                     {
                         this.x = with.right + (this.x - this.left);
                         this.SolidImpact(with, from);
-                        if ((double)this.hSpeed < -(double)this.hSpeed * (double)this.bouncy)
+                        if (this.hSpeed < -this.hSpeed * this.bouncy)
                         {
                             this.hSpeed = -this.hSpeed * this.bouncy;
-                            if ((double)Math.Abs(this.hSpeed) < 0.100000001490116)
-                                this.hSpeed = 0.0f;
+                            if (Math.Abs(this.hSpeed) < 0.1f)
+                                this.hSpeed = 0f;
                         }
                     }
                     if (from == ImpactedFrom.Top)
                     {
-                        this.y = (float)((double)with.bottom + ((double)this.y - (double)this.top) + 1.0);
+                        this.y = (with.bottom + (this.y - this.top) + 1f);
                         this.SolidImpact(with, from);
-                        if ((double)this.vSpeed < -(double)this.vSpeed * (double)this.bouncy)
+                        if (this.vSpeed < -this.vSpeed * this.bouncy)
                         {
                             this.vSpeed = -this.vSpeed * this.bouncy;
-                            if ((double)Math.Abs(this.vSpeed) < 0.100000001490116)
-                                this.vSpeed = 0.0f;
+                            if ((double)Math.Abs(this.vSpeed) < 0.1f)
+                                this.vSpeed = 0f;
                         }
                     }
                     if (from == ImpactedFrom.Bottom)
                     {
                         this.y = with.top + (this.y - this.bottom);
                         this.SolidImpact(with, from);
-                        if ((double)this.vSpeed > -(double)this.vSpeed * (double)this.bouncy)
+                        if (this.vSpeed > -this.vSpeed * this.bouncy)
                         {
                             this.vSpeed = -this.vSpeed * this.bouncy;
-                            if ((double)Math.Abs(this.vSpeed) < 0.100000001490116)
-                                this.vSpeed = 0.0f;
+                            if ((double)Math.Abs(this.vSpeed) < 0.1f)
+                                this.vSpeed = 0f;
                         }
                         this.grounded = true;
                         break;
@@ -776,7 +776,7 @@ namespace DuckGame
                     flag2 = false;
                     if (from == ImpactedFrom.Bottom)
                     {
-                        if (with is PhysicsObject && (!with.grounded || (double)Math.Abs(with.vSpeed) >= 0.300000011920929) || (double)with.top + ((double)this.vSpeed + 2.0) <= (double)this.bottom || this._skipPlatforms || this._skipAutoPlatforms && with is AutoPlatform)
+                        if (with is PhysicsObject && (!with.grounded || Math.Abs(with.vSpeed) >= 0.3f) || with.top + (this.vSpeed + 2f) <= this.bottom || this._skipPlatforms || this._skipAutoPlatforms && with is AutoPlatform)
                             return;
                         with.SolidImpact(this, ImpactedFrom.Top);
                         if (with.destroyed)
@@ -786,8 +786,8 @@ namespace DuckGame
                         if ((double)this.vSpeed > -(double)this.vSpeed * (double)this.bouncy)
                         {
                             this.vSpeed = -this.vSpeed * this.bouncy;
-                            if ((double)Math.Abs(this.vSpeed) < 0.100000001490116)
-                                this.vSpeed = 0.0f;
+                            if (Math.Abs(this.vSpeed) < 0.1f)
+                                this.vSpeed = 0f;
                         }
                         this.grounded = true;
                         break;

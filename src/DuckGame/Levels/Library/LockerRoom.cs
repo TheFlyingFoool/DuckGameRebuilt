@@ -44,7 +44,7 @@ namespace DuckGame
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
             HUD.AddCornerControl(HUDCorner.BottomRight, "@MENU2@RESET");
             this.backgroundColor = Color.Black;
-            this._confirmGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._confirmGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._confirmMenu = new UIMenu("RESET STATS?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
             this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(this._confirmGroup)), true);
             this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._confirmGroup, this._clearStats)), true);
@@ -60,7 +60,7 @@ namespace DuckGame
             int fans = profile.stats.GetFans();
             int num1 = 0;
             if (fans > 0)
-                num1 = (int)Math.Round(profile.stats.loyalFans / (double)profile.stats.GetFans() * 100.0);
+                num1 = (int)Math.Round(profile.stats.loyalFans / profile.stats.GetFans() * 100f);
             this._stats.Add(new LockerStat("FAN LOYALTY: " + Change.ToString(num1) + "%", Color.Lime));
             this._stats.Add(new LockerStat("", Color.Red));
             this._stats.Add(new LockerStat("KILLS: " + Change.ToString(profile.stats.kills), Color.GreenYellow));
@@ -74,7 +74,7 @@ namespace DuckGame
             float num2 = 0.0f;
             if (profile.stats.bulletsFired > 0)
                 num2 = profile.stats.bulletsThatHit / (float)profile.stats.bulletsFired;
-            this._stats.Add(new LockerStat("ACCURACY: " + Change.ToString((int)Math.Round((double)num2 * 100.0)) + "%", (double)num2 > 0.600000023841858 ? Color.Green : Color.Red));
+            this._stats.Add(new LockerStat("ACCURACY: " + Change.ToString((int)Math.Round(num2 * 100f)) + "%", num2 > 0.6f ? Color.Green : Color.Red));
             this._stats.Add(new LockerStat("TRICK SHOT KILLS: " + profile.stats.trickShots.ToString(), Color.Green));
             this._stats.Add(new LockerStat("", Color.Red));
             this._stats.Add(new LockerStat("MINES STEPPED ON: " + Change.ToString(profile.stats.minesSteppedOn), Color.Orange));
@@ -97,20 +97,20 @@ namespace DuckGame
             int num = (int)this._selection;
             if (this._desiredScreen != this._screen)
             {
-                this._fade = Lerp.Float(this._fade, 0.0f, 0.06f);
-                if (_fade <= 0.0)
+                this._fade = Lerp.Float(this._fade, 0f, 0.06f);
+                if (_fade <= 0f)
                 {
                     this._screen = this._desiredScreen;
                     if (this._screen == LockerScreen.Stats)
                     {
-                        this._statScroll = 0.0f;
+                        this._statScroll = 0f;
                         HUD.AddCornerControl(HUDCorner.TopLeft, "@WASD@MOVE");
                         HUD.AddCornerMessage(HUDCorner.TopRight, this._profile.name);
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
                     }
                     else if (this._screen == LockerScreen.Trophies)
                     {
-                        this._statScroll = 0.0f;
+                        this._statScroll = 0f;
                         HUD.AddCornerControl(HUDCorner.TopLeft, "@WASD@MOVE");
                         HUD.AddCornerMessage(HUDCorner.TopRight, "TROPHIES");
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
@@ -123,7 +123,7 @@ namespace DuckGame
                     }
                     else if (this._screen == LockerScreen.Exit)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new DoorRoom(this._profile);
                     }
                 }
@@ -170,13 +170,13 @@ namespace DuckGame
                     if (InputProfile.active.Down("MENUUP"))
                     {
                         this._statScroll -= 0.02f;
-                        if (_statScroll < 0.0)
-                            this._statScroll = 0.0f;
+                        if (_statScroll < 0f)
+                            this._statScroll = 0f;
                     }
                     if (InputProfile.active.Down("MENUDOWN"))
                     {
                         this._statScroll += 0.02f;
-                        if (_statScroll > 1.0)
+                        if (_statScroll > 1f)
                             this._statScroll = 1f;
                     }
                     if (InputProfile.active.Pressed("CANCEL"))
@@ -216,28 +216,28 @@ namespace DuckGame
                     this._background.scale = new Vec2(1f, 1f);
                     this._background.depth = (Depth)0.4f;
                     this._background.alpha = this._fade;
-                    Graphics.Draw(this._background, 0.0f, 0.0f);
+                    Graphics.Draw(this._background, 0f, 0f);
                     string text = this._profile.name;
                     Vec2 vec2 = new Vec2(115f, 46f);
-                    Graphics.DrawString(text, vec2 + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), 0.0f), Color.Gray * this._fade, (Depth)0.5f);
+                    Graphics.DrawString(text, vec2 + new Vec2((-Graphics.GetStringWidth(text) / 2f), 0f), Color.Gray * this._fade, (Depth)0.5f);
                     if (this._selection == LockerSelection.Stats)
                     {
                         this._boardHighlight.depth = (Depth)0.5f;
-                        this._boardHighlight.alpha = (float)(0.5 + (double)this._pulse.normalized * 0.5) * this._fade;
-                        this._boardHighlight.xscale = this._boardHighlight.yscale = (float)(1.0 + (double)this._pulse.normalized * 0.100000001490116);
+                        this._boardHighlight.alpha = (0.5f + this._pulse.normalized * 0.5f) * this._fade;
+                        this._boardHighlight.xscale = this._boardHighlight.yscale = (1f + this._pulse.normalized * 0.1f);
                         Graphics.Draw(this._boardHighlight, 75 + this._boardHighlight.w / 2, 60 + this._boardHighlight.h / 2);
                         text = "STATISTICS";
                     }
                     else if (this._selection == LockerSelection.Trophies)
                     {
                         this._trophiesHighlight.depth = (Depth)0.5f;
-                        this._trophiesHighlight.alpha = (float)(0.5 + (double)this._pulse.normalized * 0.5) * this._fade;
-                        this._trophiesHighlight.xscale = this._trophiesHighlight.yscale = (float)(1.0 + (double)this._pulse.normalized * 0.100000001490116);
+                        this._trophiesHighlight.alpha = (0.5f + this._pulse.normalized * 0.5f) * this._fade;
+                        this._trophiesHighlight.xscale = this._trophiesHighlight.yscale = (1f + this._pulse.normalized * 0.1f);
                         Graphics.Draw(this._trophiesHighlight, 161 + this._trophiesHighlight.w / 2, 53 + this._trophiesHighlight.h / 2);
                         text = "TROPHIES";
                     }
                     vec2 = new Vec2(160f, 140f);
-                    Graphics.DrawString(text, vec2 + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), 0.0f), new Color(14, 20, 27) * this._fade, (Depth)0.5f);
+                    Graphics.DrawString(text, vec2 + new Vec2((-Graphics.GetStringWidth(text) / 2f), 0f), new Color(14, 20, 27) * this._fade, (Depth)0.5f);
                 }
                 else if (this._screen == LockerScreen.Stats)
                 {
@@ -246,7 +246,7 @@ namespace DuckGame
                     {
                         Vec2 vec2 = new Vec2(160f, 18 + num * 10 - this._statScroll * (this._stats.Count * 10 - 150));
                         string name = stat.name;
-                        Graphics.DrawString(name, vec2 + new Vec2((float)(-(double)Graphics.GetStringWidth(name) / 2.0), 0.0f), stat.color * this._fade, (Depth)0.5f);
+                        Graphics.DrawString(name, vec2 + new Vec2((-Graphics.GetStringWidth(name) / 2f), 0f), stat.color * this._fade, (Depth)0.5f);
                         ++num;
                     }
                 }
@@ -254,7 +254,7 @@ namespace DuckGame
                 {
                     Vec2 vec2 = new Vec2(160f, 84f);
                     string text = "NOPE";
-                    Graphics.DrawString(text, vec2 + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), 0.0f), Color.White * this._fade, (Depth)0.5f);
+                    Graphics.DrawString(text, vec2 + new Vec2((-Graphics.GetStringWidth(text) / 2f), 0f), Color.White * this._fade, (Depth)0.5f);
                 }
             }
             base.PostDrawLayer(layer);

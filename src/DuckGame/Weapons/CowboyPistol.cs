@@ -22,7 +22,7 @@ namespace DuckGame
                 if (this._raised || this.duck == null)
                     return base.angle;
                 Vec2 p2 = this.duck.inputProfile.rightStick;
-                if ((double)p2.length < 0.100000001490116)
+                if (p2.length < 0.1f)
                 {
                     p2 = Vec2.Zero;
                     return base.angle;

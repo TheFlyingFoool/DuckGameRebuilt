@@ -72,7 +72,7 @@ namespace DuckGame
                     this.shake = 1.5f;
                     this.waveSpeed += 0.02f;
                 }
-                if (waveSpeed > 0.100000001490116)
+                if (waveSpeed > 0.1f)
                     this.waveSpeed = 0.1f;
                 if (waveSpeed > 0.0)
                     this.waveSpeed -= 0.01f;

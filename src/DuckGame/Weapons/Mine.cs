@@ -110,7 +110,7 @@ namespace DuckGame
                 this.collisionSize = new Vec2(12f, 3f);
             }
             base.Update();
-            if (!this.pin && (double)Math.Abs(this.prevAngle - this.angle) > 0.100000001490116)
+            if (!this.pin && Math.Abs(this.prevAngle - this.angle) > 0.1f)
             {
                 Vec2 vec2_1 = new Vec2(14f, 3f);
                 Vec2 vec2_2 = new Vec2(-7f, -2f);
@@ -131,7 +131,7 @@ namespace DuckGame
             if (this._thrown && this.owner == null)
             {
                 this._thrown = false;
-                if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 0.400000005960464)
+                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.4f)
                     this.angleDegrees = 180f;
             }
             if (this._armed)
@@ -324,7 +324,7 @@ namespace DuckGame
         {
             Material material = Graphics.material;
             Graphics.material = null;
-            if ((double)this._mineFlash.alpha > 0.00999999977648258)
+            if (this._mineFlash.alpha > 0.01f)
                 Graphics.Draw(this._mineFlash, this.x, this.y - 3f);
             Graphics.material = material;
             base.Draw();

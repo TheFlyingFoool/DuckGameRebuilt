@@ -66,7 +66,7 @@ namespace DuckGame
             for (int index = 0; index < 100; ++index)
             {
                 this.settingIndex = (byte)Rando.Int(DeathCrate._settings.Count - 1);
-                if (_settings[settingIndex].likelyhood == 1.0 || (double)Rando.Float(1f) < _settings[settingIndex].likelyhood)
+                if (_settings[settingIndex].likelyhood == 1.0 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
                     break;
             }
         }
@@ -75,7 +75,7 @@ namespace DuckGame
         {
             if (with.isStateObject)
                 with.Fondle(this);
-            if (from == ImpactedFrom.Top || (double)Math.Abs(this.angleDegrees) > 90.0 && (double)Math.Abs(this.angleDegrees) < 270.0 && from == ImpactedFrom.Bottom && (double)with.totalImpactPower + (double)this.totalImpactPower > 0.100000001490116 && this._sprite.currentAnimation == "idle")
+            if (from == ImpactedFrom.Top || Math.Abs(this.angleDegrees) > 90f && Math.Abs(this.angleDegrees) < 270.0 && from == ImpactedFrom.Bottom && with.totalImpactPower + this.totalImpactPower > 0.1f && this._sprite.currentAnimation == "idle")
             {
                 this.activated = true;
                 this._sprite.SetAnimation("activate");

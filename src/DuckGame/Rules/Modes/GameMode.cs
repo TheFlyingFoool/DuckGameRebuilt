@@ -341,7 +341,7 @@ namespace DuckGame
                     this._watch = new Stopwatch();
                 this._watch.Start();
             }
-            if ((double)Graphics.fade > 0.899999976158142 && Input.Pressed("START") && !Network.isActive)
+            if (Graphics.fade > 0.9f && Input.Pressed("START") && !Network.isActive)
             {
                 if (this._watch != null)
                     this._watch.Stop();
@@ -387,7 +387,7 @@ namespace DuckGame
                     else
                     {
                         Graphics.fade -= 0.04f;
-                        if ((double)Graphics.fade >= 0.00999999977648258)
+                        if (Graphics.fade >= 0.01f)
                             return;
                         Level.current = new TitleScreen();
                     }
@@ -569,15 +569,15 @@ namespace DuckGame
                         this._roundEndWait -= 0.005f;
                     if (this.skippedLevel)
                         this._roundEndWait = -1f;
-                    if (_roundEndWait < 0.5 && !this._addedPoints && !this.skippedLevel)
+                    if (_roundEndWait < 0.5f && !this._addedPoints && !this.skippedLevel)
                         this.DoAddPoints();
-                    if (_roundEndWait < 0.100000001490116 && !this._endedHighlights)
+                    if (_roundEndWait < 0.1f && !this._endedHighlights)
                     {
                         this._endedHighlights = true;
                         if (!this._editorTestMode)
                             Highlights.FinishRound();
                     }
-                    if (_roundEndWait >= 0.0 || this._switchedLevel)
+                    if (_roundEndWait >= 0f || this._switchedLevel)
                         return;
                     bool flag = false;
                     if (!Network.isActive && !this.skippedLevel)
@@ -607,22 +607,22 @@ namespace DuckGame
                                         foreach (Profile activeProfile in team.activeProfiles)
                                             Party.AddRandomPerk(activeProfile);
                                     }
-                                    else if (team.score < 2 && (double)Rando.Float(1f) > 0.300000011920929)
+                                    else if (team.score < 2 && Rando.Float(1f) > 0.3f)
                                     {
                                         foreach (Profile activeProfile in team.activeProfiles)
                                             Party.AddRandomPerk(activeProfile);
                                     }
-                                    else if (team.score < 5 && (double)Rando.Float(1f) > 0.600000023841858)
+                                    else if (team.score < 5 && Rando.Float(1f) > 0.6f)
                                     {
                                         foreach (Profile activeProfile in team.activeProfiles)
                                             Party.AddRandomPerk(activeProfile);
                                     }
-                                    else if (team.score < 7 && (double)Rando.Float(1f) > 0.850000023841858)
+                                    else if (team.score < 7 && Rando.Float(1f) > 0.85f)
                                     {
                                         foreach (Profile activeProfile in team.activeProfiles)
                                             Party.AddRandomPerk(activeProfile);
                                     }
-                                    else if (team.score < num && (double)Rando.Float(1f) > 0.899999976158142)
+                                    else if (team.score < num && Rando.Float(1f) > 0.9f)
                                     {
                                         foreach (Profile activeProfile in team.activeProfiles)
                                             Party.AddRandomPerk(activeProfile);
@@ -826,7 +826,7 @@ namespace DuckGame
             ++this.frames;
             if (layer != Layer.HUD)
                 return;
-            if (this._waitAfterSpawnDings > 0 && _fontFade > 0.00999999977648258)
+            if (this._waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
                 this._font.scale = new Vec2(2f, 2f);
                 this._font.alpha = this._fontFade;

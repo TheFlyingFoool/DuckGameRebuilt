@@ -72,24 +72,24 @@ namespace DuckGame
         {
             if (this._rested)
                 return;
-            if ((double)this.hSpeed > 0.0)
+            if ((double)this.hSpeed > 0f)
                 this.hSpeed -= 0.1f;
-            if ((double)this.hSpeed < 0.0)
+            if ((double)this.hSpeed < 0f)
                 this.hSpeed += 0.1f;
-            if ((double)this.hSpeed < 0.1 && (double)this.hSpeed > -0.100000001490116)
+            if ((double)this.hSpeed < 0.1f && (double)this.hSpeed > -0.1f)
                 this.hSpeed = 0.0f;
-            if ((double)this.vSpeed < 1.0)
+            if ((double)this.vSpeed < 1f)
                 this.vSpeed += 0.06f;
-            if ((double)this.vSpeed < 0.0)
+            if ((double)this.vSpeed < 0f)
             {
-                this._sprite.speed = 0.0f;
+                this._sprite.speed = 0f;
                 if (Level.CheckPoint<Block>(this.x, this.y - 7f) != null)
-                    this.vSpeed = 0.0f;
+                    this.vSpeed = 0f;
             }
             else if (Level.CheckPoint<IPlatform>(this.x, this.y + 3f) is Thing thing)
             {
-                this.vSpeed = 0.0f;
-                this._sprite.speed = 0.0f;
+                this.vSpeed = 0f;
+                this._sprite.speed = 0f;
                 if (thing is Block)
                     this._rested = true;
             }

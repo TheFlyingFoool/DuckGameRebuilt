@@ -191,18 +191,18 @@ namespace DuckGame
                 }
             }
             this.UpdateCharging();
-            if (bounceAmount > 0.0)
+            if (bounceAmount > 0f)
                 this.bounceAmount -= 0.8f;
             else
-                this.bounceAmount = 0.0f;
+                this.bounceAmount = 0f;
             this.y -= this.bounceAmount;
             if (this._canBounce)
                 return;
             if ((double)this.y < startY)
-                this.y += (float)(0.800000011920929 + (double)Math.Abs(this.y - this.startY) * 0.400000005960464);
+                this.y += (float)(0.8f + (double)Math.Abs(this.y - this.startY) * 0.4f);
             if ((double)this.y > startY)
-                this.y -= (float)(0.800000011920929 - (double)Math.Abs(this.y - this.startY) * 0.400000005960464);
-            if ((double)Math.Abs(this.y - this.startY) >= 0.800000011920929)
+                this.y -= (float)(0.8f - (double)Math.Abs(this.y - this.startY) * 0.4f);
+            if ((double)Math.Abs(this.y - this.startY) >= 0.8f)
                 return;
             this._canBounce = true;
             this.y = this.startY;
@@ -254,10 +254,10 @@ namespace DuckGame
                 if (gun.CanSpin())
                     gun.angleDegrees = 180f;
             }
-            Block block1 = Level.CheckPoint<Block>(this.position + new Vec2(-16f, 0.0f));
+            Block block1 = Level.CheckPoint<Block>(this.position + new Vec2(-16f, 0f));
             if (block1 != null)
                 t.clip.Add(block1);
-            Block block2 = Level.CheckPoint<Block>(this.position + new Vec2(16f, 0.0f));
+            Block block2 = Level.CheckPoint<Block>(this.position + new Vec2(16f, 0f));
             if (block2 != null)
                 t.clip.Add(block2);
             if (!Network.isActive || this is PurpleBlock)

@@ -231,7 +231,7 @@ namespace DuckGame
             "This one's gonna be a breeze.",
             "Hot off the grill, just for you."
           };
-                else if ((double)challengeSkillIndex > 0.300000011920929)
+                else if (challengeSkillIndex > 0.3f)
                     stringList = new List<string>()
           {
             "Wanna try something different?",
@@ -247,7 +247,7 @@ namespace DuckGame
             "Just never good enough huh?",
             "You still gotta top that score?"
           };
-                else if ((double)challengeSkillIndex > 0.300000011920929)
+                else if (challengeSkillIndex > 0.3f)
                     stringList = new List<string>()
           {
             "|CONCERNED|Woah, you think you can beat that score?",
@@ -262,13 +262,13 @@ namespace DuckGame
             }
             else if (Chancy._save != null && Chancy._save.trophy > TrophyType.Silver)
             {
-                if ((double)challengeSkillIndex > 0.75)
+                if (challengeSkillIndex > 0.75f)
                     stringList = new List<string>()
           {
             "You know you can do better than gold.",
             "Pretty good, but you can do better."
           };
-                else if ((double)challengeSkillIndex > 0.300000011920929)
+                else if (challengeSkillIndex > 0.3f)
                     stringList = new List<string>()
           {
             "Not bad.",
@@ -283,14 +283,14 @@ namespace DuckGame
             }
             else if (Chancy._save != null && Chancy._save.trophy > TrophyType.Baseline)
             {
-                if ((double)challengeSkillIndex > 0.75)
+                if (challengeSkillIndex > 0.75f)
                     stringList = new List<string>()
           {
             "Nice, lets try to top that.",
             "What? Not bad but you really could do better.",
             "I know you're not just gonna leave it at that."
           };
-                else if ((double)challengeSkillIndex > 0.300000011920929)
+                else if (challengeSkillIndex > 0.3f)
                     stringList = new List<string>()
           {
             "You did it, but you can do better.",
@@ -363,21 +363,21 @@ namespace DuckGame
 
         public static void StopShowingChallengeList()
         {
-            Chancy._listLerp = 0.0f;
-            Chancy._challengeLerp = 0.0f;
-            Chancy._challengeLerp = 0.0f;
+            Chancy._listLerp = 0f;
+            Chancy._challengeLerp = 0f;
+            Chancy._challengeLerp = 0f;
             Chancy.lookingAtChallenge = false;
             Chancy.lookingAtList = false;
         }
 
         public static void Update()
         {
-            bool flag1 = Chancy.lookingAtList && _challengeLerp < 0.300000011920929;
-            bool flag2 = Chancy.lookingAtChallenge && _listLerp < 0.300000011920929;
-            bool flag3 = (Chancy.lookingAtChallenge || UnlockScreen.open) && _listLerp < 0.300000011920929;
-            Chancy._listLerp = Lerp.FloatSmooth(Chancy._listLerp, flag1 ? 1f : 0.0f, 0.2f, 1.05f);
-            Chancy._challengeLerp = Lerp.FloatSmooth(Chancy._challengeLerp, flag2 ? 1f : 0.0f, 0.2f, 1.05f);
-            Chancy._chancyLerp = Lerp.FloatSmooth(Chancy._chancyLerp, flag3 ? 1f : 0.0f, 0.2f, 1.05f);
+            bool flag1 = Chancy.lookingAtList && _challengeLerp < 0.3f;
+            bool flag2 = Chancy.lookingAtChallenge && _listLerp < 0.3f;
+            bool flag3 = (Chancy.lookingAtChallenge || UnlockScreen.open) && _listLerp < 0.3f;
+            Chancy._listLerp = Lerp.FloatSmooth(Chancy._listLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
+            Chancy._challengeLerp = Lerp.FloatSmooth(Chancy._challengeLerp, flag2 ? 1f : 0f, 0.2f, 1.05f);
+            Chancy._chancyLerp = Lerp.FloatSmooth(Chancy._chancyLerp, flag3 ? 1f : 0f, 0.2f, 1.05f);
             if (Chancy.lookingAtList)
             {
                 if (Input.Pressed("MENUUP"))
@@ -668,7 +668,7 @@ namespace DuckGame
         public static void Draw()
         {
             Vec2 vec2_1 = new Vec2((float)(_listLerp * 270.0 - 200.0), 20f);
-            if (Chancy.lookingAtList || _listLerp > 0.00999999977648258)
+            if (Chancy.lookingAtList || _listLerp > 0.01f)
             {
                 Chancy.listPaper.depth = (Depth)0.8f;
                 DuckGame.Graphics.Draw(Chancy.listPaper, vec2_1.x, vec2_1.y);
@@ -699,7 +699,7 @@ namespace DuckGame
                     ++index;
                 }
             }
-            if (_challengeLerp < 0.00999999977648258 && _chancyLerp < 0.00999999977648258)
+            if (_challengeLerp < 0.01f && _chancyLerp < 0.01f)
                 return;
             Vec2 vec2_3 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp)));
             Vec2 vec2_4 = new Vec2(280f, 20f);
@@ -718,7 +718,7 @@ namespace DuckGame
                 }
                 ++num1;
             }
-            if (_challengeLerp > 0.00999999977648258 && Chancy._challengeData != null)
+            if (_challengeLerp > 0.01f && Chancy._challengeData != null)
             {
                 vec2_1 = new Vec2(40f, 28f);
                 vec2_1 = new Vec2((float)(_challengeLerp * 240.0 - 200.0), 28f);
@@ -806,7 +806,7 @@ namespace DuckGame
                 Chancy.hoverSprite.alpha = Lerp.Float(Chancy.hoverSprite.alpha, 1f, 0.05f);
             else
                 Chancy.hoverSprite.alpha = Lerp.Float(Chancy.hoverSprite.alpha, 0.0f, 0.05f);
-            if ((double)Chancy.hoverSprite.alpha <= 0.00999999977648258)
+            if (Chancy.hoverSprite.alpha <= 0.01f)
                 return;
             Chancy.hoverSprite.depth = (Depth)0.0f;
             Chancy.hoverSprite.flipH = Chancy.body.flipH;

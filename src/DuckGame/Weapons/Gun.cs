@@ -195,13 +195,13 @@ namespace DuckGame
 
         public override void HeatUp(Vec2 location)
         {
-            if (this._ammoType == null || !this._ammoType.combustable || this.ammo <= 0 || heat <= 1.0 || (double)Rando.Float(1f) <= 0.800000011920929)
+            if (this._ammoType == null || !this._ammoType.combustable || this.ammo <= 0 || heat <= 1f || (double)Rando.Float(1f) <= 0.8f)
                 return;
             int bulletFireIndex1 = bulletFireIndex;
             this.heat -= 0.05f;
             this.PressAction();
             int bulletFireIndex2 = bulletFireIndex;
-            if (bulletFireIndex1 == bulletFireIndex2 || (double)Rando.Float(1f) <= 0.400000005960464)
+            if (bulletFireIndex1 == bulletFireIndex2 || (double)Rando.Float(1f) <= 0.4f)
                 return;
             SFX.Play("bulletPop", Rando.Float(0.5f, 1f), Rando.Float(-1f, 1f));
         }
@@ -229,30 +229,30 @@ namespace DuckGame
             if (this._clickPuff.finished)
                 this._doPuff = false;
             this._accuracyLost = Maths.CountDown(this._accuracyLost, 0.015f);
-            if (_flareAlpha > 0.0)
+            if (_flareAlpha > 0f)
                 this._flareAlpha -= 0.5f;
             else
-                this._flareAlpha = 0.0f;
-            if (_barrelHeat > 0.0)
+                this._flareAlpha = 0f;
+            if (_barrelHeat > 0f)
                 this._barrelHeat -= 0.01f;
             else
-                this._barrelHeat = 0.0f;
-            if (_barrelHeat > 10.0)
+                this._barrelHeat = 0f;
+            if (_barrelHeat > 10f)
                 this._barrelHeat = 10f;
-            if (_smokeWait > 0.0)
+            if (_smokeWait > 0f)
             {
                 this._smokeWait -= 0.1f;
             }
             else
             {
-                if (_barrelHeat > 0.100000001490116 && (double)this._barrelSmoke.speed == 0.0)
+                if (_barrelHeat > 0.1f && (double)this._barrelSmoke.speed == 0f)
                 {
                     this._barrelSmoke.SetAnimation("puff");
                     this._barrelSmoke.speed = 0.1f;
                 }
-                if ((double)this._barrelSmoke.speed > 0.0 && this._barrelSmoke.currentAnimation == "puff" && this._barrelSmoke.finished)
+                if ((double)this._barrelSmoke.speed > 0f && this._barrelSmoke.currentAnimation == "puff" && this._barrelSmoke.finished)
                     this._barrelSmoke.SetAnimation("loop");
-                if ((double)this._barrelSmoke.speed > 0.0 && this._barrelSmoke.currentAnimation == "loop" && this._barrelSmoke.frame == 5 && _barrelHeat < 0.100000001490116)
+                if ((double)this._barrelSmoke.speed > 0f && this._barrelSmoke.currentAnimation == "loop" && this._barrelSmoke.frame == 5 && _barrelHeat < 0.1f)
                     this._barrelSmoke.SetAnimation("finish");
             }
             if (_smokeWait > 0.0 && (double)this._barrelSmoke.speed > 0.0)
@@ -261,21 +261,21 @@ namespace DuckGame
                 this._barrelSmoke.speed = 0.0f;
             if (this.owner != null)
             {
-                if ((double)this.owner.hSpeed > 0.100000001490116)
+                if (this.owner.hSpeed > 0.1f)
                     this._smokeAngle -= 0.1f;
-                else if ((double)this.owner.hSpeed < -0.100000001490116)
+                else if (this.owner.hSpeed < -0.1f)
                     this._smokeAngle += 0.1f;
-                if (_smokeAngle > 0.400000005960464)
+                if (_smokeAngle > 0.4f)
                     this._smokeAngle = 0.4f;
-                if (_smokeAngle < -0.400000005960464)
+                if (_smokeAngle < -0.4f)
                     this._smokeAngle = -0.4f;
-                if ((double)this.owner.vSpeed > 0.100000001490116)
+                if (this.owner.vSpeed > 0.1f)
                     this._smokeFlatten -= 0.1f;
-                else if ((double)this.owner.vSpeed < -0.100000001490116)
+                else if (this.owner.vSpeed < -0.1f)
                     this._smokeFlatten += 0.1f;
-                if (_smokeFlatten > 0.5)
+                if (_smokeFlatten > 0.5f)
                     this._smokeFlatten = 0.5f;
-                if (_smokeFlatten < -0.5)
+                if (_smokeFlatten < -0.5f)
                     this._smokeFlatten = -0.5f;
                 this._framesSinceThrown = 0;
             }
@@ -289,18 +289,18 @@ namespace DuckGame
             {
                 bool flag1 = false;
                 bool flag2 = false;
-                if (((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2.0 || !this.grounded) && gravMultiplier > 0.0 && !flag2 && !this._grounded)
+                if ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2f || !this.grounded) && gravMultiplier > 0f && !flag2 && !this._grounded)
                 {
                     if (this.offDir > 0)
-                        this.angleDegrees += (float)(((double)Math.Abs(this.hSpeed * 2f) + (double)Math.Abs(this.vSpeed)) * 1.0 + 5.0);
+                        this.angleDegrees += (float)(((double)Math.Abs(this.hSpeed * 2f) + (double)Math.Abs(this.vSpeed)) * 1f + 5f);
                     else
-                        this.angleDegrees -= (float)(((double)Math.Abs(this.hSpeed * 2f) + (double)Math.Abs(this.vSpeed)) * 1.0 + 5.0);
+                        this.angleDegrees -= (float)(((double)Math.Abs(this.hSpeed * 2f) + (double)Math.Abs(this.vSpeed)) * 1f + 5f);
                     flag1 = true;
                 }
                 if (!flag1 | flag2)
                 {
                     this.angleDegrees %= 360f;
-                    if ((double)this.angleDegrees < 0.0)
+                    if ((double)this.angleDegrees < 0f)
                         this.angleDegrees += 360f;
                     if (flag2)
                     {
@@ -323,51 +323,51 @@ namespace DuckGame
                     }
                 }
             }
-            float num = (float)(1.0 - (Math.Sin((double)Maths.DegToRad(this.angleDegrees + 90f)) + 1.0) / 2.0);
+            float num = (float)(1f - (Math.Sin((double)Maths.DegToRad(this.angleDegrees + 90f)) + 1f) / 2f);
             if (this._owner == null)
                 this._extraOffset.y = num * (this._collisionOffset.y + this._collisionSize.y + this._collisionOffset.y);
             else
                 this._extraOffset.y = 0.0f;
-            if (this.owner == null || (double)this.owner.hSpeed > -0.100000001490116 && (double)this.owner.hSpeed < 0.100000001490116)
+            if (this.owner == null || (double)this.owner.hSpeed > -0.1f && (double)this.owner.hSpeed < 0.1f)
             {
-                if (_smokeAngle >= 0.100000001490116)
+                if (_smokeAngle >= 0.1f)
                     this._smokeAngle -= 0.1f;
-                else if (_smokeAngle <= -0.100000001490116)
+                else if (_smokeAngle <= -0.1f)
                     this._smokeAngle += 0.1f;
                 else
-                    this._smokeAngle = 0.0f;
+                    this._smokeAngle = 0f;
             }
-            if (this.owner == null || (double)this.owner.vSpeed > -0.100000001490116 && (double)this.owner.vSpeed < 0.100000001490116)
+            if (this.owner == null || this.owner.vSpeed > -0.1f && this.owner.vSpeed < 0.1f)
             {
-                if (_smokeFlatten >= 0.100000001490116)
+                if (_smokeFlatten >= 0.1f)
                     this._smokeFlatten -= 0.1f;
-                else if (_smokeFlatten <= -0.100000001490116)
+                else if (_smokeFlatten <= -0.1f)
                     this._smokeFlatten += 0.1f;
                 else
-                    this._smokeFlatten = 0.0f;
+                    this._smokeFlatten = 0f;
             }
-            if (kick > 0.0)
+            if (kick > 0f)
                 this.kick -= 0.2f;
             else
-                this.kick = 0.0f;
+                this.kick = 0f;
             if (this.owner == null)
             {
-                if (this.ammo <= 0 && ((double)this.alpha < 0.990000009536743 || this.grounded && (double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) < 0.300000011920929))
+                if (this.ammo <= 0 && (this.alpha < 0.99f || this.grounded && Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) < 0.3f))
                 {
                     this.canPickUp = false;
                     this.alpha -= 10.2f;
                     this.weight = 0.01f;
                 }
-                if ((double)this.alpha < 0.0)
+                if ((double)this.alpha < 0f)
                     Level.Remove(this);
             }
             if (this.owner != null && this.owner.graphic != null)
                 this.graphic.flipH = this.owner.graphic.flipH;
-            if (_wait > 0.0)
+            if (_wait > 0f)
                 this._wait -= 0.15f;
-            if (_wait >= 0.0)
+            if (_wait >= 0f)
                 return;
-            this._wait = 0.0f;
+            this._wait = 0f;
         }
 
         public override void Terminate()
@@ -405,12 +405,13 @@ namespace DuckGame
                 List<Bullet> varBullets = new List<Bullet>();
                 for (int index = 0; index < 12; ++index)
                 {
-                    float num = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                    float num = (index * 30f - 10f) + Rando.Float(20f);
                     ATShrapnel type = new ATShrapnel
                     {
                         range = 25f + Rando.Float(10f)
                     };
-                    Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 8.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 8.0), type, num)
+                    // Precision probably matters here + dnspy decompiles to the same thing so don't remove (double) and (float).
+                    Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 8f), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 8f), type, num)
                     {
                         firedFrom = this
                     };
@@ -673,7 +674,7 @@ namespace DuckGame
                 {
                     for (int index = 1; index < 4; ++index)
                     {
-                        Graphics.DrawTexturedLine(this._laserTex, vec2, vec2 + normalized * 2f, Color.Red * (float)(1.0 - index * 0.200000002980232) * num, 0.5f, this.depth - 1);
+                        Graphics.DrawTexturedLine(this._laserTex, vec2, vec2 + normalized * 2f, Color.Red * (1f - index * 0.2f) * num, 0.5f, this.depth - 1);
                         vec2 += normalized * 2f;
                     }
                 }

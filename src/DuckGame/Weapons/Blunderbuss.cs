@@ -46,7 +46,7 @@ namespace DuckGame
                 {
                     MusketSmoke musketSmoke = new MusketSmoke(this.barrelPosition.x - 16f + Rando.Float(32f), this.barrelPosition.y - 16f + Rando.Float(32f))
                     {
-                        depth = (Depth)(float)(0.899999976158142 + index * (1.0 / 1000.0))
+                        depth = (Depth)(0.9f + index * (1f / 1000f))
                     };
                     if (num < 6)
                         musketSmoke.move -= this.barrelVector * Rando.Float(0.1f);
@@ -55,8 +55,8 @@ namespace DuckGame
                     Level.Add(musketSmoke);
                     ++num;
                 }
-                this._tampInc = 0.0f;
-                this._tampTime = this.infinite.value ? 0.5f : 0.0f;
+                this._tampInc = 0f;
+                this._tampTime = this.infinite.value ? 0.5f : 0f;
                 this._tamped = false;
             }
             else

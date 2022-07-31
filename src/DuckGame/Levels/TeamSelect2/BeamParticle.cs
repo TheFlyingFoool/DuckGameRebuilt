@@ -33,18 +33,18 @@ namespace DuckGame
             this._wave += 0.1f;
             this._sinVal = (float)Math.Sin(_wave);
             this.y += this.vSpeed;
-            if (_sinVal < -0.800000011920929 && this.depth > 0.0f)
+            if (_sinVal < -0.8f && this.depth > 0.0f)
                 this.depth = -0.8f;
-            else if (_sinVal > 0.800000011920929 && this.depth < 0.0f)
+            else if (_sinVal > 0.8f && this.depth < 0.0f)
                 this.depth = (Depth)0.8f;
-            if ((double)this.y < -20.0)
+            if ((double)this.y < -20f)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void Draw()
         {
-            Vec2 vec2 = this.position + new Vec2((float)(16.0 * _sinVal * (this._inverse ? -1.0 : 1.0)), 0.0f);
+            Vec2 vec2 = this.position + new Vec2((float)(16f * _sinVal * (this._inverse ? -1f : 1f)), 0f);
             Graphics.DrawRect(vec2 - new Vec2(this._size, this._size), vec2 + new Vec2(this._size, this._size), this._color * 0.4f, this.depth);
             base.Draw();
         }

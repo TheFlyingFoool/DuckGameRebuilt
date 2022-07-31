@@ -94,9 +94,9 @@ namespace DuckGame
                         this.angleDegrees = this._stuck.angleDegrees + 90 * offDir;
                         this.depth = this._stuck.depth - 4;
                         this.velocity = Vec2.Zero;
-                        if (_stuck._barrelHeat < (double)this._prevBarrelHeat)
+                        if (_stuck._barrelHeat < this._prevBarrelHeat)
                             this._prevBarrelHeat = this._stuck._barrelHeat;
-                        if (!this.isServerForObject || _stuck._barrelHeat <= _prevBarrelHeat + 0.00999999977648258)
+                        if (!this.isServerForObject || _stuck._barrelHeat <= _prevBarrelHeat + 0.01f)
                             return;
                         Flower.PoofEffect(this.position);
                         if (Network.isActive)
@@ -106,7 +106,7 @@ namespace DuckGame
                     }
                 }
             }
-            if ((double)Math.Abs(this.hSpeed) > 0.200000002980232 || !this._picked && this.owner != null)
+            if (Math.Abs(this.hSpeed) > 0.2f || !this._picked && this.owner != null)
                 this._picked = true;
             if (this._picked)
             {

@@ -60,7 +60,7 @@
 //                    if (Level.CheckLine<Block>(duck.position, this._target.position) == null)
 //                    {
 //                        this._targetWait -= 0.2f;
-//                        if (_targetWait <= 0.0 && (double)Rando.Float(1f) > 0.600000023841858)
+//                        if (_targetWait <= 0.0 && Rando.Float(1f) > 0.6f)
 //                        {
 //                            ai.Press("SHOOT");
 //                            this._state.Push(new AIStateWait(Rando.Float(0.2f, 0.3f)));

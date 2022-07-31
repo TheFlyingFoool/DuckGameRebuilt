@@ -124,7 +124,7 @@ namespace DuckGame
         {
             if (bullet.isLocal && this.owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
             this.Destroy(new DTShot(bullet));
             return base.Hit(bullet, hitPos);
@@ -133,13 +133,13 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1f)
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            if (_hitPoints <= 0.0 && !this._destroyed)
+            if (_hitPoints <= 0f && !this._destroyed)
                 this.Destroy(new DTImpact(this));
-            if (!this._onFire || burnt >= 0.899999976158142)
+            if (!this._onFire || burnt >= 0.9f)
                 return;
             float num = 1f - this.burnt;
             if (_hitPoints > (double)num * _maxHealth)

@@ -268,7 +268,7 @@ namespace DuckGame
                 this._highlightDrag = false;
             this._cursorPos = this._font.GetCharacterPosition(this._drawText, this._cursorPosition);
             this._drawText = this.text;
-            this._blink = (float)((_blink + 0.0199999995529652) % 1.0);
+            this._blink = (float)((_blink + 0.02f) % 1f);
         }
 
         public float textWidth => this._font.GetWidth(this._drawText);
@@ -280,7 +280,7 @@ namespace DuckGame
                 return;
             Vec2 cursorPos = this._cursorPos;
             cursorPos.x += 1f * this._font.scale.x;
-            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0.0f, 8f * this._font.scale.y), this.cursorColor, 0.5f, this.depth);
+            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0f, 8f * this._font.scale.y), this.cursorColor, 0.5f, this.depth);
         }
     }
 }

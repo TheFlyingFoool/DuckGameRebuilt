@@ -176,12 +176,12 @@ namespace DuckGame
                 {
                     if (this._smallMode)
                     {
-                        this._trophy.depth = (Depth)(float)(0.800000011920929 + index * 0.00999999977648258);
+                        this._trophy.depth = (Depth)(0.8f + index * 0.01f);
                         DuckGame.Graphics.Draw(this._trophy, this.x + 24f + index * 6, this.y + 6f);
                     }
                     else
                     {
-                        this._trophy.depth = (Depth)(float)(0.800000011920929 - index * 0.00999999977648258);
+                        this._trophy.depth = (Depth)(0.8f - index * 0.01f);
                         DuckGame.Graphics.Draw(this._trophy, this.x + 175f - index * 8, this.y + 18f);
                     }
                 }

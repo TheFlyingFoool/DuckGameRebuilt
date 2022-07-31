@@ -15,13 +15,13 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this._lightRay = new Sprite("rockThrow/lightRays");
-            this.center = new Vec2(305f, 0.0f);
+            this.center = new Vec2(305f, 0f);
             this.graphic = this._lightRay;
         }
 
         public override void Draw()
         {
-            if (RockWeather.lightOpacity < 0.00999999977648258 || Layer.blurry)
+            if (RockWeather.lightOpacity < 0.01f || Layer.blurry)
                 return;
             base.Draw();
         }

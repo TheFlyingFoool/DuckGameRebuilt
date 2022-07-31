@@ -125,7 +125,7 @@ namespace DuckGame
             this.gravityMultiplier = type.gravityMultiplier;
             this._bulletLength = type.bulletLength;
             this.depth = -0.1f;
-            if (owner is Duck && ((double)Math.Abs((owner as Duck).holdAngle) > 0.100000001490116 || (owner as Duck).holdObject is Gun && (double)Math.Abs(((owner as Duck).holdObject as Gun).angleDegrees) > 20.0 && !this._gravityAffected))
+            if (owner is Duck && (Math.Abs((owner as Duck).holdAngle) > 0.1f || (owner as Duck).holdObject is Gun && Math.Abs(((owner as Duck).holdObject as Gun).angleDegrees) > 20f && !this._gravityAffected))
                 this.trickshot = true;
             if (!tracer)
             {
@@ -133,7 +133,7 @@ namespace DuckGame
                 if (owner != null && owner is Duck duck)
                 {
                     this._contributeToAccuracy = duck.profile;
-                    if (Highlights.highlightRatingMultiplier != 0.0)
+                    if (Highlights.highlightRatingMultiplier != 0f)
                         ++duck.profile.stats.bulletsFired;
                 }
             }
@@ -145,14 +145,14 @@ namespace DuckGame
             this.angle = ang;
             this._tracer = tracer;
             this.range = type.range - Rando.Float(type.rangeVariation);
-            if ((double)distance > 0.0)
+            if (distance > 0f)
                 this.range = distance;
             this._bulletSpeed = type.bulletSpeed + Rando.Float(type.speedVariation);
             if (!this.traced)
             {
                 if (this.randomDir)
                     this.angle = Rando.Float(360f);
-                this.angle += (float)(((double)Rando.Float(30f) - 15.0) * (1.0 - ammo.accuracy));
+                this.angle += (Rando.Float(30f) - 15f) * (1f - ammo.accuracy);
                 this.travel.x = (float)Math.Cos((double)Maths.DegToRad(this.angle)) * this.range;
                 this.travel.y = (float)-Math.Sin((double)Maths.DegToRad(this.angle)) * this.range;
                 this.start = new Vec2(this.x, this.y);
@@ -271,7 +271,7 @@ namespace DuckGame
                         if (flag1 == bulletImpact is IAmADuck && (bulletImpact != this._owner && (!(this._owner is Duck) || !(this._owner as Duck).ExtendsTo(bulletImpact)) || this.ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != this._teleporter && (!(bulletImpact is Teleporter) || !this._tracer && this.ammo.canTeleport) && (this.ammo.ownerSafety <= 0 || _travelTime / (double)Maths.IncFrameTimer() >= ammo.ownerSafety || this.firedFrom == null || bulletImpact != this.firedFrom.owner))
                         {
                             bool flag2 = false;
-                            if (DevConsole.shieldMode && bulletImpact is Duck && (bulletImpact as Duck)._shieldCharge > 0.600000023841858)
+                            if (DevConsole.shieldMode && bulletImpact is Duck && (bulletImpact as Duck)._shieldCharge > 0.6f)
                             {
                                 flag2 = true;
                                 willBeStopped = true;
@@ -606,7 +606,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._tracer || _bulletDistance <= 0.100000001490116)
+            if (this._tracer || _bulletDistance <= 0.1f)
                 return;
             if (this.gravityAffected)
             {

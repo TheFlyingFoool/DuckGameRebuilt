@@ -386,25 +386,25 @@ namespace DuckGame
                 float angle = spriteArms.angle;
                 spriteArms.flipH = offDir * -1 < 0;
                 spriteArms.angle = 0.7f * offDir;
-                Graphics.Draw(spriteArms, this.owner.x - 5 * offDir, (float)((double)this.owner.y + 3.0 + (this.duck.crouch ? 3.0 : 0.0) + (this.duck.sliding ? 3.0 : 0.0)));
+                Graphics.Draw(spriteArms, this.owner.x - 5 * offDir, (float)((double)this.owner.y + 3f + (this.duck.crouch ? 3f : 0f) + (this.duck.sliding ? 3f : 0f)));
                 spriteArms.angle = angle;
                 spriteArms.flipH = flipH;
                 this.handOffset = new Vec2(9999f, 9999f);
             }
             else
                 this.handOffset = new Vec2(1f, 1f);
-            if (this.owner != null && _haloAlpha > 0.00999999977648258)
+            if (this.owner != null && _haloAlpha > 0.01f)
             {
-                this._halo.alpha = (float)(_haloAlpha * 0.400000005960464 + (double)(float)this._haloWave * 0.100000001490116);
+                this._halo.alpha = (float)(_haloAlpha * 0.4f + (double)(float)this._haloWave * 0.1f);
                 this._halo.depth = -0.2f;
-                this._halo.xscale = this._halo.yscale = (float)(0.949999988079071 + (double)(float)this._haloWave * 0.0500000007450581);
+                this._halo.xscale = this._halo.yscale = (float)(0.95f + (double)(float)this._haloWave * 0.05f);
                 this._halo.angle += 0.01f;
                 Graphics.Draw(this._halo, this.owner.x, this.owner.y);
-                if (_ringPulse > 0.0)
+                if (_ringPulse > 0f)
                 {
                     int num1 = 16;
                     Vec2 vec2_1 = Vec2.Zero;
-                    float num2 = (float)(_ammoType.range * 0.100000001490116 + (1.0 - _ringPulse) * (_ammoType.range * 0.899999976158142));
+                    float num2 = (float)(_ammoType.range * 0.1f + (1f - _ringPulse) * (_ammoType.range * 0.9f));
                     for (int index = 0; index < num1; ++index)
                     {
                         float rad = Maths.DegToRad(360 / (num1 - 1) * index);

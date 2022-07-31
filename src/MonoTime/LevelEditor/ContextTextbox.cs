@@ -75,8 +75,8 @@ namespace DuckGame
             if (this._dialog.opened)
                 return;
             this._blink += 0.04f;
-            if (_blink >= 1.0)
-                this._blink = 0.0f;
+            if (_blink >= 1f)
+                this._blink = 0f;
             if (this._dialog.result != null)
             {
                 this._field.value = _dialog.result;

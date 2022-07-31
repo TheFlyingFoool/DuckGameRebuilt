@@ -69,7 +69,7 @@ namespace DuckGame
                 ConnectionStatusBar connectionStatusBar = null;
                 foreach (ConnectionStatusBar bar in ConnectionStatusUI._core.bars)
                 {
-                    if (connectionStatusBar == null || connectionStatusBar.position > 0.300000011920929)
+                    if (connectionStatusBar == null || connectionStatusBar.position > 0.3f)
                         bar.position = Lerp.FloatSmooth(bar.position, 1f, 0.16f, 1.1f);
                     connectionStatusBar = bar;
                 }
@@ -79,8 +79,8 @@ namespace DuckGame
                 ConnectionStatusBar connectionStatusBar = null;
                 foreach (ConnectionStatusBar bar in ConnectionStatusUI._core.bars)
                 {
-                    if (connectionStatusBar == null || connectionStatusBar.position < 0.699999988079071)
-                        bar.position = Lerp.FloatSmooth(bar.position, 0.0f, 0.08f, 1.1f);
+                    if (connectionStatusBar == null || connectionStatusBar.position < 0.7f)
+                        bar.position = Lerp.FloatSmooth(bar.position, 0f, 0.08f, 1.1f);
                     connectionStatusBar = bar;
                 }
             }
@@ -92,7 +92,7 @@ namespace DuckGame
             if (ConnectionStatusUI.spectatorNum > 0)
                 ++count;
             float num1 = 14f;
-            Vec2 vec2_1 = new Vec2(30f, (float)((double)Layer.HUD.height / 2.0 - count * (double)num1 / 2.0));
+            Vec2 vec2_1 = new Vec2(30f, Layer.HUD.height / 2f - count * num1 / 2f);
             bool flag1 = false;
             int num2 = 0;
             foreach (ConnectionStatusBar bar in ConnectionStatusUI._core.bars)
@@ -104,7 +104,7 @@ namespace DuckGame
                 }
                 if (bar.profile.connection != null && bar.profile.connection.status != ConnectionStatus.Disconnected)
                 {
-                    if (bar.position > 0.00999999977648258)
+                    if (bar.position > 0.01f)
                     {
                         Vec2 vec2_2 = new Vec2(vec2_1.x, vec2_1.y + num2 * 14);
                         vec2_2.x -= Layer.HUD.width * (1f - bar.position);

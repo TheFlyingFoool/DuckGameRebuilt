@@ -66,7 +66,7 @@ namespace DuckGame
 
         public override bool visible
         {
-            get => (double)this.alpha >= 0.00999999977648258 && base.visible;
+            get => this.alpha >= 0.01f && base.visible;
             set => base.visible = value;
         }
 
@@ -148,8 +148,8 @@ namespace DuckGame
             }
             else
             {
-                ArcadeHUD.open = (double)this.alpha > 0.949999988079071;
-                if ((double)this.alpha <= 0.00999999977648258)
+                ArcadeHUD.open = this.alpha > 0.95f;
+                if (this.alpha <= 0.01f)
                     return;
                 if (!this._afterChallenge && !this._goBack)
                 {
@@ -310,20 +310,20 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.alpha <= 0.00999999977648258 || this._activeChallengeGroup == null)
+            if ((double)this.alpha <= 0.01f || this._activeChallengeGroup == null)
                 return;
             float ypos = 16f;
             string nameForDisplay = this._activeChallengeGroup.GetNameForDisplay();
             this._font.alpha = this.alpha;
             float width = this._font.GetWidth(nameForDisplay);
-            this._font.Draw(nameForDisplay, (float)(160.0 - (double)width / 2.0), ypos, Color.White);
+            this._font.Draw(nameForDisplay, (160f - width / 2f), ypos, Color.White);
             this._titleWing.alpha = this.alpha;
             this._titleWing.flipH = false;
-            this._titleWing.x = (float)(160.0 - (double)width / 2.0) - (this._titleWing.width + 1);
+            this._titleWing.x = (160f - width / 2f) - (this._titleWing.width + 1);
             this._titleWing.y = ypos;
             this._titleWing.Draw();
             this._titleWing.flipH = true;
-            this._titleWing.x = (float)(160.0 + (double)width / 2.0) + _titleWing.width;
+            this._titleWing.x = (160f + width / 2f) + _titleWing.width;
             this._titleWing.y = ypos;
             this._titleWing.Draw();
             int num = 0;
