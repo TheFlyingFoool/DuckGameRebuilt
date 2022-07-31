@@ -58,8 +58,6 @@ namespace DuckGame
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
             this.weight = 4f;
-            this._spinUp = SFX.Get("chaingunSpinUp");
-            this._spinDown = SFX.Get("chaingunSpinDown");
             this._holdOffset = new Vec2(4f, 2f);
             this.flammable = 0.8f;
             this.physicsMaterial = PhysicsMaterial.Plastic;
@@ -68,6 +66,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            this._spinUp = SFX.Get("chaingunSpinUp");
+            this._spinDown = SFX.Get("chaingunSpinDown");
             base.Initialize();
             this._bullets = new ChaingunBullet(this.x, this.y, true)
             {

@@ -52,9 +52,9 @@ namespace DuckGame
         private int _skipDebris;
         private bool _resetDuck;
         private int _skipSpark;
-        private LoopingSound _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
-        private LoopingSound _bladeSound = new LoopingSound("chainsawBladeLoop", multiSound: "chainsawBladeLoopMulti");
-        private LoopingSound _bladeSoundLow = new LoopingSound("chainsawBladeLoopLow", multiSound: "chainsawBladeLoopLowMulti");
+        private LoopingSound _sound;
+        private LoopingSound _bladeSound;
+        private LoopingSound _bladeSoundLow;
         private bool _smokeFlipper;
         private float _fireTrailWait;
         private bool _skipSmoke;
@@ -109,6 +109,9 @@ namespace DuckGame
 
         public override void Initialize()
         {
+             _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
+            _bladeSound = new LoopingSound("chainsawBladeLoop", multiSound: "chainsawBladeLoopMulti");
+            _bladeSoundLow = new LoopingSound("chainsawBladeLoopLow", multiSound: "chainsawBladeLoopLowMulti");
             this._sprite = new SpriteMap("chainsaw", 29, 13);
             if ((bool)this.souped)
                 this._sprite = new SpriteMap("turbochainsaw", 29, 13);

@@ -16,7 +16,7 @@ namespace DuckGame
         public bool _firing;
         private new float _flameWait;
         private SpriteMap _can;
-        private ConstantSound _sound = new ConstantSound("flameThrowing");
+        private ConstantSound _sound;
         private int _maxAmmo = 100;
 
         public FlameThrower(float xval, float yval)
@@ -56,7 +56,11 @@ namespace DuckGame
             this.editorTooltip = "Some Ducks just want to watch the world burn.";
             this._bio = "I have a problem. I want this flame here, to be over there. But I can't pick it up, it's too damn hot. If only there was some way I could throw it.";
         }
-
+        public override void Initialize()
+        {
+            _sound = new ConstantSound("flameThrowing");
+            base.Initialize();
+        }
         public override void Update()
         {
             base.Update();

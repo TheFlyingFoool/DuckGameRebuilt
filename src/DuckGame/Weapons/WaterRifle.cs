@@ -12,7 +12,7 @@ namespace DuckGame
     public class WaterRifle : Gun
     {
         private FluidStream _stream;
-        private ConstantSound _sound = new ConstantSound("demoBlaster");
+        private ConstantSound _sound;
         private int _wait;
 
         public WaterRifle(float xval, float yval)
@@ -38,7 +38,11 @@ namespace DuckGame
             this.isFatal = false;
         }
 
-        public override void Initialize() => Level.Add(_stream);
+        public override void Initialize()
+        {
+            _sound = new ConstantSound("demoBlaster");
+            Level.Add(_stream);
+        }
 
         public override void Terminate() => Level.Remove(_stream);
 

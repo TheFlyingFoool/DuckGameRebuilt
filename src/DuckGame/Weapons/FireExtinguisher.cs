@@ -15,7 +15,7 @@ namespace DuckGame
         private SpriteMap _guage;
         public bool _firing;
         private bool _smoke = true;
-        private ConstantSound _sound = new ConstantSound("flameThrowing");
+        private ConstantSound _sound;
         private int _maxAmmo = 200;
 
         public FireExtinguisher(float xval, float yval)
@@ -39,7 +39,11 @@ namespace DuckGame
             this.isFatal = false;
             this.editorTooltip = "Safety first! Extinguishes fires but also just makes everything fun and foamy.";
         }
-
+        public override void Initialize()
+        {
+            _sound = new ConstantSound("flameThrowing");
+            base.Initialize();
+        }
         public override void Update()
         {
             base.Update();

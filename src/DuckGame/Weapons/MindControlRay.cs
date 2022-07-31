@@ -20,7 +20,7 @@ namespace DuckGame
         private float _beamTime;
         private float _canConvert;
         private int _boltWait;
-        private LoopingSound _beamSound = new LoopingSound("mindBeam");
+        private LoopingSound _beamSound;
 
         public Duck controlledDuck => this._controlledDuck;
 
@@ -52,7 +52,11 @@ namespace DuckGame
             this.flammable = 0.8f;
             this.editorTooltip = "Best friend of Mind Control Steve. Takes control of enemy Ducks.";
         }
-
+        public override void Initialize()
+        {
+            _beamSound = new LoopingSound("mindBeam");
+            base.Initialize();
+        }
         public override void Terminate()
         {
             this._beamSound.Kill();

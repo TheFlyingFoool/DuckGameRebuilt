@@ -29,7 +29,7 @@ namespace DuckGame
         private int _inc;
         public float _idleSpeed;
         public RCController _controller;
-        private ConstantSound _idle = new ConstantSound("rcDrive");
+        private ConstantSound _idle;
 
         public bool receivingSignal
         {
@@ -72,6 +72,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            _idle = new ConstantSound("rcDrive");
         }
 
         public override void Terminate()
