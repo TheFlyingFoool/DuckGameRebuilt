@@ -78,10 +78,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._beamSound = SFX.Get("magnetBeam", 0.0f, looped: true);
+            this._beamSound = SFX.Get("magnetBeam", 0f, looped: true);
             int num = 10;
             for (int index = 0; index < num; ++index)
-                this._lines.Add(new MagnaLine(0.0f, 0.0f, this, this._ammoType.range, index / (float)num));
+                this._lines.Add(new MagnaLine(0f, 0f, this, this._ammoType.range, index / (float)num));
             base.Initialize();
         }
 
@@ -102,9 +102,9 @@ namespace DuckGame
             if (this.isServerForObject && this._magnetActive && !this.prevMagActive)
                 this._power -= 0.01f;
             this.prevMagActive = this._magnetActive;
-            if ((double)this._beamSound.Volume > 0.01f && this._beamSound.State != SoundState.Playing)
+            if (this._beamSound.Volume > 0.01f && this._beamSound.State != SoundState.Playing)
                 this._beamSound.Play();
-            else if ((double)this._beamSound.Volume < 0.01f && this._beamSound.State == SoundState.Playing)
+            else if (this._beamSound.Volume < 0.01f && this._beamSound.State == SoundState.Playing)
                 this._beamSound.Stop();
             this._beamSound.Volume = Maths.LerpTowards(this._beamSound.Volume, this._magnetActive ? 0.1f : 0f, 0.1f);
             if (_power > 1.0)
@@ -151,7 +151,7 @@ namespace DuckGame
                                     holdable3 = holdable2.tape;
                                 vec2_1 = holdable3.position - p1_1;
                                 float length = vec2_1.length;
-                                if (holdable1 == null || (double)length < (double)val1)
+                                if (holdable1 == null || length < val1)
                                 {
                                     val1 = length;
                                     holdable1 = holdable3;
@@ -189,21 +189,21 @@ namespace DuckGame
                             if (!(holdable1.owner.realObject is Duck) && Network.isActive)
                                 return;
                             holdable1.owner.realObject.hSpeed += normalized2.x * num;
-                            holdable1.owner.realObject.vSpeed += (float)(normalized2.y * (double)num * 4.0);
-                            if ((holdable1.owner.realObject as PhysicsObject).grounded && (double)holdable1.owner.realObject.vSpeed > 0.0)
-                                holdable1.owner.realObject.vSpeed = 0.0f;
+                            holdable1.owner.realObject.vSpeed += (float)(normalized2.y * num * 4.0);
+                            if ((holdable1.owner.realObject as PhysicsObject).grounded && holdable1.owner.realObject.vSpeed > 0.0)
+                                holdable1.owner.realObject.vSpeed = 0f;
                         }
                         else
                         {
                             this.Fondle(holdable1);
                             holdable1.hSpeed += normalized2.x * num;
-                            holdable1.vSpeed += (float)(normalized2.y * (double)num * 4.0);
-                            if (holdable1.grounded && (double)holdable1.vSpeed > 0.0)
-                                holdable1.vSpeed = 0.0f;
+                            holdable1.vSpeed += (float)(normalized2.y * num * 4.0);
+                            if (holdable1.grounded && holdable1.vSpeed > 0.0)
+                                holdable1.vSpeed = 0f;
                         }
                         this._hasRay = true;
                         this._rayHit = holdable1.position;
-                        if (this.isServerForObject && (double)val1 < 20.0)
+                        if (this.isServerForObject && val1 < 20.0)
                         {
                             if (holdable1 is Equipment && holdable1.duck != null)
                             {
@@ -245,7 +245,7 @@ namespace DuckGame
                             vec2_1 = block.position - position;
                             float num = ((1f - Math.Min(vec2_1.length, this._ammoType.range) / _ammoType.range) * 0.8f);
                             Vec2 vec2_2 = hitPos - this.duck.position;
-                            double length = (double)vec2_2.length;
+                            double length = vec2_2.length;
                             vec2_2.Normalize();
                             this.owner.hSpeed += vec2_2.x * num;
                             this.owner.vSpeed += vec2_2.y * num;
@@ -369,7 +369,7 @@ namespace DuckGame
                         this._raised = false;
                         this._keepRaised = false;
                     }
-                    this.owner.hSpeed = this.owner.vSpeed = 0.0f;
+                    this.owner.hSpeed = this.owner.vSpeed = 0f;
                     this.duck.moveLock = true;
                 }
                 else if (this._stuck == null && this.duck != null)
@@ -386,7 +386,7 @@ namespace DuckGame
             {
                 if (this._grabbed is Duck)
                 {
-                    this._grabbed.position = this.Offset(this.barrelOffset + new Vec2(0.0f, -6f)) + this.barrelVector * this._grabbed.halfWidth;
+                    this._grabbed.position = this.Offset(this.barrelOffset + new Vec2(0f, -6f)) + this.barrelVector * this._grabbed.halfWidth;
                     (this._grabbed as Duck).UpdateSkeleton();
                     (this._grabbed as Duck).gripped = true;
                 }
@@ -402,7 +402,7 @@ namespace DuckGame
 
         private void ReleaseGrab(Thing pThing)
         {
-            pThing.angle = 0.0f;
+            pThing.angle = 0f;
             if (pThing is Holdable t)
             {
                 t.owner = null;
@@ -420,13 +420,13 @@ namespace DuckGame
             pThing.vSpeed = this.barrelVector.y * 5f;
             if (!(pThing is EnergyScimitar))
                 return;
-            (pThing as EnergyScimitar).StartFlying(this.offDir < 0 ? (float)(-(double)this.angleDegrees - 180.0) : -this.angleDegrees, true);
+            (pThing as EnergyScimitar).StartFlying(this.offDir < 0 ? (float)(-this.angleDegrees - 180.0) : -this.angleDegrees, true);
         }
 
         public override void Draw()
         {
             base.Draw();
-            this.Draw(this._magnet, new Vec2(5f, (float)((double)(float)this._wave * _waveMult - 2.0)));
+            this.Draw(this._magnet, new Vec2(5f, (float)((float)this._wave * _waveMult - 2.0)));
             foreach (Thing line in this._lines)
                 line.Draw();
         }

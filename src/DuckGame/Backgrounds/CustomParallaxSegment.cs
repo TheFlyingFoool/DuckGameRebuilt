@@ -13,7 +13,7 @@ namespace DuckGame
         public EditorProperty<int> ystart = new EditorProperty<int>(0, max: 40f, increment: 1f);
         public EditorProperty<int> yend = new EditorProperty<int>(0, max: 40f, increment: 1f);
         public EditorProperty<float> speed = new EditorProperty<float>(0.5f, max: 2f);
-        public EditorProperty<float> distance = new EditorProperty<float>(0.0f, increment: 0.05f);
+        public EditorProperty<float> distance = new EditorProperty<float>(0f, increment: 0.05f);
         public EditorProperty<bool> moving = new EditorProperty<bool>(false);
         private bool initializedParallax;
 

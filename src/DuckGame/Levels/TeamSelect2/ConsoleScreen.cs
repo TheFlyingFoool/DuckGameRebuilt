@@ -24,7 +24,7 @@ namespace DuckGame
 
         private RenderTarget2D _screenTarget
         {
-            get => (double)this._selector._roomEditor.fade > 0.0 ? this._finalTarget : this._realScreenTarget;
+            get => this._selector._roomEditor.fade > 0f ? this._finalTarget : this._realScreenTarget;
             set => this._realScreenTarget = value;
         }
 
@@ -56,7 +56,7 @@ namespace DuckGame
             DuckGame.Graphics.Clear(Color.Black);
             DuckGame.Graphics.screen = this._batch;
             Camera camera = new Camera(3f, 4f, _screenTarget.width, _screenTarget.height);
-            if ((double)this._selector._roomEditor.fade > 0.0)
+            if (this._selector._roomEditor.fade > 0f)
                 camera = new Camera(3f, 4f, this._screenTarget.width / 4, this._screenTarget.height / 4);
             this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
         }
@@ -66,22 +66,22 @@ namespace DuckGame
             this._batch.End();
             if (!this._flashTransition)
             {
-                Camera camera1 = new Camera(0.0f, 0.0f, _screenTarget.width, _screenTarget.height);
-                if ((double)this._selector._roomEditor.fade <= 0.0)
+                Camera camera1 = new Camera(0f, 0f, _screenTarget.width, _screenTarget.height);
+                if (this._selector._roomEditor.fade <= 0f)
                 {
                     DuckGame.Graphics.SetRenderTarget(this._bloomTarget);
                     DuckGame.Graphics.viewport = new Viewport(0, 0, this._bloomTarget.width, this._bloomTarget.height);
                     DuckGame.Graphics.screen = this._batch;
                     this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, (MTEffect)this._blurMaterial, camera1.getMatrix());
-                    DuckGame.Graphics.Draw(_screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, (Depth)1f);
+                    DuckGame.Graphics.Draw(_screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, (Depth)1f);
                     this._batch.End();
                     DuckGame.Graphics.SetRenderTarget(this._finalTarget);
                     DuckGame.Graphics.viewport = new Viewport(0, 0, this._finalTarget.width, this._finalTarget.height);
-                    Camera camera2 = new Camera(0.0f, 0.0f, _screenTarget.width, _screenTarget.height);
+                    Camera camera2 = new Camera(0f, 0f, _screenTarget.width, _screenTarget.height);
                     this._batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, (MTEffect)this._lcdMaterial, camera2.getMatrix());
                     DuckGame.Graphics.device.Textures[1] = (Texture2D)_bloomTarget;
                     DuckGame.Graphics.device.SamplerStates[1] = SamplerState.LinearClamp;
-                    DuckGame.Graphics.Draw(_screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.82f);
+                    DuckGame.Graphics.Draw(_screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.82f);
                     DuckGame.Graphics.material = null;
                     this._batch.End();
                 }

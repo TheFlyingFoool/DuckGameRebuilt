@@ -43,7 +43,7 @@ namespace DuckGame
             graphic2.CenterOrigin();
             graphicList.Add(graphic2);
             this.graphic = graphicList;
-            this.center = new Vec2(0.0f, 0.0f);
+            this.center = new Vec2(0f, 0f);
             this.depth = (Depth)1f;
             this._backgroundSmoke = new Sprite("smokeBack");
         }
@@ -71,7 +71,7 @@ namespace DuckGame
             this.x += this.move.x;
             this.y += this.move.y;
             this.xscale -= 0.005f;
-            if ((double)this.xscale >= 0.1f)
+            if (this.xscale >= 0.1f)
                 return;
             Level.Remove(this);
         }

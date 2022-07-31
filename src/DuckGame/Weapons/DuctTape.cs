@@ -48,12 +48,12 @@ namespace DuckGame
                    }
                    return false;
                });
-                if ((double)this.Distance(holdable) >= 16.0)
+                if (this.Distance(holdable) >= 16.0)
                     return;
                 Level.Add(SmallSmoke.New(this.position.x, this.position.y));
                 Level.Add(SmallSmoke.New(this.position.x, this.position.y));
                 SFX.PlaySynchronized("equip", 0.8f);
-                TapedGun h = new TapedGun(0.0f, 0.0f);
+                TapedGun h = new TapedGun(0f, 0f);
                 Thing.ExtraFondle(holdable, this.connection);
                 h.gun1 = holdable;
                 holdable.owner = duck;

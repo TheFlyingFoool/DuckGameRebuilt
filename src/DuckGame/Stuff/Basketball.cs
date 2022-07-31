@@ -34,8 +34,8 @@ namespace DuckGame
             this._bouncy = 0.8f;
             this.friction = 0.03f;
             this._impactThreshold = 0.1f;
-            this._holdOffset = new Vec2(6f, 0.0f);
-            this.handOffset = new Vec2(0.0f, -0.0f);
+            this._holdOffset = new Vec2(6f, 0f);
+            this.handOffset = new Vec2(0f, -0f);
             this.editorTooltip = "Perfect for playing the world's greatest sport! Also basketball.";
         }
 
@@ -66,9 +66,9 @@ namespace DuckGame
                 if (this._bounceDuck != null)
                 {
                     float length = (this._bounceDuck.position - this.position).length;
-                    if ((double)length < 16.0)
+                    if (length < 16f)
                         this.hSpeed = this._bounceDuck.hSpeed;
-                    if (this._bounceDuck.holdObject == null && (double)this.vSpeed < 1.0 && (double)this._bounceDuck.top + 8.0 > (double)this.y && (double)length < 16.0)
+                    if (this._bounceDuck.holdObject == null && this.vSpeed < 1f && this._bounceDuck.top + 8f > this.y && length < 16f)
                     {
                         this._bounceDuck.GiveHoldable(this);
                         this._framesInHand = 0;
@@ -79,7 +79,7 @@ namespace DuckGame
             {
                 if (this._framesInHand < 0)
                     this._framesInHand = 0;
-                if (!this.owner.action && (double)Math.Abs(this.owner.hSpeed) > 0.5 && this._framesInHand > 6)
+                if (!this.owner.action && Math.Abs(this.owner.hSpeed) > 0.5f && this._framesInHand > 6)
                 {
                     this._bounceDuck = this.duck;
                     float hSpeed = this.duck.hSpeed;
@@ -90,7 +90,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((double)Math.Abs(this.owner.hSpeed) > 0.5 && this.duck.grounded)
+                    if (Math.Abs(this.owner.hSpeed) > 0.5f && this.duck.grounded)
                         ++this._walkFrames;
                     else if (this.duck.grounded)
                         --this._walkFrames;

@@ -42,7 +42,7 @@ namespace DuckGame
                 Vec2 p2 = Vec2.Zero;
                 if (this._owner.controlledDuck == null && !this._isNotControlRay)
                 {
-                    p2 = new Vec2((float)Math.Cos((double)this.angle), (float)-Math.Sin((double)this.angle));
+                    p2 = new Vec2((float)Math.Cos(this.angle), (float)-Math.Sin(this.angle));
                     if (this._isLocalWave)
                     {
                         foreach (IAmADuck amAduck in Level.CheckCircleAll<IAmADuck>(this.position, 3f))
@@ -77,7 +77,7 @@ namespace DuckGame
             else
             {
                 this.xscale = this.yscale = 1f;
-                this.position += new Vec2((float)Math.Cos((double)this.angle), (float)-Math.Sin((double)this.angle)) * 2.6f;
+                this.position += new Vec2((float)Math.Cos(this.angle), (float)-Math.Sin(this.angle)) * 2.6f;
             }
         }
     }

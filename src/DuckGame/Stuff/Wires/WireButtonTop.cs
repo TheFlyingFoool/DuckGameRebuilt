@@ -43,13 +43,13 @@ namespace DuckGame
         {
             if (with is PhysicsObject && !(with is TeamHat))
             {
-                if (this._orientation == 0 && (double)with.vSpeed > -0.100000001490116)
+                if (this._orientation == 0 && with.vSpeed > -0.100000001490116)
                     this._button.ButtonPressed(with as PhysicsObject);
-                else if (this._orientation == 1 && (double)with.hSpeed < 0.100000001490116)
+                else if (this._orientation == 1 && with.hSpeed < 0.100000001490116)
                     this._button.ButtonPressed(with as PhysicsObject);
-                else if (this._orientation == 2 && (double)with.vSpeed < 0.100000001490116)
+                else if (this._orientation == 2 && with.vSpeed < 0.100000001490116)
                     this._button.ButtonPressed(with as PhysicsObject);
-                else if (this._orientation == 3 && (double)with.hSpeed > -0.100000001490116)
+                else if (this._orientation == 3 && with.hSpeed > -0.100000001490116)
                     this._button.ButtonPressed(with as PhysicsObject);
             }
             base.OnSoftImpact(with, from);

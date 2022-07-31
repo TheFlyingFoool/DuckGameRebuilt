@@ -40,7 +40,7 @@ namespace DuckGame
 
         public override float Pitch
         {
-            get => this._single != null ? this._single.Pitch : 0.0f;
+            get => this._single != null ? this._single.Pitch : 0f;
             set
             {
                 if (this._single == null)
@@ -52,7 +52,7 @@ namespace DuckGame
 
         public override float Pan
         {
-            get => this._single != null ? this._single.Pan : 0.0f;
+            get => this._single != null ? this._single.Pan : 0f;
             set
             {
                 if (this._single == null)
@@ -97,7 +97,7 @@ namespace DuckGame
         {
             while (this._instances.Count > 0)
                 this._instances[0].Stop();
-            this._volume = 0.0f;
+            this._volume = 0f;
         }
 
         public void Stop(MultiSound who)
@@ -108,9 +108,9 @@ namespace DuckGame
                 --this._playCount;
             if (this._playCount == 0)
             {
-                this._single.Volume = 0.0f;
+                this._single.Volume = 0f;
                 this._single.Stop();
-                this._multi.Volume = 0.0f;
+                this._multi.Volume = 0f;
                 this._multi.Stop();
                 this._pooled = false;
                 SFX.UnpoolSound(this);
@@ -123,9 +123,9 @@ namespace DuckGame
         {
             if (this._single != null && this._state != SoundState.Stopped)
             {
-                this._single.Volume = 0.0f;
+                this._single.Volume = 0f;
                 this._single.Stop();
-                this._multi.Volume = 0.0f;
+                this._multi.Volume = 0f;
                 this._multi.Stop();
             }
             this._pooled = false;
@@ -135,12 +135,12 @@ namespace DuckGame
         {
             if (this._single == null)
                 return;
-            float num1 = 0.0f;
+            float num1 = 0f;
             foreach (MultiSound instance in this._instances)
                 num1 += instance.Volume;
             int count = this._instances.Count;
             float num2 = num1 / (count > 0 ? count : 1f);
-            this._volume = Lerp.Float(this._volume, (float)((double)num2 * 0.7f + Maths.Clamp(this._instances.Count, 0, 4) / 4f * (double)num2 * 0.3f), 0.05f);
+            this._volume = Lerp.Float(this._volume, (float)(num2 * 0.7f + Maths.Clamp(this._instances.Count, 0, 4) / 4f * num2 * 0.3f), 0.05f);
             if (this._state != SoundState.Playing)
                 return;
             if (this._playCount > 1)
@@ -149,8 +149,8 @@ namespace DuckGame
                     this._multi.Play();
                 if (this._single.State != SoundState.Stopped)
                 {
-                    this._single.Volume = Lerp.Float(this._single.Volume, 0.0f, 0.05f);
-                    if ((double)this._single.Volume < 0.02f)
+                    this._single.Volume = Lerp.Float(this._single.Volume, 0f, 0.05f);
+                    if (this._single.Volume < 0.02f)
                     {
                         this._single.Volume = 0f;
                         this._single.Stop();
@@ -166,10 +166,10 @@ namespace DuckGame
                     this._single.Play();
                 if (this._multi.State != SoundState.Stopped)
                 {
-                    this._multi.Volume = Lerp.Float(this._multi.Volume, 0.0f, 0.05f);
+                    this._multi.Volume = Lerp.Float(this._multi.Volume, 0f, 0.05f);
                     if (this._multi.Volume < 0.02f)
                     {
-                        this._multi.Volume = 0.0f;
+                        this._multi.Volume = 0f;
                         this._multi.Stop();
                     }
                 }
@@ -182,8 +182,8 @@ namespace DuckGame
             this._name = id;
             if (id != "")
             {
-                this._single = SFX.GetInstance(single, 0.0f, looped: true);
-                this._multi = SFX.GetInstance(multi, 0.0f, looped: true);
+                this._single = SFX.GetInstance(single, 0f, looped: true);
+                this._multi = SFX.GetInstance(multi, 0f, looped: true);
             }
             this._cannotBeCancelled = true;
             this._volume = 1f;

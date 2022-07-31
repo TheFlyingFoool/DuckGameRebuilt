@@ -92,7 +92,7 @@ namespace DuckGame
                         Editor current = Level.current as Editor;
                         current.ClearEverything();
                         current.saveName = "";
-                        current.AddObject(new ImportMachine(0.0f, 0.0f));
+                        current.AddObject(new ImportMachine(0f, 0f));
                         current.CloseMenu();
                         this._unsavedChangesDialogue.result = false;
                     }
@@ -487,7 +487,7 @@ namespace DuckGame
                 this._quitMenu.opened = true;
                 contextMenu1 = this._quitMenu;
             }
-            if (contextMenu1 == null || (double)contextMenu1.y + contextMenu1.menuSize.y <= (double)this.layer.camera.height - 4.0)
+            if (contextMenu1 == null || contextMenu1.y + contextMenu1.menuSize.y <= this.layer.camera.height - 4f)
                 return;
             this.isPushingUp = true;
             float y = contextMenu1.y;
@@ -496,7 +496,7 @@ namespace DuckGame
             ContextMenu i = this.owner as ContextMenu;
             if (i != null)
             {
-                i._openedOffset = 0.0f;
+                i._openedOffset = 0f;
                 i.y = contextMenu1.y - 16f - i.menuSize.y;
             }
             i.PositionItems();
@@ -543,7 +543,7 @@ namespace DuckGame
                 if (Editor.inputMode == EditorInput.Mouse)
                     Graphics.DrawString(this.toolBarToolTip, p1 + new Vec2(4f, 4f), Color.White * this.alpha, this.depth + 11);
                 else
-                    Graphics.DrawString("@SELECT@" + this.toolBarToolTip, p1 + new Vec2(0.0f, 4f), Color.White * this.alpha, this.depth + 11);
+                    Graphics.DrawString("@SELECT@" + this.toolBarToolTip, p1 + new Vec2(0f, 4f), Color.White * this.alpha, this.depth + 11);
             }
             float x = this.position.x;
             this._playButton.x = x;

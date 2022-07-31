@@ -52,9 +52,9 @@ namespace DuckGame
 
         public override bool isConnected => this._device != null && this._device.isConnected;
 
-        public float leftTrigger => this._device == null ? 0.0f : this._device.leftTrigger;
+        public float leftTrigger => this._device == null ? 0f : this._device.leftTrigger;
 
-        public float rightTrigger => this._device == null ? 0.0f : this._device.rightTrigger;
+        public float rightTrigger => this._device == null ? 0f : this._device.rightTrigger;
 
         public Vec2 leftStick => this._device == null ? Vec2.Zero : this._device.leftStick;
 
@@ -71,7 +71,7 @@ namespace DuckGame
 
         public override bool MapDown(int mapping, bool any = false) => this._device != null && this._device.MapDown(mapping, any);
 
-        public override void Rumble(float leftIntensity = 0.0f, float rightIntensity = 0.0f)
+        public override void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
             if (!(this.device is XInputPad))
                 return;

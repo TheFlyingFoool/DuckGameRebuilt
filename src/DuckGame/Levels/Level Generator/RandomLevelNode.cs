@@ -35,7 +35,7 @@ namespace DuckGame
         public static bool processing = false;
         public List<RandomLevelData.PreparedThing> _preparedThings;
         public static HashSet<Thing> _allPreparedThings;
-        public static Vec2 topLeft = new Vec2(0.0f, 0.0f);
+        public static Vec2 topLeft = new Vec2(0f, 0f);
         public static bool firstGetRequiresMultiplePaths = false;
         public bool kingTile;
         private bool leftSymmetric;
@@ -193,16 +193,16 @@ namespace DuckGame
                     if (randomLevelNode != null && randomLevelNode.data != null)
                     {
                         Vec2 vec2 = new Vec2(index3 * 192 + 96, index4 * 144 + 72) + RandomLevelNode.topLeft;
-                        PyramidWall pyramidWall1 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(-192f, 0.0f));
+                        PyramidWall pyramidWall1 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(-192f, 0f));
                         if (pyramidWall1 != null)
                             pyramidWall1.hasRight = true;
-                        PyramidWall pyramidWall2 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(192f, 0.0f));
+                        PyramidWall pyramidWall2 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(192f, 0f));
                         if (pyramidWall2 != null)
                             pyramidWall2.hasLeft = true;
-                        PyramidWall pyramidWall3 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(0.0f, -144f));
+                        PyramidWall pyramidWall3 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(0f, -144f));
                         if (pyramidWall3 != null)
                             pyramidWall3.hasDown = true;
-                        PyramidWall pyramidWall4 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(0.0f, 144f));
+                        PyramidWall pyramidWall4 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(0f, 144f));
                         if (pyramidWall4 != null)
                             pyramidWall4.hasUp = true;
                     }
@@ -212,7 +212,7 @@ namespace DuckGame
                 pyramidWall.AddExtraWalls();
             foreach (PyramidDoor pyramidDoor in level.things[typeof(PyramidDoor)])
             {
-                Block block = level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(-16f, 0.0f), pyramidDoor) ?? level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(16f, 0.0f), pyramidDoor);
+                Block block = level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(-16f, 0f), pyramidDoor) ?? level.CollisionPoint<Block>(pyramidDoor.position + new Vec2(16f, 0f), pyramidDoor);
                 if (block != null && !(block is PyramidDoor) && !(block is Door))
                 {
                     level.RemoveThing(pyramidDoor);
@@ -231,7 +231,7 @@ namespace DuckGame
             }
             foreach (Door door in level.things[typeof(Door)])
             {
-                switch (level.CollisionLine<Block>(door.position + new Vec2(-16f, 0.0f), door.position + new Vec2(16f, 0.0f), door))
+                switch (level.CollisionLine<Block>(door.position + new Vec2(-16f, 0f), door.position + new Vec2(16f, 0f), door))
                 {
                     case null:
                     case PyramidDoor _:
@@ -359,9 +359,9 @@ namespace DuckGame
                 }
                 if (symmetricVal && !LevelGenerator.openAirMode)
                 {
-                    if (num == 2 && (double)Rando.Float(1f) < 0.300000011920929)
+                    if (num == 2 && Rando.Float(1f) < 0.300000011920929)
                         symmetricVal = false;
-                    else if (num == 1 && (double)Rando.Float(1f) < 0.800000011920929)
+                    else if (num == 1 && Rando.Float(1f) < 0.800000011920929)
                         symmetricVal = false;
                     else if (num == 1 && tile.right && (this.right == null || this.right.right == null))
                         symmetricVal = false;

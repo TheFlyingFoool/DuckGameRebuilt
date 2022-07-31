@@ -61,7 +61,7 @@ namespace DuckGame
             set
             {
                 this.SetFrameWithoutReset(value);
-                this._frameInc = 0.0f;
+                this._frameInc = 0f;
                 this._finished = false;
             }
         }
@@ -151,7 +151,7 @@ namespace DuckGame
                 framesVal[index] = index;
             this._animations.Add(new Animation("default", 1f, true, framesVal));
             this.SetAnimation("default");
-            this._speed = 0.0f;
+            this._speed = 0f;
         }
 
         public void AddAnimation(string name, float speed, bool looping, params int[] frames)
@@ -175,7 +175,7 @@ namespace DuckGame
                 if (animation.name == name)
                 {
                     this._currentAnimation = new Animation?(animation);
-                    this._frameInc = 0.0f;
+                    this._frameInc = 0f;
                     this.frame = 0;
                     return;
                 }
@@ -210,7 +210,7 @@ namespace DuckGame
                 this._frameInc += this._currentAnimation.Value.speed * this._speed;
                 if (_frameInc >= 1.0)
                 {
-                    this._frameInc = 0.0f;
+                    this._frameInc = 0f;
                     ++this._frame;
                 }
                 if (this._lastFrame != this._frame)
@@ -246,7 +246,7 @@ namespace DuckGame
                 this._frameInc += this._currentAnimation.Value.speed * this._speed;
                 if (_frameInc >= 1.0)
                 {
-                    this._frameInc = 0.0f;
+                    this._frameInc = 0f;
                     ++this._frame;
                 }
                 if (this._frame >= this._currentAnimation.Value.frames.Length)

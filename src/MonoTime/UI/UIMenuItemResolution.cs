@@ -31,7 +31,7 @@ namespace DuckGame
                 this.controlString = "@WASD@ADJUST @SELECT@APPLY";
             else
                 this.controlString = "@WASD@ADJUST @SELECT@APPLY @MENU2@ALL";
-            UIDivider component1 = new UIDivider(true, 0.0f);
+            UIDivider component1 = new UIDivider(true, 0f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left
@@ -77,7 +77,7 @@ namespace DuckGame
                 if (Resolution.current.mode == ScreenMode.Windowed)
                     this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => x.recommended || x == Resolution.current).ToList<Resolution>();
                 else
-                    this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => (double)Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.0500000007450581 || x == Resolution.current).ToList<Resolution>();
+                    this._values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.0500000007450581 || x == Resolution.current).ToList<Resolution>();
             }
         }
 

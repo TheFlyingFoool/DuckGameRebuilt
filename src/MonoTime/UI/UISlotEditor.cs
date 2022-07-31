@@ -46,7 +46,7 @@ namespace DuckGame
           : base("", xpos, ypos, wide, high)
         {
             float num = 38f;
-            //this._captureRectangle = new Rectangle((float)(int)((double)Layer.HUD.camera.width / 2.0 - (double)num / 2.0), (float)(int)((double)Layer.HUD.camera.height / 2.0 - (double)num / 2.0), (float)(int)num, (float)(int)num);
+            //this._captureRectangle = new Rectangle((float)(int)(Layer.HUD.camera.width / 2.0 - num / 2.0), (float)(int)(Layer.HUD.camera.height / 2.0 - num / 2.0), (float)(int)num, (float)(int)num);
             this._closeMenu = closeMenu;
             //this._littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
             //this._littleFont2 = new BitmapFont("smallBiosFont", 7, 6);

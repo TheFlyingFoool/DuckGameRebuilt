@@ -276,7 +276,7 @@ namespace DuckGame
         {
             UIMenu menu = new UIMenu("@WRENCH@GRAPHICS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
             menu.Add(new UIMenuItemToggle("Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.FullscreenChanged)), new FieldBinding(Data, "fullscreen")), true);
-            menu.Add(new UIMenuItemResolution("Resolution", new FieldBinding(LocalData, "currentResolution", max: 0.0f))
+            menu.Add(new UIMenuItemResolution("Resolution", new FieldBinding(LocalData, "currentResolution", max: 0f))
             {
                 selectAction = new Action(Options.ApplyResolution)
             }, true);
@@ -430,13 +430,13 @@ namespace DuckGame
                 accessibilityMenu.Add(new UIMenuItemToggle("IME Support", field: new FieldBinding(Data, "imeSupport")), true);
                 accessibilityMenu.Add(new UIText(" ", Color.White), true);
                 accessibilityMenu.Add(new UIText("Chat Settings", Color.White), true);
-                accessibilityMenu.Add(new UIMenuItemNumber("Custom MOJIs", field: new FieldBinding(typeof(Options), "mojiFilter", 0.0f, 2f, 0.1f), valStrings: new List<string>()
+                accessibilityMenu.Add(new UIMenuItemNumber("Custom MOJIs", field: new FieldBinding(typeof(Options), "mojiFilter", 0f, 2f, 0.1f), valStrings: new List<string>()
         {
           "|DGGREENN|@languageFilterOn@DISABLED",
           "|DGYELLO|@languageFilterOn@FRIENDS ",
           "|DGREDDD| @languageFilterOff@ENABLED"
         }), true);
-                accessibilityMenu.Add(new UIMenuItemNumber("Custom Hats", field: new FieldBinding(typeof(Options), "hatFilter", 0.0f, 2f, 0.1f), valStrings: new List<string>()
+                accessibilityMenu.Add(new UIMenuItemNumber("Custom Hats", field: new FieldBinding(typeof(Options), "hatFilter", 0f, 2f, 0.1f), valStrings: new List<string>()
         {
           "|DGGREEN|   ENABLED",
           "|DGYELLO|   FRIENDS",
@@ -445,7 +445,7 @@ namespace DuckGame
                 Options.tempBlockMenu = Options.CreateBlockMenu(accessibilityMenu);
                 accessibilityMenu.Add(new UIMenuItem("Manage Block List", new UIMenuActionOpenMenu(accessibilityMenu, tempBlockMenu)), true);
                 accessibilityMenu.Add(new UIText(" ", Color.White), true);
-                accessibilityMenu.Add(new UIMenuItemNumber("Chat Font", field: new FieldBinding(typeof(Options), "selectedFont", 0.0f, 6f, 0.1f), valStrings: Options.chatFonts), true);
+                accessibilityMenu.Add(new UIMenuItemNumber("Chat Font", field: new FieldBinding(typeof(Options), "selectedFont", 0f, 6f, 0.1f), valStrings: Options.chatFonts), true);
                 accessibilityMenu.Add(new UIMenuItemNumber("Chat Font Size", field: new FieldBinding(typeof(Options), "fontSize", 12f, 30f, 0.1f)), true);
                 accessibilityMenu.Add(new UIMenuItemNumber("Chat Head Size", field: new FieldBinding(Data, "chatHeadScale"), valStrings: new List<string>()
         {
@@ -690,9 +690,9 @@ namespace DuckGame
 
         public static void PostLoad()
         {
-            if ((double)Options.Data.musicVolume > 1.0)
+            if (Options.Data.musicVolume > 1.0)
                 Options.Data.musicVolume /= 100f;
-            if ((double)Options.Data.sfxVolume > 1.0)
+            if (Options.Data.sfxVolume > 1.0)
                 Options.Data.sfxVolume /= 100f;
             if (Options.Data.windowScale < 0)
                 Options.Data.windowScale = !MonoMain.fourK ? 0 : 1;
@@ -742,8 +742,8 @@ namespace DuckGame
 
         public static void Update()
         {
-            Music.masterVolume = Math.Min(1f, Math.Max(0.0f, Options.Data.musicVolume));
-            SFX.volume = Math.Min(1f, Math.Max(0.0f, Options.Data.sfxVolume));
+            Music.masterVolume = Math.Min(1f, Math.Max(0f, Options.Data.musicVolume));
+            SFX.volume = Math.Min(1f, Math.Max(0f, Options.Data.sfxVolume));
             if (Options._openedOptionsMenu && !Options._removedOptionsMenu && Options._optionsMenu != null && !Options._optionsMenu.open && !Options._optionsMenu.animating)
             {
                 Options._openedOptionsMenu = false;

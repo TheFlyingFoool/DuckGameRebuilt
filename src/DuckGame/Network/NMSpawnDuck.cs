@@ -30,7 +30,7 @@ namespace DuckGame
                 profile.duck.connection = profile.connection;
             profile.duck.visible = true;
             Vec3 color = profile.persona.color;
-            Level.Add(new SpawnLine(profile.duck.x, profile.duck.y, 0, 0.0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
+            Level.Add(new SpawnLine(profile.duck.x, profile.duck.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
             Level.Add(new SpawnLine(profile.duck.x, profile.duck.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
             Level.Add(new SpawnLine(profile.duck.x, profile.duck.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
             SFX.Play("pullPin", 0.7f);

@@ -52,16 +52,16 @@ namespace DuckGame
             Recorder.currentRecording = null;
             if (currentRecording == null)
                 return;
-            float num = 0.0f;
+            float num = 0f;
             float lastMatchLength = Stats.lastMatchLength;
             currentRecording.Rewind();
             while (!currentRecording.StepForward())
                 num += currentRecording.GetFrameTotal();
-            if ((double)lastMatchLength < 5.0)
+            if (lastMatchLength < 5.0)
                 num *= 1.3f;
-            if ((double)lastMatchLength < 7.0)
+            if (lastMatchLength < 7.0)
                 num *= 1.2f;
-            if ((double)lastMatchLength < 10.0)
+            if (lastMatchLength < 10.0)
                 num *= 1.1f;
             currentRecording.highlightScore = num;
         }
@@ -80,9 +80,9 @@ namespace DuckGame
                     recording1 = recording2;
                     break;
                 }
-                if ((double)recording2.highlightScore < (double)recording1.highlightScore)
+                if (recording2.highlightScore < recording1.highlightScore)
                     recording1 = recording2;
-                if ((double)recording2.highlightScore == (double)recording1.highlightScore && (double)Rando.Float(1f) >= 0.5)
+                if (recording2.highlightScore == recording1.highlightScore && Rando.Float(1f) >= 0.5)
                     recording1 = recording2;
             }
             recording1.Reset();

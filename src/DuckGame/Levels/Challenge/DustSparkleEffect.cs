@@ -49,7 +49,7 @@ namespace DuckGame
                 if (sparkle.alpha < 1.0)
                     sparkle.alpha += 0.01f;
                 bool flag = false;
-                if (sparkle.position.x > (double)this.x + _light.width + 2.0 || sparkle.position.x < (double)this.x - 2.0 || sparkle.position.y < (double)this.y + 1.0 || sparkle.position.y > (double)this.y + _light.height)
+                if (sparkle.position.x > this.x + _light.width + 2.0 || sparkle.position.x < this.x - 2.0 || sparkle.position.y < this.y + 1.0 || sparkle.position.y > this.y + _light.height)
                     flag = true;
                 if (flag)
                 {
@@ -62,7 +62,7 @@ namespace DuckGame
                 return;
             this._sparkleWait = 0;
             int num = 1;
-            if ((double)Rando.Float(1f) > 0.5)
+            if (Rando.Float(1f) > 0.5)
                 num = -1;
             this._sparkles.Add(new DustSparkle(new Vec2(this.x + Rando.Float(_light.width), this.y + Rando.Float(_light.height)), new Vec2(Rando.Float(0.15f, 0.25f) * num, Rando.Float(-0.05f, 0.05f))));
         }

@@ -298,7 +298,7 @@ namespace DuckGame
                 Graphics.DrawLine(p1, p1 + new Vec2(0f, 4f * DevConsole._tray.scale.x), Color.White, 2f, (Depth)1f);
             }
             int index1 = DevConsole._core.lines.Count - 1 - DevConsole._core.viewOffset;
-            float num5 = 0.0f;
+            float num5 = 0f;
             DevConsole._core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4.0), 1.0));
             float num6 = DevConsole._core.font.scale.x / 2f;
             float num7 = 18f * num6;
@@ -317,7 +317,7 @@ namespace DuckGame
                     text = "0" + text;
                 if (DevConsole._raster != null)
                 {
-                    DevConsole._raster.maxWidth = (int)((double)num4 - 35f * _tray.scale.x);
+                    DevConsole._raster.maxWidth = (int)(num4 - 35f * _tray.scale.x);
                     DevConsole._raster.singleLine = true;
                     DevConsole._raster.enforceWidthByWord = false;
                     DevConsole._raster.Draw(text, 4f * DevConsole._tray.scale.x, (num3 - num5 + 2f), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
@@ -1557,7 +1557,7 @@ namespace DuckGame
          {
              if (!(duck.GetEquipment(typeof(Holster)) is Holster e2))
              {
-                 e2 = str == "hp" || str == "ph" ? new PowerHolster(0.0f, 0.0f) : new Holster(0.0f, 0.0f);
+                 e2 = str == "hp" || str == "ph" ? new PowerHolster(0f, 0f) : new Holster(0f, 0f);
                  Level.Add(e2);
                  duck.Equip(e2);
              }
@@ -2201,7 +2201,7 @@ namespace DuckGame
                 DevConsole._core.lastCommandIndex = -1;
                 DevConsole._core.viewOffset = 0;
             }
-            DevConsole._core.alpha = Maths.LerpTowards(DevConsole._core.alpha, DevConsole._core.open ? 1f : 0.0f, 0.1f);
+            DevConsole._core.alpha = Maths.LerpTowards(DevConsole._core.alpha, DevConsole._core.open ? 1f : 0f, 0.1f);
             if (DevConsole._pendingCommandQueue.Count > 0)
             {
                 DevConsole.QueuedCommand queuedCommand = DevConsole._pendingCommandQueue.Peek();

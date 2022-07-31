@@ -521,13 +521,13 @@ namespace DuckGame
 
         public string FormatWithNewlines(string pText, float maxWidth, bool thinButtons = false)
         {
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             char[] charArray = pText.ToCharArray();
             for (this._letterIndex = 0; this._letterIndex < charArray.Length; ++this._letterIndex)
             {
                 bool flag = false;
-                if (charArray[this._letterIndex] == ' ' && (double)num1 > (double)maxWidth)
+                if (charArray[this._letterIndex] == ' ' && num1 > maxWidth)
                     charArray[this._letterIndex] = '\n';
                 if (charArray[this._letterIndex] == '@' || this.chatFont && charArray[this._letterIndex] == ':')
                 {
@@ -536,7 +536,7 @@ namespace DuckGame
                     Sprite sprite = this.ParseSprite(pText, null);
                     if (sprite != null)
                     {
-                        num1 += thinButtons ? 6f : (float)(sprite.width * (double)sprite.scale.x + 1.0);
+                        num1 += thinButtons ? 6f : (float)(sprite.width * sprite.scale.x + 1.0);
                         flag = true;
                     }
                     else
@@ -553,9 +553,9 @@ namespace DuckGame
                 }
                 else if (charArray[this._letterIndex] == '\n')
                 {
-                    if ((double)num1 > (double)num2)
+                    if (num1 > num2)
                         num2 = num1;
-                    num1 = 0.0f;
+                    num1 = 0f;
                 }
                 if (!flag)
                 {
@@ -580,15 +580,15 @@ namespace DuckGame
                     }
                 }
             }
-            if ((double)num1 > (double)num2)
+            if (num1 > num2)
                 ;
             return new string(charArray);
         }
 
         public float GetWidth(string text, bool thinButtons = false)
         {
-            float num1 = 0.0f;
-            float width1 = 0.0f;
+            float num1 = 0f;
+            float width1 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 bool flag = false;
@@ -605,16 +605,16 @@ namespace DuckGame
                             sprite2.scale *= (this.scale.x / 2f);
                             if (this is RasterFont)
                             {
-                                float num2 = (float)((this as RasterFont).data.fontSize * (double)RasterFont.fontScaleFactor / 10.0);
+                                float num2 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
                                 Sprite sprite3 = sprite1;
                                 sprite3.scale *= num2;
                                 sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
                             }
-                            num1 += (float)(sprite1.width * (double)sprite1.scale.x + 1.0);
+                            num1 += (float)(sprite1.width * sprite1.scale.x + 1.0);
                             sprite1.scale = scale;
                         }
                         else
-                            num1 += thinButtons ? 6f : (float)(sprite1.width * (double)sprite1.scale.x + 1.0);
+                            num1 += thinButtons ? 6f : (float)(sprite1.width * sprite1.scale.x + 1.0);
                         flag = true;
                     }
                     else
@@ -630,9 +630,9 @@ namespace DuckGame
                 }
                 else if (text[this._letterIndex] == '\n')
                 {
-                    if ((double)num1 > (double)width1)
+                    if (num1 > width1)
                         width1 = num1;
-                    num1 = 0.0f;
+                    num1 = 0f;
                     flag = true;
                 }
                 if (!flag)
@@ -662,7 +662,7 @@ namespace DuckGame
                     }
                 }
             }
-            if ((double)num1 > (double)width1)
+            if (num1 > width1)
                 width1 = num1;
             return width1;
         }
@@ -674,13 +674,13 @@ namespace DuckGame
           int maxRows = 2147483647,
           bool thinButtons = false)
         {
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             int num3 = 0;
-            float num4 = 0.0f;
+            float num4 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
-                if ((double)num1 >= (double)xPosition && (double)yPosition < (double)num2 + _charHeight * (double)this.scale.y || num3 >= maxRows)
+                if (num1 >= xPosition && yPosition < num2 + _charHeight * this.scale.y || num3 >= maxRows)
                     return this._letterIndex - 1;
                 bool flag1 = false;
                 if (text[this._letterIndex] == '@' || this.chatFont && text[this._letterIndex] == ':')
@@ -689,7 +689,7 @@ namespace DuckGame
                     Sprite sprite = this.ParseSprite(text, null);
                     if (sprite != null)
                     {
-                        num1 += thinButtons ? 6f : (float)(sprite.width * (double)sprite.scale.x + 1.0);
+                        num1 += thinButtons ? 6f : (float)(sprite.width * sprite.scale.x + 1.0);
                         flag1 = true;
                     }
                     else
@@ -705,9 +705,9 @@ namespace DuckGame
                 }
                 else if (text[this._letterIndex] == '\n')
                 {
-                    if ((double)num1 > (double)num4)
+                    if (num1 > num4)
                         num4 = num1;
-                    num1 = 0.0f;
+                    num1 = 0f;
                     ++num3;
                     num2 += _charHeight * this.scale.y;
                     flag1 = true;
@@ -722,7 +722,7 @@ namespace DuckGame
                         if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
                         {
                             int index1 = this._letterIndex + 1;
-                            float num5 = 0.0f;
+                            float num5 = 0f;
                             for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
@@ -737,11 +737,11 @@ namespace DuckGame
                                     num5 += (width.width - 1f) * this.scale.x;
                                 }
                             }
-                            if ((double)num1 + (double)num5 > maxWidth)
+                            if (num1 + num5 > maxWidth)
                             {
                                 ++num3;
                                 num2 += _charHeight * this.scale.y;
-                                num1 = 0.0f;
+                                num1 = 0f;
                                 flag2 = true;
                                 if (num3 >= maxRows)
                                     return this._letterIndex;
@@ -754,11 +754,11 @@ namespace DuckGame
                             if (this._characterInfos != null)
                             {
                                 float num6 = (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
-                                if ((double)num1 + (double)num6 * scale.x > maxWidth)
+                                if (num1 + num6 * scale.x > maxWidth)
                                 {
                                     ++num3;
                                     num2 += _charHeight * this.scale.y;
-                                    num1 = 0.0f;
+                                    num1 = 0f;
                                     if (num3 >= maxRows)
                                         return this._letterIndex;
                                 }
@@ -766,11 +766,11 @@ namespace DuckGame
                             else
                             {
                                 Rectangle width = this._widths[character];
-                                if ((double)num1 + width.width * (double)this.scale.x > maxWidth)
+                                if (num1 + width.width * this.scale.x > maxWidth)
                                 {
                                     ++num3;
                                     num2 += _charHeight * this.scale.y;
-                                    num1 = 0.0f;
+                                    num1 = 0f;
                                     if (num3 >= maxRows)
                                         return this._letterIndex;
                                 }
@@ -802,7 +802,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if ((double)num2 > (double)yPosition)
+                if (num2 > yPosition)
                     return this._letterIndex;
             }
             return this._letterIndex;
@@ -810,9 +810,9 @@ namespace DuckGame
 
         public Vec2 GetCharacterPosition(string text, int index, bool thinButtons = false)
         {
-            float x = 0.0f;
-            float y = 0.0f;
-            float num1 = 0.0f;
+            float x = 0f;
+            float y = 0f;
+            float num1 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 if (this._letterIndex >= index)
@@ -824,7 +824,7 @@ namespace DuckGame
                     Sprite sprite = this.ParseSprite(text, null);
                     if (sprite != null)
                     {
-                        x += thinButtons ? 6f : (float)(sprite.width * (double)sprite.scale.x + 1.0);
+                        x += thinButtons ? 6f : (float)(sprite.width * sprite.scale.x + 1.0);
                         flag1 = true;
                     }
                     else
@@ -840,9 +840,9 @@ namespace DuckGame
                 }
                 else if (text[this._letterIndex] == '\n')
                 {
-                    if ((double)x > (double)num1)
+                    if (x > num1)
                         num1 = x;
-                    x = 0.0f;
+                    x = 0f;
                     y += _charHeight * this.scale.y;
                     flag1 = true;
                 }
@@ -854,7 +854,7 @@ namespace DuckGame
                         if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
                         {
                             int index1 = this._letterIndex + 1;
-                            float num2 = 0.0f;
+                            float num2 = 0f;
                             for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
@@ -869,10 +869,10 @@ namespace DuckGame
                                     num2 += (width.width - 1f) * this.scale.x;
                                 }
                             }
-                            if ((double)x + (double)num2 > maxWidth)
+                            if (x + num2 > maxWidth)
                             {
                                 y += _charHeight * this.scale.y;
-                                x = 0.0f;
+                                x = 0f;
                                 flag2 = true;
                             }
                         }
@@ -880,10 +880,10 @@ namespace DuckGame
                         {
                             char index3 = (char)Maths.Clamp(text[this._letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
                             Rectangle width = this._widths[FancyBitmapFont._characterMap[index3]];
-                            if ((double)x + width.width * (double)this.scale.x > maxWidth)
+                            if (x + width.width * this.scale.x > maxWidth)
                             {
                                 y += _charHeight * this.scale.y;
-                                x = 0.0f;
+                                x = 0f;
                             }
                         }
                     }
@@ -923,10 +923,10 @@ namespace DuckGame
           float outlineThickness = 1f)
         {
             this._drawingOutline = true;
-            this.Draw(text, pos + new Vec2(-outlineThickness, 0.0f), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(outlineThickness, 0.0f), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(0.0f, -outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(0.0f, outlineThickness), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(-outlineThickness, 0f), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(outlineThickness, 0f), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(0f, -outlineThickness), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(0f, outlineThickness), outline, deep + 2, true);
             this.Draw(text, pos + new Vec2(-outlineThickness, -outlineThickness), outline, deep + 2, true);
             this.Draw(text, pos + new Vec2(outlineThickness, -outlineThickness), outline, deep + 2, true);
             this.Draw(text, pos + new Vec2(-outlineThickness, outlineThickness), outline, deep + 2, true);
@@ -949,8 +949,8 @@ namespace DuckGame
             if (string.IsNullOrWhiteSpace(text))
                 return;
             Color color1 = new Color(byte.MaxValue - c.r, byte.MaxValue - c.g, byte.MaxValue - c.b);
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             int num3 = 0;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
@@ -975,14 +975,14 @@ namespace DuckGame
                                 sprite2.scale *= (this.scale.x / 2f);
                                 if (this is RasterFont)
                                 {
-                                    float num5 = (float)((this as RasterFont).data.fontSize * (double)RasterFont.fontScaleFactor / 10.0);
+                                    float num5 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
                                     Sprite sprite3 = sprite1;
                                     sprite3.scale *= num5;
                                     sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
                                 }
-                                float num6 = (float)(characterHeight * (double)this.scale.y / 2.0 - sprite1.height * (double)sprite1.scale.y / 2.0);
-                                Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num6, deep + 10 + (int)(((double)ypos + (double)num1) / 10.0));
-                                num2 += (float)(sprite1.width * (double)sprite1.scale.x + 1.0);
+                                float num6 = (float)(characterHeight * this.scale.y / 2.0 - sprite1.height * sprite1.scale.y / 2.0);
+                                Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num6, deep + 10 + (int)((ypos + num1) / 10.0));
+                                num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
                                 sprite1.scale = scale;
                             }
                             else if (this._rasterData != null)
@@ -991,14 +991,14 @@ namespace DuckGame
                                 float num7 = this._rasterData.fontHeight / 24f;
                                 Sprite sprite4 = sprite1;
                                 sprite4.scale *= num7;
-                                Graphics.Draw(sprite1, xpos + num2, (float)((double)ypos + (double)num1 + 1.0 * (double)num7), deep);
-                                num2 += (float)(sprite1.width * (double)sprite1.scale.x + 1.0);
+                                Graphics.Draw(sprite1, xpos + num2, (float)(ypos + num1 + 1.0 * num7), deep);
+                                num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
                                 sprite1.scale = scale;
                             }
                             else
                             {
                                 Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num4, deep);
-                                num2 += (float)(sprite1.width * (double)sprite1.scale.x + 1.0);
+                                num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
                             }
                             sprite1.color = Color.White;
                         }
@@ -1044,10 +1044,10 @@ namespace DuckGame
                                     Rectangle width2 = this._widths[FancyBitmapFont._characterMap[index3]];
                                     width1 += (width2.width - 1f) * this.scale.x;
                                 }
-                                if ((double)num2 + (double)width1 > maxWidth)
+                                if (num2 + width1 > maxWidth)
                                 {
                                     num1 += _charHeight * this.scale.y;
-                                    num2 = 0.0f;
+                                    num2 = 0f;
                                     ++num3;
                                     flag2 = true;
                                     if (this.singleLine)
@@ -1059,10 +1059,10 @@ namespace DuckGame
                         {
                             byte index = (byte)Maths.Clamp(text[this._letterIndex], 0, 254);
                             Rectangle width = this._widths[FancyBitmapFont._characterMap[index]];
-                            if ((double)num2 + width.width * (double)this.scale.x > maxWidth)
+                            if (num2 + width.width * this.scale.x > maxWidth)
                             {
                                 num1 += _charHeight * this.scale.y;
-                                num2 = 0.0f;
+                                num2 = 0f;
                                 ++num3;
                                 if (this.singleLine)
                                     break;
@@ -1076,7 +1076,7 @@ namespace DuckGame
                         if (text[this._letterIndex] == '\n')
                         {
                             num1 += (_charHeight + this.lineGap) * this.scale.y;
-                            num2 = 0.0f;
+                            num2 = 0f;
                             ++num3;
                         }
                         else
@@ -1089,7 +1089,7 @@ namespace DuckGame
                                 FancyBitmapFont._kanjiSprite.scale = this.scale;
                                 FancyBitmapFont._kanjiSprite.color = c;
                                 FancyBitmapFont._kanjiSprite.alpha = this.alpha;
-                                Graphics.Draw(_kanjiSprite, (float)((double)xpos + (double)num2 + 1.0), (float)((double)ypos + (double)num1 + 1.0), deep);
+                                Graphics.Draw(_kanjiSprite, (float)(xpos + num2 + 1.0), (float)(ypos + num1 + 1.0), deep);
                                 num2 += 8f * this.scale.x;
                             }
                             else

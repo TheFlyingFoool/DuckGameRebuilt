@@ -46,8 +46,8 @@ namespace DuckGame
         {
             this._sprite = new Sprite((Tex2D)t);
             this.graphic = this._sprite;
-            this.x = 0.0f;
-            this.depth = (Depth)0.0f;
+            this.x = 0f;
+            this.depth = (Depth)0f;
             this.layer = Layer.Parallax;
             this._hRepeat = 3;
             this._opaque = true;
@@ -92,8 +92,8 @@ namespace DuckGame
             if (scissor.width != 0.0)
                 this.layer.scissor = this.scissor;
             if (position.y > 0.0)
-                this.position.y = 0.0f;
-            if (this.restrictBottom && position.y + (double)this._sprite.texture.height < (double)Layer.Parallax.camera.bottom)
+                this.position.y = 0f;
+            if (this.restrictBottom && position.y + this._sprite.texture.height < Layer.Parallax.camera.bottom)
                 this.position.y = Layer.Parallax.camera.bottom - _sprite.texture.height;
             for (int index = 0; index < this._hRepeat; ++index)
             {
@@ -105,7 +105,7 @@ namespace DuckGame
                         if (index == 0)
                             zone.RenderSprites(this.position);
                         if (zone.visible)
-                            DuckGame.Graphics.Draw(this._sprite.texture, this.position + new Vec2(0.0f, this.FUCKINGYOFFSET) + new Vec2((zone.scroll % graphic.width - graphic.width + index * this.graphic.width) * this.scale.x, key * 8 * this.scale.y), new Rectangle?(new Rectangle(0.0f, key * 8, graphic.width, 8f)), this.color, 0.0f, new Vec2(), new Vec2(this.scale.x, this.scale.y), SpriteEffects.None, this.depth);
+                            DuckGame.Graphics.Draw(this._sprite.texture, this.position + new Vec2(0f, this.FUCKINGYOFFSET) + new Vec2((zone.scroll % graphic.width - graphic.width + index * this.graphic.width) * this.scale.x, key * 8 * this.scale.y), new Rectangle?(new Rectangle(0f, key * 8, graphic.width, 8f)), this.color, 0f, new Vec2(), new Vec2(this.scale.x, this.scale.y), SpriteEffects.None, this.depth);
                     }
                 }
             }

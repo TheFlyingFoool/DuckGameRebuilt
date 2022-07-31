@@ -204,7 +204,7 @@ namespace DuckGame
             if (!(Level.current is ArcadeLevel arcadeLevel))
                 arcadeLevel = ArcadeLevel.currentArcade;
             if (arcadeLevel == null)
-                return 0.0f;
+                return 0f;
             foreach (ArcadeMachine challenge1 in arcadeLevel._challenges)
             {
                 foreach (string challenge2 in challenge1.data.challenges)

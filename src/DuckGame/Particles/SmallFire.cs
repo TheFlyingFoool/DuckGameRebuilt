@@ -66,8 +66,8 @@ namespace DuckGame
                 {
                     if (p.stick != null)
                     {
-                        p.position.x = 0.0f;
-                        p.position.y = 0.0f;
+                        p.position.x = 0f;
+                        p.position.y = 0f;
                     }
                     else
                     {
@@ -105,8 +105,8 @@ namespace DuckGame
                     this.stick = ghost.thing as MaterialThing;
                 this.stickOffset = new Vec2(d.ReadSByte(), d.ReadSByte());
                 this.UpdateStick();
-                this.hSpeed = 0.0f;
-                this.vSpeed = 0.0f;
+                this.hSpeed = 0f;
+                this.vSpeed = 0f;
             }
             else
                 this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
@@ -135,15 +135,15 @@ namespace DuckGame
         public int fireID => this._fireID;
 
         private SmallFire()
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
             this._bounceEfficiency = 0.2f;
             this._sprite = new SpriteMap("smallFire", 16, 16);
-            this._sprite.AddAnimation("burn", (float)(0.200000002980232 + (double)Rando.Float(0.2f)), true, 0, 1, 2, 3, 4);
+            this._sprite.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 3, 4);
             this.graphic = _sprite;
             this.center = new Vec2(8f, 14f);
             this._airFire = new SpriteMap("airFire", 16, 16);
-            this._airFire.AddAnimation("burn", (float)(0.200000002980232 + (double)Rando.Float(0.2f)), true, 0, 1, 2, 1);
+            this._airFire.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 1);
             this._airFire.center = new Vec2(8f, 8f);
             this._collisionSize = new Vec2(12f, 12f);
             this._collisionOffset = new Vec2(-6f, -6f);
@@ -158,14 +158,14 @@ namespace DuckGame
           MaterialThing stick = null,
           bool canMultiply = true)
         {
-            if ((double)xpos == 0.0 && (double)ypos == 0.0 && stick == null)
+            if (xpos == 0.0 && ypos == 0.0 && stick == null)
             {
                 xpos = Vec2.NetMin.x;
                 ypos = Vec2.NetMin.y;
             }
             this.position.x = xpos;
             this.position.y = ypos;
-            this._airFireScale = 0.0f;
+            this._airFireScale = 0f;
             this._multiplied = false;
             this._groundLife = 125;
             this.doFloat = false;
@@ -177,14 +177,14 @@ namespace DuckGame
             this.angleDegrees = Rando.Float(20f) - 10f;
             this._airFire.SetAnimation("burn");
             this._airFire.imageIndex = Rando.Int(2);
-            this._airFire.xscale = this._airFire.yscale = 0.0f;
+            this._airFire.xscale = this._airFire.yscale = 0f;
             this._spinSpeed = 0.1f + Rando.Float(0.1f);
             this._airFire.color = Color.Orange * (0.8f + Rando.Float(0.2f));
             this._gravMult = 0.7f;
             this._sticky = 0.6f;
             this._life = 100f;
             if (Network.isActive)
-                this._sticky = 0.0f;
+                this._sticky = 0f;
             this._fireID = FireManager.GetFireID();
             this.needsSynchronization = true;
             if (shortLife)
@@ -248,26 +248,26 @@ namespace DuckGame
                     if (this._groundLife <= 0)
                     {
                         this.alpha -= 0.04f;
-                        if ((double)this.alpha < 0.0)
+                        if (this.alpha < 0.0)
                             Level.Remove(this);
                     }
                     else
                         --this._groundLife;
                 }
-                if ((double)this.y > Level.current.bottomRight.y + 200.0)
+                if (this.y > Level.current.bottomRight.y + 200.0)
                     Level.Remove(this);
                 this._airFire.xscale = this._airFire.yscale = this._airFireScale;
                 this._airFire.depth = this.depth - 1;
                 this._airFire.alpha = 0.5f;
                 this._airFire.angle += this.hSpeed * this._spinSpeed;
-                if (this.isLocal && this._canMultiply && !this._multiplied && (double)Rando.Float(310f) < 1.0 && (double)this.y > level.topLeft.y - 500.0)
+                if (this.isLocal && this._canMultiply && !this._multiplied && Rando.Float(310f) < 1.0 && this.y > level.topLeft.y - 500.0)
                 {
-                    Level.Add(SmallFire.New(this.x, this.y, Rando.Float(1f) - 0.5f, (float)-(0.5 + (double)Rando.Float(0.5f))));
+                    Level.Add(SmallFire.New(this.x, this.y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
                     this._multiplied = true;
                 }
                 if (this._stick == null)
                 {
-                    if (this.level != null && (double)this.y < level.topLeft.y - 1500.0)
+                    if (this.level != null && this.y < level.topLeft.y - 1500.0)
                         Level.Remove(this);
                     base.Update();
                 }
@@ -283,7 +283,7 @@ namespace DuckGame
                     {
                         this.UpdateStick();
                         this.stick.UpdateFirePosition(this);
-                        if (!this._stick.onFire || this._stick.removeFromLevel || (double)this._stick.alpha < 0.00999999977648258)
+                        if (!this._stick.onFire || this._stick.removeFromLevel || this._stick.alpha < 0.00999999977648258)
                         {
                             Level.Add(SmallSmoke.New(this.x, this.y));
                             Level.Remove(this);

@@ -102,34 +102,34 @@ namespace DuckGame
             {
                 Sprite graphic = this._graphic;
                 Vec2 position = this.position;
-                Vec2 vec2_1 = new Vec2(0.0f * this.shiftTime, this._vertPush * 1.5f);
+                Vec2 vec2_1 = new Vec2(0f * this.shiftTime, this._vertPush * 1.5f);
                 Vec2 vec2_2 = position + vec2_1;
                 graphic.position = vec2_2;
                 this._graphic.alpha = this.alpha;
                 this._graphic.angle = this.angle;
                 this._graphic.depth = this.depth;
-                this._graphic.scale = this.scale + new Vec2(Math.Abs(shiftAmount * 0.0f) * this.shiftTime, this._vertPush * 0.2f);
+                this._graphic.scale = this.scale + new Vec2(Math.Abs(shiftAmount * 0f) * this.shiftTime, this._vertPush * 0.2f);
                 this._graphic.center = this.center;
                 this._graphic.Draw();
             }
             if (shiftTime > 0.0)
             {
-                this._graphic.position = this.position + new Vec2(this.shiftAmount * 2 * this.shiftTime, 0.0f);
+                this._graphic.position = this.position + new Vec2(this.shiftAmount * 2 * this.shiftTime, 0f);
                 this._graphic.alpha = this.alpha;
                 this._graphic.angle = this.angle;
                 this._graphic.depth = this.depth + 10;
-                this._graphic.scale = this.scale + new Vec2(Math.Abs(shiftAmount * 0.0f) * this.shiftTime, 0.0f);
+                this._graphic.scale = this.scale + new Vec2(Math.Abs(shiftAmount * 0f) * this.shiftTime, 0f);
                 this._graphic.center = this.center;
                 this._graphic.alpha = 0.6f;
                 this._graphic.Draw();
             }
-            this.shiftTime = Lerp.FloatSmooth(this.shiftTime, 0.0f, 0.1f);
+            this.shiftTime = Lerp.FloatSmooth(this.shiftTime, 0f, 0.1f);
             if (shiftTime < 0.0500000007450581)
-                this.shiftTime = 0.0f;
-            this._vertPush = Lerp.FloatSmooth(this._vertPush, 0.0f, 0.3f);
+                this.shiftTime = 0f;
+            this._vertPush = Lerp.FloatSmooth(this._vertPush, 0f, 0.3f);
             if (_vertPush >= 0.0500000007450581)
                 return;
-            this._vertPush = 0.0f;
+            this._vertPush = 0f;
         }
 
         public void SpecialFindFrame()

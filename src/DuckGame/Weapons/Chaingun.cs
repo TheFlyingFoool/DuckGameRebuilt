@@ -36,7 +36,7 @@ namespace DuckGame
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.5f;
             this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(0.0f, 0.0f);
+            this.barrelInsertOffset = new Vec2(0f, 0f);
             this._type = "gun";
             this._sprite = new SpriteMap("chaingun", 42, 28);
             this.graphic = _sprite;
@@ -51,14 +51,14 @@ namespace DuckGame
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
             this.weight = 8f;
-            this._holdOffset = new Vec2(0.0f, 2f);
+            this._spinUp = SFX.Get("chaingunSpinUp");
+            this._spinDown = SFX.Get("chaingunSpinDown");
+            this._holdOffset = new Vec2(0f, 2f);
             this.editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
         }
 
         public override void Initialize()
         {
-            this._spinUp = SFX.Get("chaingunSpinUp");
-            this._spinDown = SFX.Get("chaingunSpinDown");
             base.Initialize();
             this._bullets = new ChaingunBullet(this.x, this.y)
             {
@@ -93,7 +93,7 @@ namespace DuckGame
             if (!this._spinning)
             {
                 this._spinning = true;
-                this._spinDown.Volume = 0.0f;
+                this._spinDown.Volume = 0f;
                 this._spinDown.Stop();
                 this._spinUp.Volume = 1f;
                 this._spinUp.Play();
@@ -127,7 +127,7 @@ namespace DuckGame
             if (this._topBullet != null)
             {
                 this._topBullet.DoUpdate();
-                int num = (int)(ammo / (double)this.bulletsTillRemove);
+                int num = (int)(ammo / this.bulletsTillRemove);
                 if (num < this.numHanging)
                 {
                     this._topBullet = this._topBullet.childThing as ChaingunBullet;

@@ -328,10 +328,10 @@ namespace DuckGame
             {
                 if (this._tagMenu != null)
                     return;
-                Vec2 vec2 = new Vec2((float)((double)this.layer.width / 2.0 - (double)this.width / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 - (double)this.height / 2.0 - 15.0)) + new Vec2(7f, 276f);
+                Vec2 vec2 = new Vec2((float)(this.layer.width / 2.0 - this.width / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 - this.height / 2.0 - 15.0)) + new Vec2(7f, 276f);
                 foreach (KeyValuePair<string, Vec2> tagPosition in this.tagPositions)
                 {
-                    if ((double)Mouse.x > tagPosition.Value.x && (double)Mouse.x < tagPosition.Value.x + 8.0 && (double)Mouse.y > tagPosition.Value.y && (double)Mouse.y < tagPosition.Value.y + 8.0 && Mouse.left == InputState.Pressed)
+                    if (Mouse.x > tagPosition.Value.x && Mouse.x < tagPosition.Value.x + 8.0 && Mouse.y > tagPosition.Value.y && Mouse.y < tagPosition.Value.y + 8.0 && Mouse.left == InputState.Pressed)
                     {
                         this._publishItem.RemoveTag(tagPosition.Key);
                         return;
@@ -340,7 +340,7 @@ namespace DuckGame
                 if (this.tagPositions.Count != SteamUploadDialog.possibleTags.Count)
                 {
                     bool flag = false;
-                    if ((double)Mouse.x > _plusPosition.x && (double)Mouse.x < _plusPosition.x + 8.0 && (double)Mouse.y > _plusPosition.y && (double)Mouse.y < _plusPosition.y + 8.0)
+                    if (Mouse.x > _plusPosition.x && Mouse.x < _plusPosition.x + 8.0 && Mouse.y > _plusPosition.y && Mouse.y < _plusPosition.y + 8.0)
                         flag = true;
                     if (flag && Mouse.left == InputState.Pressed)
                     {
@@ -380,9 +380,9 @@ namespace DuckGame
                 this._nameBox.Update();
                 this._acceptHover = false;
                 this._cancelHover = false;
-                if ((double)Mouse.x > _acceptPos.x && (double)Mouse.x < _acceptPos.x + (double)this._acceptSize.x && (double)Mouse.y > _acceptPos.y && (double)Mouse.y < _acceptPos.y + (double)this._acceptSize.y)
+                if (Mouse.x > _acceptPos.x && Mouse.x < _acceptPos.x + this._acceptSize.x && Mouse.y > _acceptPos.y && Mouse.y < _acceptPos.y + this._acceptSize.y)
                     this._acceptHover = true;
-                if ((double)Mouse.x > _cancelPos.x && (double)Mouse.x < _cancelPos.x + (double)this._cancelSize.x && (double)Mouse.y > _cancelPos.y && (double)Mouse.y < _cancelPos.y + (double)this._cancelSize.y)
+                if (Mouse.x > _cancelPos.x && Mouse.x < _cancelPos.x + this._cancelSize.x && Mouse.y > _cancelPos.y && Mouse.y < _cancelPos.y + this._cancelSize.y)
                     this._cancelHover = true;
                 if (this._acceptHover && Mouse.left == InputState.Pressed)
                 {
@@ -405,8 +405,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 328f;
             float num2 = this._fdHeight + 22f;
-            Vec2 p1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0 - 15.0));
-            Vec2 p2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0 - 12.0));
+            Vec2 p1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 - num2 / 2.0 - 15.0));
+            Vec2 p2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 + num2 / 2.0 - 12.0));
             Graphics.DrawRect(p1, p2, new Color(70, 70, 70), this.depth, false);
             Graphics.DrawRect(p1, p2, new Color(30, 30, 30), this.depth - 8);
             Graphics.DrawRect(p1 + new Vec2(4f, 23f), p2 + new Vec2(-4f, -160f), new Color(10, 10, 10), this.depth - 4);
@@ -438,7 +438,7 @@ namespace DuckGame
                 float stringWidth = Graphics.GetStringWidth(tag, scale: 0.5f);
                 float num6 = 4f;
                 if (num5 == 0)
-                    num6 = 0.0f;
+                    num6 = 0f;
                 else
                     ++num4;
                 Graphics.DrawTexturedLine(this._workshopTagMiddle.texture, vec2 + new Vec2(4f, 4f), vec2 + new Vec2(4f + stringWidth + num6, 4f), Color.White, depth: (this.depth + 10));
@@ -450,7 +450,7 @@ namespace DuckGame
                     Graphics.DrawString("x", position, Color.Red, this.depth + 14, scale: 0.5f);
                 }
                 this._workshopTag.frame = 1;
-                Graphics.Draw(_workshopTag, (float)(vec2.x + (double)num6 + 4.0) + stringWidth, vec2.y);
+                Graphics.Draw(_workshopTag, (float)(vec2.x + num6 + 4.0) + stringWidth, vec2.y);
                 vec2.x += stringWidth + 11f + num6;
                 ++num3;
             }
@@ -473,7 +473,7 @@ namespace DuckGame
             {
                 this._previewTarget.depth = this.depth + 10;
                 this._previewTarget.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(this._previewTarget, (float)(p1.x + (p2.x - (double)p1.x) / 2.0 - _previewTarget.width * (double)this._previewTarget.scale.x / 2.0), (float)(p1.y + (p2.y - (double)p1.y) / 2.0 - _previewTarget.height * (double)this._previewTarget.scale.y / 2.0 - 20.0));
+                Graphics.Draw(this._previewTarget, (float)(p1.x + (p2.x - p1.x) / 2.0 - _previewTarget.width * this._previewTarget.scale.x / 2.0), (float)(p1.y + (p2.y - p1.y) / 2.0 - _previewTarget.height * this._previewTarget.scale.y / 2.0 - 20.0));
             }
             else
             {

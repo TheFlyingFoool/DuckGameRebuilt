@@ -108,13 +108,13 @@ namespace DuckGame
                     int num1 = 0;
                     foreach (WorkshopBrowser.Group group in this.groups)
                     {
-                        Vec2 vec2_2 = pos + new Vec2(0.0f, 12f);
+                        Vec2 vec2_2 = pos + new Vec2(0f, 12f);
                         this._font.scale = new Vec2(1f, 1f);
                         this._font.Draw(group.name, pos, Color.White, (Depth)0.5f);
                         int num2 = 0;
                         foreach (WorkshopBrowser.Item obj in group.items)
                         {
-                            Vec2 vec2_3 = new Vec2(0.0f);
+                            Vec2 vec2_3 = new Vec2(0f);
                             float num3 = 0.25f;
                             float num4 = 0.1f;
                             if (num1 == this._selectedGroup && num2 == this._selectedItem)
@@ -128,7 +128,7 @@ namespace DuckGame
                             {
                                 float num5 = 256f / obj.preview.height;
                                 float x = obj.preview.width / 2 - obj.preview.height / 2;
-                                DuckGame.Graphics.Draw(obj.preview, vec2_2 + vec2_3, new Rectangle?(new Rectangle(x, 0.0f, obj.preview.height, obj.preview.height)), Color.White, 0.0f, Vec2.Zero, new Vec2(num5 * num3, num5 * num3), SpriteEffects.None, (Depth)num4);
+                                DuckGame.Graphics.Draw(obj.preview, vec2_2 + vec2_3, new Rectangle?(new Rectangle(x, 0f, obj.preview.height, obj.preview.height)), Color.White, 0f, Vec2.Zero, new Vec2(num5 * num3, num5 * num3), SpriteEffects.None, (Depth)num4);
                             }
                             else
                                 DuckGame.Graphics.Draw(_quackLoader, vec2_2.x + vec2_1.x / 2f, vec2_2.y + vec2_1.y / 2f);
@@ -137,7 +137,7 @@ namespace DuckGame
                             this._font.Draw(text, vec2_2 + vec2_3 + new Vec2(2f, 2f), Color.White, (Depth)(num4 + 0.1f));
                             DuckGame.Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(1f, 1f), vec2_2 + vec2_3 + new Vec2(this._font.GetWidth(text) + 6f, 8f), Color.Black * 0.7f, (Depth)(num4 + 0.05f));
                             vec2_2.x += vec2_1.x;
-                            if (vec2_2.x + (double)vec2_1.x <= (double)Layer.HUD.width)
+                            if (vec2_2.x + vec2_1.x <= Layer.HUD.width)
                                 ++num2;
                             else
                                 break;

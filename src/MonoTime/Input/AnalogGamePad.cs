@@ -54,20 +54,20 @@ namespace DuckGame
 
         protected virtual PadState GetState(int index) => new PadState();
 
-        public override void Rumble(float leftIntensity = 0.0f, float rightIntensity = 0.0f)
+        public override void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
             if (!this.isConnected)
                 return;
-            if (this._rumble == Vec2.Zero && ((double)leftIntensity != 0.0 || (double)rightIntensity != 0.0))
+            if (this._rumble == Vec2.Zero && (leftIntensity != 0f || rightIntensity != 0f))
             {
                 this.RumbleNow(leftIntensity, rightIntensity);
             }
             else
             {
                 this._rumble = new Vec2(leftIntensity, rightIntensity);
-                if (_rumble.x > (double)this._highestRumble.x)
+                if (_rumble.x > this._highestRumble.x)
                     this._highestRumble.x = this._rumble.x;
-                if (_rumble.y <= (double)this._highestRumble.y)
+                if (_rumble.y <= this._highestRumble.y)
                     return;
                 this._highestRumble.y = this._rumble.y;
             }
@@ -90,7 +90,7 @@ namespace DuckGame
                 if (this._rumbleWait <= 0)
                 {
                     this._rumbleWait = 4;
-                    if (this._rumble != this._prevRumble || _highestRumble.x > (double)this._rumble.x || _highestRumble.y > (double)this._rumble.y)
+                    if (this._rumble != this._prevRumble || _highestRumble.x > this._rumble.x || _highestRumble.y > this._rumble.y)
                         this.RumbleNow(this._highestRumble.x, this._highestRumble.y);
                 }
             }
@@ -106,7 +106,7 @@ namespace DuckGame
                 this._statePrev = this._state;
                 this._state = this._states[this._realState];
                 this._realState = (this._realState + 1) % 256;
-                if ((double)Rando.Float(1f) <= 0.5 || this._behind)
+                if (Rando.Float(1f) <= 0.5f || this._behind)
                     return;
                 if (!this._ahead)
                 {

@@ -35,12 +35,12 @@ namespace DuckGame
         {
             Layer background = Layer.Background;
             Vec2 vec2_1 = t.position - t.center - StaticRenderer._position;
-            int num1 = (int)Math.Floor(vec2_1.x / (double)StaticRenderer._size);
-            int num2 = (int)Math.Floor(vec2_1.y / (double)StaticRenderer._size);
+            int num1 = (int)Math.Floor(vec2_1.x / StaticRenderer._size);
+            int num2 = (int)Math.Floor(vec2_1.y / StaticRenderer._size);
             StaticRenderer.InitializeLayer(background);
             Vec2 vec2_2 = t.position - t.center + new Vec2(t.graphic.width, t.graphic.height) - StaticRenderer._position;
-            int num3 = (int)Math.Floor(vec2_2.x / (double)StaticRenderer._size);
-            int num4 = (int)Math.Floor(vec2_2.y / (double)StaticRenderer._size);
+            int num3 = (int)Math.Floor(vec2_2.x / StaticRenderer._size);
+            int num4 = (int)Math.Floor(vec2_2.y / StaticRenderer._size);
             StaticRenderer._targets[background][num2 * StaticRenderer._numSections + num1].things.Add(t);
             if (num1 != num3)
                 StaticRenderer._targets[background][num2 * StaticRenderer._numSections + num3].things.Add(t);

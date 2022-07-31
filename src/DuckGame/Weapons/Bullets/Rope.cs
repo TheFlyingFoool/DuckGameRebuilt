@@ -51,9 +51,9 @@ namespace DuckGame
 
         public override NetIndex8 authority => this._belongsTo != null ? this._belongsTo.authority : base.authority;
 
-        public float linkDirection => this.attach2 is Rope attach2 ? Maths.PointDirection(new Vec2(0.0f, 0.0f), (this.attach2Point - this.attach1Point).Rotate(Maths.DegToRad(attach2.offsetDegrees), Vec2.Zero)) : 0.0f;
+        public float linkDirection => this.attach2 is Rope attach2 ? Maths.PointDirection(new Vec2(0f, 0f), (this.attach2Point - this.attach1Point).Rotate(Maths.DegToRad(attach2.offsetDegrees), Vec2.Zero)) : 0f;
 
-        public float linkDirectionNormalized => Maths.PointDirection(new Vec2(0.0f, 0.0f), this.attach2Point - this.attach1Point);
+        public float linkDirectionNormalized => Maths.PointDirection(new Vec2(0f, 0f), this.attach2Point - this.attach1Point);
 
         public float properLength
         {
@@ -85,7 +85,7 @@ namespace DuckGame
             }
         }
 
-        public float length => this._attach1 != null && this._attach2 != null ? (this._attach1.position - this._attach2.position).length : 0.0f;
+        public float length => this._attach1 != null && this._attach2 != null ? (this._attach1.position - this._attach2.position).length : 0f;
 
         public Rope(
           float xpos,
@@ -112,7 +112,7 @@ namespace DuckGame
             {
                 this._vine = new Sprite(nameof(vine))
                 {
-                    center = new Vec2(8f, 0.0f)
+                    center = new Vec2(8f, 0f)
                 };
             }
             if (tex != null)
@@ -160,7 +160,7 @@ namespace DuckGame
                 return;
             Rope attach2_1 = this._attach2 as Rope;
             bool flag = false;
-            if ((double)(this.attach1Point - this.attach2Point).length < 4.0)
+            if ((this.attach1Point - this.attach2Point).length < 4.0)
             {
                 flag = true;
             }
@@ -168,10 +168,10 @@ namespace DuckGame
             {
                 float deg = cornerVector.x <= 0.0 ? attach2_1.linkDirectionNormalized + 90f : attach2_1.linkDirectionNormalized - 90f;
                 this.breakVector = Maths.AngleToVec(Maths.DegToRad(deg));
-                if (Math.Acos((double)Vec2.Dot(this.breakVector, this.cornerVector)) > Math.PI / 2.0)
+                if (Math.Acos(Vec2.Dot(this.breakVector, this.cornerVector)) > Math.PI / 2.0)
                     this.breakVector = Maths.AngleToVec(Maths.DegToRad(deg + 180f));
                 this.dirLine = (this.attach1.position - this.attach2.position).normalized;
-                if (Math.Acos((double)Vec2.Dot(this.breakVector, this.dirLine)) < 1.52079632604984)
+                if (Math.Acos(Vec2.Dot(this.breakVector, this.dirLine)) < 1.52079632604984)
                     flag = true;
             }
             if (!flag)
@@ -264,13 +264,13 @@ namespace DuckGame
                     ++num2;
                     if (num2 > 30)
                     {
-                        num3 = 0.0f;
+                        num3 = 0f;
                         break;
                     }
                     attach1Point += vec2_2;
                     --num3;
                 }
-                if ((double)num3 > 8.0)
+                if (num3 > 8.0)
                 {
                     Vec2 position;
                     AutoBlock autoBlock = Level.CheckLine<AutoBlock>(attach1Point, attach1Point + vec2_2 * num3, out position);
@@ -284,7 +284,7 @@ namespace DuckGame
                             vec2_3.Normalize();
                             blockCorner.corner += vec2_3 * 1f;
                             Vec2 vec2_4 = blockCorner.corner - this.attach2.position;
-                            if ((double)vec2_4.length > 4.0)
+                            if (vec2_4.length > 4.0)
                             {
                                 vec2_4 = this.attach2Point - this.attach1Point;
                                 this.linkVector = vec2_4.normalized;
@@ -337,32 +337,32 @@ namespace DuckGame
                 Vec2 normalized = vec2_1.normalized;
                 Vec2 vec2_2 = normalized;
                 vec2_2 = vec2_2.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-                double length1 = (double)vec2_1.length;
+                double length1 = vec2_1.length;
                 float num2 = 16f;
                 Vec2 vec2_3 = this.attach1Point + normalized * num2;
                 Vec2 p1 = this.attach1Point;
                 Depth depth = this.depth;
-                double num3 = (double)num2;
+                double num3 = num2;
                 int num4 = (int)Math.Ceiling(length1 / num3);
                 for (int index = 0; index < num4; ++index)
                 {
                     float a = 6.283185f / num4 * index;
-                    float num5 = (float)((1.0 - (double)num1) * 16.0);
-                    Vec2 p2 = vec2_3 + vec2_2 * ((float)Math.Sin((double)a) * num5);
+                    float num5 = (float)((1.0 - num1) * 16.0);
+                    Vec2 p2 = vec2_3 + vec2_2 * ((float)Math.Sin(a) * num5);
                     if (index == num4 - 1)
                         p2 = this.attach2Point;
-                    this._vine.angleDegrees = (float)-((double)Maths.PointDirection(p1, p2) + 90.0);
+                    this._vine.angleDegrees = (float)-(Maths.PointDirection(p1, p2) + 90.0);
                     this._vine.depth = depth;
                     depth += 1;
                     float length2 = (p2 - p1).length;
                     if (index == num4 - 1)
                     {
                         this._vine.yscale = 1f;
-                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0.0f, 0.0f, 16f, (int)((double)length2 % (double)num2)));
+                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0f, 0f, 16f, (int)(length2 % num2)));
                     }
                     else
                     {
-                        this._vine.yscale = (float)((double)length2 / 16.0 + 0.100000001490116);
+                        this._vine.yscale = (float)(length2 / 16.0 + 0.100000001490116);
                         Graphics.Draw(this._vine, p1.x, p1.y);
                     }
                     p1 = p2;
@@ -370,7 +370,7 @@ namespace DuckGame
                     float num6 = a + 6.283185f / num4;
                 }
             }
-            else if ((double)num1 < 0.949999988079071 && (double)num1 > 0.0)
+            else if (num1 < 0.949999988079071 && num1 > 0.0)
             {
                 Vec2 vec2_4 = this.attach2Point - this.attach1Point;
                 Vec2 vec2_5 = vec2_4.normalized;
@@ -380,9 +380,9 @@ namespace DuckGame
                 Vec2 p1 = this.attach1Point;
                 for (int index = 0; index < 8; ++index)
                 {
-                    float num7 = (float)((1.0 - (double)num1) * 8.0);
-                    Graphics.DrawLine(p1, vec2_6 + vec2_5 * (float)Math.Sin((double)a) * num7, Color.White * 0.8f, depth: (this.depth - 1));
-                    p1 = vec2_6 + vec2_5 * (float)Math.Sin((double)a) * num7;
+                    float num7 = (float)((1.0 - num1) * 8.0);
+                    Graphics.DrawLine(p1, vec2_6 + vec2_5 * (float)Math.Sin(a) * num7, Color.White * 0.8f, depth: (this.depth - 1));
+                    p1 = vec2_6 + vec2_5 * (float)Math.Sin(a) * num7;
                     vec2_6 += vec2_4 / 8f;
                     a += 0.7853982f;
                 }

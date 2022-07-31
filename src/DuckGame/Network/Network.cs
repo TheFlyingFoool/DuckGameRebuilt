@@ -116,7 +116,7 @@ namespace DuckGame
         {
             if (!(Network.activeNetwork._lastReceivedTime < pTime))
                 return;
-            Network.activeNetwork._synchronizedTime = pTime + (ushort)((double)Network.host.manager.ping / 2.0 / (double)Maths.IncFrameTimer());
+            Network.activeNetwork._synchronizedTime = pTime + (ushort)(Network.host.manager.ping / 2.0 / Maths.IncFrameTimer());
             Network.activeNetwork._lastReceivedTime = pTime;
         }
 
@@ -132,10 +132,10 @@ namespace DuckGame
         {
             get
             {
-                float highestPing = 0.0f;
+                float highestPing = 0f;
                 foreach (NetworkConnection connection in Network.connections)
                 {
-                    if (connection.status == ConnectionStatus.Connected && (double)connection.manager.ping > (double)highestPing)
+                    if (connection.status == ConnectionStatus.Connected && connection.manager.ping > highestPing)
                         highestPing = connection.manager.ping;
                 }
                 return highestPing;

@@ -77,7 +77,7 @@ namespace DuckGame
 
         public void TryChangingAllegiance(Profile to, float awesomeness)
         {
-            if (awesomeness > 0.1f && (double)Rando.Float(1f) < awesomeness)
+            if (awesomeness > 0.1f && Rando.Float(1f) < awesomeness)
             {
                 if (this.loyalty != null)
                 {
@@ -92,7 +92,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (awesomeness <= 0.15f || (double)Rando.Float(1.1f) >= awesomeness)
+                        if (awesomeness <= 0.15f || Rando.Float(1.1f) >= awesomeness)
                             return;
                         to.stats.MakeFanLoyal();
                         this.newLoyal = true;
@@ -204,7 +204,7 @@ namespace DuckGame
             this.graphic = _sprite;
             this.collisionSize = new Vec2(_sprite.width, _sprite.height);
             this.collisionOffset = new Vec2(-(this._sprite.w / 2), -(this._sprite.h / 2));
-            this.center = new Vec2(0.0f, spriteMap.h);
+            this.center = new Vec2(0f, spriteMap.h);
             this.collisionOffset = new Vec2(this.collisionOffset.x, -this._sprite.h);
             this.depth = (Depth)(0.3f - row * 0.05f);
             this.layer = Layer.Background;
@@ -276,18 +276,18 @@ namespace DuckGame
                     if (this._letter[this._letter.Length - 1] == 'S')
                     {
                         Graphics.Draw(this._suckSign, this.x + 28f, this.y - 27f + num);
-                        this._font.Draw(this._letter, (float)((double)this.x - (double)this._font.GetWidth(this._letter) / 2.0 + 28.0), (float)((double)this.y - 26.0 - 8.0) + num, Color.Gray, this._suckSign.depth + 3);
+                        this._font.Draw(this._letter, (float)(this.x - this._font.GetWidth(this._letter) / 2.0 + 28.0), (float)(this.y - 26.0 - 8.0) + num, Color.Gray, this._suckSign.depth + 3);
                     }
                     else
                     {
                         Graphics.Draw(this._sucksSign, this.x + 28f, this.y - 27f + num);
-                        this._font.Draw(this._letter, (float)((double)this.x - (double)this._font.GetWidth(this._letter) / 2.0 + 28.0), (float)((double)this.y - 26.0 - 8.0) + num, Color.Gray, this._sucksSign.depth + 3);
+                        this._font.Draw(this._letter, (float)(this.x - this._font.GetWidth(this._letter) / 2.0 + 28.0), (float)(this.y - 26.0 - 8.0) + num, Color.Gray, this._sucksSign.depth + 3);
                     }
                 }
                 else
                 {
                     Graphics.Draw(this._loveSign, this.x + 28f, this.y - 27f + num);
-                    this._font.Draw(this._letter, (float)((double)this.x - (double)this._font.GetWidth(this._letter) / 2.0 + 29.0), this.y - 26f + num, Color.Gray, this._loveSign.depth + 3);
+                    this._font.Draw(this._letter, (float)(this.x - this._font.GetWidth(this._letter) / 2.0 + 29.0), this.y - 26f + num, Color.Gray, this._loveSign.depth + 3);
                 }
             }
             if (!this._empty && this._lastLoyalty != null && this._lastLoyalty.persona != null && this._lastLoyalty.team != null)
@@ -302,11 +302,11 @@ namespace DuckGame
                 if (g == null)
                     return;
                 g.depth = this.depth + 2;
-                g.angle = 0.0f;
+                g.angle = 0f;
                 g.alpha = 1f;
                 g.color = Color.White;
                 bool flag = this._sprite.imageIndex == 1 || this._sprite.imageIndex == 2 || this._sprite.imageIndex == 4 || this._sprite.imageIndex == 5 || this._sprite.imageIndex == 7 || this._sprite.imageIndex == 8;
-                float num = 0.0f;
+                float num = 0f;
                 if (this._sprite.imageIndex > 2)
                 {
                     g.flipH = true;
@@ -325,7 +325,7 @@ namespace DuckGame
                 if (this.loyal)
                     g.frame = flag ? 1 : 0;
                 g.CenterOrigin();
-                Graphics.Draw(g, (float)((double)this.x - vec2.x + 8.0) + num, (float)((double)this.y - vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
+                Graphics.Draw(g, (float)(this.x - vec2.x + 8.0) + num, (float)(this.y - vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
                 g.frame = 0;
                 g.flipH = false;
             }

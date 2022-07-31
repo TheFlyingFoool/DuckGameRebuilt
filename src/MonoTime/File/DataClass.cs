@@ -251,7 +251,7 @@ namespace DuckGame
                         {
                             if (Steam.IsInitialized())
                             {
-                                if ((double)Steam.GetStat(property.Name) >= -99999.0)
+                                if (Steam.GetStat(property.Name) >= -99999.0)
                                     continue;
                             }
                             if (property.GetValue(output, null) is StatBinding statBinding)
@@ -302,7 +302,7 @@ namespace DuckGame
                             {
                                 if (Steam.IsInitialized())
                                 {
-                                    if ((double)Steam.GetStat(field.Name) >= -99999.0)
+                                    if (Steam.GetStat(field.Name) >= -99999.0)
                                         continue;
                                 }
                                 if (field.GetValue(output) is StatBinding statBinding)
@@ -374,7 +374,7 @@ namespace DuckGame
                 {
                     float num3 = (float)property.GetValue(value1, null);
                     float num4 = (float)property.GetValue(value2, null);
-                    property.SetValue(instance, (float)((double)num3 - (double)num4), null);
+                    property.SetValue(instance, (float)(num3 - num4), null);
                 }
                 else if (property.PropertyType == typeof(DateTime))
                 {
@@ -403,7 +403,7 @@ namespace DuckGame
                 {
                     float num3 = (float)property.GetValue(value1, null);
                     float num4 = (float)property.GetValue(value2, null);
-                    property.SetValue(instance, (float)((double)num3 + (double)num4), null);
+                    property.SetValue(instance, (float)(num3 + num4), null);
                 }
                 else if (property.PropertyType == typeof(DateTime))
                 {

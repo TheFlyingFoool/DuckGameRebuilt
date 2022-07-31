@@ -19,7 +19,7 @@ namespace DuckGame
         {
             for (int index = 0; index < length; ++index)
             {
-                short num = (short)((double)this._chip.render() * 8000.0);
+                short num = (short)(this._chip.render() * 8000.0);
                 buffer[index * 2] = num;
                 buffer[index * 2 + 1] = num;
             }

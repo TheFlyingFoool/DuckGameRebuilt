@@ -53,13 +53,13 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-8f, -11f);
             this.collisionSize = new Vec2(16f, 14f);
             this.depth = (Depth)0.5f;
-            this.thickness = 0.0f;
+            this.thickness = 0f;
             this.weight = 7f;
             this._editorIcon = new Sprite("drumsIcon");
             this._holdOffset = new Vec2(1f, 7f);
             this.flammable = 0.3f;
             this.collideSounds.Add("rockHitGround2");
-            this.handOffset = new Vec2(0.0f, -9999f);
+            this.handOffset = new Vec2(0f, -9999f);
             this.holsterable = false;
             this.tapeable = false;
             this.hugWalls = WallHug.Floor;
@@ -68,7 +68,7 @@ namespace DuckGame
 
         public void ThrowStick()
         {
-            if ((double)Rando.Float(1f) >= 0.5)
+            if (Rando.Float(1f) >= 0.5)
                 Level.Add(new DrumStick(this.x - 5f, this.y - 8f));
             else
                 Level.Add(new DrumStick(this.x + 5f, this.y - 8f));
@@ -140,8 +140,8 @@ namespace DuckGame
                 this.depth = (Depth)0.5f;
             if (this.owner != null && this.held)
             {
-                this.owner.vSpeed = 0.0f;
-                this.owner.hSpeed = 0.0f;
+                this.owner.vSpeed = 0f;
+                this.owner.hSpeed = 0f;
                 if (this.isServerForObject)
                 {
                     int hits1 = this.hits;

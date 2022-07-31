@@ -13,16 +13,16 @@ namespace DuckGame
     {
         public static float Float(float current, float to, float amount)
         {
-            if ((double)to > (double)current)
+            if (to > current)
             {
                 current += amount;
-                if ((double)to < (double)current)
+                if (to < current)
                     current = to;
             }
-            else if ((double)to < (double)current)
+            else if (to < current)
             {
                 current -= amount;
-                if ((double)to > (double)current)
+                if (to > current)
                     current = to;
             }
             return current;
@@ -31,10 +31,10 @@ namespace DuckGame
         public static float FloatSmooth(float current, float to, float amount, float toMul = 1f)
         {
             float num1 = to - (1f - toMul) * to;
-            if ((double)to < (double)current)
+            if (to < current)
                 num1 = to + (1f - toMul) * to;
             float num2 = current + amount * (num1 - current);
-            if ((double)to >= (double)current && (double)num2 > (double)to || (double)to <= (double)current && (double)num2 < (double)to)
+            if (to >= current && num2 > to || to <= current && num2 < to)
                 num2 = to;
             return num2;
         }
@@ -44,27 +44,27 @@ namespace DuckGame
             Vec2 vec2_1 = current;
             Vec2 vec2_2 = to;
             Vec2 vec2_3 = vec2_2 - vec2_1;
-            if ((double)vec2_3.Length() < 0.0001f)
+            if (vec2_3.Length() < 0.0001f)
                 return current;
             vec2_3.Normalize();
             Vec2 vec2_4 = vec2_1 + vec2_3 * amount;
-            if (vec2_2.x > (double)vec2_1.x && vec2_4.x > (double)vec2_2.x)
+            if (vec2_2.x > vec2_1.x && vec2_4.x > vec2_2.x)
                 vec2_4.x = vec2_2.x;
-            if (vec2_2.x < (double)vec2_1.x && vec2_4.x < (double)vec2_2.x)
+            if (vec2_2.x < vec2_1.x && vec2_4.x < vec2_2.x)
                 vec2_4.x = vec2_2.x;
-            if (vec2_2.y > (double)vec2_1.y && vec2_4.y > (double)vec2_2.y)
+            if (vec2_2.y > vec2_1.y && vec2_4.y > vec2_2.y)
                 vec2_4.y = vec2_2.y;
-            if (vec2_2.y < (double)vec2_1.y && vec2_4.y < (double)vec2_2.y)
+            if (vec2_2.y < vec2_1.y && vec2_4.y < vec2_2.y)
                 vec2_4.y = vec2_2.y;
             return vec2_4;
         }
 
         public static Vec2 Vec2Smooth(Vec2 current, Vec2 to, float amount) => current + amount * (to - current);
 
-        public static Vec2 Vec2Smooth(Vec2 current, Vec2 to, float amount, float thresh = 0.0f)
+        public static Vec2 Vec2Smooth(Vec2 current, Vec2 to, float amount, float thresh = 0f)
         {
             Vec2 vec2 = current + amount * (to - current);
-            return (double)(vec2 - to).length < (double)thresh ? to : vec2;
+            return (vec2 - to).length < thresh ? to : vec2;
         }
 
         public static T Generic<T>(T current, T to, float amount)
@@ -79,7 +79,7 @@ namespace DuckGame
             Vec3 vec3_1 = current;
             Vec3 vec3_2 = to;
             Vec3 vec3_3 = vec3_2 - vec3_1;
-            if ((double)vec3_3.Length() < 0.0001f)
+            if (vec3_3.Length() < 0.0001f)
                 return current;
             vec3_3.Normalize();
             Vec3 vec3_4 = vec3_1 + vec3_3 * amount;
@@ -103,7 +103,7 @@ namespace DuckGame
             Vec4 vector4_1 = current.ToVector4();
             Vec4 vector4_2 = to.ToVector4();
             Vec4 vec4_1 = vector4_2 - vector4_1;
-            if ((double)vec4_1.Length() < 0.0001f)
+            if (vec4_1.Length() < 0.0001f)
                 return current;
             vec4_1.Normalize();
             Vec4 vec4_2 = vector4_1 + vec4_1 * amount;

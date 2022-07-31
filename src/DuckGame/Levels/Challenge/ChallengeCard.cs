@@ -70,8 +70,8 @@ namespace DuckGame
                 };
             }
             this._size = Lerp.Float(this._size, this.contract ? 1f : (this.expand ? 130f : 42f), 8f);
-            this._alphaMul = Lerp.Float(this._alphaMul, this.contract ? 0.0f : 1f, 0.1f);
-            this._dataAlpha = Lerp.Float(this._dataAlpha, _size <= 126.0 || !this.expand ? 0.0f : 1f, !this.expand ? 1f : 0.2f);
+            this._alphaMul = Lerp.Float(this._alphaMul, this.contract ? 0f : 1f, 0.1f);
+            this._dataAlpha = Lerp.Float(this._dataAlpha, _size <= 126.0 || !this.expand ? 0f : 1f, !this.expand ? 1f : 0.2f);
         }
 
         public string MakeQuestionMarks(string val)
@@ -142,7 +142,7 @@ namespace DuckGame
         {
             float num1 = this.alpha * (this.hover ? 1f : 0.6f) * this._alphaMul;
             this._font.alpha = num1;
-            DuckGame.Graphics.DrawRect(this.position, this.position + new Vec2(258f, this._size), Color.White * num1, (Depth)(0.8f + (double)num1 * 0.04f), false);
+            DuckGame.Graphics.DrawRect(this.position, this.position + new Vec2(258f, this._size), Color.White * num1, (Depth)(0.8f + num1 * 0.04f), false);
             if (this._save.trophy != TrophyType.Baseline)
             {
                 this._medalRibbon.depth = (Depth)(0.81f + num1 * 0.04f);
@@ -173,7 +173,7 @@ namespace DuckGame
             if (this._unlocked && this._preview != null)
             {
                 this._preview.alpha = num1;
-                this._preview.depth = (Depth)(0.8f + (double)num1 * 0.04f);
+                this._preview.depth = (Depth)(0.8f + num1 * 0.04f);
                 DuckGame.Graphics.Draw(_preview, this.x + 2f, this.y + 2f);
             }
             else
@@ -194,8 +194,8 @@ namespace DuckGame
             if (_dataAlpha <= 0.01f)
                 return;
             float num2 = this._dataAlpha * num1;
-            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
-            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 64f), this.position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
+            DuckGame.Graphics.DrawLine(this.position + new Vec2(0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            DuckGame.Graphics.DrawLine(this.position + new Vec2(0f, 64f), this.position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
             this._font.alpha = num2;
             Color color = new Color(245, 165, 36);
             Color c2 = Colors.DGRed;
@@ -212,7 +212,7 @@ namespace DuckGame
             this._fancyFont.Draw("|DGBLUE|" + this._challenge.goal, this.x + 6f, this.y + 45f, Color.White, (Depth)1f);
             this._font.Draw(Chancy.GetChallengeBestString(this._save, this._challenge), this.x + 6f, (float)(this.y + 45f + 9f), c2, (Depth)1f);
             bool flag1 = false;
-            this._medalNoRibbon.depth = (Depth)(0.8f + (double)num1 * 0.04f);
+            this._medalNoRibbon.depth = (Depth)(0.8f + num1 * 0.04f);
             this._medalNoRibbon.alpha = num2;
             this._medalNoRibbon.frame = 2;
             float x = this.x + 6f;
@@ -262,7 +262,7 @@ namespace DuckGame
                 text1 = string.Concat(strArray);
             }
             this._font.Draw(text1, x + 22f, num3 + 9f, Color.White, (Depth)1f);
-            float num5 = (float)((double)this.y + 68.0 + 20.0);
+            float num5 = (this.y + 68f + 20f);
             this._medalNoRibbon.alpha = num2;
             this._medalNoRibbon.frame = 1;
             DuckGame.Graphics.Draw(_medalNoRibbon, x, num5);
@@ -312,7 +312,7 @@ namespace DuckGame
                 text2 = string.Concat(strArray);
             }
             this._font.Draw(text2, x + 22f, num5 + 9f, Color.White, (Depth)1f);
-            float num6 = (float)((double)this.y + 68.0 + 40.0);
+            float num6 = (this.y + 68f + 40f);
             this._medalNoRibbon.alpha = num2;
             this._medalNoRibbon.frame = 0;
             DuckGame.Graphics.Draw(_medalNoRibbon, x, num6);

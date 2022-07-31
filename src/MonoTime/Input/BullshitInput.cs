@@ -80,11 +80,11 @@
 
 //        public AILocomotion locomotion => this._locomotion;
 
-//        public override bool Pressed(string trigger, bool any = false) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > (double)this._bullshitTriggerStates[trigger].previous;
+//        public override bool Pressed(string trigger, bool any = false) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > this._bullshitTriggerStates[trigger].previous;
 
-//        public override bool Released(string trigger) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current <= 0.0 && _bullshitTriggerStates[trigger].previous > 0.0;
+//        public override bool Released(string trigger) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current <= 0f && _bullshitTriggerStates[trigger].previous > 0f;
 
-//        public override bool Down(string trigger) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > 0.0;
+//        public override bool Down(string trigger) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > 0f;
 
 //        public BullshitInput()
 //          : base()
@@ -102,7 +102,7 @@
 //            }
 //        }
 
-//        public override float leftTrigger => 0.0f;
+//        public override float leftTrigger => 0f;
 
 //        private class CountdownPair
 //        {

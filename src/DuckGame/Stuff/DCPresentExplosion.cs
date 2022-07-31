@@ -23,7 +23,7 @@ namespace DuckGame
             {
                 float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
             if (server)
             {
@@ -31,7 +31,7 @@ namespace DuckGame
                 {
                     Present present = new Present(c.x, c.y)
                     {
-                        hSpeed = (float)((double)(index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f),
+                        hSpeed = (float)((index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f),
                         vSpeed = Rando.Float(-3f, -11f)
                     };
                     Level.Add(present);
@@ -40,7 +40,7 @@ namespace DuckGame
                 {
                     Flower flower = new Flower(c.x, c.y)
                     {
-                        hSpeed = (float)((double)(index / 3f) * 20.0 - 10.0) * Rando.Float(0.5f, 1f),
+                        hSpeed = (float)((index / 3f) * 20.0 - 10.0) * Rando.Float(0.5f, 1f),
                         vSpeed = Rando.Float(-3f, -11f)
                     };
                     Level.Add(flower);

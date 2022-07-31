@@ -123,7 +123,7 @@ namespace DuckGame
 
         public double GetCurrentLatency()
         {
-            double currentLatency = (m_samples_in_rsinbuf - (double)this.m_filtlatency) / this.m_sratein;
+            double currentLatency = (m_samples_in_rsinbuf - this.m_filtlatency) / this.m_sratein;
             if (currentLatency < 0.0)
                 currentLatency = 0.0;
             return currentLatency;
@@ -503,8 +503,8 @@ namespace DuckGame
                 int num4 = filtsz;
                 while (num4-- != 0)
                 {
-                    num2 += filter[index2] * (double)inBuffer[index3];
-                    num3 += filter[index2 + 1] * (double)inBuffer[index3];
+                    num2 += filter[index2] * inBuffer[index3];
+                    num3 += filter[index2 + 1] * inBuffer[index3];
                     index3 += nch;
                     index2 += lpOversize;
                 }
@@ -534,8 +534,8 @@ namespace DuckGame
             int num4 = filtsz;
             while (num4-- != 0)
             {
-                num2 += filter[index1] * (double)inBuffer[index2];
-                num3 += filter[index1 + 1] * (double)inBuffer[index2];
+                num2 += filter[index1] * inBuffer[index2];
+                num3 += filter[index1 + 1] * inBuffer[index2];
                 ++index2;
                 index1 += lpOversize;
             }
@@ -566,14 +566,14 @@ namespace DuckGame
             int num6 = filtsz / 2;
             while (num6-- != 0)
             {
-                double num7 = num2 + filter[index1] * (double)inBuffer[index2];
-                double num8 = num3 + filter[index1] * (double)inBuffer[index2 + 1];
-                double num9 = num4 + filter[index1 + 1] * (double)inBuffer[index2];
-                double num10 = num5 + filter[index1 + 1] * (double)inBuffer[index2 + 1];
-                num2 = num7 + filter[index1 + lpOversize] * (double)inBuffer[index2 + 2];
-                num3 = num8 + filter[index1 + lpOversize] * (double)inBuffer[index2 + 3];
-                num4 = num9 + filter[index1 + lpOversize + 1] * (double)inBuffer[index2 + 2];
-                num5 = num10 + filter[index1 + lpOversize + 1] * (double)inBuffer[index2 + 3];
+                double num7 = num2 + filter[index1] * inBuffer[index2];
+                double num8 = num3 + filter[index1] * inBuffer[index2 + 1];
+                double num9 = num4 + filter[index1 + 1] * inBuffer[index2];
+                double num10 = num5 + filter[index1 + 1] * inBuffer[index2 + 1];
+                num2 = num7 + filter[index1 + lpOversize] * inBuffer[index2 + 2];
+                num3 = num8 + filter[index1 + lpOversize] * inBuffer[index2 + 3];
+                num4 = num9 + filter[index1 + lpOversize + 1] * inBuffer[index2 + 2];
+                num5 = num10 + filter[index1 + lpOversize + 1] * inBuffer[index2 + 3];
                 index2 += 4;
                 index1 += lpOversize * 2;
             }
@@ -642,7 +642,7 @@ namespace DuckGame
                 }
             }
 
-            //private double denormal_filter(float x) => (double)x;
+            //private double denormal_filter(float x) => x;
 
             private double denormal_filter(double x) => x;
         }

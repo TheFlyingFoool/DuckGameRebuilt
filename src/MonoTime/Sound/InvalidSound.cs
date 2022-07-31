@@ -38,8 +38,8 @@ namespace DuckGame
 
         public override float Volume
         {
-            get => Math.Min(1f, Math.Max(0.0f, this._volume));
-            set => this._volume = Math.Min(1f, Math.Max(0.0f, value));
+            get => Math.Min(1f, Math.Max(0f, this._volume));
+            set => this._volume = Math.Min(1f, Math.Max(0f, value));
         }
 
         public override void Play()

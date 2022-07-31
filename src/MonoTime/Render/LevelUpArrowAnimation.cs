@@ -19,7 +19,7 @@ namespace DuckGame
           : base(pos, new SpriteMap("levelUpArrow", 16, 16), 0.9f)
         {
             this.layer = Layer.HUD;
-            this.alpha = 0.0f;
+            this.alpha = 0f;
             this._startWait = Rando.Float(2.5f);
             this._sprite.depth = (Depth)1f;
         }
@@ -36,7 +36,7 @@ namespace DuckGame
                 this.y += this._vel;
                 this._alph -= 0.1f;
                 this.alpha = Math.Min(this._alph, 1f);
-                if ((double)this.alpha <= 0.0)
+                if (this.alpha <= 0.0)
                     Level.Remove(this);
             }
             base.Update();

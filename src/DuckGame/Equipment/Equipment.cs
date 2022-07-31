@@ -127,7 +127,7 @@ namespace DuckGame
             if (autoEquipTime > 0.0)
                 this.autoEquipTime -= 0.016f;
             else
-                this.autoEquipTime = 0.0f;
+                this.autoEquipTime = 0f;
             if (this.isServerForObject)
             {
                 if (_equipmentHealth <= 0.0 && this._equippedDuck != null && this.duck != null)
@@ -142,7 +142,7 @@ namespace DuckGame
             if (this.destroyed)
             {
                 this.alpha -= 0.1f;
-                if ((double)this.alpha < 0.0)
+                if (this.alpha < 0.0)
                     Level.Remove(this);
             }
             if (this.localEquipIndex < this.equipIndex)

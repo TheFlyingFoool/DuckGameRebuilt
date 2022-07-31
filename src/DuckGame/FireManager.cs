@@ -33,13 +33,13 @@ namespace DuckGame
         {
             foreach (SmallFire litBy in Level.current.things[typeof(SmallFire)])
             {
-                if ((double)litBy.y >= -2000.0 && litBy.fireID == FireManager._curUpdateID && (double)litBy.alpha > 0.5)
+                if (litBy.y >= -2000.0 && litBy.fireID == FireManager._curUpdateID && litBy.alpha > 0.5)
                 {
                     Thing thing = null;
                     if (litBy.stick != null && (litBy.stick is DartGun || litBy.stick is Chaindart))
                         thing = litBy.stick.owner;
                     litBy.doFloat = false;
-                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(litBy.position + new Vec2(0.0f, -4f), 6f))
+                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(litBy.position + new Vec2(0f, -4f), 6f))
                     {
                         if (materialThing != thing)
                         {
@@ -64,8 +64,8 @@ namespace DuckGame
                                     Level.Add(smallSmoke);
                                     Level.Remove(litBy);
                                 }
-                                else if ((double)Rando.Float(1000f) < materialThing.flammable * 1000.0 && (litBy.whoWait == null || duck != litBy.whoWait))
-                                    materialThing.Burn(litBy.position + new Vec2(0.0f, 4f), litBy);
+                                else if (Rando.Float(1000f) < materialThing.flammable * 1000.0 && (litBy.whoWait == null || duck != litBy.whoWait))
+                                    materialThing.Burn(litBy.position + new Vec2(0f, 4f), litBy);
                             }
                         }
                     }
@@ -75,14 +75,14 @@ namespace DuckGame
             {
                 if (litBy1.data.flammable <= 0.5)
                     litBy1.onFire = false;
-                else if (litBy1.onFire && (double)litBy1.fireID == _curUpdateID && (double)litBy1.alpha > 0.5)
+                else if (litBy1.onFire && litBy1.fireID == _curUpdateID && litBy1.alpha > 0.5)
                 {
-                    foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(litBy1.topLeft + new Vec2(0.0f, -4f), litBy1.topRight + new Vec2(0.0f, 2f)))
+                    foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(litBy1.topLeft + new Vec2(0f, -4f), litBy1.topRight + new Vec2(0f, 2f)))
                     {
                         if (materialThing != litBy1 && materialThing.isServerForObject)
                         {
-                            if ((!(materialThing is Duck duck) || duck.slideBuildup <= 0.0) && (double)Rando.Float(1000f) < materialThing.flammable * 1000.0)
-                                materialThing.Burn(litBy1.position + new Vec2(0.0f, 4f), litBy1);
+                            if ((!(materialThing is Duck duck) || duck.slideBuildup <= 0.0) && Rando.Float(1000f) < materialThing.flammable * 1000.0)
+                                materialThing.Burn(litBy1.position + new Vec2(0f, 4f), litBy1);
                             materialThing.DoHeatUp(0.05f, litBy1.position);
                         }
                     }
@@ -92,7 +92,7 @@ namespace DuckGame
                     Rectangle rectangle = litBy1.rectangle;
                     foreach (Spark litBy2 in Level.current.things[typeof(Spark)])
                     {
-                        if ((double)litBy2.x > rectangle.x && (double)litBy2.x < rectangle.x + (double)rectangle.width && (double)litBy2.y > rectangle.y && (double)litBy2.y < rectangle.y + (double)rectangle.height)
+                        if (litBy2.x > rectangle.x && litBy2.x < rectangle.x + rectangle.width && litBy2.y > rectangle.y && litBy2.y < rectangle.y + rectangle.height)
                         {
                             litBy1.Burn(litBy1.position, litBy2);
                             break;
@@ -104,18 +104,18 @@ namespace DuckGame
             {
                 if (extinguisherSmoke.smokeID == FireManager._curUpdateID)
                 {
-                    foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(extinguisherSmoke.position + new Vec2(0.0f, -8f), 12f))
+                    foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(extinguisherSmoke.position + new Vec2(0f, -8f), 12f))
                     {
                         if (extinguisherSmoke.scale.x > 1.0)
                             smallFire.SuckLife(10f);
                     }
-                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(extinguisherSmoke.position + new Vec2(0.0f, -8f), 4f))
+                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(extinguisherSmoke.position + new Vec2(0f, -8f), 4f))
                     {
                         if (extinguisherSmoke.scale.x > 1.0)
                             materialThing.spreadExtinguisherSmoke = 1f;
                         if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
                             materialThing.DoFreeze(0.03f, extinguisherSmoke.position);
-                        if (materialThing.onFire && (double)Rando.Float(1000f) > materialThing.flammable * 650.0)
+                        if (materialThing.onFire && Rando.Float(1000f) > materialThing.flammable * 650.0)
                             materialThing.Extinquish();
                     }
                 }

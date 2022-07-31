@@ -80,7 +80,7 @@ namespace DuckGame
             int num = 0;
             foreach (Duck duck in this.things[typeof(Duck)])
             {
-                if ((double)duck.x < _p1.x)
+                if (duck.x < _p1.x)
                     this._p1 = duck.position;
                 this._p2 += duck.position;
                 ++num;
@@ -137,7 +137,7 @@ namespace DuckGame
                 if (Network.isServer && Network.isActive)
                     Send.Message(new NMSpawnDuck(pendingSpawn.netProfileIndex));
                 Vec3 color = pendingSpawn.profile.persona.color;
-                Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0.0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
+                Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
                 Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                 Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                 Level.Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f));
@@ -211,7 +211,7 @@ namespace DuckGame
                 this._fontFade -= 0.1f;
                 if (_fontFade >= 0f)
                     return;
-                this._fontFade = 0.0f;
+                this._fontFade = 0f;
             }
         }
 

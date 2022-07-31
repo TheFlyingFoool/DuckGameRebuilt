@@ -31,7 +31,7 @@ namespace DuckGame
             this._owner = owner;
             this.breakForce = 1f;
             this._stickTime = 2f + Rando.Float(0.8f);
-            if ((double)Rando.Float(1f) > 0.949999988079071)
+            if (Rando.Float(1f) > 0.949999988079071)
                 this._stickTime += Rando.Float(15f);
             this.angle = fireAngle;
             if (owner == null)
@@ -51,7 +51,7 @@ namespace DuckGame
                     angle = this.angle
                 };
                 Level.Add(dartShell);
-                dartShell.hSpeed = (float)((0.5 + (double)Rando.Float(0.3f)) * -(double)this._sprite.flipMultH);
+                dartShell.hSpeed = (float)((0.5 + Rando.Float(0.3f)) * -this._sprite.flipMultH);
                 Level.Remove(this);
                 return true;
             }
@@ -179,7 +179,7 @@ namespace DuckGame
                 return;
             this.burning = true;
             this.onFire = true;
-            Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
+            Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
             SFX.Play("ignite", Rando.Float(0.9f, 1f), Rando.Float(-0.2f, 0.2f));
         }
 
@@ -195,12 +195,12 @@ namespace DuckGame
             }
             if (this._stuck)
             {
-                this.vSpeed = 0.0f;
-                this.hSpeed = 0.0f;
+                this.vSpeed = 0f;
+                this.hSpeed = 0f;
                 this.grounded = true;
                 this._sprite.frame = 1;
                 this._stickTime -= 0.005f;
-                this.gravMultiplier = 0.0f;
+                this.gravMultiplier = 0f;
             }
             if (_stickTime > 0.0 || this.destroyed)
                 return;

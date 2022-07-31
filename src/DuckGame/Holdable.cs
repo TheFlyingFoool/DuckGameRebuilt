@@ -71,7 +71,7 @@ namespace DuckGame
                 if (this._hoverSpawner != null && value == null)
                     this.gravMultiplier = 1f;
                 else if (this._hoverSpawner == null && value != null)
-                    this.gravMultiplier = 0.0f;
+                    this.gravMultiplier = 0f;
                 if (value != null && this._hoverSpawner != value)
                     this._prevHoverPos = this.position;
                 this._hoverSpawner = value;
@@ -84,14 +84,14 @@ namespace DuckGame
             {
                 if (this.owner != null && !(this is DrumSet))
                     return new Vec2(-10000f, -8999f);
-                return this.hoverSpawner == null ? this.position : this.hoverSpawner.position + new Vec2(0.0f, -8f);
+                return this.hoverSpawner == null ? this.position : this.hoverSpawner.position + new Vec2(0f, -8f);
             }
             set
             {
-                double num = (double)Math.Abs(value.x);
+                double num = Math.Abs(value.x);
                 if (value.x <= -9000.0)
                     return;
-                if (this.hoverSpawner == null || this._lastReceivedPosition != value || (double)(this._lastReceivedPosition - this.position).length > 25.0)
+                if (this.hoverSpawner == null || this._lastReceivedPosition != value || (this._lastReceivedPosition - this.position).length > 25.0)
                     this.position = value;
                 this._lastReceivedPosition = value;
             }
@@ -134,14 +134,14 @@ namespace DuckGame
             Vec2 vec2 = pos * this.scale - this._extraOffset;
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            vec2 = vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f));
+            vec2 = vec2.Rotate(this.angle, new Vec2(0f, 0f));
             return vec2;
         }
 
         public override Vec2 ReverseOffsetLocal(Vec2 pos)
         {
             Vec2 vec2 = pos * this.scale - this._extraOffset;
-            vec2 = vec2.Rotate(-this.angle, new Vec2(0.0f, 0.0f));
+            vec2 = vec2.Rotate(-this.angle, new Vec2(0f, 0f));
             return vec2;
         }
 
@@ -199,7 +199,7 @@ namespace DuckGame
         /// <returns></returns>
         public virtual Holdable BecomeTapedMonster(TapedGun pTaped) => null;
 
-        public virtual void Thrown() => this.angle = 0.0f;
+        public virtual void Thrown() => this.angle = 0f;
 
         public virtual void CheckIfHoldObstructed()
         {
@@ -316,7 +316,7 @@ namespace DuckGame
 
         public virtual void UpdateMaterial()
         {
-            if (this.material == null && burnt >= (double)this.charThreshold)
+            if (this.material == null && burnt >= this.charThreshold)
             {
                 this.material = new MaterialCharred();
                 SFX.Play("flameExplode");

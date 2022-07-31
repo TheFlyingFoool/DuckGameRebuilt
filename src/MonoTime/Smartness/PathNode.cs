@@ -35,7 +35,7 @@ namespace DuckGame
 
         public List<PathNodeLink> links => this._links;
 
-        public PathNode(float xpos = 0.0f, float ypos = 0.0f, Thing t = null)
+        public PathNode(float xpos = 0f, float ypos = 0f, Thing t = null)
           : base(xpos, ypos)
         {
             this._thing = t;
@@ -44,7 +44,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
             this.scale = new Vec2(0.5f, 0.5f);
-            this.editorOffset = new Vec2(0.0f, -8f);
+            this.editorOffset = new Vec2(0f, -8f);
         }
 
         public override void Update()
@@ -76,7 +76,7 @@ namespace DuckGame
         public static bool LineIsClear(Vec2 from, Vec2 to, Thing ignore = null)
         {
             IEnumerable<IPathNodeBlocker> pathNodeBlockers = Level.current.CollisionLineAll<IPathNodeBlocker>(from, to);
-            if (to.y - (double)from.y < -64.0)
+            if (to.y - from.y < -64.0)
                 return false;
             bool flag = false;
             foreach (IPathNodeBlocker pathNodeBlocker in pathNodeBlockers)
@@ -87,7 +87,7 @@ namespace DuckGame
                     switch (thing)
                     {
                         case IPlatform _:
-                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && !(thing is AutoPlatform) && (double)thing.y > from.y && to.y > (double)thing.y)
+                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && !(thing is AutoPlatform) && thing.y > from.y && to.y > thing.y)
                             {
                                 flag = true;
                                 goto label_13;
@@ -112,7 +112,7 @@ namespace DuckGame
             //    List<PathNode> path = AI.GetPath(this, pathNode1);
             //    if (path != null)
             //    {
-            //        float num = 0.0f;
+            //        float num = 0f;
             //        Vec2 vec2 = Vec2.Zero;
             //        foreach (PathNode pathNode2 in path)
             //        {
@@ -131,7 +131,7 @@ namespace DuckGame
             //}
         }
 
-        public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - (double)to.y <= 64.0 && (double)Math.Abs(from.x - to.x) <= 128.0 && (from.y - (double)to.y <= 8.0 || (double)Math.Abs(from.x - to.x) <= 64.0);
+        public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - to.y <= 64.0 && Math.Abs(from.x - to.x) <= 128.0 && (from.y - to.y <= 8.0 || Math.Abs(from.x - to.x) <= 64.0);
 
         public static bool CanTraverse(Vec2 from, Vec2 to, Thing ignore) => PathNode.CheckTraversalLimits(from, to) && !PathNode.PathPhysicallyBlocked(from, to, ignore);
 
@@ -147,7 +147,7 @@ namespace DuckGame
                     switch (thing)
                     {
                         case IPlatform _:
-                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && (double)thing.y > (double)this.y)
+                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && thing.y > this.y)
                             {
                                 flag = true;
                                 goto label_11;
@@ -176,7 +176,7 @@ namespace DuckGame
                     switch (thing)
                     {
                         case IPlatform _:
-                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && (double)thing.y > from.y)
+                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && thing.y > from.y)
                             {
                                 flag = true;
                                 goto label_11;
@@ -205,10 +205,10 @@ namespace DuckGame
                         link = to,
                         distance = (to.position - this.position).length
                     };
-                    if ((double)Math.Abs(this.y - to.y) < 8.0)
+                    if (Math.Abs(this.y - to.y) < 8.0)
                     {
                         Vec2 p1 = (this.position + to.position) / 2f;
-                        if (Level.CheckLine<IPathNodeBlocker>(p1, p1 + new Vec2(0.0f, 18f)) == null)
+                        if (Level.CheckLine<IPathNodeBlocker>(p1, p1 + new Vec2(0f, 18f)) == null)
                             pathNodeLink.gap = true;
                     }
                     PathNodeLink link = to.GetLink(this);
@@ -226,8 +226,8 @@ namespace DuckGame
 
         public void Reset()
         {
-            this.cost = 0.0f;
-            this.heuristic = 0.0f;
+            this.cost = 0f;
+            this.heuristic = 0f;
             this._parent = null;
         }
 
@@ -235,10 +235,10 @@ namespace DuckGame
         {
             float num1 = who.x - parent.x;
             float num2 = who.y - parent.y;
-            if ((double)parent.y > (double)who.y && (double)Math.Abs(num2) > 48.0)
+            if (parent.y > who.y && Math.Abs(num2) > 48.0)
                 num2 *= 100f;
             float num3 = num2 * 2f;
-            return parent.cost + (float)((double)num1 * (double)num1 + (double)num3 * (double)num3);
+            return parent.cost + (float)(num1 * num1 + num3 * num3);
         }
 
         public static float CalculateHeuristic(PathNode who, PathNode end) => Math.Abs(who.x - end.x + (who.y - end.y));

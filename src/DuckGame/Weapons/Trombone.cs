@@ -70,9 +70,9 @@ namespace DuckGame
                     {
                         this.notePitch = (float)(num / 12.0 + 0.00999999977648258);
                         this.handPitch = this.notePitch;
-                        if (notePitch != (double)this.prevNotePitch)
+                        if (notePitch != this.prevNotePitch)
                         {
-                            this.prevNotePitch = 0.0f;
+                            this.prevNotePitch = 0f;
                             if (this.noteSound != null)
                             {
                                 this.noteSound.Stop();
@@ -81,9 +81,9 @@ namespace DuckGame
                         }
                     }
                     else
-                        this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0.0f : this.handPitch + 0.01f;
+                        this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : this.handPitch + 0.01f;
                 }
-                if (notePitch != (double)this.prevNotePitch)
+                if (notePitch != this.prevNotePitch)
                 {
                     if (notePitch != 0.0)
                     {
@@ -109,9 +109,9 @@ namespace DuckGame
                 }
                 if (this._raised)
                 {
-                    this.handAngle = 0.0f;
-                    this.handOffset = new Vec2(0.0f, 0.0f);
-                    this._holdOffset = new Vec2(0.0f, 2f);
+                    this.handAngle = 0f;
+                    this.handOffset = new Vec2(0f, 0f);
+                    this._holdOffset = new Vec2(0f, 2f);
                     this.collisionOffset = new Vec2(-4f, -7f);
                     this.collisionSize = new Vec2(8f, 16f);
                 }
@@ -151,7 +151,7 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = this.material;
-            this.Draw(this._slide, new Vec2((float)(6.0 + _slideVal * 8.0), 0.0f), -1);
+            this.Draw(this._slide, new Vec2((float)(6.0 + _slideVal * 8.0), 0f), -1);
             Graphics.material = material;
         }
     }

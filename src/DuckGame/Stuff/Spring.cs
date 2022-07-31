@@ -30,14 +30,14 @@ namespace DuckGame
             this.UpdatePower();
             this.editorCycleType = typeof(SpringUpRight);
             this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-8f, 0.0f);
+            this.collisionOffset = new Vec2(-8f, 0f);
             this.collisionSize = new Vec2(16f, 8f);
             this.depth = -0.5f;
             this._editorName = nameof(Spring);
             this.editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
             this.thickness = 0.1f;
             this.physicsMaterial = PhysicsMaterial.Metal;
-            this._impactThreshold = 0.0f;
+            this._impactThreshold = 0f;
             this._mult = mult;
         }
 
@@ -139,19 +139,19 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed > -22.0 * _mult)
+                if (with.vSpeed > -22.0 * _mult)
                     with.vSpeed = -22f * this._mult;
                 if (with is RagdollPart)
                 {
-                    if ((double)Math.Abs(with.hSpeed) < 0.100000001490116)
-                        with.hSpeed = (double)Rando.Float(1f) >= 0.5 ? 1.3f : -1.3f;
+                    if (Math.Abs(with.hSpeed) < 0.100000001490116)
+                        with.hSpeed = Rando.Float(1f) >= 0.5 ? 1.3f : -1.3f;
                     else
                         with.hSpeed *= Rando.Float(1.1f, 1.4f);
                 }
                 if (with is Mine)
                 {
-                    if ((double)Math.Abs(with.hSpeed) < 0.100000001490116)
-                        with.hSpeed = (double)Rando.Float(1f) >= 0.5 ? 1.2f : -1.2f;
+                    if (Math.Abs(with.hSpeed) < 0.100000001490116)
+                        with.hSpeed = Rando.Float(1f) >= 0.5 ? 1.2f : -1.2f;
                     else
                         with.hSpeed *= Rando.Float(1.1f, 1.2f);
                 }

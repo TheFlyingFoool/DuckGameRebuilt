@@ -72,14 +72,14 @@ namespace DuckGame
                     }
                     return null;
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return null;
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return null;
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return null;
@@ -101,14 +101,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return default(T);
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return default(T);
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -130,14 +130,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return default(T);
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return default(T);
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -159,14 +159,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return default(T);
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return default(T);
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -188,14 +188,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return default(T);
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return default(T);
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -216,14 +216,14 @@ namespace DuckGame
                     }
                     return null;
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return null;
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return null;
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return null;
@@ -244,14 +244,14 @@ namespace DuckGame
                     }
                     return null;
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return null;
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return null;
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return null;
@@ -272,14 +272,14 @@ namespace DuckGame
                     }
                     return null;
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return null;
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return null;
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return null;
@@ -301,14 +301,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return default(T);
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return default(T);
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -330,14 +330,14 @@ namespace DuckGame
                     }
                     return default(T);
                 }
-                if (pos.x > quadTree._position.x + (double)quadTree._width)
+                if (pos.x > quadTree._position.x + quadTree._width)
                     return default(T);
-                if (pos.y > quadTree._position.y + (double)quadTree._width)
+                if (pos.y > quadTree._position.y + quadTree._width)
                     return default(T);
                 index = 0;
-                if (pos.x > quadTree._position.x + (double)quadTree._halfWidth)
+                if (pos.x > quadTree._position.x + quadTree._halfWidth)
                     index = 1;
-                if (pos.y > quadTree._position.y + (double)quadTree._halfWidth)
+                if (pos.y > quadTree._position.y + quadTree._halfWidth)
                     index += 2;
             }
             return default(T);
@@ -983,7 +983,7 @@ namespace DuckGame
                 Graphics.DrawString(Change.ToString(_personalIDX), this._position + new Vec2(2f, 16f), Color.White, (Depth)0.9f, scale: 0.5f);
                 foreach (Thing thing in this._objects)
                 {
-                    Graphics.DrawRect(thing.rectangle, Color.Blue, (Depth)0.0f, false);
+                    Graphics.DrawRect(thing.rectangle, Color.Blue, (Depth)0f, false);
                     Graphics.DrawString(Change.ToString(_personalIDX), thing.position, Color.Green, (Depth)0.9f, scale: 0.5f);
                 }
             }

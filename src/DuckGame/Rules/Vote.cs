@@ -98,7 +98,7 @@ namespace DuckGame
                 if (vote.vote == VoteType.None)
                     vote.open = false;
                 vote.slide = Lerp.FloatSmooth(vote.slide, vote.open ? 1f : -0.1f, 0.1f, 1.1f);
-                vote.wobble = Lerp.Float(vote.wobble, 0.0f, 0.05f);
+                vote.wobble = Lerp.Float(vote.wobble, 0f, 0.05f);
                 vote.wobbleInc += 0.5f;
                 if (!vote.open && vote.slide < 0.00999999977648258)
                     vote.vote = VoteType.None;
@@ -114,8 +114,8 @@ namespace DuckGame
                 {
                     float num2 = (float)(Math.Sin(vote.wobbleInc) * vote.wobble * 3.0);
                     Vec2 vec2 = Network.isActive ? vote.leftStick : vote.who.inputProfile.leftStick;
-                    vote.who.persona.skipSprite.angle = (float)((double)num2 * 0.0299999993294477 + vec2.y * 0.400000005960464);
-                    float num3 = 0.0f;
+                    vote.who.persona.skipSprite.angle = (float)(num2 * 0.0299999993294477 + vec2.y * 0.400000005960464);
+                    float num3 = 0f;
                     float num4 = 3f;
                     float num5 = 49f;
                     if (vote.vote == VoteType.Skip)
@@ -129,13 +129,13 @@ namespace DuckGame
                         num5 = 68f;
                         vote.who.persona.skipSprite.frame = 1;
                     }
-                    Graphics.Draw(vote.who.persona.skipSprite, (float)((double)Layer.HUD.width + (double)num5 - vote.slide * 48.0 + vec2.x * (double)num4) + num3, (float)((double)Layer.HUD.height - 28.0 - num1 * 16 - vec2.y * (double)num4), (Depth)0.9f);
+                    Graphics.Draw(vote.who.persona.skipSprite, (float)(Layer.HUD.width + num5 - vote.slide * 48.0 + vec2.x * num4) + num3, (float)(Layer.HUD.height - 28.0 - num1 * 16 - vec2.y * num4), (Depth)0.9f);
                     vote.who.persona.skipSprite.frame = 1;
                     Vec2 p2 = Network.isActive ? vote.rightStick : vote.who.inputProfile.rightStick;
                     if (vote.vote == VoteType.None)
                         num3 = -50f;
                     vote.who.persona.skipSprite.angle = num2 * 0.03f + Maths.DegToRad(Maths.PointDirection(Vec2.Zero, p2) - 180f);
-                    Graphics.Draw(vote.who.persona.skipSprite, (float)((double)Layer.HUD.width + 68.0 - vote.slide * 48.0 + p2.x * 20.0) + num3, (float)((double)Layer.HUD.height - 32.0 - num1 * 16 - p2.y * 20.0), (Depth)0.9f);
+                    Graphics.Draw(vote.who.persona.skipSprite, (float)(Layer.HUD.width + 68.0 - vote.slide * 48.0 + p2.x * 20.0) + num3, (float)(Layer.HUD.height - 32.0 - num1 * 16 - p2.y * 20.0), (Depth)0.9f);
                     ++num1;
                 }
             }

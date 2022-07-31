@@ -30,7 +30,7 @@ namespace DuckGame
             if (this._controlledDuck.ragdoll != null)
                 position = this._controlledDuck.ragdoll.part3.position;
             Vec2 vec2 = position - this.position;
-            double length = (double)vec2.length;
+            double length = vec2.length;
             vec2.Normalize();
             this.angleDegrees = (-Maths.PointDirection(this.position, position) + 90f);
             this.position += vec2 * 4f;

@@ -125,7 +125,7 @@ namespace DuckGame
             this.graphic = new Sprite("tinyGun");
             this._barrelOffsetTL = new Vec2(20f, 15f);
             this._fireSound = "littleGun";
-            this._kickForce = 0.0f;
+            this._kickForce = 0f;
             this._fireRumble = RumbleIntensity.Kick;
             this._tape = new Sprite("tapePiece");
             this._tape.CenterOrigin();
@@ -164,16 +164,16 @@ namespace DuckGame
         public void UpdatePositioning()
         {
             this.ammo = 0;
-            this.buoyancy = 0.0f;
+            this.buoyancy = 0f;
             this.onlyFloatInLava = false;
-            this.flammable = 0.0f;
-            this.weight = 0.0f;
-            this.heat = 0.0f;
-            this.bouncy = 0.0f;
-            this.kick = 0.0f;
+            this.flammable = 0f;
+            this.weight = 0f;
+            this.heat = 0f;
+            this.bouncy = 0f;
+            this.kick = 0f;
             this.dontCrush = true;
             float num1 = this.gun1 is TapedGun || this.gun2 is TapedGun ? 4f : 3f;
-            float num2 = 0.0f;
+            float num2 = 0f;
             if (this.gun1 != null)
             {
                 num2 += this.gun1.height;
@@ -192,7 +192,7 @@ namespace DuckGame
                 if (gun1.angleMul != 1.0)
                     this.angleMul = this.gun1.angleMul;
                 if (this.gun1.addVerticalTapeOffset)
-                    this.gun1.position = this.Offset(new Vec2(0.0f, y1) + this.gun1.tapedOffset);
+                    this.gun1.position = this.Offset(new Vec2(0f, y1) + this.gun1.tapedOffset);
                 else
                     this.gun1.position = this.Offset(this.gun1.tapedOffset);
                 this.gun1.depth = this.depth - 8;
@@ -225,15 +225,15 @@ namespace DuckGame
                     this.flammable += this.gun1.flammable;
                     this.weight = Math.Max(this.gun1.weight, this.weight);
                     this.heat += this.gun1.heat / 2f;
-                    if (!this.gun1.dontCrush && (double)this.gun1.weight >= 5.0)
+                    if (!this.gun1.dontCrush && this.gun1.weight >= 5.0)
                         this.dontCrush = false;
                 }
                 this.gun1.UpdateTapedPositioning(this);
                 if (!(this.gun1 is Gun))
-                    this.gun1._extraOffset.y = (float)(1.0 - (Math.Sin((double)Maths.DegToRad(this.gun1.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun1.collisionOffset.y + this.gun1.collisionSize.y + this.gun1.collisionOffset.y);
+                    this.gun1._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(this.gun1.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun1.collisionOffset.y + this.gun1.collisionSize.y + this.gun1.collisionOffset.y);
                 if (this.gun1 is Gun)
                     this.kick += (this.gun1 as Gun).kick;
-                if ((double)this.gun1.bouncy > (double)this.bouncy)
+                if (this.gun1.bouncy > this.bouncy)
                     this.bouncy = this.gun1.bouncy;
             }
             if (this.gun2 != null)
@@ -241,7 +241,7 @@ namespace DuckGame
                 if (gun2.angleMul != 1.0)
                     this.angleMul = this.gun2.angleMul;
                 if (this.gun2.addVerticalTapeOffset)
-                    this.gun2.position = this.Offset(new Vec2(0.0f, -y1) + this.gun2.tapedOffset);
+                    this.gun2.position = this.Offset(new Vec2(0f, -y1) + this.gun2.tapedOffset);
                 else
                     this.gun2.position = this.Offset(this.gun2.tapedOffset);
                 this.gun2.depth = this.depth - 4;
@@ -266,28 +266,28 @@ namespace DuckGame
                     this.flammable += this.gun2.flammable;
                     this.weight = Math.Max(this.gun2.weight, this.weight);
                     this.heat += this.gun2.heat / 2f;
-                    if (!this.gun2.dontCrush && (double)this.gun2.weight >= 5.0)
+                    if (!this.gun2.dontCrush && this.gun2.weight >= 5.0)
                         this.dontCrush = false;
                 }
                 this.gun2.UpdateTapedPositioning(this);
                 if (!(this.gun2 is Gun))
-                    this.gun2._extraOffset.y = (float)(1.0 - (Math.Sin((double)Maths.DegToRad(this.gun2.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun2.collisionOffset.y + this.gun2.collisionSize.y + this.gun2.collisionOffset.y);
+                    this.gun2._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(this.gun2.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun2.collisionOffset.y + this.gun2.collisionSize.y + this.gun2.collisionOffset.y);
                 if (this.gun2 is Gun)
                     this.kick += (this.gun2 as Gun).kick;
-                if ((double)this.gun2.bouncy > (double)this.bouncy)
+                if (this.gun2.bouncy > this.bouncy)
                     this.bouncy = this.gun2.bouncy;
             }
             if (this.ammo > 100)
                 this.ammo = 100;
-            if ((double)this.weight > 8.0)
+            if (this.weight > 8.0)
                 this.weight = 8f;
             this.center = new Vec2(16f, 16f);
             if (this.gun1 != null && this.gun2 != null)
             {
                 if (!this._firstCalc)
                     return;
-                this.gun1._extraOffset.y = (float)(1.0 - (Math.Sin((double)Maths.DegToRad(this.gun1.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun1.collisionOffset.y + this.gun1.collisionSize.y + this.gun1.collisionOffset.y);
-                this.gun2._extraOffset.y = (float)(1.0 - (Math.Sin((double)Maths.DegToRad(this.gun2.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun2.collisionOffset.y + this.gun2.collisionSize.y + this.gun2.collisionOffset.y);
+                this.gun1._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(this.gun1.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun1.collisionOffset.y + this.gun1.collisionSize.y + this.gun1.collisionOffset.y);
+                this.gun2._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(this.gun2.angleDegrees + 90f)) + 1.0) / 2.0) * (this.gun2.collisionOffset.y + this.gun2.collisionSize.y + this.gun2.collisionOffset.y);
                 float num3 = Math.Min(this.gun1.top - this.gun1._extraOffset.y, this.gun2.top - this.gun2._extraOffset.y);
                 float num4 = Math.Max(this.gun1.bottom - this.gun1._extraOffset.y, this.gun2.bottom - this.gun2._extraOffset.y);
                 this.collisionOffset = new Vec2(-6f, -(this.y - num3));
@@ -296,7 +296,7 @@ namespace DuckGame
             }
             else
             {
-                this.collisionOffset = new Vec2(-6f, (float)-((double)y2 / 2.0));
+                this.collisionOffset = new Vec2(-6f, (float)-(y2 / 2.0));
                 this.collisionSize = new Vec2(12f, y2);
             }
         }
@@ -386,7 +386,7 @@ namespace DuckGame
                                        }
                                        return false;
                                    });
-                                    if ((double)this.Distance(holdable1) < 16.0)
+                                    if (this.Distance(holdable1) < 16.0)
                                     {
                                         Level.Add(SmallSmoke.New(this.position.x, this.position.y));
                                         Level.Add(SmallSmoke.New(this.position.x, this.position.y));
@@ -454,10 +454,10 @@ namespace DuckGame
             this._tape.depth = this.depth + 16;
             this._tape.angleDegrees = this.angleDegrees;
             this._tape.flipH = this.offDir < 0;
-            Vec2 vec2_1 = new Vec2(0.0f, this.bottom - this.top);
+            Vec2 vec2_1 = new Vec2(0f, this.bottom - this.top);
             if (this.gun2 != null)
             {
-                Vec2 vec2_2 = this.gun2.Offset(new Vec2(0.0f, (float)-(collisionOffset.y / 2.0)));
+                Vec2 vec2_2 = this.gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2.0)));
                 Graphics.Draw(this._tape, vec2_2.x, vec2_2.y);
             }
             else

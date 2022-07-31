@@ -40,12 +40,12 @@ namespace DuckGame
             this._smallDome = new Sprite("domeSmall");
             this._smallDome.CenterOrigin();
             this._smallPillar = new Sprite("domePillar");
-            this._smallPillar.center = new Vec2(this._smallPillar.w / 2, 0.0f);
+            this._smallPillar.center = new Vec2(this._smallPillar.w / 2, 0f);
             this._domeBleachers = new SpriteMap("domeBleachers", 25, 20)
             {
                 center = new Vec2(13f, 13f)
             };
-            this._virtualBackground = new VirtualBackground(0.0f, 0.0f, null);
+            this._virtualBackground = new VirtualBackground(0f, 0f, null);
             Level.Add(_virtualBackground);
             this._cornerWedge = new Sprite("rockThrow/cornerWedge");
             this._intermissionText = new Sprite("rockThrow/intermission");
@@ -54,13 +54,13 @@ namespace DuckGame
                 allowTallAspect = true
             };
             Layer.Add(this._subHUD);
-            Layer.Foreground.camera = new Camera(0.0f, 0.0f, 320f, 320f / Resolution.current.aspect);
+            Layer.Foreground.camera = new Camera(0f, 0f, 320f, 320f / Resolution.current.aspect);
         }
 
         public override void Update()
         {
-            Music.volume = Lerp.Float(Music.volume, 0.0f, 0.008f);
-            if ((double)Music.volume <= 0.0)
+            Music.volume = Lerp.Float(Music.volume, 0f, 0.008f);
+            if (Music.volume <= 0.0)
                 Music.Stop();
             this._panWait -= 0.04f;
             if (_panWait >= 0.0)
@@ -69,7 +69,7 @@ namespace DuckGame
             if (_yScrollVel > 0.00999999977648258)
                 this._yScrollVel = 0.01f;
             if (_yScrollVel < 0.0)
-                this._yScrollVel = 0.0f;
+                this._yScrollVel = 0f;
             this._yScroll -= this._yScrollVel;
             this._virtualBackground.layer.fade = Lerp.Float(this._virtualBackground.layer.fade, 0.5f, 0.01f);
             if (_yScroll >= 0.400000005960464)
@@ -79,12 +79,12 @@ namespace DuckGame
                 return;
             this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 1f, 0.1f, 1.1f);
             this._subHUD.fade -= 0.02f;
-            if ((double)this._subHUD.fade < 0.0)
-                this._subHUD.fade = 0.0f;
+            if (this._subHUD.fade < 0.0)
+                this._subHUD.fade = 0f;
             this._virtualBackground.layer.fade -= 0.02f;
-            if ((double)this._virtualBackground.layer.fade < 0.0)
-                this._virtualBackground.layer.fade = 0.0f;
-            if (!Network.isServer || (double)this._subHUD.fade > 0.0 || _intermissionSlide < 0.990000009536743 || !this.ready)
+            if (this._virtualBackground.layer.fade < 0.0)
+                this._virtualBackground.layer.fade = 0f;
+            if (!Network.isServer || this._subHUD.fade > 0.0 || _intermissionSlide < 0.990000009536743 || !this.ready)
                 return;
             Music.volume = 1f;
             Level.current = new RockScoreboard(this._next);
@@ -96,14 +96,14 @@ namespace DuckGame
             {
                 float num1 = 160f;
                 float num2 = this._yScroll * num1;
-                this._virtualBackground.parallax.y = (float)(-(double)num1 * (1.0 - (double)num2 / (double)num1));
+                this._virtualBackground.parallax.y = (float)(-num1 * (1.0 - num2 / num1));
                 this._bigDome.depth = (Depth)0.5f;
                 Graphics.Draw(this._bigDome, 160f, 130f + num2);
                 float deg = 45f;
                 float rad1 = Maths.DegToRad(deg);
                 float rad2 = Maths.DegToRad(25f + this.rotter);
                 this.rotter -= 0.3f;
-                if (rotter <= -(double)deg)
+                if (rotter <= -deg)
                     this.rotter += deg;
                 for (int index = 0; index < 8; ++index)
                 {
@@ -111,7 +111,7 @@ namespace DuckGame
                         this._smallDome.depth = (Depth)0.6f;
                     else
                         this._smallDome.depth = (Depth)0.4f;
-                    Vec2 vec2_1 = new Vec2((float)Math.Cos((double)rad2 + index * (double)rad1), (float)(-Math.Sin((double)rad2 + index * (double)rad1) * (0.400000005960464 * (1.0 - (double)num2 / (double)num1))));
+                    Vec2 vec2_1 = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.400000005960464 * (1.0 - num2 / num1))));
                     Vec2 vec2_2 = new Vec2(160f, 130f + num2) + vec2_1 * 100f;
                     Graphics.Draw(this._smallDome, vec2_2.x, vec2_2.y - 30f);
                     this._smallPillar.depth = this._smallDome.depth;

@@ -562,15 +562,15 @@ namespace DuckGame
 
         //private Vec2 Slerp(Vec2 from, Vec2 to, float step)
         //{
-        //    if ((double)step == 0.0)
+        //    if (step == 0.0)
         //        return from;
-        //    if (from == to || (double)step == 1.0)
+        //    if (from == to || step == 1.0)
         //        return to;
-        //    double a = Math.Acos((double)Vec2.Dot(from, to));
+        //    double a = Math.Acos(Vec2.Dot(from, to));
         //    if (a == 0.0)
         //        return to;
         //    double num = Math.Sin(a);
-        //    return (float)(Math.Sin((1.0 - (double)step) * a) / num) * from + (float)(Math.Sin((double)step * a) / num) * to;
+        //    return (float)(Math.Sin((1.0 - step) * a) / num) * from + (float)(Math.Sin(step * a) / num) * to;
         //}
 
         public bool isLocalController => this._inputObject != null && this._inputObject.inputProfile != null && this._inputObject.inputProfile.virtualDevice == null;
@@ -815,7 +815,7 @@ namespace DuckGame
 
         public static Profile IndexToProfile(NetIndex16 pIndex)
         {
-            int index = (int)(pIndex._index / (double)GhostManager.kGhostIndexMax);
+            int index = (int)(pIndex._index / GhostManager.kGhostIndexMax);
             return index < 0 || index >= DuckNetwork.profiles.Count ? null : DuckNetwork.profiles[index];
         }
 

@@ -126,7 +126,7 @@ namespace DuckGame
         {
             bool flag = false;
             Vec2 position1 = Mouse.position;
-            if (position1.x > (double)this._position.x && position1.y > (double)this._position.y && position1.x < _position.x + (double)this._size.x && position1.y < _position.y + (double)this._size.y)
+            if (position1.x > this._position.x && position1.y > this._position.y && position1.x < _position.x + this._size.x && position1.y < _position.y + this._size.y)
             {
                 flag = true;
                 Editor.hoverTextBox = true;

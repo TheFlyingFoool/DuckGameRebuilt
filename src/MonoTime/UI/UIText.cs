@@ -56,9 +56,9 @@ namespace DuckGame
           string textVal,
           Color c,
           UIAlign al = UIAlign.Center,
-          float heightAdd = 0.0f,
+          float heightAdd = 0f,
           InputProfile controlProfile = null)
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._heightAdd = heightAdd;
             this._font = new BitmapFont("biosFontUI", 8, 7);
@@ -72,9 +72,9 @@ namespace DuckGame
           Func<string> textFunc,
           Color c,
           UIAlign al = UIAlign.Center,
-          float heightAdd = 0.0f,
+          float heightAdd = 0f,
           InputProfile controlProfile = null)
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._heightAdd = heightAdd;
             this._font = new BitmapFont("biosFontUI", 8, 7);
@@ -90,8 +90,8 @@ namespace DuckGame
             this._font.scale = this.scale;
             this._font.alpha = this.alpha;
             float width = this._font.GetWidth(this.text);
-            float num1 = (this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-(double)width / 2.0) : this.width / 2f - width) : (float)-((double)this.width / 2.0);
-            float num2 = (this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-(double)this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-((double)this.height / 2.0);
+            float num1 = (this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
+            float num2 = (this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0);
             if (specialScale != 0.0)
             {
                 Vec2 scale = this._font.scale;

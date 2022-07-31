@@ -18,7 +18,7 @@ namespace DuckGame
             this._sprite.AddAnimation("idle", 0.7f, false, 0, 1, 2);
             this._sprite.SetAnimation("idle");
             this.graphic = _sprite;
-            this.center = new Vec2(0.0f, 16f);
+            this.center = new Vec2(0f, 16f);
         }
 
         public override void Update()

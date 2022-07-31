@@ -31,7 +31,7 @@ namespace DuckGame
             this._distanceSign.depth = this.depth;
             Graphics.Draw(this._distanceSign, this.x, this.y);
             string text = Change.ToString(_distance);
-            this._font.Draw(text, this.x - this._font.GetWidth(text) / 2f, (float)((double)this.y - (double)this._font.height / 2.0 + 1.0), Color.DarkSlateGray, this.depth + 1);
+            this._font.Draw(text, this.x - this._font.GetWidth(text) / 2f, (float)(this.y - this._font.height / 2.0 + 1.0), Color.DarkSlateGray, this.depth + 1);
         }
     }
 }

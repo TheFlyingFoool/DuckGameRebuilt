@@ -93,9 +93,9 @@
 //            list.Sort((a, b) =>
 //           {
 //               Vec2 vec2 = a.position - position;
-//               double lengthSq1 = (double)vec2.lengthSq;
+//               double lengthSq1 = vec2.lengthSq;
 //               vec2 = b.position - position;
-//               double lengthSq2 = (double)vec2.lengthSq;
+//               double lengthSq2 = vec2.lengthSq;
 //               return lengthSq1 >= lengthSq2 ? 1 : -1;
 //           });
 //            PathNode pathNode1 = null;
@@ -112,9 +112,9 @@
 //            list.Sort((a, b) =>
 //           {
 //               Vec2 vec2 = a.position - target;
-//               double lengthSq3 = (double)vec2.lengthSq;
+//               double lengthSq3 = vec2.lengthSq;
 //               vec2 = b.position - target;
-//               double lengthSq4 = (double)vec2.lengthSq;
+//               double lengthSq4 = vec2.lengthSq;
 //               return lengthSq3 >= lengthSq4 ? 1 : -1;
 //           });
 //            PathNode to = null;

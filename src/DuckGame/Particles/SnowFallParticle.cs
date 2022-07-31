@@ -35,7 +35,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if ((double)this.vSpeed > 1.0)
+            if (this.vSpeed > 1.0)
                 this.vSpeed = 1f;
             if (this._grounded)
                 return;
@@ -47,7 +47,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            double num = (double)this.z / 200.0;
+            double num = this.z / 200.0;
             float size = this._size;
             Graphics.DrawRect(this.position + new Vec2(-size, -size), this.position + new Vec2(size, size), Color.White * this.alpha, (Depth)0.1f);
         }

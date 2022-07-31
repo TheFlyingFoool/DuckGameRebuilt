@@ -22,7 +22,7 @@ namespace DuckGame
         public FlameThrower(float xval, float yval)
           : base(xval, yval)
         {
-            this.barrelInsertOffset = new Vec2(0.0f, -2f);
+            this.barrelInsertOffset = new Vec2(0f, -2f);
             this.wideBarrel = true;
             this.ammo = this._maxAmmo;
             this._ammoType = new AT9mm();
@@ -39,7 +39,7 @@ namespace DuckGame
             this._kickForce = 1f;
             this._barrelFlame = new SpriteMap("flameBurst", 20, 21)
             {
-                center = new Vec2(0.0f, 17f)
+                center = new Vec2(0f, 17f)
             };
             this._barrelFlame.AddAnimation("idle", 0.4f, true, 0, 1, 2, 3);
             this._barrelFlame.AddAnimation("puff", 0.4f, false, 4, 5, 6, 7);
@@ -50,7 +50,7 @@ namespace DuckGame
             {
                 center = new Vec2(4f, 4f)
             };
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this._barrelAngleOffset = 8f;
             this._editorName = "Flame Thrower";
             this.editorTooltip = "Some Ducks just want to watch the world burn.";
@@ -67,7 +67,7 @@ namespace DuckGame
             if (this.ammo == 0)
             {
                 this._firing = false;
-                this._barrelFlame.speed = 0.0f;
+                this._barrelFlame.speed = 0f;
             }
             if (this._firing && this._barrelFlame.currentAnimation == "idle")
                 this._barrelFlame.SetAnimation("puff");
@@ -77,7 +77,7 @@ namespace DuckGame
                 this._barrelFlame.SetAnimation("puffOut");
             if (this._barrelFlame.currentAnimation == "puffOut" && this._barrelFlame.finished)
                 this._barrelFlame.SetAnimation("idle");
-            this._sound.lerpVolume = this._firing ? 0.5f : 0.0f;
+            this._sound.lerpVolume = this._firing ? 0.5f : 0f;
             if (this.isServerForObject && this._firing && this._barrelFlame.imageIndex > 5)
             {
                 this._flameWait -= 0.25f;
@@ -90,7 +90,7 @@ namespace DuckGame
                 this._flameWait = 1f;
             }
             else
-                this._flameWait = 0.0f;
+                this._flameWait = 0f;
         }
 
         public override void Draw()
@@ -98,12 +98,12 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = null;
-            if ((double)this._barrelFlame.speed > 0.0)
+            if (this._barrelFlame.speed > 0.0)
             {
                 this._barrelFlame.alpha = 0.9f;
                 this.Draw(_barrelFlame, new Vec2(11f, 1f));
             }
-            this._can.frame = (int)((1.0 - ammo / (double)this._maxAmmo) * 15.0);
+            this._can.frame = (int)((1.0 - ammo / this._maxAmmo) * 15.0);
             this.Draw(_can, new Vec2(this.barrelOffset.x - 11f, this.barrelOffset.y + 4f));
             Graphics.material = material;
         }

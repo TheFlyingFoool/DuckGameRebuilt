@@ -103,8 +103,8 @@ namespace DuckGame
             this._hitPoints = 1f;
             this.impactThreshold = -1f;
             this.physicsMaterial = PhysicsMaterial.Glass;
-            this._holdOffset = new Vec2(2f, 0.0f);
-            this.flammable = 0.0f;
+            this._holdOffset = new Vec2(2f, 0f);
+            this.flammable = 0f;
             this.collideSounds.Add("glassHit");
             this.superNonFlammable = true;
         }
@@ -313,7 +313,7 @@ namespace DuckGame
                 this._graphic.scale = this.scale;
                 this._graphic.center = this.center;
                 int y2 = (int)((1.0 - _hitPoints) * 12.0);
-                DuckGame.Graphics.Draw(this._graphic.texture, this.position + new Vec2(0.0f, y2), new Rectangle?(new Rectangle(0.0f, 0.0f, 16f, 24 - y2)), Color.White, this.angle, this._graphic.center, this.scale, this.graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
+                DuckGame.Graphics.Draw(this._graphic.texture, this.position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, this.angle, this._graphic.center, this.scale, this.graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
                 this.y = y1;
             }
             else
@@ -342,7 +342,7 @@ namespace DuckGame
             this.heat = -1f;
             if (this._containedThing != null && this._containedThing is Holdable)
             {
-                if ((double)(this._containedThing as MaterialThing).weight > (double)this.weight)
+                if ((this._containedThing as MaterialThing).weight > this.weight)
                     this.weight = (this._containedThing as MaterialThing).weight;
                 (this._containedThing as MaterialThing).heat = -1f;
                 (this._containedThing as Holdable).UpdateMaterial();

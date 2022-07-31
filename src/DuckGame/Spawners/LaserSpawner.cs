@@ -22,7 +22,7 @@ namespace DuckGame
         public float fireDirection;
         public float firePower = 1f;
 
-        public float direction => this.fireDirection + (this.flipHorizontal ? 180f : 0.0f);
+        public float direction => this.fireDirection + (this.flipHorizontal ? 180f : 0f);
 
         public LaserSpawner(float xpos, float ypos, System.Type c = null)
           : base(xpos, ypos)
@@ -48,7 +48,7 @@ namespace DuckGame
         {
             if (Level.current.simulatePhysics)
                 this._spawnWait += 0.0166666f;
-            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && _spawnWait >= (double)this.spawnTime)
+            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && _spawnWait >= this.spawnTime)
             {
                 if (initialDelay > 0.0)
                 {
@@ -59,7 +59,7 @@ namespace DuckGame
                     Vec2 travel = Maths.AngleToVec(Maths.DegToRad(this.direction)) * this.firePower;
                     Vec2 vec2 = this.position - travel.normalized * 16f;
                     Level.Add(new QuadLaserBullet(vec2.x, vec2.y, travel));
-                    this._spawnWait = 0.0f;
+                    this._spawnWait = 0f;
                     ++this._numSpawned;
                 }
             }

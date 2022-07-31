@@ -85,7 +85,7 @@ namespace DuckGame
             float challengeSkillIndex = Challenges.GetChallengeSkillIndex();
             foreach (ArcadeFrame frame in this._frames)
             {
-                if ((double)challengeSkillIndex >= (double)(float)frame.respect && ChallengeData.CheckRequirement(Profiles.active[0], (string)frame.requirement))
+                if (challengeSkillIndex >= (float)frame.respect && ChallengeData.CheckRequirement(Profiles.active[0], (string)frame.requirement))
                     frame.visible = true;
                 else
                     frame.visible = false;
@@ -97,7 +97,7 @@ namespace DuckGame
             float challengeSkillIndex = Challenges.GetChallengeSkillIndex();
             foreach (ArcadeFrame frame in (IEnumerable<ArcadeFrame>)this._frames.OrderBy<ArcadeFrame, int>(x => x.saveData == null ? Rando.Int(100) : Rando.Int(100) + 200))
             {
-                if ((double)challengeSkillIndex >= (double)(float)frame.respect && ChallengeData.CheckRequirement(Profiles.active[0], (string)frame.requirement))
+                if (challengeSkillIndex >= (float)frame.respect && ChallengeData.CheckRequirement(Profiles.active[0], (string)frame.requirement))
                     return frame;
             }
             return null;
@@ -173,15 +173,15 @@ namespace DuckGame
                 challenge.unlocked = challenge.CheckUnlocked(false);
             this._hud = new ArcadeHUD
             {
-                alpha = 0.0f
+                alpha = 0f
             };
             Level.Add(_hud);
             this._unlockScreen = new UnlockScreen
             {
-                alpha = 0.0f
+                alpha = 0f
             };
             Level.Add(_unlockScreen);
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
             this._confirmMenu = new UIMenu("EXIT ARCADE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             this._advancedMenu = new UIMenu("@LWING@ADVANCED@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, conString: "@CANCEL@BACK  @SELECT@SELECT");
@@ -310,7 +310,7 @@ namespace DuckGame
                         this._followCam.Update();
                 }
             }
-            double num = (double)Math.Min(1f, Math.Max(0.0f, (float)((1.0 - (double)Layer.Game.fade) * 1.5)));
+            double num = Math.Min(1f, Math.Max(0f, (float)((1f - Layer.Game.fade) * 1.5f)));
             this.backgroundColor = Color.Black;
             if (UnlockScreen.open || ArcadeHUD.open)
             {
@@ -364,7 +364,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
+                    Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
                     if (Graphics.fade > 0.01f)
                         return;
                     Chancy.StopShowingChallengeList();
@@ -387,14 +387,14 @@ namespace DuckGame
                 bool flag = false;
                 if (this._desiredState == ArcadeState.ViewChallenge)
                 {
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0.0f, 0.1f);
+                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0f, 0.1f);
                     this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, 2f, 0.16f);
                     if (_followCam.manualViewSize < 30.0)
                     {
-                        Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.08f);
-                        Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.08f);
+                        Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
+                        Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         this._hud.alpha = Lerp.Float(this._hud.alpha, 1f, 0.08f);
-                        if (_followCam.manualViewSize < 3.0 && (double)this._hud.alpha == 1.0 && (double)Layer.Game.fade == 0.0)
+                        if (_followCam.manualViewSize < 3f && this._hud.alpha == 1f && Layer.Game.fade == 0f)
                             flag = true;
                     }
                 }
@@ -411,9 +411,9 @@ namespace DuckGame
                         this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, this._followCam.viewSize, 0.14f, 1.05f);
                     Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0.0f, 0.08f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0.0f, 0.08f);
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == (double)this._followCam.viewSize) && (double)this._hud.alpha == 0.0 && (double)Layer.Game.fade == 1.0)
+                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
+                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
+                    if ((_followCam.manualViewSize < 0f || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         this._followCam.manualViewSize = -1f;
@@ -435,9 +435,9 @@ namespace DuckGame
                         this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, this._followCam.viewSize, 0.14f, 1.05f);
                     Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0.0f, 0.08f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0.0f, 0.08f);
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == (double)this._followCam.viewSize) && (double)this._hud.alpha == 0.0 && (double)Layer.Game.fade == 1.0)
+                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
+                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
+                    if ((_followCam.manualViewSize < 0f || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         this._followCam.manualViewSize = -1f;
@@ -457,10 +457,10 @@ namespace DuckGame
                     this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 1f, 0.1f, 1.1f);
                     Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0.0f, 0.08f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0.0f, 0.08f);
+                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
+                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
                     this._unlockMachineWait = 1f;
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == (double)this._followCam.viewSize) && (double)this._hud.alpha == 0.0 && (double)Layer.Game.fade == 1.0)
+                    if ((_followCam.manualViewSize < 0f || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         this._followCam.manualViewSize = -1f;
@@ -471,22 +471,22 @@ namespace DuckGame
                 {
                     if (!this._flipState)
                         HUD.CloseAllCorners();
-                    Music.volume = Lerp.Float(Music.volume, 0.0f, 0.01f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0.0f, 0.02f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0.0f, 0.08f);
-                    if ((double)this._hud.alpha == 0.0)
+                    Music.volume = Lerp.Float(Music.volume, 0f, 0.01f);
+                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.02f);
+                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
+                    if (this._hud.alpha == 0f)
                         flag = true;
                 }
                 if (this._desiredState == ArcadeState.UnlockScreen)
                 {
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0.0f, 0.1f);
+                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0f, 0.1f);
                     this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, 2f, 0.16f);
                     if (_followCam.manualViewSize < 30.0)
                     {
-                        Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.08f);
-                        Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.08f);
+                        Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
+                        Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 1f, 0.08f);
-                        if (_followCam.manualViewSize < 3.0 && (double)this._unlockScreen.alpha == 1.0 && (double)Layer.Game.fade == 0.0)
+                        if (_followCam.manualViewSize < 3f && this._unlockScreen.alpha == 1f && Layer.Game.fade == 0f)
                             flag = true;
                     }
                 }
@@ -495,8 +495,8 @@ namespace DuckGame
                 this._flipState = true;
                 if (this._launchedChallenge)
                 {
-                    Layer.Background.fade = 0.0f;
-                    Layer.Game.fade = 0.0f;
+                    Layer.Background.fade = 0f;
+                    Layer.Game.fade = 0f;
                 }
                 if (flag)
                 {
@@ -616,13 +616,13 @@ namespace DuckGame
             {
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.08f);
                 Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.08f);
-                this._hud.alpha = Lerp.Float(this._hud.alpha, 0.0f, 0.08f);
+                this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
                 if (this._state == ArcadeState.Normal)
                 {
                     object obj = null;
                     foreach (ArcadeMachine challenge in this._challenges)
                     {
-                        double length = (double)(this._duck.position - challenge.position).length;
+                        double length = (this._duck.position - challenge.position).length;
                         if (challenge.hover)
                         {
                             obj = challenge;
@@ -693,12 +693,12 @@ namespace DuckGame
                     Chancy.hover = false;
                     if (!Chancy.atCounter)
                     {
-                        if ((double)(this._duck.position - Chancy.standingPosition).length < 22.0)
+                        if ((this._duck.position - Chancy.standingPosition).length < 22f)
                         {
                             obj = Chancy.context;
                             Chancy.hover = true;
                         }
-                        if (Chancy.standingPosition.x < (double)Layer.Game.camera.left - 16.0 || Chancy.standingPosition.x > (double)Layer.Game.camera.right + 16.0 || Chancy.standingPosition.y < (double)Layer.Game.camera.top - 16.0 || Chancy.standingPosition.y > (double)Layer.Game.camera.bottom + 16.0)
+                        if (Chancy.standingPosition.x < Layer.Game.camera.left - 16f || Chancy.standingPosition.x > Layer.Game.camera.right + 16f || Chancy.standingPosition.y < Layer.Game.camera.top - 16f || Chancy.standingPosition.y > Layer.Game.camera.bottom + 16f)
                         {
                             Chancy.atCounter = true;
                             Chancy.activeChallenge = null;
@@ -811,8 +811,8 @@ namespace DuckGame
             else if (this._state == ArcadeState.ViewChallenge)
             {
                 Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.05f);
-                Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0.0f, 0.05f);
+                Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.05f);
+                Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.05f);
                 this._hud.alpha = Lerp.Float(this._hud.alpha, 1f, 0.05f);
                 if (this._hud.quitOut)
                 {
@@ -870,11 +870,11 @@ namespace DuckGame
                 }
                 else
                 {
-                    Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
-                    if ((double)Graphics.fade < 0.01f)
+                    Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                    if (Graphics.fade < 0.01f)
                     {
                         this._hud.launchChallenge = true;
-                        this._hud.selected = new ChallengeCard(0.0f, 0.0f, Chancy.activeChallenge);
+                        this._hud.selected = new ChallengeCard(0f, 0f, Chancy.activeChallenge);
                         HUD.CloseAllCorners();
                     }
                 }

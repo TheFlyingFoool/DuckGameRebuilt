@@ -22,12 +22,12 @@ namespace DuckGame
             this._leftJet = new SpriteMap("jet", 16, 16);
             this._leftJet.AddAnimation("idle", 0.4f, true, 0, 1, 2);
             this._leftJet.SetAnimation("idle");
-            this._leftJet.center = new Vec2(8f, 0.0f);
+            this._leftJet.center = new Vec2(8f, 0f);
             this._leftJet.alpha = 0.7f;
             this._rightJet = new SpriteMap("jet", 16, 16);
             this._rightJet.AddAnimation("idle", 0.4f, true, 1, 2, 0);
             this._rightJet.SetAnimation("idle");
-            this._rightJet.center = new Vec2(8f, 0.0f);
+            this._rightJet.center = new Vec2(8f, 0f);
             this._rightJet.alpha = 0.7f;
             this.center = new Vec2(16f, 8f);
             this._collisionSize = new Vec2(16f, 14f);

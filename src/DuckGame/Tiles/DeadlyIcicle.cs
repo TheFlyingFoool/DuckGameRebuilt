@@ -22,7 +22,7 @@ namespace DuckGame
             this.depth = -0.5f;
             this.thickness = 4f;
             this.weight = 5f;
-            this.flammable = 0.0f;
+            this.flammable = 0f;
             this.collideSounds.Add("rockHitGround2");
             this.physicsMaterial = PhysicsMaterial.Plastic;
         }

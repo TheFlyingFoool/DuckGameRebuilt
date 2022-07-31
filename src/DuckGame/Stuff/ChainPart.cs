@@ -26,7 +26,7 @@ namespace DuckGame
             this.depth = -0.5f;
             this._vinePartSprite = new Sprite("chain")
             {
-                center = new Vec2(8f, 0.0f)
+                center = new Vec2(8f, 0f)
             };
         }
     }

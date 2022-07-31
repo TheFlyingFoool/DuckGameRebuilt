@@ -26,7 +26,7 @@ namespace DuckGame
             this.center = new Vec2(16f, 7f);
             this.collisionOffset = new Vec2(-8f, -5f);
             this.collisionSize = new Vec2(16f, 9f);
-            this._holdOffset = new Vec2(3f, 0.0f);
+            this._holdOffset = new Vec2(3f, 0f);
             this._barrelOffsetTL = new Vec2(35f, 5f);
             this._fireSound = "sniper";
             this._fireSoundPitch = -0.2f;
@@ -48,7 +48,7 @@ namespace DuckGame
                     if (this._loadState == 3)
                         this.loaded = true;
                     this._loadState = -1;
-                    this._angleOffset = 0.0f;
+                    this._angleOffset = 0f;
                     this.handOffset = Vec2.Zero;
                 }
                 if (this._loadState == 0)
@@ -85,20 +85,20 @@ namespace DuckGame
                     if (handOffset.x <= 0.0)
                     {
                         ++this._loadState;
-                        this.handOffset.x = 0.0f;
+                        this.handOffset.x = 0f;
                     }
                 }
                 else if (this._loadState == 4)
                 {
                     if (_angleOffset > 0.0399999991059303)
                     {
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.25f);
+                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.25f);
                     }
                     else
                     {
                         this._loadState = -1;
                         this.loaded = true;
-                        this._angleOffset = 0.0f;
+                        this._angleOffset = 0f;
                     }
                 }
             }

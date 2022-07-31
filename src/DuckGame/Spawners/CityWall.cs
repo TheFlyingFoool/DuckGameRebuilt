@@ -45,15 +45,15 @@ namespace DuckGame
             if (!(Level.current is Editor))
             {
                 Graphics.Draw(this._wall, this.x, this.y);
-                if (Level.current.topLeft.y < (double)this.y - 500.0)
+                if (Level.current.topLeft.y < this.y - 500f)
                     Graphics.Draw(this._wall, this.x, this.y - _wall.h);
-                if (Level.current.bottomRight.y <= (double)this.y + 500.0)
+                if (Level.current.bottomRight.y <= this.y + 500f)
                     return;
                 Graphics.Draw(this._wall, this.x, this.y + _wall.h);
             }
             else
             {
-                Graphics.DrawLine(this.position, this.position + new Vec2(this.flipHorizontal ? 16f : -16f, 0.0f), Color.Red);
+                Graphics.DrawLine(this.position, this.position + new Vec2(this.flipHorizontal ? 16f : -16f, 0f), Color.Red);
                 base.Draw();
             }
         }

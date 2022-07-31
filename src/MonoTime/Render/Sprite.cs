@@ -70,20 +70,20 @@ namespace DuckGame
         {
         }
 
-        public Sprite(Tex2D tex, float x = 0.0f, float y = 0.0f)
+        public Sprite(Tex2D tex, float x = 0f, float y = 0f)
         {
             this._texture = tex;
             this.position = new Vec2(x, y);
         }
 
-        public Sprite(RenderTarget2D tex, float x = 0.0f, float y = 0.0f)
+        public Sprite(RenderTarget2D tex, float x = 0f, float y = 0f)
         {
             this._texture = tex;
             this._renderTexture = tex;
             this.position = new Vec2(x, y);
         }
 
-        public Sprite(string tex, float x = 0.0f, float y = 0.0f)
+        public Sprite(string tex, float x = 0f, float y = 0f)
         {
             this._texture = Content.Load<Tex2D>(tex);
             this.position = new Vec2(x, y);

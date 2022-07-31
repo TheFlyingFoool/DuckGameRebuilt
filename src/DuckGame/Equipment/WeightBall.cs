@@ -66,7 +66,7 @@ namespace DuckGame
         {
             if (with is Duck && this.collar != null && with != null)
             {
-                if (with == this.collar.owner || (double)this.totalImpactPower <= 8.0)
+                if (with == this.collar.owner || this.totalImpactPower <= 8.0)
                     return;
                 if (this.collar.duck != null)
                     RumbleManager.AddRumbleEvent(this.collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
@@ -80,7 +80,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.collar != null && this.collar.duck != null && this.collar.duck.profile != null && (double)this.totalImpactPower > 4.0)
+            if (this.collar != null && this.collar.duck != null && this.collar.duck.profile != null && this.totalImpactPower > 4.0)
                 RumbleManager.AddRumbleEvent(this.collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
             base.OnSolidImpact(with, from);
         }
@@ -100,25 +100,25 @@ namespace DuckGame
             float num1 = dist;
             Vec2 vec2_1 = b2.position - b1.position;
             float num2 = vec2_1.length;
-            if ((double)num2 < 0.0001f)
+            if (num2 < 0.0001f)
                 num2 = 0.0001f;
-            if ((double)num2 < (double)num1)
-                return 0.0f;
+            if (num2 < num1)
+                return 0f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(thing1.hSpeed, thing1.vSpeed);
             Vec2 vec2_4 = new Vec2(thing2.hSpeed, thing2.vSpeed);
-            double num3 = (double)Vec2.Dot(vec2_4 - vec2_3, vec2_2);
+            double num3 = Vec2.Dot(vec2_4 - vec2_3, vec2_2);
             float num4 = num2 - num1;
             float num5 = 2.5f;
             float num6 = 2.1f;
             if (thing1 is ChainLink && !(thing2 is ChainLink))
             {
                 num5 = 10f;
-                num6 = 0.0f;
+                num6 = 0f;
             }
             else if (thing2 is ChainLink && !(thing1 is ChainLink))
             {
-                num5 = 0.0f;
+                num5 = 0f;
                 num6 = 10f;
             }
             else if (thing1 is ChainLink && thing2 is ChainLink)
@@ -130,8 +130,8 @@ namespace DuckGame
                 num5 = 10f;
             else if (thing2 is ChokeCollar)
                 num6 = 10f;
-            double num7 = (double)num4;
-            float num8 = (float)((num3 + num7) / ((double)num5 + (double)num6));
+            double num7 = num4;
+            float num8 = (float)((num3 + num7) / (num5 + num6));
             Vec2 vec2_5 = vec2_2 * num8;
             Vec2 vec2_6 = vec2_3 + vec2_5 * num5;
             vec2_4 -= vec2_5 * num6;
@@ -139,9 +139,9 @@ namespace DuckGame
             thing1.vSpeed = vec2_6.y;
             thing2.hSpeed = vec2_4.x;
             thing2.vSpeed = vec2_4.y;
-            if (thing1 is ChainLink && (double)(thing2.position - thing1.position).length > (double)num1 * 12.0)
+            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
                 thing1.position = this.position;
-            if (thing2 is ChainLink && (double)(thing2.position - thing1.position).length > (double)num1 * 12.0)
+            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
                 thing2.position = this.position;
             return num8;
         }
@@ -156,26 +156,26 @@ namespace DuckGame
             }
             if (physicsObject == null)
                 return;
-            double num1 = (double)this.Solve(this, physicsObject, 30f);
+            double num1 = this.Solve(this, physicsObject, 30f);
             int num2 = 0;
             PhysicsObject b2 = this;
             foreach (ChainLink link in this._links)
             {
-                double num3 = (double)this.Solve(link, b2, 2f);
+                double num3 = this.Solve(link, b2, 2f);
                 b2 = link;
                 link.depth = this._attach.depth - 8 - num2;
                 ++num2;
             }
-            double num4 = (double)this.Solve(physicsObject, b2, 2f);
+            double num4 = this.Solve(physicsObject, b2, 2f);
             base.Update();
             if (_sparkWait > 0.0)
                 this._sparkWait -= 0.1f;
             else
-                this._sparkWait = 0.0f;
-            if (_sparkWait != 0.0 || !this.grounded || (double)Math.Abs(this.hSpeed) <= 1.0)
+                this._sparkWait = 0f;
+            if (_sparkWait != 0.0 || !this.grounded || Math.Abs(this.hSpeed) <= 1.0)
                 return;
             this._sparkWait = 0.25f;
-            Level.Add(Spark.New(this.x + ((double)this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0.0f, 0.5f)));
+            Level.Add(Spark.New(this.x + (this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0f, 0.5f)));
         }
     }
 }

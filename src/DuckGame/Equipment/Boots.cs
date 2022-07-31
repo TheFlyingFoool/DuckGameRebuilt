@@ -37,8 +37,8 @@ namespace DuckGame
             {
                 this.center = new Vec2(16f, 12f);
                 this.graphic = _sprite;
-                this.collisionOffset = new Vec2(0.0f, -9999f);
-                this.collisionSize = new Vec2(0.0f, 0.0f);
+                this.collisionOffset = new Vec2(0f, -9999f);
+                this.collisionSize = new Vec2(0f, 0f);
                 this.solid = false;
                 this._sprite.frame = this._equippedDuck._sprite.imageIndex;
                 if (this._equippedDuck.ragdoll != null)
@@ -57,7 +57,7 @@ namespace DuckGame
             }
             if (this.destroyed)
                 this.alpha -= 0.05f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0f)
                 Level.Remove(this);
             base.Update();
         }

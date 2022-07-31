@@ -14,7 +14,7 @@ namespace DuckGame
     public class RandomControllerNew : Thing
     {
         public EditorProperty<int> Max_Up = new EditorProperty<int>(1, max: 32f, increment: 1f, minSpecial: "NO LIMIT");
-        public EditorProperty<float> Delay = new EditorProperty<float>(0.0f, max: 100f, increment: 0.05f);
+        public EditorProperty<float> Delay = new EditorProperty<float>(0f, max: 100f, increment: 0.05f);
         public EditorProperty<bool> Continuous = new EditorProperty<bool>(true);
         public EditorProperty<int> Group = new EditorProperty<int>(0, min: -1f, max: 99f, increment: 1f, minSpecial: "ALL");
         public EditorProperty<bool> Ordered_Groups = new EditorProperty<bool>(false, "GROUP");
@@ -95,10 +95,10 @@ namespace DuckGame
             if (this.Group_Wait.value && this._up.Count != 0 || this._up.Count >= (int)this.Max_Up && (int)this.Max_Up != 0)
                 return;
             this._waitCount += Maths.IncFrameTimer();
-            if (_waitCount < (double)this.Delay.value)
+            if (_waitCount < this.Delay.value)
                 return;
             this.PopUpItems();
-            this._waitCount = 0.0f;
+            this._waitCount = 0f;
         }
 
         private void PopUpItems()
@@ -197,14 +197,14 @@ namespace DuckGame
                 if (num2 == 0)
                     num2 = 1;
                 float num3 = ChallengeRando.Float(1f);
-                float num4 = 0.0f;
+                float num4 = 0f;
                 if (sequenceItemList.Count == 0)
                     flag1 = true;
                 bool flag3 = false;
                 foreach (SequenceItem sequenceItem in sequenceItemList)
                 {
                     float num5 = sequenceItem.likelyhood / (float)num2;
-                    if ((double)num3 > (double)num4 && (double)num3 < (double)num4 + (double)num5)
+                    if (num3 > num4 && num3 < num4 + num5)
                     {
                         sequenceItem.randomMode = true;
                         sequenceItem.Activate();

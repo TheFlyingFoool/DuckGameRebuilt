@@ -107,13 +107,13 @@ namespace DuckGame
             this._matchmakingStars.Add(spriteMap4);
         }
 
-        public void ChangeState(MatchmakingState s, float wait = 0.0f)
+        public void ChangeState(MatchmakingState s, float wait = 0f)
         {
             this._connectTimeout = 0;
             DevConsole.Log("|PURPLE|LOBBY    |DGYELLOW|CHANGE STATE " + s.ToString(), Color.White);
             if (s == MatchmakingState.Waiting)
                 return;
-            if ((double)wait == 0.0)
+            if (wait == 0.0)
             {
                 this.OnStateChange(s);
             }
@@ -130,7 +130,7 @@ namespace DuckGame
         private void OnStateChange(MatchmakingState s)
         {
             UIMatchmakingBox._core._state = s;
-            this._stateWait = 0.0f;
+            this._stateWait = 0f;
             if (UIMatchmakingBox._core._state == MatchmakingState.Disconnect)
             {
                 if (!Network.isActive)
@@ -165,11 +165,11 @@ namespace DuckGame
             this._tryConnectLobby = null;
             this._tryHostingLobby = null;
             this.ChangeState(MatchmakingState.ConnectToMoon);
-            this._tryHostingWait = 0.0f;
-            this._tryConnectTimeout = 0.0f;
+            this._tryHostingWait = 0f;
+            this._tryConnectTimeout = 0f;
             this._quit = false;
             this._tries = 0;
-            this._tryHostingWait = 0.0f;
+            this._tryHostingWait = 0f;
             this._totalLobbiesFound = -1;
             this._failedAttempts.Clear();
             this._currentLevel = Level.current;
@@ -183,7 +183,7 @@ namespace DuckGame
         public override void Close()
         {
             this.ChangeState(MatchmakingState.None);
-            this._tryHostingWait = 0.0f;
+            this._tryHostingWait = 0f;
             if (this._quit)
             {
                 foreach (KeyValuePair<Profile, Team> teamProfileLink in this._teamProfileLinks)
@@ -192,7 +192,7 @@ namespace DuckGame
             this._quit = false;
             this._newStatusList.Clear();
             this._statusList.Clear();
-            this._tryConnectTimeout = 0.0f;
+            this._tryConnectTimeout = 0f;
             base.Close();
         }
 
@@ -325,15 +325,15 @@ namespace DuckGame
             {
                 this._scroll += 0.1f;
                 if (_scroll > 9.0)
-                    this._scroll = 0.0f;
+                    this._scroll = 0f;
                 this._dots += 0.01f;
                 if (_dots > 1.0)
-                    this._dots = 0.0f;
+                    this._dots = 0f;
             }
             if (this.open)
             {
                 foreach (BlacklistServer failedAttempt in this._failedAttempts)
-                    failedAttempt.cooldown = Lerp.Float(failedAttempt.cooldown, 0.0f, Maths.IncFrameTimer());
+                    failedAttempt.cooldown = Lerp.Float(failedAttempt.cooldown, 0f, Maths.IncFrameTimer());
                 if (this._searchingIsOver)
                 {
                     this._signalCrossLocal.SetAnimation("idle");
@@ -385,7 +385,7 @@ namespace DuckGame
                     this._stateWait -= Maths.IncFrameTimer();
                     if (_stateWait <= 0.0)
                     {
-                        this._stateWait = 0.0f;
+                        this._stateWait = 0f;
                         this.OnStateChange(this._pendingState);
                     }
                 }
@@ -590,7 +590,7 @@ namespace DuckGame
                 if (_newStatusWait <= 0.0)
                 {
                     this._newStatusWait = 1f;
-                    while ((double)this._fancyFont.GetWidth(this._newStatusList[0]) > 100.0)
+                    while (this._fancyFont.GetWidth(this._newStatusList[0]) > 100.0)
                         this._newStatusList[0] = this._newStatusList[0].Substring(0, this._newStatusList[0].Length - 1);
                     this._statusList.Add(this._newStatusList[0]);
                     if (this._statusList.Count > 7)
@@ -622,7 +622,7 @@ namespace DuckGame
                     float num1 = this.x - 28f;
                     float x = num1 + index * 9 + (float)Math.Round(_scroll);
                     float num2 = num1 + 63f;
-                    double num3 = ((double)x - (double)num1) / ((double)num2 - (double)num1);
+                    double num3 = (x - num1) / (num2 - num1);
                     this._matchmakingSignal.depth = this.depth + 4;
                     if (num3 > -0.100000001490116)
                         this._matchmakingSignal.frame = 0;
@@ -649,7 +649,7 @@ namespace DuckGame
             Graphics.Draw(_signalCrossLocal, this.x - 35f, this.y - 19f);
             this._signalCrossNetwork.depth = this.depth + 2;
             Graphics.Draw(_signalCrossNetwork, this.x + 45f, this.y - 23f);
-            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-((double)this._font.GetWidth(this._caption) / 2.0), -42f), Color.White, Color.Black, this.depth + 2);
+            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-(this._font.GetWidth(this._caption) / 2.0), -42f), Color.White, Color.Black, this.depth + 2);
             this._fancyFont.scale = new Vec2(0.5f);
             int num4 = 0;
             int num5 = 0;

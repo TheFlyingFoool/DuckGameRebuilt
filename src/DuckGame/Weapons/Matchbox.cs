@@ -38,7 +38,7 @@ namespace DuckGame
             if (this.isServerForObject && this.ammo > 0)
             {
                 for (int index = 0; index < 5; ++index)
-                    Level.Add(SmallFire.New(this.x - 6f + Rando.Float(12f), this.y - 8f + Rando.Float(4f), Rando.Float(4f) - 2f, (float)-(1.0 + (double)Rando.Float(2f)), firedFrom: this));
+                    Level.Add(SmallFire.New(this.x - 6f + Rando.Float(12f), this.y - 8f + Rando.Float(4f), Rando.Float(4f) - 2f, (float)-(1.0 + Rando.Float(2f)), firedFrom: this));
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                 if (this.owner is Duck owner)
                     owner.ThrowItem();
@@ -57,8 +57,8 @@ namespace DuckGame
                 {
                     --this.ammo;
                     SFX.Play("lightMatch", 0.5f, Rando.Float(0.2f) - 0.4f);
-                    float num1 = 0.0f;
-                    float num2 = 0.0f;
+                    float num1 = 0f;
+                    float num2 = 0f;
                     if (owner.inputProfile.Down("LEFT"))
                         --num1;
                     if (owner.inputProfile.Down("RIGHT"))
@@ -70,7 +70,7 @@ namespace DuckGame
                     if (this.receivingPress || !this.isServerForObject)
                         return;
                     if (owner.crouch)
-                        Level.Add(SmallFire.New(this.x + offDir * 11f, this.y, 0.0f, 0.0f, firedFrom: this));
+                        Level.Add(SmallFire.New(this.x + offDir * 11f, this.y, 0f, 0f, firedFrom: this));
                     else
                         Level.Add(SmallFire.New(this.x + offDir * 11f, this.y, offDir * (1f + Rando.Float(0.3f)) + num1, -0.6f - Rando.Float(0.5f) + num2, firedFrom: this));
                 }

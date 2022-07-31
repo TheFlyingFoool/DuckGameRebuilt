@@ -90,23 +90,23 @@ namespace DuckGame
             this._items.Clear();
             if (this._currentDirectory != this._rootDirectory)
             {
-                this.AddItem(new LSItem(0.0f, 0.0f, this, "../"));
+                this.AddItem(new LSItem(0f, 0f, this, "../"));
             }
             else
             {
-                this.AddItem(new LSItem(0.0f, 0.0f, this, "@VANILLA@")
+                this.AddItem(new LSItem(0f, 0f, this, "@VANILLA@")
                 {
                     itemType = LSItemType.Vanilla
                 });
                 if (Steam.GetNumWorkshopItems() > 0)
-                    this.AddItem(new LSItem(0.0f, 0.0f, this, "@WORKSHOP@", true));
+                    this.AddItem(new LSItem(0f, 0f, this, "@WORKSHOP@", true));
             }
             if (folder.EndsWith(".play") || folder == "@WORKSHOP@" || folder == "@VANILLA@")
             {
                 List<string> levelsInside = LSItem.GetLevelsInside(this, folder);
                 levelsInside.Sort();
                 foreach (string PATH in levelsInside)
-                    this.AddItem(new LSItem(0.0f, 0.0f, this, PATH));
+                    this.AddItem(new LSItem(0f, 0f, this, PATH));
                 this._items = this._items.OrderBy<LSItem, bool>(x => x.data != null && x.data.metaData.eightPlayer).ToList<LSItem>();
                 this.PositionItems();
             }
@@ -121,13 +121,13 @@ namespace DuckGame
                     foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                     {
                         if (accessibleMod.configuration != null && accessibleMod.configuration.content != null && accessibleMod.configuration.content.levels.Count > 0)
-                            this.AddItem(new LSItem(0.0f, 0.0f, this, accessibleMod.configuration.contentDirectory + "/Levels", pIsModPath: true, pIsModRoot: true)
+                            this.AddItem(new LSItem(0f, 0f, this, accessibleMod.configuration.contentDirectory + "/Levels", pIsModPath: true, pIsModRoot: true)
                             {
                                 _name = accessibleMod.configuration.name
                             });
                     }
                     foreach (MapPack mapPack in MapPack.active)
-                        this.AddItem(new LSItem(0.0f, 0.0f, this, mapPack.path, pIsModPath: true, pIsModRoot: true, pIsMapPack: true)
+                        this.AddItem(new LSItem(0f, 0f, this, mapPack.path, pIsModPath: true, pIsModRoot: true, pIsMapPack: true)
                         {
                             _name = mapPack.name,
                             _customIcon = mapPack.icon,
@@ -137,7 +137,7 @@ namespace DuckGame
                 foreach (string str in directories)
                 {
                     if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Count<string>() > 0)
-                        this.AddItem(new LSItem(0.0f, 0.0f, this, str, pIsModPath: isModPath));
+                        this.AddItem(new LSItem(0f, 0f, this, str, pIsModPath: isModPath));
                 }
                 List<string> stringList = new List<string>();
                 foreach (string str in files)
@@ -146,10 +146,10 @@ namespace DuckGame
                     if (Path.GetExtension(file) == ".lev" && this._filters.TrueForAll(a => a.Filter(file)))
                         stringList.Add(file);
                     else if (Path.GetExtension(file) == ".play")
-                        this.AddItem(new LSItem(0.0f, 0.0f, this, file, pIsModPath: isModPath));
+                        this.AddItem(new LSItem(0f, 0f, this, file, pIsModPath: isModPath));
                 }
                 foreach (string PATH in stringList)
-                    this.AddItem(new LSItem(0.0f, 0.0f, this, PATH, pIsModPath: isModPath));
+                    this.AddItem(new LSItem(0f, 0f, this, PATH, pIsModPath: isModPath));
                 this.PositionItems();
             }
         }
@@ -325,8 +325,8 @@ namespace DuckGame
                 if (this._exiting)
                 {
                     HUD.CloseAllCorners();
-                    Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.04f);
-                    if ((double)Graphics.fade >= 0.01f)
+                    Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.04f);
+                    if (Graphics.fade >= 0.01f)
                         return;
                     this.isClosed = true;
                 }
@@ -464,7 +464,7 @@ namespace DuckGame
         public void DrawThings(bool drawBack = false)
         {
             if (drawBack)
-                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, -0.8f);
+                DuckGame.Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, -0.8f);
             foreach (LSItem lsItem in this._items)
             {
                 if (lsItem.visible)

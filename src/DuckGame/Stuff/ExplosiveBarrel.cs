@@ -25,7 +25,7 @@ namespace DuckGame
             this.physicsMaterial = PhysicsMaterial.Metal;
             this.collideSounds.Clear();
             this.collideSounds.Add("barrelThud");
-            this._holdOffset = new Vec2(1f, 0.0f);
+            this._holdOffset = new Vec2(1f, 0f);
             this.flammable = 0.3f;
             this._placementCost += 10;
             this.baseExplosionRange = 70f;

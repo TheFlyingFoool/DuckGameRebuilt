@@ -44,8 +44,8 @@ namespace DuckGame
             this.depth = (Depth)0.95f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             this.position = vec2_1 + new Vec2(4f, 20f);
             this.itemSize = new Vec2(490f, 16f);
             this._root = true;
@@ -141,8 +141,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 300f;
             float num2 = 72f;
-            Vec2 p1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 p2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 p1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 p2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             Graphics.DrawRect(p1, p2, new Color(70, 70, 70), this.depth, false, 0.95f);
             Graphics.DrawRect(p1, p2, new Color(30, 30, 30), this.depth - 1);
             Graphics.DrawRect(p1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), this.depth + 1);

@@ -24,7 +24,7 @@ namespace DuckGame
             this.depth = -0.5f;
             this.thickness = 1f;
             this.weight = 3f;
-            this.flammable = 0.0f;
+            this.flammable = 0f;
             this.collideSounds.Add("metalRebound");
             this.physicsMaterial = PhysicsMaterial.Metal;
             this.editorTooltip = "For opening locked doors. You've heard of keys before, right?";
@@ -36,7 +36,7 @@ namespace DuckGame
         {
             this._sprite.flipH = this.offDir < 0;
             if (this.owner != null)
-                Level.CheckLine<Door>(this.position + new Vec2(-10f, 0.0f), this.position + new Vec2(10f, 0.0f))?.UnlockDoor(this);
+                Level.CheckLine<Door>(this.position + new Vec2(-10f, 0f), this.position + new Vec2(10f, 0f))?.UnlockDoor(this);
             base.Update();
         }
 

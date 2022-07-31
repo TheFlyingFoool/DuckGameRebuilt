@@ -36,7 +36,7 @@ namespace DuckGame
             this.thickness = 2f;
             this.weight = 5f;
             this.buoyancy = 1f;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this.flammable = 0.3f;
             this.collideSounds.Add("crateHit");
             this.editorTooltip = "It's made of wood. That's...pretty much it.";
@@ -44,7 +44,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             Level.Remove(this);
             SFX.Play("crateDestroy");
             Vec2 vec2 = Vec2.Zero;
@@ -53,7 +53,7 @@ namespace DuckGame
             for (int index = 0; index < 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)(((double)Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * (double)Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }

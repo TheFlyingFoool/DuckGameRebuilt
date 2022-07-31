@@ -30,7 +30,7 @@ namespace DuckGame
         private float _tvFade = 1f;
         private TVState _state;
         private TVState _desiredState;
-        private Vec2 _cameraOffset = new Vec2(0.0f, 0.0f);
+        private Vec2 _cameraOffset = new Vec2(0f, 0f);
         private Teleprompter _talker;
         public static bool didSkip;
         private bool _firedSkipLogic;
@@ -94,7 +94,7 @@ namespace DuckGame
             if (this._testMode)
             {
                 this._endOfHighlights = true;
-                Options.Data.sfxVolume = 0.0f;
+                Options.Data.sfxVolume = 0f;
                 DuckStory duckStory = new DuckStory
                 {
                     text = "|SUAVE||RED|John Mallard|WHITE| here dancing|CALM| for you |EXCITED|and wearing ties!"
@@ -121,8 +121,8 @@ namespace DuckGame
             Level.Add(_transition);
             //this._tl = new Vec2(30f, 32f);
             //this._size = new Vec2(207f, 141f);
-            this._rockImage2 = new Sprite(RockScoreboard.finalImage, 0.0f, 0.0f);
-            this._talker = new Teleprompter(0.0f, 0.0f, this._duck);
+            this._rockImage2 = new Sprite(RockScoreboard.finalImage, 0f, 0f);
+            this._talker = new Teleprompter(0f, 0f, this._duck);
             this._talker.active = this._talker.visible = false;
             Level.Add(_talker);
             if (HighlightLevel.didSkip)

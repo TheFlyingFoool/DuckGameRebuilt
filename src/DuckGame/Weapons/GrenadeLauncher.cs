@@ -41,7 +41,7 @@ namespace DuckGame
             this._fireSound = "pistol";
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Light;
-            this._holdOffset = new Vec2(4f, 0.0f);
+            this._holdOffset = new Vec2(4f, 0f);
             this._ammoType = new ATGrenade();
             this._fireSound = "deepMachineGun";
             this._bulletColor = Color.White;
@@ -58,7 +58,7 @@ namespace DuckGame
             if (_cooldown > 0.0)
                 this._cooldown -= 0.1f;
             else
-                this._cooldown = 0.0f;
+                this._cooldown = 0f;
             if (this.owner != null)
             {
                 this._aimAngle = -Maths.DegToRad(this._fireAngle);
@@ -67,14 +67,14 @@ namespace DuckGame
             }
             else
             {
-                this._aimWait = 0.0f;
+                this._aimWait = 0f;
                 this._aiming = false;
-                this._aimAngle = 0.0f;
-                this._fireAngle = 0.0f;
+                this._aimAngle = 0f;
+                this._fireAngle = 0f;
             }
             if (!this._raised)
                 return;
-            this._aimAngle = 0.0f;
+            this._aimAngle = 0f;
         }
 
         public override void OnPressAction()
@@ -97,8 +97,8 @@ namespace DuckGame
             this._aiming = false;
             this.Fire();
             this._cooldown = 1f;
-            this.angle = 0.0f;
-            this._fireAngle = 0.0f;
+            this.angle = 0f;
+            this._fireAngle = 0f;
         }
     }
 }

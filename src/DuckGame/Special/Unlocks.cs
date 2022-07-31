@@ -55,14 +55,14 @@ namespace DuckGame
                 else if (unlock.priceTier == UnlockPrice.Ridiculous)
                     ++num14;
             }
-            int num15 = (int)Math.Round(num9 * 0.100000001490116);
-            int num16 = (int)Math.Round(num9 * 0.300000011920929);
-            int num17 = (int)Math.Round(num9 * 0.400000005960464);
-            int num18 = (int)Math.Round(num9 * 0.200000002980232);
-            int num19 = (int)Math.Round(num15 / (double)num11);
-            int num20 = (int)Math.Round(num16 / (double)num12);
-            int num21 = (int)Math.Round(num17 / (double)num13);
-            int num22 = (int)Math.Round(num18 / (double)num14);
+            int num15 = (int)Math.Round((double)(num9 * 0.1f));
+            int num16 = (int)Math.Round((double)(num9 * 0.3f));
+            int num17 = (int)Math.Round((double)(num9 * 0.4f));
+            int num18 = (int)Math.Round((double)(num9 * 0.2f));
+            int num19 = (int)Math.Round((double)(num15 / num11));
+            int num20 = (int)Math.Round((double)(num16 / num12));
+            int num21 = (int)Math.Round((double)(num17 / num13));
+            int num22 = (int)Math.Round((double)(num18 / num14));
             while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 > num9)
                 --num22;
             while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 < num9)

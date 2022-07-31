@@ -29,12 +29,12 @@ namespace DuckGame
             if (this._playSwipe)
                 return;
             this._playSwipe = true;
-            this._duckLerp = 0.0f;
-            this._channelLerp = 0.0f;
-            this._slideOutWait = 0.0f;
-            this._fiveLerp = 0.0f;
+            this._duckLerp = 0f;
+            this._channelLerp = 0f;
+            this._slideOutWait = 0f;
+            this._fiveLerp = 0f;
             this._doTransition = false;
-            this._transitionWait = 0.0f;
+            this._transitionWait = 0f;
             for (int index = 0; index < 10; ++index)
             {
                 this._swipeLines[index] = Rando.Float(0.1f);
@@ -74,9 +74,9 @@ namespace DuckGame
                 }
                 else
                 {
-                    this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 0.0f, 0.1f, 1.1f);
-                    this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 0.0f, 0.1f, 1.1f);
-                    this._fiveLerp = Lerp.FloatSmooth(this._fiveLerp, 0.0f, 0.1f, 1.1f);
+                    this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 0f, 0.1f, 1.1f);
+                    this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 0f, 0.1f, 1.1f);
+                    this._fiveLerp = Lerp.FloatSmooth(this._fiveLerp, 0f, 0.1f, 1.1f);
                     if (_duckLerp < 0.01f)
                         this._playSwipe = false;
                 }

@@ -230,21 +230,21 @@ namespace DuckGame
 
             public void Draw(SpriteBatch batch, string text, float xpos, float ypos, Color c)
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 for (int index = 0; index < text.Length; ++index)
                 {
                     if (text[index] == '\n')
                     {
                         num1 += this._tileSize * 8;
-                        num2 = 0.0f;
+                        num2 = 0f;
                     }
                     else
                     {
                         int character = FPSCounter.BitmapFont._characterMap[text[index]];
                         int x = character % 16 * this._tileSize;
                         int y = character / 16 * this._tileSize;
-                        batch.Draw(this._texture, (Vector2)new Vec2(xpos + num2, ypos), new Microsoft.Xna.Framework.Rectangle?((Microsoft.Xna.Framework.Rectangle)new Rectangle(x, y, _tileSize, _tileSize)), (Microsoft.Xna.Framework.Color)c, 0.0f, (Vector2)Vec2.Zero, (Vector2)new Vec2(1f, 1f), SpriteEffects.None, 1f);
+                        batch.Draw(this._texture, (Vector2)new Vec2(xpos + num2, ypos), new Microsoft.Xna.Framework.Rectangle?((Microsoft.Xna.Framework.Rectangle)new Rectangle(x, y, _tileSize, _tileSize)), (Microsoft.Xna.Framework.Color)c, 0f, (Vector2)Vec2.Zero, (Vector2)new Vec2(1f, 1f), SpriteEffects.None, 1f);
                         num2 += _tileSize;
                     }
                 }

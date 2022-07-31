@@ -21,7 +21,7 @@ namespace DuckGame
         {
             if (this._spawner == null)
                 return;
-            this._spawner._spawnWait = 0.0f;
+            this._spawner._spawnWait = 0f;
         }
     }
 }

@@ -42,20 +42,20 @@ namespace DuckGame
 
         private void UpdateOpenState()
         {
-            if ((double)this.angleDegrees == 0.0)
+            if (this.angleDegrees == 0.0)
             {
                 this.collisionSize = this._colSize;
                 this._open = false;
             }
             else
             {
-                if ((double)this.angleDegrees == 0.0)
+                if (this.angleDegrees == 0.0)
                     return;
                 if (!this._open)
                 {
                     if (!(Level.current is Editor))
                     {
-                        foreach (PhysicsObject physicsObject in Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -8f), this.bottomRight))
+                        foreach (PhysicsObject physicsObject in Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(0f, -8f), this.bottomRight))
                             physicsObject.sleeping = false;
                     }
                     this._open = true;

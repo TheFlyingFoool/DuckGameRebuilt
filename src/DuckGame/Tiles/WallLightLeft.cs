@@ -33,8 +33,8 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this._occluders.Add(new LightOccluder(this.topLeft + new Vec2(-2f, 0.0f), this.topRight, new Color(1f, 0.8f, 0.8f)));
-            this._occluders.Add(new LightOccluder(this.bottomLeft + new Vec2(-2f, 0.0f), this.bottomRight, new Color(1f, 0.8f, 0.8f)));
+            this._occluders.Add(new LightOccluder(this.topLeft + new Vec2(-2f, 0f), this.topRight, new Color(1f, 0.8f, 0.8f)));
+            this._occluders.Add(new LightOccluder(this.bottomLeft + new Vec2(-2f, 0f), this.bottomRight, new Color(1f, 0.8f, 0.8f)));
             this._light = new PointLight(this.x - 5f, this.y, new Color((int)byte.MaxValue, (int)byte.MaxValue, 190), 100f, this._occluders);
             Level.Add(_light);
             this._shade = new SpriteThing(this.x, this.y, new Sprite("wallLight"))

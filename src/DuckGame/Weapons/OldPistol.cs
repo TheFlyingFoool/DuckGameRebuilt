@@ -31,7 +31,7 @@ namespace DuckGame
             this._kickForce = 2f;
             this._fireRumble = RumbleIntensity.Kick;
             this._manualLoad = true;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this.editorTooltip = "A pain in the tailfeathers to reload, but it'll get the job done.";
         }
 
@@ -117,20 +117,20 @@ namespace DuckGame
                     return;
                 if (_angleOffset > 0.04f)
                 {
-                    this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.08f);
+                    this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.08f);
                 }
                 else
                 {
                     this._loadState = -1;
                     this.loaded = true;
-                    this._angleOffset = 0.0f;
+                    this._angleOffset = 0f;
                     if (this.isServerForObject && this.duck != null && this.duck.profile != null)
                         RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
                     if (Network.isActive)
                     {
                         if (!this.isServerForObject)
                             return;
-                        SFX.PlaySynchronized("click", 1f, 0.5f, 0.0f, false, true);
+                        SFX.PlaySynchronized("click", 1f, 0.5f, 0f, false, true);
                     }
                     else
                         SFX.Play("click", pitch: 0.5f);

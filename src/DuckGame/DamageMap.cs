@@ -17,23 +17,23 @@ namespace DuckGame
 
         public bool InRange(int x, int y)
         {
-            x = (int)(x - (double)this.thing.left);
-            y = (int)(y - (double)this.thing.top);
+            x = (int)(x - this.thing.left);
+            y = (int)(y - this.thing.top);
             x += y * 16;
             return x >= 0 && x < 256;
         }
 
         public bool InRange(float x, float y)
         {
-            x = (float)Math.Round((double)x);
-            y = (float)Math.Round((double)y);
+            x = (float)Math.Round(x);
+            y = (float)Math.Round(y);
             return this.InRange((int)x, (int)y);
         }
 
         public bool CheckPoint(int x, int y)
         {
-            x = (int)(x - (double)this.thing.left);
-            y = (int)(y - (double)this.thing.top);
+            x = (int)(x - this.thing.left);
+            y = (int)(y - this.thing.top);
             x += y * 16;
             return x < 0 || x >= 256 || this.bytes[x] > 0;
         }
@@ -46,8 +46,8 @@ namespace DuckGame
 
         public bool CheckPoint(float x, float y)
         {
-            x = (float)Math.Round((double)x);
-            y = (float)Math.Round((double)y);
+            x = (float)Math.Round(x);
+            y = (float)Math.Round(y);
             return this.CheckPoint((int)x, (int)y);
         }
 
@@ -67,7 +67,7 @@ namespace DuckGame
             {
                 for (int x = 0; x < 16; ++x)
                 {
-                    if ((double)(new Vec2(x, y) - point).length <= (double)radius)
+                    if ((new Vec2(x, y) - point).length <= radius)
                         this.SetPoint(x, y, false);
                 }
             }

@@ -113,11 +113,11 @@ namespace DuckGame
                             GameMode.lastWinners.Add(activeProfile);
                             if (p != null)
                             {
-                                PlusOne plusOne = new PlusOne(0.0f, 0.0f, p, testMode: this._editorTestMode)
+                                PlusOne plusOne = new PlusOne(0f, 0f, p, testMode: this._editorTestMode)
                                 {
                                     anchor = (Anchor)activeProfile.duck
                                 };
-                                plusOne.anchor.offset = new Vec2(0.0f, -16f);
+                                plusOne.anchor.offset = new Vec2(0f, -16f);
                                 Level.Add(plusOne);
                             }
                         }

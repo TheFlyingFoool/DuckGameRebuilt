@@ -13,8 +13,8 @@ namespace DuckGame
     public class CameraFixed : CustomCamera
     {
         public EditorProperty<int> Size = new EditorProperty<int>(320, min: 60f, max: 1920f, increment: 1f);
-        public EditorProperty<float> MoveX = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
-        public EditorProperty<float> MoveY = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> MoveX = new EditorProperty<float>(0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> MoveY = new EditorProperty<float>(0f, min: -10f, max: 10f, increment: 0.25f);
         public EditorProperty<float> MoveDelay = new EditorProperty<float>(1f, max: 120f, increment: 0.25f);
         //private bool moving;
         //private int inc;
@@ -42,7 +42,7 @@ namespace DuckGame
         {
             if (!(Level.current is GameLevel) || GameMode.started)
             {
-                if ((double)this.MoveDelay.value > 0.0)
+                if (this.MoveDelay.value > 0f)
                 {
                     this.MoveDelay.value -= Maths.IncFrameTimer();
                 }
@@ -51,10 +51,10 @@ namespace DuckGame
                     Level.current.camera.x += this.MoveX.value;
                     Level.current.camera.y += this.MoveY.value;
                     this.position = Level.current.camera.center;
-                    if ((double)this.MoveX.value != 0.0 || (double)this.MoveY.value != 0.0)
+                    if (this.MoveX.value != 0f || this.MoveY.value != 0f)
                     {
                         CameraMover cameraMover = Level.CheckLine<CameraMover>(this.position, this.position + new Vec2(this.MoveX.value, this.MoveY.value));
-                        if (cameraMover != null && cameraMover != this.curMover && ((double)(cameraMover.position - this.position).length < 0.5 || (double)this.MoveX.value != 0.0 && Math.Sign(cameraMover.position.x - this.position.x) != Math.Sign(this.MoveX.value) || (double)this.MoveY.value != 0.0 && Math.Sign(cameraMover.position.y - this.position.y) != Math.Sign(this.MoveY.value)))
+                        if (cameraMover != null && cameraMover != this.curMover && ((cameraMover.position - this.position).length < 0.5f || this.MoveX.value != 0f && Math.Sign(cameraMover.position.x - this.position.x) != Math.Sign(this.MoveX.value) || this.MoveY.value != 0f && Math.Sign(cameraMover.position.y - this.position.y) != Math.Sign(this.MoveY.value)))
                         {
                             this.position = cameraMover.position;
                             this.MoveX.value = cameraMover.SpeedX.value;

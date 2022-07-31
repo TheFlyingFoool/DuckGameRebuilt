@@ -105,8 +105,8 @@ namespace DuckGame
             this._previewSprite = null;
             float num1 = 350f;
             float num2 = 350f;
-            Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0) + this.hOffset, (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 + num2 / 2.0));
             this.position = vec2_1 + new Vec2(4f, 40f);
             this._save = save;
             rootFolder = rootFolder.Replace('\\', '/');
@@ -124,10 +124,10 @@ namespace DuckGame
 
         private void ComputeAvailableStorageSpace()
         {
-            float percent = 0.0f;
+            float percent = 0f;
             if (!DuckFile.GetLevelSpacePercentUsed(ref percent))
                 return;
-            this._percentStorageUsed = (double)percent > 100.0 ? 100f : percent;
+            this._percentStorageUsed = percent > 100.0 ? 100f : percent;
         }
 
         public void Close()
@@ -192,7 +192,7 @@ namespace DuckGame
             Array.Sort<string>(files);
             float x = 338f;
             this._scrollBar = false;
-            this._scrollPosition = 0.0f;
+            this._scrollPosition = 0f;
             if (num2 > this._maxItems)
             {
                 x = 326f;
@@ -317,7 +317,7 @@ namespace DuckGame
                 }
                 ++num3;
             }
-            int num4 = (int)Math.Round((this._items.Count - 1 - this._maxItems) * (double)this._scrollPosition);
+            int num4 = (int)Math.Round((this._items.Count - 1 - this._maxItems) * this._scrollPosition);
             int num5 = 0;
             for (int index = 0; index < this._items.Count; ++index)
             {
@@ -328,7 +328,7 @@ namespace DuckGame
                 else
                 {
                     this._items[index].visible = true;
-                    this._items[index].position = new Vec2(this._items[index].position.x, (float)((double)this.y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
+                    this._items[index].position = new Vec2(this._items[index].position.x, (float)(this.y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
                     ++num5;
                 }
             }
@@ -524,7 +524,7 @@ namespace DuckGame
                 }
                 Editor.lockInput = this;
                 base.Update();
-                this._scrollWait = Lerp.Float(this._scrollWait, 0.0f, 0.2f);
+                this._scrollWait = Lerp.Float(this._scrollWait, 0f, 0.2f);
                 if (this._dialog.result != null && this._dialog.result != "")
                 {
                     string[] files = DuckFile.GetFiles(this._currentDirectory, this._dialog.result + ".lev");
@@ -625,13 +625,13 @@ namespace DuckGame
                         this._selectedIndex += this._maxItems;
                     this._selectedIndex = Maths.Clamp(this._selectedIndex, 0, this._items.Count - 1);
                     float num1 = 1f / (this._items.Count - this._maxItems);
-                    if ((double)Mouse.scroll != 0.0)
+                    if (Mouse.scroll != 0.0)
                     {
                         this._scrollPosition += Math.Sign(Mouse.scroll) * num1;
                         if (_scrollPosition > 1.0)
                             this._scrollPosition = 1f;
                         if (_scrollPosition < 0.0)
-                            this._scrollPosition = 0.0f;
+                            this._scrollPosition = 0f;
                     }
                     bool flag3 = false;
                     int num2 = (int)Math.Round((this._items.Count - this._maxItems - 1.0) * _scrollPosition);
@@ -666,7 +666,7 @@ namespace DuckGame
                         {
                             ContextMenu contextMenu = this._items[index];
                             this._items[index].visible = true;
-                            this._items[index].position = new Vec2(this._items[index].position.x, (float)((double)this.y + 3.0 + num3 * (double)this._items[index].itemSize.y));
+                            this._items[index].position = new Vec2(this._items[index].position.x, (float)(this.y + 3.0 + num3 * this._items[index].itemSize.y));
                             ++num3;
                         }
                     }
@@ -682,8 +682,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 350f;
             float num2 = this._fdHeight + 22f;
-            Vec2 p1_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0 + hOffset - 1.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0 - 15.0));
-            Vec2 p2_1 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0 + hOffset + 1.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0 - 12.0));
+            Vec2 p1_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(this.layer.height / 2.0 - num2 / 2.0 - 15.0));
+            Vec2 p2_1 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(this.layer.height / 2.0 + num2 / 2.0 - 12.0));
             DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), this.depth, false);
             DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), this.depth - 8);
             DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), this.depth - 4);
@@ -697,7 +697,7 @@ namespace DuckGame
                 Vec2 p1_3 = new Vec2(p2_1.x - 14f, (float)(topRight.y + 7.0 + (240.0 * _scrollLerp - 4.0)));
                 Vec2 p2_3 = new Vec2(p2_1.x - 5f, (float)(topRight.y + 11.0 + (240.0 * _scrollLerp + 8.0)));
                 bool flag = false;
-                if ((double)Mouse.x > p1_3.x && (double)Mouse.x < p2_3.x && (double)Mouse.y > p1_3.y && (double)Mouse.y < p2_3.y)
+                if (Mouse.x > p1_3.x && Mouse.x < p2_3.x && Mouse.y > p1_3.y && Mouse.y < p2_3.y)
                 {
                     flag = true;
                     if (Mouse.left == InputState.Pressed)
@@ -707,9 +707,9 @@ namespace DuckGame
                     this.drag = false;
                 if (this.drag)
                 {
-                    this._scrollPosition = (float)(((double)Mouse.y - p1_2.y - 10.0) / (p2_2.y - (double)p1_2.y - 20.0));
+                    this._scrollPosition = (float)((Mouse.y - p1_2.y - 10.0) / (p2_2.y - p1_2.y - 20.0));
                     if (_scrollPosition < 0.0)
-                        this._scrollPosition = 0.0f;
+                        this._scrollPosition = 0f;
                     if (_scrollPosition > 1.0)
                         this._scrollPosition = 1f;
                     this._scrollLerp = this._scrollPosition;
@@ -756,7 +756,7 @@ namespace DuckGame
             if (this._previewPair.strange)
             {
                 DuckGame.Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, this.depth + 8);
-                Vec2 p1_5 = p1_4 + new Vec2(0.0f, 122f);
+                Vec2 p1_5 = p1_4 + new Vec2(0f, 122f);
                 Vec2 p2_5 = p1_5 + new Vec2(166f, 36f);
                 DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), this.depth, false);
                 DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), this.depth - 8);
@@ -773,7 +773,7 @@ namespace DuckGame
             else
             {
                 DuckGame.Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, this.depth + 8);
-                Vec2 p1_6 = p1_4 + new Vec2(0.0f, 122f);
+                Vec2 p1_6 = p1_4 + new Vec2(0f, 122f);
                 this._fancyFont.Draw("Contains the following Local-Only objects:", p1_6.x + 4f, p1_6.y + 4f, Color.White, this.depth + 8);
                 int num3 = 22;
                 if (this._previewPair.invalid != null)
@@ -782,7 +782,7 @@ namespace DuckGame
                     {
                         string text = "- " + keyValuePair.Key + (keyValuePair.Value > 1 ? " (x" + keyValuePair.Value.ToString() + ")" : "");
                         this._fancyFont.Draw(text, p1_6.x + 4f, p1_6.y + 4f + num3, Color.White, this.depth + 8);
-                        if ((double)this._fancyFont.GetWidth(text) > 160.0)
+                        if (this._fancyFont.GetWidth(text) > 160.0)
                             num3 += 12;
                         num3 += 12;
                     }

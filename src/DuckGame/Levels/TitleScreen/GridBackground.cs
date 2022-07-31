@@ -24,7 +24,7 @@ namespace DuckGame
             float y = 230f;
             this._effect = new BasicEffect(DuckGame.Graphics.device)
             {
-                View = (Microsoft.Xna.Framework.Matrix)Matrix.CreateLookAt(new Vec3(0.0f, 0.0f, 500f), new Vec3(0.0f, 0.0f, 0.0f), Vec3.Up)
+                View = (Microsoft.Xna.Framework.Matrix)Matrix.CreateLookAt(new Vec3(0f, 0f, 500f), new Vec3(0f, 0f, 0f), Vec3.Up)
             };
             BasicEffect effect = this._effect;
             Viewport viewport = DuckGame.Graphics.viewport;
@@ -36,16 +36,16 @@ namespace DuckGame
             this._effect.Texture = (Texture2D)new Sprite("grid").texture;
             this._effect.TextureEnabled = true;
             this._effect.VertexColorEnabled = true;
-            this._vertices[0].Position = (Vector3)new Vec3(0.0f, y, 0.0f);
-            this._vertices[0].TextureCoordinate = (Vector2)new Vec2(0.0f, 0.0f);
+            this._vertices[0].Position = (Vector3)new Vec3(0f, y, 0f);
+            this._vertices[0].TextureCoordinate = (Vector2)new Vec2(0f, 0f);
             this._vertices[0].Color = (Microsoft.Xna.Framework.Color)new Color(1f, 1f, 1f, 1f);
-            this._vertices[1].Position = (Vector3)new Vec3(0.0f, 0.0f, 0.0f);
-            this._vertices[1].TextureCoordinate = (Vector2)new Vec2(0.0f, 11f);
+            this._vertices[1].Position = (Vector3)new Vec3(0f, 0f, 0f);
+            this._vertices[1].TextureCoordinate = (Vector2)new Vec2(0f, 11f);
             this._vertices[1].Color = (Microsoft.Xna.Framework.Color)new Color(0.5f, 0.5f, 0.5f, 1f);
-            this._vertices[2].Position = (Vector3)new Vec3(x, y, 0.0f);
-            this._vertices[2].TextureCoordinate = (Vector2)new Vec2(8.5f, 0.0f);
+            this._vertices[2].Position = (Vector3)new Vec3(x, y, 0f);
+            this._vertices[2].TextureCoordinate = (Vector2)new Vec2(8.5f, 0f);
             this._vertices[2].Color = (Microsoft.Xna.Framework.Color)new Color(1f, 1f, 1f, 1f);
-            this._vertices[3].Position = (Vector3)new Vec3(x, 0.0f, 0.0f);
+            this._vertices[3].Position = (Vector3)new Vec3(x, 0f, 0f);
             this._vertices[3].TextureCoordinate = (Vector2)new Vec2(8.5f, 11f);
             this._vertices[3].Color = (Microsoft.Xna.Framework.Color)new Color(0.5f, 0.5f, 0.5f, 1f);
             this._planet = new Sprite("background/planet");
@@ -72,31 +72,31 @@ namespace DuckGame
             this._effect.World = (Microsoft.Xna.Framework.Matrix)Matrix.CreateTranslation(new Vec3(190f, -75f, 300f));
             this.Begin(transparent, false);
             this._planet.flipH = true;
-            DuckGame.Graphics.Draw(this._planet, 0.0f, 0.0f);
+            DuckGame.Graphics.Draw(this._planet, 0f, 0f);
             this._batch.End();
-            this._effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, 52f, 0.0f)));
+            this._effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, 52f, 0f)));
             this.Begin(transparent, false);
             float num1 = 32f;
             int num2 = 26;
             int num3 = 16;
             for (int index = 0; index < num3; ++index)
-                DuckGame.Graphics.DrawLine(new Vec2(0.0f + this._scroll, index * num1), new Vec2(num1 * (num2 - 1), index * num1), Color.DarkGray, 3f);
+                DuckGame.Graphics.DrawLine(new Vec2(0f + this._scroll, index * num1), new Vec2(num1 * (num2 - 1), index * num1), Color.DarkGray, 3f);
             for (int index = 0; index < num2; ++index)
-                DuckGame.Graphics.DrawLine(new Vec2(index * num1 + this._scroll, 0.0f), new Vec2(index * num1 + this._scroll, num1 * (num3 - 1)), Color.DarkGray, 3f);
+                DuckGame.Graphics.DrawLine(new Vec2(index * num1 + this._scroll, 0f), new Vec2(index * num1 + this._scroll, num1 * (num3 - 1)), Color.DarkGray, 3f);
             this._batch.End();
-            this._effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, 62f, 0.0f)));
+            this._effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, 62f, 0f)));
             this.Begin(transparent, false);
             for (int index = 0; index < num3; ++index)
-                DuckGame.Graphics.DrawLine(new Vec2(0.0f + this._scroll, index * num1), new Vec2(num1 * (num2 - 1), index * num1), Color.DarkGray * 0.2f, 3f);
+                DuckGame.Graphics.DrawLine(new Vec2(0f + this._scroll, index * num1), new Vec2(num1 * (num2 - 1), index * num1), Color.DarkGray * 0.2f, 3f);
             for (int index = 0; index < num2; ++index)
-                DuckGame.Graphics.DrawLine(new Vec2(index * num1 + this._scroll, 0.0f), new Vec2(index * num1 + this._scroll, num1 * (num3 - 1)), Color.DarkGray * 0.2f, 3f);
+                DuckGame.Graphics.DrawLine(new Vec2(index * num1 + this._scroll, 0f), new Vec2(index * num1 + this._scroll, num1 * (num3 - 1)), Color.DarkGray * 0.2f, 3f);
             this._batch.End();
-            this._effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, -52f, 0.0f)));
+            this._effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, -52f, 0f)));
             this.Begin(transparent, false);
             for (int index = 0; index < num3; ++index)
-                DuckGame.Graphics.DrawLine(new Vec2(0.0f + this._scroll, index * num1), new Vec2(num1 * (num2 - 1), index * num1), Color.DarkGray, 3f);
+                DuckGame.Graphics.DrawLine(new Vec2(0f + this._scroll, index * num1), new Vec2(num1 * (num2 - 1), index * num1), Color.DarkGray, 3f);
             for (int index = 0; index < num2; ++index)
-                DuckGame.Graphics.DrawLine(new Vec2(index * num1 + this._scroll, 0.0f), new Vec2(index * num1 + this._scroll, num1 * (num3 - 1)), Color.DarkGray, 3f);
+                DuckGame.Graphics.DrawLine(new Vec2(index * num1 + this._scroll, 0f), new Vec2(index * num1 + this._scroll, num1 * (num3 - 1)), Color.DarkGray, 3f);
             this._batch.End();
             DuckGame.Graphics.screen = null;
             DuckGame.Graphics.currentLayer = null;

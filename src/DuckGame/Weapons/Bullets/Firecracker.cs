@@ -16,7 +16,7 @@ namespace DuckGame
         private ActionTimer _explodeTimer = (ActionTimer)Rando.Float(0.01f, 0.012f);
         private bool didRemove;
 
-        public Firecracker(float xpos, float ypos, float ang = 0.0f)
+        public Firecracker(float xpos, float ypos, float ang = 0f)
           : base(xpos, ypos)
         {
             this.graphic = new Sprite("fireCracker");
@@ -88,7 +88,7 @@ namespace DuckGame
                 {
                     range = 8f + Rando.Float(3f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 6.0), type, num)
+                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type, num)
                 {
                     firedFrom = this
                 };
@@ -98,7 +98,7 @@ namespace DuckGame
             if (Network.isActive)
                 Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
             Level.Add(SmallSmoke.New(this.x, this.y));
-            if ((double)Rando.Float(1f) < 0.1f)
+            if (Rando.Float(1f) < 0.1f)
                 Level.Add(SmallFire.New(this.x, this.y, 0f, 0f, firedFrom: this));
             Level.Remove(this);
         }

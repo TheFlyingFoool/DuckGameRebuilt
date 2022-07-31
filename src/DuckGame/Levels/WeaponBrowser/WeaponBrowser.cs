@@ -18,7 +18,7 @@
 //            {
 //                scale = new Vec2(2f, 2f)
 //            };
-//            Gun gun = new Saxaphone(0.0f, 0.0f);
+//            Gun gun = new Saxaphone(0f, 0f);
 //            gun.scale = new Vec2(2f, 2f);
 //            UIMenu uiMenu = new UIMenu(gun.editorName, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f);
 //            UIBox component1 = new UIBox(false, false);
@@ -57,7 +57,7 @@
 //                }
 //                else
 //                {
-//                    if ((textVal.Length + str3.Length) * 8 > (double)num)
+//                    if ((textVal.Length + str3.Length) * 8 > num)
 //                    {
 //                        component4.Add(new UIText(textVal, Color.White), true);
 //                        textVal = "";

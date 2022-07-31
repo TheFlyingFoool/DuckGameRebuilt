@@ -53,7 +53,7 @@ namespace DuckGame
             };
             this.graphic = _sprite;
             this.DoPositioning();
-            this.melt = 0.0f;
+            this.melt = 0f;
         }
 
         public override void HeatUp(Vec2 location)

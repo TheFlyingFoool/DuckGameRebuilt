@@ -32,7 +32,7 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             this._valueStrings = valStrings;
-            UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0.0f : 0.8f);
+            UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0f : 0.8f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left

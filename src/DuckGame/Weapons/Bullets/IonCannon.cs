@@ -41,7 +41,7 @@ namespace DuckGame
             Vec2 vec2_3 = this.position + normalized1 * num1 / 2f;
             HashSet<ushort> varBlocks = new HashSet<ushort>();
             List<BlockGroup> blockGroupList = new List<BlockGroup>();
-            for (int index = 0; index < (double)num2; ++index)
+            for (int index = 0; index < num2; ++index)
             {
                 Vec2 vec2_4 = vec2_3 + normalized2 * num3 * index;
                 foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(vec2_4, vec2_4 + (this._target - this.position)))
@@ -106,8 +106,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            double num1 = (double)Maths.NormalizeSection(this._blast, 0.0f, 0.2f);
-            double num2 = (double)Maths.NormalizeSection(this._blast, 0.6f, 1f);
+            double num1 = Maths.NormalizeSection(this._blast, 0f, 0.2f);
+            double num2 = Maths.NormalizeSection(this._blast, 0.6f, 1f);
             Vec2 vec2_1 = this.position - this._target;
             vec2_1 = vec2_1.Rotate(Maths.DegToRad(-90f), Vec2.Zero);
             Vec2 normalized1 = vec2_1.normalized;
@@ -118,7 +118,7 @@ namespace DuckGame
             float num4 = 7f;
             float num5 = num3 / (num4 - 1f);
             Vec2 vec2_3 = this.position + normalized1 * num3 / 2f;
-            for (int index = 0; index < (double)num4; ++index)
+            for (int index = 0; index < num4; ++index)
             {
                 Vec2 p1 = vec2_3 + normalized2 * num5 * index;
                 Graphics.DrawLine(p1, p1 + (this._target - this.position), Color.SkyBlue * (this._blast * 0.9f), 2f, (Depth)0.9f);

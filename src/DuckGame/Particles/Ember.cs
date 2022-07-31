@@ -34,7 +34,7 @@ namespace DuckGame
             if (_initialLife >= 0f)
                 return;
             this.alpha -= 0.025f;
-            if ((double)this.alpha >= 0f)
+            if (this.alpha >= 0f)
                 return;
             Level.Remove(this);
         }

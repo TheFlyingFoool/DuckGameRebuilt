@@ -23,7 +23,7 @@ namespace DuckGame
             this.depth = -0.5f;
             this.thickness = 4f;
             this.weight = 7f;
-            this.flammable = 0.0f;
+            this.flammable = 0f;
             this.collideSounds.Add("rockHitGround2");
             this.editorTooltip = "The saddest rock.";
         }

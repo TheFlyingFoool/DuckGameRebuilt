@@ -58,20 +58,20 @@ namespace DuckGame
         {
             Vec2 vec2 = this.position - this._target.position;
             float lengthSq = vec2.lengthSq;
-            if ((double)lengthSq < 64.0 || (double)lengthSq > 4096.0)
+            if (lengthSq < 64.0 || lengthSq > 4096.0)
                 this.alpha -= 0.08f;
-            this.hSpeed = Lerp.Float(this.hSpeed, (float)(-(double)vec2.x * 0.699999988079071), 0.15f);
-            this.vSpeed = Lerp.Float(this.vSpeed, (float)(-(double)vec2.y * 0.699999988079071), 0.15f);
+            this.hSpeed = Lerp.Float(this.hSpeed, (float)(-vec2.x * 0.699999988079071), 0.15f);
+            this.vSpeed = Lerp.Float(this.vSpeed, (float)(-vec2.y * 0.699999988079071), 0.15f);
             this.position.x += this.hSpeed;
             this.position.y += this.vSpeed;
             this.position.x = Lerp.Float(this.position.x, this._target.x, 0.16f);
             this.position.y = Lerp.Float(this.position.y, this._target.y, 0.16f);
-            this.hSpeed *= Math.Min(1f, (float)((double)lengthSq / 128.0 + 0.25));
-            this.vSpeed *= Math.Min(1f, (float)((double)lengthSq / 128.0 + 0.25));
+            this.hSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
+            this.vSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
             this.life -= 0.02f;
             if (life < 0.0)
                 this.alpha -= 0.08f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             base.Update();
         }

@@ -76,7 +76,7 @@ namespace DuckGame
                 return;
             if (this._timeHot <= 0)
                 this._hotAlpha -= 0.01f;
-            float num = 0.0f;
+            float num = 0f;
             if (this.offDir < 0)
                 num = -2f;
             for (int index = 0; index < 3; ++index)

@@ -54,27 +54,27 @@ namespace DuckGame
                 this.xscale += 0.036f;
                 this.y += 0.16f;
             }
-            if ((double)this.yscale < 0.0)
+            if (this.yscale < 0.0)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!this.kill && (double)with.impactPowerV > 2.0)
+            if (!this.kill && with.impactPowerV > 2.0)
             {
                 float num1 = with.impactPowerV;
                 float num2 = with.impactDirectionH;
-                if ((double)num1 > 6.0)
+                if (num1 > 6.0)
                     num1 = 6f;
-                if ((double)num2 > 6.0)
+                if (num2 > 6.0)
                     num2 = 6f;
                 for (int index = 0; index < 12; ++index)
                 {
                     float num3 = 1f;
                     if (index < 10)
                         num3 = 0.7f;
-                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-6f, 0.0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
+                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-6f, 0f), new Vec2((float)(num2 * num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * (num1 * num3)), (float)(0.200000002980232 * (num1 * num3))), (float)(-Rando.Float(0.8f, 1.5f) * (num1 * num3 * 0.150000005960464))), index < 6));
                 }
                 this.kill = true;
             }

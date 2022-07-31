@@ -65,8 +65,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            double num1 = (double)Maths.NormalizeSection(this._blast, 0.0f, 0.2f);
-            double num2 = (double)Maths.NormalizeSection(this._blast, 0.6f, 1f);
+            double num1 = Maths.NormalizeSection(this._blast, 0f, 0.2f);
+            double num2 = Maths.NormalizeSection(this._blast, 0.6f, 1f);
             Vec2 normalized1 = this._target.Rotate(Maths.DegToRad(-90f), Vec2.Zero).normalized;
             Vec2 normalized2 = this._target.Rotate(Maths.DegToRad(90f), Vec2.Zero).normalized;
             Vec2 vec2 = this.position + normalized1 * 16f;

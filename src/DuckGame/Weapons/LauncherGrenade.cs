@@ -29,10 +29,10 @@ namespace DuckGame
             this.collisionSize = new Vec2(8f, 6f);
             this.collisionOffset = new Vec2(-4f, -3f);
             for (int index = 0; index < 17; ++index)
-                this._trail.Add(new Vec2(0.0f, 0.0f));
+                this._trail.Add(new Vec2(0f, 0f));
             this._prevPosition = new Vec2(this.position);
             this.bouncy = 1f;
-            this.friction = 0.0f;
+            this.friction = 0f;
             this._dontCrush = true;
         }
 
@@ -71,11 +71,11 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._fade || with is Gun || (with is AutoPlatform || with is Nubber) && (double)this.vSpeed <= 0.0)
+            if (this._fade || with is Gun || (with is AutoPlatform || with is Nubber) && this.vSpeed <= 0.0)
                 return;
             if (with is PhysicsObject)
                 this._isVolatile = -1f;
-            if (_startWait <= 0.0 && !this._fade && ((double)this.totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || this._blowUp))
+            if (_startWait <= 0.0 && !this._fade && (this.totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || this._blowUp))
             {
                 int num1 = 0;
                 for (int index = 0; index < 1; ++index)

@@ -40,7 +40,7 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             this._valueStrings = valStrings;
-            UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0.0f : 0.8f);
+            UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0f : 0.8f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left
@@ -153,13 +153,13 @@ namespace DuckGame
                         this._field.value = (int)this._field.max;
                         return;
                     }
-                    if ((bool)this._filterField.value && trigger == "MENULEFT" && (int)this._field.value == (double)this._field.min)
+                    if ((bool)this._filterField.value && trigger == "MENULEFT" && (int)this._field.value == this._field.min)
                     {
                         SFX.Play("textLetter", 0.7f);
                         this._filterField.value = false;
                         return;
                     }
-                    if ((bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (int)this._field.value == (double)this._field.max)
+                    if ((bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (int)this._field.value == this._field.max)
                     {
                         SFX.Play("textLetter", 0.7f);
                         this._filterField.value = false;
@@ -211,7 +211,7 @@ namespace DuckGame
                             FieldBinding current = enumerator.Current;
                             while (true)
                             {
-                                if ((int)current.value > (double)current.min && num3 > 0)
+                                if ((int)current.value > current.min && num3 > 0)
                                 {
                                     int num4 = (int)current.value - (int)current.inc;
                                     current.value = num4;
@@ -234,7 +234,7 @@ namespace DuckGame
                             FieldBinding current = enumerator.Current;
                             while (true)
                             {
-                                if ((int)current.value < (double)current.max && num5 < 0)
+                                if ((int)current.value < current.max && num5 < 0)
                                 {
                                     int num6 = (int)current.value + (int)current.inc;
                                     current.value = num6;

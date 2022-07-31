@@ -35,7 +35,7 @@ namespace DuckGame
                     this._endPoint = Vec2.Zero;
                     for (int index = 0; index < 32; ++index)
                     {
-                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(0.0f, 4 + index * 16), this.position + new Vec2(0.0f, (index + 1) * 16 - 6));
+                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(0f, 4 + index * 16), this.position + new Vec2(0f, (index + 1) * 16 - 6));
                         if (thing != null)
                         {
                             this._endPoint = new Vec2(this.x, thing.top - 2f);
@@ -53,11 +53,11 @@ namespace DuckGame
                     this.graphic.flipH = false;
                     this._beam.depth = this.depth - 2;
                     float y = this._endPoint.y - this.y;
-                    int num = (int)Math.Ceiling((double)y / 16.0);
+                    int num = (int)Math.Ceiling(y / 16.0);
                     for (int index = 0; index < num; ++index)
                     {
                         if (index == num - 1)
-                            this._beam.cutWidth = 16 - (int)((double)y % 16.0);
+                            this._beam.cutWidth = 16 - (int)(y % 16.0);
                         else
                             this._beam.cutWidth = 0;
                         this._beam.angleDegrees = 90f;

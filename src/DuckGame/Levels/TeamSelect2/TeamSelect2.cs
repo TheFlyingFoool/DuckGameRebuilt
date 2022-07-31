@@ -331,7 +331,7 @@ namespace DuckGame
         {
             if (this._pauseGroup != null)
                 Level.Remove(_pauseGroup);
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f)
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f)
             {
                 isPauseMenu = true
             };
@@ -388,7 +388,7 @@ namespace DuckGame
             this._pauseGroup.Update();
             if (this._localPauseGroup != null)
                 Level.Remove(_localPauseGroup);
-            this._localPauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._localPauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._localPauseMenu = new UIMenu("MULTIPLAYER", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
             UIDivider component2 = new UIDivider(true, 0.8f);
             component2.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
@@ -653,7 +653,7 @@ namespace DuckGame
             Level.Add(profileBox2_4);
             TeamSelect2.growCamera = false;
             double xpos2 = 357.0;
-            float num1 = 0.0f;
+            float num1 = 0f;
             ProfileBox2 profileBox2_5 = new ProfileBox2((float)xpos2, num1 + 1f, InputProfile.Get(InputProfile.MPPlayer5), defaultProfiles[4], this, 4);
             this._profiles.Add(profileBox2_5);
             Level.Add(profileBox2_5);
@@ -679,12 +679,12 @@ namespace DuckGame
             this._buttons.CenterOrigin();
             this._buttons.depth = (Depth)0.9f;
             Music.Play("CharacterSelect");
-            this._beam = new TeamBeam(160f, 0.0f);
-            this._beam2 = new TeamBeam(338f, 0.0f);
+            this._beam = new TeamBeam(160f, 0f);
+            this._beam2 = new TeamBeam(338f, 0f);
             Level.Add(_beam);
             Level.Add(_beam2);
             TeamSelect2.UpdateModifierStatus();
-            this._configGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._configGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._multiplayerMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._modifierMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._modifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_modifierMenu, _multiplayerMenu));
@@ -715,7 +715,7 @@ namespace DuckGame
             this._configGroup.Add(_levelSelectMenu, false);
             this._configGroup.Close();
             Level.Add(_configGroup);
-            this._playOnlineGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._playOnlineGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._playOnlineMenu = new UIMenu("@PLANET@PLAY ONLINE@PLANET@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._hostGameMenu = new UIMenu("@LWING@CREATE GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._hostSettingsMenu = new UIMenu("@LWING@HOST SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -918,7 +918,7 @@ namespace DuckGame
                     }
                 }
                 this._joinGameMenu.Add(new UIText(" ", Color.White), true);
-                this._joinGameMenu.Add(new UIMenuItemNumber("Ping", field: new FieldBinding(typeof(UIMatchmakerMark2), "searchMode", 0.0f, 2f, 0.1f), valStrings: new List<string>()
+                this._joinGameMenu.Add(new UIMenuItemNumber("Ping", field: new FieldBinding(typeof(UIMatchmakerMark2), "searchMode", 0f, 2f, 0.1f), valStrings: new List<string>()
         {
           "|DGYELLO|PREFER GOOD",
           "|DGGREEN|GOOD PING",
@@ -953,7 +953,7 @@ namespace DuckGame
             }
             this._playOnlineGroup.Close();
             Level.Add(_playOnlineGroup);
-            Graphics.fade = 0.0f;
+            Graphics.fade = 0f;
             Layer l = new Layer("HUD2", -85, new Camera());
             l.camera.width /= 2f;
             l.camera.height /= 2f;
@@ -1193,8 +1193,8 @@ namespace DuckGame
             }
             if (this.openLevelSelect)
             {
-                Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.04f);
-                if ((double)Graphics.fade >= 0.00999999977648258)
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.04f);
+                if (Graphics.fade >= 0.00999999977648258)
                     return;
                 this._levelSelector = new LevelSelect(returnLevel: this);
                 this._levelSelector.Initialize();
@@ -1233,7 +1233,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if ((double)Graphics.fade <= 0.0 && this._returnToMenu.value)
+                if (Graphics.fade <= 0.0 && this._returnToMenu.value)
                     Level.current = new TitleScreen();
                 if (!Network.isActive)
                     DuckNetwork.core.startCountdown = this._starting;
@@ -1261,7 +1261,7 @@ namespace DuckGame
                         DuckNetwork.inGame = true;
                         this.dim = Maths.LerpTowards(this.dim, 0.8f, 0.02f);
                         this._countTime -= 0.006666667f;
-                        if (_countTime <= 0.0 && Network.isServer && ((double)Graphics.fade <= 0.0 || NetworkDebugger.enabled))
+                        if (_countTime <= 0.0 && Network.isServer && (Graphics.fade <= 0.0 || NetworkDebugger.enabled))
                         {
                             TeamSelect2.UpdateModifierStatus();
                             DevConsole.qwopMode = TeamSelect2.Enabled("QWOPPY", true);
@@ -1319,7 +1319,7 @@ namespace DuckGame
                     else
                     {
                         DuckNetwork.inGame = false;
-                        this.dim = Maths.LerpTowards(this.dim, 0.0f, 0.1f);
+                        this.dim = Maths.LerpTowards(this.dim, 0f, 0.1f);
                         if (dim < 0.0500000007450581)
                             this._countTime = 1.5f;
                     }
@@ -1360,7 +1360,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    this.dim = Maths.LerpTowards(this.dim, 0.0f, 0.1f);
+                    this.dim = Maths.LerpTowards(this.dim, 0f, 0.1f);
                     if (dim < 0.0500000007450581)
                         this._countTime = 1.5f;
                     this._matchSetup = false;
@@ -1377,22 +1377,22 @@ namespace DuckGame
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
                         if (profile.localPlayer && profile.inputProfile != null && profile.inputProfile.Pressed("ANY", true))
-                            this._afkTimeout = 0.0f;
+                            this._afkTimeout = 0f;
                     }
                     if (DuckNetwork.lobbyType == DuckNetwork.LobbyType.FriendsOnly || DuckNetwork.lobbyType == DuckNetwork.LobbyType.Private)
-                        this._afkTimeout = 0.0f;
-                    if (_afkTimeout > (double)this._afkShowTimeout && (int)this._afkTimeout != this._timeoutBeep)
+                        this._afkTimeout = 0f;
+                    if (_afkTimeout > this._afkShowTimeout && (int)this._afkTimeout != this._timeoutBeep)
                     {
                         this._timeoutBeep = (int)this._afkTimeout;
                         SFX.Play("cameraBeep");
                     }
-                    if (_afkTimeout > (double)this._afkMaxTimeout)
+                    if (_afkTimeout > this._afkMaxTimeout)
                         Level.current = new DisconnectFromGame();
                 }
                 else
-                    this._afkTimeout = 0.0f;
-                Graphics.fade = Lerp.Float(Graphics.fade, this._returnToMenu.value || _countTime <= 0.0 ? 0.0f : 1f, 0.02f);
-                this._setupFade = Lerp.Float(this._setupFade, !this._matchSetup || this.menuOpen || DuckNetwork.core.startCountdown ? 0.0f : 1f, 0.05f);
+                    this._afkTimeout = 0f;
+                Graphics.fade = Lerp.Float(Graphics.fade, this._returnToMenu.value || _countTime <= 0.0 ? 0f : 1f, 0.02f);
+                this._setupFade = Lerp.Float(this._setupFade, !this._matchSetup || this.menuOpen || DuckNetwork.core.startCountdown ? 0f : 1f, 0.05f);
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, this._matchSetup ? 0.5f : 1f, 0.05f);
             }
         }
@@ -1497,17 +1497,17 @@ namespace DuckGame
                 Layer background = Layer.Background;
                 if (layer == Layer.HUD)
                 {
-                    if (_afkTimeout >= (double)this._afkShowTimeout)
+                    if (_afkTimeout >= this._afkShowTimeout)
                     {
                         this._timeoutFade = Lerp.Float(this._timeoutFade, 1f, 0.05f);
                         Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(10000f, 10000f), Color.Black * 0.7f * this._timeoutFade, (Depth)0.95f);
                         string text1 = "AFK TIMEOUT IN";
-                        string text2 = ((int)(_afkMaxTimeout - (double)this._afkTimeout)).ToString();
-                        Graphics.DrawString(text1, new Vec2((float)((double)layer.width / 2.0 - (double)Graphics.GetStringWidth(text1) / 2.0), (float)((double)layer.height / 2.0 - 8.0)), Color.White * this._timeoutFade, (Depth)0.96f);
-                        Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)((double)layer.height / 2.0 + 4.0)), Color.White * this._timeoutFade, (Depth)0.96f, scale: 2f);
+                        string text2 = ((int)(_afkMaxTimeout - this._afkTimeout)).ToString();
+                        Graphics.DrawString(text1, new Vec2((float)(layer.width / 2.0 - Graphics.GetStringWidth(text1) / 2.0), (float)(layer.height / 2.0 - 8.0)), Color.White * this._timeoutFade, (Depth)0.96f);
+                        Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)(layer.height / 2.0 + 4.0)), Color.White * this._timeoutFade, (Depth)0.96f, scale: 2f);
                     }
                     else
-                        this._timeoutFade = Lerp.Float(this._timeoutFade, 0.0f, 0.05f);
+                        this._timeoutFade = Lerp.Float(this._timeoutFade, 0f, 0.05f);
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
                         if (profile.reservedUser != null)
@@ -1518,8 +1518,8 @@ namespace DuckGame
                     }
                     if (Level.core.gameInProgress)
                     {
-                        Vec2 vec2 = new Vec2(0.0f, Layer.HUD.barSize);
-                        Graphics.DrawRect(new Vec2(0.0f, vec2.y), new Vec2(320f, vec2.y + 10f), Color.Black, (Depth)0.9f);
+                        Vec2 vec2 = new Vec2(0f, Layer.HUD.barSize);
+                        Graphics.DrawRect(new Vec2(0f, vec2.y), new Vec2(320f, vec2.y + 10f), Color.Black, (Depth)0.9f);
                         this._littleFont.depth = (Depth)0.95f;
                         string text3 = "GAME STILL IN PROGRESS, HOST RETURNED TO LOBBY.";
                         string text4 = "";
@@ -1550,11 +1550,11 @@ namespace DuckGame
                             --this._topScroll;
                         if (_topScroll < 0.0)
                             ++this._topScroll;
-                        this._littleFont.Draw(text4, new Vec2((float)(1.0 - _topScroll * ((double)this._littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
+                        this._littleFont.Draw(text4, new Vec2((float)(1.0 - _topScroll * (this._littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
                     }
                     if (_setupFade > 0.00999999977648258)
                     {
-                        float num = (float)((double)Layer.HUD.camera.height / 2.0 - 28.0);
+                        float num = (float)(Layer.HUD.camera.height / 2.0 - 28.0);
                         string str1 = "@MENU2@PLAY ONLINE";
                         if (!Network.available)
                         {
@@ -1573,19 +1573,19 @@ namespace DuckGame
                             {
                                 string text5 = str2;
                                 this._font.alpha = this._setupFade;
-                                this._font.Draw(text5, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text5) / 2.0), num + 15f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text5, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text5) / 2.0), num + 15f, Color.White, (Depth)0.81f);
                                 string text6 = str1;
                                 this._font.alpha = this._setupFade;
-                                this._font.Draw(text6, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text6) / 2.0), (float)((double)num + 12.0 + 17.0), Color.White, (Depth)0.81f);
+                                this._font.Draw(text6, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text6) / 2.0), (float)(num + 12.0 + 17.0), Color.White, (Depth)0.81f);
                             }
                             else
                             {
                                 string text7 = str2;
                                 this._font.alpha = this._setupFade;
-                                this._font.Draw(text7, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text7) / 2.0), num + 15f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text7, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text7) / 2.0), num + 15f, Color.White, (Depth)0.81f);
                                 string text8 = str1;
                                 this._font.alpha = this._setupFade;
-                                this._font.Draw(text8, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text8) / 2.0), (float)((double)num + 12.0 + 17.0), Color.White, (Depth)0.81f);
+                                this._font.Draw(text8, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text8) / 2.0), (float)(num + 12.0 + 17.0), Color.White, (Depth)0.81f);
                             }
                         }
                         else
@@ -1596,23 +1596,23 @@ namespace DuckGame
                                 string text = "WAITING FOR HOST TO START";
                                 if (Level.core.gameInProgress)
                                     text = "WAITING FOR HOST TO RESUME";
-                                this._font.Draw(text, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
                             }
                             else if (!Network.isActive)
                             {
                                 string text9 = "@SELECT@START MATCH";
-                                this._font.Draw(text9, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text9) / 2.0), num + 9f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text9, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text9) / 2.0), num + 9f, Color.White, (Depth)0.81f);
                                 string text10 = "@MENU1@MATCH SETTINGS";
-                                this._font.Draw(text10, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text10) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text10, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text10) / 2.0), num + 22f, Color.White, (Depth)0.81f);
                                 string text11 = str1;
-                                this._font.Draw(text11, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text11) / 2.0), num + 35f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text11, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text11) / 2.0), num + 35f, Color.White, (Depth)0.81f);
                             }
                             else
                             {
                                 string text = "@SELECT@START MATCH";
                                 if (Level.core.gameInProgress)
                                     text = "@SELECT@RESUME MATCH";
-                                this._font.Draw(text, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                this._font.Draw(text, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
                             }
                         }
                         this._countdownScreen.alpha = this._setupFade;
@@ -1632,13 +1632,13 @@ namespace DuckGame
                         this._countdown.centery = this._countdown.height / 2;
                         if (DuckNetwork.isDedicatedServer)
                         {
-                            Graphics.Draw(_countdown, 160f, (float)((double)Layer.HUD.camera.height / 2.0 - 8.0));
+                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2.0 - 8.0));
                             string text = "@CANCEL@STOP COUNTDOWN";
                             this._font.alpha = this.dim * 1.2f;
-                            this._font.Draw(text, (float)((double)Layer.HUD.width / 2.0 - (double)this._font.GetWidth(text) / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 + 8.0), Color.White, (Depth)0.81f);
+                            this._font.Draw(text, (float)(Layer.HUD.width / 2.0 - this._font.GetWidth(text) / 2.0), (float)(Layer.HUD.camera.height / 2.0 + 8.0), Color.White, (Depth)0.81f);
                         }
                         else
-                            Graphics.Draw(_countdown, 160f, (float)((double)Layer.HUD.camera.height / 2.0 - 3.0));
+                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2.0 - 3.0));
                     }
                 }
                 base.PostDrawLayer(layer);

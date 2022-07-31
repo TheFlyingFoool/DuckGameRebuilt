@@ -68,9 +68,9 @@ namespace DuckGame
         {
             this._sprite = new SpriteMap("gunSpawner", 14, 10);
             this.graphic = _sprite;
-            this.center = new Vec2(7f, 0.0f);
+            this.center = new Vec2(7f, 0f);
             this.collisionSize = new Vec2(14f, 2f);
-            this.collisionOffset = new Vec2(-7f, 0.0f);
+            this.collisionOffset = new Vec2(-7f, 0f);
             this.depth = -0.35f;
             this.contains = c;
             this.hugWalls = WallHug.Floor;
@@ -115,7 +115,7 @@ namespace DuckGame
 
         public virtual void SpawnItem()
         {
-            this._spawnWait = 0.0f;
+            this._spawnWait = 0f;
             if (Network.isActive && this.isServerForObject)
                 Send.Message(new NMItemSpawned(this));
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(this.contains);
@@ -123,7 +123,7 @@ namespace DuckGame
             if (hover == null)
                 return;
             hover.x = this.x;
-            hover.y = (float)((double)this.top + ((double)hover.y - (double)hover.bottom) - 6.0);
+            hover.y = (float)(this.top + (hover.y - hover.bottom) - 6.0);
             hover.vSpeed = -2f;
             hover.spawnAnimation = true;
             hover.isSpawned = true;
@@ -154,7 +154,7 @@ namespace DuckGame
         {
             if (this._seatingTries >= 3 || this._ball1 == null)
                 return;
-            if (Level.CheckPoint<IPlatform>(this.position + new Vec2(0.0f, 6f)) != null)
+            if (Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 6f)) != null)
             {
                 this._seated = true;
                 this._seatingTries = 3;
@@ -187,7 +187,7 @@ namespace DuckGame
                 if (this._seated)
                 {
                     Holdable hover = Level.current.NearestThingFilter<Holdable>(this.position, d => !(d is TeamHat) && (d as Holdable).canPickUp, 16f);
-                    if (hover != null && hover.owner == null && hover != null && hover.canPickUp && (double)Math.Abs(hover.hSpeed) + (double)Math.Abs(hover.vSpeed) < 2.5 && (!(hover is Gun) || (hover as Gun).ammo > 0))
+                    if (hover != null && hover.owner == null && hover != null && hover.canPickUp && Math.Abs(hover.hSpeed) + Math.Abs(hover.vSpeed) < 2.5 && (!(hover is Gun) || (hover as Gun).ammo > 0))
                         this.SetHoverItem(hover);
                 }
                 this._ball1.desiredOrbitDistance = 3f;
@@ -197,21 +197,21 @@ namespace DuckGame
                 if (Level.current.simulatePhysics)
                     this._spawnWait += 0.0166666f;
             }
-            else if ((double)Math.Abs(this._hoverItem.hSpeed) + (double)Math.Abs(this._hoverItem.vSpeed) > 2.0 || (double)(this._hoverItem.collisionCenter - this.position).length > 18.0 || this._hoverItem.destroyed || this._hoverItem.removeFromLevel || this._hoverItem.owner != null || !this._hoverItem.visible)
+            else if (Math.Abs(this._hoverItem.hSpeed) + Math.Abs(this._hoverItem.vSpeed) > 2.0 || (this._hoverItem.collisionCenter - this.position).length > 18.0 || this._hoverItem.destroyed || this._hoverItem.removeFromLevel || this._hoverItem.owner != null || !this._hoverItem.visible)
             {
                 this.BreakHoverBond();
             }
             else
             {
-                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0.0f, (float)(-((double)this._hoverItem.bottom - (double)this._hoverItem.y) - 2.0 + (double)(float)this._hoverSin * 2.0)), 0.2f);
-                this._hoverItem.vSpeed = 0.0f;
-                this._hoverItem.gravMultiplier = 0.0f;
+                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0f, (float)(-(this._hoverItem.bottom - this._hoverItem.y) - 2.0 + (float)this._hoverSin * 2.0)), 0.2f);
+                this._hoverItem.vSpeed = 0f;
+                this._hoverItem.gravMultiplier = 0f;
                 this._ball1.desiredOrbitDistance = this._hoverItem.collisionSize.x / 2f;
                 this._ball2.desiredOrbitDistance = this._hoverItem.collisionSize.x / 2f;
                 this._ball1.desiredOrbitHeight = 4f;
                 this._ball2.desiredOrbitHeight = 4f;
             }
-            if (!Network.isServer || this._numSpawned >= this.spawnNum && this.spawnNum != -1 || this._hoverItem != null || !(this.contains != null) && !this.randomSpawn || _spawnWait < (double)this.spawnTime)
+            if (!Network.isServer || this._numSpawned >= this.spawnNum && this.spawnNum != -1 || this._hoverItem != null || !(this.contains != null) && !this.randomSpawn || _spawnWait < this.spawnTime)
                 return;
             if (initialDelay > 0.0)
             {
@@ -241,7 +241,7 @@ namespace DuckGame
                 this.previewSprite.CenterOrigin();
                 this.previewSprite.alpha = 0.5f;
                 this.previewSprite.flipH = this.offDir < 0;
-                Graphics.Draw(this.previewSprite, this.x, (float)((double)this.y - 8.0 + Math.Sin(_bob) * 2.0));
+                Graphics.Draw(this.previewSprite, this.x, (float)(this.y - 8.0 + Math.Sin(_bob) * 2.0));
             }
             if (this._isClassicSpawner && (this._sprite.frame == 1 || this._sprite.frame == 3))
             {
@@ -375,7 +375,7 @@ namespace DuckGame
         {
             if (this.possible.Count > 0)
             {
-                float num = 0.0f;
+                float num = 0f;
                 foreach (TypeProbPair typeProbPair in this.possible)
                 {
                     if (typeProbPair.probability > 0f)

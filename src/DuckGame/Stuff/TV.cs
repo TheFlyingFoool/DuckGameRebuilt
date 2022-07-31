@@ -46,13 +46,13 @@ namespace DuckGame
             this._editorName = nameof(TV);
             this.thickness = 2f;
             this.weight = 5f;
-            this.holsterAngle = 0.0f;
+            this.holsterAngle = 0f;
             this.flammable = 0.3f;
             this._frame = new Sprite("tv2");
             this._frame.CenterOrigin();
             this._damaged = new Sprite("tvBroken");
             this._damaged.CenterOrigin();
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this._breakForce = 4f;
             this.collideSounds.Add("landTV");
             this.physicsMaterial = PhysicsMaterial.Metal;
@@ -136,7 +136,7 @@ namespace DuckGame
                 duck = this._owner.owner as Duck;
             if (duck != null)
             {
-                if ((double)duck.vSpeed < -1.0 && prevVSpeed > 0.0 && !duck.tvJumped)
+                if (duck.vSpeed < -1.0 && prevVSpeed > 0.0 && !duck.tvJumped)
                     this.fakeGrounded = true;
                 this.jumpReady = this.jumpReady || duck.grounded || this.fakeGrounded || duck._vine != null;
                 this.prevVSpeed = duck.vSpeed;
@@ -177,7 +177,7 @@ namespace DuckGame
             this._frame.flipH = this._channels.flipH = this._tvNoise.flipH = this.offDir < 0;
             this._frame.depth = this.depth + 1;
             Graphics.Draw(this._frame, this.x, this.y);
-            this._channels.alpha = Lerp.Float(this._channels.alpha, this.owner != null ? 1f : 0.0f, 0.1f);
+            this._channels.alpha = Lerp.Float(this._channels.alpha, this.owner != null ? 1f : 0f, 0.1f);
             this._channels.depth = this.depth + 4;
             this._channels.frame = this.channel ? (this.jumpReady ? 1 : 2) : 0;
             Vec2 vec2 = this.Offset(new Vec2(-4f, -4f));

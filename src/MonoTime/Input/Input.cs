@@ -1187,35 +1187,35 @@ namespace DuckGame
             SpriteMap spriteMap6 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 0
             };
             DuckGame.Input._triggerImageMap.Add("happyface", spriteMap6);
             SpriteMap spriteMap7 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 1
             };
             DuckGame.Input._triggerImageMap.Add("sadface", spriteMap7);
             SpriteMap spriteMap8 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 2
             };
             DuckGame.Input._triggerImageMap.Add("puffyface", spriteMap8);
             SpriteMap spriteMap9 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 3
             };
             DuckGame.Input._triggerImageMap.Add("angryface", spriteMap9);
             SpriteMap spriteMap10 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 4
             };
             DuckGame.Input._triggerImageMap.Add("yayface", spriteMap10);
@@ -1228,49 +1228,49 @@ namespace DuckGame
             SpriteMap spriteMap12 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 5
             };
             DuckGame.Input._triggerImageMap.Add("wowface", spriteMap12);
             SpriteMap spriteMap13 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 6
             };
             DuckGame.Input._triggerImageMap.Add("wtfface", spriteMap13);
             SpriteMap spriteMap14 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 7
             };
             DuckGame.Input._triggerImageMap.Add("straightface", spriteMap14);
             SpriteMap spriteMap15 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 8
             };
             DuckGame.Input._triggerImageMap.Add("oiface", spriteMap15);
             SpriteMap spriteMap16 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 9
             };
             DuckGame.Input._triggerImageMap.Add("blankface", spriteMap16);
             SpriteMap spriteMap17 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 10
             };
             DuckGame.Input._triggerImageMap.Add("sweatface", spriteMap17);
             SpriteMap spriteMap18 = new SpriteMap("moji", 11, 11)
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f,
+                centery = 0f,
                 frame = 11
             };
             DuckGame.Input._triggerImageMap.Add("cryface", spriteMap18);
@@ -1283,7 +1283,7 @@ namespace DuckGame
             Sprite sprite27 = new Sprite("grave")
             {
                 scale = new Vec2(2f, 2f),
-                centery = 0.0f
+                centery = 0f
             };
             DuckGame.Input._triggerImageMap.Add("rip", sprite27);
             SpriteMap spriteMap19 = new SpriteMap("searchicon", 16, 16)
@@ -1296,13 +1296,13 @@ namespace DuckGame
             Sprite sprite28 = new Sprite("filterOn", 16f, 16f)
             {
                 scale = new Vec2(0.5f, 0.5f),
-                center = new Vec2(0.0f, -9f)
+                center = new Vec2(0f, -9f)
             };
             DuckGame.Input._triggerImageMap.Add("languageFilterOn", sprite28);
             Sprite sprite29 = new Sprite("filterOff", 16f, 16f)
             {
                 scale = new Vec2(0.5f, 0.5f),
-                center = new Vec2(0.0f, -9f)
+                center = new Vec2(0f, -9f)
             };
             DuckGame.Input._triggerImageMap.Add("languageFilterOff", sprite29);
             SpriteMap spriteMap20 = new SpriteMap("searchiconwhite", 16, 16)
@@ -1322,8 +1322,8 @@ namespace DuckGame
             SpriteMap spriteMap22 = new SpriteMap("cloudIcon", 16, 16)
             {
                 scale = new Vec2(1f, 1f),
-                centery = 0.0f,
-                centerx = 0.0f
+                centery = 0f,
+                centerx = 0f
             };
             DuckGame.Input._triggerImageMap.Add("cloudicon", spriteMap22);
             SpriteMap spriteMap23 = new SpriteMap("exBox", 10, 10)
@@ -1837,17 +1837,17 @@ namespace DuckGame
             InputSystem.Terminate();
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             if (state.IsConnected)
-                GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
+                GamePad.SetVibration(PlayerIndex.One, 0f, 0f);
             state = GamePad.GetState(PlayerIndex.Two);
             if (state.IsConnected)
-                GamePad.SetVibration(PlayerIndex.Two, 0.0f, 0.0f);
+                GamePad.SetVibration(PlayerIndex.Two, 0f, 0f);
             state = GamePad.GetState(PlayerIndex.Three);
             if (state.IsConnected)
-                GamePad.SetVibration(PlayerIndex.Three, 0.0f, 0.0f);
+                GamePad.SetVibration(PlayerIndex.Three, 0f, 0f);
             state = GamePad.GetState(PlayerIndex.Four);
             if (!state.IsConnected)
                 return;
-            GamePad.SetVibration(PlayerIndex.Four, 0.0f, 0.0f);
+            GamePad.SetVibration(PlayerIndex.Four, 0f, 0f);
         }
 
         public static bool CheckCode(InputCode code)

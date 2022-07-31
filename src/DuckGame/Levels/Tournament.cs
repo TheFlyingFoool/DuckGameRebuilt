@@ -74,8 +74,8 @@
 //            {
 //                this._groups.Clear();
 //                Rando.generator = new Random(30502);
-//                int num1 = 2 + (int)((double)InputProfile.DefaultPlayer1.leftTrigger * 30.0);
-//                int num2 = 2 + (int)((double)InputProfile.DefaultPlayer1.rightTrigger * 2.0);
+//                int num1 = 2 + (int)(InputProfile.DefaultPlayer1.leftTrigger * 30.0);
+//                int num2 = 2 + (int)(InputProfile.DefaultPlayer1.rightTrigger * 2.0);
 //                TourneyGroup tourneyGroup1 = new TourneyGroup();
 //                int num3 = 0;
 //                foreach (Team p in Teams.allRandomized)
@@ -167,12 +167,12 @@
 
 //        public void DrawGroup(List<TourneyGroup> gr, Vec2 drawPos)
 //        {
-//            Vec2 vec2 = new Vec2(0.0f, 0.0f);
+//            Vec2 vec2 = new Vec2(0f, 0f);
 //            List<TourneyGroup> tourneyGroupList1 = gr;
 //            List<TourneyGroup> tourneyGroupList2 = new List<TourneyGroup>();
 //            Vec2 zero = Vec2.Zero;
 //            float num1 = 8f;
-//            float num2 = 0.0f;
+//            float num2 = 0f;
 //            while (tourneyGroupList1.Count > 0)
 //            {
 //                int num3 = 0;
@@ -180,25 +180,25 @@
 //                {
 //                    if (tourneyGroup.next != null && !tourneyGroupList2.Contains(tourneyGroup.next))
 //                        tourneyGroupList2.Add(tourneyGroup.next);
-//                    Graphics.DrawLine(drawPos + vec2 + new Vec2(96f, 4f), drawPos + vec2 + new Vec2(96f, (float)((double)(tourneyGroup.players.Count - 1) * ((double)num1 + 8.0) + 4.0)), Color.White);
+//                    Graphics.DrawLine(drawPos + vec2 + new Vec2(96f, 4f), drawPos + vec2 + new Vec2(96f, (float)((tourneyGroup.players.Count - 1) * (num1 + 8.0) + 4.0)), Color.White);
 //                    foreach (Team player in tourneyGroup.players)
 //                    {
 //                        string text = tourneyGroup.assigned[tourneyGroup.players.IndexOf(player)] ? player.name : "???";
 //                        if (tourneyGroup.depth > 0)
 //                        {
-//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0.0f, 4f), drawPos + vec2 + new Vec2((float)((9 - (text.Length - 1)) * 8), 4f), Color.White);
-//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0.0f, 4f), player.prevTreeDraw, Color.White);
+//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0f, 4f), drawPos + vec2 + new Vec2((float)((9 - (text.Length - 1)) * 8), 4f), Color.White);
+//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0f, 4f), player.prevTreeDraw, Color.White);
 //                        }
 //                        player.prevTreeDraw = drawPos + vec2 + new Vec2(96f, 4f);
 //                        Graphics.DrawLine(drawPos + vec2 + new Vec2(90f, 4f), drawPos + vec2 + new Vec2(96f, 4f), Color.White);
-//                        Graphics.DrawString(text, drawPos + vec2 + new Vec2((float)(88 - text.Length * 8), 0.0f), Color.White, (Depth)1f);
+//                        Graphics.DrawString(text, drawPos + vec2 + new Vec2((float)(88 - text.Length * 8), 0f), Color.White, (Depth)1f);
 //                        vec2.y += num1 + 8f;
 //                        ++num3;
 //                    }
 //                }
 //                vec2.x += 96f;
 //                int num4 = (num3 * 16 + tourneyGroupList1.Count * 8) / 2;
-//                vec2.y = num2 + (float)((double)(tourneyGroupList1[0].players.Count - 1) * ((double)num1 + 8.0) / 2.0);
+//                vec2.y = num2 + (float)((tourneyGroupList1[0].players.Count - 1) * (num1 + 8.0) / 2.0);
 //                num2 = vec2.y;
 //                num1 = num1 * (float)tourneyGroupList1[0].players.Count + (float)(8 * (tourneyGroupList1[0].players.Count - 1));
 //                tourneyGroupList1 = tourneyGroupList2;

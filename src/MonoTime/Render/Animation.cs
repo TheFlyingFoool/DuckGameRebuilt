@@ -28,7 +28,7 @@ namespace DuckGame
 
         public static bool operator !=(Animation l, Animation r) => !l.Equals(r);
 
-        public bool Equals(Animation other) => this.name == other.name && speed == (double)other.speed && this.frames == other.frames && this.looping == other.looping;
+        public bool Equals(Animation other) => this.name == other.name && speed == other.speed && this.frames == other.frames && this.looping == other.looping;
 
         public override int GetHashCode() => ((this.name.GetHashCode() * 19 + this.speed.GetHashCode()) * 19 + this.frames.GetHashCode()) * 19 + this.looping.GetHashCode();
 

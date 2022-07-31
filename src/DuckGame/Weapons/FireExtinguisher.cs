@@ -33,7 +33,7 @@ namespace DuckGame
             this._fireWait = 1f;
             this._kickForce = 1f;
             this._guage = new SpriteMap("netGunGuage", 8, 8);
-            this._holdOffset = new Vec2(0.0f, 2f);
+            this._holdOffset = new Vec2(0f, 2f);
             if (Network.isActive)
                 this.ammo = 120;
             this.isFatal = false;
@@ -59,14 +59,14 @@ namespace DuckGame
                         vSpeed = vec2.y
                     };
                     --this.ammo;
-                    this._guage.frame = 3 - (int)(ammo / (double)this._maxAmmo * 4.0);
+                    this._guage.frame = 3 - (int)(ammo / this._maxAmmo * 4.0);
                     Level.Add(extinguisherSmoke);
                 }
                 this._smoke = !this._smoke;
             }
             else
                 this._smoke = true;
-            this._sound.lerpVolume = this._firing ? 0.5f : 0.0f;
+            this._sound.lerpVolume = this._firing ? 0.5f : 0f;
         }
 
         public override void Draw()

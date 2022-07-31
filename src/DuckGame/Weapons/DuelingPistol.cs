@@ -28,7 +28,7 @@ namespace DuckGame
             this.collisionSize = new Vec2(12f, 8f);
             this._barrelOffsetTL = new Vec2(20f, 15f);
             this._fireSound = "littleGun";
-            this._kickForce = 0.0f;
+            this._kickForce = 0f;
             this._fireRumble = RumbleIntensity.Kick;
             this.editorTooltip = "The perfect weapon when a Duck has dishonored your family. One shot only.";
         }

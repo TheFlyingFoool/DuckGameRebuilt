@@ -32,7 +32,7 @@ namespace DuckGame
                 SpriteMap graphic = this.graphic as SpriteMap;
                 if (!this.flipHorizontal && graphic.frame % 8 == 0)
                 {
-                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(-16f, 0.0f)) != null)
+                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(-16f, 0f)) != null)
                     {
                         ++graphic.frame;
                         graphic.UpdateFrame();
@@ -40,7 +40,7 @@ namespace DuckGame
                 }
                 else if (!this.flipHorizontal && graphic.frame % 8 == 7)
                 {
-                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(16f, 0.0f)) != null)
+                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(16f, 0f)) != null)
                     {
                         --graphic.frame;
                         graphic.UpdateFrame();
@@ -48,13 +48,13 @@ namespace DuckGame
                 }
                 else if (this.flipHorizontal && graphic.frame % 8 == 0)
                 {
-                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(16f, 0.0f)) != null)
+                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(16f, 0f)) != null)
                     {
                         ++graphic.frame;
                         graphic.UpdateFrame();
                     }
                 }
-                else if (this.flipHorizontal && graphic.frame % 8 == 7 && Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(-16f, 0.0f)) != null)
+                else if (this.flipHorizontal && graphic.frame % 8 == 7 && Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(-16f, 0f)) != null)
                 {
                     --graphic.frame;
                     graphic.UpdateFrame();

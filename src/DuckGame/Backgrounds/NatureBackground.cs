@@ -34,7 +34,7 @@ namespace DuckGame
                 return;
             this.backgroundColor = new Color(129, 182, 218);
             Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/forest5", 0.0f, 0.0f, 3);
+            this._parallax = new ParallaxBackground("background/forest5", 0f, 0f, 3);
             float speed1 = 0.4f;
             Sprite s1 = new Sprite("background/cloud1")
             {

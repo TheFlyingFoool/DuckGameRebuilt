@@ -52,8 +52,8 @@ namespace DuckGame
                     if (this.joinAddress != 0UL)
                         Level.current = new JoinServer(this.joinAddress);
                     else
-                        Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
-                    if ((double)Graphics.fade <= 0.0)
+                        Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                    if (Graphics.fade <= 0.0)
                         Level.current = new TitleScreen();
                 }
             }
@@ -66,7 +66,7 @@ namespace DuckGame
         {
             this._dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0.0f;
+                this._dots = 0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {
@@ -74,7 +74,7 @@ namespace DuckGame
                     str += ".";
             }
             string text = "Disconnecting";
-            Graphics.DrawString(text + str, new Vec2((float)((double)Layer.HUD.width / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), (float)((double)Layer.HUD.height / 2.0 - 4.0)), Color.White);
+            Graphics.DrawString(text + str, new Vec2((float)(Layer.HUD.width / 2.0 - Graphics.GetStringWidth(text) / 2.0), (float)(Layer.HUD.height / 2.0 - 4.0)), Color.White);
         }
     }
 }

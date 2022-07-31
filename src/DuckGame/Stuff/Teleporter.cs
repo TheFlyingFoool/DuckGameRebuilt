@@ -108,13 +108,13 @@ namespace DuckGame
         public void InitLinks()
         {
             this._initLinks = true;
-            Vec2 vec2_1 = new Vec2(0.0f, -1f);
+            Vec2 vec2_1 = new Vec2(0f, -1f);
             if (this.direction == 1)
-                vec2_1 = new Vec2(0.0f, 1f);
+                vec2_1 = new Vec2(0f, 1f);
             else if (this.direction == 2)
-                vec2_1 = new Vec2(-1f, 0.0f);
+                vec2_1 = new Vec2(-1f, 0f);
             else if (this.direction == 3)
-                vec2_1 = new Vec2(1f, 0.0f);
+                vec2_1 = new Vec2(1f, 0f);
             Vec2 hitPos;
             if (this.horizontal.value)
             {
@@ -125,7 +125,7 @@ namespace DuckGame
             }
             else
             {
-                Vec2 vec2_2 = this.position + new Vec2(0.0f, (float)-((int)this.teleHeight * 16.0 / 2.0 - 8.0));
+                Vec2 vec2_2 = this.position + new Vec2(0f, (float)-((int)this.teleHeight * 16.0 / 2.0 - 8.0));
                 Teleporter teleporter = Level.CheckRay<Teleporter>(vec2_2 + vec2_1 * 20f, vec2_2 + vec2_1 * 5000f, this, out hitPos);
                 if (teleporter != null)
                     this._link = teleporter;
@@ -176,7 +176,7 @@ namespace DuckGame
                 for (int index2 = 0; index2 < 2; ++index2)
                     Level.Add(SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
                 Vec2 position1 = thing1.position;
-                float num2 = 0.0f;
+                float num2 = 0f;
                 if (thing1 is RagdollPart)
                     num2 = 8f;
                 this._link._teleported.Add(thing1 as ITeleport);
@@ -189,7 +189,7 @@ namespace DuckGame
                         {
                             if (thing1 is PhysicsObject)
                             {
-                                if ((double)thing1.hSpeed > 0.0)
+                                if (thing1.hSpeed > 0.0)
                                     thing1.position.x = this._link.position.x + 8f;
                                 else
                                     thing1.position.x = this._link.position.x - 8f;
@@ -197,10 +197,10 @@ namespace DuckGame
                         }
                         else if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.vSpeed > 0.0)
-                                thing1.position.y = this._link.position.y + ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                            if (thing1.vSpeed > 0.0)
+                                thing1.position.y = this._link.position.y + ((float)(thing1.height / 2.0 + 6.0) + num2);
                             else
-                                thing1.position.y = this._link.position.y - ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                                thing1.position.y = this._link.position.y - ((float)(thing1.height / 2.0 + 6.0) + num2);
                         }
                     }
                     else
@@ -210,7 +210,7 @@ namespace DuckGame
                         {
                             if (thing1 is PhysicsObject)
                             {
-                                if ((double)thing1.hSpeed > 0.0)
+                                if (thing1.hSpeed > 0.0)
                                     thing1.position.x = this._link.position.x + 8f;
                                 else
                                     thing1.position.x = this._link.position.x - 8f;
@@ -218,24 +218,24 @@ namespace DuckGame
                         }
                         else if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.vSpeed > 0.0)
-                                thing1.position.y = this._link.position.y + ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                            if (thing1.vSpeed > 0.0)
+                                thing1.position.y = this._link.position.y + ((float)(thing1.height / 2.0 + 6.0) + num2);
                             else
-                                thing1.position.y = this._link.position.y - ((float)((double)thing1.height / 2.0 + 6.0) + num2);
+                                thing1.position.y = this._link.position.y - ((float)(thing1.height / 2.0 + 6.0) + num2);
                         }
                     }
                     if (!this.horizontal.value)
                     {
-                        if ((double)thing1.bottom > (double)this._link.bottom)
+                        if (thing1.bottom > this._link.bottom)
                             thing1.bottom = this._link.bottom;
-                        if ((double)thing1.top < (double)this._link.top)
+                        if (thing1.top < this._link.top)
                             thing1.top = this._link.top;
                     }
                     else
                     {
-                        if ((double)thing1.right > (double)this._link.right)
+                        if (thing1.right > this._link.right)
                             thing1.right = this._link.right;
-                        if ((double)thing1.left < (double)this._link.left)
+                        if (thing1.left < this._link.left)
                             thing1.left = this._link.left;
                     }
                 }
@@ -254,7 +254,7 @@ namespace DuckGame
                             thing1.position.y = this._link.position.y;
                         if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.hSpeed > 0.0)
+                            if (thing1.hSpeed > 0.0)
                                 thing1.position.x = this._link.position.x + 8f;
                             else
                                 thing1.position.x = this._link.position.x - 8f;
@@ -266,7 +266,7 @@ namespace DuckGame
                             thing1.position.x = this._link.position.x;
                         if (thing1 is PhysicsObject)
                         {
-                            if ((double)thing1.vSpeed > 0.0)
+                            if (thing1.vSpeed > 0.0)
                                 thing1.position.y = this._link.position.y + 8f;
                             else
                                 thing1.position.y = this._link.position.y - 8f;
@@ -323,9 +323,9 @@ namespace DuckGame
             {
                 Color purple = Color.Purple;
                 if ((bool)this.noduck)
-                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 2f), new Vec2(this.x - 5f, this.y + 2f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 2f), new Vec2(this.x - 5f, this.y + 2f), Color.Yellow * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
-                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 4f), new Vec2(this.x - 5f, this.y + 4f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x + ((int)this.teleHeight * 16 - 9), this.y - 4f), new Vec2(this.x - 5f, this.y + 4f), purple * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 this._top.angleDegrees = 90f;
                 this._bottom.angleDegrees = 90f;
                 this._top.depth = this.depth + 1;
@@ -335,24 +335,24 @@ namespace DuckGame
                 this._arrow.depth = this.depth + 2;
                 this._arrow.alpha = 0.5f;
                 if (this.direction == 0)
-                    this._arrow.angleDegrees = 0.0f;
+                    this._arrow.angleDegrees = 0f;
                 else if (this.direction == 1)
                     this._arrow.angleDegrees = 180f;
                 else if (this.direction == 2)
                     this._arrow.angleDegrees = -90f;
                 else if (this.direction == 3)
                     this._arrow.angleDegrees = 90f;
-                Graphics.Draw(this._arrow, (float)((double)this.x - 8.0 + (int)this.teleHeight * 16 / 2 + (double)(float)this._float * 2.0), this.y);
+                Graphics.Draw(this._arrow, (float)(this.x - 8.0 + (int)this.teleHeight * 16 / 2 + (float)this._float * 2.0), this.y);
             }
             else
             {
                 Color purple = Color.Purple;
                 if ((bool)this.noduck)
-                    Graphics.DrawRect(new Vec2(this.x - 2f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                    Graphics.DrawRect(new Vec2(this.x - 2f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
-                    Graphics.DrawRect(new Vec2(this.x - 4f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
-                this._top.angle = 0.0f;
-                this._bottom.angle = 0.0f;
+                    Graphics.DrawRect(new Vec2(this.x - 4f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)(this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
+                this._top.angle = 0f;
+                this._bottom.angle = 0f;
                 this._top.depth = this.depth + 1;
                 this._bottom.depth = this.depth + 1;
                 Graphics.Draw(this._top, this.x, this.y - ((int)this.teleHeight * 16 - 9));
@@ -360,14 +360,14 @@ namespace DuckGame
                 this._arrow.depth = this.depth + 2;
                 this._arrow.alpha = 0.5f;
                 if (this.direction == 0)
-                    this._arrow.angleDegrees = 0.0f;
+                    this._arrow.angleDegrees = 0f;
                 else if (this.direction == 1)
                     this._arrow.angleDegrees = 180f;
                 else if (this.direction == 2)
                     this._arrow.angleDegrees = -90f;
                 else if (this.direction == 3)
                     this._arrow.angleDegrees = 90f;
-                Graphics.Draw(this._arrow, this.x, (float)((double)this.y + 8.0 - (int)this.teleHeight * 16 / 2 + (double)(float)this._float * 2.0));
+                Graphics.Draw(this._arrow, this.x, (float)(this.y + 8.0 - (int)this.teleHeight * 16 / 2 + (float)this._float * 2.0));
             }
         }
 

@@ -31,7 +31,7 @@ namespace DuckGame
             this.editorCycleType = typeof(SpikesLeft);
             this.angle = 3.141593f;
             this.up = false;
-            this.editorOffset = new Vec2(0.0f, -6f);
+            this.editorOffset = new Vec2(0f, -6f);
             this.hugWalls = WallHug.Ceiling;
             this._killImpact = ImpactedFrom.Bottom;
         }

@@ -325,9 +325,9 @@ namespace DuckGame
             {
                 zs = 1f;
             }
-            scale.x = xs * (float)Math.Sqrt((double)(this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13));
-            scale.y = ys * (float)Math.Sqrt((double)(this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23));
-            scale.z = zs * (float)Math.Sqrt((double)(this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
+            scale.x = xs * (float)Math.Sqrt((this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13));
+            scale.y = ys * (float)Math.Sqrt((this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23));
+            scale.z = zs * (float)Math.Sqrt((this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
             if (scale.x == 0.0 || scale.y == 0.0 || scale.z == 0.0)
             {
                 rotation = Quaternion.Identity;
@@ -585,7 +585,7 @@ namespace DuckGame
             {
                 throw new ArgumentOutOfRangeException("nearPlaneDistance", "Near plane distance is larger than Far plane distance. Near plane distance must be smaller than Far plane distance.");
             }
-            float yscale = 1f / (float)Math.Tan((double)(fieldOfView / 2f));
+            float yscale = 1f / (float)Math.Tan((fieldOfView / 2f));
             float xscale = yscale / aspectRatio;
             result.M11 = xscale;
             result.M22 = yscale;
@@ -607,8 +607,8 @@ namespace DuckGame
         public static Matrix CreateRotationX(float radians)
         {
             Matrix returnMatrix = Matrix.Identity;
-            returnMatrix.M22 = (float)Math.Cos((double)radians);
-            returnMatrix.M23 = (float)Math.Sin((double)radians);
+            returnMatrix.M22 = (float)Math.Cos(radians);
+            returnMatrix.M23 = (float)Math.Sin(radians);
             returnMatrix.M32 = -returnMatrix.M23;
             returnMatrix.M33 = returnMatrix.M22;
             return returnMatrix;
@@ -617,8 +617,8 @@ namespace DuckGame
         public static void CreateRotationX(float radians, out Matrix result)
         {
             result = Matrix.Identity;
-            result.M22 = (float)Math.Cos((double)radians);
-            result.M23 = (float)Math.Sin((double)radians);
+            result.M22 = (float)Math.Cos(radians);
+            result.M23 = (float)Math.Sin(radians);
             result.M32 = -result.M23;
             result.M33 = result.M22;
         }
@@ -626,8 +626,8 @@ namespace DuckGame
         public static Matrix CreateRotationY(float radians)
         {
             Matrix returnMatrix = Matrix.Identity;
-            returnMatrix.M11 = (float)Math.Cos((double)radians);
-            returnMatrix.M13 = (float)Math.Sin((double)radians);
+            returnMatrix.M11 = (float)Math.Cos(radians);
+            returnMatrix.M13 = (float)Math.Sin(radians);
             returnMatrix.M31 = -returnMatrix.M13;
             returnMatrix.M33 = returnMatrix.M11;
             return returnMatrix;
@@ -636,8 +636,8 @@ namespace DuckGame
         public static void CreateRotationY(float radians, out Matrix result)
         {
             result = Matrix.Identity;
-            result.M11 = (float)Math.Cos((double)radians);
-            result.M13 = (float)Math.Sin((double)radians);
+            result.M11 = (float)Math.Cos(radians);
+            result.M13 = (float)Math.Sin(radians);
             result.M31 = -result.M13;
             result.M33 = result.M11;
         }
@@ -645,8 +645,8 @@ namespace DuckGame
         public static Matrix CreateRotationZ(float radians)
         {
             Matrix returnMatrix = Matrix.Identity;
-            returnMatrix.M11 = (float)Math.Cos((double)radians);
-            returnMatrix.M12 = (float)Math.Sin((double)radians);
+            returnMatrix.M11 = (float)Math.Cos(radians);
+            returnMatrix.M12 = (float)Math.Sin(radians);
             returnMatrix.M21 = -returnMatrix.M12;
             returnMatrix.M22 = returnMatrix.M11;
             return returnMatrix;
@@ -655,8 +655,8 @@ namespace DuckGame
         public static void CreateRotationZ(float radians, out Matrix result)
         {
             result = Matrix.Identity;
-            result.M11 = (float)Math.Cos((double)radians);
-            result.M12 = (float)Math.Sin((double)radians);
+            result.M11 = (float)Math.Cos(radians);
+            result.M12 = (float)Math.Sin(radians);
             result.M21 = -result.M12;
             result.M22 = result.M11;
         }

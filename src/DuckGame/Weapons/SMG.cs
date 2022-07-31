@@ -28,7 +28,7 @@ namespace DuckGame
             this._fireWait = 1f;
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-1f, 0.0f);
+            this._holdOffset = new Vec2(-1f, 0f);
             this.loseAccuracy = 0.2f;
             this.maxAccuracyLost = 0.8f;
             this.editorTooltip = "Rapid-fire bullet-spitting machine. Great for making artisanal swiss cheese.";

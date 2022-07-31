@@ -117,7 +117,7 @@ namespace DuckGame
 
         public float bender
         {
-            get => Maths.Clamp(this._bender + this._benderOffset, 0.0f, 1f);
+            get => Maths.Clamp(this._bender + this._benderOffset, 0f, 1f);
             set => this._bender = value;
         }
 
@@ -143,7 +143,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.isServerForObject && ((double)Math.Abs(this.hSpeed) > 4.0 || (double)Math.Abs(this.vSpeed) > 4.0) && !this._ruined && this.owner == null)
+            if (this.isServerForObject && (Math.Abs(this.hSpeed) > 4.0 || Math.Abs(this.vSpeed) > 4.0) && !this._ruined && this.owner == null)
                 this._ruined = true;
             base.OnSolidImpact(with, from);
         }
@@ -207,7 +207,7 @@ namespace DuckGame
                         this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : this.handPitch + 0.01f;
                 }
                 else
-                    this._benderOffset = 0.0f;
+                    this._benderOffset = 0f;
                 if (this.noteSound != null && this._ruined && Rando.Int(30) == 0)
                     this.noteSound.Volume *= 0.75f;
                 this.duckMoving = owner._sprite.currentAnimation == "run";
@@ -222,7 +222,7 @@ namespace DuckGame
                 int num1 = this.currentNote;
                 if (preset == this.presets.Length - 1)
                     num1 = (int)Math.Round(currentNote / 2.0);
-                if (notePitch == 0.0 || (num1 != this.prevNote || this.noteSound != null && (double)this.noteSound.Pitch + 1.0 != (double)this.bender / 12.0) && !owner._hovering)
+                if (notePitch == 0.0 || (num1 != this.prevNote || this.noteSound != null && this.noteSound.Pitch + 1.0 != this.bender / 12.0) && !owner._hovering)
                 {
                     if (notePitch != 0.0)
                     {
@@ -238,8 +238,8 @@ namespace DuckGame
                                 if (Rando.Int(7) == 0)
                                     val -= 0.25f;
                                 if (flag)
-                                    val = Rando.Int(3) == 0 ? 0.2f : 0.0f;
-                                vol = Maths.Clamp(val, 0.0f, 1f);
+                                    val = Rando.Int(3) == 0 ? 0.2f : 0f;
+                                vol = Maths.Clamp(val, 0f, 1f);
                             }
                             if (this.noteSound != null)
                                 this._prevSounds.Add(this.noteSound);
@@ -258,7 +258,7 @@ namespace DuckGame
                                 Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = (float)((double)this.bender / 12.0 - 1.0);
+                            this.noteSound.Pitch = (float)(this.bender / 12.0 - 1.0);
                     }
                     else
                     {
@@ -295,7 +295,7 @@ namespace DuckGame
                     --index;
                 }
                 else
-                    this._prevSounds[index].Volume = Lerp.Float(this._prevSounds[index].Volume, 0.0f, 0.15f);
+                    this._prevSounds[index].Volume = Lerp.Float(this._prevSounds[index].Volume, 0f, 0.15f);
             }
             if (preset != _prevPreset)
                 SFX.Play("click");

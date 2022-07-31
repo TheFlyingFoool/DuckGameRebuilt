@@ -390,7 +390,7 @@ namespace DuckGame
                 if (typeof(T) == typeof(TeamHat))
                 {
                     Team t = Teams.all.FirstOrDefault<Team>(x => x.name.ToLower() == pValue);
-                    return t != null ? new TeamHat(0.0f, 0.0f, t) : this.Error("Argument (" + pValue + ") should be the name of a team");
+                    return t != null ? new TeamHat(0f, 0f, t) : this.Error("Argument (" + pValue + ") should be the name of a team");
                 }
                 foreach (System.Type thingType in Editor.ThingTypes)
                 {

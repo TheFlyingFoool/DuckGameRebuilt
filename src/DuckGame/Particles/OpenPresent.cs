@@ -20,9 +20,9 @@ namespace DuckGame
             };
             this.graphic = _sprite;
             this.center = new Vec2(8f, 13f);
-            this.hSpeed = 0.0f;
-            this.vSpeed = 0.0f;
-            this._bounceEfficiency = 0.0f;
+            this.hSpeed = 0f;
+            this.vSpeed = 0f;
+            this._bounceEfficiency = 0f;
             this.depth = (Depth)0.9f;
             this._life = 5f;
         }

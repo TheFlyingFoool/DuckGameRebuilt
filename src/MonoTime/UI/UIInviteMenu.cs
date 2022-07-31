@@ -107,7 +107,7 @@ namespace DuckGame
                 this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
                 this._moreArrow = new Sprite("moreArrow");
                 this._moreArrow.CenterOrigin();
-                this._box = new UIBox(0.0f, 0.0f, 100f, 14 * num + 8, isVisible: false);
+                this._box = new UIBox(0f, 0f, 100f, 14 * num + 8, isVisible: false);
                 this._noAvatar = new Sprite("noAvatar");
                 this._noAvatar.CenterOrigin();
                 this.Add(_box, true);
@@ -194,7 +194,7 @@ namespace DuckGame
             if (num1 > this._maxShow)
                 num1 = this._maxShow;
             float num2 = 14 * num1 - 12;
-            float num3 = 0.0f;
+            float num3 = 0f;
             bool flag = false;
             for (int viewTop = this._viewTop; viewTop < this._viewTop + this._maxShow && viewTop < this._users.Count; ++viewTop)
             {
@@ -238,13 +238,13 @@ namespace DuckGame
             {
                 this._moreArrow.depth = this.depth + 2;
                 this._moreArrow.flipV = false;
-                DuckGame.Graphics.Draw(this._moreArrow, this.x, (float)((double)this.y + (double)num2 / 2.0 + 13.0));
+                DuckGame.Graphics.Draw(this._moreArrow, this.x, (float)(this.y + num2 / 2.0 + 13.0));
             }
             if (this._viewTop > 0)
             {
                 this._moreArrow.depth = this.depth + 2;
                 this._moreArrow.flipV = true;
-                DuckGame.Graphics.Draw(this._moreArrow, this.x, (float)((double)this.y - (double)num2 / 2.0 - 2.0));
+                DuckGame.Graphics.Draw(this._moreArrow, this.x, (float)(this.y - num2 / 2.0 - 2.0));
             }
             base.Draw();
         }

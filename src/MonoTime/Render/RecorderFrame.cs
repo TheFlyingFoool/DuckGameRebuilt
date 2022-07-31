@@ -40,7 +40,7 @@ namespace DuckGame
         public void Reset()
         {
             this.currentObject = 0;
-            this.totalVelocity = 0.0f;
+            this.totalVelocity = 0f;
             this.actions = 0;
             this.bonus = 0;
             this.deaths = 0;

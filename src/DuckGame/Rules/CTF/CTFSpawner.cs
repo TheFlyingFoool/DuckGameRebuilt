@@ -67,12 +67,12 @@ namespace DuckGame
         {
             if (this._present != null)
                 return;
-            this._spawnWait = 0.0f;
+            this._spawnWait = 0f;
             this._present = new CTFPresent(this.x, this.y, (bool)this.team)
             {
                 x = this.x
             };
-            this._present.y = (float)((double)this.top + ((double)this._present.y - (double)this._present.bottom) - 6.0);
+            this._present.y = (float)(this.top + (this._present.y - this._present.bottom) - 6.0);
             this._present.vSpeed = -2f;
             Level.Add(_present);
             if (!this._seated)

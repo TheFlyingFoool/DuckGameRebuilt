@@ -71,13 +71,13 @@ namespace DuckGame
             switch (from)
             {
                 case ImpactedFrom.Left:
-                    return new Vec2(-1f, 0.0f);
+                    return new Vec2(-1f, 0f);
                 case ImpactedFrom.Right:
-                    return new Vec2(1f, 0.0f);
+                    return new Vec2(1f, 0f);
                 case ImpactedFrom.Top:
-                    return new Vec2(0.0f, -1f);
+                    return new Vec2(0f, -1f);
                 default:
-                    return new Vec2(0.0f, 1f);
+                    return new Vec2(0f, 1f);
             }
         }
 
@@ -168,7 +168,7 @@ namespace DuckGame
             get
             {
                 float num = this.weight;
-                if ((double)num < 5.0)
+                if (num < 5.0)
                     num = 5f;
                 return 5f / num;
             }
@@ -179,7 +179,7 @@ namespace DuckGame
             get
             {
                 float num = this.weight * 0.75f;
-                if ((double)num < 5.0)
+                if (num < 5.0)
                     num = 5f;
                 return 5f / num;
             }
@@ -190,7 +190,7 @@ namespace DuckGame
             get
             {
                 float num = this.weight;
-                if ((double)num < 5.0)
+                if (num < 5.0)
                     num = 5f;
                 return num / 5f;
             }
@@ -214,7 +214,7 @@ namespace DuckGame
 
         public void CheckIsland()
         {
-            if (this.island == null || this.island.owner == this || this.level == null || !this.level.simulatePhysics || (double)(this.position - this.island.owner.position).lengthSq <= island.radiusSquared)
+            if (this.island == null || this.island.owner == this || this.level == null || !this.level.simulatePhysics || (this.position - this.island.owner.position).lengthSq <= island.radiusSquared)
                 return;
             this.island.RemoveThing(this);
             this.UpdateIsland();
@@ -296,7 +296,7 @@ namespace DuckGame
                 if (_flameWait > 1.0)
                 {
                     this.AddFire();
-                    this._flameWait = 0.0f;
+                    this._flameWait = 0f;
                 }
                 this._flameWait += 0.03f;
                 this.burnt += this.burnSpeed;
@@ -310,7 +310,7 @@ namespace DuckGame
             if (spreadExtinguisherSmoke > 0.0)
             {
                 this.spreadExtinguisherSmoke -= 0.15f;
-                if ((double)Math.Abs(this.hSpeed) + (double)Math.Abs(this.vSpeed) > 2f)
+                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2f)
                 {
                     ++this.extWait;
                     if (this.extWait >= 3)
@@ -380,7 +380,7 @@ namespace DuckGame
                     Level.Add(woodDebris);
                 }
             }
-            return thickness > (double)bullet.ammo.penetration;
+            return thickness > bullet.ammo.penetration;
         }
 
         public virtual void DoExitHit(Bullet bullet, Vec2 exitPos) => this.ExitHit(bullet, exitPos);
@@ -426,7 +426,7 @@ namespace DuckGame
         public virtual void DoHeatUp(float val, Vec2 location)
         {
             bool flag = heat < 0f;
-            if (!flag || (double)val > 0f)
+            if (!flag || val > 0f)
             {
                 this.heat += val;
                 if (heat > 1.5)
@@ -434,7 +434,7 @@ namespace DuckGame
                 if (!flag && heat < 0f)
                     this.heat = 0f;
             }
-            if ((double)val <= 0f)
+            if (val <= 0f)
                 return;
             this.HeatUp(location);
         }
@@ -447,7 +447,7 @@ namespace DuckGame
 
         public virtual void DoFreeze(float val, Vec2 location)
         {
-            if ((double)val < 0f)
+            if (val < 0f)
                 val = -val;
             this.heat -= val;
             if (heat < -1.5)
@@ -478,7 +478,7 @@ namespace DuckGame
 
         public virtual void Impact(MaterialThing with, ImpactedFrom from, bool solidImpact)
         {
-            if (with.ignoreCollisions || this.ignoreCollisions || (double)this.CalculateImpactPower(with, from) <= _impactThreshold)
+            if (with.ignoreCollisions || this.ignoreCollisions || this.CalculateImpactPower(with, from) <= _impactThreshold)
                 return;
             if (!with.onlyCrush || from == ImpactedFrom.Top)
                 this.OnSoftImpact(with, from);
@@ -493,10 +493,10 @@ namespace DuckGame
         {
             if (with.ignoreCollisions || this.ignoreCollisions)
                 return;
-            double impactPower = (double)this.CalculateImpactPower(with, from);
+            double impactPower = this.CalculateImpactPower(with, from);
             if (impactPower > _breakForce)
                 this.Destroy(new DTImpact(with));
-            if ((double)this.CalculatePersonalImpactPower(with, from) > _impactThreshold)
+            if (this.CalculatePersonalImpactPower(with, from) > _impactThreshold)
                 this._didImpactSound = this.PlayCollideSound(from);
             if (impactPower <= _impactThreshold)
                 return;

@@ -118,7 +118,7 @@ namespace DuckGame
         public void Update()
         {
             bool flag = false;
-            if ((double)Mouse.x > _position.x && (double)Mouse.y > _position.y && (double)Mouse.x < _position.x + (double)this._size.x && (double)Mouse.y < _position.y + (double)this._size.y)
+            if (Mouse.x > _position.x && Mouse.y > _position.y && Mouse.x < _position.x + this._size.x && Mouse.y < _position.y + this._size.y)
             {
                 flag = true;
                 Editor.hoverTextBox = true;
@@ -273,7 +273,7 @@ namespace DuckGame
                 return;
             Vec2 cursorPos = this._cursorPos;
             cursorPos.x += 1f * this._font.scale.x;
-            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0.0f, 8f * this._font.scale.y), Color.White, 0.5f, this.depth);
+            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0f, 8f * this._font.scale.y), Color.White, 0.5f, this.depth);
         }
     }
 }

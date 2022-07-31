@@ -32,9 +32,9 @@ namespace DuckGame
                 alpha = 0.9f,
                 depth = -0.8f
             };
-            this._selectBeam.center = new Vec2(this._selectBeam.w / 2, 0.0f);
-            this.depth = (Depth)0.0f;
-            this._collisionOffset = new Vec2((float)-(this._selectBeam.w / 2 * 0.800000011920929), 0.0f);
+            this._selectBeam.center = new Vec2(this._selectBeam.w / 2, 0f);
+            this.depth = (Depth)0f;
+            this._collisionOffset = new Vec2((float)-(this._selectBeam.w / 2 * 0.800000011920929), 0f);
             this._collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
             this.center = new Vec2(this._selectBeam.w / 2);
             this.thickness = 10f;
@@ -46,7 +46,7 @@ namespace DuckGame
         {
             if (this._ducks.Any<BeamDuck>(t => t.duck == d))
                 return;
-            float num = (double)d.y >= 100.0 ? ((double)d.y >= 150.0 ? 220f : 130f) : 40f;
+            float num = d.y >= 100.0 ? (d.y >= 150.0 ? 220f : 130f) : 40f;
             SFX.Play("stepInBeam");
             d.beammode = true;
             d.immobilized = true;
@@ -63,7 +63,7 @@ namespace DuckGame
                 duck = d,
                 entryHeight = num,
                 leaving = false,
-                entryDir = (double)d.x < (double)this.x ? -1 : 1,
+                entryDir = d.x < this.x ? -1 : 1,
                 sin = new SinWave(0.1f),
                 sin2 = new SinWave(0.05f)
             });
@@ -99,7 +99,7 @@ namespace DuckGame
                 this._beamHeight = 180f;
                 this._collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
             }
-            this._selectBeam.color = new Color(0.3f, (float)(0.300000011920929 + (double)this._wave2.normalized * 0.200000002980232), (float)(0.5 + (double)this._wave.normalized * 0.300000011920929)) * (1f + this._flash);
+            this._selectBeam.color = new Color(0.3f, (float)(0.300000011920929 + this._wave2.normalized * 0.200000002980232), (float)(0.5 + this._wave.normalized * 0.300000011920929)) * (1f + this._flash);
             this._flash = Maths.CountDown(this._flash, 0.1f);
             this._spawnWait -= 0.1f;
             if (_spawnWait < 0.0)
@@ -144,7 +144,7 @@ namespace DuckGame
                     int val1 = 0;
                     foreach (ProfileBox2 profile in current._profiles)
                     {
-                        if (profile.ready && profile.duck != null && (double)Math.Abs(profile.duck.x - this.x) < 16.0)
+                        if (profile.ready && profile.duck != null && Math.Abs(profile.duck.x - this.x) < 16.0)
                         {
                             if (profile.duck != null && profile.duck.profile != null)
                             {
@@ -161,8 +161,8 @@ namespace DuckGame
                 }
             }
             int num1 = 0;
-            float num2 = (float)(_beamHeight / (double)val2 / 2.0 + 20.0 * (val2 > 1 ? 1.0 : 0.0));
-            float num3 = (float)((_beamHeight - (double)num2 * 2.0) / (val2 > 1 ? val2 - 1 : 1.0));
+            float num2 = (float)(_beamHeight / val2 / 2.0 + 20.0 * (val2 > 1 ? 1.0 : 0.0));
+            float num3 = (float)((_beamHeight - num2 * 2.0) / (val2 > 1 ? val2 - 1 : 1.0));
             for (int index = 0; index < this._ducks.Count; ++index)
             {
                 BeamDuck duck = this._ducks[index];
@@ -177,14 +177,14 @@ namespace DuckGame
                     {
                         duck.duck.solid = true;
                         duck.duck.y = MathHelper.Lerp(duck.duck.position.y, duck.entryHeight, 0.35f);
-                        duck.duck.vSpeed = 0.0f;
-                        if ((double)Math.Abs(duck.duck.position.y - duck.entryHeight) < 4.0)
+                        duck.duck.vSpeed = 0f;
+                        if (Math.Abs(duck.duck.position.y - duck.entryHeight) < 4.0)
                         {
                             duck.duck.position.y = duck.entryHeight;
                             duck.duck.hSpeed = duck.entryDir * 3f;
-                            duck.duck.vSpeed = 0.0f;
+                            duck.duck.vSpeed = 0f;
                         }
-                        if ((double)Math.Abs(duck.duck.position.x - this.x) > 24.0)
+                        if (Math.Abs(duck.duck.position.x - this.x) > 24.0)
                         {
                             duck.duck.gravMultiplier = 1f;
                             duck.duck.immobilized = false;
@@ -196,18 +196,18 @@ namespace DuckGame
                     }
                     else
                     {
-                        if ((double)Math.Abs(duck.duck.position.x - this.x) <= 24.0)
+                        if (Math.Abs(duck.duck.position.x - this.x) <= 24.0)
                             duck.duck.beammode = true;
                         int num4 = index;
                         if (Network.isActive && duck.duck.profile != null)
                             num4 = duck.floatOrder;
                         duck.duck.position.x = Lerp.FloatSmooth(duck.duck.position.x, this.position.x + (float)duck.sin2 * 1f, 0.4f);
-                        duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)((double)num2 + (double)num3 * num4 + (double)(float)duck.sin * 2.0), 0.1f);
-                        duck.duck.vSpeed = 0.0f;
-                        duck.duck.hSpeed = 0.0f;
-                        duck.duck.gravMultiplier = 0.0f;
+                        duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)(num2 + num3 * num4 + (float)duck.sin * 2.0), 0.1f);
+                        duck.duck.vSpeed = 0f;
+                        duck.duck.hSpeed = 0f;
+                        duck.duck.gravMultiplier = 0f;
                     }
-                    if (duck.duck.inputProfile != null && duck.duck.inputProfile.Pressed("CANCEL") && (double)Math.Abs(duck.duck.position.x - this.x) < 2.0)
+                    if (duck.duck.inputProfile != null && duck.duck.inputProfile.Pressed("CANCEL") && Math.Abs(duck.duck.position.x - this.x) < 2.0)
                         duck.leaving = true;
                     if (duck.duck.profile == null)
                         duck.leaving = true;
@@ -219,13 +219,13 @@ namespace DuckGame
             for (int index = 0; index < this._guns.Count; ++index)
             {
                 Thing gun = this._guns[index];
-                gun.vSpeed = 0.0f;
-                gun.hSpeed = 0.0f;
-                if ((double)Math.Abs(this.position.x - gun.position.x) < 6.0)
+                gun.vSpeed = 0f;
+                gun.hSpeed = 0f;
+                if (Math.Abs(this.position.x - gun.position.x) < 6.0)
                 {
                     gun.position = Vec2.Lerp(gun.position, new Vec2(this.position.x, gun.position.y - 3f), 0.1f);
-                    gun.alpha = Maths.LerpTowards(gun.alpha, 0.0f, 0.1f);
-                    if ((double)gun.alpha <= 0.0)
+                    gun.alpha = Maths.LerpTowards(gun.alpha, 0f, 0.1f);
+                    if (gun.alpha <= 0.0)
                     {
                         gun.y = -200f;
                         this._guns.RemoveAt(index);

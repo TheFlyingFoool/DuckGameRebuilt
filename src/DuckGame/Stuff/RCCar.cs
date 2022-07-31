@@ -55,7 +55,7 @@ namespace DuckGame
             this._sprite.AddAnimation("beep", 0.2f, true, 0, 1);
             this.graphic = _sprite;
             this.center = new Vec2(16f, 24f);
-            this.collisionOffset = new Vec2(-8f, 0.0f);
+            this.collisionOffset = new Vec2(-8f, 0f);
             this.collisionSize = new Vec2(16f, 11f);
             this.depth = -0.5f;
             this._editorName = "RC Car";
@@ -78,7 +78,7 @@ namespace DuckGame
         public override void Terminate()
         {
             this._idle.Kill();
-            this._idle.lerpVolume = 0.0f;
+            this._idle.lerpVolume = 0f;
         }
 
         protected override bool OnDestroy(DestroyType type = null)
@@ -95,7 +95,7 @@ namespace DuckGame
                 {
                     range = 55f + Rando.Float(14f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos((double)Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin((double)Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
                 {
                     firedFrom = this
                 };
@@ -137,7 +137,7 @@ namespace DuckGame
             this._idle.lerpVolume = Math.Min(this._idleSpeed * 10f, 0.7f);
             if (this._destroyed)
             {
-                this._idle.lerpVolume = 0.0f;
+                this._idle.lerpVolume = 0f;
                 this._idle.lerpSpeed = 1f;
             }
             this._idle.pitch = (float)(0.5 + _idleSpeed * 0.5);
@@ -145,7 +145,7 @@ namespace DuckGame
             {
                 if (this.isServerForObject)
                 {
-                    if ((double)this.hSpeed > -(double)this._maxSpeed)
+                    if (this.hSpeed > -this._maxSpeed)
                         this.hSpeed -= 0.4f;
                     else
                         this.hSpeed = -this._maxSpeed;
@@ -158,7 +158,7 @@ namespace DuckGame
             {
                 if (this.isServerForObject)
                 {
-                    if ((double)this.hSpeed < _maxSpeed)
+                    if (this.hSpeed < _maxSpeed)
                         this.hSpeed += 0.4f;
                     else
                         this.hSpeed = this._maxSpeed;
@@ -177,12 +177,12 @@ namespace DuckGame
             if (_idleSpeed > 1.0)
                 this._idleSpeed = 1f;
             if (_idleSpeed < 0.0)
-                this._idleSpeed = 0.0f;
+                this._idleSpeed = 0f;
             if (this.jump && this.grounded)
                 this.vSpeed -= 4.8f;
             this._tilt = MathHelper.Lerp(this._tilt, -this.hSpeed, 0.4f);
             this._waveMult = MathHelper.Lerp(this._waveMult, -this.hSpeed, 0.1f);
-            this.angleDegrees = (float)(_tilt * 2.0 + (double)this._wave.value * (_waveMult * (_maxSpeed - (double)Math.Abs(this.hSpeed))));
+            this.angleDegrees = (float)(_tilt * 2.0 + this._wave.value * (_waveMult * (_maxSpeed - Math.Abs(this.hSpeed))));
             if (!this.isServerForObject || !this.isOffBottomOfLevel || this.destroyed)
                 return;
             this.Destroy(new DTFall());

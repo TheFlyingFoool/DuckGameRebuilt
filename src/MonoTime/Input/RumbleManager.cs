@@ -104,7 +104,7 @@ namespace DuckGame
                 foreach (Profile profile in active)
                 {
                     if (profile != null && profile.inputProfile != null && profile.inputProfile.lastActiveDevice != null)
-                        profile.inputProfile.lastActiveDevice.rumbleIntensity = 0.0f;
+                        profile.inputProfile.lastActiveDevice.rumbleIntensity = 0f;
                 }
                 for (int index = RumbleManager.ListRumbleEvents.Count - 1; index >= 0; --index)
                 {
@@ -119,10 +119,10 @@ namespace DuckGame
                                 {
                                     float num1 = Vec2.Distance(listRumbleEvent.position.Value, profile.duck.cameraPosition);
                                     float num2 = 1f;
-                                    if ((double)num1 > 32.0)
+                                    if (num1 > 32.0)
                                     {
-                                        if ((double)num1 <= 512.0)
-                                            num2 = (float)(1.0 - ((double)num1 - 32.0 > 0.0 ? (double)num1 - 32.0 : 0.0) / 512.0);
+                                        if (num1 <= 512.0)
+                                            num2 = (float)(1.0 - (num1 - 32.0 > 0.0 ? num1 - 32.0 : 0.0) / 512.0);
                                         else
                                             continue;
                                     }
@@ -144,7 +144,7 @@ namespace DuckGame
                             RumbleManager.ListRumbleEvents.RemoveAt(index);
                     }
                 }
-                if ((double)Options.Data.rumbleIntensity <= 0.0)
+                if (Options.Data.rumbleIntensity <= 0.0)
                     return;
                 foreach (Profile profile in active)
                 {

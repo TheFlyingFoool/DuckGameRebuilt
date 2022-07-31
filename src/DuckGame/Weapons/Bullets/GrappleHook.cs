@@ -16,7 +16,7 @@ namespace DuckGame
         public bool inGun => this._inGun;
 
         public GrappleHook(Grapple ownerVal)
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
             this._owner = ownerVal;
             this.graphic = new Sprite("harpoon");
@@ -33,8 +33,8 @@ namespace DuckGame
                 return;
             this.position = this._owner.barrelPosition;
             this.depth = this._owner.depth - 1;
-            this.hSpeed = 0.0f;
-            this.vSpeed = 0.0f;
+            this.hSpeed = 0f;
+            this.vSpeed = 0f;
             this.graphic.flipH = _owner.offDir < 0.0;
         }
 
@@ -59,8 +59,8 @@ namespace DuckGame
             if (this._inGun)
                 return;
             this._inGun = true;
-            this.hSpeed = 0.0f;
-            this.vSpeed = 0.0f;
+            this.hSpeed = 0f;
+            this.vSpeed = 0f;
             this._stuck = false;
         }
 

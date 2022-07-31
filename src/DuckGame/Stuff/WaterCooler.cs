@@ -42,7 +42,7 @@ namespace DuckGame
             this.flammable = 0.3f;
             this._bottom = new Sprite("waterCoolerBottom");
             this._bottom.CenterOrigin();
-            this.editorOffset = new Vec2(0.0f, -8f);
+            this.editorOffset = new Vec2(0f, -8f);
             this._fluid = Fluid.Water;
         }
 
@@ -51,14 +51,14 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - (hitPos.y - (double)this.top) / ((double)this.bottom - (double)this.top) < _fluidLevel)
+            if (1.0 - (hitPos.y - this.top) / (this.bottom - this.top) < _fluidLevel)
             {
                 this.thickness = 2f;
                 Vec2 off = hitPos - this.position;
                 bool flag = false;
                 foreach (FluidStream hole in this._holes)
                 {
-                    if ((double)(hole.offset - off).length < 2.0)
+                    if ((hole.offset - off).length < 2.0)
                     {
                         hole.offset = off;
                         hole.holeThickness += 0.5f;
@@ -68,7 +68,7 @@ namespace DuckGame
                 }
                 if (!flag)
                 {
-                    FluidStream fluidStream = new FluidStream(0.0f, 0.0f, (-bullet.travelDirNormalized).Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off);
+                    FluidStream fluidStream = new FluidStream(0f, 0f, (-bullet.travelDirNormalized).Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off);
                     this._holes.Add(fluidStream);
                     fluidStream.streamSpeedMultiplier = 2f;
                 }
@@ -87,7 +87,7 @@ namespace DuckGame
             bool flag = false;
             foreach (FluidStream hole in this._holes)
             {
-                if ((double)(hole.offset - off).length < 2.0)
+                if ((hole.offset - off).length < 2.0)
                 {
                     hole.offset = off;
                     hole.holeThickness += 0.5f;
@@ -97,14 +97,14 @@ namespace DuckGame
             }
             if (flag)
                 return;
-            this._holes.Add(new FluidStream(0.0f, 0.0f, bullet.travelDirNormalized.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off));
+            this._holes.Add(new FluidStream(0f, 0f, bullet.travelDirNormalized.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off));
         }
 
         public override void Update()
         {
             base.Update();
             this._shakeInc += 0.8f;
-            this._shakeMult = Lerp.Float(this._shakeMult, 0.0f, 0.05f);
+            this._shakeMult = Lerp.Float(this._shakeMult, 0f, 0.05f);
             if (this._alternate == 0)
             {
                 foreach (FluidStream hole in this._holes)
@@ -115,8 +115,8 @@ namespace DuckGame
                     hole.DoUpdate();
                     hole.position = this.Offset(hole.offset);
                     hole.sprayAngle = this.OffsetLocal(hole.startSprayAngle);
-                    float num1 = (float)(1.0 - (hole.offset.y - (double)this.topLocal) / ((double)this.bottomLocal - (double)this.topLocal));
-                    if ((double)hole.x > (double)this.left - 2.0 && (double)hole.x < (double)this.right + 2.0 && (double)num1 < _fluidLevel)
+                    float num1 = (float)(1.0 - (hole.offset.y - this.topLocal) / (this.bottomLocal - this.topLocal));
+                    if (hole.x > this.left - 2.0 && hole.x < this.right + 2.0 && num1 < _fluidLevel)
                     {
                         float num2 = Maths.Clamp(this._fluidLevel - num1, 0.1f, 1f) * 0.0012f * hole.holeThickness;
                         FluidData fluid = this._fluid;

@@ -27,10 +27,10 @@ namespace DuckGame
 
         public void DoActivate(Vec2 position, Profile owner)
         {
-            this.typeInstance.rangeVariation = 0.0f;
+            this.typeInstance.rangeVariation = 0f;
             this.typeInstance.accuracy = 1f;
             this.typeInstance.bulletSpeed = this.speed;
-            this.typeInstance.speedVariation = 0.0f;
+            this.typeInstance.speedVariation = 0f;
             Bullet bullet = this.typeInstance.GetBullet(position.x, position.y, owner?.duck, -this.angle, distance: this.range, network: false);
             bullet.isLocal = false;
             bullet.connection = this.connection;

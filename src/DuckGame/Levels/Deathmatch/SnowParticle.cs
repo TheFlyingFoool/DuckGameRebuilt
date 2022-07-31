@@ -25,8 +25,8 @@ namespace DuckGame
             Vec3 vec3 = (Vec3)new Viewport(0, 0, (int)Layer.HUD.width, (int)Layer.HUD.height).Project((Vector3)new Vec3(position.x, this.z, position.y), (Microsoft.Xna.Framework.Matrix)Layer.Game.projection, (Microsoft.Xna.Framework.Matrix)Layer.Game.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
             this.position = new Vec2(vec3.x, vec3.y);
             float num1 = this.z / 200f;
-            float num2 = (float)(0.300000011920929 + (double)num1 * 0.300000011920929);
-            DuckGame.Graphics.DrawRect(this.position + new Vec2(-num2, -num2), this.position + new Vec2(num2, num2), Color.White * this.alpha, (Depth)(float)((double)num1 * 0.100000001490116 - 0.0199999995529652));
+            float num2 = (float)(0.300000011920929 + num1 * 0.300000011920929);
+            DuckGame.Graphics.DrawRect(this.position + new Vec2(-num2, -num2), this.position + new Vec2(num2, num2), Color.White * this.alpha, (Depth)(float)(num1 * 0.100000001490116 - 0.0199999995529652));
             this.position = position;
         }
 

@@ -13,7 +13,7 @@ namespace DuckGame
         private float yOffset;
 
         public UIImage(string imageVal, UIAlign al = UIAlign.Left)
-          : base(0.0f, 0.0f, -1f, -1f)
+          : base(0f, 0f, -1f, -1f)
         {
             this._image = new Sprite(imageVal);
             this._collisionSize = new Vec2(_image.w, _image.h);
@@ -22,7 +22,7 @@ namespace DuckGame
         }
 
         public UIImage(Sprite imageVal, UIAlign al = UIAlign.Left)
-          : base(0.0f, 0.0f, -1f, -1f)
+          : base(0f, 0f, -1f, -1f)
         {
             this._image = imageVal;
             this._collisionSize = new Vec2(_image.w, _image.h);
@@ -30,8 +30,8 @@ namespace DuckGame
             this.align = al;
         }
 
-        public UIImage(Sprite imageVal, UIAlign al, float s = 1f, float yOff = 0.0f)
-          : base(0.0f, 0.0f, -1f, -1f)
+        public UIImage(Sprite imageVal, UIAlign al, float s = 1f, float yOff = 0f)
+          : base(0f, 0f, -1f, -1f)
         {
             this._image = imageVal;
             this._collisionSize = new Vec2(_image.w * s, _image.h * s);

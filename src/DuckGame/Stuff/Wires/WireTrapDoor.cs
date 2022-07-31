@@ -67,12 +67,12 @@ namespace DuckGame
                 if (this._open)
                     this._shutter.angleDegrees = 90f * offDir;
                 else
-                    this._shutter.angleDegrees = 0.0f;
+                    this._shutter.angleDegrees = 0f;
             }
             else if (this._open)
                 this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 90f * offDir, 10f);
             else
-                this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 0.0f, 10f);
+                this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 0f, 10f);
             (this._shutter as IShutter).UpdateSprite();
         }
 

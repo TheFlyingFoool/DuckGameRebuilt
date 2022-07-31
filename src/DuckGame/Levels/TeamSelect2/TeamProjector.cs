@@ -63,7 +63,7 @@ namespace DuckGame
             if (_swapFade > 0.0 || !this._swap)
                 return;
             this._swap = false;
-            this._swapFade = 0.0f;
+            this._swapFade = 0f;
             this._profiles.Clear();
             this._profiles.AddRange(collection);
         }
@@ -72,29 +72,29 @@ namespace DuckGame
         {
             float num1 = -0.53f;
             this._selectProjector.depth = (Depth)num1;
-            this._selectProjector.alpha = (float)(0.300000011920929 + (double)this._projectorSin.normalized * 0.200000002980232);
+            this._selectProjector.alpha = (float)(0.300000011920929 + this._projectorSin.normalized * 0.200000002980232);
             this._selectPlatform.depth = (Depth)num1;
             int count = this._profiles.Count;
             int num2 = 0;
             foreach (Profile profile in this._profiles)
             {
                 Color color = new Color(0.35f, 0.5f, 0.6f);
-                profile.persona.sprite.alpha = Maths.Clamp(this._swapFade, 0.0f, 1f);
-                profile.persona.sprite.color = color * (float)(0.699999988079071 + (double)this._projectorSin.normalized * 0.100000001490116);
+                profile.persona.sprite.alpha = Maths.Clamp(this._swapFade, 0f, 1f);
+                profile.persona.sprite.color = color * (float)(0.699999988079071 + this._projectorSin.normalized * 0.100000001490116);
                 profile.persona.sprite.color = new Color(profile.persona.sprite.color.r, profile.persona.sprite.color.g, profile.persona.sprite.color.b);
                 profile.persona.sprite.flipH = false;
-                profile.persona.armSprite.alpha = Maths.Clamp(this._swapFade, 0.0f, 1f);
-                profile.persona.armSprite.color = color * (float)(0.699999988079071 + (double)this._projectorSin.normalized * 0.100000001490116);
+                profile.persona.armSprite.alpha = Maths.Clamp(this._swapFade, 0f, 1f);
+                profile.persona.armSprite.color = color * (float)(0.699999988079071 + this._projectorSin.normalized * 0.100000001490116);
                 profile.persona.armSprite.color = new Color(profile.persona.armSprite.color.r, profile.persona.armSprite.color.g, profile.persona.armSprite.color.b);
                 profile.persona.armSprite.flipH = false;
                 profile.persona.sprite.scale = new Vec2(1f, 1f);
                 profile.persona.armSprite.scale = new Vec2(1f, 1f);
                 float num3 = 12f;
-                float num4 = (float)((double)this.x - (count - 1) * (double)num3 / 2.0 + num2 * (double)num3);
-                profile.persona.sprite.depth = (Depth)(float)((double)num1 + 0.00999999977648258 + num2 * (1.0 / 1000.0));
-                profile.persona.armSprite.depth = (Depth)(float)((double)num1 + 0.0199999995529652 + num2 * (1.0 / 1000.0));
+                float num4 = (float)(this.x - (count - 1) * num3 / 2.0 + num2 * num3);
+                profile.persona.sprite.depth = (Depth)(float)(num1 + 0.00999999977648258 + num2 * (1.0 / 1000.0));
+                profile.persona.armSprite.depth = (Depth)(float)(num1 + 0.0199999995529652 + num2 * (1.0 / 1000.0));
                 Graphics.Draw(profile.persona.sprite, num4 + 1f, this.y - 17f);
-                Graphics.Draw(profile.persona.armSprite, (float)((double)num4 + 1.0 - 3.0), (float)((double)this.y - 17.0 + 6.0));
+                Graphics.Draw(profile.persona.armSprite, (float)(num4 + 1.0 - 3.0), (float)(this.y - 17.0 + 6.0));
                 Team team = profile.team;
                 if (team != null)
                 {
@@ -105,7 +105,7 @@ namespace DuckGame
                     hat.color = profile.persona.sprite.color;
                     hat.center = new Vec2(16f, 16f) + team.hatOffset;
                     hat.flipH = false;
-                    Graphics.Draw(hat, (float)((double)num4 + hatPoint.x + 1.0), this.y - 17f + hatPoint.y);
+                    Graphics.Draw(hat, (float)(num4 + hatPoint.x + 1.0), this.y - 17f + hatPoint.y);
                     hat.color = Color.White;
                 }
                 this._profile.persona.sprite.color = Color.White;

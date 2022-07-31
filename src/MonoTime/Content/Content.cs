@@ -185,7 +185,7 @@ namespace DuckGame
                 Thing.skipLayerAdding = false;
                 Level.skipInitialize = false;
                 DuckGame.Content.previewLevel.CalculateBounds();
-                DuckGame.Content._previewCamera = DuckGame.Content.customPreviewWidth == 0 ? new Camera(0.0f, 0.0f, 1280f, 1280f * DuckGame.Graphics.aspect) : new Camera(0.0f, 0.0f, customPreviewWidth, customPreviewHeight);
+                DuckGame.Content._previewCamera = DuckGame.Content.customPreviewWidth == 0 ? new Camera(0f, 0f, 1280f, 1280f * DuckGame.Graphics.aspect) : new Camera(0f, 0f, customPreviewWidth, customPreviewHeight);
                 Vec2 vec2 = (DuckGame.Content.previewLevel.topLeft + DuckGame.Content.previewLevel.bottomRight) / 2f;
                 if (DuckGame.Content.cancelPreview)
                     return;
@@ -873,7 +873,7 @@ namespace DuckGame
                             {
                                 Vec2 textureSize = DuckGame.Content.GetTextureSize(name);
                                 Tex2D tex2D;
-                                if (textureSize != Vec2.Zero && (texture2D.Width != (double)textureSize.x || texture2D.Height != (double)textureSize.y))
+                                if (textureSize != Vec2.Zero && (texture2D.Width != textureSize.x || texture2D.Height != textureSize.y))
                                     tex2D = new BigBoyTex2D(texture2D, name, DuckGame.Content._currentTextureIndex)
                                     {
                                         scaleFactor = (textureSize.x / texture2D.Width)

@@ -14,7 +14,7 @@ namespace DuckGame
     public class WireButton : Block, IWirePeripheral
     {
         public EditorProperty<bool> offSignal = new EditorProperty<bool>(false);
-        public EditorProperty<float> holdTime = new EditorProperty<float>(0.0f);
+        public EditorProperty<float> holdTime = new EditorProperty<float>(0f);
         public EditorProperty<bool> releaseOnly = new EditorProperty<bool>(false);
         public EditorProperty<bool> invert = new EditorProperty<bool>(false);
         public EditorProperty<int> orientation = new EditorProperty<int>(0, max: 3f, increment: 1f);
@@ -136,7 +136,7 @@ namespace DuckGame
                 if (physicsObject == null)
                 {
                     this.releaseHold += Maths.IncFrameTimer();
-                    if (releaseHold > (double)this.holdTime.value)
+                    if (releaseHold > this.holdTime.value)
                     {
                         SFX.Play("click");
                         this._sprite.frame = 0;
@@ -147,7 +147,7 @@ namespace DuckGame
                 this.prevO = physicsObject;
             }
             else
-                this.releaseHold = 0.0f;
+                this.releaseHold = 0f;
             base.Update();
         }
 

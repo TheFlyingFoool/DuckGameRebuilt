@@ -11,9 +11,9 @@ namespace DuckGame
     [BaggedProperty("previewPriority", true)]
     internal class CameraMover : Thing
     {
-        public EditorProperty<float> SpeedX = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
-        public EditorProperty<float> SpeedY = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
-        public EditorProperty<float> MoveDelay = new EditorProperty<float>(0.0f, max: 120f, increment: 0.25f);
+        public EditorProperty<float> SpeedX = new EditorProperty<float>(0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> SpeedY = new EditorProperty<float>(0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> MoveDelay = new EditorProperty<float>(0f, max: 120f, increment: 0.25f);
 
         public CameraMover(float xPos, float yPos)
           : base(xPos, yPos)
@@ -27,7 +27,7 @@ namespace DuckGame
         public override void Initialize()
         {
             if (!(Level.current is Editor))
-                this.alpha = 0.0f;
+                this.alpha = 0f;
             base.Initialize();
         }
     }

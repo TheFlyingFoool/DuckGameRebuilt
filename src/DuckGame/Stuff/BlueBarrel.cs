@@ -24,7 +24,7 @@ namespace DuckGame
             this._toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
             {
                 frame = 1,
-                center = new Vec2(0.0f, -6f)
+                center = new Vec2(0f, -6f)
             };
         }
     }

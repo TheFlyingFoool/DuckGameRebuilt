@@ -36,7 +36,7 @@ namespace DuckGame
             this._font = new BitmapFont("biosFont", 8);
             this.change = c;
             this.anchor = (Anchor)d;
-            this.anchor.offset = new Vec2(-0.0f, -24f);
+            this.anchor.offset = new Vec2(-0f, -24f);
             this._profile = d.profile;
         }
 

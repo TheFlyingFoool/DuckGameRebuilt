@@ -68,7 +68,7 @@ namespace DuckGame
                     return;
                 CategoryPage.camOffset = Lerp.FloatSmooth(CategoryPage.camOffset, -40f, 0.1f);
                 if (camOffset < 0.0)
-                    CategoryPage.camOffset = 0.0f;
+                    CategoryPage.camOffset = 0f;
                 this._strip.active = camOffset == 0.0;
             }
         }

@@ -52,7 +52,7 @@ namespace DuckGame
             this.graphic = new SpriteMap("altar", 48, 16);
             this.hugWalls = WallHug.Floor;
             this.UpdateSize();
-            this.thickness = 0.0f;
+            this.thickness = 0f;
             this.depth = -0.05f;
             this.placementLayerOverride = Layer.Blocks;
         }

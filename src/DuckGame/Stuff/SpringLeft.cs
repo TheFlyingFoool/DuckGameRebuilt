@@ -22,7 +22,7 @@ namespace DuckGame
                 if (!this._flipHorizontal)
                 {
                     this.center = new Vec2(8f, 7f);
-                    this.collisionOffset = new Vec2(0.0f, -8f);
+                    this.collisionOffset = new Vec2(0f, -8f);
                     this.collisionSize = new Vec2(8f, 16f);
                     this.angleDegrees = -90f;
                     this.hugWalls = WallHug.Right;
@@ -43,7 +43,7 @@ namespace DuckGame
         {
             this.UpdateSprite();
             this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(0.0f, -8f);
+            this.collisionOffset = new Vec2(0f, -8f);
             this.collisionSize = new Vec2(8f, 16f);
             this.depth = -0.5f;
             this._editorName = "Spring Left";
@@ -60,10 +60,10 @@ namespace DuckGame
             {
                 if (!this._flipHorizontal)
                 {
-                    if ((double)with.hSpeed > -12.0 * _mult)
+                    if (with.hSpeed > -12.0 * _mult)
                         with.hSpeed = -12f * this._mult;
                 }
-                else if ((double)with.hSpeed < 12.0 * _mult)
+                else if (with.hSpeed < 12.0 * _mult)
                     with.hSpeed = 12f * this._mult;
                 if (with is Gun)
                     (with as Gun).PressAction();

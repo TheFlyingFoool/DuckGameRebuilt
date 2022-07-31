@@ -40,13 +40,13 @@ namespace DuckGame
         {
             if (this.processed)
                 return rect;
-            if ((double)this.left < rect.x)
+            if (this.left < rect.x)
             {
-                rect.width += (int)(rect.x - (double)this.left);
+                rect.width += (int)(rect.x - this.left);
                 rect.x = (int)this.left;
             }
-            if ((double)this.right > rect.x + (double)rect.width)
-                rect.width += (int)((double)this.right - (rect.x + (double)rect.width));
+            if (this.right > rect.x + rect.width)
+                rect.width += (int)(this.right - (rect.x + rect.width));
             this.processed = true;
             if (!this._wallLeft)
             {
@@ -103,9 +103,9 @@ namespace DuckGame
             IEnumerable<PhysicsObject> source = Level.CheckRectAll<PhysicsObject>(this.topLeft, this.bottomRight);
             foreach (PhysicsObject physicsObject in source)
             {
-                if (flipHorizontal && (double)physicsObject.hSpeed > -2.0)
+                if (flipHorizontal && physicsObject.hSpeed > -2.0)
                     physicsObject.hSpeed -= 0.3f;
-                else if (!flipHorizontal && (double)physicsObject.hSpeed < 2.0)
+                else if (!flipHorizontal && physicsObject.hSpeed < 2.0)
                     physicsObject.hSpeed += 0.3f;
                 physicsObject.sleeping = false;
                 physicsObject.frictionMult = 0.3f;
@@ -136,16 +136,16 @@ namespace DuckGame
             if (!this.flipHorizontal)
             {
                 if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle(this.graphic.w - 4, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle(this.graphic.w - 4, 0f, 4f, graphic.h));
                 if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0f, 0f, 4f, graphic.h));
             }
             else
             {
                 if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle(this.graphic.w - 4, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle(this.graphic.w - 4, 0f, 4f, graphic.h));
                 if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0f, 0f, 4f, graphic.h));
             }
             foreach (WaterFlow waterFlow in this._extraWater)
             {

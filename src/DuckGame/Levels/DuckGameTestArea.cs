@@ -52,7 +52,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
             this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             this._testMode = new UIMenu("TEST MODE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
@@ -84,7 +84,7 @@ namespace DuckGame
             Level.Add(_pauseGroup);
             if (this._level == "RANDOM")
             {
-                LevelGenerator.MakeLevel(this._center, this._center.left && this._center.right, this._seed, this._genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0.0f, 0.0f, this, this._seed);
+                LevelGenerator.MakeLevel(this._center, this._center.left && this._center.right, this._seed, this._genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0f, 0f, this, this._seed);
                 List<SpawnPoint> source1 = new List<SpawnPoint>();
                 foreach (SpawnPoint spawnPoint in this.things[typeof(SpawnPoint)])
                     source1.Add(spawnPoint);
@@ -112,7 +112,7 @@ namespace DuckGame
                     if (!chosenSpawns.Contains(spawnPoint))
                         Level.Remove(spawnPoint);
                 }
-                PyramidBackground pyramidBackground = new PyramidBackground(0.0f, 0.0f)
+                PyramidBackground pyramidBackground = new PyramidBackground(0f, 0f)
                 {
                     visible = false
                 };

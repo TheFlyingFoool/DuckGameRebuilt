@@ -108,7 +108,7 @@ namespace DuckGame
                                 int num1 = furniture3.rarity;
                                 if (rareDupesChance & flag && furniture3.rarity > minRarity)
                                     num1 = (int)(num1 * 0.5);
-                                if (furniture3.rarity == Rarity.Common || Rando.Int((int)(num1 * (double)rarityMult)) == 0)
+                                if (furniture3.rarity == Rarity.Common || Rando.Int((int)(num1 * rarityMult)) == 0)
                                     winner = furniture3;
                             }
                         }
@@ -228,7 +228,7 @@ namespace DuckGame
                                 if (gachaSpeed > 0.800000011920929)
                                     SFX.Play("gachaBounce", pitch: 0.2f);
                                 this.gachaY = 50f;
-                                this.gachaSpeed = (float)(-(double)this.gachaSpeed * 0.400000005960464);
+                                this.gachaSpeed = (float)(-this.gachaSpeed * 0.400000005960464);
                             }
                             this._openWait += 0.019f;
                             if (_openWait >= 1.0)
@@ -256,7 +256,7 @@ namespace DuckGame
                     }
                 }
             }
-            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0.0f, 0.4f, 1.1f);
+            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.4f, 1.1f);
             if (this.down)
             {
                 if (this._swapped)
@@ -290,10 +290,10 @@ namespace DuckGame
             this._frame.depth = -0.9f;
             Graphics.Draw(this._frame, this.x, this.y);
             this._frame.depth = -0.7f;
-            Graphics.Draw(this._frame, this.x, this.y, new Rectangle(0.0f, 0.0f, 125f, 36f));
+            Graphics.Draw(this._frame, this.x, this.y, new Rectangle(0f, 0f, 125f, 36f));
             if (this._swapped)
             {
-                this._contains.Draw(this.position + new Vec2(0.0f, 10f), -0.8f);
+                this._contains.Draw(this.position + new Vec2(0f, 10f), -0.8f);
                 if (_starGrow <= 1.0)
                 {
                     this._star.depth = (Depth)0.9f;
@@ -310,20 +310,20 @@ namespace DuckGame
             string text1 = "@LWING@NEW TOY@RWING@";
             if (this._rare)
                 text1 = "@LWING@RARE TOY@RWING@";
-            Vec2 vec2_1 = new Vec2((float)-((double)this._font.GetWidth(text1) / 2.0), -42f);
+            Vec2 vec2_1 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -42f);
             this._font.DrawOutline(text1, this.position + vec2_1, this._rare ? Colors.DGYellow : Color.White, Color.Black, this.depth + 2);
             string text2 = "  ???  ";
             if (this._swapped)
                 text2 = "} " + this._contains.name + " }";
             this._fancyFont.scale = new Vec2(1f, 1f);
-            Vec2 vec2_2 = new Vec2((float)-((double)this._fancyFont.GetWidth(text2) / 2.0), -25f);
+            Vec2 vec2_2 = new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0), -25f);
             this._fancyFont.DrawOutline(text2, this.position + vec2_2, this._rare || this._swapped && this._rareCapsule ? Colors.DGYellow : Color.White, Color.Black, this.depth + 2);
             this._fancyFont.scale = new Vec2(0.5f, 0.5f);
             if (_insertCoin > 0.00999999977648258)
             {
                 this._duckCoin.frame = this._rare ? 1 : 0;
                 this._duckCoin.depth = -0.8f;
-                Graphics.Draw(_duckCoin, this.x + 40f, (float)((double)this.y - 100.0 + _insertCoin * 65.0));
+                Graphics.Draw(_duckCoin, this.x + 40f, (float)(this.y - 100.0 + _insertCoin * 65.0));
             }
             if (this._swapped)
             {
@@ -331,7 +331,7 @@ namespace DuckGame
                 int num = Profiles.experienceProfile.GetNumFurnitures(_contains.index) - 1;
                 if (num > 0)
                     text3 = "I've already got " + (num - 1 >= this.numberNames.Count ? num.ToString() : this.numberNames[num - 1]) + " of these...";
-                Vec2 vec2_3 = new Vec2((float)-((double)this._fancyFont.GetWidth(text3) / 2.0), 38f);
+                Vec2 vec2_3 = new Vec2((float)-(this._fancyFont.GetWidth(text3) / 2.0), 38f);
                 this._fancyFont.DrawOutline(text3, this.position + vec2_3, num > 0 ? Colors.DGYellow : Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
             }
             this.y -= this.yOffset;

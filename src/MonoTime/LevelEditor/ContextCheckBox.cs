@@ -90,7 +90,7 @@ namespace DuckGame
             Graphics.DrawString(this._text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.85f);
             bool flag = !(this._field.value is IList) ? (bool)this._field.value : (this._field.value as IList).Contains(_myType);
             this._checkBox.depth = (Depth)0.9f;
-            this._checkBox.x = (float)((double)this.x + itemSize.x - 16.0);
+            this._checkBox.x = (this.x + itemSize.x - 16f);
             this._checkBox.y = this.y;
             this._checkBox.frame = flag ? 1 : 0;
             this._checkBox.Draw();

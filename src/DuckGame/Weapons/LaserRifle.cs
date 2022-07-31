@@ -27,7 +27,7 @@ namespace DuckGame
             this._fireWait = 1f;
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-2f, 0.0f);
+            this._holdOffset = new Vec2(-2f, 0f);
             this.editorTooltip = "Fires a reflecting beam of deadly energy at an angle. Science makes it happen!";
         }
     }

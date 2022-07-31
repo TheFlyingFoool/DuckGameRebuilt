@@ -74,7 +74,7 @@ namespace DuckGame
                     this._burnWait -= 0.01f;
                     if (_burnWait < 0.0)
                     {
-                        Level.Add(SmallFire.New(8f, 0.0f, 0.0f, 0.0f, stick: this, canMultiply: false, firedFrom: this));
+                        Level.Add(SmallFire.New(8f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                         this._burnWait = 1f;
                     }
                     this._burnLife -= 1f / 500f;

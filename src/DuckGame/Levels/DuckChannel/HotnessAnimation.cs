@@ -71,7 +71,7 @@ namespace DuckGame
                     this._sampleCool.Add(0);
                 this._cool.Add(-50);
                 this._lastFrame.Add(0);
-                this._upScale.Add(0.0f);
+                this._upScale.Add(0f);
             }
         }
 
@@ -92,7 +92,7 @@ namespace DuckGame
                         ++this._cool[index];
                         flag = false;
                     }
-                    if ((double)this._upScale[index] > 0.0)
+                    if (this._upScale[index] > 0.0)
                         this._upScale[index] -= 0.05f;
                 }
                 if (flag)
@@ -124,16 +124,16 @@ namespace DuckGame
                 float num1 = active.Count != 1 ? (active.Count != 2 ? index1 * (vec2_3.x / (active.Count - 1)) : (float)(vec2_3.x / 2.0 - vec2_3.x / 4.0 + index1 * (vec2_3.x / 2.0))) : vec2_3.x / 2f;
                 float num2 = (this._cool[index1] + 50) / 250f;
                 float num3 = 1f / (this._tempMap.Count - 2);
-                int index2 = (int)((double)num2 * (this._tempMap.Count - 2));
+                int index2 = (int)(num2 * (this._tempMap.Count - 2));
                 if (index2 < 0)
                     index2 = 0;
                 int temp = this._tempMap[index2];
                 float num4 = Maths.NormalizeSection(num2, num3 * index2, num3 * (index2 + 1));
-                int num5 = (int)(this._tempMap[index2] + (this._tempMap[index2 + 1] - this._tempMap[index2]) * (double)num4);
+                int num5 = (int)(this._tempMap[index2] + (this._tempMap[index2 + 1] - this._tempMap[index2]) * num4);
                 float num6 = 50f;
                 float num7 = num2 + 0.28f;
                 float x = vec2_1.x + num1;
-                float y = (float)(vec2_2.y - 32.0 - (double)num7 * (double)num6);
+                float y = (float)(vec2_2.y - 32.0 - num7 * num6);
                 profile.persona.sprite.depth = (Depth)0.3f;
                 profile.persona.sprite.color = Color.White;
                 Graphics.Draw(profile.persona.sprite, 0, x, y);
@@ -149,10 +149,10 @@ namespace DuckGame
                 this._font.depth = (Depth)0.25f;
                 if (this._cool.Count > 4)
                     this._font.scale = new Vec2(0.5f);
-                this._font.Draw(text, new Vec2((float)((double)x - (double)this._font.GetWidth(text) / 2.0 + 3.0), 140f), Color.White, (Depth)0.25f);
+                this._font.Draw(text, new Vec2((float)(x - this._font.GetWidth(text) / 2.0 + 3.0), 140f), Color.White, (Depth)0.25f);
                 this._font.scale = new Vec2(1f);
                 this._icon.depth = (Depth)0.3f;
-                this._icon.frame = (int)Math.Floor((double)num2 * 8.98999977111816);
+                this._icon.frame = (int)Math.Floor(num2 * 8.98999977111816);
                 if (this._icon.frame != this._lastFrame[index1])
                 {
                     this._lastFrame[index1] = this._icon.frame;

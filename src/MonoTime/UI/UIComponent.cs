@@ -120,9 +120,9 @@ namespace DuckGame
         {
             this._collisionSize = new Vec2(wide, high);
             this.layer = Layer.HUD;
-            this.depth = (Depth)0.0f;
-            this._autoSizeHor = (double)wide < 0.0;
-            this._autoSizeVert = (double)high < 0.0;
+            this.depth = (Depth)0f;
+            this._autoSizeHor = wide < 0.0;
+            this._autoSizeVert = high < 0.0;
         }
 
         public virtual void Open()
@@ -188,7 +188,7 @@ namespace DuckGame
             {
                 float to = this._close ? this.layer.camera.height * 2f : this._startPosition.y;
                 this.position.y = Lerp.FloatSmooth(this.position.y, to, 0.2f, 1.05f);
-                bool flag = position.y != (double)to;
+                bool flag = position.y != to;
                 if (this.animating != flag)
                     this.animating = flag;
             }

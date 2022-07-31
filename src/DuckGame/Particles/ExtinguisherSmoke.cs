@@ -129,7 +129,7 @@ namespace DuckGame
         public override void Draw()
         {
             float num1 = (float)Math.Sin(_distPulse);
-            float num2 = (float)-(Math.Sin(_orbitInc) * (double)num1) * this.s1;
+            float num2 = (float)-(Math.Sin(_orbitInc) * num1) * this.s1;
             float num3 = (float)Math.Cos(_orbitInc) * num1 * this.s1;
             this._sprite.imageIndex = this._sprite.imageIndex;
             this._sprite.depth = this.depth;

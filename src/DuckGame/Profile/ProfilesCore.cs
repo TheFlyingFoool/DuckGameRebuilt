@@ -443,13 +443,13 @@ namespace DuckGame
                 bool flag = false;
                 for (int index = 0; index < roundStatRankings.Count; ++index)
                 {
-                    if ((double)statCalculation > roundStatRankings[index].value)
+                    if (statCalculation > roundStatRankings[index].value)
                     {
                         roundStatRankings.Insert(index, new ProfileStatRank(stat, statCalculation, pro));
                         flag = true;
                         break;
                     }
-                    if ((double)statCalculation == roundStatRankings[index].value)
+                    if (statCalculation == roundStatRankings[index].value)
                     {
                         roundStatRankings[index].profiles.Add(pro);
                         flag = true;

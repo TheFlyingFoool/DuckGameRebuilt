@@ -541,13 +541,13 @@ namespace DuckGame
             int num2 = num1 + 1;
             float x1 = x - num1;
             float x2 = x1 - 1f;
-            double num3 = 1.0 - (double)x1 * (double)x1;
+            double num3 = 1.0 - x1 * x1;
             double num4 = num3 * num3;
             float num5 = (float)(num4 * num4) * Noise.grad(Noise.perm[num1 & byte.MaxValue], x1);
-            double num6 = 1.0 - (double)x2 * (double)x2;
+            double num6 = 1.0 - x2 * x2;
             double num7 = num6 * num6;
             float num8 = (float)(num7 * num7) * Noise.grad(Noise.perm[num2 & byte.MaxValue], x2);
-            return (float)(0.395000010728836 * ((double)num5 + (double)num8));
+            return (float)(0.395000010728836 * (num5 + num8));
         }
 
         /// <summary>2D simplex noise</summary>
@@ -556,8 +556,8 @@ namespace DuckGame
         /// <returns></returns>
         public static float Generate(float x, float y)
         {
-            float num1 = (float)(((double)x + (double)y) * 0.366025388240814);
-            double x1 = (double)x + (double)num1;
+            float num1 = (float)((x + y) * 0.366025388240814);
+            double x1 = x + num1;
             float x2 = y + num1;
             int num2 = Noise.FastFloor((float)x1);
             int num3 = Noise.FastFloor(x2);
@@ -568,7 +568,7 @@ namespace DuckGame
             float y1 = y - num6;
             int num7;
             int num8;
-            if ((double)x3 > (double)y1)
+            if (x3 > y1)
             {
                 num7 = 1;
                 num8 = 0;
@@ -578,52 +578,52 @@ namespace DuckGame
                 num7 = 0;
                 num8 = 1;
             }
-            float x4 = (float)((double)x3 - num7 + 0.211324870586395);
-            float y2 = (float)((double)y1 - num8 + 0.211324870586395);
-            float x5 = (float)((double)x3 - 1.0 + 0.422649741172791);
-            float y3 = (float)((double)y1 - 1.0 + 0.422649741172791);
+            float x4 = (float)(x3 - num7 + 0.211324870586395);
+            float y2 = (float)(y1 - num8 + 0.211324870586395);
+            float x5 = (float)(x3 - 1.0 + 0.422649741172791);
+            float y3 = (float)(y1 - 1.0 + 0.422649741172791);
             int num9 = num2 % 256;
             int index = num3 % 256;
-            float num10 = (float)(0.5 - (double)x3 * (double)x3 - (double)y1 * (double)y1);
+            float num10 = (float)(0.5 - x3 * x3 - y1 * y1);
             float num11;
-            if ((double)num10 < 0.0)
+            if (num10 < 0.0)
             {
-                num11 = 0.0f;
+                num11 = 0f;
             }
             else
             {
                 float num12 = num10 * num10;
                 num11 = num12 * num12 * Noise.grad(Noise.perm[num9 + Noise.perm[index]], x3, y1);
             }
-            float num13 = (float)(0.5 - (double)x4 * (double)x4 - (double)y2 * (double)y2);
+            float num13 = (float)(0.5 - x4 * x4 - y2 * y2);
             float num14;
-            if ((double)num13 < 0.0)
+            if (num13 < 0.0)
             {
-                num14 = 0.0f;
+                num14 = 0f;
             }
             else
             {
                 float num15 = num13 * num13;
                 num14 = num15 * num15 * Noise.grad(Noise.perm[num9 + num7 + Noise.perm[index + num8]], x4, y2);
             }
-            float num16 = (float)(0.5 - (double)x5 * (double)x5 - (double)y3 * (double)y3);
+            float num16 = (float)(0.5 - x5 * x5 - y3 * y3);
             float num17;
-            if ((double)num16 < 0.0)
+            if (num16 < 0.0)
             {
-                num17 = 0.0f;
+                num17 = 0f;
             }
             else
             {
                 float num18 = num16 * num16;
                 num17 = num18 * num18 * Noise.grad(Noise.perm[num9 + 1 + Noise.perm[index + 1]], x5, y3);
             }
-            return (float)(40.0 * ((double)num11 + (double)num14 + (double)num17));
+            return (float)(40.0 * (num11 + num14 + num17));
         }
 
         public static float Generate(float x, float y, float z)
         {
-            float num1 = (float)(((double)x + (double)y + (double)z) * 0.333333343267441);
-            double x1 = (double)x + (double)num1;
+            float num1 = (float)((x + y + z) * 0.333333343267441);
+            double x1 = x + num1;
             float x2 = y + num1;
             float x3 = z + num1;
             int x4 = Noise.FastFloor((float)x1);
@@ -642,9 +642,9 @@ namespace DuckGame
             int num9;
             int num10;
             int num11;
-            if ((double)x7 >= (double)y1)
+            if (x7 >= y1)
             {
-                if ((double)y1 >= (double)z1)
+                if (y1 >= z1)
                 {
                     num6 = 1;
                     num7 = 0;
@@ -653,7 +653,7 @@ namespace DuckGame
                     num10 = 1;
                     num11 = 0;
                 }
-                else if ((double)x7 >= (double)z1)
+                else if (x7 >= z1)
                 {
                     num6 = 1;
                     num7 = 0;
@@ -672,7 +672,7 @@ namespace DuckGame
                     num11 = 1;
                 }
             }
-            else if ((double)y1 < (double)z1)
+            else if (y1 < z1)
             {
                 num6 = 0;
                 num7 = 0;
@@ -681,7 +681,7 @@ namespace DuckGame
                 num10 = 1;
                 num11 = 1;
             }
-            else if ((double)x7 < (double)z1)
+            else if (x7 < z1)
             {
                 num6 = 0;
                 num7 = 1;
@@ -706,14 +706,14 @@ namespace DuckGame
             float y3 = (y1 - num10 + 0.33333334f);
             float z3 = (z1 - num11 + 0.33333334f);
             float x10 = (x7 - 1f + 0.5f);
-            float y4 = (y1 - 1.0f + 0.5f);
-            float z4 = (z1 - 1.0f + 0.5f);
+            float y4 = (y1 - 1f + 0.5f);
+            float z4 = (z1 - 1f + 0.5f);
             int num12 = Noise.Mod(x4, 256);
             int num13 = Noise.Mod(x5, 256);
             int index = Noise.Mod(x6, 256);
             float num14 = (0.6f - x7 * x7 - y1 * y1 - z1 * z1);
             float num15;
-            if ((double)num14 < 0f)
+            if (num14 < 0f)
             {
                 num15 = 0f;
             }
@@ -726,7 +726,7 @@ namespace DuckGame
             float num18;
             if (num17 < 0f)
             {
-                num18 = 0.0f;
+                num18 = 0f;
             }
             else
             {
@@ -735,7 +735,7 @@ namespace DuckGame
             }
             float num20 = (0.6f - x9 * x9 - y3 * y3 - z3 * z3);
             float num21;
-            if ((double)num20 < 0.0)
+            if (num20 < 0.0)
             {
                 num21 = 0f;
             }
@@ -746,7 +746,7 @@ namespace DuckGame
             }
             float num23 = (0.6f - x10 * x10 - y4 * y4 - z4 * z4);
             float num24;
-            if ((double)num23 < 0f)
+            if (num23 < 0f)
             {
                 num24 = 0f;
             }
@@ -765,7 +765,7 @@ namespace DuckGame
                 Noise.perm[index] = (byte)Math.Round(random.NextDouble() * byte.MaxValue);
         }
 
-        private static int FastFloor(float x) => (double)x <= 0.0 ? (int)x - 1 : (int)x;
+        private static int FastFloor(float x) => x <= 0.0 ? (int)x - 1 : (int)x;
 
         private static int Mod(int x, int m)
         {

@@ -58,15 +58,15 @@ namespace DuckGame
         {
             if (this.parentThing != null)
             {
-                this.position = this.parentThing.position + this.chainOffset + new Vec2(0.0f, 2f);
+                this.position = this.parentThing.position + this.chainOffset + new Vec2(0f, 2f);
                 this.graphic.flipH = this.parentThing.graphic.flipH;
-                this.desiredSway = 0.0f;
+                this.desiredSway = 0f;
                 this.desiredSway = !(this.parentThing is Gun parentThing1) || parentThing1.owner == null ? -this.parentThing.hSpeed : -parentThing1.owner.hSpeed;
                 this.shake += Math.Abs(this.lastDesiredSway - this.desiredSway) * 0.3f;
                 if (shake > 0.0)
                     this.shake -= 0.01f;
                 else
-                    this.shake = 0.0f;
+                    this.shake = 0f;
                 if (shake > 1.5)
                 {
                     this.shake = 1.5f;
@@ -74,14 +74,14 @@ namespace DuckGame
                 }
                 if (waveSpeed > 0.1f)
                     this.waveSpeed = 0.1f;
-                if (waveSpeed > 0.0)
+                if (waveSpeed > 0f)
                     this.waveSpeed -= 0.01f;
                 else
-                    this.waveSpeed = 0.0f;
+                    this.waveSpeed = 0f;
                 this.lastDesiredSway = this.desiredSway;
                 if (this.parentThing is ChaingunBullet parentThing2)
                     this.desiredSway += parentThing2.sway * 0.7f;
-                this.desiredSway += (float)Math.Sin(wave + (double)this.waveAdd) * this.shake;
+                this.desiredSway += (float)Math.Sin(wave + this.waveAdd) * this.shake;
                 this.sway = MathHelper.Lerp(this.sway, this.desiredSway, 1f);
                 this.position.x += this.sway;
             }

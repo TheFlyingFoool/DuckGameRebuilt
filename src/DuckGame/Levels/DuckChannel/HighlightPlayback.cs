@@ -47,7 +47,7 @@ namespace DuckGame
             if (this._skip)
                 this._fadeOut = true;
             Graphics.fade = Lerp.Float(Graphics.fade, this._fadeOut ? 0f : 1f, 0.02f);
-            if ((double)Graphics.fade < 0.01f && this._skip)
+            if (Graphics.fade < 0.01f && this._skip)
             {
                 HighlightLevel.didSkip = true;
                 Vote.CloseVoting();
@@ -67,7 +67,7 @@ namespace DuckGame
                 this._fadeOut = false;
                 this._showHighlight = true;
             }
-            if (this._showHighlight && (double)Graphics.fade > 0.95f)
+            if (this._showHighlight && Graphics.fade > 0.95f)
                 this._keepPaused -= 0.03f;
             if (this._currentHighlight >= 0 && !this._highlights[this._currentHighlight].finished)
                 return;
@@ -75,7 +75,7 @@ namespace DuckGame
             if (_endWait > 0f)
                 return;
             this._fadeOut = true;
-            if ((double)Graphics.fade >= 0.01f)
+            if (Graphics.fade >= 0.01f)
                 return;
             int highlight = this._currentHighlight - 1;
             if (this._currentHighlight <= 0)

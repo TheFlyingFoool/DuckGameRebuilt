@@ -34,7 +34,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._shake = Lerp.Float(this._shake, 0.0f, 0.08f);
+            this._shake = Lerp.Float(this._shake, 0f, 0.08f);
             base.Update();
         }
 

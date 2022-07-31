@@ -43,7 +43,7 @@ namespace DuckGame
             get => this._volume;
             set
             {
-                this._volume = MathHelper.Clamp(value, 0.0f, 1f);
+                this._volume = MathHelper.Clamp(value, 0f, 1f);
                 if (this._instance == null || this._instance.State != SoundState.Playing)
                     return;
                 this._instance.Volume = this._volume;
@@ -101,7 +101,7 @@ namespace DuckGame
         public void Stop()
         {
             this._instance.Stop();
-            this._instance.Volume = 0.0f;
+            this._instance.Volume = 0f;
             this._iSaidStop = true;
             this._vgmReader.BaseStream.Seek(0L, SeekOrigin.Begin);
         }
@@ -215,7 +215,7 @@ namespace DuckGame
             if (this._lastCommand == 102 && !this._looped)
             {
                 this._lastCommand = 0;
-                this._instance.Volume = 0.0f;
+                this._instance.Volume = 0f;
                 this._iSaidStop = true;
                 this.Stop();
             }

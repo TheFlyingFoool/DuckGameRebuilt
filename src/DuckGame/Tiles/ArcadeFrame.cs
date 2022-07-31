@@ -16,7 +16,7 @@ namespace DuckGame
     {
         private SpriteMap _frame;
         public EditorProperty<int> style = new EditorProperty<int>(0, max: 5f, increment: 1f);
-        public EditorProperty<float> respect = new EditorProperty<float>(0.0f, increment: 0.05f);
+        public EditorProperty<float> respect = new EditorProperty<float>(0f, increment: 0.05f);
         public EditorProperty<string> requirement = new EditorProperty<string>("");
         private Sprite _image;
         private ChallengeSaveData _saveData;

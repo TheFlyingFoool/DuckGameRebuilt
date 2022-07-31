@@ -84,7 +84,7 @@ namespace DuckGame
         /// be changed only at the start of the game.
         ///  </summary>
         public static int packetsEvery = 1;
-        public static float ghostLerpDivisor = 0.0f;
+        public static float ghostLerpDivisor = 0f;
 
         public int authorityPower => this.profile != null ? GameLevel.NumberOfDucks - (profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks + 1 : 1;
 
@@ -229,7 +229,7 @@ namespace DuckGame
 
         public uint estimatedClientTick
         {
-            get => (uint)(_estimatedClientTick + (ulong)(int)((double)this.manager.ping / 2.0 * 60.0));
+            get => (uint)(_estimatedClientTick + (ulong)(int)(this.manager.ping / 2.0 * 60.0));
             set => this._estimatedClientTick = value;
         }
 
@@ -543,27 +543,27 @@ namespace DuckGame
                 ++this._currentSessionTicks;
                 if (this._status == ConnectionStatus.Connecting)
                 {
-                    if ((double)Maths.TicksToSeconds(this._currentSessionTicks) > 0.0 && this._numErrorLogs == 0)
+                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 0.0 && this._numErrorLogs == 0)
                     {
                         ++this._numErrorLogs;
                         this.LogSessionDetails();
                     }
-                    if ((double)Maths.TicksToSeconds(this._currentSessionTicks) > 5.0 && this._numErrorLogs == 1)
+                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 5.0 && this._numErrorLogs == 1)
                     {
                         ++this._numErrorLogs;
                         this.LogSessionDetails();
                     }
-                    if ((double)Maths.TicksToSeconds(this._currentSessionTicks) > 8.0 && this._numErrorLogs == 2)
+                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 8.0 && this._numErrorLogs == 2)
                     {
                         ++this._numErrorLogs;
                         this.LogSessionDetails();
                     }
-                    if ((double)Maths.TicksToSeconds(this._currentSessionTicks) > 10.0 && this._numErrorLogs == 3)
+                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 10.0 && this._numErrorLogs == 3)
                     {
                         ++this._numErrorLogs;
                         this.LogSessionDetails();
                     }
-                    if ((double)Maths.TicksToSeconds(this._currentSessionTicks) > 15.0 && this._numErrorLogs == 4)
+                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 15.0 && this._numErrorLogs == 4)
                     {
                         ++this._numErrorLogs;
                         this.LogSessionDetails();
@@ -571,7 +571,7 @@ namespace DuckGame
                     float num = 18f;
                     if (NetworkDebugger.enabled)
                         num = 8f;
-                    if ((double)Maths.TicksToSeconds(this._currentSessionTicks) > (double)num && !MonoMain.noConnectionTimeout)
+                    if (Maths.TicksToSeconds(this._currentSessionTicks) > num && !MonoMain.noConnectionTimeout)
                         this.Disconnect_ConnectionTimeout();
                 }
                 if (this._data == null)

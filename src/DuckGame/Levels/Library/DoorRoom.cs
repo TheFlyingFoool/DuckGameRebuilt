@@ -69,23 +69,23 @@ namespace DuckGame
                 Global.data.winsAsHair.value = 100;
             if (this._desiredTransition != this._transition)
             {
-                this._fade = Lerp.Float(this._fade, 0.0f, 0.06f);
+                this._fade = Lerp.Float(this._fade, 0f, 0.06f);
                 if (_fade <= 0.0)
                 {
                     this._transition = this._desiredTransition;
                     if (this._transition == DoorTransition.Profile)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new LockerRoom(this._profile);
                     }
                     else if (this._transition == DoorTransition.Exit)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new TitleScreen();
                     }
                     else if (this._transition == DoorTransition.Album)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new Album();
                     }
                 }
@@ -115,12 +115,12 @@ namespace DuckGame
                     this._desiredTransition = DoorTransition.Album;
                     HUD.CloseAllCorners();
                 }
-                if (_slideTo != 0.0 && _slide != (double)this._slideTo)
+                if (_slideTo != 0.0 && _slide != this._slideTo)
                     this._slide = Lerp.Float(this._slide, this._slideTo, 0.05f);
-                else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
+                else if (_slideTo != 0.0 && _slide == this._slideTo)
                 {
-                    this._slide = 0.0f;
-                    this._slideTo = 0.0f;
+                    this._slide = 0f;
+                    this._slideTo = 0f;
                     SFX.Play("textLetter", 0.7f);
                     this._selectorPosition = this._desiredSelectorPosition;
                     if (this._profiles.Count > 0)
@@ -164,7 +164,7 @@ namespace DuckGame
         {
             if (layer == Layer.Background)
             {
-                Vec2 vec2_1 = new Vec2(0.0f, 0.0f);
+                Vec2 vec2_1 = new Vec2(0f, 0f);
                 float num1 = -260f;
                 float num2 = 140f;
                 for (int index1 = 0; index1 < 7; ++index1)
@@ -173,23 +173,23 @@ namespace DuckGame
                     string str = "NO PROFILE";
                     if (index2 != -1)
                         str = this._profiles[index2].name;
-                    float num3 = (float)(vec2_1.x + (double)num1 + 3.0 * (double)num2);
-                    float x = (float)(vec2_1.x + (double)num1 + index1 * (double)num2 + -(double)this._slide * (double)num2);
-                    double num4 = (double)Maths.Clamp((float)((100.0 - (double)Math.Abs(x - num3)) / 100.0), 0.0f, 1f);
-                    float num5 = (float)num4 * Maths.NormalizeSection((float)num4, 0.0f, 0.9f);
+                    float num3 = (float)(vec2_1.x + num1 + 3.0 * num2);
+                    float x = (float)(vec2_1.x + num1 + index1 * num2 + -this._slide * num2);
+                    double num4 = Maths.Clamp((float)((100.0 - Math.Abs(x - num3)) / 100.0), 0f, 1f);
+                    float num5 = (float)num4 * Maths.NormalizeSection((float)num4, 0f, 0.9f);
                     this._door.color = Color.White * num5 * this._fade;
                     this._door.depth = (Depth)(num5 * 0.8f);
-                    if ((double)num5 < 1.0)
+                    if (num5 < 1.0)
                     {
-                        this._unlitDoor.alpha = (float)((1.0 - (double)num5) * 0.5) * this._fade;
+                        this._unlitDoor.alpha = (float)((1.0 - num5) * 0.5) * this._fade;
                         Graphics.Draw(this._unlitDoor, x, 90f);
                     }
-                    if ((double)num5 > 0.0)
+                    if (num5 > 0.0)
                         Graphics.Draw(this._door, x, 90f);
                     string text = str;
-                    float num6 = (float)(((double)num5 + 1.0) * 0.5);
-                    float num7 = 0.0f;
-                    float num8 = 0.0f;
+                    float num6 = (float)((num5 + 1.0) * 0.5);
+                    float num7 = 0f;
+                    float num8 = 0f;
                     Vec2 vec2_2 = new Vec2(1f, 1f);
                     if (text.Length > 9)
                     {
@@ -203,7 +203,7 @@ namespace DuckGame
                         num7 = 2f;
                         num8 = 1f;
                     }
-                    Graphics.DrawString(text, new Vec2(x - Graphics.GetStringWidth(text, scale: vec2_2.x) / 2f + num8, 35f + num7), new Color((byte)Math.Round(165.0 * (double)num6), (byte)Math.Round(100.0 * (double)num6), (byte)Math.Round(34.0 * (double)num6)) * this._fade, (Depth)0.9f, scale: vec2_2.x);
+                    Graphics.DrawString(text, new Vec2(x - Graphics.GetStringWidth(text, scale: vec2_2.x) / 2f + num8, 35f + num7), new Color((byte)Math.Round(165.0 * num6), (byte)Math.Round(100.0 * num6), (byte)Math.Round(34.0 * num6)) * this._fade, (Depth)0.9f, scale: vec2_2.x);
                 }
                 this._door.scale = new Vec2(1f, 1f);
                 this._door.depth = (Depth)0.4f;

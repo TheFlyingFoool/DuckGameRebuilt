@@ -511,7 +511,7 @@ namespace DuckGame
             autoBlockList1.Add(this);
             while (autoBlock1 != null && !autoBlock1._groupedWithNeighbors)
             {
-                if (autoBlock1.collisionSize.y == (double)this.collisionSize.y && autoBlock1.collisionOffset.y == (double)this.collisionOffset.y)
+                if (autoBlock1.collisionSize.y == this.collisionSize.y && autoBlock1.collisionOffset.y == this.collisionOffset.y)
                 {
                     autoBlockList1.Add(autoBlock1);
                     autoBlock1 = autoBlock1.leftBlock as AutoBlock;
@@ -521,7 +521,7 @@ namespace DuckGame
             }
             while (autoBlock2 != null && !autoBlock2._groupedWithNeighbors)
             {
-                if (autoBlock2.collisionSize.y == (double)this.collisionSize.y && autoBlock2.collisionOffset.y == (double)this.collisionOffset.y)
+                if (autoBlock2.collisionSize.y == this.collisionSize.y && autoBlock2.collisionOffset.y == this.collisionOffset.y)
                 {
                     autoBlockList1.Add(autoBlock2);
                     autoBlock2 = autoBlock2.rightBlock as AutoBlock;
@@ -535,7 +535,7 @@ namespace DuckGame
             AutoBlock autoBlock4 = this.downBlock as AutoBlock;
             while (autoBlock3 != null && !autoBlock3._groupedWithNeighbors)
             {
-                if (autoBlock3.collisionSize.x == (double)this.collisionSize.x && autoBlock3.collisionOffset.x == (double)this.collisionOffset.x)
+                if (autoBlock3.collisionSize.x == this.collisionSize.x && autoBlock3.collisionOffset.x == this.collisionOffset.x)
                 {
                     autoBlockList2.Add(autoBlock3);
                     autoBlock3 = autoBlock3.upBlock as AutoBlock;
@@ -545,7 +545,7 @@ namespace DuckGame
             }
             while (autoBlock4 != null && !autoBlock4._groupedWithNeighbors)
             {
-                if (autoBlock4.collisionSize.x == (double)this.collisionSize.x && autoBlock4.collisionOffset.x == (double)this.collisionOffset.x)
+                if (autoBlock4.collisionSize.x == this.collisionSize.x && autoBlock4.collisionOffset.x == this.collisionOffset.x)
                 {
                     autoBlockList2.Add(autoBlock4);
                     autoBlock4 = autoBlock4.downBlock as AutoBlock;
@@ -620,13 +620,13 @@ namespace DuckGame
             if (DevConsole.showCollision)
             {
                 if (this.leftBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(-8f, 0.0f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(-8f, 0f), Color.Red * 0.5f, depth: ((Depth)1f));
                 if (this.rightBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(8f, 0.0f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(8f, 0f), Color.Red * 0.5f, depth: ((Depth)1f));
                 if (this.upBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(0.0f, -8f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(0f, -8f), Color.Red * 0.5f, depth: ((Depth)1f));
                 if (this.downBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(0.0f, 8f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(0f, 8f), Color.Red * 0.5f, depth: ((Depth)1f));
             }
             if (this.hasBroke)
             {
@@ -643,7 +643,7 @@ namespace DuckGame
                 }
                 if (this.brokeRight)
                 {
-                    this._brokenSprite.angleDegrees = 0.0f;
+                    this._brokenSprite.angleDegrees = 0f;
                     Graphics.Draw(this._brokenSprite, this.x + 16f, this.y);
                 }
                 if (this.brokeUp)
@@ -672,15 +672,15 @@ namespace DuckGame
                 case 51:
                 case 53:
                 case 58:
-                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
-                    this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
+                    this.collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
+                    this.collisionOffset = new Vec2((-this.verticalWidth / 2f), -8f);
                     break;
                 case 37:
                 case 43:
                 case 45:
                 case 52:
                 case 60:
-                    this.collisionSize = new Vec2((float)(8.0 + verticalWidth / 2.0), 16f);
+                    this.collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
                     this.collisionOffset = new Vec2(-8f, -8f);
                     break;
                 case 40:
@@ -688,7 +688,7 @@ namespace DuckGame
                 case 49:
                 case 50:
                     this.collisionSize = new Vec2(this.verticalWidth, 16f);
-                    this.collisionOffset = new Vec2((float)(-(double)this.verticalWidth / 2.0), -8f);
+                    this.collisionOffset = new Vec2((-this.verticalWidth / 2f), -8f);
                     break;
                 default:
                     this.collisionSize = new Vec2(16f, 16f);

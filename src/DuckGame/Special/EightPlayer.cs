@@ -23,7 +23,7 @@ namespace DuckGame
             this.editorTooltip = "Place in a level to make it an 8 Player map!";
             this.eightPlayerOnly._tooltip = "If true, this map will not appear when less than 5 players are present in the game.";
             this.solid = false;
-            this._collisionSize = new Vec2(0.0f, 0.0f);
+            this._collisionSize = new Vec2(0f, 0f);
         }
     }
 }

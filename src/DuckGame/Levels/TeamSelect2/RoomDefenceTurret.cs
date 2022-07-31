@@ -33,7 +33,7 @@ namespace DuckGame
             this._fireSound = "phaserSmall";
             this._fireSoundPitch = 0.4f;
             this.weight = 10f;
-            this._kickForce = 0.0f;
+            this._kickForce = 0f;
             this.ammo = 99;
         }
 
@@ -69,7 +69,7 @@ namespace DuckGame
                             if (_charge > 0.200000002980232)
                             {
                                 this.owner = _friendly;
-                                this._charge = 0.0f;
+                                this._charge = 0f;
                                 this.Fire();
                                 this.owner = null;
                                 this.enablePhysics = false;
@@ -91,7 +91,7 @@ namespace DuckGame
             this._target = null;
             if (_charge > 0.0)
                 SFX.PlaySynchronized("chaingunSpinDown", 0.95f, 0.1f);
-            this._charge = 0.0f;
+            this._charge = 0f;
         }
 
         public override void Draw()

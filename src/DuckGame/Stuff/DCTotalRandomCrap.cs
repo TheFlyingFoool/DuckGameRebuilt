@@ -25,7 +25,7 @@ namespace DuckGame
             {
                 float deg = index * 60f + Rando.Float(-10f, 10f);
                 float num2 = Rando.Float(12f, 20f);
-                Level.Add(new ExplosionPart(x + (float)Math.Cos((double)Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin((double)Maths.DegToRad(deg)) * num2));
+                Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
             if (server)
             {
@@ -33,7 +33,7 @@ namespace DuckGame
                 {
                     PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
                     randomItem.position = c.position;
-                    randomItem.hSpeed = (float)((double)(index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f);
+                    randomItem.hSpeed = (float)((index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f);
                     randomItem.vSpeed = Rando.Float(-10f, 10f);
                     Level.Add(randomItem);
                 }

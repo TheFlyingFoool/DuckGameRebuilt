@@ -26,7 +26,7 @@ namespace DuckGame
             this._beam.SetAnimation("idle");
             this._beam.speed = 0.2f;
             this._beam.alpha = 0.3f;
-            this._beam.center = new Vec2(0.0f, 8f);
+            this._beam.center = new Vec2(0f, 8f);
             this.graphic = new Sprite("funBeamer");
             this.center = new Vec2(9f, 8f);
             this.collisionOffset = new Vec2(-2f, -5f);
@@ -64,7 +64,7 @@ namespace DuckGame
                     this._endPoint = Vec2.Zero;
                     for (int index = 0; index < 32; ++index)
                     {
-                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(4 + index * 16, 0.0f), this.position + new Vec2((index + 1) * 16 - 6, 0.0f));
+                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(4 + index * 16, 0f), this.position + new Vec2((index + 1) * 16 - 6, 0f));
                         if (thing != null)
                         {
                             this._endPoint = new Vec2(thing.left - 2f, this.y);
@@ -81,10 +81,10 @@ namespace DuckGame
                     this.graphic.flipH = false;
                     this._beam.depth = this.depth - 2;
                     float x = this._endPoint.x - this.x;
-                    int num = (int)Math.Ceiling((double)x / 16.0);
+                    int num = (int)Math.Ceiling(x / 16.0);
                     for (int index = 0; index < num; ++index)
                     {
-                        this._beam.cutWidth = index != num - 1 ? 0 : 16 - (int)((double)x % 16.0);
+                        this._beam.cutWidth = index != num - 1 ? 0 : 16 - (int)(x % 16.0);
                         Graphics.Draw(_beam, this.x + index * 16, this.y);
                     }
                     this.collisionOffset = new Vec2(-1f, -4f);

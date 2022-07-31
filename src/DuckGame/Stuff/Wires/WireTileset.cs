@@ -54,7 +54,7 @@ namespace DuckGame
             this._signalSprite.CenterOrigin();
         }
 
-        public void Emit(WireTileset.WireSignal signal = null, float overshoot = 0.0f, int type = 0)
+        public void Emit(WireTileset.WireSignal signal = null, float overshoot = 0f, int type = 0)
         {
             if (this._centerWire == null)
                 return;
@@ -206,30 +206,30 @@ namespace DuckGame
             if (updatePrev)
                 signal.prevPosition = signal.position;
             float overshoot;
-            if (signal.travel.position.x < (double)signal.position.x)
+            if (signal.travel.position.x < signal.position.x)
             {
                 signal.position.x -= travelSpeed;
                 overshoot = signal.travel.position.x - signal.position.x;
             }
-            else if (signal.travel.position.x > (double)signal.position.x)
+            else if (signal.travel.position.x > signal.position.x)
             {
                 signal.position.x += travelSpeed;
                 overshoot = signal.position.x - signal.travel.position.x;
             }
-            else if (signal.travel.position.y > (double)signal.position.y)
+            else if (signal.travel.position.y > signal.position.y)
             {
                 signal.position.y += travelSpeed;
                 overshoot = signal.position.y - signal.travel.position.y;
             }
-            else if (signal.travel.position.y < (double)signal.position.y)
+            else if (signal.travel.position.y < signal.position.y)
             {
                 signal.position.y -= travelSpeed;
                 overshoot = signal.travel.position.y - signal.position.y;
             }
             else
-                overshoot = 0.0f;
-            signal.life -= (float)((double)travelSpeed / 16.0 * 0.00999999977648258);
-            if ((double)overshoot >= 0.0 && signal.life > 0.0)
+                overshoot = 0f;
+            signal.life -= (float)(travelSpeed / 16.0 * 0.00999999977648258);
+            if (overshoot >= 0.0 && signal.life > 0.0)
                 this.Emit(signal, overshoot, signal.signalType);
             if (signal.life > 0.0)
                 return;
@@ -243,7 +243,7 @@ namespace DuckGame
             foreach (WireConnection connection2 in this._connections)
             {
                 float lengthSq = (connection2.position - pos).lengthSq;
-                if ((double)lengthSq < (double)num)
+                if (lengthSq < num)
                 {
                     num = lengthSq;
                     connection1 = connection2;
@@ -305,7 +305,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection = new WireConnection()
                 {
@@ -321,7 +321,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection = new WireConnection()
                 {
@@ -337,7 +337,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection1 = new WireConnection()
                 {
@@ -361,7 +361,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection3 = new WireConnection()
                 {
@@ -377,7 +377,7 @@ namespace DuckGame
                 };
                 WireConnection wireConnection5 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
@@ -393,7 +393,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection6 = new WireConnection()
                 {
@@ -409,13 +409,13 @@ namespace DuckGame
                 };
                 WireConnection wireConnection8 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
                 WireConnection wireConnection9 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -433,11 +433,11 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 0.0f)
+                    position = this.position + new Vec2(0f, 0f)
                 };
                 WireConnection wireConnection = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -449,7 +449,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection10 = new WireConnection()
                 {
@@ -459,13 +459,13 @@ namespace DuckGame
                 };
                 WireConnection wireConnection11 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
                 WireConnection wireConnection12 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -481,11 +481,11 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 0.0f)
+                    position = this.position + new Vec2(0f, 0f)
                 };
                 WireConnection wireConnection = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
@@ -497,17 +497,17 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 0.0f)
+                    position = this.position + new Vec2(0f, 0f)
                 };
                 WireConnection wireConnection13 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
                 WireConnection wireConnection14 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -521,7 +521,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection15 = new WireConnection()
                 {
@@ -531,7 +531,7 @@ namespace DuckGame
                 };
                 WireConnection wireConnection16 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
@@ -545,7 +545,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection17 = new WireConnection()
                 {
@@ -555,7 +555,7 @@ namespace DuckGame
                 };
                 WireConnection wireConnection18 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
@@ -569,7 +569,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection19 = new WireConnection()
                 {
@@ -579,13 +579,13 @@ namespace DuckGame
                 };
                 WireConnection wireConnection20 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, 8f),
+                    position = this.position + new Vec2(0f, 8f),
                     up = this._centerWire,
                     wireDown = true
                 };
                 WireConnection wireConnection21 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -601,7 +601,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection22 = new WireConnection()
                 {
@@ -617,7 +617,7 @@ namespace DuckGame
                 };
                 WireConnection wireConnection24 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -633,7 +633,7 @@ namespace DuckGame
             {
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection25 = new WireConnection()
                 {
@@ -643,7 +643,7 @@ namespace DuckGame
                 };
                 WireConnection wireConnection26 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };
@@ -659,7 +659,7 @@ namespace DuckGame
                     return;
                 this._centerWire = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -4f)
+                    position = this.position + new Vec2(0f, -4f)
                 };
                 WireConnection wireConnection27 = new WireConnection()
                 {
@@ -669,7 +669,7 @@ namespace DuckGame
                 };
                 WireConnection wireConnection28 = new WireConnection()
                 {
-                    position = this.position + new Vec2(0.0f, -8f),
+                    position = this.position + new Vec2(0f, -8f),
                     down = this._centerWire,
                     wireUp = true
                 };

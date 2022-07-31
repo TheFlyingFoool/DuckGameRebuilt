@@ -42,10 +42,10 @@ namespace DuckGame
 
         public override void Reset()
         {
-            this._time = 0.0f;
+            this._time = 0f;
             this._active = false;
         }
 
-        public override void Restart() => this._time = 0.0f;
+        public override void Restart() => this._time = 0f;
     }
 }

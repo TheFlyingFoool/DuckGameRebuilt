@@ -26,7 +26,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if ((double)with.impactPowerV > 2.40000009536743)
+            if (with.impactPowerV > 2.40000009536743)
             {
                 Level.CheckPoint<PineTree>(this.x, this.y)?.KnockOffSnow(with.velocity, true);
                 Level.CheckPoint<PineTree>(this.x, this.y - 16f)?.KnockOffSnow(with.velocity, true);

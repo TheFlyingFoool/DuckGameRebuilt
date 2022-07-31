@@ -35,7 +35,7 @@ namespace DuckGame
             this._selectConsole.AddAnimation("idle", 1f, true, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             this._selectConsole.SetAnimation("idle");
             this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(0.0f, 0.0f);
+            this._collisionOffset = new Vec2(0f, 0f);
             this.depth = -0.5f;
             this.graphic = _selectConsole;
         }

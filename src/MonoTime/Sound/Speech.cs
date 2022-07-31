@@ -84,8 +84,8 @@ namespace DuckGame
                 List<InstalledVoice> list = (this.speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>();
                 if (Options.Data.textToSpeechVoice >= 0 && Options.Data.textToSpeechVoice < list.Count)
                     (this.speech as SpeechSynthesizer).SelectVoice(list[Options.Data.textToSpeechVoice].VoiceInfo.Name);
-                (this.speech as SpeechSynthesizer).Volume = Maths.Clamp((int)((double)Options.Data.textToSpeechVolume * 100.0), 0, 100);
-                (this.speech as SpeechSynthesizer).Rate = Maths.Clamp((int)Math.Round(((double)Options.Data.textToSpeechRate - 0.5) * 20.0), -10, 10);
+                (this.speech as SpeechSynthesizer).Volume = Maths.Clamp((int)(Options.Data.textToSpeechVolume * 100.0), 0, 100);
+                (this.speech as SpeechSynthesizer).Rate = Maths.Clamp((int)Math.Round((Options.Data.textToSpeechRate - 0.5) * 20.0), -10, 10);
             }
             catch (Exception ex)
             {

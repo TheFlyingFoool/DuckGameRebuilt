@@ -43,27 +43,27 @@ namespace DuckGame
             this._block = b;
             this.depth = (Depth)0.3f;
             this.flammable = 0.9f;
-            this.alpha = 0.0f;
+            this.alpha = 0f;
             List<BlockCorner> groupCorners = b.GetGroupCorners();
             this._coll = new List<PhysicsObject>();
             this._leftCorner = null;
             this._rightCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
             {
-                if ((double)Math.Abs(ypos - blockCorner.corner.y) < 4.0)
+                if (Math.Abs(ypos - blockCorner.corner.y) < 4.0)
                 {
-                    if (blockCorner.corner.x > (double)xpos)
+                    if (blockCorner.corner.x > xpos)
                     {
                         if (this._rightCorner == null)
                             this._rightCorner = blockCorner;
-                        else if (blockCorner.corner.x < (double)this._rightCorner.corner.x)
+                        else if (blockCorner.corner.x < this._rightCorner.corner.x)
                             this._rightCorner = blockCorner;
                     }
-                    else if (blockCorner.corner.x < (double)xpos)
+                    else if (blockCorner.corner.x < xpos)
                     {
                         if (this._leftCorner == null)
                             this._leftCorner = blockCorner;
-                        else if (blockCorner.corner.x > (double)this._leftCorner.corner.x)
+                        else if (blockCorner.corner.x > this._leftCorner.corner.x)
                             this._leftCorner = blockCorner;
                     }
                 }
@@ -123,19 +123,19 @@ namespace DuckGame
             if (dat.amount > 0.0)
                 this._framesSinceFeed = 0;
             this.data.Mix(dat);
-            this.data.amount = Maths.Clamp(this.data.amount, 0.0f, this.MaxFluidFill());
+            this.data.amount = Maths.Clamp(this.data.amount, 0f, this.MaxFluidFill());
             this._wide = this.FeedAmountToDistance(this.data.amount);
             float num1 = this._wide + 4f;
-            this._collisionOffset.x = (float)-((double)num1 / 2.0);
+            this._collisionOffset.x = (float)-(num1 / 2.0);
             this._collisionSize.x = num1;
             this.FeedEdges();
-            if (this._leftCorner != null && this._rightCorner != null && _wide > _rightCorner.corner.x - (double)this._leftCorner.corner.x)
+            if (this._leftCorner != null && this._rightCorner != null && _wide > _rightCorner.corner.x - this._leftCorner.corner.x)
             {
                 this._wide = this._rightCorner.corner.x - this._leftCorner.corner.x;
-                this.x = this._leftCorner.corner.x + (float)((_rightCorner.corner.x - (double)this._leftCorner.corner.x) / 2.0);
+                this.x = this._leftCorner.corner.x + (float)((_rightCorner.corner.x - this._leftCorner.corner.x) / 2.0);
             }
             float num2 = this._wide + 4f;
-            this._collisionOffset.x = (float)-((double)num2 / 2.0);
+            this._collisionOffset.x = (float)-(num2 / 2.0);
             this._collisionSize.x = num2;
             if (!(this.data.sprite == "water") || this._leftCorner == null)
                 return;
@@ -147,14 +147,14 @@ namespace DuckGame
                     case null:
                         goto label_19;
                     case SnowTileset _:
-                        if ((double)block.left + 2.0 > (double)this.left && (double)block.right - 2.0 < (double)this.right)
+                        if (block.left + 2.0 > this.left && block.right - 2.0 < this.right)
                         {
                             (block as SnowTileset).Freeze();
                             break;
                         }
                         break;
                     case SnowIceTileset _:
-                        if ((double)block.left + 2.0 > (double)this.left && (double)block.right - 2.0 < (double)this.right)
+                        if (block.left + 2.0 > this.left && block.right - 2.0 < this.right)
                         {
                             (block as SnowIceTileset).Freeze();
                             break;
@@ -182,11 +182,11 @@ namespace DuckGame
 
         public void FeedEdges()
         {
-            if (this._rightCorner != null && (double)this.right > _rightCorner.corner.x && this._rightCorner.wallCorner)
+            if (this._rightCorner != null && this.right > _rightCorner.corner.x && this._rightCorner.wallCorner)
                 this.x -= this.right - this._rightCorner.corner.x;
-            if (this._leftCorner != null && (double)this.left < _leftCorner.corner.x && this._leftCorner.wallCorner)
+            if (this._leftCorner != null && this.left < _leftCorner.corner.x && this._leftCorner.wallCorner)
                 this.x += this._leftCorner.corner.x - this.left;
-            if (this._rightCorner != null && (double)this.right > _rightCorner.corner.x && !this._rightCorner.wallCorner)
+            if (this._rightCorner != null && this.right > _rightCorner.corner.x && !this._rightCorner.wallCorner)
             {
                 float feedAmount = this.DistanceToFeedAmount(this.right - this._rightCorner.corner.x);
                 this.x -= ((this.right - _rightCorner.corner.x) / 2f);
@@ -200,19 +200,19 @@ namespace DuckGame
             float num1 = this._wide + 4f;
             this._collisionOffset.x = -(num1 / 2f);
             this._collisionSize.x = num1;
-            if (this._leftCorner != null && (double)this.left < _leftCorner.corner.x && !this._leftCorner.wallCorner)
+            if (this._leftCorner != null && this.left < _leftCorner.corner.x && !this._leftCorner.wallCorner)
             {
                 float feedAmount = this.DistanceToFeedAmount(this._leftCorner.corner.x - this.left);
                 this.x += ((_leftCorner.corner.x - this.left) / 2f);
                 if (this._leftStream == null)
-                    this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0.0f), 1f);
+                    this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0f), 1f);
                 this._leftStream.position.y = this.y - this._collisionOffset.y;
                 this._leftStream.position.x = this._leftCorner.corner.x - 2f;
                 this._leftStream.Feed(this.data.Take(feedAmount));
             }
             this._wide = this.FeedAmountToDistance(this.data.amount);
             float num2 = this._wide + 4f;
-            this._collisionOffset.x = (float)-((double)num2 / 2f);
+            this._collisionOffset.x = (float)-(num2 / 2f);
             this._collisionSize.x = num2;
         }
 
@@ -229,7 +229,7 @@ namespace DuckGame
         {
             if (collisionSize.y <= 10f)
                 return;
-            foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -8f), this.topRight + new Vec2(0.0f, -8f)))
+            foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0f, -8f), this.topRight + new Vec2(0f, -8f)))
             {
                 physicsObject.position.y = this.top;
                 physicsObject.DoFloat();
@@ -311,7 +311,7 @@ namespace DuckGame
             else
             {
                 this.alpha = Lerp.Float(this.alpha, 1f, 0.04f);
-                if ((double)num < 3.0)
+                if (num < 3.0)
                 {
                     FluidData dat2 = this.data;
                     dat2.amount = -0.0001f;
@@ -322,23 +322,23 @@ namespace DuckGame
 
             }
             float depth = this.CalculateDepth();
-            if ((double)depth > 4.0 && !this._initializedUpperCorners)
+            if (depth > 4.0 && !this._initializedUpperCorners)
             {
                 this._initializedUpperCorners = true;
                 foreach (BlockCorner groupCorner in this._block.GetGroupCorners())
                 {
-                    if (this._leftCorner != null && groupCorner.corner.x == (double)this._leftCorner.corner.x && groupCorner.corner.y < (double)this._leftCorner.corner.y)
+                    if (this._leftCorner != null && groupCorner.corner.x == this._leftCorner.corner.x && groupCorner.corner.y < this._leftCorner.corner.y)
                     {
                         if (this._topLeftCorner == null)
                             this._topLeftCorner = groupCorner;
-                        else if (groupCorner.corner.y > (double)this._topLeftCorner.corner.y)
+                        else if (groupCorner.corner.y > this._topLeftCorner.corner.y)
                             this._topLeftCorner = groupCorner;
                     }
-                    else if (this._rightCorner != null && groupCorner.corner.x == (double)this._rightCorner.corner.x && groupCorner.corner.y < (double)this._rightCorner.corner.y)
+                    else if (this._rightCorner != null && groupCorner.corner.x == this._rightCorner.corner.x && groupCorner.corner.y < this._rightCorner.corner.y)
                     {
                         if (this._topRightCorner == null)
                             this._topRightCorner = groupCorner;
-                        else if (groupCorner.corner.y > (double)this._topRightCorner.corner.y)
+                        else if (groupCorner.corner.y > this._topRightCorner.corner.y)
                             this._topRightCorner = groupCorner;
                     }
                 }
@@ -347,7 +347,7 @@ namespace DuckGame
                 this._leftStream.position.y = this.y - this._collisionOffset.y;
             if (this._rightStream != null)
                 this._rightStream.position.y = this.y - this._collisionOffset.y;
-            this._collisionOffset.y = (float)(-(double)depth - 1.0);
+            this._collisionOffset.y = (float)(-depth - 1.0);
             this._collisionSize.y = depth;
         }
 

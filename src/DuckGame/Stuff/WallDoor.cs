@@ -76,13 +76,13 @@ namespace DuckGame
                 {
                     WallDoor wallDoor = null;
                     if (transportingDuck.inputProfile.Pressed("LEFT") || transportingDuck.inputProfile.Down("LEFT") && transportingDuck.autoExitDoorFrames > 5)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(-10000f, 0.0f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(-10000f, 0f), this, out Vec2 _);
                     if (transportingDuck.inputProfile.Pressed("RIGHT") || transportingDuck.inputProfile.Down("RIGHT") && transportingDuck.autoExitDoorFrames > 5)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(10000f, 0.0f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(10000f, 0f), this, out Vec2 _);
                     if (transportingDuck.inputProfile.Pressed("UP") || transportingDuck.inputProfile.Down("UP") && transportingDuck.autoExitDoorFrames > 10)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(0.0f, -10000f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(0f, -10000f), this, out Vec2 _);
                     if (transportingDuck.inputProfile.Pressed("DOWN") || transportingDuck.inputProfile.Down("DOWN") && transportingDuck.autoExitDoorFrames > 5)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(0.0f, 10000f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(0f, 10000f), this, out Vec2 _);
                     if (wallDoor != null)
                     {
                         transportingDuck.enteringWalldoor = true;
@@ -90,7 +90,7 @@ namespace DuckGame
                         transportingDuck.autoExitDoorFrames = 0;
                     }
                 }
-                if ((double)Math.Abs(transportingDuck.x - this.x) < 3.0 && transportingDuck.wallDoorAI != null)
+                if (Math.Abs(transportingDuck.x - this.x) < 3.0 && transportingDuck.wallDoorAI != null)
                 {
                     transportingDuck.hSpeed *= 0.5f;
                     transportingDuck.moveLock = true;
@@ -98,9 +98,9 @@ namespace DuckGame
                 }
                 else if (transportingDuck.wallDoorAI != null)
                 {
-                    if ((double)transportingDuck.x > (double)this.x + 2.0)
+                    if (transportingDuck.x > this.x + 2.0)
                         transportingDuck.wallDoorAI.Press("LEFT");
-                    if ((double)transportingDuck.x < (double)this.x - 2.0)
+                    if (transportingDuck.x < this.x - 2.0)
                         transportingDuck.wallDoorAI.Press("RIGHT");
                 }
                 if (transportingDuck.transportDoor != null)
@@ -116,7 +116,7 @@ namespace DuckGame
                 }
                 if (transportingDuck.transportDoor != null && transportingDuck.autoExitDoorFrames <= 0)
                 {
-                    transportingDuck.position = transportingDuck.transportDoor.position + new Vec2(0.0f, -6f);
+                    transportingDuck.position = transportingDuck.transportDoor.position + new Vec2(0f, -6f);
                     transportingDuck.transportDoor.AddDuck(transportingDuck);
                     transportingDuck.transportDoor = null;
                     this._transportingDucks.RemoveAt(index);

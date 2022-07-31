@@ -38,7 +38,7 @@ namespace DuckGame
             {
                 if (this.grounded && Math.Abs(this.vSpeed) + Math.Abs(this.hSpeed) <= 0.2f)
                     this.alpha -= 0.2f;
-                if ((double)this.alpha <= 0.0)
+                if (this.alpha <= 0f)
                     Level.Remove(this);
                 if (!this.onFire && Level.CheckRect<SmallFire>(this.position + new Vec2(-6f, -6f), this.position + new Vec2(6f, 6f), this) != null)
                     this.LightOnFire();
@@ -49,7 +49,7 @@ namespace DuckGame
         public void LightOnFire()
         {
             this.onFire = true;
-            Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
+            Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

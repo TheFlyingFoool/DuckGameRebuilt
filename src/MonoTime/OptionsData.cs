@@ -132,13 +132,13 @@ namespace DuckGame
             get => this._textToSpeechVolume;
             set
             {
-                if (!Program.isLinux && _textToSpeechVolume != (double)value && this.textToSpeech)
+                if (!Program.isLinux && _textToSpeechVolume != value && this.textToSpeech)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)
                     {
                         SFX.StopSaying();
-                        SFX.Say("Volume " + ((int)((double)value * 100.0)).ToString());
+                        SFX.Say("Volume " + ((int)(value * 100.0)).ToString());
                     }
                 }
                 this._textToSpeechVolume = value;
@@ -152,13 +152,13 @@ namespace DuckGame
             get => this._textToSpeechRate;
             set
             {
-                if (!Program.isLinux && _textToSpeechRate != (double)value && this.textToSpeech)
+                if (!Program.isLinux && _textToSpeechRate != value && this.textToSpeech)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)
                     {
                         SFX.StopSaying();
-                        SFX.Say("Speed " + ((int)Math.Round(((double)value - 0.5) * 20.0)).ToString());
+                        SFX.Say("Speed " + ((int)Math.Round((value - 0.5) * 20.0)).ToString());
                     }
                 }
                 this._textToSpeechRate = value;

@@ -17,9 +17,9 @@ namespace DuckGame
         private static List<int> _removeTouches = new List<int>();
         private static ulong _totalFrameCount = 0;
         private static bool _updated = false;
-        public static float _spoofFingerDistance = 0.0f;
-        public static float _spoofFinger1Waver = 0.0f;
-        public static float _spoofFinger2Waver = 0.0f;
+        public static float _spoofFingerDistance = 0f;
+        public static float _spoofFinger1Waver = 0f;
+        public static float _spoofFinger2Waver = 0f;
 
         private static void System_MapTouch(TSData pTouch)
         {
@@ -194,7 +194,7 @@ namespace DuckGame
                         });
                     TouchScreen._spoofFingerDistance += Mouse.scroll * 0.1f;
                     if (_spoofFingerDistance < 0.0)
-                        TouchScreen._spoofFingerDistance = 0.0f;
+                        TouchScreen._spoofFingerDistance = 0f;
                 }
                 TouchScreen._updated = true;
             }

@@ -128,7 +128,7 @@ namespace DuckGame
             this._pendingSpawns = this._pendingSpawns.OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
             foreach (Thing pendingSpawn in this._pendingSpawns)
                 this.followCam.Add(pendingSpawn);
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._pauseMenu = new UIMenu("@LWING@CHALLENGE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             this._captureMenu = new UICaptureBox(this._pauseMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
@@ -223,7 +223,7 @@ namespace DuckGame
             if (this._fading)
             {
                 DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.05f);
-                if ((double)DuckGame.Graphics.fade >= 0.01f)
+                if (Graphics.fade >= 0.01f)
                     return;
                 if (this._validityTest)
                 {
@@ -257,7 +257,7 @@ namespace DuckGame
                         this._restarting = true;
                 }
                 this._waitFade -= 0.04f;
-                if (!this._didFade && _waitFade <= 0f && (double)DuckGame.Graphics.fade < 1f)
+                if (!this._didFade && _waitFade <= 0f && DuckGame.Graphics.fade < 1f)
                     DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.04f);
                 else if (this._restarting)
                 {
@@ -312,11 +312,11 @@ namespace DuckGame
                                                 MonoMain.RenderGame(MonoMain.screenCapture);
                                                 Layer.HUD.visible = true;
                                                 Matrix result;
-                                                Matrix.CreateOrthographicOffCenter(0.0f, MonoMain.screenCapture.width, MonoMain.screenCapture.height, 0f, 0f, -1f, out result);
+                                                Matrix.CreateOrthographicOffCenter(0f, MonoMain.screenCapture.width, MonoMain.screenCapture.height, 0f, 0f, -1f, out result);
                                                 result.M41 += -0.5f * result.M11;
                                                 result.M42 += -0.5f * result.M22;
                                                 Matrix matrix = Level.current.camera.getMatrix();
-                                                Vec3 vec3 = (Vec3)DuckGame.Graphics.viewport.Project((Vector3)new Vec3(ChallengeLevel._duck.cameraPosition.x, ChallengeLevel._duck.cameraPosition.y, 0.0f), (Microsoft.Xna.Framework.Matrix)result, (Microsoft.Xna.Framework.Matrix)matrix, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                                Vec3 vec3 = (Vec3)DuckGame.Graphics.viewport.Project((Vector3)new Vec3(ChallengeLevel._duck.cameraPosition.x, ChallengeLevel._duck.cameraPosition.y, 0f), (Microsoft.Xna.Framework.Matrix)result, (Microsoft.Xna.Framework.Matrix)matrix, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                                 DuckGame.Graphics.SetRenderTarget(this._captureTarget);
                                                 camera.center = new Vec2(vec3.x, vec3.y);
                                                 if (camera.bottom > MonoMain.screenCapture.height)
@@ -348,8 +348,8 @@ namespace DuckGame
                                 }
                                 this._trophyGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
                                 this._trophyMenu = !this._validityTest || this._challenge.wonTrophies.Count <= 0 || this._challenge.wonTrophies[0].type != TrophyType.Platinum && this._challenge.wonTrophies[0].type != TrophyType.Developer ? new UIMenu("@LWING@" + this._challenge.challenge.GetNameForDisplay() + "@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@RETRY @SELECT@CONTINUE") : new UIMenu("@LWING@" + this._challenge.challenge.GetNameForDisplay() + "@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@SELECT@CONTINUE");
-                                UIDivider component1 = new UIDivider(false, 0.0f, 6f);
-                                UIDivider component2 = new UIDivider(true, 0.0f);
+                                UIDivider component1 = new UIDivider(false, 0f, 6f);
+                                UIDivider component2 = new UIDivider(true, 0f);
                                 SpriteMap imageVal = new SpriteMap("challengeTrophy", 60, 58);
                                 component1.leftSection.vertical = false;
                                 component1.leftSection.borderSize.y = 2f;
@@ -541,7 +541,7 @@ namespace DuckGame
                             this.AddThing(pendingSpawn);
                             this._pendingSpawns.RemoveAt(0);
                             Vec3 color = pendingSpawn.profile.persona.color;
-                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0.0f, new Color((int)color.x, (int)color.z, (int)color.z), 32f));
+                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.z, (int)color.z), 32f));
                             Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             SFX.Play("pullPin", 0.7f);
@@ -678,7 +678,7 @@ namespace DuckGame
                         {
                             this._fontFade -= 0.1f;
                             if (_fontFade < 0.0)
-                                this._fontFade = 0.0f;
+                                this._fontFade = 0f;
                             this.PauseLogic();
                         }
                     }
@@ -739,11 +739,11 @@ namespace DuckGame
                     text = "";
                 float width = this._font.GetWidth(text);
                 float num = 1f;
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) - num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) - num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) - num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) + num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) + num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) - num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0) + num, (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0) + num, Color.Black, (Depth)0.9f);
-                this._font.Draw(text, (float)((double)Layer.HUD.camera.width / 2.0 - (double)width / 2.0), (float)((double)Layer.HUD.camera.height / 2.0 - (double)this._font.height / 2.0), Color.White, (Depth)1f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) - num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) - num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) - num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) + num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) + num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) - num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f) + num, (Layer.HUD.camera.height / 2f - this._font.height / 2f) + num, Color.Black, (Depth)0.9f);
+                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f), (Layer.HUD.camera.height / 2f - this._font.height / 2f), Color.White, (Depth)1f);
             }
             base.PostDrawLayer(layer);
         }

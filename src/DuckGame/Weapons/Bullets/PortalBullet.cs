@@ -45,28 +45,28 @@ namespace DuckGame
             {
                 center = pos
             };
-            if ((double)Math.Abs(this.travelDirNormalized.y) < 0.5)
+            if (Math.Abs(this.travelDirNormalized.y) < 0.5)
             {
                 door.horizontal = false;
-                door.point1 = new Vec2(pos + new Vec2(0.0f, -16f));
-                door.point2 = new Vec2(pos + new Vec2(0.0f, 16f));
-                AutoBlock autoBlock1 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(0.0f, 16f));
-                if (autoBlock1 != null && (double)autoBlock1.top < door.point2.y)
+                door.point1 = new Vec2(pos + new Vec2(0f, -16f));
+                door.point2 = new Vec2(pos + new Vec2(0f, 16f));
+                AutoBlock autoBlock1 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(0f, 16f));
+                if (autoBlock1 != null && autoBlock1.top < door.point2.y)
                     door.point2.y = autoBlock1.top;
-                AutoBlock autoBlock2 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(0.0f, -16f));
-                if (autoBlock2 != null && (double)autoBlock2.bottom > door.point1.y)
+                AutoBlock autoBlock2 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(0f, -16f));
+                if (autoBlock2 != null && autoBlock2.bottom > door.point1.y)
                     door.point1.y = autoBlock2.bottom;
             }
             else
             {
                 door.horizontal = true;
-                door.point1 = new Vec2(pos + new Vec2(-16f, 0.0f));
-                door.point2 = new Vec2(pos + new Vec2(16f, 0.0f));
-                AutoBlock autoBlock3 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(16f, 0.0f));
-                if (autoBlock3 != null && (double)autoBlock3.left < door.point2.x)
+                door.point1 = new Vec2(pos + new Vec2(-16f, 0f));
+                door.point2 = new Vec2(pos + new Vec2(16f, 0f));
+                AutoBlock autoBlock3 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(16f, 0f));
+                if (autoBlock3 != null && autoBlock3.left < door.point2.x)
                     door.point2.x = autoBlock3.left;
-                AutoBlock autoBlock4 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(-16f, 0.0f));
-                if (autoBlock4 != null && (double)autoBlock4.right > door.point1.x)
+                AutoBlock autoBlock4 = Level.CheckLine<AutoBlock>(p1, p1 + new Vec2(-16f, 0f));
+                if (autoBlock4 != null && autoBlock4.right > door.point1.x)
                     door.point1.x = autoBlock4.right;
             }
             portal.AddPortalDoor(door);
@@ -77,16 +77,16 @@ namespace DuckGame
             if (this._tracer || _bulletDistance <= 0.100000001490116)
                 return;
             float length = (this.drawStart - this.drawEnd).length;
-            float val = 0.0f;
-            float num1 = (float)(1.0 / ((double)length / 8.0));
-            float num2 = 0.0f;
+            float val = 0f;
+            float num1 = (float)(1.0 / (length / 8.0));
+            float num2 = 0f;
             float num3 = 8f;
             while (true)
             {
                 bool flag = false;
-                if ((double)val + (double)num3 > (double)length)
+                if (val + num3 > length)
                 {
-                    num3 = length - Maths.Clamp(val, 0.0f, 99f);
+                    num3 = length - Maths.Clamp(val, 0f, 99f);
                     flag = true;
                 }
                 num2 += num1;

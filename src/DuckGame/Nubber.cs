@@ -63,9 +63,9 @@ namespace DuckGame
             this.collisionSize = new Vec2(8f, 5f);
             this._sprite.frame = left ? 62 : 63;
             if (left)
-                this.collisionOffset = new Vec2(13f, 0.0f);
+                this.collisionOffset = new Vec2(13f, 0f);
             else
-                this.collisionOffset = new Vec2(-5f, 0.0f);
+                this.collisionOffset = new Vec2(-5f, 0f);
             this._editorCanModify = false;
             this.UpdateCustomTileset();
         }

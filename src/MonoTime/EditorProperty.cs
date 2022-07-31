@@ -51,7 +51,7 @@ namespace DuckGame
         public EditorProperty(
           T val,
           Thing notify = null,
-          float min = 0.0f,
+          float min = 0f,
           float max = 1f,
           float increment = 0.1f,
           string minSpecial = null,
@@ -72,7 +72,7 @@ namespace DuckGame
           T val,
           string varSection,
           Thing notify = null,
-          float min = 0.0f,
+          float min = 0f,
           float max = 1f,
           float increment = 0.1f,
           string minSpecial = null,

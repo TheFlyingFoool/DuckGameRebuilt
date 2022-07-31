@@ -77,7 +77,7 @@ namespace DuckGame
             this.gun.hasFireEvents = true;
             this.gun.onlyFireAction = this.onlyFireAction;
             float wait = this.gun._wait;
-            this.gun._wait = 0.0f;
+            this.gun._wait = 0f;
             if (!this.release)
             {
                 bool loaded = this.gun.loaded;

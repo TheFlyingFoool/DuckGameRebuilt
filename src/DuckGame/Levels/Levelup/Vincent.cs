@@ -16,7 +16,7 @@ namespace DuckGame
     {
         public static Vincent context = new Vincent();
         public static List<VincentProduct> products = new List<VincentProduct>();
-        public static float alpha = 0.0f;
+        public static float alpha = 0f;
         public static bool lookingAtList = false;
         public static bool lookingAtChallenge = false;
         public static bool hover = false;
@@ -37,21 +37,21 @@ namespace DuckGame
         private static List<TextLine> _lineProgress = new List<TextLine>();
         private static float _waitLetter = 1f;
         private static float _waitAfterLine = 1f;
-        private static float _talkMove = 0.0f;
-        private static float _showLerp = 0.0f;
+        private static float _talkMove = 0f;
+        private static float _showLerp = 0f;
         private static bool _allowMovement = false;
         private static bool _hasYoYo = true;
         public static DayType type;
         public static bool show = false;
         public static bool hasKid = false;
         public static bool openedCorners = false;
-        private static float _afterShowWait = 0.0f;
+        private static float _afterShowWait = 0f;
         public static bool _willGiveYoYo = false;
         public static bool _willGiveVooDoo = false;
         public static bool _willGivePerimeterDefence = false;
-        private static float _listLerp = 0.0f;
-        private static float _challengeLerp = 0.0f;
-        private static float _chancyLerp = 0.0f;
+        private static float _listLerp = 0f;
+        private static float _challengeLerp = 0f;
+        private static float _chancyLerp = 0f;
         public static Sprite _furniFrame;
         public static Sprite _furniFill;
         public static Sprite _furniHov;
@@ -62,10 +62,10 @@ namespace DuckGame
         private static List<RenderTarget2D> _priceTargets = new List<RenderTarget2D>();
         private static int _soldSelectIndex = -1;
         private static bool killSkip = false;
-        private static float _extraWait = 0.0f;
+        private static float _extraWait = 0f;
         public static int _giveTickets = 0;
         public static bool afterChallenge = false;
-        public static float afterChallengeWait = 0.0f;
+        public static float afterChallengeWait = 0f;
         private static List<ChallengeData> _chancyChallenges = new List<ChallengeData>();
         public static bool showingDay = false;
         private static string lastWord = "";
@@ -96,8 +96,8 @@ namespace DuckGame
         {
             Vincent._lines.Clear();
             Vincent._lineProgress.Clear();
-            Vincent._waitLetter = 0.0f;
-            Vincent._waitAfterLine = 0.0f;
+            Vincent._waitLetter = 0f;
+            Vincent._waitAfterLine = 0f;
             Vincent._currentLine = "";
             Vincent._mood = DealerMood.Normal;
         }
@@ -108,25 +108,25 @@ namespace DuckGame
         {
             float num1 = Rando.Float(1f) - Profiles.experienceProfile.GetNumFurnitures(t1.index) * 1f;
             float num2 = Rando.Float(1f) - Profiles.experienceProfile.GetNumFurnitures(t2.index) * 1f;
-            if ((double)num1 > (double)num2)
+            if (num1 > num2)
                 return 1;
-            return (double)num1 < (double)num2 ? -1 : 0;
+            return num1 < num2 ? -1 : 0;
         }
 
         public static void Open(DayType t)
         {
             Vincent._lineProgress.Clear();
             Vincent.show = false;
-            Vincent._afterShowWait = 0.0f;
-            Vincent._showLerp = 0.0f;
+            Vincent._afterShowWait = 0f;
+            Vincent._showLerp = 0f;
             Vincent._allowMovement = false;
             Vincent._waitAfterLine = 1f;
             Vincent._waitLetter = 1f;
             Vincent._mood = DealerMood.Normal;
-            Vincent._chancyLerp = 0.0f;
+            Vincent._chancyLerp = 0f;
             Vincent.hasKid = false;
             Vincent._allowMovement = false;
-            Vincent._afterShowWait = 0.0f;
+            Vincent._afterShowWait = 0f;
             Vincent.show = false;
             if (Profiles.experienceProfile == null)
                 return;
@@ -263,9 +263,9 @@ namespace DuckGame
                         };
                         vincentProduct.originalCost = vincentProduct.furnitureData.price;
                         vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5);
-                        if ((double)Rando.Float(1f) > 0.949999988079071)
+                        if (Rando.Float(1f) > 0.949999988079071)
                             vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4.0);
-                        if (vincentProduct.furnitureData.name == "ROUND TABLE" && (double)Rando.Float(1f) > 0.5)
+                        if (vincentProduct.furnitureData.name == "ROUND TABLE" && Rando.Float(1f) > 0.5)
                         {
                             Vincent.Add("|POINT|Oh baby, is that one of them ROUND tables??");
                             Vincent.Add("|CONCERNED| Can I buy it from you?|SHOW| I'm so tired of square tables...");
@@ -875,14 +875,14 @@ namespace DuckGame
             Vincent.Initialize();
             if (UILevelBox.menuOpen)
                 return;
-            Vincent._showLerp = Lerp.FloatSmooth(Vincent._showLerp, Vincent.show ? 1f : 0.0f, 0.09f, 1.05f);
+            Vincent._showLerp = Lerp.FloatSmooth(Vincent._showLerp, Vincent.show ? 1f : 0f, 0.09f, 1.05f);
             bool flag1 = Vincent.lookingAtList && _challengeLerp < 0.300000011920929;
             bool flag2 = Vincent.lookingAtChallenge && _listLerp < 0.300000011920929;
             bool flag3 = FurniShopScreen.open && _listLerp < 0.300000011920929;
-            Vincent._listLerp = Lerp.FloatSmooth(Vincent._listLerp, flag1 ? 1f : 0.0f, 0.2f, 1.05f);
-            Vincent._challengeLerp = Lerp.FloatSmooth(Vincent._challengeLerp, flag2 ? 1f : 0.0f, 0.2f, 1.05f);
-            Vincent._chancyLerp = Lerp.FloatSmooth(Vincent._chancyLerp, flag3 ? 1f : 0.0f, 0.2f, 1.05f);
-            Vincent.alpha = !FurniShopScreen.open ? Lerp.Float(Vincent.alpha, 0.0f, 0.05f) : Lerp.Float(Vincent.alpha, 1f, 0.05f);
+            Vincent._listLerp = Lerp.FloatSmooth(Vincent._listLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
+            Vincent._challengeLerp = Lerp.FloatSmooth(Vincent._challengeLerp, flag2 ? 1f : 0f, 0.2f, 1.05f);
+            Vincent._chancyLerp = Lerp.FloatSmooth(Vincent._chancyLerp, flag3 ? 1f : 0f, 0.2f, 1.05f);
+            Vincent.alpha = !FurniShopScreen.open ? Lerp.Float(Vincent.alpha, 0f, 0.05f) : Lerp.Float(Vincent.alpha, 1f, 0.05f);
             if (!FurniShopScreen.open || Vincent.showingDay)
                 return;
             if (!Vincent.openedCorners)
@@ -1055,7 +1055,7 @@ namespace DuckGame
                     if (_talkMove > 1.0)
                     {
                         Vincent.frame = 0;
-                        Vincent._talkMove = 0.0f;
+                        Vincent._talkMove = 0f;
                     }
                     if (num3 == 0 && _waitAfterLine <= 0.0)
                         HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
@@ -1081,7 +1081,7 @@ namespace DuckGame
                         if (_talkMove > 1.0)
                         {
                             Vincent.frame = Vincent._currentLine[0] == ' ' || Vincent.frame != 1 || _extraWait > 0.0 ? 1 : 2;
-                            Vincent._talkMove = 0.0f;
+                            Vincent._talkMove = 0f;
                         }
                         Vincent._waitLetter = 1f;
                         char ch1;
@@ -1106,7 +1106,7 @@ namespace DuckGame
                                 return;
                             }
                         }
-                        float num4 = 0.0f;
+                        float num4 = 0f;
                         while (Vincent._currentLine[0] == '|')
                         {
                             Vincent._currentLine = Vincent._currentLine.Remove(0, 1);
@@ -1300,7 +1300,7 @@ namespace DuckGame
                     if (_talkMove > 1.0)
                     {
                         Vincent.frame = 0;
-                        Vincent._talkMove = 0.0f;
+                        Vincent._talkMove = 0f;
                     }
                 }
                 string str10 = "";
@@ -1310,7 +1310,7 @@ namespace DuckGame
                     num1 = 9;
                     string str12 = num1.ToString();
                     str10 = str11 + str12;
-                    Camera camera = new Camera(0.0f, 0.0f, 64f, 16f);
+                    Camera camera = new Camera(0f, 0f, 64f, 16f);
                     DuckGame.Graphics.SetRenderTarget(Vincent._priceTargets[index]);
                     DepthStencilState depthStencilState = new DepthStencilState()
                     {
@@ -1325,7 +1325,7 @@ namespace DuckGame
                     num1 = Math.Min(Math.Max(Vincent.products[index].cost, 0), 9999);
                     string text = "$" + num1.ToString();
                     Vincent._furniTag.frame = text.Length - 1;
-                    Vincent._priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5.0 * 20.0), 0.0f), Vincent.products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
+                    Vincent._priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5.0 * 20.0), 0f), Vincent.products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
                     DuckGame.Graphics.screen.End();
                     DuckGame.Graphics.SetRenderTarget(null);
                 }
@@ -1340,13 +1340,13 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
             Vec2 vec2_3 = new Vec2(280f, 30f);
             Vec2 vec2_4 = new Vec2(20f, 132f) + vec2_2;
-            DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-2f, 0.0f), vec2_4 + vec2_3 + new Vec2(2f, 0.0f), Color.Black, (Depth)0.96f);
+            DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-2f, 0f), vec2_4 + vec2_3 + new Vec2(2f, 0f), Color.Black, (Depth)0.96f);
             int num = 0;
             for (int index1 = Vincent._lineProgress.Count - 1; index1 >= 0; --index1)
             {
                 float stringWidth = DuckGame.Graphics.GetStringWidth(Vincent._lineProgress[index1].text);
                 float y = vec2_4.y + 2f + num * 9;
-                float x = (float)(vec2_4.x + vec2_3.x / 2.0 - (double)stringWidth / 2.0);
+                float x = (float)(vec2_4.x + vec2_3.x / 2.0 - stringWidth / 2.0);
                 for (int index2 = Vincent._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     Vincent._descriptionFont.Draw(Vincent._lineProgress[index1].segments[index2].text, new Vec2(x, y), Vincent._lineProgress[index1].segments[index2].color, (Depth)0.97f);
@@ -1578,7 +1578,7 @@ namespace DuckGame
                 Vec2 vec2_6 = new Vec2(226f, 11f);
                 DuckGame.Graphics.DrawRect(p1, p1 + vec2_6, Color.Black, (Depth)0.96f);
                 string name = Vincent.products[index].name;
-                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - (double)DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
+                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
                 Vincent._tail.depth = (Depth)0.5f;
                 Vincent._tail.alpha = Vincent.alpha;
                 Vincent._tail.flipH = false;

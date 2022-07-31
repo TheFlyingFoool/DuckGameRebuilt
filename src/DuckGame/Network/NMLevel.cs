@@ -124,7 +124,7 @@ namespace DuckGame
                     this._level = new RockScoreboard(mode: ScoreBoardMode.ShowWinner);
                 else if (this.level == "@ROCKTHROW|SHOWEND")
                 {
-                    Graphics.fade = 0.0f;
+                    Graphics.fade = 0f;
                     this._level = new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
                 }
                 else

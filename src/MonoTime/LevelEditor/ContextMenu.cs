@@ -129,7 +129,7 @@ namespace DuckGame
                         if (contextMenu.pinned && !Editor.ignorePinning)
                             this.pinOpened = true;
                     }
-                    this._openedOffset = 0.0f;
+                    this._openedOffset = 0f;
                     this.PositionItems();
                     this._selectedIndex = 0;
                     if (this._items.Count > 0)
@@ -289,20 +289,20 @@ namespace DuckGame
             if (Keyboard.Down(Keys.Y))
                 return;
             Vec2 vec2_1 = new Vec2(this.x, this.y);
-            Vec2 vec2_2 = new Vec2(0.0f, 0.0f);
+            Vec2 vec2_2 = new Vec2(0f, 0f);
             if (!this._root && !this.dontPush)
                 vec2_2 = new Vec2(this.itemSize.x + 4f, -2f);
             Vec2 vec2_3 = vec2_1 + vec2_2;
             bool flag = false;
-            if (_lastDrawPos.x + (double)this.menuSize.x + 4.0 > (double)this.layer.camera.width)
+            if (_lastDrawPos.x + this.menuSize.x + 4f > this.layer.camera.width)
             {
                 if (Editor.bigInterfaceMode)
                     vec2_3.x -= this.menuSize.x;
                 else
-                    vec2_3.x = (float)((double)this.layer.camera.width - menuSize.x - 4.0);
+                    vec2_3.x = (this.layer.camera.width - menuSize.x - 4f);
                 flag = true;
             }
-            if (contextMenu1 != null && (double)contextMenu1.x != vec2_3.x && !this.pinOpened)
+            if (contextMenu1 != null && contextMenu1.x != vec2_3.x && !this.pinOpened)
             {
                 vec2_3.x = !this._root ? (this._pinned || Editor.pretendPinned == this ? contextMenu1.x - 4f : contextMenu1.x - 2f) : contextMenu1.x;
                 flag = true;
@@ -407,7 +407,7 @@ namespace DuckGame
                         Editor.clickedContextBackground = true;
                     if (!this.pinOpened)
                     {
-                        Vec2 vec2_1 = new Vec2((float)(lastDrawPos.x + (double)this.menuSize.x - 5.0), lastDrawPos.y - 4f);
+                        Vec2 vec2_1 = new Vec2((float)(lastDrawPos.x + this.menuSize.x - 5f), lastDrawPos.y - 4f);
                         this._hoverPin = false;
                         Vec2 vec2_2 = Vec2.Zero;
                         bool flag1 = false;
@@ -510,10 +510,10 @@ namespace DuckGame
                         Vec2 vec2_3 = new Vec2(12f, 12f);
                         if (Editor.inputMode == EditorInput.Touch)
                             vec2_3 = new Vec2(24f, 24f);
-                        Vec2 vec2_4 = lastDrawPos + new Vec2((float)-(vec2_3.x + 2.0), 0.0f);
+                        Vec2 vec2_4 = lastDrawPos + new Vec2(-(vec2_3.x + 2f), 0f);
                         Vec2 vec2_5 = lastDrawPos + new Vec2(-2f, vec2_3.y);
                         this._hoverBackArrow = false;
-                        if (vec2_2.x > (double)vec2_4.x && vec2_2.x < (double)vec2_5.x && vec2_2.y > (double)vec2_4.y && vec2_2.y < (double)vec2_5.y)
+                        if (vec2_2.x > vec2_4.x && vec2_2.x < vec2_5.x && vec2_2.y > vec2_4.y && vec2_2.y < vec2_5.y)
                         {
                             this._hoverBackArrow = true;
                             if (flag1)
@@ -690,7 +690,7 @@ namespace DuckGame
                         {
                             case EditorInput.Mouse:
                                 bool flag7 = false;
-                                if (Editor.inputMode == EditorInput.Mouse && (double)Mouse.x >= (double)this.x && (double)Mouse.x <= (double)this.x + itemSize.x && (double)Mouse.y >= (double)this.y + 1.0 && (double)Mouse.y <= (double)this.y + itemSize.y - 1.0)
+                                if (Editor.inputMode == EditorInput.Mouse && Mouse.x >= this.x && Mouse.x <= this.x + itemSize.x && Mouse.y >= this.y + 1f && Mouse.y <= this.y + itemSize.y - 1f)
                                 {
                                     if (Mouse.left == InputState.Pressed)
                                         flag3 = true;
@@ -764,11 +764,11 @@ namespace DuckGame
                                     break;
                         }
                     }
-                    if (Editor.inputMode == EditorInput.Mouse && (double)Mouse.x > lastDrawPos.x && (double)Mouse.x < lastDrawPos.x + (double)this.menuSize.x && (double)Mouse.y > lastDrawPos.y && (double)Mouse.y < lastDrawPos.y + (double)this.menuSize.y)
+                    if (Editor.inputMode == EditorInput.Mouse && Mouse.x > lastDrawPos.x && Mouse.x < lastDrawPos.x + this.menuSize.x && Mouse.y > lastDrawPos.y && Mouse.y < lastDrawPos.y + this.menuSize.y)
                     {
-                        if ((double)Mouse.scroll != 0.0 && !ContextMenu._didContextScroll)
+                        if (Mouse.scroll != 0f && !ContextMenu._didContextScroll)
                         {
-                            this._drawIndex += (double)Mouse.scroll > 0.0 ? 1 : -1;
+                            this._drawIndex += Mouse.scroll > 0f ? 1 : -1;
                             this._drawIndex = Maths.Clamp(this._drawIndex, 0, this._items.Count - this._maxNumToDraw);
                             SFX.Play("highClick", 0.3f, 0.2f);
                             foreach (ContextMenu contextMenu in this._items)
@@ -807,12 +807,12 @@ namespace DuckGame
         private void UpdatePositioning()
         {
             bool flag = false;
-            if ((double)this.y + _openedOffset + menuSize.y + 16.0 > (double)this.layer.height)
+            if (this.y + _openedOffset + menuSize.y + 16f > this.layer.height)
             {
-                this._openedOffset = (float)((double)this.layer.height - menuSize.y - (double)this.y - 16.0);
+                this._openedOffset = (this.layer.height - menuSize.y - this.y - 16f);
                 flag = true;
             }
-            if ((double)this.y + _openedOffset < 0.0)
+            if (this.y + _openedOffset < 0f)
             {
                 this._openedOffset = -this.y;
                 flag = true;
@@ -862,7 +862,7 @@ namespace DuckGame
                         Graphics.DrawString(this._text, this.position + new Vec2(2f, 4f), Colors.DGBlue * num2, this.depth + 1);
                     else if (this.fancy)
                     {
-                        float num3 = 0.0f;
+                        float num3 = 0f;
                         if (this.customIcon != null)
                         {
                             Vec2 vec2 = this.position + new Vec2(2f, 4f);
@@ -870,7 +870,7 @@ namespace DuckGame
                             num3 += 8f;
                         }
                         Graphics.DrawFancyString(this._text, this.position + new Vec2(2f + num3, 4f), Color.White * num2, this.depth + 1);
-                        Vec2 vec2_1 = this.position + new Vec2(this.itemSize.x - 24f, 0.0f);
+                        Vec2 vec2_1 = this.position + new Vec2(this.itemSize.x - 24f, 0f);
                         int num4 = 0;
                         for (int index1 = 0; index1 < 3 && num4 != 4; ++index1)
                         {
@@ -930,7 +930,7 @@ namespace DuckGame
                     if (this._items.Count > 0)
                     {
                         this._contextArrow.color = Color.White * num2;
-                        Graphics.Draw(this._contextArrow, (float)((double)this.x + itemSize.x - 8.0), this.y + 4f, this.depth + 1);
+                        Graphics.Draw(this._contextArrow, (this.x + itemSize.x - 8f), this.y + 4f, this.depth + 1);
                         this._contextArrow.color = Color.White;
                     }
                 }
@@ -960,20 +960,20 @@ namespace DuckGame
                                 g.alpha = 1f;
                             else
                                 g.alpha = 0.5f;
-                            Vec2 vec2_2 = new Vec2((float)(p1_1.x + (double)x - 5.0), p1_1.y - 4f);
+                            Vec2 vec2_2 = new Vec2((p1_1.x + x - 5f), p1_1.y - 4f);
                             Graphics.Draw(g, vec2_2.x, vec2_2.y);
                             Vec2 p1_2 = vec2_2 + new Vec2(-6f, -6f);
                             Vec2 p2_1 = p1_2 + new Vec2(11f, 11f);
                             if (Editor.inputMode == EditorInput.Gamepad && this._takingInput)
                                 p1_2.x -= 10f;
                             Graphics.DrawRect(p1_2, p2_1, new Color(70, 70, 70) * this.alpha, this.depth);
-                            Graphics.DrawRect(p1_2 + new Vec2(1f, 1f), p2_1 + new Vec2(-1f, 0.0f), new Color(30, 30, 30) * this.alpha, this.depth + 1);
+                            Graphics.DrawRect(p1_2 + new Vec2(1f, 1f), p2_1 + new Vec2(-1f, 0f), new Color(30, 30, 30) * this.alpha, this.depth + 1);
                             if (this._owner != null && this._owner is ContextMenu && (this._owner as ContextMenu).pinOpened)
                             {
                                 Vec2 vec2_3 = new Vec2(12f, 12f);
                                 if (Editor.bigInterfaceMode)
                                     vec2_3 = new Vec2(24f, 24f);
-                                Vec2 p1_3 = p1_1 + new Vec2((float)-(vec2_3.x + 2.0), 0.0f);
+                                Vec2 p1_3 = p1_1 + new Vec2((float)-(vec2_3.x + 2.0), 0f);
                                 Vec2 p2_2 = p1_1 + new Vec2(-2f, vec2_3.y);
                                 Graphics.DrawRect(p1_3, p2_2, new Color(70, 70, 70) * this.alpha, this.depth);
                                 Graphics.DrawRect(p1_3 + new Vec2(1f, 1f), p2_2 + new Vec2(-1f, -1f), new Color(30, 30, 30) * this.alpha, this.depth + 1);
@@ -1030,8 +1030,8 @@ namespace DuckGame
                         }
                         if (!this._root && !flag)
                             text += "  @LEFT@BACK";
-                        Graphics.DrawRect(p1_1 + new Vec2(0.0f, y), p1_1 + new Vec2(x, y + 15f), Color.Black * this.alpha, this.depth);
-                        Graphics.DrawString(text, p1_1 + new Vec2(0.0f, y + 4f), Color.White * this.alpha, this.depth + 1);
+                        Graphics.DrawRect(p1_1 + new Vec2(0f, y), p1_1 + new Vec2(x, y + 15f), Color.Black * this.alpha, this.depth);
+                        Graphics.DrawString(text, p1_1 + new Vec2(0f, y + 4f), Color.White * this.alpha, this.depth + 1);
                         if (this.isPinnable && (!this._root || this.pinned))
                         {
                             Graphics._biosFont.spriteScale = new Vec2(0.75f);
@@ -1162,8 +1162,8 @@ namespace DuckGame
         private double CalculateSimilarity(string source, string target)
         {
             if (source == null || target == null || source.Length == 0 || target.Length == 0)
-                return 0.0;
-            return source == target ? 1.0 : 1.0 - this.ComputeLevenshteinDistance(source, target) / (double)Math.Max(source.Length, target.Length);
+                return 0f;
+            return source == target ? 1f : 1f - this.ComputeLevenshteinDistance(source, target) / Math.Max(source.Length, target.Length);
         }
 
         /// <summary>
@@ -1237,13 +1237,13 @@ namespace DuckGame
 
         public void PositionItems()
         {
-            float num1 = 0.0f;
+            float num1 = 0f;
             float num2 = this.y + this._openedOffset;
-            this._openedOffsetX = 0.0f;
+            this._openedOffsetX = 0f;
             if (Editor.inputMode != EditorInput.Mouse && !this._root)
             {
                 num2 = 16f;
-                this._openedOffset = (float)(-(double)this.y + 16.0);
+                this._openedOffset = (-this.y + 16f);
             }
             for (int index = 0; index < this._items.Count; ++index)
             {
@@ -1251,7 +1251,7 @@ namespace DuckGame
                 if (!contextMenu.opened || contextMenu is ContextToolbarItem && (contextMenu as ContextToolbarItem).isPushingUp)
                 {
                     if (!this._root && !this.dontPush)
-                        contextMenu.x = (float)((double)this.x + 3.0 + itemSize.x + 3.0);
+                        contextMenu.x = (this.x + 3f + itemSize.x + 3f);
                     else
                         contextMenu.x = this.x;
                     if ((this._pinned || Editor.pretendPinned == this) && !this._root)
@@ -1271,16 +1271,16 @@ namespace DuckGame
                 }
                 if (index >= this._drawIndex && !this.pinOpened && (this._alwaysDrawLast && (index == this._items.Count - 1 || index != this._drawIndex + this._maxNumToDraw - 1 && index < this._drawIndex + this._maxNumToDraw) || !this._alwaysDrawLast))
                     num2 += contextMenu.itemSize.y + 1f;
-                if (contextMenu.itemSize.x < 107.0)
+                if (contextMenu.itemSize.x < 107f)
                     contextMenu.itemSize.x = 107f;
                 if (contextMenu.itemSize.x + 4.0 > menuSize.x)
                     this.menuSize.x = contextMenu.itemSize.x + 4f;
                 contextMenu.depth = this.depth + 2;
-                if (contextMenu.itemSize.x > (double)num1)
+                if (contextMenu.itemSize.x > num1)
                     num1 = contextMenu.itemSize.x;
             }
             int num3 = 0;
-            float num4 = 0.0f;
+            float num4 = 0f;
             foreach (ContextMenu contextMenu in this._items)
             {
                 if (num3 < this._maxNumToDraw)

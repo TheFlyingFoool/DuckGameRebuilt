@@ -262,7 +262,7 @@ namespace DuckGame
             return true;
         }
 
-        public void PlaySFX(string sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
+        public void PlaySFX(string sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             if (!this.isServerForObject)
                 return;
@@ -564,9 +564,9 @@ namespace DuckGame
         public void ApplyForce(Vec2 force, Vec2 limits)
         {
             limits = new Vec2(Math.Abs(limits.x), Math.Abs(limits.y));
-            if (force.x < 0.0 && _hSpeed > -(double)limits.x || force.x > 0.0 && _hSpeed < (double)limits.x)
+            if (force.x < 0.0 && _hSpeed > -limits.x || force.x > 0.0 && _hSpeed < limits.x)
                 this._hSpeed += force.x;
-            if ((force.y >= 0.0 || _vSpeed <= -(double)limits.y) && (force.y <= 0.0 || _vSpeed >= (double)limits.y))
+            if ((force.y >= 0.0 || _vSpeed <= -limits.y) && (force.y <= 0.0 || _vSpeed >= limits.y))
                 return;
             this._vSpeed += force.y;
         }
@@ -574,10 +574,10 @@ namespace DuckGame
         public void ApplyForceLimited(Vec2 force)
         {
             this._hSpeed += force.x;
-            if (force.x < 0.0 && _hSpeed < (double)force.x || force.x > 0.0 && _hSpeed > (double)force.x)
+            if (force.x < 0.0 && _hSpeed < force.x || force.x > 0.0 && _hSpeed > force.x)
                 this._hSpeed = force.x;
             this._vSpeed += force.y;
-            if ((force.y >= 0.0 || _vSpeed >= (double)force.y) && (force.y <= 0.0 || _vSpeed <= (double)force.y))
+            if ((force.y >= 0.0 || _vSpeed >= force.y) && (force.y <= 0.0 || _vSpeed <= force.y))
                 return;
             this._vSpeed = force.y;
         }
@@ -715,7 +715,7 @@ namespace DuckGame
 
         public static bool CheckForBozoData(Thing pThing)
         {
-            if (pThing == null || (double)Math.Abs(pThing.y) > 99999.0 || (double)Math.Abs(pThing.x) > 99999.0)
+            if (pThing == null || Math.Abs(pThing.y) > 99999.0 || Math.Abs(pThing.x) > 99999.0)
                 return true;
             if (!(pThing is ThingContainer))
                 return false;
@@ -738,7 +738,7 @@ namespace DuckGame
             Thing thing = Editor.CreateThing(type);
             if (!thing.Deserialize(node))
                 return null;
-            if (!(Level.current is Editor) && chance && (double)thing.likelyhoodToExist != 1.0 && !Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist))
+            if (!(Level.current is Editor) && chance && thing.likelyhoodToExist != 1.0 && !Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist))
                 return null;
             if (thing is IContainPossibleThings)
                 (thing as IContainPossibleThings).PreparePossibilities();
@@ -811,7 +811,7 @@ namespace DuckGame
             Thing thing = Editor.CreateThing(type);
             if (!thing.LegacyDeserialize(node))
                 thing = null;
-            return Level.current is Editor || !chance || (double)thing.likelyhoodToExist == 1.0 || Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist) ? thing : null;
+            return Level.current is Editor || !chance || thing.likelyhoodToExist == 1.0 || Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist) ? thing : null;
         }
 
         public bool isAccessible
@@ -1090,14 +1090,14 @@ namespace DuckGame
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
             if (this.graphic == null)
-                return new Sprite(target, 0.0f, 0.0f);
+                return new Sprite(target, 0f, 0f);
             float num2 = num1 / (collisionSize.x > 0.0 & pUseCollisionSize ? this.collisionSize.x : graphic.width);
-            Camera camera = new Camera(0.0f, 0.0f, wide, high)
+            Camera camera = new Camera(0f, 0f, wide, high)
             {
                 position = new Vec2(this.x - this.centerx * num2, this.y - this.centery * num2)
             };
             if (pUseCollisionSize && collisionSize.x > 0.0)
-                camera.center = new Vec2((int)(((double)this.left + (double)this.right) / 2.0), (int)(((double)this.top + (double)this.bottom) / 2.0));
+                camera.center = new Vec2((int)((this.left + this.right) / 2.0), (int)((this.top + this.bottom) / 2.0));
             RenderTarget2D currentRenderTarget = DuckGame.Graphics.currentRenderTarget;
             DuckGame.Graphics.SetRenderTarget(target);
             DepthStencilState depthStencilState = new DepthStencilState()
@@ -1147,8 +1147,8 @@ namespace DuckGame
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
             if (this.graphic == null)
-                return new Sprite(target, 0.0f, 0.0f);
-            Camera camera = new Camera(0.0f, 0.0f, wide, high)
+                return new Sprite(target, 0f, 0f);
+            Camera camera = new Camera(0f, 0f, wide, high)
             {
                 position = new Vec2(this.x - wide / 2, this.y - high / 2)
             };
@@ -1208,27 +1208,27 @@ namespace DuckGame
         {
             if (_likelyhoodToExist == 1.0 && this._chanceGroup == -1)
                 return this.GetPropertyDetails();
-            return "Chance: " + Math.Round((double)this.likelyhoodToExist / 1.0 * 100.0).ToString() + "%\nChance Group: " + (this._chanceGroup == -1 ? "None" : this._chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + this.GetPropertyDetails();
+            return "Chance: " + Math.Round(this.likelyhoodToExist / 1.0 * 100.0).ToString() + "%\nChance Group: " + (this._chanceGroup == -1 ? "None" : this._chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + this.GetPropertyDetails();
         }
 
         public virtual void ReturnItemToWorld(Thing t)
         {
-            Block block1 = Level.CheckLine<Block>(this.position, this.position + new Vec2(16f, 0.0f));
-            if (block1 != null && block1.solid && (double)t.right > (double)block1.left)
+            Block block1 = Level.CheckLine<Block>(this.position, this.position + new Vec2(16f, 0f));
+            if (block1 != null && block1.solid && t.right > block1.left)
                 t.right = block1.left;
-            Block block2 = Level.CheckLine<Block>(this.position, this.position - new Vec2(16f, 0.0f));
-            if (block2 != null && block2.solid && (double)t.left < (double)block2.right)
+            Block block2 = Level.CheckLine<Block>(this.position, this.position - new Vec2(16f, 0f));
+            if (block2 != null && block2.solid && t.left < block2.right)
                 t.left = block2.right;
-            Block block3 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0.0f, -16f));
-            if (block3 != null && block3.solid && (double)t.top < (double)block3.bottom)
+            Block block3 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, -16f));
+            if (block3 != null && block3.solid && t.top < block3.bottom)
                 t.top = block3.bottom;
-            Block block4 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0.0f, 16f));
-            if (block4 == null || !block4.solid || (double)t.bottom <= (double)block4.top)
+            Block block4 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, 16f));
+            if (block4 == null || !block4.solid || t.bottom <= block4.top)
                 return;
             t.bottom = block4.top;
         }
 
-        public bool isOffBottomOfLevel => (double)this.y > Level.activeLevel.lowestPoint + 100.0 && (double)this.top > (double)Level.current.camera.bottom + 8.0;
+        public bool isOffBottomOfLevel => this.y > Level.activeLevel.lowestPoint + 100.0 && this.top > Level.current.camera.bottom + 8.0;
 
         public virtual Vec2 collisionOffset
         {
@@ -1291,18 +1291,18 @@ namespace DuckGame
             Vec2 vec2 = this.topLeft;
             float num = (this.topLeft - to).length;
             float length1 = (this.topRight - to).length;
-            if ((double)length1 < (double)num)
+            if (length1 < num)
             {
                 vec2 = this.topRight;
                 num = length1;
             }
             float length2 = (this.bottomLeft - to).length;
-            if ((double)length2 < (double)num)
+            if (length2 < num)
             {
                 vec2 = this.bottomLeft;
                 num = length2;
             }
-            if ((double)(this.bottomRight - to).length < (double)num)
+            if ((this.bottomRight - to).length < num)
                 vec2 = this.bottomRight;
             return vec2;
         }
@@ -1312,27 +1312,27 @@ namespace DuckGame
             Vec2 vec2_1 = Vec2.Zero;
             float num = 9999999f;
             float length1 = (this.topLeft - to).length;
-            if ((double)length1 < (double)num && Level.CheckCircle<Block>(this.topLeft, 2f, this) == null)
+            if (length1 < num && Level.CheckCircle<Block>(this.topLeft, 2f, this) == null)
             {
                 vec2_1 = this.topLeft;
                 num = length1;
             }
             Vec2 vec2_2 = this.topRight - to;
             float length2 = vec2_2.length;
-            if ((double)length2 < (double)num && Level.CheckCircle<Block>(this.topRight, 2f, this) == null)
+            if (length2 < num && Level.CheckCircle<Block>(this.topRight, 2f, this) == null)
             {
                 vec2_1 = this.topRight;
                 num = length2;
             }
             vec2_2 = this.bottomLeft - to;
             float length3 = vec2_2.length;
-            if ((double)length3 < (double)num && Level.CheckCircle<Block>(this.bottomLeft, 2f, this) == null)
+            if (length3 < num && Level.CheckCircle<Block>(this.bottomLeft, 2f, this) == null)
             {
                 vec2_1 = this.bottomLeft;
                 num = length3;
             }
             vec2_2 = this.bottomRight - to;
-            if ((double)vec2_2.length < (double)num && Level.CheckCircle<Block>(this.bottomRight, 2f, this) == null)
+            if (vec2_2.length < num && Level.CheckCircle<Block>(this.bottomRight, 2f, this) == null)
                 vec2_1 = this.bottomRight;
             return vec2_1;
         }
@@ -1355,7 +1355,7 @@ namespace DuckGame
 
         public float h => this.height;
 
-        public Rectangle rectangle => new Rectangle((int)this.left, (int)this.top, (int)((double)this.right - (double)this.left), (int)((double)this.bottom - (double)this.top));
+        public Rectangle rectangle => new Rectangle((int)this.left, (int)this.top, (int)(this.right - this.left), (int)(this.bottom - this.top));
 
         public Vec2 collisionCenter
         {
@@ -1367,7 +1367,7 @@ namespace DuckGame
             }
         }
 
-        public Thing(float xval = 0.0f, float yval = 0.0f, Sprite sprite = null)
+        public Thing(float xval = 0f, float yval = 0f, Sprite sprite = null)
         {
             this.x = xval;
             this.y = yval;
@@ -1384,13 +1384,13 @@ namespace DuckGame
             Vec2 vec2 = pos * this.scale;
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            return vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f));
+            return vec2.Rotate(this.angle, new Vec2(0f, 0f));
         }
 
         public virtual Vec2 ReverseOffsetLocal(Vec2 pos)
         {
             Vec2 vec2 = pos * this.scale;
-            vec2 = vec2.Rotate(-this.angle, new Vec2(0.0f, 0.0f));
+            vec2 = vec2.Rotate(-this.angle, new Vec2(0f, 0f));
             return vec2;
         }
 
@@ -1404,18 +1404,18 @@ namespace DuckGame
 
         public virtual float OffsetX(float pos)
         {
-            Vec2 vec2 = new Vec2(pos, 0.0f);
+            Vec2 vec2 = new Vec2(pos, 0f);
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            return (this.position + vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f))).x;
+            return (this.position + vec2.Rotate(this.angle, new Vec2(0f, 0f))).x;
         }
 
         public virtual float OffsetY(float pos)
         {
-            Vec2 vec2 = new Vec2(0.0f, pos);
+            Vec2 vec2 = new Vec2(0f, pos);
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            return (this.position + vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f))).y;
+            return (this.position + vec2.Rotate(this.angle, new Vec2(0f, 0f))).y;
         }
 
         public virtual void ResetProperties()

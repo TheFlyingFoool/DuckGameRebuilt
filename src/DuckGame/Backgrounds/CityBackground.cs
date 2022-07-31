@@ -41,11 +41,11 @@ namespace DuckGame
                 return;
             this.backgroundColor = new Color(24, 0, 31);
             Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/city", 0.0f, 0.0f, 3);
+            this._parallax = new ParallaxBackground("background/city", 0f, 0f, 3);
             float speed = 0.4f;
-            this._parallax.AddZone(0, 0.0f, -speed, true);
-            this._parallax.AddZone(1, 0.0f, -speed, true);
-            this._parallax.AddZone(2, 0.0f, -speed, true);
+            this._parallax.AddZone(0, 0f, -speed, true);
+            this._parallax.AddZone(1, 0f, -speed, true);
+            this._parallax.AddZone(2, 0f, -speed, true);
             this._parallax.AddZone(3, 0.2f, -speed, true);
             this._parallax.AddZone(4, 0.2f, -speed, true);
             this._parallax.AddZone(5, 0.4f, -speed, true);
@@ -94,7 +94,7 @@ namespace DuckGame
             if (stringList.Count <= 0)
                 return;
             bool flag = false;
-            if ((double)Rando.Float(1f) > 0.5 || stringList.Count > 1 || stringList[0].Length > 80)
+            if (Rando.Float(1f) > 0.5f || stringList.Count > 1 || stringList[0].Length > 80)
                 flag = true;
             Vec2 vec2 = new Vec2(flag ? 350f : -50f, 60f + Rando.Float(80f));
             if (spawn != Vec2.Zero)
@@ -108,9 +108,9 @@ namespace DuckGame
             {
                 CityBackground.Plane plane = new CityBackground.Plane(vec2, text1, flag);
                 if (flag)
-                    vec2.x += (float)((double)plane.textWidth * 0.5 + 80.0);
+                    vec2.x += (plane.textWidth * 0.5f + 80f);
                 else
-                    vec2.x -= (float)((double)plane.textWidth * 0.5 + 80.0);
+                    vec2.x -= (plane.textWidth * 0.5f + 80f);
                 this._planes.Add(plane);
             }
         }
@@ -177,9 +177,9 @@ namespace DuckGame
             if (!Network.isActive || Network.isServer)
             {
                 this.timeSinceSkySay += Maths.IncFrameTimer();
-                if (timeSinceSkySay > 30.0 && this._planes.Count == 0)
+                if (timeSinceSkySay > 30f && this._planes.Count == 0)
                 {
-                    if ((double)Rando.Float(1f) > 0.5)
+                    if (Rando.Float(1f) > 0.5f)
                         this.RandomSkySay();
                     this.timeSinceSkySay = Rando.Float(15f);
                 }
@@ -222,9 +222,9 @@ namespace DuckGame
                 this.position = pos;
                 this.AddAnimation("idle", 0.8f, true, 0, 1);
                 this.SetAnimation("idle");
-                this.bannerTarget = new RenderTarget2D((int)((double)this._font.GetWidth(text) + 4.0) + 8, 15);
+                this.bannerTarget = new RenderTarget2D((int)(this._font.GetWidth(text) + 4f) + 8, 15);
                 this._wiggle = new MaterialWiggle(this);
-                Camera camera = new Camera(0.0f, 0.0f, bannerTarget.width, bannerTarget.height)
+                Camera camera = new Camera(0f, 0f, bannerTarget.width, bannerTarget.height)
                 {
                     position = Vec2.Zero
                 };
@@ -239,7 +239,7 @@ namespace DuckGame
                 };
                 DuckGame.Graphics.Clear(Color.Transparent);
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
-                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 2f), new Vec2(this.bannerTarget.width - 8, this.bannerTarget.height - 2), Color.Black);
+                DuckGame.Graphics.DrawRect(new Vec2(0f, 2f), new Vec2(this.bannerTarget.width - 8, this.bannerTarget.height - 2), Color.Black);
                 this._font.Draw(text, new Vec2(1f, 3f), new Color(47, 0, 66), (Depth)1f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
@@ -248,9 +248,9 @@ namespace DuckGame
             public void UpdateFlying()
             {
                 this.position.x += this._flyLeft ? -0.25f : 0.25f;
-                if (this.bannerTarget != null && (this._flyLeft && (double)this.x < -(400 + this.bannerTarget.width) || !this._flyLeft && (double)this.x > 400 + this.bannerTarget.width))
+                if (this.bannerTarget != null && (this._flyLeft && this.x < -(400 + this.bannerTarget.width) || !this._flyLeft && this.x > 400 + this.bannerTarget.width))
                     this.finished = true;
-                double num = -(Level.current.bottomRight.y + (double)Level.current.topLeft.y) / 2.0;
+                double num = -(Level.current.bottomRight.y + Level.current.topLeft.y) / 2f;
             }
 
             public override void Draw()

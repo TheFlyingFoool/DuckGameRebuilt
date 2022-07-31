@@ -30,7 +30,7 @@ namespace DuckGame
         private PhysicsObject _hoverThing;
         private Vec2 _scaleLerp = Vec2.One;
 
-        public float direction => this.fireDirection + (this.flipHorizontal ? 180f : 0.0f);
+        public float direction => this.fireDirection + (this.flipHorizontal ? 180f : 0f);
 
         public override void EditorPropertyChanged(object property)
         {
@@ -85,7 +85,7 @@ namespace DuckGame
         {
             if (!Network.isServer && !this.wasPulse)
             {
-                this._spawnWait = 0.0f;
+                this._spawnWait = 0f;
                 ++this._numSpawned;
             }
             else
@@ -101,7 +101,7 @@ namespace DuckGame
                 if (!this.initializedWired)
                 {
                     WireTileset wireTileset = Level.current.NearestThing<WireTileset>(this.position);
-                    if (wireTileset != null && (double)(wireTileset.position - this.position).length < 1.0)
+                    if (wireTileset != null && (wireTileset.position - this.position).length < 1.0)
                         this.wired = true;
                     this.initializedWired = true;
                 }
@@ -118,7 +118,7 @@ namespace DuckGame
                     if (type != null)
                         this.contains = type;
                 }
-                this._spawnWait = 0.0f;
+                this._spawnWait = 0f;
                 ++this._numSpawned;
                 if (this.contains == null || !(Editor.CreateThing(this.contains) is PhysicsObject thing))
                     return;
@@ -154,26 +154,26 @@ namespace DuckGame
                     this._spawnWait += 0.0166666f;
                 if (this.bing.value > 0)
                 {
-                    float num1 = Math.Max(this.spawnTime - this._spawnWait, 0.0f) + this.initialDelay;
+                    float num1 = Math.Max(this.spawnTime - this._spawnWait, 0f) + this.initialDelay;
                     float num2 = bing.value * Maths.IncFrameTimer();
                     float num3 = (num2 - num1) / num2;
-                    if (this.beeps == 0 && (double)num3 > 0.0)
+                    if (this.beeps == 0 && num3 > 0.0)
                     {
                         SFX.Play("singleBeep");
                         ++this.beeps;
                     }
-                    if (this.beeps == 1 && (double)num3 > 0.333333343267441)
+                    if (this.beeps == 1 && num3 > 0.333333343267441)
                     {
                         SFX.Play("singleBeep");
                         ++this.beeps;
                     }
-                    if (this.beeps == 2 && (double)num3 > 0.666666686534882)
+                    if (this.beeps == 2 && num3 > 0.666666686534882)
                     {
                         SFX.Play("singleBeep");
                         ++this.beeps;
                     }
                 }
-                if (Level.current.simulatePhysics && _spawnWait >= (double)this.spawnTime)
+                if (Level.current.simulatePhysics && _spawnWait >= this.spawnTime)
                 {
                     if (initialDelay > 0.0)
                     {
@@ -185,8 +185,8 @@ namespace DuckGame
                             SFX.Play("bing");
                         this.beeps = 0;
                         this.Spawn();
-                        this._startupDelay = 0.0f;
-                        this.initialDelay = 0.0f;
+                        this._startupDelay = 0f;
+                        this.initialDelay = 0f;
                     }
                 }
             }
@@ -254,7 +254,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (this.contains != null)
                 text = this.contains.Name;
-            Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
             if (!(this.contains != null))
                 return;
             if (this._hoverThing == null || this._hoverThing.GetType() != this.contains)
@@ -284,20 +284,20 @@ namespace DuckGame
             float val = this._spawnWait / (this.spawnTime + this._startupDelay);
             if (this.showClock.value)
             {
-                float radians = (float)((this.flipHorizontal ? (double)val : -(double)val) * 6.28318548202515);
+                float radians = (float)((this.flipHorizontal ? val : -val) * 6.28318548202515);
                 if (this.flipHorizontal)
                     radians += 3.141593f;
-                Graphics.DrawLine(this.Offset(new Vec2(0.0f, 0.0f)), this.Offset(Maths.AngleToVec(radians) * 3f), Color.Black, depth: (this.depth + 2));
+                Graphics.DrawLine(this.Offset(new Vec2(0f, 0f)), this.Offset(Maths.AngleToVec(radians) * 3f), Color.Black, depth: (this.depth + 2));
                 Vec2 vec2 = this.Offset(Maths.AngleToVec(radians) * 2f);
-                this._arrowHead.angle = (float)((this.flipHorizontal ? (double)radians : -(double)radians) + (double)this.angle + 3.14159274101257 * (this.flipHorizontal ? -0.5 : 0.5));
+                this._arrowHead.angle = (float)((this.flipHorizontal ? radians : -radians) + this.angle + 3.14159274101257 * (this.flipHorizontal ? -0.5 : 0.5));
                 this._arrowHead.scale = new Vec2(0.5f, 0.5f);
                 Graphics.Draw(this._arrowHead, vec2.x, vec2.y, this.depth + 2);
             }
-            float num = Maths.Clamp(val, 0.0f, 1f);
-            if ((double)num > 0.800000011920929 && !(Level.current is Editor))
+            float num = Maths.Clamp(val, 0f, 1f);
+            if (num > 0.800000011920929 && !(Level.current is Editor))
             {
-                this.xscale = (float)(1.0 - ((double)num - 0.800000011920929) * 2.0);
-                this.yscale = (float)(1.0 + ((double)num - 0.800000011920929) * 4.0);
+                this.xscale = (float)(1.0 - (num - 0.800000011920929) * 2.0);
+                this.yscale = (float)(1.0 + (num - 0.800000011920929) * 4.0);
             }
             this.angleDegrees = -this.direction;
             base.Draw();

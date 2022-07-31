@@ -16,7 +16,7 @@ namespace DuckGame
         {
             this.UpdateSprite();
             this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-8f, 0.0f);
+            this.collisionOffset = new Vec2(-8f, 0f);
             this.collisionSize = new Vec2(16f, 8f);
             this.depth = -0.5f;
             this._editorName = "Spring UpRight";
@@ -54,24 +54,24 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if ((double)with.vSpeed > -22.0 * _mult)
+                if (with.vSpeed > -22.0 * _mult)
                     with.vSpeed = -22f * this._mult;
                 if (this.flipHorizontal)
                 {
                     if (this.purple)
                     {
-                        if ((double)with.hSpeed > -7.0)
+                        if (with.hSpeed > -7.0)
                             with.hSpeed = -7f;
                     }
-                    else if ((double)with.hSpeed > -10.0)
+                    else if (with.hSpeed > -10.0)
                         with.hSpeed = -10f;
                 }
                 else if (this.purple)
                 {
-                    if ((double)with.hSpeed < 7.0)
+                    if (with.hSpeed < 7.0)
                         with.hSpeed = 7f;
                 }
-                else if ((double)with.hSpeed < 10.0)
+                else if (with.hSpeed < 10.0)
                     with.hSpeed = 10f;
                 if (with is Gun)
                     (with as Gun).PressAction();

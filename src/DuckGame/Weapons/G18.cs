@@ -35,7 +35,7 @@ namespace DuckGame
             this._fireSound = "smg";
             this._kickForce = 0.3f;
             this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-1f, 0.0f);
+            this._holdOffset = new Vec2(-1f, 0f);
             this._bio = "Old faithful, the 9MM pistol.";
             this._editorName = "Machine Pistol";
             this.editorTooltip = "Need to deliver a bunch of bullets to someone in a hurry? Try this.";
@@ -58,7 +58,7 @@ namespace DuckGame
                 this._sprite.SetAnimation("fire");
                 for (int index = 0; index < 3; ++index)
                 {
-                    Vec2 vec2 = this.Offset(new Vec2(-9f, 0.0f));
+                    Vec2 vec2 = this.Offset(new Vec2(-9f, 0f));
                     Vec2 hitAngle = this.barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);
                     Level.Add(Spark.New(vec2.x, vec2.y, hitAngle, 0.1f));
                 }

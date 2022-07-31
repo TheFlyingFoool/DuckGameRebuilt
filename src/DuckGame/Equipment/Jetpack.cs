@@ -31,7 +31,7 @@ namespace DuckGame
             this._equippedDepth = -15;
             this._jumpMod = true;
             this.thickness = 0.1f;
-            this._wearOffset = new Vec2(-2f, 0.0f);
+            this._wearOffset = new Vec2(-2f, 0f);
             this.editorTooltip = "Allows you to fly like some kind of soaring bird.";
         }
 
@@ -45,9 +45,9 @@ namespace DuckGame
             this._sprite.frame = (int)(_heat * 7.0);
             if (this._equippedDuck != null)
             {
-                float num1 = 0.0f;
+                float num1 = 0f;
                 this._offset = new Vec2(-3f, 3f);
-                this.angle = 0.0f;
+                this.angle = 0f;
                 if (this._equippedDuck.sliding && this._equippedDuck._trapped == null)
                 {
                     if (this._equippedDuck.offDir > 0)
@@ -84,7 +84,7 @@ namespace DuckGame
                         Level.Add(new JetpackSmoke(vec2_1.x, vec2_1.y));
                         this.angle = angle;
                         Vec2 vec2_2 = physicsObject1.velocity;
-                        if ((double)vec2_2.length < 7f)
+                        if (vec2_2.length < 7f)
                         {
                             RagdollPart ragdollPart = physicsObject1 as RagdollPart;
                             ragdollPart.addWeight = 0.2f;
@@ -98,7 +98,7 @@ namespace DuckGame
                             }
                             else
                             {
-                                vec2_3 = new Vec2(0.0f, 0.0f);
+                                vec2_3 = new Vec2(0f, 0f);
                                 if (this._equippedDuck.inputProfile.Down("LEFT"))
                                     --vec2_3.x;
                                 if (this._equippedDuck.inputProfile.Down("RIGHT"))
@@ -130,7 +130,7 @@ namespace DuckGame
                         }
                         else if (this.angle < 0f)
                         {
-                            if (physicsObject1.hSpeed > -6.0f)
+                            if (physicsObject1.hSpeed > -6f)
                                 physicsObject1.hSpeed -= 0.9f;
                         }
                         else if (physicsObject1.vSpeed > -4.5f)

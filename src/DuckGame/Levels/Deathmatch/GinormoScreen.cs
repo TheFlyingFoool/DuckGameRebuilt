@@ -19,7 +19,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.layer = Layer.Foreground;
-            this.depth = (Depth)0.0f;
+            this.depth = (Depth)0f;
             this._font = new BitmapFont("biosFont", 8);
             this._collisionSize = new Vec2(184f, 102f);
             List<Team> teamList = new List<Team>();
@@ -39,7 +39,7 @@ namespace DuckGame
             foreach (Team team in teamList)
             {
                 float y = this.y + 2f + (smallMode ? 12 : 25) * idx;
-                if ((double)Graphics.aspect > 0.589999973773956)
+                if (Graphics.aspect > 0.589999973773956)
                     y += 10f;
                 Level.current.AddThing(new GinormoCard(idx * 1f, new Vec2(300f, y), new Vec2(this.x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
                 ++idx;

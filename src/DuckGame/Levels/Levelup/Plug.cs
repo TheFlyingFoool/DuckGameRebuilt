@@ -13,7 +13,7 @@ namespace DuckGame
     {
         public static Plug context = new Plug();
         public static List<VincentProduct> products = new List<VincentProduct>();
-        public static float alpha = 0.0f;
+        public static float alpha = 0f;
         private static FancyBitmapFont _font;
         private static SpriteMap _dealer;
         private static List<string> _lines = new List<string>();
@@ -21,23 +21,23 @@ namespace DuckGame
         private static List<TextLine> _lineProgress = new List<TextLine>();
         private static float _waitLetter = 1f;
         private static float _waitAfterLine = 1f;
-        private static float _talkMove = 0.0f;
-        //private static float _showLerp = 0.0f;
+        private static float _talkMove = 0f;
+        //private static float _showLerp = 0f;
         private static bool _allowMovement = false;
         public static bool open = false;
         private static int frame = 0;
         private static bool killSkip = false;
-        private static float _extraWait = 0.0f;
+        private static float _extraWait = 0f;
         private static int colorLetters = 0;
-        private static float _chancyLerp = 0.0f;
+        private static float _chancyLerp = 0f;
         private static string lastWord = "";
         private static int wait = 0;
 
         public static void Clear()
         {
             Plug._lines.Clear();
-            Plug._waitLetter = 0.0f;
-            Plug._waitAfterLine = 0.0f;
+            Plug._waitLetter = 0f;
+            Plug._waitAfterLine = 0f;
             Plug._currentLine = "";
         }
 
@@ -46,7 +46,7 @@ namespace DuckGame
         public static void Open()
         {
             Plug._lineProgress.Clear();
-            //Plug._showLerp = 0.0f;
+            //Plug._showLerp = 0f;
             Plug._allowMovement = false;
             Plug._waitAfterLine = 1f;
             Plug._waitLetter = 1f;
@@ -64,9 +64,9 @@ namespace DuckGame
         public static void Update()
         {
             Plug.Initialize();
-            Plug.alpha = !FurniShopScreen.open ? Lerp.Float(Plug.alpha, 0.0f, 0.05f) : Lerp.Float(Plug.alpha, 1f, 0.05f);
+            Plug.alpha = !FurniShopScreen.open ? Lerp.Float(Plug.alpha, 0f, 0.05f) : Lerp.Float(Plug.alpha, 1f, 0.05f);
             bool flag1 = true;
-            Plug._chancyLerp = Lerp.FloatSmooth(Plug._chancyLerp, flag1 ? 1f : 0.0f, 0.2f, 1.05f);
+            Plug._chancyLerp = Lerp.FloatSmooth(Plug._chancyLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
             bool flag2 = !Plug._allowMovement && Input.Down("SELECT");
             if (Plug._lines.Count > 0 && Plug._currentLine == "")
             {
@@ -80,7 +80,7 @@ namespace DuckGame
                 if (_talkMove > 1.0)
                 {
                     Plug.frame = 0;
-                    Plug._talkMove = 0.0f;
+                    Plug._talkMove = 0f;
                 }
                 if (num == 0 && _waitAfterLine <= 0.0)
                     HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
@@ -105,7 +105,7 @@ namespace DuckGame
                 if (_talkMove > 1.0)
                 {
                     Plug.frame = Plug._currentLine[0] == ' ' || Plug.frame != 1 || _extraWait > 0.0 ? 1 : 2;
-                    Plug._talkMove = 0.0f;
+                    Plug._talkMove = 0f;
                 }
                 Plug._waitLetter = 1f;
                 while (Plug._currentLine[0] == '@')
@@ -123,7 +123,7 @@ namespace DuckGame
                         return;
                     }
                 }
-                float num1 = 0.0f;
+                float num1 = 0f;
                 while (Plug._currentLine[0] == '|')
                 {
                     Plug._currentLine = Plug._currentLine.Remove(0, 1);
@@ -253,7 +253,7 @@ namespace DuckGame
                 if (_talkMove <= 1.0)
                     return;
                 Plug.frame = 0;
-                Plug._talkMove = 0.0f;
+                Plug._talkMove = 0f;
             }
         }
 
@@ -268,7 +268,7 @@ namespace DuckGame
             {
                 float width = Plug._font.GetWidth(Plug._lineProgress[index1].text);
                 float y = vec2_3.y + 2f + num * 9;
-                float x = (float)(vec2_3.x + vec2_2.x / 2.0 - (double)width / 2.0);
+                float x = (float)(vec2_3.x + vec2_2.x / 2.0 - width / 2.0);
                 for (int index2 = Plug._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     Plug._font.Draw(Plug._lineProgress[index1].segments[index2].text, new Vec2(x, y), Plug._lineProgress[index1].segments[index2].color, (Depth)0.98f);
@@ -279,7 +279,7 @@ namespace DuckGame
             Plug._dealer.depth = (Depth)0.96f;
             Plug._dealer.alpha = 1f;
             Graphics.Draw(_dealer, 214f + vec2_1.x, 6f + vec2_1.y);
-            Graphics.DrawRect(vec2_3 + new Vec2(-2f, 0.0f), vec2_3 + vec2_2 + new Vec2(2f, 0.0f), Color.Black, (Depth)0.97f);
+            Graphics.DrawRect(vec2_3 + new Vec2(-2f, 0f), vec2_3 + vec2_2 + new Vec2(2f, 0f), Color.Black, (Depth)0.97f);
         }
     }
 }

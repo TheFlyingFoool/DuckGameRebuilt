@@ -27,7 +27,7 @@ namespace DuckGame
         public override void Initialize()
         {
             this._overlaySprite = Content.Load<Tex2D>("rockThrow/boardOverlayLarge");
-            this._targetSprite = new Sprite(GinormoBoard.boardLayer.target, 0.0f, 0.0f);
+            this._targetSprite = new Sprite(GinormoBoard.boardLayer.target, 0f, 0f);
             this._screenMaterial = new Material("Shaders/lcdNoBlur");
             this._screenMaterial.SetValue("screenWidth", GinormoScreen.GetSize(this._smallMode).x);
             this._screenMaterial.SetValue("screenHeight", GinormoScreen.GetSize(this._smallMode).y);

@@ -189,14 +189,14 @@ namespace DuckGame
                             str3 = "|DGPURPLE|";
                         }
                         string text1 = str3 + str2;
-                        ConnectionStatusUI._smallBios.Draw(text1, new Vec2((float)(vec2_2.x + (double)ConnectionStatusUI._bar.width - 3.0 - (double)ConnectionStatusUI._smallBios.GetWidth(text1) - 60.0), vec2_2.y + 3f), Color.White, (Depth)0.9f);
-                        int num8 = (int)Math.Round((double)bar.profile.connection.manager.ping * 1000.0);
+                        ConnectionStatusUI._smallBios.Draw(text1, new Vec2((float)(vec2_2.x + ConnectionStatusUI._bar.width - 3f - ConnectionStatusUI._smallBios.GetWidth(text1) - 60f), vec2_2.y + 3f), Color.White, (Depth)0.9f);
+                        int num8 = (int)Math.Round(bar.profile.connection.manager.ping * 1000f);
                         if (bar.profile.connection == DuckNetwork.localConnection)
                             num8 = 0;
                         string source = num8.ToString() + "|WHITE|MS";
                         source.Count<char>();
                         string text2 = num8 >= 150 ? (num8 >= 250 ? (bar.profile.connection.status != ConnectionStatus.Connected ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
-                        ConnectionStatusUI._smallBios.Draw(text2, new Vec2((float)(vec2_2.x + (double)ConnectionStatusUI._bar.width - 3.0) - ConnectionStatusUI._smallBios.GetWidth(text2), vec2_2.y + 3f), Color.White, (Depth)0.9f);
+                        ConnectionStatusUI._smallBios.Draw(text2, new Vec2((float)(vec2_2.x + ConnectionStatusUI._bar.width - 3f) - ConnectionStatusUI._smallBios.GetWidth(text2), vec2_2.y + 3f), Color.White, (Depth)0.9f);
                     }
                     ++num2;
                 }

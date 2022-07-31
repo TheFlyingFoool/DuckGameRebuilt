@@ -422,7 +422,7 @@ namespace DuckGame
         {
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._core._noModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0.0f, 0.0f);
+            DuckNetwork._core._noModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
             DuckNetwork._core._noModsMenu = DuckNetwork.CreateNoModsOnlineWindow(acceptFunction);
             DuckNetwork._core._noModsUIGroup.Add(_core._noModsMenu, false);
             DuckNetwork._core._noModsUIGroup.Close();
@@ -490,7 +490,7 @@ namespace DuckGame
         {
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._core._restartModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0.0f, 0.0f);
+            DuckNetwork._core._restartModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
             DuckNetwork._core._restartModsMenu = DuckNetwork.CreateModsRestartWindow(openOnClose);
             DuckNetwork._core._restartModsUIGroup.Add(_core._restartModsMenu, false);
             DuckNetwork._core._restartModsUIGroup.Close();
@@ -511,7 +511,7 @@ namespace DuckGame
         {
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._core._resUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0.0f, 0.0f);
+            DuckNetwork._core._resUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
             DuckNetwork._core._resMenu = DuckNetwork.CreateResolutionRestartWindow(openOnClose);
             DuckNetwork._core._resUIGroup.Add(_core._resMenu, false);
             DuckNetwork._core._resUIGroup.Close();
@@ -806,7 +806,7 @@ namespace DuckGame
 
         //private static void DoMatchSettingsInfoOpen()
         //{
-        //    DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0.0f, 0.0f);
+        //    DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
         //    DuckNetwork._core._matchSettingMenu = DuckNetwork.CreateMatchSettingsInfoWindow();
         //    DuckNetwork._ducknetUIGroup.Add((UIComponent)DuckNetwork._core._matchSettingMenu, false);
         //    DuckNetwork._ducknetUIGroup.Close();
@@ -825,7 +825,7 @@ namespace DuckGame
 
         private static void DoSpectatorOpen(bool pSpectator)
         {
-            DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0.0f, 0.0f);
+            DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
             UIMenu spectatorWindow = DuckNetwork.CreateSpectatorWindow(pSpectator);
             DuckNetwork._ducknetUIGroup.Add(spectatorWindow, false);
             DuckNetwork._ducknetUIGroup.Close();
@@ -881,7 +881,7 @@ namespace DuckGame
             DuckNetwork._core._menuOpenProfile = whoOpen;
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._ducknetUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0.0f, 0.0f)
+            DuckNetwork._ducknetUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f)
             {
                 isPauseMenu = true
             };
@@ -1149,7 +1149,7 @@ namespace DuckGame
             MemoryStream compressedLevelData = DuckNetwork.compressedLevelData;
             long length1 = compressedLevelData.Length;
             int offset = 0;
-            Math.Ceiling(length1 / (double)val2);
+            Math.Ceiling((double)(length1 / val2));
             compressedLevelData.Position = 0L;
             Send.Message(new NMLevelDataHeader(session, (int)length1, DuckNetwork.compressedLevelName), c);
             while (offset != length1)
@@ -1183,7 +1183,7 @@ namespace DuckGame
             if (DuckNetwork._uhOhGroup != null)
                 Level.Remove(_uhOhGroup);
             DuckNetwork.ClearTeam(p);
-            DuckNetwork._uhOhGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            DuckNetwork._uhOhGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             DuckNetwork._uhOhMenu = new UIMenu("UH OH", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 210f, conString: "@SELECT@OK");
             float num = 190f;
             string str1 = "The host isn't allowing teams, and someone else is already wearing your hat :(";
@@ -1197,7 +1197,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((textVal.Length + str2.Length) * 8 > (double)num)
+                    if ((textVal.Length + str2.Length) * 8 > num)
                     {
                         DuckNetwork._uhOhMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
@@ -2051,13 +2051,13 @@ namespace DuckGame
                                         if (profile2.inputProfile.leftStick.length < 0.05f)
                                         {
                                             if (profile2.inputProfile.Down("LEFT"))
-                                                pValue += new Vec2(-1f, 0.0f);
+                                                pValue += new Vec2(-1f, 0f);
                                             if (profile2.inputProfile.Down("RIGHT"))
-                                                pValue += new Vec2(1f, 0.0f);
+                                                pValue += new Vec2(1f, 0f);
                                             if (profile2.inputProfile.Down("DOWN"))
-                                                pValue += new Vec2(0.0f, -1f);
+                                                pValue += new Vec2(0f, -1f);
                                             if (profile2.inputProfile.Down("UP"))
-                                                pValue += new Vec2(0.0f, 1f);
+                                                pValue += new Vec2(0f, 1f);
                                         }
                                         else
                                             pValue = profile2.inputProfile.leftStick;
@@ -3083,7 +3083,7 @@ namespace DuckGame
             if (DuckNetwork.localProfile == null)
                 return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
-            float num1 = 0.0f;
+            float num1 = 0f;
             int num2 = 8;
             float chatScale = DuckNetwork.chatScale;
             float num3 = Resolution.current.x > 1920 ? 2f : 1f;
@@ -3127,12 +3127,12 @@ namespace DuckGame
                 DuckNetwork._core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
                 if (DuckNetwork._core._chatFont is RasterFont)
                     DuckNetwork._core._chatFont.scale = new Vec2(0.5f);
-                float x = (float)((double)DuckNetwork._core._chatFont.GetWidth(chatMessage.text) + (double)num7 + 8.0 * (double)chatScale);
+                float x = (float)(DuckNetwork._core._chatFont.GetWidth(chatMessage.text) + num7 + 8.0 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
                     if (DuckNetwork._core._chatFont is RasterFont)
                     {
-                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * (double)RasterFont.fontScaleFactor / 10.0);
+                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
                         x += 6f * num8;
                     }
                     else

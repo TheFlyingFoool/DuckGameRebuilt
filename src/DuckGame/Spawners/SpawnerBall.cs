@@ -60,7 +60,7 @@ namespace DuckGame
             }
             else
             {
-                this._sprite.scale = new Vec2((float)(0.5 - (double)num + 0.600000023841858), (float)(0.5 - (double)num + 0.600000023841858));
+                this._sprite.scale = new Vec2((float)(0.5 - num + 0.600000023841858), (float)(0.5 - num + 0.600000023841858));
                 this._sprite.depth = (Depth)(_sprite.scale.x > 0.800000011920929 ? 0.4f : -0.8f);
                 Graphics.Draw(_sprite, this.x - (float)Math.Sin(_wave) * this.orbitDistance, this.y - this.orbitHeight);
             }

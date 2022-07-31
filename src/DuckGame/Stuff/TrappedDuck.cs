@@ -52,7 +52,7 @@ namespace DuckGame
             this.thickness = 0.5f;
             this.weight = 5f;
             this.flammable = 1f;
-            this.burnSpeed = 0.0f;
+            this.burnSpeed = 0f;
             this._duckOwner = duckowner;
             this.tapeable = false;
             this.InitializeStuff();
@@ -176,7 +176,7 @@ namespace DuckGame
             this.jumpCountdown -= Maths.IncFrameTimer();
             this._prevVisible = this.visible;
             this._shakeInc += 0.8f;
-            this._shakeMult = Lerp.Float(this._shakeMult, 0.0f, 0.05f);
+            this._shakeMult = Lerp.Float(this._shakeMult, 0f, 0.05f);
             if (Network.isActive && this._duckOwner._trapped == this && !this._duckOwner.isServerForObject && this._duckOwner.inputProfile.Pressed("JUMP"))
                 this._shakeMult = 1f;
             if (this._duckOwner.isServerForObject && this._duckOwner._trapped == this)
@@ -205,12 +205,12 @@ namespace DuckGame
                         this._trapTime -= 0.028f;
                         if (this.owner == null)
                         {
-                            if ((double)Math.Abs(this.hSpeed) < 1.0 && this._framesSinceTransfer > 30)
+                            if (Math.Abs(this.hSpeed) < 1.0 && this._framesSinceTransfer > 30)
                                 this._duckOwner.Fondle(this);
                             this.vSpeed -= Rando.Float(0.8f, 1.1f);
-                            if (this._duckOwner.inputProfile.Down("LEFT") && (double)this.hSpeed > -1.0)
+                            if (this._duckOwner.inputProfile.Down("LEFT") && this.hSpeed > -1.0)
                                 this.hSpeed -= Rando.Float(0.6f, 0.8f);
-                            if (this._duckOwner.inputProfile.Down("RIGHT") && (double)this.hSpeed < 1.0)
+                            if (this._duckOwner.inputProfile.Down("RIGHT") && this.hSpeed < 1.0)
                                 this.hSpeed += Rando.Float(0.6f, 0.8f);
                         }
                     }
@@ -243,16 +243,16 @@ namespace DuckGame
             this._duckOwner._spriteQuack.depth = this.depth;
             if (Network.isActive)
                 this._duckOwner.DrawConnectionIndicators();
-            float num1 = 0.0f;
+            float num1 = 0f;
             if (this.owner != null)
                 num1 = (float)(Math.Sin(_shakeInc) * _shakeMult * 1.0);
             if (this._duckOwner.quack > 0)
             {
                 Vec2 tounge = this._duckOwner.tounge;
                 if (!this._duckOwner._spriteQuack.flipH && tounge.x < 0.0)
-                    tounge.x = 0.0f;
+                    tounge.x = 0f;
                 if (this._duckOwner._spriteQuack.flipH && tounge.x > 0.0)
-                    tounge.x = 0.0f;
+                    tounge.x = 0f;
                 if (tounge.y < -0.300000011920929)
                     tounge.y = -0.3f;
                 if (tounge.y > 0.400000005960464)
@@ -264,7 +264,7 @@ namespace DuckGame
                 Vec2 stickSlowLerp = this._stickSlowLerp;
                 stickSlowLerp.y *= -1f;
                 int num2 = 0;
-                double length = (double)stickLerp.length;
+                double length = stickLerp.length;
                 if (length > 0.5)
                     num2 = 72;
                 Graphics.Draw(this._duckOwner._spriteQuack, this._duckOwner._sprite.imageIndex + num2, this.x + num1, this.y - 8f);

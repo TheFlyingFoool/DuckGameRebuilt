@@ -56,7 +56,7 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0.0f);
+            UIDivider component1 = new UIDivider(true, 0f);
             this._uiText = new UIText(text, c);
             this._uiText.SetFont(f);
             this._uiText.align = UIAlign.Left;
@@ -77,7 +77,7 @@ namespace DuckGame
             this.leftSection.Add(_arrow, true);
             this._styleBubble = new Sprite("buttons/styleBubble")
             {
-                center = new Vec2(0.0f, 11f)
+                center = new Vec2(0f, 11f)
             };
             this._styleTray = new Sprite("buttons/styleTray");
             this._styleTray.CenterOrigin();
@@ -243,7 +243,7 @@ namespace DuckGame
                 {
                     this._styleTray.depth = (Depth)0.92f;
                     Graphics.Draw(this._styleTray, this.x + 118f, Layer.HUD.camera.height / 2f);
-                    Vec2 vec2_2 = new Vec2(this.x + 90f, (float)((double)Layer.HUD.camera.height / 2.0 - 80.0));
+                    Vec2 vec2_2 = new Vec2(this.x + 90f, (float)(Layer.HUD.camera.height / 2.0 - 80.0));
                     int num = 0;
                     foreach (Sprite buttonStyle in Input.buttonStyles)
                     {

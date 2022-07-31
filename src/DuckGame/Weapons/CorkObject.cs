@@ -24,10 +24,10 @@ namespace DuckGame
             this._gun = pOwner;
             this.weight = 0.1f;
             this.bouncy = 0.5f;
-            this.airFrictionMult = 0.0f;
+            this.airFrictionMult = 0f;
             this._ropeSprite = new Sprite("grappleWire")
             {
-                center = new Vec2(8f, 0.0f)
+                center = new Vec2(8f, 0f)
             };
         }
 
@@ -65,7 +65,7 @@ namespace DuckGame
 
         public float WindUp(float pAmount)
         {
-            if ((double)pAmount <= 0.0 || _rope.startLength <= 0.0)
+            if (pAmount <= 0f || _rope.startLength <= 0f)
                 return 100f;
             this._rope.Pull(-pAmount);
             this._rope.startLength -= pAmount;
@@ -77,19 +77,19 @@ namespace DuckGame
             if (this._rope != null)
             {
                 if (!this.grounded)
-                    this.specialFrictionMod = 0.0f;
+                    this.specialFrictionMod = 0f;
                 else
                     this.specialFrictionMod = 1f;
                 this._rope.position = this.position;
                 this._rope.SetServer(this.isServerForObject);
                 Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
                 bool flag = true;
-                if ((double)this._rope.properLength < 0.0)
+                if (this._rope.properLength < 0f)
                 {
                     this._rope.startLength = this._rope.properLength = 100f;
                     flag = false;
                 }
-                if ((double)vec2_1.length > (double)this._rope.properLength)
+                if (vec2_1.length > this._rope.properLength)
                 {
                     vec2_1 = vec2_1.normalized;
                     Vec2 position2 = this.position;
@@ -102,18 +102,18 @@ namespace DuckGame
                     {
                         this.hSpeed = vec2_2.x - this.position.x;
                         this.vSpeed = vec2_2.y - this.position.y;
-                        this.gravMultiplier = 0.0f;
+                        this.gravMultiplier = 0f;
                         float specialFrictionMod = this.specialFrictionMod;
-                        this.specialFrictionMod = 0.0f;
-                        this.airFrictionMult = 0.0f;
+                        this.specialFrictionMod = 0f;
+                        this.airFrictionMult = 0f;
                         Vec2 lastPosition = this.lastPosition;
                         this.UpdatePhysics();
                         this.gravMultiplier = 1f;
                         this.specialFrictionMod = specialFrictionMod;
                         Vec2 vec2_4 = vec2_2 - lastPosition;
-                        if ((double)vec2_4.length > 32.0)
+                        if (vec2_4.length > 32f)
                             this.position = vec2_2;
-                        else if ((double)vec2_4.length > 6.0)
+                        else if (vec2_4.length > 6f)
                         {
                             this.hSpeed = Rando.Float(-2f, 2f);
                             this.vSpeed = Rando.Float(-2f, 2f);

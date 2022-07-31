@@ -46,7 +46,7 @@ namespace DuckGame
             switch (Editor.inputMode)
             {
                 case EditorInput.Mouse:
-                    if ((double)Mouse.x > (double)this.x && (double)Mouse.x < (double)this.x + 16.0 && (double)Mouse.y > (double)this.y && (double)Mouse.y < (double)this.y + 16.0)
+                    if (Mouse.x > this.x && Mouse.x < this.x + 16.0 && Mouse.y > this.y && Mouse.y < this.y + 16.0)
                     {
                         this._owner.toolBarToolTip = this.hoverText;
                         this._hover = true;

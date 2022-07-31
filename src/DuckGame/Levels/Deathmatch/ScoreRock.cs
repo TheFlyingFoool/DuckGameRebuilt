@@ -94,7 +94,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            foreach (Block block in Level.CheckLineAll<Block>(this.position, this.position + new Vec2(0.0f, 100f)))
+            foreach (Block block in Level.CheckLineAll<Block>(this.position, this.position + new Vec2(0f, 100f)))
             {
                 if (block.solid)
                 {
@@ -102,13 +102,13 @@ namespace DuckGame
                     this._dropShadowPoint.y = block.top;
                 }
             }
-            if (RockScoreboard.wallMode && (double)this.x > 610.0)
+            if (RockScoreboard.wallMode && this.x > 610.0)
             {
                 this.x = 610f;
                 this.hSpeed = -1f;
                 SFX.Play("rockHitGround2", pitch: -0.4f);
             }
-            if (RockScoreboard.wallMode && (double)this.x > 610.0)
+            if (RockScoreboard.wallMode && this.x > 610.0)
             {
                 this.x = 610f;
                 this.hSpeed = -1f;

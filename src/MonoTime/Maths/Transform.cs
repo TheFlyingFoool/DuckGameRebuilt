@@ -12,7 +12,7 @@ namespace DuckGame
     {
         public Vec2 position;
         protected float _z;
-        protected Depth _depth = new Depth(0.0f);
+        protected Depth _depth = new Depth(0f);
         protected Vec2 _center;
         public float _angle;
         private Vec2 _scale = new Vec2(1f, 1f);

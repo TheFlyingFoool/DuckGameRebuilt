@@ -17,7 +17,7 @@ namespace DuckGame
         public float transparent;
         public float douseFire;
 
-        public FluidData(float am, Vec4 col, float flam, string spr = "", float h = 0.0f, float trans = 0.7f)
+        public FluidData(float am, Vec4 col, float flam, string spr = "", float h = 0f, float trans = 0.7f)
         {
             this.amount = am;
             this.color = col;
@@ -35,11 +35,11 @@ namespace DuckGame
             {
                 float num2 = this.amount / num1;
                 float num3 = with.amount / num1;
-                this.flammable = (float)((double)num2 * flammable + (double)num3 * with.flammable);
+                this.flammable = (float)(num2 * flammable + num3 * with.flammable);
                 this.color = this.color * num2 + with.color * num3;
-                this.heat = (float)(heat * (double)num2 + with.heat * (double)num3);
-                this.transparent = (float)(transparent * (double)num2 + with.transparent * (double)num3);
-                this.douseFire = (float)(douseFire * (double)num2 + with.douseFire * (double)num3);
+                this.heat = (float)(heat * num2 + with.heat * num3);
+                this.transparent = (float)(transparent * num2 + with.transparent * num3);
+                this.douseFire = (float)(douseFire * num2 + with.douseFire * num3);
             }
             this.amount = num1;
         }

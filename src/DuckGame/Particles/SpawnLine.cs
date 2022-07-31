@@ -33,11 +33,11 @@ namespace DuckGame
         public override void Update()
         {
             this.alpha -= 0.03f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0.0)
                 Level.Remove(this);
             this.x += this._moveSpeed;
         }
 
-        public override void Draw() => Graphics.DrawLine(this.position, this.position + new Vec2(0.0f, -1200f), this._color * this.alpha, this._thickness, (Depth)0.9f);
+        public override void Draw() => Graphics.DrawLine(this.position, this.position + new Vec2(0f, -1200f), this._color * this.alpha, this._thickness, (Depth)0.9f);
     }
 }

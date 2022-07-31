@@ -20,13 +20,13 @@ namespace DuckGame
 
         public override NCError SendPacket(BitBuffer sendData, NetworkConnection connection)
         {
-            if (!this.sendingDuplicate && (double)Rando.Float(1f) < (double)connection.debuggerContext.duplicate)
+            if (!this.sendingDuplicate && Rando.Float(1f) < connection.debuggerContext.duplicate)
             {
                 this.sendingDuplicate = true;
                 this.SendPacket(sendData, connection);
                 if (connection.debuggerContext.duplicate > 0.4f && Rando.Float(1f) < connection.debuggerContext.duplicate)
                     this.SendPacket(sendData, connection);
-                if ((double)connection.debuggerContext.duplicate > 0.8f && (double)Rando.Float(1f) < (double)connection.debuggerContext.duplicate)
+                if (connection.debuggerContext.duplicate > 0.8f && Rando.Float(1f) < connection.debuggerContext.duplicate)
                     this.SendPacket(sendData, connection);
                 this.sendingDuplicate = false;
             }
@@ -88,17 +88,17 @@ namespace DuckGame
 
             public float CalculateLatency()
             {
-                float num = 0.0f;
+                float num = 0f;
                 if (this.CalculateLoss())
                 {
                     if (Rando.Int(3) != 0)
                         return float.MaxValue;
                     num += Rando.Float(2f, 4f);
                 }
-                return (float)((double)this.latency + 0f - 0.016f) + Rando.Float(-this.jitter, this.jitter) + num;
+                return (float)(this.latency + 0f - 0.016f) + Rando.Float(-this.jitter, this.jitter) + num;
             }
 
-            public bool CalculateLoss() => (double)this.loss != 0f && (double)Rando.Float(1f) < (double)this.loss;
+            public bool CalculateLoss() => this.loss != 0f && Rando.Float(1f) < this.loss;
 
             public bool Update(NCNetworkImplementation pNetwork)
             {

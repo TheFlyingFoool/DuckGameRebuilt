@@ -28,8 +28,8 @@ namespace DuckGame
             this.depth = (Depth)0.97f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             this.position = vec2_1 + new Vec2(4f, 20f);
             this.itemSize = new Vec2(490f, 16f);
             this._root = true;
@@ -62,14 +62,14 @@ namespace DuckGame
             }
             float num1 = 300f;
             float num2 = 90f;
-            Vec2 vec2_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             Vec2 vec2_3 = new Vec2(vec2_1.x - 5f, vec2_2.y - 70f) + new Vec2(18f, 28f);
             Vec2 vec2_4 = new Vec2(135f, 30f);
             Vec2 vec2_5 = new Vec2(vec2_1.x + 136f, vec2_2.y - 70f) + new Vec2(18f, 28f);
             Vec2 vec2_6 = new Vec2(135f, 30f);
-            this._hoverOk = (double)Mouse.x > vec2_3.x && (double)Mouse.x < vec2_3.x + (double)vec2_4.x && (double)Mouse.y > vec2_3.y && (double)Mouse.y < vec2_3.y + (double)vec2_4.y;
-            this._hoverCancel = (double)Mouse.x > vec2_5.x && (double)Mouse.x < vec2_5.x + (double)vec2_6.x && (double)Mouse.y > vec2_5.y && (double)Mouse.y < vec2_5.y + (double)vec2_6.y;
+            this._hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
+            this._hoverCancel = Mouse.x > vec2_5.x && Mouse.x < vec2_5.x + vec2_6.x && Mouse.y > vec2_5.y && Mouse.y < vec2_5.y + vec2_6.y;
             if (this._selectedIndex < 0)
                 this._selectedIndex = 0;
             if (this._selectedIndex > 1)
@@ -103,8 +103,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 300f;
             float num2 = 90f;
-            Vec2 p1_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0));
-            Vec2 p2 = new Vec2((float)((double)this.layer.width / 2.0 + (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 + (double)num2 / 2.0));
+            Vec2 p1_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
+            Vec2 p2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
             Graphics.DrawRect(p1_1, p2, new Color(70, 70, 70), this.depth, false);
             Graphics.DrawRect(p1_1, p2, new Color(30, 30, 30), this.depth - 1);
             Graphics.DrawRect(p1_1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), this.depth + 1);
@@ -119,10 +119,10 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2(135f, 30f);
             Graphics.DrawRect(p1_2, p1_2 + vec2_1, this._hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             string text1 = "PUBLISH!";
-            this._font.Draw(text1, (float)(p1_2.x + vec2_1.x / 2.0 - (double)this._font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw(text1, (float)(p1_2.x + vec2_1.x / 2.0 - this._font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
             Graphics.DrawRect(p1_3, p1_3 + vec2_2, this._hoverCancel ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
             string text2 = "CANCEL!";
-            this._font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2.0 - (double)this._font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
+            this._font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2.0 - this._font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, this.depth + 3);
         }
     }
 }

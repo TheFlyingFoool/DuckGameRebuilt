@@ -141,9 +141,9 @@ namespace DuckGame
             Sprite sprite = new Sprite("shiny");
             DuckGame.Graphics.SetRenderTarget(t);
             DuckGame.Graphics.viewport = new Viewport(0, 0, num1, num2);
-            Camera camera = new Camera(0.0f, 0.0f, num1, num2);
+            Camera camera = new Camera(0f, 0f, num1, num2);
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
-            DuckGame.Graphics.Draw(sprite.texture, 0.0f, 0.0f, 4f, 4f, (Depth)0.1f);
+            DuckGame.Graphics.Draw(sprite.texture, 0f, 0f, 4f, 4f, (Depth)0.1f);
             string[] files = Directory.GetFiles(this._mod.configuration.directory, "*.lev", SearchOption.AllDirectories);
             int num3 = 0;
             int num4 = (int)Math.Ceiling(Math.Sqrt(files.Count<string>()));
@@ -165,7 +165,7 @@ namespace DuckGame
                                     float num6 = 0.95f;
                                     Vec2 vec2_1 = new Vec2(preview.preview.Width * num5 * num6, preview.preview.Height * num5 * num6);
                                     Vec2 vec2_2 = new Vec2(preview.preview.Width * num5, preview.preview.Height * num5);
-                                    DuckGame.Graphics.Draw((Tex2D)preview.preview, new Vec2((float)(zero.x + vec2_2.x / 2.0 - vec2_1.x / 2.0), (float)(zero.y + vec2_2.y / 2.0 - vec2_1.y / 2.0)), new Rectangle?(new Rectangle(0.0f, 10f, 320f, 180f)), Color.White, 0.0f, Vec2.Zero, new Vec2(num6 * num5), SpriteEffects.None, (Depth)0.9f);
+                                    DuckGame.Graphics.Draw((Tex2D)preview.preview, new Vec2((float)(zero.x + vec2_2.x / 2.0 - vec2_1.x / 2.0), (float)(zero.y + vec2_2.y / 2.0 - vec2_1.y / 2.0)), new Rectangle?(new Rectangle(0f, 10f, 320f, 180f)), Color.White, 0f, Vec2.Zero, new Vec2(num6 * num5), SpriteEffects.None, (Depth)0.9f);
                                 }
                             }
                         }
@@ -176,7 +176,7 @@ namespace DuckGame
                     ++num3;
                     if (num3 % num4 == 0)
                     {
-                        zero.x = 0.0f;
+                        zero.x = 0f;
                         zero.y += num2 / num4;
                     }
                     else

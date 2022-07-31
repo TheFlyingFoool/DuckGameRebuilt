@@ -48,7 +48,7 @@ namespace DuckGame
         {
             this._popup = true;
             this._waitFire = this.autofire.value;
-            this._reloadAdd = 0.0f;
+            this._reloadAdd = 0f;
             this._holdAction = false;
         }
 
@@ -68,12 +68,12 @@ namespace DuckGame
             float num = 300f;
             if (holdObject.ammoType != null)
                 num = holdObject.ammoType.range;
-            Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0.0f));
+            Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0f));
             if (_waitFire <= 0.0)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)].Where<Thing>(d => !(d is TargetDuck)))
                 {
-                    if (Collision.Line(this.holdObject.position + new Vec2(0.0f, -5f), vec2 + new Vec2(0.0f, -5f), duck.rectangle) || Collision.Line(this.holdObject.position + new Vec2(0.0f, 5f), vec2 + new Vec2(0.0f, 5f), duck.rectangle))
+                    if (Collision.Line(this.holdObject.position + new Vec2(0f, -5f), vec2 + new Vec2(0f, -5f), duck.rectangle) || Collision.Line(this.holdObject.position + new Vec2(0f, 5f), vec2 + new Vec2(0f, 5f), duck.rectangle))
                     {
                         IEnumerable<Block> blocks = Level.CheckLineAll<Block>(this.holdObject.position, duck.position);
                         bool flag = false;
@@ -87,7 +87,7 @@ namespace DuckGame
                         }
                         if (!flag)
                         {
-                            this._waitFire = Math.Max((float)this.speediness + this._reloadAdd, 0.0f);
+                            this._waitFire = Math.Max((float)this.speediness + this._reloadAdd, 0f);
                             break;
                         }
                         break;
@@ -111,12 +111,12 @@ namespace DuckGame
             {
                 float num = this._waitFire * this._waitFire;
                 Vec2 barrelPosition = (this.holdObject as Gun).barrelPosition;
-                Vec2 p1_1 = barrelPosition + new Vec2(0.0f, (float)(-(double)num * 64.0));
-                Vec2 p1_2 = barrelPosition + new Vec2(0.0f, num * 64f);
-                float amount = (float)(1.0 - (double)Math.Min(this._waitFire, 0.08f) / 0.0799999982118607);
+                Vec2 p1_1 = barrelPosition + new Vec2(0f, (float)(-num * 64.0));
+                Vec2 p1_2 = barrelPosition + new Vec2(0f, num * 64f);
+                float amount = (float)(1.0 - Math.Min(this._waitFire, 0.08f) / 0.0799999982118607);
                 Color color = Lerp.ColorSmooth(Color.White, Color.Red, amount);
-                Graphics.DrawLine(p1_1, p1_1 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0.0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0.0f), 1f + amount, (Depth)0.99f);
-                Graphics.DrawLine(p1_2, p1_2 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0.0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0.0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_1, p1_1 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_2, p1_2 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
             }
             base.Draw();
         }

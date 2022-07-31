@@ -34,7 +34,7 @@ namespace DuckGame
                 Mouse._prevScrollValue = Mouse.scroll;
                 Mouse._mouseStatePrev = Mouse._mouseState;
                 Mouse._mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-                Vec3 vec3 = new Vec3(_mouseState.X, _mouseState.Y, 0.0f);
+                Vec3 vec3 = new Vec3(_mouseState.X, _mouseState.Y, 0f);
                 if (Graphics._screenViewport.HasValue)
                     Mouse._mouseScreenPos = new Vec2(vec3.x / Resolution.size.x * Layer.HUD.camera.width, vec3.y / Resolution.size.y * Layer.HUD.camera.height);
                 Mouse._mouseScreenPos.x = (int)Mouse._mouseScreenPos.x;

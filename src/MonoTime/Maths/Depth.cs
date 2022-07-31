@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public static float kDepthSpanMax = 0.01f;
         public static float kSpanIncrement = 0.0001f;
-        private static float _currentSpan = 0.0f;
+        private static float _currentSpan = 0f;
         public float value;
         public float span;
 
-        public static void ResetSpan() => Depth._currentSpan = 0.0f;
+        public static void ResetSpan() => Depth._currentSpan = 0f;
 
         public Depth(float val)
         {
@@ -38,8 +38,8 @@ namespace DuckGame
 
         public static Depth operator -(Depth c1, int c2) => c1.Add(-c2);
 
-        public static bool operator <(Depth c1, float c2) => c1.value < (double)c2;
+        public static bool operator <(Depth c1, float c2) => c1.value < c2;
 
-        public static bool operator >(Depth c1, float c2) => c1.value > (double)c2;
+        public static bool operator >(Depth c1, float c2) => c1.value > c2;
     }
 }

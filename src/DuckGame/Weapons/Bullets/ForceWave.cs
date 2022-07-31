@@ -98,7 +98,7 @@ namespace DuckGame
             this.x += offDir * this._speed;
             this.y += this._speedv;
             this.alpha -= this._alphaSub;
-            if ((double)this.alpha > 0.0)
+            if (this.alpha > 0.0)
                 return;
             Level.Remove(this);
         }

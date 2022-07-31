@@ -11,7 +11,7 @@ namespace DuckGame
     {
         private SpriteMap _spawnSprite;
 
-        public EnemySpawn(float xpos = 0.0f, float ypos = 0.0f)
+        public EnemySpawn(float xpos = 0f, float ypos = 0f)
           : base(xpos, ypos)
         {
             GraphicList graphicList = new GraphicList();

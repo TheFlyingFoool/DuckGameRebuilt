@@ -46,7 +46,7 @@ namespace DuckGame
             this._type = "gun";
             this._sprite = new SpriteMap("warpgun", 19, 17)
             {
-                speed = 0.0f
+                speed = 0f
             };
             this.graphic = _sprite;
             this.center = new Vec2(11f, 8f);
@@ -74,12 +74,12 @@ namespace DuckGame
                 return;
             if (owner is TargetDuck)
             {
-                Block block = Level.CheckLine<Block>(this.position + new Vec2(this.offDir > 0 ? -16f : 16f, 0.0f), owner.position + new Vec2(this.offDir > 0 ? -16f : 16f, 8f));
+                Block block = Level.CheckLine<Block>(this.position + new Vec2(this.offDir > 0 ? -16f : 16f, 0f), owner.position + new Vec2(this.offDir > 0 ? -16f : 16f, 8f));
                 owner.holdObstructed = block != null;
             }
             else
             {
-                Block block = Level.CheckLine<Block>(owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 0.0f), owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 10f));
+                Block block = Level.CheckLine<Block>(owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 0f), owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 10f));
                 owner.holdObstructed = block != null;
             }
         }
@@ -107,10 +107,10 @@ namespace DuckGame
         {
             this.ammo = 9999;
             if (this.isServerForObject && !this._triggerHeld)
-                this.gravMultTime = 0.0f;
+                this.gravMultTime = 0f;
             IPlatform platform = Level.Nearest<IPlatform>(this.x, this.y);
             bool flag = false;
-            if (platform != null && (double)((platform as Thing).position - this.position).length < 32.0)
+            if (platform != null && ((platform as Thing).position - this.position).length < 32.0)
                 flag = true;
             if (!flag)
             {
@@ -127,7 +127,7 @@ namespace DuckGame
                 {
                     float deg = (float)(index1 * 45.0 - 5.0) + Rando.Float(20f);
                     Vec2 position;
-                    if (Level.CheckLine<IPlatform>(this.position, this.position + new Vec2((float)Math.Cos((double)Maths.DegToRad(deg)), (float)Math.Sin((double)Maths.DegToRad(deg))) * 32f, out position) != null)
+                    if (Level.CheckLine<IPlatform>(this.position, this.position + new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)Math.Sin(Maths.DegToRad(deg))) * 32f, out position) != null)
                     {
                         this.blockGlows.Add(new Warpgun.BlockGlow()
                         {
@@ -167,7 +167,7 @@ namespace DuckGame
                         else if (!(bool)this.infinite)
                         {
                             float num = Math.Min(shotsSinceDuckWasGrounded / 38f, 1f);
-                            if (heat < (double)num)
+                            if (heat < num)
                                 this.heat = num;
                         }
                     }
@@ -192,7 +192,7 @@ namespace DuckGame
                             this.duck.gravMultiplier = 1f;
                             this.duck.blendColor = Color.White;
                         }
-                        this.gravMultTime = 0.0f;
+                        this.gravMultTime = 0f;
                     }
                 }
                 this.lastDuck = this.duck;
@@ -201,7 +201,7 @@ namespace DuckGame
             {
                 this.lastDuck.blendColor = Color.White;
                 this.lastDuck.gravMultiplier = 1f;
-                this.gravMultTime = 0.0f;
+                this.gravMultTime = 0f;
                 this.warped = false;
                 this.lastDuck = null;
             }
@@ -244,7 +244,7 @@ namespace DuckGame
             }
             if (this.shotsSinceGrounded >= this.maxUngroundedShots && !(bool)this.infinite)
                 return;
-            this.lerpShut = 0.0f;
+            this.lerpShut = 0f;
             float num1 = -this.angle;
             if (this.offDir < 0)
                 num1 += 3.141593f;
@@ -257,7 +257,7 @@ namespace DuckGame
             if (flag)
                 num4 = 5f;
             float num5 = 8f;
-            if ((double)this.angleDegrees != 0.0 && (double)Math.Abs(this.angleDegrees) != 90.0 && (double)Math.Abs(this.angleDegrees) != 180.0)
+            if (this.angleDegrees != 0.0 && Math.Abs(this.angleDegrees) != 90.0 && Math.Abs(this.angleDegrees) != 180.0)
                 num5 = 24f;
             int num6 = 6;
             if (Math.Abs((int)this.angleDegrees) < 70.0 && Math.Abs((int)this.angleDegrees) > 65.0)
@@ -268,14 +268,14 @@ namespace DuckGame
             }
             for (int index = 0; index < 3; ++index)
             {
-                Vec2 vec2_3 = new Vec2((float)Math.Cos((double)num1) * 134f, (float)-Math.Sin((double)num1) * 134f);
-                if ((double)Math.Abs(vec2_3.x) < 16.0)
+                Vec2 vec2_3 = new Vec2((float)Math.Cos(num1) * 134f, (float)-Math.Sin(num1) * 134f);
+                if (Math.Abs(vec2_3.x) < 16.0)
                 {
                     num4 = 2f;
                     num6 = 8;
                 }
-                float num8 = (float)(-(double)num4 + index * (double)num4);
-                Vec2 start = position + new Vec2((float)Math.Cos((double)num1 + Math.PI / 2.0) * num8, (float)-Math.Sin((double)num1 + Math.PI / 2.0) * num8);
+                float num8 = (float)(-num4 + index * num4);
+                Vec2 start = position + new Vec2((float)Math.Cos(num1 + Math.PI / 2.0) * num8, (float)-Math.Sin(num1 + Math.PI / 2.0) * num8);
                 Vec2 vec2_4 = start - vec2_3;
                 Vec2 vec2_5 = -(start - vec2_4).normalized;
                 Vec2 hitPos = Vec2.Zero;
@@ -290,10 +290,10 @@ namespace DuckGame
                     Vec2 vec2_7 = vec2_1 = hitPos + vec2_5 * -num6;
                     if (index == 1)
                         num3 = vec2_6.length;
-                    if ((double)vec2_6.length < (double)num2)
+                    if (vec2_6.length < num2)
                         num2 = vec2_6.length;
                 }
-                else if ((double)(start - vec2_4).length < (double)num2)
+                else if ((start - vec2_4).length < num2)
                 {
                     num2 = (start - vec2_4).length - 7f;
                     vec2_1 = start - (vec2_4 + vec2_5 * -7f);
@@ -305,7 +305,7 @@ namespace DuckGame
                 if (index == 2)
                     ignore = thing;
             }
-            if ((double)num3 < 99999.0 && (double)num5 > 9.0 && (double)Math.Abs(num3 - num2) < (double)num5)
+            if (num3 < 99999.0 && num5 > 9.0 && Math.Abs(num3 - num2) < num5)
                 num2 = num3;
             this.warpLines.Add(new WarpLine()
             {
@@ -324,7 +324,7 @@ namespace DuckGame
                     Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
                     this.firedBullets.Clear();
                 }
-                this._wait = 0.0f;
+                this._wait = 0f;
                 this._barrelOffsetTL = new Vec2(8f, 15f);
                 this.Fire();
                 if (Network.isActive)
@@ -332,7 +332,7 @@ namespace DuckGame
                     Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
                     this.firedBullets.Clear();
                 }
-                this._wait = 0.0f;
+                this._wait = 0f;
                 this._barrelOffsetTL = new Vec2(8f, 9f);
                 this.Fire();
                 if (Network.isActive)
@@ -340,16 +340,16 @@ namespace DuckGame
                     Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
                     this.firedBullets.Clear();
                 }
-                this._wait = 0.0f;
+                this._wait = 0f;
                 this._barrelOffsetTL = new Vec2(8f, 4f);
                 if (this.duck != null)
                 {
-                    if (vec2_1.y < (double)this.duck.y - 16.0 && (double)Math.Abs(vec2_1.x - this.duck.x) < 16.0)
+                    if (vec2_1.y < this.duck.y - 16.0 && Math.Abs(vec2_1.x - this.duck.x) < 16.0)
                         num2 -= 2f;
                     this.duck.position = this.duck.position + vec2_2 * num2;
                     this.duck.sleeping = false;
                     this.duck._disarmDisable = 10;
-                    this.duck.gravMultiplier = 0.0f;
+                    this.duck.gravMultiplier = 0f;
                     this.duck.OnTeleport();
                     this.duck.blendColor = Color.Purple;
                     this.warped = true;
@@ -358,7 +358,7 @@ namespace DuckGame
                     if (block != null)
                         this.duck.bottom = block.top;
                     IPlatform platform = Level.CheckLine<IPlatform>(new Vec2(this.duck.position.x, this.duck.bottom - 2f), new Vec2(this.duck.position.x, this.duck.bottom + 1f), ignore);
-                    if (platform != null && (platform as Thing).solid && (ignore == null || (double)ignore.top < (double)(platform as Thing).top - 0.5))
+                    if (platform != null && (platform as Thing).solid && (ignore == null || ignore.top < (platform as Thing).top - 0.5))
                         this.duck.bottom = (platform as Thing).top;
                     this.warpPos = this.duck.position;
                 }
@@ -389,7 +389,7 @@ namespace DuckGame
                 this.explode = true;
                 this.PressAction();
             }
-            if (this.level != null && (double)this.y < level.topLeft.y - 256.0)
+            if (this.level != null && this.y < level.topLeft.y - 256.0)
             {
                 this.shotsSinceDuckWasGrounded = 16;
                 this.heat = 1f;
@@ -409,8 +409,8 @@ namespace DuckGame
         {
             foreach (Warpgun.BlockGlow blockGlow in this.blockGlows)
             {
-                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0.0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
-                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0.0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
                 blockGlow.glow -= 0.05f;
             }
             this.blockGlows.RemoveAll(x => x.glow < 0.00999999977648258);
@@ -437,7 +437,7 @@ namespace DuckGame
                     if (this.offDir < 0)
                         num += 3.141593f;
                     Vec2 laserOffset = this.laserOffset;
-                    Vec2 p2 = laserOffset - new Vec2((float)Math.Cos((double)num) * 122f, (float)-Math.Sin((double)num) * 122f);
+                    Vec2 p2 = laserOffset - new Vec2((float)Math.Cos(num) * 122f, (float)-Math.Sin(num) * 122f);
                     Vec2 vec2 = -(laserOffset - p2).normalized;
                     Vec2 hitPos = Vec2.Zero;
                     if (Level.CheckRay<Block>(laserOffset, p2 + new Vec2(0.2f, 0.2f), out hitPos) != null)
@@ -446,7 +446,7 @@ namespace DuckGame
                         p2 = hitPos;
                     }
                     else
-                        this._warpPoint = p2 + new Vec2(-5f, 0.0f);
+                        this._warpPoint = p2 + new Vec2(-5f, 0f);
                     Graphics.DrawTexturedLine(this._laserTex, laserOffset, p2, Color.Red, 0.5f, this.depth - 1);
                     if (this._sightHit != null)
                     {

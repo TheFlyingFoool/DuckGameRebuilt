@@ -16,7 +16,7 @@ namespace DuckGame
         protected bool _dirty = true;
         protected Vec2 _position;
         protected Vec2 _size = new Vec2(320f, 320f * DuckGame.Graphics.aspect);
-        protected Vec2 _zoomPoint = new Vec2(0.0f, 0.0f);
+        protected Vec2 _zoomPoint = new Vec2(0f, 0f);
         public bool skipUpdate;
         private Rectangle _rectangle;
         public Vec2 _viewSize;
@@ -38,7 +38,7 @@ namespace DuckGame
             get => this._position.x;
             set
             {
-                if (_position.x == (double)value)
+                if (_position.x == value)
                     return;
                 this._position.x = value;
                 this._dirty = true;
@@ -50,7 +50,7 @@ namespace DuckGame
             get => this._position.y;
             set
             {
-                if (_position.y == (double)value)
+                if (_position.y == value)
                     return;
                 this._position.y = value;
                 this._dirty = true;
@@ -124,7 +124,7 @@ namespace DuckGame
             get => this._size.x;
             set
             {
-                if (_size.x == (double)value)
+                if (_size.x == value)
                     return;
                 this._size.x = value;
                 this._dirty = true;
@@ -136,7 +136,7 @@ namespace DuckGame
             get => this._size.y;
             set
             {
-                if (_size.y == (double)value)
+                if (_size.y == value)
                     return;
                 this._size.y = value;
                 this._dirty = true;
@@ -167,9 +167,9 @@ namespace DuckGame
 
         public Camera(float xval, float yval, float wval = -1f, float hval = -1f)
         {
-            if ((double)wval < 0.0)
+            if (wval < 0f)
                 wval = 320f;
-            if ((double)hval < 0.0)
+            if (hval < 0f)
                 hval = 320f * DuckGame.Graphics.aspect;
             this.x = xval;
             this.y = yval;
@@ -191,31 +191,31 @@ namespace DuckGame
 
         public virtual Vec2 transformScreenVector(Vec2 vector)
         {
-            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0.0f), Matrix.Invert(this.getMatrix()));
+            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0f), Matrix.Invert(this.getMatrix()));
             return new Vec2(vec3.x, vec3.y);
         }
 
         public virtual Vec2 transformTime(Vec2 vector)
         {
-            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0.0f), Resolution.getTransformationMatrix() * this.getMatrix());
+            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0f), Resolution.getTransformationMatrix() * this.getMatrix());
             return new Vec2(vec3.x, vec3.y);
         }
 
         public virtual Vec2 transformWorldVector(Vec2 vector)
         {
-            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0.0f), Matrix.Invert(Resolution.getTransformationMatrix()) * this.getMatrix());
+            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0f), Matrix.Invert(Resolution.getTransformationMatrix()) * this.getMatrix());
             return new Vec2(vec3.x, vec3.y);
         }
 
         public virtual Vec2 transform(Vec2 vector)
         {
-            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0.0f), this.getMatrix());
+            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0f), this.getMatrix());
             return new Vec2(vec3.x, vec3.y);
         }
 
         public virtual Vec2 transformInverse(Vec2 vector)
         {
-            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0.0f), Matrix.Invert(this.getMatrix()));
+            Vec3 vec3 = Vec3.Transform(new Vec3(vector.x, vector.y, 0f), Matrix.Invert(this.getMatrix()));
             return new Vec2(vec3.x, vec3.y);
         }
 
@@ -227,10 +227,10 @@ namespace DuckGame
             if (!this._dirty)
             {
                 viewport = DuckGame.Graphics.viewport;
-                if (viewport.Width == (double)this._viewSize.x)
+                if (viewport.Width == this._viewSize.x)
                 {
                     viewport = DuckGame.Graphics.viewport;
-                    if (viewport.Height == (double)this._viewSize.y)
+                    if (viewport.Height == this._viewSize.y)
                         goto label_4;
                 }
             }
@@ -243,7 +243,7 @@ namespace DuckGame
             Vec2 position = this.position;
             float width2 = this.width;
             float height2 = this.height;
-            this._matrix = Matrix.CreateTranslation(new Vec3(-position.x, -position.y, 0.0f)) * Matrix.CreateScale(this._viewSize.x / width2, this._viewSize.y / height2, 1f);
+            this._matrix = Matrix.CreateTranslation(new Vec3(-position.x, -position.y, 0f)) * Matrix.CreateScale(this._viewSize.x / width2, this._viewSize.y / height2, 1f);
             this._dirty = false;
         label_4:
             return this._matrix;

@@ -42,7 +42,7 @@ namespace DuckGame
             this.collisionSize = new Vec2(14f, 9f);
             this._barrelOffsetTL = new Vec2(13f, 3f);
             this._fireSound = "snubbyFire";
-            this._kickForce = 0.0f;
+            this._kickForce = 0f;
             this._fireRumble = RumbleIntensity.Kick;
             this._holdOffset = new Vec2(-1f, -1f);
             this._loaded = true;
@@ -68,10 +68,10 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._angleOffset = (float)(-(double)this._loadBurst * 0.300000011920929);
-            this._loadBurst = Lerp.FloatSmooth(this._loadBurst, 0.0f, 0.18f);
+            this._angleOffset = (float)(-this._loadBurst * 0.300000011920929);
+            this._loadBurst = Lerp.FloatSmooth(this._loadBurst, 0f, 0.18f);
             if (_loadBurst < 0.100000001490116)
-                this._loadBurst = 0.0f;
+                this._loadBurst = 0f;
             base.Update();
         }
     }

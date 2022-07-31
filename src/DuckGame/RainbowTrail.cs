@@ -67,9 +67,9 @@ namespace DuckGame
                 }
             }
             float num2 = thing.velocity.length;
-            if ((double)num2 > 3.0)
+            if (num2 > 3.0)
                 num2 = 3f;
-            float num3 = (float)(1.0 - (double)num2 / 3.0);
+            float num3 = (float)(1.0 - num2 / 3.0);
             this._capeWave += num2 * 0.1f;
             this._inverseWave += num3 * 0.09f;
             this._inverseWave2 += num3 * 0.06f;
@@ -84,8 +84,8 @@ namespace DuckGame
             this.depth = thing.depth - 18;
             position.y += num1;
             _p2.y += num1;
-            position.y += (float)((double)num4 * _capeWaveMult * (thing.velocity.x * 0.5));
-            position.x += (float)((double)num4 * _capeWaveMult * (thing.velocity.y * 0.200000002980232));
+            position.y += (float)(num4 * _capeWaveMult * (thing.velocity.x * 0.5));
+            position.x += (float)(num4 * _capeWaveMult * (thing.velocity.y * 0.200000002980232));
             if (this.capePeices.Count > 0)
                 _p2 = this.capePeices[this.capePeices.Count - 1].p1;
             this.capePeices.Add(new TrailPiece(thing.x - offDir * -10, thing.y + 6f, 0.5f, position, _p2));
@@ -93,10 +93,10 @@ namespace DuckGame
             {
                 if (capePeice.wide < 1.0)
                     capePeice.wide += 0.05f;
-                capePeice.p1.x += (float)((double)num5 * (double)num7 * (capePeice.wide - 0.5) * 0.899999976158142);
-                capePeice.p2.x += (float)((double)num5 * (double)num7 * (capePeice.wide - 0.5) * 0.899999976158142);
-                capePeice.p1.y += (float)((double)num6 * (double)num7 * (capePeice.wide - 0.5) * 0.800000011920929);
-                capePeice.p2.y += (float)((double)num6 * (double)num7 * (capePeice.wide - 0.5) * 0.800000011920929);
+                capePeice.p1.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.899999976158142);
+                capePeice.p2.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.899999976158142);
+                capePeice.p1.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.800000011920929);
+                capePeice.p2.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.800000011920929);
                 ++capePeice.p1.y;
                 ++capePeice.p2.y;
                 capePeice.p1.x += 0.3f * offDir;
@@ -115,15 +115,15 @@ namespace DuckGame
         public override void Draw()
         {
             float num1 = 22f;
-            float num2 = 0.0f;
+            float num2 = 0f;
             float num3 = 13f;
             Vec2 vec2_1 = Vec2.Zero;
             Vec2 vec2_2 = Vec2.Zero;
             bool flag1 = false;
             bool flag2 = false;
-            Vec2 t1 = new Vec2(0.0f, 0.0f);
-            Vec2 t2 = new Vec2(1f, 0.0f);
-            Vec2 t3 = new Vec2(0.0f, 1f);
+            Vec2 t1 = new Vec2(0f, 0f);
+            Vec2 t2 = new Vec2(1f, 0f);
+            Vec2 t3 = new Vec2(0f, 1f);
             Vec2 t4 = new Vec2(1f, 1f);
             if (this._capeTexture == null)
                 return;
@@ -145,12 +145,12 @@ namespace DuckGame
                     float length = vec2_6.length;
                     num2 += length;
                     vec2_6.Normalize();
-                    if ((double)num2 > (double)num1)
+                    if (num2 > num1)
                     {
                         vec2_5 = vec2_1 + vec2_6 * (length - (num2 - num1));
                         flag2 = true;
                     }
-                    DuckGame.Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)((double)num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)((double)num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)((double)num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)((double)num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, this._capeTexture, Color.White);
+                    DuckGame.Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, this._capeTexture, Color.White);
                     if (flag2)
                         break;
                 }

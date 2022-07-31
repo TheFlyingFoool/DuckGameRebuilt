@@ -17,16 +17,16 @@ namespace DuckGame
         {
             get
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 foreach (Sprite sprite in this._objects)
                 {
-                    if ((double)sprite.x - (double)sprite.centerx < (double)num1)
+                    if (sprite.x - sprite.centerx < num1)
                         num1 = sprite.x - sprite.centerx;
-                    if ((double)sprite.x - (double)sprite.centerx + sprite.width > (double)num2)
+                    if (sprite.x - sprite.centerx + sprite.width > num2)
                         num2 = sprite.x - sprite.centerx + sprite.width;
                 }
-                return (int)((double)num2 - (double)num1 + 0.5);
+                return (int)(num2 - num1 + 0.5);
             }
         }
 
@@ -36,16 +36,16 @@ namespace DuckGame
         {
             get
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 foreach (Sprite sprite in this._objects)
                 {
-                    if ((double)sprite.y - (double)sprite.centery < (double)num1)
+                    if (sprite.y - sprite.centery < num1)
                         num1 = sprite.x - sprite.centery;
-                    if ((double)sprite.y - (double)sprite.centery + sprite.height > (double)num2)
+                    if (sprite.y - sprite.centery + sprite.height > num2)
                         num2 = sprite.y - sprite.centery + sprite.width;
                 }
-                return (int)((double)num2 - (double)num1 + 0.5);
+                return (int)(num2 - num1 + 0.5);
             }
         }
 

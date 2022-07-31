@@ -16,7 +16,7 @@ namespace DuckGame
         private float _step;
 
         public UIProgressBar(float wide, float high, FieldBinding field, float increment, Color c = default(Color))
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._field = field;
             this._barSize = new Vec2(wide, high);
@@ -28,11 +28,11 @@ namespace DuckGame
         {
             float num1 = this._barSize.x * this.scale.x;
             float num2 = this._barSize.y * this.scale.y;
-            int num3 = (int)Math.Ceiling(((double)this._field.max - (double)this._field.min) / _step);
+            int num3 = (int)Math.Ceiling((this._field.max - this._field.min) / _step);
             for (int index = 0; index < num3; ++index)
             {
-                Vec2 p1 = this.position - new Vec2(this.halfWidth, num2 / 2f) + new Vec2(index * (int)Math.Round((double)num1 / num3), 0.0f);
-                Vec2 p2 = this.position - new Vec2(this.halfWidth, (float)(-(double)num2 / 2.0)) + new Vec2((index + 1) * (int)Math.Round((double)num1 / num3) - 1f, 0.0f);
+                Vec2 p1 = this.position - new Vec2(this.halfWidth, num2 / 2f) + new Vec2(index * (int)Math.Round(num1 / num3), 0f);
+                Vec2 p2 = this.position - new Vec2(this.halfWidth, (float)(-num2 / 2.0)) + new Vec2((index + 1) * (int)Math.Round(num1 / num3) - 1f, 0f);
                 if ((this.align & UIAlign.Center) > UIAlign.Center)
                 {
                     p1.x += this.halfWidth - num1 / 2f;
@@ -43,10 +43,10 @@ namespace DuckGame
                     p1.x += this.width - num1;
                     p2.x += this.width - num1;
                 }
-                if (p1.x == (double)p2.x)
+                if (p1.x == p2.x)
                     ++p2.x;
                 float num4 = (float)this._field.value;
-                Graphics.DrawRect(p1, p2, (double)num4 > index * (double)this._step ? Color.White : new Color(70, 70, 70), this.depth);
+                Graphics.DrawRect(p1, p2, num4 > index * this._step ? Color.White : new Color(70, 70, 70), this.depth);
             }
         }
     }

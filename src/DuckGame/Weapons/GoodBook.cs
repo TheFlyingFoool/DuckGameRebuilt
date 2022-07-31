@@ -217,9 +217,9 @@ namespace DuckGame
         {
             base.Update();
             this._sprite.frame = this._owner == null || this._raised ? 0 : 1;
-            this._raiseArm = Lerp.Float(this._raiseArm, 0.0f, 0.05f);
-            this._preachWait = Lerp.Float(this._preachWait, 0.0f, 0.06f);
-            this._ringPulse = Lerp.Float(this._ringPulse, 0.0f, 0.05f);
+            this._raiseArm = Lerp.Float(this._raiseArm, 0f, 0.05f);
+            this._preachWait = Lerp.Float(this._preachWait, 0f, 0.06f);
+            this._ringPulse = Lerp.Float(this._ringPulse, 0f, 0.05f);
             if (Network.isActive)
             {
                 if (this.isServerForObject)
@@ -288,7 +288,7 @@ namespace DuckGame
                 if (t3 != null && t3.captureDuck != null && t3.captureDuck.dead && Level.CheckLine<Block>(this.duck.position, t3.position) == null)
                 {
                     vec2 = t3.position - this.duck.position;
-                    if ((double)vec2.length < _ammoType.range)
+                    if (vec2.length < _ammoType.range)
                     {
                         if (Network.isActive)
                         {
@@ -304,7 +304,7 @@ namespace DuckGame
                     if (duck1 is TargetDuck && (duck1 as TargetDuck).stanceSetting == 3)
                     {
                         for (int index = 0; index < 3; ++index)
-                            Level.Add(new MusketSmoke(duck1.x - 5f + Rando.Float(10f), (float)((double)duck1.y + 6.0 - 3.0 + (double)Rando.Float(6f) - index * 1.0))
+                            Level.Add(new MusketSmoke(duck1.x - 5f + Rando.Float(10f), (float)(duck1.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                             {
                                 move = {
                   x = (Rando.Float(0.4f) - 0.2f),
@@ -322,7 +322,7 @@ namespace DuckGame
                     if (duck1 != this.duck && duck1.grounded && !(duck1.holdObject is GoodBook) && Level.CheckLine<Block>(this.duck.position, duck1.position) == null)
                     {
                         vec2 = duck1.position - this.duck.position;
-                        if ((double)vec2.length < _ammoType.range)
+                        if (vec2.length < _ammoType.range)
                         {
                             if (duck1.dead)
                             {
@@ -346,7 +346,7 @@ namespace DuckGame
                                     this.Fondle(duck1._trappedInstance);
                                     this.Fondle(duck1._cookedInstance);
                                     duck1.listenTime = 80;
-                                    if ((double)this.owner.x < (double)duck1.x)
+                                    if (this.owner.x < duck1.x)
                                         duck1.offDir = -1;
                                     else
                                         duck1.offDir = 1;
@@ -368,7 +368,7 @@ namespace DuckGame
                     }
                 }
             }
-            this._haloAlpha = Lerp.Float(this._haloAlpha, !this._triggerHeld || this.duck == null || !this.duck.grounded ? 0.0f : 1f, 0.05f);
+            this._haloAlpha = Lerp.Float(this._haloAlpha, !this._triggerHeld || this.duck == null || !this.duck.grounded ? 0f : 1f, 0.05f);
             for (int index = 0; index < 8; ++index)
                 this.prevControlling[index] = this.controlling[index];
         }
@@ -386,7 +386,7 @@ namespace DuckGame
                 float angle = spriteArms.angle;
                 spriteArms.flipH = offDir * -1 < 0;
                 spriteArms.angle = 0.7f * offDir;
-                Graphics.Draw(spriteArms, this.owner.x - 5 * offDir, (float)((double)this.owner.y + 3f + (this.duck.crouch ? 3f : 0f) + (this.duck.sliding ? 3f : 0f)));
+                Graphics.Draw(spriteArms, this.owner.x - 5 * offDir, (float)(this.owner.y + 3f + (this.duck.crouch ? 3f : 0f) + (this.duck.sliding ? 3f : 0f)));
                 spriteArms.angle = angle;
                 spriteArms.flipH = flipH;
                 this.handOffset = new Vec2(9999f, 9999f);
@@ -395,9 +395,9 @@ namespace DuckGame
                 this.handOffset = new Vec2(1f, 1f);
             if (this.owner != null && _haloAlpha > 0.01f)
             {
-                this._halo.alpha = (float)(_haloAlpha * 0.4f + (double)(float)this._haloWave * 0.1f);
+                this._halo.alpha = (float)(_haloAlpha * 0.4f + (float)this._haloWave * 0.1f);
                 this._halo.depth = -0.2f;
-                this._halo.xscale = this._halo.yscale = (float)(0.95f + (double)(float)this._haloWave * 0.05f);
+                this._halo.xscale = this._halo.yscale = (float)(0.95f + (float)this._haloWave * 0.05f);
                 this._halo.angle += 0.01f;
                 Graphics.Draw(this._halo, this.owner.x, this.owner.y);
                 if (_ringPulse > 0f)
@@ -408,7 +408,7 @@ namespace DuckGame
                     for (int index = 0; index < num1; ++index)
                     {
                         float rad = Maths.DegToRad(360 / (num1 - 1) * index);
-                        Vec2 vec2_2 = new Vec2((float)Math.Cos((double)rad) * num2, (float)-Math.Sin((double)rad) * num2);
+                        Vec2 vec2_2 = new Vec2((float)Math.Cos(rad) * num2, (float)-Math.Sin(rad) * num2);
                         if (index > 0)
                             Graphics.DrawLine(this.owner.position + vec2_2, this.owner.position + vec2_1, Color.White * (this._ringPulse * 0.6f), this._ringPulse * 10f);
                         vec2_1 = vec2_2;

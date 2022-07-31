@@ -146,14 +146,14 @@ namespace DuckGame
                     bool flag = false;
                     for (int index = 0; index < source.Count; ++index)
                     {
-                        if (source[index][0].storeValue < (double)num)
+                        if (source[index][0].storeValue < num)
                         {
                             source.Insert(index, new List<Profile>());
                             source[index].Add(profile);
                             flag = true;
                             break;
                         }
-                        if (source[index][0].storeValue == (double)num)
+                        if (source[index][0].storeValue == num)
                         {
                             source[index].Add(profile);
                             flag = true;

@@ -33,7 +33,7 @@ namespace DuckGame
             this.thickness = 2f;
             this.weight = 5f;
             this.flammable = 0.3f;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this._light = new Sprite("eCrateLight");
             this._light.CenterOrigin();
             this.collideSounds.Add("crateHit");
@@ -41,7 +41,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             for (int index = 0; index < 6; ++index)
                 Level.Add(new GlassParticle(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f), new Vec2(Rando.Float(-2f, 2f), Rando.Float(-2f, 2f))));
             for (int index = 0; index < 5; ++index)
@@ -98,7 +98,7 @@ namespace DuckGame
                 this.damageMultiplier -= 0.2f;
             else
                 this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / (double)this._maxHealth) * 4f);
+            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / this._maxHealth) * 4f);
             if (_hitPoints <= 0f && !this._destroyed)
                 this.Destroy(new DTImpact(this));
             if (!this._onFire || burnt >= 0.9f)

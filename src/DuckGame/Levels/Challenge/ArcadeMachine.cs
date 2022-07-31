@@ -17,10 +17,10 @@ namespace DuckGame
         public EditorProperty<bool> lit = new EditorProperty<bool>(true);
         public EditorProperty<int> style = new EditorProperty<int>(0, max: 16f, increment: 1f);
         public EditorProperty<int> requirement = new EditorProperty<int>(0, max: 100f, increment: 1f);
-        public EditorProperty<float> respect = new EditorProperty<float>(0.0f, increment: 0.05f);
-        public EditorProperty<string> challenge01 = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
-        public EditorProperty<string> challenge02 = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
-        public EditorProperty<string> challenge03 = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
+        public EditorProperty<float> respect = new EditorProperty<float>(0f, increment: 0.05f);
+        public EditorProperty<string> challenge01 = new EditorProperty<string>("", increment: 0f, isLevel: true);
+        public EditorProperty<string> challenge02 = new EditorProperty<string>("", increment: 0f, isLevel: true);
+        public EditorProperty<string> challenge03 = new EditorProperty<string>("", increment: 0f, isLevel: true);
         protected bool _underlayStyle = true;
         protected SpriteMap _sprite;
         private Sprite _customMachineOverlay;
@@ -169,7 +169,7 @@ namespace DuckGame
                     }
                 }
             }
-            if ((double)(float)this.respect != 0.0 && (double)Challenges.GetChallengeSkillIndex() < (double)(float)this.respect)
+            if ((float)this.respect != 0f && Challenges.GetChallengeSkillIndex() < (float)this.respect)
                 return false;
             return (int)this.requirement <= 0 || Challenges.GetNumTrophies(Profiles.active[0]) >= (int)this.requirement;
         }
@@ -191,7 +191,7 @@ namespace DuckGame
                 if (Thing._alphaTestEffect == null)
                     Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
                 RenderTarget2D t = new RenderTarget2D(48, 48, true);
-                Camera camera = new Camera(0.0f, 0.0f, 48f, 48f);
+                Camera camera = new Camera(0f, 0f, 48f, 48f);
                 DuckGame.Graphics.SetRenderTarget(t);
                 DepthStencilState depthStencilState = new DepthStencilState()
                 {
@@ -204,7 +204,7 @@ namespace DuckGame
                 DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)Thing._alphaTestEffect, camera.getMatrix());
                 DuckGame.Graphics.Draw(this._machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
-                DuckGame.Graphics.Draw(this._customMachineOverlayMask, 0.0f, 0.0f, (Depth)0.9f);
+                DuckGame.Graphics.Draw(this._customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
                 Texture2D tex = new Texture2D(DuckGame.Graphics.device, t.width, t.height);
@@ -271,14 +271,14 @@ namespace DuckGame
                 Duck duck = Level.Nearest<Duck>(this.x, this.y);
                 if (duck != null)
                 {
-                    if (duck.grounded && (double)(duck.position - this.position).length < 20.0)
+                    if (duck.grounded && (duck.position - this.position).length < 20f)
                     {
                         this._hoverFade = Lerp.Float(this._hoverFade, 1f, 0.1f);
                         this.hover = true;
                     }
                     else
                     {
-                        this._hoverFade = Lerp.Float(this._hoverFade, 0.0f, 0.1f);
+                        this._hoverFade = Lerp.Float(this._hoverFade, 0f, 0.1f);
                         this.hover = false;
                     }
                 }
@@ -305,17 +305,17 @@ namespace DuckGame
                     if (levelData != null && levelData.previewData.preview != null)
                     {
                         Tex2D texture = (Tex2D)Editor.StringToTexture(levelData.previewData.preview);
-                        Vec2 vec2 = new Vec2(this.x - 28f, (float)((double)this.y + 30.0 - texture.width / 8.0 - 6.0));
+                        Vec2 vec2 = new Vec2(this.x - 28f, (this.y + 30f - texture.width / 8f - 6f));
                         switch (index)
                         {
                             case 1:
-                                vec2 = new Vec2((float)((double)this.x + 28.0 - texture.width / 8.0), (float)((double)this.y + 30.0 - texture.width / 8.0 - 6.0));
+                                vec2 = new Vec2((float)(this.x + 28f - texture.width / 8f), (this.y + 30f - texture.width / 8f - 6f));
                                 break;
                             case 2:
-                                vec2 = new Vec2(this.x - (float)(texture.width / 8.0 / 2.0), (float)((double)this.y + 30.0 - texture.width / 8.0));
+                                vec2 = new Vec2(this.x - (float)(texture.width / 8f / 2f), (this.y + 30f - texture.width / 8f));
                                 break;
                         }
-                        DuckGame.Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((float)(vec2.x + texture.width / 8.0 + 0.5), (float)(vec2.y + texture.height / 8.0 + 0.5)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
+                        DuckGame.Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((vec2.x + texture.width / 8f + 0.5f), (vec2.y + texture.height / 8f + 0.5f)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
                         DuckGame.Graphics.Draw(texture, vec2.x, vec2.y, 0.125f, 0.125f, (Depth)(index == 2 ? 0.99f : 0.85f));
                     }
                 }

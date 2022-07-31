@@ -60,8 +60,8 @@ namespace DuckGame
             this._sprite.AddAnimation("idle", 1f, true, new int[1]);
             this._sprite.AddAnimation("activate", 0.35f, false, 1, 2, 3, 4, 4, 5, 4, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 5, 7, 7, 7, 7, 7, 7, 7, 7, 5, 8, 8, 8, 8, 8, 8, 8, 8, 5, 9, 9, 5);
             this._sprite.SetAnimation("idle");
-            this._holdOffset = new Vec2(2f, 0.0f);
-            this.flammable = 0.0f;
+            this._holdOffset = new Vec2(2f, 0f);
+            this.flammable = 0f;
             this.collideSounds.Add("crateHit");
             for (int index = 0; index < 100; ++index)
             {

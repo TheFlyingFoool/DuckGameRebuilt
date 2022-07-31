@@ -146,7 +146,7 @@ namespace DuckGame
                     if (_talkMove > 1.0)
                     {
                         this.SetCasterFrame(0);
-                        this._talkMove = 0.0f;
+                        this._talkMove = 0f;
                     }
                     if (_waitAfterLine <= 0.0)
                     {
@@ -173,7 +173,7 @@ namespace DuckGame
                             this.SetCasterFrame(Rando.Int(1) + 1);
                         else
                             this.SetCasterFrame(0);
-                        this._talkMove = 0.0f;
+                        this._talkMove = 0f;
                     }
                     this._waitLetter = 1f;
                     char ch1;
@@ -304,7 +304,7 @@ namespace DuckGame
                     if (_talkMove <= 1.0)
                         return;
                     this.SetCasterFrame(0);
-                    this._talkMove = 0.0f;
+                    this._talkMove = 0f;
                 }
             }
         }
@@ -316,8 +316,8 @@ namespace DuckGame
             {
                 float width = this._font.GetWidth(this._lineProgress[index1].text);
                 float ypos = 140 - (this._lineProgress.Count - 1) * 9 + num * 9;
-                Graphics.DrawRect(new Vec2((float)(132.0 - (double)width / 2.0 - 1.0), ypos - 1f), new Vec2((float)(132.0 + (double)width / 2.0), ypos + 9f), Color.Black, (Depth)0.84f);
-                float xpos = (float)(132.0 - (double)width / 2.0);
+                Graphics.DrawRect(new Vec2((float)(132.0 - width / 2.0 - 1.0), ypos - 1f), new Vec2((float)(132.0 + width / 2.0), ypos + 9f), Color.Black, (Depth)0.84f);
+                float xpos = (float)(132.0 - width / 2.0);
                 for (int index2 = this._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     this._font.Draw(this._lineProgress[index1].segments[index2].text, xpos, ypos, this._lineProgress[index1].segments[index2].color, (Depth)0.85f);

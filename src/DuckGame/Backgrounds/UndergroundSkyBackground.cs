@@ -35,7 +35,7 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             Level.current.backgroundColor = new Color(0, 0, 0);
-            this._parallax = new ParallaxBackground("background/underground", 0.0f, 0.0f, 5);
+            this._parallax = new ParallaxBackground("background/underground", 0f, 0f, 5);
             float speed = 0.9f * this._speedMult;
             float distance = 0.99f;
             this._parallax.AddZone(0, distance, speed);
@@ -53,7 +53,7 @@ namespace DuckGame
             this._parallax.x -= 340f;
             this._parallax.restrictBottom = false;
             this._parallax.depth = -0.9f;
-            this._parallax.layer = new Layer("PARALLAX3", 115, new Camera(0.0f, 0.0f, 320f, 200f))
+            this._parallax.layer = new Layer("PARALLAX3", 115, new Camera(0f, 0f, 320f, 200f))
             {
                 aspectReliesOnGameLayer = true,
                 allowTallAspect = true

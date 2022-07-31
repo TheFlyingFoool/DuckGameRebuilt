@@ -14,7 +14,7 @@ namespace DuckGame
         protected bool _update = true;
         protected bool _yParallax = true;
         protected float _yOffset;
-        public Rectangle scissor = new Rectangle(0.0f, 0.0f, 0.0f, 0.0f);
+        public Rectangle scissor = new Rectangle(0f, 0f, 0f, 0f);
         public bool overrideBaseScissorCall;
         public float _extraYOffset;
         public Color backgroundColor;
@@ -56,9 +56,9 @@ namespace DuckGame
                 if (y == 0)
                     y = (int)Resolution.size.x;
                 Vec2 vec2 = Vec2.Transform(rockWall.position, matrix) * num;
-                if (!rockWall.flipHorizontal && vec2.x > (double)x)
+                if (!rockWall.flipHorizontal && vec2.x > x)
                     x = (int)vec2.x;
-                else if (rockWall.flipHorizontal && vec2.x < (double)y)
+                else if (rockWall.flipHorizontal && vec2.x < y)
                     y = (int)vec2.x;
             }
             if (y != 0)
@@ -74,7 +74,7 @@ namespace DuckGame
             {
                 Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
                 if (wallScissor != Vec2.Zero)
-                    this.scissor = new Rectangle((int)wallScissor.x, 0.0f, (int)wallScissor.y, Resolution.current.y);
+                    this.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, Resolution.current.y);
             }
             if (!this._update)
                 return;
@@ -83,7 +83,7 @@ namespace DuckGame
                 float num = Level.current.camera.width * 4f / Graphics.width;
                 if (this._yParallax)
                 {
-                    this._parallax.y = (float)(-((double)Level.current.camera.centerY / 12.0) - 5.0) + this._yOffset;
+                    this._parallax.y = (float)(-(Level.current.camera.centerY / 12f) - 5f) + this._yOffset;
                 }
                 else
                 {

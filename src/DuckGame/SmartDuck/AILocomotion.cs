@@ -1,182 +1,182 @@
-﻿//// Decompiled with JetBrains decompiler
-//// Type: DuckGame.AILocomotion
-//// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
-//// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-//// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-//// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
+﻿//// decompiled with jetbrains decompiler
+//// type: duckgame.ailocomotion
+//// assembly: duckgame, version=1.1.8175.33388, culture=neutral, publickeytoken=null
+//// mvid: c907f20b-c12b-4773-9b1e-25290117c0e4
+//// assembly location: d:\program files (x86)\steam\steamapps\common\duck game\duckgame.exe
+//// xml documentation location: d:\program files (x86)\steam\steamapps\common\duck game\duckgame.xml
 
-//using System;
+//using system;
 
-//namespace DuckGame
+//namespace duckgame
 //{
-//    public class AILocomotion
+//    public class ailocomotion
 //    {
-//        private AIPathFinder _path = new AIPathFinder();
-//        private DuckAI _ai;
-//        private float _jumpFrames;
-//        private float _quackFrames;
-//        private float _slideFrames;
-//        private int _tryJump = -1;
+//        private aipathfinder _path = new aipathfinder();
+//        private duckai _ai;
+//        private float _jumpframes;
+//        private float _quackframes;
+//        private float _slideframes;
+//        private int _tryjump = -1;
 
-//        public AIPathFinder pathFinder => this._path;
+//        public aipathfinder pathfinder => this._path;
 
-//        public Vec2 target
+//        public vec2 target
 //        {
-//            set => this._path.SetTarget(value);
-//            get => this._path.target == null ? Vec2.Zero : this._path.target.link.position;
+//            set => this._path.settarget(value);
+//            get => this._path.target == null ? vec2.zero : this._path.target.link.position;
 //        }
 
-//        public void RunLeft()
+//        public void runleft()
 //        {
-//            this._ai.Release("RIGHT");
-//            this._ai.Press("LEFT");
+//            this._ai.release("right");
+//            this._ai.press("left");
 //        }
 
-//        public void RunRight()
+//        public void runright()
 //        {
-//            this._ai.Press("RIGHT");
-//            this._ai.Release("LEFT");
+//            this._ai.press("right");
+//            this._ai.release("left");
 //        }
 
-//        public void Jump(int frames)
+//        public void jump(int frames)
 //        {
-//            this._jumpFrames = frames;
-//            this._ai.Press("JUMP");
+//            this._jumpframes = frames;
+//            this._ai.press("jump");
 //        }
 
-//        public void Quack(int frames)
+//        public void quack(int frames)
 //        {
-//            this._quackFrames = frames;
-//            this._ai.Press("QUACK");
+//            this._quackframes = frames;
+//            this._ai.press("quack");
 //        }
 
-//        public void Slide(int frames)
+//        public void slide(int frames)
 //        {
-//            this._slideFrames = frames;
-//            this._ai.Press("DOWN");
+//            this._slideframes = frames;
+//            this._ai.press("down");
 //        }
 
-//        public void TrimLastTarget()
+//        public void trimlasttarget()
 //        {
-//            if (this._path.path == null || this._path.path.Count <= 0)
+//            if (this._path.path == null || this._path.path.count <= 0)
 //                return;
-//            this._path.path.RemoveAt(this._path.path.Count - 1);
+//            this._path.path.removeat(this._path.path.count - 1);
 //        }
 
-//        public void Update(DuckAI ai, Duck duck)
+//        public void update(duckai ai, duck duck)
 //        {
-//            if (Mouse.right == InputState.Pressed)
+//            if (mouse.right == inputstate.pressed)
 //            {
-//                this._path.followObject = duck;
-//                this._path.SetTarget(Mouse.positionScreen);
-//                this._path.Refresh();
+//                this._path.followobject = duck;
+//                this._path.settarget(mouse.positionscreen);
+//                this._path.refresh();
 //            }
 //            this._ai = ai;
-//            this._path.followObject = duck;
-//            if (_jumpFrames == 1.0)
+//            this._path.followobject = duck;
+//            if (_jumpframes == 1.0)
 //            {
-//                this._jumpFrames = 0.0f;
-//                this._ai.Release("JUMP");
+//                this._jumpframes = 0f;
+//                this._ai.release("jump");
 //            }
-//            else if (_jumpFrames > 0.0)
-//                --this._jumpFrames;
-//            if (_slideFrames == 1.0)
+//            else if (_jumpframes > 0.0)
+//                --this._jumpframes;
+//            if (_slideframes == 1.0)
 //            {
-//                this._slideFrames = 0.0f;
-//                this._ai.Release("DOWN");
+//                this._slideframes = 0f;
+//                this._ai.release("down");
 //            }
-//            else if (_slideFrames > 0.0)
-//                --this._slideFrames;
-//            if (_quackFrames == 1.0)
+//            else if (_slideframes > 0.0)
+//                --this._slideframes;
+//            if (_quackframes == 1.0)
 //            {
-//                this._quackFrames = 0.0f;
-//                this._ai.Release("QUACK");
+//                this._quackframes = 0f;
+//                this._ai.release("quack");
 //            }
-//            else if (_quackFrames > 0.0)
-//                --this._quackFrames;
-//            ai.Release("LEFT");
-//            ai.Release("RIGHT");
-//            if (this._path.path == null || this._path.path.Count == 0)
+//            else if (_quackframes > 0.0)
+//                --this._quackframes;
+//            ai.release("left");
+//            ai.release("right");
+//            if (this._path.path == null || this._path.path.count == 0)
 //                return;
-//            Vec2 target = this.target;
-//            Vec2 vec2 = new Vec2(target.x - duck.x, target.y - duck.y);
-//            if (!PathNode.LineIsClear(duck.position, target))
+//            vec2 target = this.target;
+//            vec2 vec2 = new vec2(target.x - duck.x, target.y - duck.y);
+//            if (!pathnode.lineisclear(duck.position, target))
 //            {
-//                this._path.Refresh();
+//                this._path.refresh();
 //                if (this._path.path == null)
 //                    return;
 //                target = this.target;
-//                vec2 = new Vec2(target.x - duck.x, target.y - duck.y);
+//                vec2 = new vec2(target.x - duck.x, target.y - duck.y);
 //            }
 //            if (this._path.path == null)
 //                return;
-//            if (vec2.y < (double)duck.y && (double)Math.Abs(vec2.y) > 64.0 && this._path.path.Count > 1)
+//            if (vec2.y < duck.y && math.abs(vec2.y) > 64.0 && this._path.path.count > 1)
 //            {
-//                this._path.Refresh();
+//                this._path.refresh();
 //                if (this._path.path == null)
 //                    return;
 //                target = this.target;
-//                vec2 = new Vec2(target.x - duck.x, target.y - duck.y);
+//                vec2 = new vec2(target.x - duck.x, target.y - duck.y);
 //            }
-//            if (!PathNode.LineIsClear(duck.position, target))
+//            if (!pathnode.lineisclear(duck.position, target))
 //            {
-//                this._path.Refresh();
+//                this._path.refresh();
 //                if (this._path.path == null)
 //                    return;
 //                target = this.target;
-//                vec2 = new Vec2(target.x - duck.x, target.y - duck.y);
+//                vec2 = new vec2(target.x - duck.x, target.y - duck.y);
 //            }
 //            if (this._path.path == null)
 //                return;
 //            bool flag = false;
-//            if (this._tryJump > 0)
-//                --this._tryJump;
-//            if (this._tryJump == 0 && duck.grounded)
+//            if (this._tryjump > 0)
+//                --this._tryjump;
+//            if (this._tryjump == 0 && duck.grounded)
 //            {
-//                this._path.Refresh();
+//                this._path.refresh();
 //                if (this._path.path == null)
 //                    return;
 //                target = this.target;
-//                vec2 = new Vec2(target.x - duck.x, target.y - duck.y);
-//                this._tryJump = -1;
+//                vec2 = new vec2(target.x - duck.x, target.y - duck.y);
+//                this._tryjump = -1;
 //            }
 //            if (this._path.path == null)
 //                return;
 //            float num1 = 1f;
-//            if (_path.target.position.y == (double)this.target.y)
-//                num1 = 0.0f;
-//            if (vec2.x < ((double)duck.hSpeed * 3.0 - 2.0) * (double)num1)
+//            if (_path.target.position.y == this.target.y)
+//                num1 = 0f;
+//            if (vec2.x < (duck.hspeed * 3f - 2f) * num1)
 //            {
-//                if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(-32f, 0.0f)) != null)
-//                    this.Slide(30);
-//                this.RunLeft();
+//                if (duck.grounded && level.checkline<window>(duck.position, duck.position + new vec2(-32f, 0f)) != null)
+//                    this.slide(30);
+//                this.runleft();
 //            }
-//            else if (vec2.x > ((double)duck.hSpeed * 3.0 + 2.0) * (double)num1)
+//            else if (vec2.x > (duck.hspeed * 3f + 2f) * num1)
 //            {
-//                if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(32f, 0.0f)) != null)
-//                    this.Slide(30);
-//                this.RunRight();
+//                if (duck.grounded && level.checkline<window>(duck.position, duck.position + new vec2(32f, 0f)) != null)
+//                    this.slide(30);
+//                this.runright();
 //            }
 //            if (this._path.peek.gap && duck.grounded)
 //            {
-//                this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.x), 0.0f, 48f) / 48.0 * 16.0));
-//                this._tryJump = 5;
+//                this.jump((int)(maths.clamp(math.abs(vec2.x), 0f, 48f) / 48.0 * 16f));
+//                this._tryjump = 5;
 //            }
 //            if (vec2.y <= -4.0 && duck.grounded)
 //            {
-//                this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.y), 0.0f, 48f) / 48.0 * 16.0));
-//                this._tryJump = 5;
+//                this.jump((int)(maths.clamp(math.abs(vec2.y), 0f, 48f) / 48f * 16f));
+//                this._tryjump = 5;
 //            }
 //            if (flag)
-//                ai.Release("JUMP");
+//                ai.release("jump");
 //            float num2 = 8f;
-//            if ((double)Math.Abs(this._path.peek.owner.y - target.y) < 8.0)
+//            if (math.abs(this._path.peek.owner.y - target.y) < 8.0)
 //                num2 = 200f;
-//            if ((double)Math.Abs(vec2.x) >= 4.0 || (double)Math.Abs(vec2.y) >= (double)num2 || !PathNode.LineIsClear(duck.position - new Vec2(0.0f, 8f), target) || _path.peek.link.position.y < (double)duck.y - 8.0 && !duck.grounded || !duck.grounded)
+//            if (math.abs(vec2.x) >= 4.0 || math.abs(vec2.y) >= num2 || !pathnode.lineisclear(duck.position - new vec2(0f, 8f), target) || _path.peek.link.position.y < duck.y - 8f && !duck.grounded || !duck.grounded)
 //                return;
-//            this._path.AtTarget();
-//            this._ai.canRefresh = true;
-//            this._tryJump = -1;
+//            this._path.attarget();
+//            this._ai.canrefresh = true;
+//            this._tryjump = -1;
 //        }
 //    }
 //}

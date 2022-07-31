@@ -11,11 +11,11 @@ namespace DuckGame
 {
     public class Fluid : PhysicsParticle
     {
-        public static FluidData Lava = new FluidData(0.0f, new Color((int)byte.MaxValue, 89, 5).ToVector4(), 0.0f, "lava", 1f, 0.8f);
-        public static FluidData Gas = new FluidData(0.0f, new Color(246, 198, 55).ToVector4(), 1f, "gas");
-        public static FluidData Water = new FluidData(0.0f, new Color(0, 150, 249).ToVector4(), 0.0f, "water");
-        public static FluidData Ketchup = new FluidData(0.0f, Color.Red.ToVector4() * 0.8f, 0.4f, "water");
-        public static FluidData Poo = new FluidData(0.0f, Color.SaddleBrown.ToVector4() * 0.8f, 0.5f, "water");
+        public static FluidData Lava = new FluidData(0f, new Color((int)byte.MaxValue, 89, 5).ToVector4(), 0f, "lava", 1f, 0.8f);
+        public static FluidData Gas = new FluidData(0f, new Color(246, 198, 55).ToVector4(), 1f, "gas");
+        public static FluidData Water = new FluidData(0f, new Color(0, 150, 249).ToVector4(), 0f, "water");
+        public static FluidData Ketchup = new FluidData(0f, Color.Red.ToVector4() * 0.8f, 0.4f, "water");
+        public static FluidData Poo = new FluidData(0f, Color.SaddleBrown.ToVector4() * 0.8f, 0.5f, "water");
         private Fluid _stream;
         private Fluid _child;
         private bool _firstHit;
@@ -71,17 +71,17 @@ namespace DuckGame
             if (this._fire != null)
                 this._fire.position = this.position;
             this._life = 1f;
-            if (_thickness < 4f || (double)Math.Abs(this.vSpeed) < 1.5)
+            if (_thickness < 4f || Math.Abs(this.vSpeed) < 1.5)
                 this.live -= 0.01f;
             this._thickness = Lerp.FloatSmooth(this.startThick, 0.1f, 1f - this.live);
-            if (live < 0f || this._grounded && (double)Math.Abs(this.vSpeed) < 0.1f)
+            if (live < 0f || this._grounded && Math.Abs(this.vSpeed) < 0.1f)
             {
                 Level.Remove(this);
                 this.active = false;
                 FluidPuddle fluidPuddle1 = null;
                 foreach (FluidPuddle fluidPuddle2 in Level.current.things[typeof(FluidPuddle)])
                 {
-                    if ((double)this.x > (double)fluidPuddle2.left && (double)this.x < (double)fluidPuddle2.right && (double)Math.Abs(fluidPuddle2.y - this.y) < 10.0)
+                    if (this.x > fluidPuddle2.left && this.x < fluidPuddle2.right && Math.Abs(fluidPuddle2.y - this.y) < 10.0)
                     {
                         fluidPuddle1 = fluidPuddle2;
                         break;
@@ -90,8 +90,8 @@ namespace DuckGame
                 if (fluidPuddle1 == null)
                 {
                     Vec2 position;
-                    Block b = Level.CheckLine<AutoBlock>(this.position + new Vec2(0.0f, -8f), this.position + new Vec2(0.0f, 16f), out position);
-                    if (b != null && position.y == (double)b.top)
+                    Block b = Level.CheckLine<AutoBlock>(this.position + new Vec2(0f, -8f), this.position + new Vec2(0f, 16f), out position);
+                    if (b != null && position.y == b.top)
                     {
                         fluidPuddle1 = new FluidPuddle(position.x, position.y, b);
                         Level.Add(fluidPuddle1);
@@ -145,7 +145,7 @@ namespace DuckGame
                     this._glob.frame = 2;
                     this._glob.color = new Color(this.data.color) * this.alpha;
                     this._glob.CenterOrigin();
-                    this._glob.angle = Maths.DegToRad((float)(-(double)Maths.PointDirection(this.position, this.position + this.velocity) + 90.0));
+                    this._glob.angle = Maths.DegToRad((float)(-Maths.PointDirection(this.position, this.position + this.velocity) + 90.0));
                     Graphics.Draw(_glob, this.x, this.y);
                 }
                 else

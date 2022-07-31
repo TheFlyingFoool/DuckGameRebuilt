@@ -62,7 +62,7 @@ namespace DuckGame
 
         public virtual bool hasMotionAxis => false;
 
-        public virtual float motionAxis => 0.0f;
+        public virtual float motionAxis => 0f;
 
         public virtual bool allowStartRemap => true;
 
@@ -103,10 +103,10 @@ namespace DuckGame
         {
             if (rumbleIntensity > 0.3)
                 this._rumbleThisFrame = true;
-            return this._framesRumbled > 120 ? 0.0f : Options.Data.rumbleIntensity;
+            return this._framesRumbled > 120 ? 0f : Options.Data.rumbleIntensity;
         }
 
-        public virtual void Rumble(float leftIntensity = 0.0f, float rightIntensity = 0.0f)
+        public virtual void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
         }
 

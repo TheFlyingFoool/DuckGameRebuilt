@@ -81,12 +81,12 @@ namespace DuckGame
             bool flag = false;
             foreach (Door door in this._doorList)
             {
-                if (!this._doors[door] && (double)Math.Abs(door._open) > 0.800000011920929)
+                if (!this._doors[door] && Math.Abs(door._open) > 0.800000011920929)
                 {
                     this._doors[door] = true;
                     flag = true;
                 }
-                else if (this._doors[door] && (double)Math.Abs(door._open) < 0.200000002980232)
+                else if (this._doors[door] && Math.Abs(door._open) < 0.200000002980232)
                 {
                     this._doors[door] = false;
                     flag = true;
@@ -94,12 +94,12 @@ namespace DuckGame
             }
             foreach (VerticalDoor verticalDoor in this._verticalDoorList)
             {
-                if (!this._verticalDoors[verticalDoor] && (double)Math.Abs(verticalDoor._open) > 0.800000011920929)
+                if (!this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) > 0.800000011920929)
                 {
                     this._verticalDoors[verticalDoor] = true;
                     flag = true;
                 }
-                else if (this._verticalDoors[verticalDoor] && (double)Math.Abs(verticalDoor._open) < 0.200000002980232)
+                else if (this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) < 0.200000002980232)
                 {
                     this._verticalDoors[verticalDoor] = false;
                     flag = true;
@@ -135,8 +135,8 @@ namespace DuckGame
             int num1 = 64;
             for (int index1 = 0; index1 <= num1; ++index1)
             {
-                float deg = (float)(index1 / (double)num1 * 360.0);
-                Vec2 vec2_2 = new Vec2((float)Math.Cos((double)Maths.DegToRad(deg)), -(float)Math.Sin((double)Maths.DegToRad(deg)));
+                float deg = (float)(index1 / num1 * 360.0);
+                Vec2 vec2_2 = new Vec2((float)Math.Cos(Maths.DegToRad(deg)), -(float)Math.Sin(Maths.DegToRad(deg)));
                 Vec2 vec2_3 = Vec2.Zero;
                 Vec2 point2 = this.position + vec2_2 * this._range;
                 Vec2 vec2_4;
@@ -157,7 +157,7 @@ namespace DuckGame
                             {
                                 vec2_4 = vec2_5 - this.position;
                                 float lengthSq = vec2_4.lengthSq;
-                                if ((double)lengthSq < (double)num2)
+                                if (lengthSq < num2)
                                 {
                                     vec2_3 = vec2_5;
                                     num2 = lengthSq;
@@ -165,7 +165,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    if ((double)num2 > 99999.0)
+                    if (num2 > 99999.0)
                         vec2_3 = point2;
                 }
                 Color c = this._lightColor;
@@ -176,11 +176,11 @@ namespace DuckGame
                 float num3;
                 if (this._strangeFalloff)
                 {
-                    float num4 = 1f - Math.Max(length - 30f, 0.0f) / this._range;
+                    float num4 = 1f - Math.Max(length - 30f, 0f) / this._range;
                     num3 = num4 * num4;
                 }
                 else
-                    num3 = (float)(1.0 - (double)length / _range);
+                    num3 = (float)(1.0 - length / _range);
                 bool flag2 = false;
                 Color color = Color.White;
                 foreach (LightOccluder occluder in this._occluders)

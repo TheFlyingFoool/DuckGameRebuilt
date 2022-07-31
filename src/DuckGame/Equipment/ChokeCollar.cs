@@ -72,7 +72,7 @@ namespace DuckGame
             }
             if (this.destroyed)
                 this.alpha -= 0.05f;
-            if ((double)this.alpha < 0.0)
+            if (this.alpha < 0f)
                 Level.Remove(this);
             base.Update();
         }

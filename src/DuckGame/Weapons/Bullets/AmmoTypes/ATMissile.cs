@@ -21,7 +21,7 @@ namespace DuckGame
             this.bulletThickness = 2f;
             this.sprite = new Sprite("missile");
             this.sprite.CenterOrigin();
-            this.speedVariation = 0.0f;
+            this.speedVariation = 0f;
             this.flawlessPipeTravel = true;
         }
 
@@ -56,7 +56,7 @@ namespace DuckGame
                     {
                         range = 15f + Rando.Float(5f)
                     };
-                    Vec2 vec2 = new Vec2((float)Math.Cos((double)Maths.DegToRad(num)), (float)Math.Sin((double)Maths.DegToRad(num)));
+                    Vec2 vec2 = new Vec2((float)Math.Cos(Maths.DegToRad(num)), (float)Math.Sin(Maths.DegToRad(num)));
                     Bullet bullet = new Bullet(b.x + vec2.x * 8f, b.y - vec2.y * 8f, type, num)
                     {
                         firedFrom = b
@@ -90,7 +90,7 @@ namespace DuckGame
             {
                 if (pBullet.isLocal && pBullet.owner == null)
                     Thing.Fondle(t, DuckNetwork.localConnection);
-                if ((double)(t.position - pPosition).length < 30.0)
+                if ((t.position - pPosition).length < 30f)
                     t.Destroy(new DTImpact(pBullet));
                 t.sleeping = false;
                 t.vSpeed = -2f;

@@ -675,8 +675,8 @@ namespace DuckGame
             get
             {
                 if (this.connections.Count == 0)
-                    return 0.0f;
-                float num = 0.0f;
+                    return 0f;
+                float num = 0f;
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.ping;
@@ -689,8 +689,8 @@ namespace DuckGame
             get
             {
                 if (this.connections.Count == 0)
-                    return 0.0f;
-                float num = 0.0f;
+                    return 0f;
+                float num = 0f;
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.pingPeak;
@@ -702,7 +702,7 @@ namespace DuckGame
         {
             get
             {
-                float num = 0.0f;
+                float num = 0f;
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.jitter;
@@ -714,7 +714,7 @@ namespace DuckGame
         {
             get
             {
-                float num = 0.0f;
+                float num = 0f;
                 List<NetworkConnection> connections = this.connections;
                 foreach (NetworkConnection networkConnection in connections)
                     num += networkConnection.manager.jitterPeak;
@@ -750,7 +750,7 @@ namespace DuckGame
                     num1 += networkConnection.manager.losses;
                     num2 += networkConnection.manager.sent;
                 }
-                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (double)(num2 / connections.Count) * 100.0);
+                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (num2 / connections.Count) * 100.0);
             }
         }
 

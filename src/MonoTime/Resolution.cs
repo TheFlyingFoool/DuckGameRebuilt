@@ -146,9 +146,9 @@ namespace DuckGame
         public static Matrix getTransformationMatrix()
         {
             Viewport viewport = DuckGame.Graphics.viewport;
-            double xScale = viewport.Width / (double)MonoMain.screenWidth;
+            double xScale = viewport.Width / MonoMain.screenWidth;
             viewport = DuckGame.Graphics.viewport;
-            double yScale = viewport.Height / (double)MonoMain.screenHeight;
+            double yScale = viewport.Height / MonoMain.screenHeight;
             return Matrix.CreateScale((float)xScale, (float)yScale, 1f);
         }
 
@@ -358,9 +358,9 @@ namespace DuckGame
             {
                 float num1 = Math.Abs(resolution.aspect - pAspect);
                 float num2 = Math.Abs(nearestInternal.aspect - pAspect);
-                bool flag1 = (double)num1 < (double)num2 && (double)Math.Abs(num1 - num2) > 0.0500000007450581;
-                bool flag2 = (double)Math.Abs(num1 - num2) < 0.0500000007450581;
-                if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && (double)pAspect > 0.0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || (double)pAspect < 0.0 || flag1 | flag2 && (resolution.recommended || !pRecommended)))
+                bool flag1 = num1 < num2 && Math.Abs(num1 - num2) > 0.0500000007450581;
+                bool flag2 = Math.Abs(num1 - num2) < 0.0500000007450581;
+                if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && pAspect > 0.0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || pAspect < 0.0 || flag1 | flag2 && (resolution.recommended || !pRecommended)))
                     nearestInternal = resolution;
             }
             return nearestInternal;

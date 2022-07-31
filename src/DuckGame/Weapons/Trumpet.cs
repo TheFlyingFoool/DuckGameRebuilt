@@ -66,12 +66,12 @@ namespace DuckGame
                         this.currentPitch = 0;
                     if (owner.inputProfile.Pressed("RAGDOLL"))
                         this.currentPitch = 1;
-                    if ((double)owner.inputProfile.leftTrigger > 0.5 && !this.leftPressed)
+                    if (owner.inputProfile.leftTrigger > 0.5 && !this.leftPressed)
                     {
                         this.currentPitch = 2;
                         this.leftPressed = true;
                     }
-                    if ((double)owner.inputProfile.rightTrigger > 0.5 && !this.rightPressed)
+                    if (owner.inputProfile.rightTrigger > 0.5 && !this.rightPressed)
                     {
                         this.currentPitch = 3;
                         this.rightPressed = true;
@@ -82,21 +82,21 @@ namespace DuckGame
                         this.currentPitch = -1;
                     if (owner.inputProfile.Released("RAGDOLL") && this.currentPitch == 1)
                         this.currentPitch = -1;
-                    if ((double)owner.inputProfile.leftTrigger <= 0.5)
+                    if (owner.inputProfile.leftTrigger <= 0.5)
                     {
                         if (this.currentPitch == 2 && this.leftPressed)
                             this.currentPitch = -1;
                         this.leftPressed = false;
                     }
-                    if ((double)owner.inputProfile.rightTrigger <= 0.5)
+                    if (owner.inputProfile.rightTrigger <= 0.5)
                     {
                         if (this.currentPitch == 3 && this.rightPressed)
                             this.currentPitch = -1;
                         this.rightPressed = false;
                     }
-                    this.notePitch = this.currentPitch < 0 || this._raised ? 0.0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
+                    this.notePitch = this.currentPitch < 0 || this._raised ? 0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
                 }
-                if (notePitch != (double)this.prevNotePitch)
+                if (notePitch != this.prevNotePitch)
                 {
                     if (notePitch != 0.0)
                     {
@@ -117,7 +117,7 @@ namespace DuckGame
                             Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - (double)this.hitPitch) * 0.00999999977648258), -1f, 1f);
+                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - this.hitPitch) * 0.00999999977648258), -1f, 1f);
                     }
                     else if (this.noteSound != null)
                     {
@@ -129,8 +129,8 @@ namespace DuckGame
                 {
                     this.collisionOffset = new Vec2(4f, -4f);
                     this.collisionSize = new Vec2(8f, 8f);
-                    this._holdOffset = new Vec2(0.0f, 0.0f);
-                    this.handOffset = new Vec2(0.0f, 0.0f);
+                    this._holdOffset = new Vec2(0f, 0f);
+                    this.handOffset = new Vec2(0f, 0f);
                     this.OnReleaseAction();
                 }
                 else
@@ -174,7 +174,7 @@ namespace DuckGame
                 fingerPositionSprite.frame = this.currentPitch + 1;
                 fingerPositionSprite.depth = this.depth - 100;
                 fingerPositionSprite.flipH = this.offDir <= 0;
-                fingerPositionSprite.angle = 0.0f;
+                fingerPositionSprite.angle = 0f;
                 Vec2 vec2 = this.Offset(new Vec2(-8f, -2f));
                 Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
             }

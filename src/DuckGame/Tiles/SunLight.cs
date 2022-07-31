@@ -104,12 +104,12 @@ namespace DuckGame
                 bool flag = false;
                 foreach (Door door in this._doorList)
                 {
-                    if (!this._doors[door] && (double)Math.Abs(door._open) > 0.800000011920929)
+                    if (!this._doors[door] && Math.Abs(door._open) > 0.800000011920929)
                     {
                         this._doors[door] = true;
                         flag = true;
                     }
-                    else if (this._doors[door] && (double)Math.Abs(door._open) < 0.200000002980232)
+                    else if (this._doors[door] && Math.Abs(door._open) < 0.200000002980232)
                     {
                         this._doors[door] = false;
                         flag = true;
@@ -117,12 +117,12 @@ namespace DuckGame
                 }
                 foreach (VerticalDoor verticalDoor in this._verticalDoorList)
                 {
-                    if (!this._verticalDoors[verticalDoor] && (double)Math.Abs(verticalDoor._open) > 0.800000011920929)
+                    if (!this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) > 0.800000011920929)
                     {
                         this._verticalDoors[verticalDoor] = true;
                         flag = true;
                     }
-                    else if (this._verticalDoors[verticalDoor] && (double)Math.Abs(verticalDoor._open) < 0.200000002980232)
+                    else if (this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) < 0.200000002980232)
                     {
                         this._verticalDoors[verticalDoor] = false;
                         flag = true;
@@ -143,28 +143,28 @@ namespace DuckGame
                 Vec2 vec2_1 = new Vec2(3000f, 5000f);
                 for (int index = 0; index < 8; ++index)
                 {
-                    Vec2 vec2_2 = start + new Vec2(32f * num, 0.0f);
-                    start += new Vec2(8f, 0.0f);
+                    Vec2 vec2_2 = start + new Vec2(32f * num, 0f);
+                    start += new Vec2(8f, 0f);
                     Vec2 hitPos = Vec2.Zero;
                     Block key = Level.CheckRay<Block>(vec2_2, vec2_2 + vec2_1, out hitPos);
                     if (key is Window)
                         key = null;
                     if (key == null)
                     {
-                        this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(9f, 0.0f), vec2_2 + vec2_1, this.lightColor, this.lightColor, this.lightColor);
-                        this.geo.AddTriangle(vec2_2, vec2_2 + vec2_1, vec2_2 + new Vec2(9f, 0.0f) + vec2_1, this.lightColor, this.lightColor, this.lightColor);
+                        this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(9f, 0f), vec2_2 + vec2_1, this.lightColor, this.lightColor, this.lightColor);
+                        this.geo.AddTriangle(vec2_2, vec2_2 + vec2_1, vec2_2 + new Vec2(9f, 0f) + vec2_1, this.lightColor, this.lightColor, this.lightColor);
                     }
                     else
                     {
-                        if (Level.CheckPoint<Block>(hitPos + new Vec2(0.0f, -9f) + new Vec2(1f, 0.0f)) != null)
+                        if (Level.CheckPoint<Block>(hitPos + new Vec2(0f, -9f) + new Vec2(1f, 0f)) != null)
                         {
-                            this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(8f, 0.0f), hitPos + new Vec2(0.0f, -18f), this.lightColor, this.lightColor, this.lightColor);
-                            this.geo.AddTriangle(vec2_2, hitPos, hitPos + new Vec2(0.0f, -18f), this.lightColor, this.lightColor, this.lightColor);
+                            this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(8f, 0f), hitPos + new Vec2(0f, -18f), this.lightColor, this.lightColor, this.lightColor);
+                            this.geo.AddTriangle(vec2_2, hitPos, hitPos + new Vec2(0f, -18f), this.lightColor, this.lightColor, this.lightColor);
                         }
                         else
                         {
-                            this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(12f, 0.0f), hitPos + new Vec2(8f, 0.0f), this.lightColor, this.lightColor, this.lightColor);
-                            this.geo.AddTriangle(vec2_2, hitPos, hitPos + new Vec2(12f, 0.0f), this.lightColor, this.lightColor, this.lightColor);
+                            this.geo.AddTriangle(vec2_2, vec2_2 + new Vec2(12f, 0f), hitPos + new Vec2(8f, 0f), this.lightColor, this.lightColor, this.lightColor);
+                            this.geo.AddTriangle(vec2_2, hitPos, hitPos + new Vec2(12f, 0f), this.lightColor, this.lightColor, this.lightColor);
                         }
                         this.affectors.Add(key);
                         if (key is Door)

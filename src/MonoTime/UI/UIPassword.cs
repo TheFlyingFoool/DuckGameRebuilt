@@ -16,7 +16,7 @@ namespace DuckGame
           string textVal,
           Color c,
           UIAlign al = UIAlign.Center,
-          float heightAdd = 0.0f,
+          float heightAdd = 0f,
           InputProfile controlProfile = null)
           : base(textVal, c, al, heightAdd, controlProfile)
         {
@@ -29,7 +29,7 @@ namespace DuckGame
             {
                 this._collisionSize.x = 48f;
                 float num = this._text.Length * 8;
-                Graphics.DrawPassword(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-(double)num / 2.0) : this.width / 2f - num) : (float)-((double)this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-(double)this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-((double)this.height / 2.0))), this._color, this.depth);
+                Graphics.DrawPassword(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2.0) : this.width / 2f - num) : (float)-(this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0))), this._color, this.depth);
             }
             else
             {
@@ -37,7 +37,7 @@ namespace DuckGame
                     this._text = this._text.Substring(0, 8) + "..";
                 this._collisionSize.x = 48f;
                 float num = this._text.Length * 8;
-                Graphics.DrawString(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-(double)num / 2.0) : this.width / 2f - num) : (float)-((double)this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-(double)this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-((double)this.height / 2.0))), this._color, this.depth);
+                Graphics.DrawString(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2.0) : this.width / 2f - num) : (float)-(this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0))), this._color, this.depth);
             }
         }
     }

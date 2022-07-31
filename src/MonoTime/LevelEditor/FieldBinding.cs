@@ -39,7 +39,7 @@ namespace DuckGame
 
         public float inc => this._inc;
 
-        public FieldBinding(object thing, string field, float min = 0.0f, float max = 1f, float increment = 0.1f)
+        public FieldBinding(object thing, string field, float min = 0f, float max = 1f, float increment = 0.1f)
         {
             this._thing = thing;
             this._field = thing.GetType().GetField(field);
@@ -51,7 +51,7 @@ namespace DuckGame
             this.Construct();
         }
 
-        public FieldBinding(System.Type thing, string field, float min = 0.0f, float max = 1f, float increment = 0.1f)
+        public FieldBinding(System.Type thing, string field, float min = 0f, float max = 1f, float increment = 0.1f)
         {
             this._thing = thing;
             this._field = thing.GetField(field);
@@ -67,7 +67,7 @@ namespace DuckGame
         {
             if (this.value == null || !this.value.GetType().IsEnum)
                 return;
-            this._min = 0.0f;
+            this._min = 0f;
             this._max = Enum.GetValues(this.value.GetType()).Length - 1;
         }
     }

@@ -34,7 +34,7 @@ namespace DuckGame
             {
                 Graphics.DrawRect(position, position + vec2, Color.White, this.depth + 2, false);
                 Graphics.DrawRect(position, position + vec2, Color.White * 0.3f, this.depth + 1);
-                Graphics.DrawString(this._name, position + new Vec2((float)(vec2.x / 2.0 - (double)Graphics.GetStringWidth(this._name) / 2.0), 2f), Color.White * 1f, this.depth + 10);
+                Graphics.DrawString(this._name, position + new Vec2((float)(vec2.x / 2.0 - Graphics.GetStringWidth(this._name) / 2.0), 2f), Color.White * 1f, this.depth + 10);
                 if (Mouse.left == InputState.Pressed)
                 {
                     if (this._pressAction != null)
@@ -53,7 +53,7 @@ namespace DuckGame
             {
                 Graphics.DrawRect(position, position + vec2, Color.White, this.depth + 2, false);
                 Graphics.DrawRect(position, position + vec2, Color.Black * 0.8f, this.depth + 1);
-                Graphics.DrawString(this._name, position + new Vec2((float)(vec2.x / 2.0 - (double)Graphics.GetStringWidth(this._name) / 2.0), 2f), Color.White * 0.8f, this.depth + 10);
+                Graphics.DrawString(this._name, position + new Vec2((float)(vec2.x / 2.0 - Graphics.GetStringWidth(this._name) / 2.0), 2f), Color.White * 0.8f, this.depth + 10);
             }
             if (Mouse.left == InputState.Released)
                 this.pressing = false;

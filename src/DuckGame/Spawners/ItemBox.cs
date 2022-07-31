@@ -89,7 +89,7 @@ namespace DuckGame
                 this._aboveList = Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(1f, -4f), this.bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
                 foreach (PhysicsObject above in this._aboveList)
                 {
-                    if (above.grounded || (double)above.vSpeed > 0.0 || (double)above.vSpeed == 0.0)
+                    if (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0)
                     {
                         this.Fondle(above);
                         above.y -= 2f;
@@ -176,7 +176,7 @@ namespace DuckGame
                 {
                     if (this.isServerForObject && above.owner == null)
                         this.Fondle(above);
-                    if (above.isServerForObject && (above.grounded || (double)above.vSpeed > 0.0 || (double)above.vSpeed == 0.0))
+                    if (above.isServerForObject && (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0))
                     {
                         above.y -= 2f;
                         above.vSpeed = -3f;
@@ -198,11 +198,11 @@ namespace DuckGame
             this.y -= this.bounceAmount;
             if (this._canBounce)
                 return;
-            if ((double)this.y < startY)
-                this.y += (float)(0.8f + (double)Math.Abs(this.y - this.startY) * 0.4f);
-            if ((double)this.y > startY)
-                this.y -= (float)(0.8f - (double)Math.Abs(this.y - this.startY) * 0.4f);
-            if ((double)Math.Abs(this.y - this.startY) >= 0.8f)
+            if (this.y < startY)
+                this.y += (float)(0.8f + Math.Abs(this.y - this.startY) * 0.4f);
+            if (this.y > startY)
+                this.y -= (float)(0.8f - Math.Abs(this.y - this.startY) * 0.4f);
+            if (Math.Abs(this.y - this.startY) >= 0.8f)
                 return;
             this._canBounce = true;
             this.y = this.startY;
@@ -329,7 +329,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (this.contains != null)
                 text = this.contains.Name;
-            Graphics.DrawString(text, this.position + new Vec2((float)(-(double)Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
         }
     }
 }

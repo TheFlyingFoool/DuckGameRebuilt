@@ -289,7 +289,7 @@ namespace DuckGame
                     this._broadcastWait += Maths.IncFrameTimer();
                     if (_broadcastWait > 0.75)
                     {
-                        this._broadcastWait = 0.0f;
+                        this._broadcastWait = 0f;
                         this.BroadcastServerHeader();
                     }
                 }

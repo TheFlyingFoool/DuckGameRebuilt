@@ -42,14 +42,14 @@ namespace DuckGame
             for (int index = 0; index < 4; ++index)
             {
                 ConfettiParticle confettiParticle = new ConfettiParticle();
-                confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0.0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0.0f), Rando.Float(-1f, 1f)));
+                confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)));
                 confettiParticle._color = new Color(49, 163, 242);
                 Level.Add(confettiParticle);
             }
             for (int index = 0; index < 2; ++index)
             {
                 ConfettiParticle confettiParticle = new ConfettiParticle();
-                confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0.0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0.0f), Rando.Float(-1f, 1f)));
+                confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)));
                 confettiParticle._color = new Color(163, 206, 39);
                 Level.Add(confettiParticle);
             }
@@ -116,7 +116,7 @@ namespace DuckGame
                     this.center = new Vec2(8f, 12f);
                     this.collisionOffset = new Vec2(-3f, -12f);
                     this.collisionSize = new Vec2(6f, 14f);
-                    this.angleDegrees = 0.0f;
+                    this.angleDegrees = 0f;
                     this.graphic.flipH = this.offDir < 0;
                 }
                 else
@@ -125,7 +125,7 @@ namespace DuckGame
                     if (this.framesSinceThrown < 15)
                     {
                         Gun gun = Level.current.NearestThing<Gun>(this.position);
-                        if (gun != null && (double)(gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && (double)this.hSpeed < 0.0 || gun.offDir < 0 && (double)this.hSpeed > 0.0))
+                        if (gun != null && (gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && this.hSpeed < 0.0 || gun.offDir < 0 && this.hSpeed > 0.0))
                         {
                             this._stuck = gun;
                             this._prevBarrelHeat = this._stuck._barrelHeat;

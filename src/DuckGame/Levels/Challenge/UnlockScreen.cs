@@ -25,7 +25,7 @@ namespace DuckGame
 
         public override bool visible
         {
-            get => (double)this.alpha >= 0.00999999977648258 && base.visible;
+            get => this.alpha >= 0.00999999977648258 && base.visible;
             set => base.visible = value;
         }
 
@@ -54,7 +54,7 @@ namespace DuckGame
                 this._pauseGroup = null;
             }
             this._confirm.value = false;
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._confirmMenu = new UIMenu("UNLOCK FEATURE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@CANCEL  @SELECT@BUY");
             this._confirmMenu.Add(new UIText(unlock.GetNameForDisplay(), Color.Green), true);
             this._confirmMenu.Add(new UIText(" ", Color.White), true);
@@ -70,7 +70,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if ((textVal.Length + str2.Length) * 8 > (double)num)
+                    if ((textVal.Length + str2.Length) * 8 > num)
                     {
                         this._confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
@@ -210,7 +210,7 @@ namespace DuckGame
                 Layer.Add(this._treeLayer);
             this._plasma.alpha = this.alpha;
             this._tree.alpha = this.alpha;
-            if ((double)this.alpha > 0.899999976158142)
+            if (this.alpha > 0.899999976158142)
             {
                 UnlockScreen.open = true;
                 if (!Input.Pressed("CANCEL"))
@@ -224,7 +224,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if ((double)this.alpha < 0.00999999977648258)
+            if (this.alpha < 0.00999999977648258)
                 return;
             Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, 140f), new Color(20, 20, 20) * this.alpha * 0.7f, -0.9f);
             Vec2 p1 = new Vec2(20f, 8f);
@@ -237,7 +237,7 @@ namespace DuckGame
             string text = this._tree.selected.GetNameForDisplay();
             if (!flag2)
                 text = "???";
-            Graphics.DrawString(text, p1 + new Vec2((float)((vec2.x - 27.0) / 2.0 - (double)Graphics.GetStringWidth(text) / 2.0), 2f), (flag1 ? new Color(163, 206, 39) : Color.Red) * this.alpha, (Depth)0.5f);
+            Graphics.DrawString(text, p1 + new Vec2((float)((vec2.x - 27.0) / 2.0 - Graphics.GetStringWidth(text) / 2.0), 2f), (flag1 ? new Color(163, 206, 39) : Color.Red) * this.alpha, (Depth)0.5f);
             this._tail.depth = (Depth)0.5f;
             this._tail.alpha = this.alpha;
             this._tail.flipH = false;

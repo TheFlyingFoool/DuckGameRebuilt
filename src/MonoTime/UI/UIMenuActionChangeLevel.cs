@@ -23,8 +23,8 @@ namespace DuckGame
         {
             if (!this._activated)
                 return;
-            Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.09f);
-            if ((double)Graphics.fade != 0.0)
+            Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.09f);
+            if (Graphics.fade != 0.0)
                 return;
             Level.current = this._destination;
         }

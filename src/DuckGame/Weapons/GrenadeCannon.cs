@@ -58,7 +58,7 @@ namespace DuckGame
             this._fireSound = "pistol";
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Light;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this._ammoType = new ATGrenade();
             this._fireSound = "deepMachineGun";
             this._bulletColor = Color.White;
@@ -100,7 +100,7 @@ namespace DuckGame
                     this.kick = 1f;
                     this._aiming = false;
                     this._cooldown = 1f;
-                    this._fireAngle = 0.0f;
+                    this._fireAngle = 0f;
                     if (this.owner != null)
                     {
                         this.owner.hSpeed -= vec.x * 4f;
@@ -124,7 +124,7 @@ namespace DuckGame
             if (_cooldown > 0.0)
                 this._cooldown -= 0.1f;
             else
-                this._cooldown = 0.0f;
+                this._cooldown = 0f;
             if (this.owner != null)
             {
                 this._aimAngle = -Maths.DegToRad(this._fireAngle);
@@ -133,14 +133,14 @@ namespace DuckGame
             }
             else
             {
-                this._aimWait = 0.0f;
+                this._aimWait = 0f;
                 this._aiming = false;
-                this._aimAngle = 0.0f;
-                this._fireAngle = 0.0f;
+                this._aimAngle = 0f;
+                this._fireAngle = 0f;
             }
             if (!this._raised)
                 return;
-            this._aimAngle = 0.0f;
+            this._aimAngle = 0f;
         }
 
         public override void OnPressAction()
@@ -171,7 +171,7 @@ namespace DuckGame
             if (!this.receivingPress && this.isServerForObject)
             {
                 Vec2 vec2 = this.Offset(this.barrelOffset);
-                double radians = (double)this.barrelAngle + (double)Rando.Float(-0.1f, 0.1f);
+                double radians = this.barrelAngle + Rando.Float(-0.1f, 0.1f);
                 CannonGrenade t = new CannonGrenade(vec2.x, vec2.y)
                 {
                     _pin = false,
@@ -188,8 +188,8 @@ namespace DuckGame
                 this._sprite.SetAnimation("idle" + Math.Min(this.ammo, 4).ToString());
             }
             this._cooldown = 1f;
-            this.angle = 0.0f;
-            this._fireAngle = 0.0f;
+            this.angle = 0f;
+            this._fireAngle = 0f;
         }
 
         public override void Fire()

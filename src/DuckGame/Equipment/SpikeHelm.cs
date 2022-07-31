@@ -68,9 +68,9 @@ namespace DuckGame
             this.crushed = true;
         }
 
-        private Vec2 spikePoint => this.Offset(new Vec2(0.0f, -8f));
+        private Vec2 spikePoint => this.Offset(new Vec2(0f, -8f));
 
-        private Vec2 spikeDir => this.OffsetLocal(new Vec2(0.0f, -8f)).normalized;
+        private Vec2 spikeDir => this.OffsetLocal(new Vec2(0f, -8f)).normalized;
 
         public override bool action => this.poked == null && this._owner != null && this._owner.action;
 
@@ -96,7 +96,7 @@ namespace DuckGame
                 foreach (MaterialThing materialThing1 in materialThings)
                 {
                     Vec2 vec2 = velocity - materialThing1.velocity;
-                    if (materialThing1 != this && materialThing1 != this.equippedDuck && materialThing1 != this.oldPoke && ((double)materialThing1.velocity.length >= 0.5 || materialThing1 is IAmADuck) && (double)Vec2.Dot(vec2.normalized, spikeDir) >= 0.649999976158142 && (double)vec2.length >= 1.5 && this._equippedDuck != null)
+                    if (materialThing1 != this && materialThing1 != this.equippedDuck && materialThing1 != this.oldPoke && (materialThing1.velocity.length >= 0.5 || materialThing1 is IAmADuck) && Vec2.Dot(vec2.normalized, spikeDir) >= 0.649999976158142 && vec2.length >= 1.5 && this._equippedDuck != null)
                     {
                         if (materialThing1 is IAmADuck)
                         {
@@ -117,7 +117,7 @@ namespace DuckGame
                             MaterialThing materialThing2 = materialThing1;
                             if (materialThing2 != null)
                             {
-                                if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || spikeDir.y >= 0.5 || (double)Math.Abs(spikeDir.x) >= 0.200000002980232)
+                                if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || spikeDir.y >= 0.5 || Math.Abs(spikeDir.x) >= 0.200000002980232)
                                 {
                                     Duck associatedDuck = Duck.GetAssociatedDuck(materialThing2);
                                     if ((associatedDuck == null || associatedDuck != this._equippedDuck && (this._equippedDuck == null || !this._equippedDuck.IsOwnedBy(associatedDuck))) && (associatedDuck != this._filteredDuck || this.throwCooldown <= 0))
@@ -176,7 +176,7 @@ namespace DuckGame
             this.poked.visible = false;
             this.poked.solid = false;
             this.poked.grounded = true;
-            if (this.poked.removeFromLevel || (double)this.poked.y < level.topLeft.y - 2000.0 || !this.poked.active)
+            if (this.poked.removeFromLevel || this.poked.y < level.topLeft.y - 2000.0 || !this.poked.active)
             {
                 this.ReleasePokedObject();
             }
@@ -187,7 +187,7 @@ namespace DuckGame
                 this.poked.hSpeed = this.duck.hSpeed;
                 this.poked.vSpeed = this.duck.vSpeed;
                 if (this.equippedDuck.ragdoll == null)
-                    this.poked.solid = (double)this.equippedDuck.velocity.length < 0.0500000007450581;
+                    this.poked.solid = this.equippedDuck.velocity.length < 0.0500000007450581;
                 if (this.equippedDuck.ragdoll != null && this.prevRagdoll == null)
                     this.ReleasePokedObject();
                 this.prevRagdoll = this.equippedDuck.ragdoll;
@@ -198,7 +198,7 @@ namespace DuckGame
         {
             if (this.poked != null)
             {
-                this.poked.hSpeed = 0.0f;
+                this.poked.hSpeed = 0f;
                 this.poked.vSpeed = -2f;
                 this.poked.y += 8f;
                 this.poked.owner = null;
@@ -207,7 +207,7 @@ namespace DuckGame
                 this.poked.visible = true;
                 this.poked.solid = true;
                 this.poked.grounded = false;
-                this.poked.angle = 0.0f;
+                this.poked.angle = 0f;
                 this.oldPoke = this.poked;
                 this.oldPokeCooldown = 0.5f;
             }

@@ -92,10 +92,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._chargeSound = SFX.Get("laserCharge", 0.0f);
-            this._chargeSoundShort = SFX.Get("laserChargeShort", 0.0f);
-            this._unchargeSound = SFX.Get("laserUncharge", 0.0f);
-            this._unchargeSoundShort = SFX.Get("laserUnchargeShort", 0.0f);
+            this._chargeSound = SFX.Get("laserCharge", 0f);
+            this._chargeSoundShort = SFX.Get("laserChargeShort", 0f);
+            this._unchargeSound = SFX.Get("laserUncharge", 0f);
+            this._unchargeSoundShort = SFX.Get("laserUnchargeShort", 0f);
         }
 
         public void PostFireLogic()
@@ -103,13 +103,13 @@ namespace DuckGame
             if (this.isServerForObject)
             {
                 this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0.0f;
+                this._unchargeSound.Volume = 0f;
                 this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0.0f;
+                this._unchargeSoundShort.Volume = 0f;
                 this._chargeSound.Stop();
-                this._chargeSound.Volume = 0.0f;
+                this._chargeSound.Volume = 0f;
                 this._chargeSoundShort.Stop();
-                this._chargeSoundShort.Volume = 0.0f;
+                this._chargeSoundShort.Volume = 0f;
             }
             this._chargeAnim.SetAnimation("drain");
             SFX.Play("laserBlast");
@@ -121,10 +121,10 @@ namespace DuckGame
             {
                 if (this.isServerForObject)
                 {
-                    this._chargeVolume = this._chargeSound.State == SoundState.Playing ? this._chargeSound.Volume : 0.0f;
-                    this._chargeVolumeShort = this._chargeSoundShort.State == SoundState.Playing ? this._chargeSoundShort.Volume : 0.0f;
-                    this._unchargeVolume = this._unchargeSound.State == SoundState.Playing ? this._unchargeSound.Volume : 0.0f;
-                    this._unchargeVolumeShort = this._unchargeSoundShort.State == SoundState.Playing ? this._unchargeSoundShort.Volume : 0.0f;
+                    this._chargeVolume = this._chargeSound.State == SoundState.Playing ? this._chargeSound.Volume : 0f;
+                    this._chargeVolumeShort = this._chargeSoundShort.State == SoundState.Playing ? this._chargeSoundShort.Volume : 0f;
+                    this._unchargeVolume = this._unchargeSound.State == SoundState.Playing ? this._unchargeSound.Volume : 0f;
+                    this._unchargeVolumeShort = this._unchargeSoundShort.State == SoundState.Playing ? this._unchargeSoundShort.Volume : 0f;
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace DuckGame
             if (_charge > 0.0)
                 this._charge -= 0.1f;
             else
-                this._charge = 0.0f;
+                this._charge = 0f;
             if (this._chargeAnim.currentAnimation == "uncharge" && this._chargeAnim.finished)
                 this._chargeAnim.SetAnimation("loaded");
             if (this._chargeAnim.currentAnimation == "charge" && this._chargeAnim.finished && this.isServerForObject)
@@ -189,7 +189,7 @@ namespace DuckGame
                     this.vSpeed -= (float)(barrelVector.y * 9.0 + 3.0);
                 }
                 Vec2 vec2_1 = this.Offset(this.barrelOffset);
-                Vec2 vec2_2 = this.Offset(this.barrelOffset + new Vec2(1200f, 0.0f)) - vec2_1;
+                Vec2 vec2_2 = this.Offset(this.barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
                 if (this.isServerForObject)
                     ++Global.data.laserBulletsFired.valueInt;
                 if (Network.isActive)
@@ -227,7 +227,7 @@ namespace DuckGame
             else if (this._chargeAnim.currentAnimation == "uncharge")
                 this._tip.alpha = (24 - this._chargeAnim.frame) / 24f;
             else
-                this._tip.alpha = 0.0f;
+                this._tip.alpha = 0f;
             Graphics.Draw(this._tip, this.barrelPosition.x, this.barrelPosition.y);
             this._chargeAnim.flipH = this.graphic.flipH;
             this._chargeAnim.depth = this.depth + 1;
@@ -235,12 +235,12 @@ namespace DuckGame
             this._chargeAnim.alpha = this.alpha;
             Graphics.Draw(_chargeAnim, this.x, this.y);
             Graphics.material = material;
-            float num1 = Maths.NormalizeSection(this._tip.alpha, 0.0f, 0.7f);
+            float num1 = Maths.NormalizeSection(this._tip.alpha, 0f, 0.7f);
             float num2 = Maths.NormalizeSection(this._tip.alpha, 0.6f, 1f);
             float num3 = Maths.NormalizeSection(this._tip.alpha, 0.75f, 1f);
             float num4 = Maths.NormalizeSection(this._tip.alpha, 0.9f, 1f);
             float num5 = Maths.NormalizeSection(this._tip.alpha, 0.8f, 1f) * 0.5f;
-            if ((double)num1 <= 0.0)
+            if (num1 <= 0.0)
                 return;
             Vec2 p1 = this.Offset(this.barrelOffset);
             Vec2 p2 = this.Offset(this.barrelOffset + new Vec2(num1 * 1200f, 0f));
@@ -288,9 +288,9 @@ namespace DuckGame
                 if (!this.isServerForObject)
                     return;
                 this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0.0f;
+                this._unchargeSound.Volume = 0f;
                 this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0.0f;
+                this._unchargeSoundShort.Volume = 0f;
             }
         }
 
@@ -323,9 +323,9 @@ namespace DuckGame
             if (!this.isServerForObject)
                 return;
             this._chargeSound.Stop();
-            this._chargeSound.Volume = 0.0f;
+            this._chargeSound.Volume = 0f;
             this._chargeSoundShort.Stop();
-            this._chargeSoundShort.Volume = 0.0f;
+            this._chargeSoundShort.Volume = 0f;
         }
     }
 }

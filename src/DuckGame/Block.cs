@@ -186,7 +186,7 @@ namespace DuckGame
             foreach (BlockCorner blockCorner in groupCorners)
             {
                 float length = (blockCorner.corner - to).length;
-                if ((double)length < (double)num)
+                if (length < num)
                 {
                     num = length;
                     nearestCorner = blockCorner;
@@ -209,18 +209,18 @@ namespace DuckGame
                     {
                         blockCorner1.testedCorners.Add(blockCorner2);
                         blockCorner2.testedCorners.Add(blockCorner1);
-                        if (blockCorner1.corner.x == (double)blockCorner2.corner.x)
+                        if (blockCorner1.corner.x == blockCorner2.corner.x)
                         {
                             int num = 8;
-                            if (blockCorner1.corner.y > (double)blockCorner2.corner.y)
+                            if (blockCorner1.corner.y > blockCorner2.corner.y)
                                 num = -8;
                             if (Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + 8f, blockCorner1.corner.y + num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x - 8f, blockCorner1.corner.y + num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x + 8f, blockCorner2.corner.y - num)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - 8f, blockCorner2.corner.y - num)) != null)
                                 concaveLineList2.Add(new ConcaveLine(blockCorner1.corner, blockCorner2.corner));
                         }
-                        else if (blockCorner1.corner.y == (double)blockCorner2.corner.y)
+                        else if (blockCorner1.corner.y == blockCorner2.corner.y)
                         {
                             int num = 8;
-                            if (blockCorner1.corner.x > (double)blockCorner2.corner.x)
+                            if (blockCorner1.corner.x > blockCorner2.corner.x)
                                 num = -8;
                             if (Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + num, blockCorner1.corner.y - 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner1.corner.x + num, blockCorner1.corner.y + 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - num, blockCorner2.corner.y - 8f)) != null && Level.CheckPoint<AutoBlock>(new Vec2(blockCorner2.corner.x - num, blockCorner2.corner.y + 8f)) != null)
                                 concaveLineList1.Add(new ConcaveLine(blockCorner1.corner, blockCorner2.corner));

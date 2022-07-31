@@ -876,7 +876,7 @@ namespace DuckGame
                 int num = Team.CustomHatMetadata.kCurrentMetadata.ParticleDefaultBehavior.value;
                 if (num == 1)
                 {
-                    Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(0.0f, 0.0f);
+                    Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(0f, 0f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleOffset.value = new Vec2(2f, 2f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleOffset.randomizerX = new Vec2(-1f, 1f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleOffset.randomizerY = new Vec2(-1f, 1f);
@@ -892,14 +892,14 @@ namespace DuckGame
                 }
                 if (num == 2)
                 {
-                    Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(0.0f, 0.0f);
+                    Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(0f, 0f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleOffset.value = new Vec2(2f, 2f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleOffset.randomizerX = new Vec2(-1f, 1f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleOffset.randomizerY = new Vec2(-1f, 1f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleVelocity.value = new Vec2(1.5f, 2.5f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleVelocity.randomizerX = new Vec2(-1f, 1f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleVelocity.randomizerY = new Vec2(-1f, 1f);
-                    Team.CustomHatMetadata.kCurrentMetadata.ParticleScale.value = new Vec2(1f, 0.0f);
+                    Team.CustomHatMetadata.kCurrentMetadata.ParticleScale.value = new Vec2(1f, 0f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleScale.randomizerX = new Vec2(0.7f, 1f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleCount.value = 8;
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleCount.randomizerX = new Vec2(0.5f, 1f);
@@ -908,19 +908,19 @@ namespace DuckGame
                 if (num == 3)
                 {
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(1f, 2f);
-                    Team.CustomHatMetadata.kCurrentMetadata.ParticleAlpha.value = new Vec2(1f, 0.0f);
+                    Team.CustomHatMetadata.kCurrentMetadata.ParticleAlpha.value = new Vec2(1f, 0f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleCount.value = 8;
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleBackground.value = true;
-                    Team.CustomHatMetadata.kCurrentMetadata.ParticleGravity.value = new Vec2(0.0f, 0.0f);
+                    Team.CustomHatMetadata.kCurrentMetadata.ParticleGravity.value = new Vec2(0f, 0f);
                     Team.CustomHatMetadata.kCurrentMetadata.ParticleAnchor.value = true;
                 }
                 if (num != 4)
                     return;
-                Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(0.0f, 0.0f);
+                Team.CustomHatMetadata.kCurrentMetadata.ParticleEmitShape.value = new Vec2(0f, 0f);
                 Team.CustomHatMetadata.kCurrentMetadata.ParticleScale.value = new Vec2(0.3f, 1.5f);
                 Team.CustomHatMetadata.kCurrentMetadata.ParticleCount.value = 1;
                 Team.CustomHatMetadata.kCurrentMetadata.ParticleBackground.value = false;
-                Team.CustomHatMetadata.kCurrentMetadata.ParticleGravity.value = new Vec2(0.0f, 0.0f);
+                Team.CustomHatMetadata.kCurrentMetadata.ParticleGravity.value = new Vec2(0f, 0f);
                 Team.CustomHatMetadata.kCurrentMetadata.ParticleAnchor.value = true;
                 Team.CustomHatMetadata.kCurrentMetadata.ParticleVelocity.value = new Vec2(1.4f, -1.2f);
                 Team.CustomHatMetadata.kCurrentMetadata.ParticleFriction.value = new Vec2(0.92f, 0.9f);
@@ -1005,7 +1005,7 @@ namespace DuckGame
                 {
                     range = 2f,
                     allowNegative = true,
-                    value = new Vec2(0.0f, PhysicsObject.gravity)
+                    value = new Vec2(0f, PhysicsObject.gravity)
                 };
                 this.ParticleGravity = mdVec2Normalized4;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized5 = new Team.CustomHatMetadata.MDVec2Normalized
@@ -1026,13 +1026,13 @@ namespace DuckGame
                 {
                     range = 2f,
                     allowNegative = false,
-                    value = new Vec2(1f, 0.0f)
+                    value = new Vec2(1f, 0f)
                 };
                 this.ParticleScale = mdVec2Normalized7;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized8 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 36f,
-                    value = new Vec2(0.0f, 0.0f)
+                    value = new Vec2(0f, 0f)
                 };
                 this.ParticleRotation = mdVec2Normalized8;
                 this.ParticleOffset = new Team.CustomHatMetadata.MDVec2()
@@ -1054,13 +1054,13 @@ namespace DuckGame
                 Team.CustomHatMetadata.MDFloat mdFloat7 = new Team.CustomHatMetadata.MDFloat
                 {
                     range = 2f,
-                    value = 0.0f
+                    value = 0f
                 };
                 this.QuackDelay = mdFloat7;
                 Team.CustomHatMetadata.MDFloat mdFloat8 = new Team.CustomHatMetadata.MDFloat
                 {
                     range = 2f,
-                    value = 0.0f
+                    value = 0f
                 };
                 this.QuackHold = mdFloat8;
                 this.QuackSuppressRequack = new Team.CustomHatMetadata.MDBool();
@@ -1166,8 +1166,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            vec2.x = Maths.Clamp(vec2.x, 0.0f, this.range);
-                            vec2.y = Maths.Clamp(vec2.y, 0.0f, this.range);
+                            vec2.x = Maths.Clamp(vec2.x, 0f, this.range);
+                            vec2.y = Maths.Clamp(vec2.y, 0f, this.range);
                         }
                         return vec2;
                     }
@@ -1238,7 +1238,7 @@ namespace DuckGame
                             val = this._defaultCopy.value;
                         if (this.randomizerX != Vec2.Zero)
                             val = Rando.Float(this._value * this.randomizerX.x, this._value * this.randomizerX.y);
-                        return this.allowNegative ? Maths.Clamp(val, -this.range, this.range) : Maths.Clamp(val, 0.0f, this.range);
+                        return this.allowNegative ? Maths.Clamp(val, -this.range, this.range) : Maths.Clamp(val, 0f, this.range);
                     }
                     set => this._value = value;
                 }
@@ -1267,7 +1267,7 @@ namespace DuckGame
                             a = _defaultCopy.value;
                         if (this.randomizerX != Vec2.Zero)
                             a = Rando.Float(_value * this.randomizerX.x, _value * this.randomizerX.y);
-                        return (int)Math.Round((double)a);
+                        return (int)Math.Round(a);
                     }
                     set => this._value = value;
                 }
@@ -1296,11 +1296,11 @@ namespace DuckGame
                         if (this._value == Vec2.MaxValue && this._defaultCopy != null)
                             vec2 = this._defaultCopy.value;
                         if (this.randomizerX != Vec2.Zero)
-                            vec2.x = (float)Math.Round((double)Rando.Float(this._value.x * this.randomizerX.x, this._value.x * this.randomizerX.y));
+                            vec2.x = (float)Math.Round(Rando.Float(this._value.x * this.randomizerX.x, this._value.x * this.randomizerX.y));
                         if (this.randomizerY == Vec2.MaxValue)
                             vec2.y = vec2.x;
                         else if (this.randomizerY != Vec2.Zero)
-                            vec2.y = (float)Math.Round((double)Rando.Float(this._value.y * this.randomizerY.x, this._value.y * this.randomizerY.y));
+                            vec2.y = (float)Math.Round(Rando.Float(this._value.y * this.randomizerY.x, this._value.y * this.randomizerY.y));
                         return vec2;
                     }
                     set => this._value = value;

@@ -21,7 +21,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this._vineEnd = new Sprite("chainStretchEnd")
             {
-                center = new Vec2(8f, 0.0f)
+                center = new Vec2(8f, 0f)
             };
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
