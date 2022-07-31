@@ -79,8 +79,8 @@ namespace DuckGame
             SFX.PlaySynchronized("lightMatch", 0.5f, Rando.Float(0.2f) - 0.4f);
             if (!(this.owner is Duck owner))
                 return;
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             if (owner.inputProfile.Down("LEFT"))
                 num1 -= 2f;
             if (owner.inputProfile.Down("RIGHT"))

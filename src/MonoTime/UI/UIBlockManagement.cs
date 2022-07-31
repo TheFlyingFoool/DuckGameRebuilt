@@ -22,7 +22,7 @@ namespace DuckGame
         public UIBlockManagement(UIMenu openOnClose)
           : base("BLOCKED USERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, 160f)
         {
-            this.Add(new UIBox(0.0f, 0.0f, 100f, 130f, isVisible: false), true);
+            this.Add(new UIBox(0f, 0f, 100f, 130f, isVisible: false), true);
             this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
             this._downArrow = new Sprite("cloudDown");
             this._downArrow.CenterOrigin();
@@ -144,7 +144,7 @@ namespace DuckGame
             if (this.open)
             {
                 Vec2 vec2 = new Vec2(this.x - 124f, this.y - 56f);
-                float y = 0.0f;
+                float y = 0f;
                 int num1 = 0;
                 int num2 = 0;
                 if (this.items.Count == 0)
@@ -186,7 +186,7 @@ namespace DuckGame
                         }
                         if (keyValuePair.Value)
                             text = "|DGRED|" + text;
-                        this._littleFont.Draw(text, vec2 + new Vec2(0.0f, y), Color.White, (Depth)0.5f);
+                        this._littleFont.Draw(text, vec2 + new Vec2(0f, y), Color.White, (Depth)0.5f);
                         y += 8f;
                         ++num1;
                         ++num2;

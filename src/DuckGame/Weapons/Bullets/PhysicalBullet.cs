@@ -12,7 +12,7 @@ namespace DuckGame
         public Bullet bullet;
 
         public PhysicalBullet()
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
         }
     }

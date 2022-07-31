@@ -588,7 +588,7 @@ namespace DuckGame
             float num11;
             if ((double)num10 < 0.0)
             {
-                num11 = 0.0f;
+                num11 = 0f;
             }
             else
             {
@@ -599,7 +599,7 @@ namespace DuckGame
             float num14;
             if ((double)num13 < 0.0)
             {
-                num14 = 0.0f;
+                num14 = 0f;
             }
             else
             {
@@ -610,7 +610,7 @@ namespace DuckGame
             float num17;
             if ((double)num16 < 0.0)
             {
-                num17 = 0.0f;
+                num17 = 0f;
             }
             else
             {
@@ -706,8 +706,8 @@ namespace DuckGame
             float y3 = (y1 - num10 + 0.33333334f);
             float z3 = (z1 - num11 + 0.33333334f);
             float x10 = (x7 - 1f + 0.5f);
-            float y4 = (y1 - 1.0f + 0.5f);
-            float z4 = (z1 - 1.0f + 0.5f);
+            float y4 = (y1 - 1f + 0.5f);
+            float z4 = (z1 - 1f + 0.5f);
             int num12 = Noise.Mod(x4, 256);
             int num13 = Noise.Mod(x5, 256);
             int index = Noise.Mod(x6, 256);
@@ -726,7 +726,7 @@ namespace DuckGame
             float num18;
             if (num17 < 0f)
             {
-                num18 = 0.0f;
+                num18 = 0f;
             }
             else
             {

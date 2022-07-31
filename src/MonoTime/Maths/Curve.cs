@@ -79,7 +79,7 @@ namespace DuckGame
             }
             vec2_1.y = end.y <= (double)start.y ? end.y - 16f * arcSizeMult : start.y - 22f * arcSizeMult;
             List<Vec2> vec2List = Curve.Bezier(8, start, vec2_1, end);
-            float num1 = 0.0f;
+            float num1 = 0f;
             for (int index = 1; index < vec2List.Count; ++index)
                 num1 += (vec2List[index] - vec2List[index - 1]).length;
             double num2 = (double)num1 / vec2List.Count;

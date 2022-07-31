@@ -79,7 +79,7 @@ namespace DuckGame
                         if (!this._particles.TryGetValue(key, out physicsParticle) | flag && typeIndex != null)
                         {
                             if (typeIndex == typeof(SmallFire))
-                                physicsParticle = SmallFire.New(Vec2.NetMin.x, Vec2.NetMin.y, 0.0f, 0.0f, canMultiply: false, network: true);
+                                physicsParticle = SmallFire.New(Vec2.NetMin.x, Vec2.NetMin.y, 0f, 0f, canMultiply: false, network: true);
                             else if (typeIndex == typeof(ExtinguisherSmoke))
                                 physicsParticle = new ExtinguisherSmoke(Vec2.NetMin.x, Vec2.NetMin.y, true);
                             else if (typeIndex == typeof(Firecracker))

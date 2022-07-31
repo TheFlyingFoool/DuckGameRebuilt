@@ -33,7 +33,7 @@ namespace DuckGame
         private static bool _enableRandom = true;
         private static bool _randomMapsOnly = false;
         public static List<Profile> lastWinners = new List<Profile>();
-        private static float _wait = 0.0f;
+        private static float _wait = 0f;
         private static bool _endedHighlights = false;
         private static string _currentSong = "";
         //private Sprite _bottomWedge;
@@ -98,7 +98,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             UIDivider component = new UIDivider(true, 0.8f);
@@ -434,7 +434,7 @@ namespace DuckGame
                         }
                         if (source.Count <= 1)
                         {
-                            Highlights.highlightRatingMultiplier = 0.0f;
+                            Highlights.highlightRatingMultiplier = 0f;
                             Deathmatch.lastWinners.Clear();
                             if (source.Count > 0)
                             {
@@ -455,12 +455,12 @@ namespace DuckGame
                                                 Profile p = activeProfile;
                                                 if (activeProfile.duck.converted != null)
                                                     p = activeProfile.duck.converted.profile;
-                                                PlusOne plusOne = new PlusOne(0.0f, 0.0f, p)
+                                                PlusOne plusOne = new PlusOne(0f, 0f, p)
                                                 {
                                                     _duck = activeProfile.duck,
                                                     anchor = (Anchor)activeProfile.duck
                                                 };
-                                                plusOne.anchor.offset = new Vec2(0.0f, -16f);
+                                                plusOne.anchor.offset = new Vec2(0f, -16f);
                                                 Level.Add(plusOne);
                                             }
                                         }

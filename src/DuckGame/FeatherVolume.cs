@@ -14,7 +14,7 @@ namespace DuckGame
         public Duck duckOwner => this._duckOwner;
 
         public FeatherVolume(Duck duckOwner)
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
             this.thickness = 0.1f;
             this._duckOwner = duckOwner;
@@ -28,7 +28,7 @@ namespace DuckGame
             Gun owner = bullet.owner as Gun;
             if (bullet.owner != null && (bullet.owner == this._duckOwner || owner != null && owner.owner == this._duckOwner))
                 return false;
-            Feather feather = Feather.New(0.0f, 0.0f, this._duckOwner.persona);
+            Feather feather = Feather.New(0f, 0f, this._duckOwner.persona);
             feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = hitPos;
@@ -51,7 +51,7 @@ namespace DuckGame
             Gun owner = bullet.owner as Gun;
             if (bullet.owner != null && (bullet.owner == this._duckOwner || owner != null && owner.owner == this._duckOwner))
                 return;
-            Feather feather = Feather.New(0.0f, 0.0f, this._duckOwner.persona);
+            Feather feather = Feather.New(0f, 0f, this._duckOwner.persona);
             feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = exitPos;

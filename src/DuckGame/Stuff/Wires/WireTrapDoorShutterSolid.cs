@@ -54,7 +54,7 @@ namespace DuckGame
                 {
                     if (!(Level.current is Editor))
                     {
-                        foreach (PhysicsObject physicsObject in Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -8f), this.bottomRight))
+                        foreach (PhysicsObject physicsObject in Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(0f, -8f), this.bottomRight))
                             physicsObject.sleeping = false;
                     }
                     this._open = true;

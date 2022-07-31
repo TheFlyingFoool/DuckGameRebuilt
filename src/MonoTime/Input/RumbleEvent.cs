@@ -30,7 +30,7 @@ namespace DuckGame
             switch (intensityToSet)
             {
                 case RumbleIntensity.None:
-                    this.intensityInitial = 0.0f;
+                    this.intensityInitial = 0f;
                     break;
                 case RumbleIntensity.Kick:
                     this.intensityInitial = 0.15f;
@@ -70,7 +70,7 @@ namespace DuckGame
             switch (falloffToSet)
             {
                 case RumbleFalloff.None:
-                    this.timeFalloff = 0.0f;
+                    this.timeFalloff = 0f;
                     break;
                 case RumbleFalloff.Short:
                     this.timeFalloff = 0.1f;

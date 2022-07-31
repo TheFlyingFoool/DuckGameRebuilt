@@ -783,7 +783,7 @@ namespace DuckGame
             bool flag5 = Rando.Int(300) == 1;
             MTSpriteBatch screen = DuckGame.Graphics.screen;
             DuckGame.Graphics.screen = Profile._batch;
-            Profile._batch.Draw(Profile._egg.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num3 * 16, 0.0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._egg.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
             if (flag3)
             {
                 if (flag5)
@@ -796,7 +796,7 @@ namespace DuckGame
                     DuckGame.Graphics.DrawString(character.ToString() ?? "", new Vec2(4f, 6f), new Color(60, 60, 60, 200), (Depth)0.9f);
                 }
                 else
-                    Profile._batch.Draw(Profile._eggSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 16, 0f, 16f, 16f)), new Color(60, 60, 60, 200), 0.0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
+                    Profile._batch.Draw(Profile._eggSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 16, 0f, 16f, 16f)), new Color(60, 60, 60, 200), 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
             }
             Profile._batch.Draw(Profile._eggOuter.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
             Profile._batch.End();
@@ -872,8 +872,8 @@ namespace DuckGame
             t.SetData(data);
             Graphics.SetRenderTarget(t);
             Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-            Profile._batch.Draw(Profile._eggShine.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.Draw(Profile._eggBorder.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0.0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._eggShine.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._eggBorder.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
             Profile._batch.End();
             Graphics.SetRenderTarget(null);
             Rando.generator = generator;
@@ -950,8 +950,8 @@ namespace DuckGame
             Rando.Int(300);
             MTSpriteBatch screen = Graphics.screen;
             Graphics.screen = Profile._batch;
-            Profile._batch.Draw(Profile._easel.texture, new Vec2(0.0f, 0.0f), new Rectangle?(), Color.White, 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.Draw(Profile._easelSymbols.texture, new Vec2(0.0f, 0.0f), new Rectangle?(new Rectangle(num2 * 19, 0.0f, 19f, 12f)), new Color(60, 60, 60, 200), 0.0f, new Vec2(0.0f, 0.0f), 1f, SpriteEffects.None, 0.9f);
+            Profile._batch.Draw(Profile._easel.texture, new Vec2(0f, 0f), new Rectangle?(), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            Profile._batch.Draw(Profile._easelSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 19, 0f, 19f, 12f)), new Color(60, 60, 60, 200), 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
             Profile._batch.End();
             Graphics.screen = screen;
             Graphics.SetRenderTarget(null);

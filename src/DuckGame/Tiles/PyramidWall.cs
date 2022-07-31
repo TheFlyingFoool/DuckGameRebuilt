@@ -97,12 +97,12 @@ namespace DuckGame
         public override void Draw()
         {
             this.graphic.depth = -0.8f;
-            Graphics.Draw(this.graphic, this.x - 8f, this.y - 8f, new Rectangle(0.0f, 0.0f, 208f, 8f));
+            Graphics.Draw(this.graphic, this.x - 8f, this.y - 8f, new Rectangle(0f, 0f, 208f, 8f));
             this.graphic.depth = -0.85f;
             Graphics.Draw(this.graphic, this.x, this.y + 144f, new Rectangle(8f, 152f, 192f, 8f));
             this.graphic.depth = -0.86f;
             Graphics.Draw(this.graphic, this.x + 192f, this.y, new Rectangle(200f, 8f, 8f, 144f));
-            Graphics.Draw(this.graphic, this.x - 8f, this.y - 8f, new Rectangle(0.0f, 0.0f, 8f, 152f));
+            Graphics.Draw(this.graphic, this.x - 8f, this.y - 8f, new Rectangle(0f, 0f, 8f, 152f));
             this._corner.depth = -0.9f;
             Graphics.Draw(this._corner, this.x - 8f, this.y + 144f);
             this._corner2.depth = -0.9f;

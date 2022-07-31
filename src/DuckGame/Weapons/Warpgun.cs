@@ -46,7 +46,7 @@ namespace DuckGame
             this._type = "gun";
             this._sprite = new SpriteMap("warpgun", 19, 17)
             {
-                speed = 0.0f
+                speed = 0f
             };
             this.graphic = _sprite;
             this.center = new Vec2(11f, 8f);
@@ -74,12 +74,12 @@ namespace DuckGame
                 return;
             if (owner is TargetDuck)
             {
-                Block block = Level.CheckLine<Block>(this.position + new Vec2(this.offDir > 0 ? -16f : 16f, 0.0f), owner.position + new Vec2(this.offDir > 0 ? -16f : 16f, 8f));
+                Block block = Level.CheckLine<Block>(this.position + new Vec2(this.offDir > 0 ? -16f : 16f, 0f), owner.position + new Vec2(this.offDir > 0 ? -16f : 16f, 8f));
                 owner.holdObstructed = block != null;
             }
             else
             {
-                Block block = Level.CheckLine<Block>(owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 0.0f), owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 10f));
+                Block block = Level.CheckLine<Block>(owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 0f), owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 10f));
                 owner.holdObstructed = block != null;
             }
         }
@@ -107,7 +107,7 @@ namespace DuckGame
         {
             this.ammo = 9999;
             if (this.isServerForObject && !this._triggerHeld)
-                this.gravMultTime = 0.0f;
+                this.gravMultTime = 0f;
             IPlatform platform = Level.Nearest<IPlatform>(this.x, this.y);
             bool flag = false;
             if (platform != null && (double)((platform as Thing).position - this.position).length < 32.0)
@@ -192,7 +192,7 @@ namespace DuckGame
                             this.duck.gravMultiplier = 1f;
                             this.duck.blendColor = Color.White;
                         }
-                        this.gravMultTime = 0.0f;
+                        this.gravMultTime = 0f;
                     }
                 }
                 this.lastDuck = this.duck;
@@ -201,7 +201,7 @@ namespace DuckGame
             {
                 this.lastDuck.blendColor = Color.White;
                 this.lastDuck.gravMultiplier = 1f;
-                this.gravMultTime = 0.0f;
+                this.gravMultTime = 0f;
                 this.warped = false;
                 this.lastDuck = null;
             }
@@ -244,7 +244,7 @@ namespace DuckGame
             }
             if (this.shotsSinceGrounded >= this.maxUngroundedShots && !(bool)this.infinite)
                 return;
-            this.lerpShut = 0.0f;
+            this.lerpShut = 0f;
             float num1 = -this.angle;
             if (this.offDir < 0)
                 num1 += 3.141593f;
@@ -324,7 +324,7 @@ namespace DuckGame
                     Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
                     this.firedBullets.Clear();
                 }
-                this._wait = 0.0f;
+                this._wait = 0f;
                 this._barrelOffsetTL = new Vec2(8f, 15f);
                 this.Fire();
                 if (Network.isActive)
@@ -332,7 +332,7 @@ namespace DuckGame
                     Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
                     this.firedBullets.Clear();
                 }
-                this._wait = 0.0f;
+                this._wait = 0f;
                 this._barrelOffsetTL = new Vec2(8f, 9f);
                 this.Fire();
                 if (Network.isActive)
@@ -340,7 +340,7 @@ namespace DuckGame
                     Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
                     this.firedBullets.Clear();
                 }
-                this._wait = 0.0f;
+                this._wait = 0f;
                 this._barrelOffsetTL = new Vec2(8f, 4f);
                 if (this.duck != null)
                 {
@@ -349,7 +349,7 @@ namespace DuckGame
                     this.duck.position = this.duck.position + vec2_2 * num2;
                     this.duck.sleeping = false;
                     this.duck._disarmDisable = 10;
-                    this.duck.gravMultiplier = 0.0f;
+                    this.duck.gravMultiplier = 0f;
                     this.duck.OnTeleport();
                     this.duck.blendColor = Color.Purple;
                     this.warped = true;
@@ -409,8 +409,8 @@ namespace DuckGame
         {
             foreach (Warpgun.BlockGlow blockGlow in this.blockGlows)
             {
-                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0.0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
-                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0.0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
                 blockGlow.glow -= 0.05f;
             }
             this.blockGlows.RemoveAll(x => x.glow < 0.00999999977648258);
@@ -446,7 +446,7 @@ namespace DuckGame
                         p2 = hitPos;
                     }
                     else
-                        this._warpPoint = p2 + new Vec2(-5f, 0.0f);
+                        this._warpPoint = p2 + new Vec2(-5f, 0f);
                     Graphics.DrawTexturedLine(this._laserTex, laserOffset, p2, Color.Red, 0.5f, this.depth - 1);
                     if (this._sightHit != null)
                     {

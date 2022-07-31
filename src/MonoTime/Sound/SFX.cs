@@ -160,8 +160,8 @@ namespace DuckGame
 
         public static float volume
         {
-            get => Math.Min(1f, Math.Max(0.0f, SFX._volume * SFX._volume)) * 0.9f;
-            set => SFX._volume = Math.Min(1f, Math.Max(0.0f, value));
+            get => Math.Min(1f, Math.Max(0f, SFX._volume * SFX._volume)) * 0.9f;
+            set => SFX._volume = Math.Min(1f, Math.Max(0f, value));
         }
 
         /// <summary>
@@ -170,8 +170,8 @@ namespace DuckGame
         public static Sound PlaySynchronized(
           string sound,
           float vol = 1f,
-          float pitch = 0.0f,
-          float pan = 0.0f,
+          float pitch = 0f,
+          float pan = 0f,
           bool looped = false)
         {
             return SFX.PlaySynchronized(sound, vol, pitch, pan, looped, false);
@@ -195,7 +195,7 @@ namespace DuckGame
             return SFX.Play(sound, vol, pitch, pan, looped);
         }
 
-        public static Sound Play(string sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
+        public static Sound Play(string sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             if (!SFX.enabled || SFX.skip)
                 return new InvalidSound(sound, vol, pitch, pan, looped);
@@ -213,16 +213,16 @@ namespace DuckGame
                 }
                 catch (Exception)
                 {
-                    return new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0.0f, 0.0f, 0.0f, false);
+                    return new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0f, 0f, 0f, false);
                 }
             }
             return sound1;
         }
 
-        public static Sound Play(int sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
+        public static Sound Play(int sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             string key;
-            return SFX._soundHashmap.TryGetKey(sound, out key) ? SFX.Play(key, vol, pitch, pan, looped) : new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0.0f, 0.0f, 0.0f, false);
+            return SFX._soundHashmap.TryGetKey(sound, out key) ? SFX.Play(key, vol, pitch, pan, looped) : new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0f, 0f, 0f, false);
         }
 
         public static int SoundHash(string pSound)
@@ -248,16 +248,16 @@ namespace DuckGame
             return pEffect != null;
         }
 
-        public static Sound Get(string sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
+        public static Sound Get(string sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             try
             {
-                float vol1 = Math.Min(1f, Math.Max(0.0f, vol));
+                float vol1 = Math.Min(1f, Math.Max(0f, vol));
                 return SFX.HasSound(sound) ? new Sound(sound, vol1, pitch, pan, looped) : new InvalidSound(sound, vol1, pitch, pan, looped);
             }
             catch (Exception)
             {
-                return new InvalidSound(sound, 0.0f, pitch, pan, looped);
+                return new InvalidSound(sound, 0f, pitch, pan, looped);
             }
         }
 
@@ -279,11 +279,11 @@ namespace DuckGame
         public static SoundEffectInstance GetInstance(
           string sound,
           float vol = 1f,
-          float pitch = 0.0f,
-          float pan = 0.0f,
+          float pitch = 0f,
+          float pan = 0f,
           bool looped = false)
         {
-            float num = Math.Min(1f, Math.Max(0.0f, vol));
+            float num = Math.Min(1f, Math.Max(0f, vol));
             SoundEffectInstance instance = SFX._sounds[sound].CreateInstance();
             instance.Volume = num;
             instance.Pitch = pitch;

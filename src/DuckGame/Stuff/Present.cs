@@ -27,7 +27,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-7f, -4f);
             this.collisionSize = new Vec2(14f, 11f);
             this.depth = -0.5f;
-            this.thickness = 0.0f;
+            this.thickness = 0f;
             this.weight = 3f;
             this.flammable = 0.3f;
             this.charThreshold = 0.5f;
@@ -44,7 +44,7 @@ namespace DuckGame
                     Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
                 Holdable holdable = this.SpawnPresent(null);
                 if (holdable != null)
-                    holdable.velocity = Rando.Vec2(-1f, 1f, -2f, 0.0f);
+                    holdable.velocity = Rando.Vec2(-1f, 1f, -2f, 0f);
                 Level.Remove(this);
             }
             return base.OnDestroy(type);

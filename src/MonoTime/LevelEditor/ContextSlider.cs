@@ -99,9 +99,9 @@ namespace DuckGame
                 {
                     case EditorInput.Mouse:
                         this._sliding = true;
-                        float num1 = Maths.Clamp(Mouse.x - this.position.x, 0.0f, this.itemSize.x);
+                        float num1 = Maths.Clamp(Mouse.x - this.position.x, 0f, this.itemSize.x);
                         if (Editor.inputMode == EditorInput.Touch)
-                            num1 = Maths.Clamp(TouchScreen.GetTouch().Transform(this.layer.camera).x - this.position.x, 0.0f, this.itemSize.x);
+                            num1 = Maths.Clamp(TouchScreen.GetTouch().Transform(this.layer.camera).x - this.position.x, 0f, this.itemSize.x);
                         if (this._field.value is List<TypeProbPair>)
                         {
                             if (_step > 0.0)
@@ -120,7 +120,7 @@ namespace DuckGame
                             {
                                 typeProbPair1 = new TypeProbPair()
                                 {
-                                    probability = 0.0f,
+                                    probability = 0f,
                                     type = this._myType
                                 };
                                 typeProbPairList.Add(typeProbPair1);
@@ -193,13 +193,13 @@ namespace DuckGame
                 {
                     typeProbPair1 = new TypeProbPair()
                     {
-                        probability = 0.0f,
+                        probability = 0f,
                         type = this._myType
                     };
                     typeProbPairList.Add(typeProbPair1);
                 }
                 typeProbPair1.probability += this._step;
-                typeProbPair1.probability = Maths.Clamp(typeProbPair1.probability, 0.0f, 1f);
+                typeProbPair1.probability = Maths.Clamp(typeProbPair1.probability, 0f, 1f);
             }
             else if (this._field.value is float)
                 this._field.value = Maths.Clamp((float)this._field.value + this._step, this._field.min, this._field.max);
@@ -233,7 +233,7 @@ namespace DuckGame
                 {
                     typeProbPair1 = new TypeProbPair()
                     {
-                        probability = 0.0f,
+                        probability = 0f,
                         type = this._myType
                     };
                     typeProbPairList.Add(typeProbPair1);
@@ -245,7 +245,7 @@ namespace DuckGame
                 else
                 {
                     typeProbPair1.probability -= this._step;
-                    typeProbPair1.probability = Maths.Clamp(typeProbPair1.probability, 0.0f, 1f);
+                    typeProbPair1.probability = Maths.Clamp(typeProbPair1.probability, 0f, 1f);
                 }
             }
             else if (this._field.value is float)
@@ -318,7 +318,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            float num1 = 0.0f;
+            float num1 = 0f;
             string text1 = "";
             if (this._field.value is List<TypeProbPair>)
             {
@@ -331,7 +331,7 @@ namespace DuckGame
                         break;
                     }
                 }
-                num1 = typeProbPair1 == null ? 0.0f : typeProbPair1.probability;
+                num1 = typeProbPair1 == null ? 0f : typeProbPair1.probability;
                 text1 = num1.ToString("0.00", CultureInfo.InvariantCulture);
             }
             else if (this._field.value is float)
@@ -357,7 +357,7 @@ namespace DuckGame
             {
                 float num2 = this._field.max - this._field.min;
                 float x1 = (float)(4.0 + ((double)num2 - ((double)this._field.max - (double)num1)) / (double)num2 * (itemSize.x - 8.0));
-                float x2 = 0.0f;
+                float x2 = 0f;
                 float x3 = this.itemSize.x;
                 string text2 = this._text + ": " + text1;
                 Color color = Color.White;
@@ -381,11 +381,11 @@ namespace DuckGame
                     x3 += stringWidth + 10f;
                 }
                 Graphics.DrawRect(this.position + new Vec2(x1 - 2f, 3f), this.position + new Vec2(x1 + 2f, this.itemSize.y - 3f), new Color(250, 250, 250), (Depth)(0.85f + num3));
-                Graphics.DrawRect(this.position + new Vec2(x2, 0.0f), this.position + new Vec2(x3, this.itemSize.y), new Color(70, 70, 70), (Depth)(0.75f + num3));
+                Graphics.DrawRect(this.position + new Vec2(x2, 0f), this.position + new Vec2(x3, this.itemSize.y), new Color(70, 70, 70), (Depth)(0.75f + num3));
                 Graphics.DrawRect(this.position + new Vec2(4f, (float)(itemSize.y / 2.0 - 2.0)), this.position + new Vec2(this.itemSize.x - 4f, (float)(itemSize.y / 2.0 + 2.0)), new Color(150, 150, 150), (Depth)(0.82f + num3));
                 if (Editor.inputMode != EditorInput.Gamepad)
                     return;
-                Vec2 vec2 = this.position + new Vec2(x1, 0.0f);
+                Vec2 vec2 = this.position + new Vec2(x1, 0f);
                 this._adjusterHand.depth = (Depth)0.9f;
                 Graphics.Draw(_adjusterHand, vec2.x - 6f, vec2.y - 6f);
             }

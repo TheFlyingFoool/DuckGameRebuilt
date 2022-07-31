@@ -20,7 +20,7 @@ namespace DuckGame
             set => this._burnVal = value;
         }
 
-        public MaterialBurn(float burnVal = 0.0f)
+        public MaterialBurn(float burnVal = 0f)
         {
             this._effect = Content.Load<MTEffect>("Shaders/burn");
             this._burnTexture = Content.Load<Tex2D>("burn");

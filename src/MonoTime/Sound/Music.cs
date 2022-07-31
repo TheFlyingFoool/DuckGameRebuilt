@@ -179,7 +179,7 @@ namespace DuckGame
             return "Challenging";
         }
 
-        public static void Play(string music, bool looping = true, float crossFadeTime = 0.0f)
+        public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
             if (!Music.Load(music))
                 return;
@@ -191,7 +191,7 @@ namespace DuckGame
         {
         }
 
-        public static bool Load(string music, bool looping = true, float crossFadeTime = 0.0f)
+        public static bool Load(string music, bool looping = true, float crossFadeTime = 0f)
         {
             Music._currentSong = music;
             Music._musicPlayer.Stop();
@@ -237,7 +237,7 @@ namespace DuckGame
 
         public static void CancelLooping() => Music._musicPlayer.IsLooped = false;
 
-        public static void LoadAlternateSong(string music, bool looping = true, float crossFadeTime = 0.0f)
+        public static void LoadAlternateSong(string music, bool looping = true, float crossFadeTime = 0f)
         {
             Music._alternateLoop = looping;
             Music._pendingSong = music;

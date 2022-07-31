@@ -32,7 +32,7 @@ namespace DuckGame
         public UICloudManagement(UIMenu openOnClose)
           : base("MANAGE CLOUD", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, 180f)
         {
-            this.Add(new UIBox(0.0f, 0.0f, 100f, 150f, isVisible: false), true);
+            this.Add(new UIBox(0f, 0f, 100f, 150f, isVisible: false), true);
             this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
             this._downArrow = new Sprite("cloudDown");
             this._downArrow.CenterOrigin();
@@ -238,7 +238,7 @@ namespace DuckGame
             if (this.open && this.currentFolder != null)
             {
                 Vec2 vec2 = new Vec2(this.x - 124f, this.y - 66f);
-                float y = 0.0f;
+                float y = 0f;
                 int num1 = 0;
                 int num2 = 0;
                 foreach (UICloudManagement.File file in this.currentFolder.files)
@@ -264,7 +264,7 @@ namespace DuckGame
                         if (str1.Length > 31)
                             str1 = str1.Substring(0, 30) + "..";
                         string str2 = file.files == null ? (this._flagged.Contains(file) ? "@DELETEFLAG_ON@" : "@DELETEFLAG_OFF@") + str1 : (this._flagged.Contains(file) ? "@FOLDERDELETEICON@" : "@FOLDERICON@") + str1;
-                        this._littleFont.Draw(num1 != this._selection ? " " + str2 : "@SELECTICON@" + str2, vec2 + new Vec2(0.0f, y), Color.White, (Depth)0.5f);
+                        this._littleFont.Draw(num1 != this._selection ? " " + str2 : "@SELECTICON@" + str2, vec2 + new Vec2(0f, y), Color.White, (Depth)0.5f);
                         y += 8f;
                         ++num1;
                         ++num2;

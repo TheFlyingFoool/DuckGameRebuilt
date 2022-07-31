@@ -21,7 +21,7 @@ namespace DuckGame
             this.bulletThickness = 2f;
             this.sprite = new Sprite("missile");
             this.sprite.CenterOrigin();
-            this.speedVariation = 0.0f;
+            this.speedVariation = 0f;
             this.flawlessPipeTravel = true;
         }
 

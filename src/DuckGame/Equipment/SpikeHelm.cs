@@ -68,9 +68,9 @@ namespace DuckGame
             this.crushed = true;
         }
 
-        private Vec2 spikePoint => this.Offset(new Vec2(0.0f, -8f));
+        private Vec2 spikePoint => this.Offset(new Vec2(0f, -8f));
 
-        private Vec2 spikeDir => this.OffsetLocal(new Vec2(0.0f, -8f)).normalized;
+        private Vec2 spikeDir => this.OffsetLocal(new Vec2(0f, -8f)).normalized;
 
         public override bool action => this.poked == null && this._owner != null && this._owner.action;
 
@@ -198,7 +198,7 @@ namespace DuckGame
         {
             if (this.poked != null)
             {
-                this.poked.hSpeed = 0.0f;
+                this.poked.hSpeed = 0f;
                 this.poked.vSpeed = -2f;
                 this.poked.y += 8f;
                 this.poked.owner = null;
@@ -207,7 +207,7 @@ namespace DuckGame
                 this.poked.visible = true;
                 this.poked.solid = true;
                 this.poked.grounded = false;
-                this.poked.angle = 0.0f;
+                this.poked.angle = 0f;
                 this.oldPoke = this.poked;
                 this.oldPokeCooldown = 0.5f;
             }

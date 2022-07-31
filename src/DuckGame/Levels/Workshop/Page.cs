@@ -41,7 +41,7 @@ namespace DuckGame
                     return;
                 Page.camOffset = Lerp.FloatSmooth(Page.camOffset, -40f, 0.1f);
                 if (camOffset < 0.0)
-                    Page.camOffset = 0.0f;
+                    Page.camOffset = 0f;
                 if (camOffset == 0.0)
                     this.ActivateAll();
                 else

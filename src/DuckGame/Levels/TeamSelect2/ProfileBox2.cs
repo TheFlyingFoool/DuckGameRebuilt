@@ -1092,12 +1092,12 @@ namespace DuckGame
                         furniture3.background.depth = this._roomLeftBackground.depth;
                         furniture3.sprite.scale = new Vec2(1f);
                         furniture3.background.scale = new Vec2(1f);
-                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 4f, 87f));
-                        Graphics.Draw(furniture3.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
-                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 141f, 16f));
-                        Graphics.Draw(furniture3.sprite, this.x + 21f, this.y + 44f, new Rectangle(49f, 0.0f, 92f, 68f));
+                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(furniture3.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 141f, 16f));
+                        Graphics.Draw(furniture3.sprite, this.x + 21f, this.y + 44f, new Rectangle(49f, 0f, 92f, 68f));
                         furniture3.sprite.depth = this._selectConsole.depth - 20;
-                        Graphics.Draw(furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), this.y + 44f, new Rectangle(4f, 0.0f, 44f, 54f));
+                        Graphics.Draw(furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), this.y + 44f, new Rectangle(4f, 0f, 44f, 54f));
                         furniture3.sprite.depth = (Depth)0.31f;
                         Graphics.Draw(furniture3.sprite, (float)((double)this.x + 70.0 - 4.0), (float)((double)this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
                         furniture3.sprite.flipH = false;
@@ -1108,11 +1108,11 @@ namespace DuckGame
                     else
                     {
                         Graphics.Draw(this._roomLeftBackground, this.x - 1f, this.y + 1f);
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, this.y + 1f, new Rectangle(0.0f, 0.0f, 49f, 16f));
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)((double)this.y + 1.0 + 16.0), new Rectangle(0.0f, 16f, 6f, 8f));
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)((double)this.y + 1.0 + 55.0), new Rectangle(0.0f, 55f, 53f, 13f));
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)((double)this.y + 1.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
-                        Graphics.Draw(this._roomLeftForeground, (float)((double)this.x - 1.0 + 137.0), this.y + 1f, new Rectangle(137f, 0.0f, 4f, 87f));
+                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, this.y + 1f, new Rectangle(0f, 0f, 49f, 16f));
+                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)((double)this.y + 1.0 + 16.0), new Rectangle(0f, 16f, 6f, 8f));
+                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)((double)this.y + 1.0 + 55.0), new Rectangle(0f, 55f, 53f, 13f));
+                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)((double)this.y + 1.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(this._roomLeftForeground, (float)((double)this.x - 1.0 + 137.0), this.y + 1f, new Rectangle(137f, 0f, 4f, 87f));
                     }
                     if (Network.isActive && (Network.isServer && this.profile.connection == DuckNetwork.localConnection || this.profile.connection == Network.host))
                     {
@@ -1144,12 +1144,12 @@ namespace DuckGame
                         furniture4.background.depth = this._roomLeftBackground.depth;
                         furniture4.sprite.scale = new Vec2(1f);
                         furniture4.background.scale = new Vec2(1f);
-                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 4f, 87f));
-                        Graphics.Draw(furniture4.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0.0f, 68f, 141f, 19f));
-                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0.0f, 0.0f, 141f, 16f));
-                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 49.0), this.y + 44f, new Rectangle(49f, 0.0f, 92f, 68f));
+                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(furniture4.sprite, this.x + 70f, (float)((double)this.y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 141f, 16f));
+                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 49.0), this.y + 44f, new Rectangle(49f, 0f, 92f, 68f));
                         furniture4.sprite.depth = this._selectConsole.depth - 20;
-                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), this.y + 44f, new Rectangle(4f, 0.0f, 44f, 54f));
+                        Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), this.y + 44f, new Rectangle(4f, 0f, 44f, 54f));
                         furniture4.sprite.depth = (Depth)0.31f;
                         Graphics.Draw(furniture4.sprite, (float)((double)this.x + 70.0 + 4.0), (float)((double)this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
                         Graphics.Draw(furniture4.background, this.x + 70f, this.y + 45f);
@@ -1157,9 +1157,9 @@ namespace DuckGame
                     else
                     {
                         Graphics.Draw(this._roomLeftBackground, this.x + 4f, this.y + 1f);
-                        Graphics.Draw(this._roomLeftForeground, this.x, this.y + 1f, new Rectangle(0.0f, 0.0f, 4f, 87f));
+                        Graphics.Draw(this._roomLeftForeground, this.x, this.y + 1f, new Rectangle(0f, 0f, 4f, 87f));
                         Graphics.Draw(this._roomLeftForeground, this.x + 4f, (float)((double)this.y + 1.0 + 68.0), new Rectangle(4f, 68f, 137f, 19f));
-                        Graphics.Draw(this._roomLeftForeground, this.x + 92f, this.y + 1f, new Rectangle(92f, 0.0f, 49f, 16f));
+                        Graphics.Draw(this._roomLeftForeground, this.x + 92f, this.y + 1f, new Rectangle(92f, 0f, 49f, 16f));
                         Graphics.Draw(this._roomLeftForeground, this.x + 135f, (float)((double)this.y + 1.0 + 16.0), new Rectangle(135f, 16f, 6f, 8f));
                         Graphics.Draw(this._roomLeftForeground, this.x + 89f, (float)((double)this.y + 1.0 + 55.0), new Rectangle(89f, 55f, 52f, 13f));
                     }

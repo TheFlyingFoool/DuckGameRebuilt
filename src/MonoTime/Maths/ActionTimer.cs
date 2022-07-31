@@ -32,15 +32,15 @@ namespace DuckGame
             this._val += this._inc;
             if (_val < (double)this._max)
                 return;
-            this._val = 0.0f;
+            this._val = 0f;
             this._hit = true;
         }
 
-        public void Reset() => this._val = 0.0f;
+        public void Reset() => this._val = 0f;
 
         public void SetToEnd()
         {
-            this._val = 0.0f;
+            this._val = 0f;
             this._hit = true;
         }
 

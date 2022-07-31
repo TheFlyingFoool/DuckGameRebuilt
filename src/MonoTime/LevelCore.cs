@@ -26,31 +26,31 @@ namespace DuckGame
         public int firePoolIndex;
         public List<float> _chanceGroups = new List<float>()
     {
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f
     };
         public List<float> _chanceGroups2 = new List<float>()
     {
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f
     };
         public InputCode konamiCode = new InputCode()
         {

@@ -211,7 +211,7 @@ namespace DuckGame
             }
             if (Mouse.left == InputState.Released)
                 this._tookInput = false;
-            Graphics.DrawRect(consoleSize, Color.Black * 0.5f, (Depth)0.0f);
+            Graphics.DrawRect(consoleSize, Color.Black * 0.5f, (Depth)0f);
         }
     }
 }

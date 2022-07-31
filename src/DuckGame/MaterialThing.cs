@@ -71,13 +71,13 @@ namespace DuckGame
             switch (from)
             {
                 case ImpactedFrom.Left:
-                    return new Vec2(-1f, 0.0f);
+                    return new Vec2(-1f, 0f);
                 case ImpactedFrom.Right:
-                    return new Vec2(1f, 0.0f);
+                    return new Vec2(1f, 0f);
                 case ImpactedFrom.Top:
-                    return new Vec2(0.0f, -1f);
+                    return new Vec2(0f, -1f);
                 default:
-                    return new Vec2(0.0f, 1f);
+                    return new Vec2(0f, 1f);
             }
         }
 
@@ -296,7 +296,7 @@ namespace DuckGame
                 if (_flameWait > 1.0)
                 {
                     this.AddFire();
-                    this._flameWait = 0.0f;
+                    this._flameWait = 0f;
                 }
                 this._flameWait += 0.03f;
                 this.burnt += this.burnSpeed;

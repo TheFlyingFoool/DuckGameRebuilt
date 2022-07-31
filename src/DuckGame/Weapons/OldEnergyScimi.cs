@@ -69,7 +69,7 @@ namespace DuckGame
             this.centerHeld = new Vec2(6f, 29f);
             this.centerUnheld = new Vec2(6f, 16f);
             this._bladeMaterial = new MaterialEnergyBlade(this);
-            this.additionalHoldOffset = new Vec2(0.0f, -3f);
+            this.additionalHoldOffset = new Vec2(0f, -3f);
             this._swingSound = null;
             this._enforceJabSwing = false;
             this._allowJabMotion = false;
@@ -103,7 +103,7 @@ namespace DuckGame
                 this._walls.Add(energyBlocker);
                 Level.Add(energyBlocker);
             }
-            this._platform = new Platform(0.0f, 0.0f, 20f, 8f)
+            this._platform = new Platform(0f, 0f, 20f, 8f)
             {
                 solid = false,
                 enablePhysics = false,
@@ -114,7 +114,7 @@ namespace DuckGame
             Level.Add(_platform);
             this._hum = new ConstantSound("scimiHum")
             {
-                volume = 0.0f,
+                volume = 0f,
                 lerpSpeed = 1f
             };
             base.Initialize();
@@ -145,7 +145,7 @@ namespace DuckGame
         {
             if (pHeld)
             {
-                this.collisionOffset = new Vec2(-4f, 0.0f);
+                this.collisionOffset = new Vec2(-4f, 0f);
                 this.collisionSize = new Vec2(4f, 4f);
                 if (!this._crouchStance || this._jabStance)
                     return;
@@ -212,10 +212,10 @@ namespace DuckGame
                 return;
             if (this._canAirFly && !this._airFly && this._framesSinceThrown < 15)
             {
-                this._upFlyTime = 0.0f;
+                this._upFlyTime = 0f;
                 if ((double)Math.Abs(this.hSpeed) > 2.0)
                 {
-                    if (Level.CheckLine<Block>(this.position + new Vec2(-16f, 0.0f), this.position + new Vec2(16f, 0.0f)) == null)
+                    if (Level.CheckLine<Block>(this.position + new Vec2(-16f, 0f), this.position + new Vec2(16f, 0f)) == null)
                     {
                         this._airFly = true;
                         this._airFlyDir = Math.Sign(this.hSpeed);
@@ -226,7 +226,7 @@ namespace DuckGame
                 }
                 else if ((double)Math.Abs(this.vSpeed) > 2.0)
                 {
-                    if (Level.CheckLine<Block>(this.position + new Vec2(0.0f, -16f), this.position + new Vec2(0.0f, 16f)) == null)
+                    if (Level.CheckLine<Block>(this.position + new Vec2(0f, -16f), this.position + new Vec2(0f, 16f)) == null)
                     {
                         this._airFly = true;
                         this._airFlyDir = Math.Sign(this.vSpeed);
@@ -249,19 +249,19 @@ namespace DuckGame
                     else if (_airFlyDir < 0.0)
                         this._throwSpin = 270f;
                     this.vSpeed = this._airFlyDir * 18f;
-                    this.hSpeed = 0.0f;
+                    this.hSpeed = 0f;
                 }
                 else
                 {
                     if (_airFlyDir > 0.0)
-                        this._throwSpin = 0.0f;
+                        this._throwSpin = 0f;
                     else if (_airFlyDir < 0.0)
                         this._throwSpin = 180f;
-                    this.vSpeed = 0.0f;
+                    this.vSpeed = 0f;
                     this.hSpeed = this._airFlyDir * 18f;
                 }
                 this.angleDegrees = 90f + this._throwSpin;
-                this.gravMultiplier = 0.0f;
+                this.gravMultiplier = 0f;
             }
             else
             {
@@ -281,7 +281,7 @@ namespace DuckGame
                 bool flag = false;
                 if (this._airFlyVertical)
                 {
-                    Block block = Level.CheckLine<Block>(this.position, this.position + new Vec2(0.0f, this.vSpeed));
+                    Block block = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, this.vSpeed));
                     if (block != null)
                     {
                         flag = true;
@@ -300,7 +300,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    Block block = Level.CheckLine<Block>(this.position, this.position + new Vec2(this.hSpeed, 0.0f));
+                    Block block = Level.CheckLine<Block>(this.position, this.position + new Vec2(this.hSpeed, 0f));
                     if (block != null)
                     {
                         flag = true;
@@ -308,7 +308,7 @@ namespace DuckGame
                         if ((double)this.hSpeed > 0.0)
                         {
                             this.x = block.left - 18f;
-                            this._throwSpin = 0.0f;
+                            this._throwSpin = 0f;
                         }
                         else
                         {
@@ -322,8 +322,8 @@ namespace DuckGame
                     this._longCharge = true;
                     this._stuck = true;
                     this.enablePhysics = false;
-                    this.hSpeed = 0.0f;
-                    this.vSpeed = 0.0f;
+                    this.hSpeed = 0f;
+                    this.vSpeed = 0f;
                 }
             }
             this._airFly = false;
@@ -335,7 +335,7 @@ namespace DuckGame
             if (!this.isServerForObject)
                 return;
             this.Fondle(pBullet);
-            EnergyScimitarBlast energyScimitarBlast = new EnergyScimitarBlast(pBullet.position, new Vec2(offDir * 2000, 0.0f));
+            EnergyScimitarBlast energyScimitarBlast = new EnergyScimitarBlast(pBullet.position, new Vec2(offDir * 2000, 0f));
             Level.Add(energyScimitarBlast);
             Level.Remove(pBullet);
             if (!Network.isActive)
@@ -408,9 +408,9 @@ namespace DuckGame
                     if (!this._airFlyVertical)
                         ragdollDrag.part.position = this.Offset(new Vec2(-10f, 10f));
                     else if (_airFlyDir < 0.0)
-                        ragdollDrag.part.position = this.Offset(new Vec2(0.0f, 0.0f));
+                        ragdollDrag.part.position = this.Offset(new Vec2(0f, 0f));
                     else
-                        ragdollDrag.part.position = this.Offset(new Vec2(0.0f, 20f));
+                        ragdollDrag.part.position = this.Offset(new Vec2(0f, 20f));
                     ragdollDrag.part.doll.position = ragdollDrag.part.position;
                     ragdollDrag.part.doll.captureDuck.position = ragdollDrag.part.position;
                     ragdollDrag.part.doll.captureDuck.OnKill(new DTIncinerate(ragdollDrag.part.doll.captureDuck));
@@ -456,8 +456,8 @@ namespace DuckGame
                 this.warpLines.Add(new WarpLine()
                 {
                     start = this.duck.position,
-                    end = this.duck.position + new Vec2(0.0f, -80f),
-                    lerp = 0.0f,
+                    end = this.duck.position + new Vec2(0f, -80f),
+                    lerp = 0f,
                     wide = 24f
                 });
             }
@@ -470,7 +470,7 @@ namespace DuckGame
                 {
                     start = this.duck.position + new Vec2(-this.offDir * 16, 4f),
                     end = this.duck.position + new Vec2(offDir * 62, 4f),
-                    lerp = 0.0f,
+                    lerp = 0f,
                     wide = 20f
                 });
             }
@@ -521,8 +521,8 @@ namespace DuckGame
                 foreach (OldEnergyScimi.RagdollDrag ragdollDrag in this._drag)
                 {
                     ragdollDrag.part.position = this.position - ragdollDrag.offset;
-                    ragdollDrag.part.hSpeed = 0.0f;
-                    ragdollDrag.part.vSpeed = 0.0f;
+                    ragdollDrag.part.hSpeed = 0f;
+                    ragdollDrag.part.vSpeed = 0f;
                 }
                 this._timeSincePickedUp += Maths.IncFrameTimer();
                 if (this.grounded)
@@ -535,15 +535,15 @@ namespace DuckGame
                     if (this.prevOwner == null && !this._didOwnerSwitchLogic)
                     {
                         this._didOwnerSwitchLogic = true;
-                        this._timeSincePickedUp = 0.0f;
+                        this._timeSincePickedUp = 0f;
                         foreach (PhysicsObject physicsObject in Level.CheckCircleAll<PhysicsObject>(this.position, 16f))
                             physicsObject.sleeping = false;
                     }
                     float num2 = 20f + num1;
-                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0.0f, -2f));
+                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0f, -2f));
                     foreach (EnergyBlocker wall in this._walls)
                     {
-                        vec2 += this.OffsetLocal(new Vec2(0.0f, -num2 / _walls.Count));
+                        vec2 += this.OffsetLocal(new Vec2(0f, -num2 / _walls.Count));
                         wall.position = vec2;
                         wall.solid = _glow > 0.5;
                     }
@@ -551,15 +551,15 @@ namespace DuckGame
                 else
                 {
                     this._didOwnerSwitchLogic = false;
-                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0.0f, this._stuck ? -25f : -14f));
+                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0f, this._stuck ? -25f : -14f));
                     foreach (EnergyBlocker wall in this._walls)
                     {
-                        vec2 += this.OffsetLocal(new Vec2(0.0f, 18f / _walls.Count));
+                        vec2 += this.OffsetLocal(new Vec2(0f, 18f / _walls.Count));
                         wall.position = vec2;
                         wall.solid = _glow > 0.5;
                     }
                 }
-                if (this.duck != null && _timeSincePickedUp > 0.400000005960464 && this.held && this._swinging && Level.CheckLine<Block>(this.position, this.position + new Vec2(offDir * 16, 0.0f)) != null)
+                if (this.duck != null && _timeSincePickedUp > 0.400000005960464 && this.held && this._swinging && Level.CheckLine<Block>(this.position, this.position + new Vec2(offDir * 16, 0f)) != null)
                 {
                     this.duck.Swear();
                     double angle = (double)this.angle;
@@ -584,7 +584,7 @@ namespace DuckGame
                 if (this.isServerForObject && ((double)this.x < level.topLeft.x - 1000.0 || (double)this.x > level.bottomRight.x + 1000.0))
                     Level.Remove(this);
             }
-            this._extraOffset = new Vec2(0.0f, -num1);
+            this._extraOffset = new Vec2(0f, -num1);
             this._barrelOffsetTL = new Vec2(4f, 3f - num1);
             this._lastAngleHum = this.angle;
             if (_glow > 1.0)
@@ -601,7 +601,7 @@ namespace DuckGame
                 }
                 float to2 = 1f;
                 if (this.duck != null && !this._swinging && !this._crouchStance)
-                    to2 = 0.0f;
+                    to2 = 0f;
                 this._glow = Lerp.Float(this._glow, to2, 0.1f);
             }
             else
@@ -614,7 +614,7 @@ namespace DuckGame
                         this._playedChargeUp = false;
                         SFX.Play("laserUnchargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                     }
-                    this._glow = Lerp.Float(this._glow, 0.0f, 0.2f);
+                    this._glow = Lerp.Float(this._glow, 0f, 0.2f);
                 }
             }
             if (_glow > 0.100000001490116)
@@ -640,7 +640,7 @@ namespace DuckGame
             {
                 this._platform.solid = true;
                 this._platform.enablePhysics = true;
-                this._platform.position = this.Offset(new Vec2(0.0f, -10f));
+                this._platform.position = this.Offset(new Vec2(0f, -10f));
             }
             this.center = new Vec2(6f, 29f);
         }
@@ -657,7 +657,7 @@ namespace DuckGame
                 Vec2 vec2_1 = warpLine.start - warpLine.end;
                 Vec2 vec2_2 = warpLine.end - warpLine.start;
                 float num1 = Math.Min(warpLine.lerp, 0.5f) / 0.5f;
-                float num2 = Math.Max((float)((warpLine.lerp - 0.5) * 2.0), 0.0f);
+                float num2 = Math.Max((float)((warpLine.lerp - 0.5) * 2.0), 0f);
                 Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start, swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
                 Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start - vec2_1 * (num1 * 1f), swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.13f;
@@ -700,7 +700,7 @@ namespace DuckGame
             for (int idx = 0; idx < 8; ++idx)
             {
                 Vec2 current1 = Vec2.Zero;
-                float current2 = 0.0f;
+                float current2 = 0f;
                 for (int index1 = 0; index1 < 4 && this._lastSize > idx; ++index1)
                 {
                     int index2 = this.historyIndex(idx);
@@ -714,7 +714,7 @@ namespace DuckGame
                     if (this.owner != null)
                         vec2 += this.owner.velocity * 0.5f;
                     this._bladeTrail.angle = num3;
-                    this._bladeTrail.alpha = Math.Min(Math.Max((float)(((double)this._hum.volume - 0.100000001490116) * 4.0), 0.0f), 1f) * 0.7f;
+                    this._bladeTrail.alpha = Math.Min(Math.Max((float)(((double)this._hum.volume - 0.100000001490116) * 4.0), 0f), 1f) * 0.7f;
                     Graphics.Draw(this._bladeTrail, vec2.x, vec2.y, this.depth - 2);
                 }
                 num4 -= 0.15f;

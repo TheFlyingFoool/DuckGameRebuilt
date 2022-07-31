@@ -192,7 +192,7 @@ namespace DuckGame
         {
             ++this.reboundBulletsCreated;
             Vec2 travelDirNormalized = this.travelDirNormalized;
-            Vec2 vec2 = new Vec2(-Math.Sign(this.travelDirNormalized.x), 0.0f);
+            Vec2 vec2 = new Vec2(-Math.Sign(this.travelDirNormalized.x), 0f);
             float dir = Maths.PointDirection(Vec2.Zero, travelDirNormalized - vec2 * 2f * Vec2.Dot(travelDirNormalized, vec2));
             float length = (this._actualStart - this.start).length;
             if ((double)length > 2.0)
@@ -386,14 +386,14 @@ namespace DuckGame
                                             Vec2 vec2_1 = Vec2.Zero;
                                             Vec2 pos = this.currentTravel;
                                             Vec2 vec2_2 = this.currentTravel - this.travelDirNormalized;
-                                            float num2 = 0.0f;
+                                            float num2 = 0f;
                                             float num3 = 999.9f;
                                             if (currentTravel.y >= (double)bulletImpact.top && vec2_2.y < (double)bulletImpact.top)
                                             {
                                                 num2 = Math.Abs(this.currentTravel.y - vec2_2.y);
                                                 if ((double)num2 < (double)num3)
                                                 {
-                                                    vec2_1 = new Vec2(0.0f, -1f);
+                                                    vec2_1 = new Vec2(0f, -1f);
                                                     pos = new Vec2(this.currentTravel.x, bulletImpact.top - 1f);
                                                     num3 = num2;
                                                 }
@@ -403,7 +403,7 @@ namespace DuckGame
                                                 num2 = Math.Abs(this.currentTravel.y - vec2_2.y);
                                                 if ((double)num2 < (double)num3)
                                                 {
-                                                    vec2_1 = new Vec2(0.0f, 1f);
+                                                    vec2_1 = new Vec2(0f, 1f);
                                                     pos = new Vec2(this.currentTravel.x, bulletImpact.bottom + 1f);
                                                     num3 = num2;
                                                 }
@@ -413,7 +413,7 @@ namespace DuckGame
                                                 num2 = Math.Abs(this.currentTravel.x - vec2_2.x);
                                                 if ((double)num2 < (double)num3)
                                                 {
-                                                    vec2_1 = new Vec2(1f, 0.0f);
+                                                    vec2_1 = new Vec2(1f, 0f);
                                                     pos = new Vec2(bulletImpact.left - 1f, this.currentTravel.y);
                                                     num3 = num2;
                                                 }
@@ -424,13 +424,13 @@ namespace DuckGame
                                                 num2 = Math.Abs(this.currentTravel.x - vec2_2.x);
                                                 if ((double)num2 < (double)num3)
                                                 {
-                                                    vec2_1 = new Vec2(-1f, 0.0f);
+                                                    vec2_1 = new Vec2(-1f, 0f);
                                                     pos = new Vec2(bulletImpact.right + 1f, this.currentTravel.y);
                                                 }
                                             }
                                             if (vec2_1 == Vec2.Zero)
                                             {
-                                                vec2_1 = new Vec2(0.0f, -1f);
+                                                vec2_1 = new Vec2(0f, -1f);
                                                 pos = new Vec2(this.currentTravel.x, bulletImpact.top - 1f);
                                             }
                                             Vec2 travelDirNormalized = this.travelDirNormalized;
@@ -524,12 +524,12 @@ namespace DuckGame
             if (!this._initializedDraw)
             {
                 this.prev.Add(this.start);
-                this.vel.Add(0.0f);
+                this.vel.Add(0f);
                 this._initializedDraw = true;
             }
             this._travelTime += Maths.IncFrameTimer();
             this._bulletDistance += this._bulletSpeed;
-            this.startpoint = Maths.Clamp(this._bulletDistance - this._bulletLength, 0.0f, 99999f);
+            this.startpoint = Maths.Clamp(this._bulletDistance - this._bulletLength, 0f, 99999f);
             float num = this._bulletDistance;
             if (this._gravityAffected)
             {
@@ -584,7 +584,7 @@ namespace DuckGame
 
         public Vec2 GetPointOnArc(float distanceBack)
         {
-            float num1 = 0.0f;
+            float num1 = 0f;
             Vec2 pointOnArc = this.prev.Last<Vec2>();
             for (int index = this.prev.Count - 1; index > 0; --index)
             {
@@ -638,7 +638,7 @@ namespace DuckGame
                     Graphics.Draw(this.ammo.sprite, this.drawEnd.x, this.drawEnd.y);
                 }
                 float length = (this.drawStart - this.drawEnd).length;
-                float val = 0.0f;
+                float val = 0f;
                 float num1 = (float)(1.0 / ((double)length / 8.0));
                 float num2 = 1f;
                 float num3 = 8f;
@@ -647,7 +647,7 @@ namespace DuckGame
                     bool flag = false;
                     if ((double)val + (double)num3 > (double)length)
                     {
-                        num3 = length - Maths.Clamp(val, 0.0f, 99f);
+                        num3 = length - Maths.Clamp(val, 0f, 99f);
                         flag = true;
                     }
                     num2 -= num1;

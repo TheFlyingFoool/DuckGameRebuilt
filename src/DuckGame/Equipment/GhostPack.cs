@@ -33,7 +33,7 @@ namespace DuckGame
                 this.position = this.duck.position + offset;
             }
             else
-                this.depth = (Depth)0.0f;
+                this.depth = (Depth)0f;
         }
     }
 }

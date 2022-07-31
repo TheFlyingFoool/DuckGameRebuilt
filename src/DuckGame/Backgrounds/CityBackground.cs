@@ -41,11 +41,11 @@ namespace DuckGame
                 return;
             this.backgroundColor = new Color(24, 0, 31);
             Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/city", 0.0f, 0.0f, 3);
+            this._parallax = new ParallaxBackground("background/city", 0f, 0f, 3);
             float speed = 0.4f;
-            this._parallax.AddZone(0, 0.0f, -speed, true);
-            this._parallax.AddZone(1, 0.0f, -speed, true);
-            this._parallax.AddZone(2, 0.0f, -speed, true);
+            this._parallax.AddZone(0, 0f, -speed, true);
+            this._parallax.AddZone(1, 0f, -speed, true);
+            this._parallax.AddZone(2, 0f, -speed, true);
             this._parallax.AddZone(3, 0.2f, -speed, true);
             this._parallax.AddZone(4, 0.2f, -speed, true);
             this._parallax.AddZone(5, 0.4f, -speed, true);
@@ -224,7 +224,7 @@ namespace DuckGame
                 this.SetAnimation("idle");
                 this.bannerTarget = new RenderTarget2D((int)((double)this._font.GetWidth(text) + 4.0) + 8, 15);
                 this._wiggle = new MaterialWiggle(this);
-                Camera camera = new Camera(0.0f, 0.0f, bannerTarget.width, bannerTarget.height)
+                Camera camera = new Camera(0f, 0f, bannerTarget.width, bannerTarget.height)
                 {
                     position = Vec2.Zero
                 };
@@ -239,7 +239,7 @@ namespace DuckGame
                 };
                 DuckGame.Graphics.Clear(Color.Transparent);
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
-                DuckGame.Graphics.DrawRect(new Vec2(0.0f, 2f), new Vec2(this.bannerTarget.width - 8, this.bannerTarget.height - 2), Color.Black);
+                DuckGame.Graphics.DrawRect(new Vec2(0f, 2f), new Vec2(this.bannerTarget.width - 8, this.bannerTarget.height - 2), Color.Black);
                 this._font.Draw(text, new Vec2(1f, 3f), new Color(47, 0, 66), (Depth)1f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);

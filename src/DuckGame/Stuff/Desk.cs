@@ -44,7 +44,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             SFX.Play("crateDestroy");
             Level.Remove(this);
             Vec2 vec2 = Vec2.Zero;
@@ -108,7 +108,7 @@ namespace DuckGame
             if (_flip > 1.0)
                 this._flip = 1f;
             if (_flip < 0.0)
-                this._flip = 0.0f;
+                this._flip = 0f;
             if (this.owner != null && this.flipped != 0)
                 this.flipped = 0;
             Vec2 collisionSize = this.collisionSize;
@@ -126,7 +126,7 @@ namespace DuckGame
                     this.Land();
                 if (this.flipped > 0)
                 {
-                    this.collisionOffset = new Vec2(0.0f, -12f);
+                    this.collisionOffset = new Vec2(0f, -12f);
                     this.collisionSize = new Vec2(8f, 17f);
                 }
                 else

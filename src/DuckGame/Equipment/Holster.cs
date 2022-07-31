@@ -251,7 +251,7 @@ namespace DuckGame
                 if (this._equippedDuck != null && this._equippedDuck.inputProfile != null && this._equippedDuck.inputProfile.Down("UP"))
                     this.netRaise = true;
                 if (this.owner == null && this.equippedDuck == null)
-                    this.angleDegrees = 0.0f;
+                    this.angleDegrees = 0f;
                 Vec2 vec2_1;
                 if (this.containedObject != null)
                 {
@@ -298,8 +298,8 @@ namespace DuckGame
                         (this.containedObject as RagdollPart).doll.part1.x = (this.containedObject as RagdollPart).doll.part3.x - 4f;
                     if ((double)(this.containedObject as RagdollPart).doll.part1.x > (double)(this.containedObject as RagdollPart).doll.part3.x + 4.0)
                         (this.containedObject as RagdollPart).doll.part1.x = (this.containedObject as RagdollPart).doll.part3.x + 4f;
-                    Vec2 vec2_2 = (this.containedObject as RagdollPart).doll.part3.position + new Vec2(0.0f, -11f);
-                    Vec2 vec2_3 = (this.containedObject as RagdollPart).doll.part3.position + new Vec2(0.0f, -5f);
+                    Vec2 vec2_2 = (this.containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -11f);
+                    Vec2 vec2_3 = (this.containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -5f);
                     (this.containedObject as RagdollPart).doll.part1.x = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.x, vec2_2.x, 0.5f);
                     (this.containedObject as RagdollPart).doll.part1.y = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.y, vec2_2.y, 0.5f);
                     (this.containedObject as RagdollPart).doll.part2.x = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.x, vec2_3.x, 0.5f);
@@ -357,7 +357,7 @@ namespace DuckGame
                 this._containedObject.offDir = this.owner.offDir > 0 ? (sbyte)1 : (sbyte)-1;
                 if (this.containedObject is RagdollPart)
                 {
-                    this._containedObject.position = this.Offset(new Vec2(this.backOffset, 0.0f));
+                    this._containedObject.position = this.Offset(new Vec2(this.backOffset, 0f));
                     this._containedObject.angleDegrees += this.owner.offDir > 0 ? 90f : -90f;
                     if (this.duck != null && this.duck.ragdoll == null)
                     {
@@ -404,7 +404,7 @@ namespace DuckGame
                 this.PositionContainedObject();
                 if (this.chained.value)
                 {
-                    float num = this._equippedDuck != null ? 0.0f : 8f;
+                    float num = this._equippedDuck != null ? 0f : 8f;
                     this._chain.CenterOrigin();
                     this._chain.depth = this._underPart.depth + 1;
                     this._chain.angleDegrees = this.angleDegrees - 45 * this.offDir;

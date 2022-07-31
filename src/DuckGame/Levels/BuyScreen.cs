@@ -32,7 +32,7 @@
 
 //        public override void Initialize()
 //        {
-//            Graphics.fade = 0.0f;
+//            Graphics.fade = 0f;
 //            this._payScreen = new Sprite("payScreen");
 //            this._payScreen.CenterOrigin();
 //            this._moneyType = new SpriteMap("moneyTypes", 14, 18);
@@ -61,7 +61,7 @@
 //        {
 //            if (this._fade)
 //            {
-//                Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.02f);
+//                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.02f);
 //                if ((double)Graphics.fade > 0.0)
 //                    return;
 //                Main.isDemo = this._demo;

@@ -72,7 +72,7 @@ namespace DuckGame
         public MultiSound(MultiSoundUpdater updater)
         {
             this._controller = updater;
-            this._volume = 0.0f;
+            this._volume = 0f;
         }
     }
 }

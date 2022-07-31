@@ -132,7 +132,7 @@ namespace DuckGame
         {
             get
             {
-                float highestPing = 0.0f;
+                float highestPing = 0f;
                 foreach (NetworkConnection connection in Network.connections)
                 {
                     if (connection.status == ConnectionStatus.Connected && (double)connection.manager.ping > (double)highestPing)

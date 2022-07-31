@@ -125,7 +125,7 @@ namespace DuckGame
             this.graphic = new Sprite("tinyGun");
             this._barrelOffsetTL = new Vec2(20f, 15f);
             this._fireSound = "littleGun";
-            this._kickForce = 0.0f;
+            this._kickForce = 0f;
             this._fireRumble = RumbleIntensity.Kick;
             this._tape = new Sprite("tapePiece");
             this._tape.CenterOrigin();
@@ -164,16 +164,16 @@ namespace DuckGame
         public void UpdatePositioning()
         {
             this.ammo = 0;
-            this.buoyancy = 0.0f;
+            this.buoyancy = 0f;
             this.onlyFloatInLava = false;
-            this.flammable = 0.0f;
-            this.weight = 0.0f;
-            this.heat = 0.0f;
-            this.bouncy = 0.0f;
-            this.kick = 0.0f;
+            this.flammable = 0f;
+            this.weight = 0f;
+            this.heat = 0f;
+            this.bouncy = 0f;
+            this.kick = 0f;
             this.dontCrush = true;
             float num1 = this.gun1 is TapedGun || this.gun2 is TapedGun ? 4f : 3f;
-            float num2 = 0.0f;
+            float num2 = 0f;
             if (this.gun1 != null)
             {
                 num2 += this.gun1.height;
@@ -192,7 +192,7 @@ namespace DuckGame
                 if (gun1.angleMul != 1.0)
                     this.angleMul = this.gun1.angleMul;
                 if (this.gun1.addVerticalTapeOffset)
-                    this.gun1.position = this.Offset(new Vec2(0.0f, y1) + this.gun1.tapedOffset);
+                    this.gun1.position = this.Offset(new Vec2(0f, y1) + this.gun1.tapedOffset);
                 else
                     this.gun1.position = this.Offset(this.gun1.tapedOffset);
                 this.gun1.depth = this.depth - 8;
@@ -241,7 +241,7 @@ namespace DuckGame
                 if (gun2.angleMul != 1.0)
                     this.angleMul = this.gun2.angleMul;
                 if (this.gun2.addVerticalTapeOffset)
-                    this.gun2.position = this.Offset(new Vec2(0.0f, -y1) + this.gun2.tapedOffset);
+                    this.gun2.position = this.Offset(new Vec2(0f, -y1) + this.gun2.tapedOffset);
                 else
                     this.gun2.position = this.Offset(this.gun2.tapedOffset);
                 this.gun2.depth = this.depth - 4;
@@ -454,10 +454,10 @@ namespace DuckGame
             this._tape.depth = this.depth + 16;
             this._tape.angleDegrees = this.angleDegrees;
             this._tape.flipH = this.offDir < 0;
-            Vec2 vec2_1 = new Vec2(0.0f, this.bottom - this.top);
+            Vec2 vec2_1 = new Vec2(0f, this.bottom - this.top);
             if (this.gun2 != null)
             {
-                Vec2 vec2_2 = this.gun2.Offset(new Vec2(0.0f, (float)-(collisionOffset.y / 2.0)));
+                Vec2 vec2_2 = this.gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2.0)));
                 Graphics.Draw(this._tape, vec2_2.x, vec2_2.y);
             }
             else

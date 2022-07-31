@@ -23,7 +23,7 @@ namespace DuckGame
 
         public float normalized => (float)((_value + 1.0) / 2.0);
 
-        public SinWaveManualUpdate(float inc, float start = 0.0f)
+        public SinWaveManualUpdate(float inc, float start = 0f)
         {
             this._increment = inc;
             this._wave = start;
@@ -32,7 +32,7 @@ namespace DuckGame
         public SinWaveManualUpdate()
         {
             this._increment = 0.1f;
-            this._wave = 0.0f;
+            this._wave = 0f;
         }
 
         public void Update()

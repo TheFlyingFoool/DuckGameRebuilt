@@ -138,7 +138,7 @@ namespace DuckGame
         public virtual Bullet FireBullet(
           Vec2 position,
           Thing owner = null,
-          float angle = 0.0f,
+          float angle = 0f,
           Thing firedFrom = null)
         {
             Bullet bullet = this.GetBullet(position.x, position.y, owner, angle, firedFrom);

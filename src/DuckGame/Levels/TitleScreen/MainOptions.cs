@@ -26,7 +26,7 @@ namespace DuckGame
         "OPTIONS",
         "QUIT"
       };
-            float num = 0.0f;
+            float num = 0f;
             foreach (string option in this._options)
             {
                 float width = this._font.GetWidth(option);

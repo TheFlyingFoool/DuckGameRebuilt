@@ -17,7 +17,7 @@ namespace DuckGame
             this.bulletSpeed = 25f;
             this.bulletLength = 40f;
             this.bulletThickness = 0.3f;
-            this.rangeVariation = 0.0f;
+            this.rangeVariation = 0f;
             this.barrelAngleDegrees = 180f;
             this.bulletType = typeof(LaserBulletPurple);
             this.canBeReflected = false;

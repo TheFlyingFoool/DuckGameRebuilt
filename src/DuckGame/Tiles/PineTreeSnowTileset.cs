@@ -28,7 +28,7 @@ namespace DuckGame
             this._snowFall.AddAnimation("fall", (float)(0.200000002980232 + (double)Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
             this._snowFall.AddAnimation("idle", 0.4f, false, new int[1]);
             this._snowFall.SetAnimation("idle");
-            this._snowFall.center = new Vec2(4f, 0.0f);
+            this._snowFall.center = new Vec2(4f, 0f);
             this.snowWait = Rando.Float(4f);
         }
 
@@ -68,7 +68,7 @@ namespace DuckGame
                 {
                     this.snowWait = Rando.Float(2f, 3f);
                     if ((double)Rando.Float(1f) > 0.920000016689301)
-                        Level.Add(new SnowFallParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), new Vec2(0.0f, 0.0f)));
+                        Level.Add(new SnowFallParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }
             base.Update();

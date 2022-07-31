@@ -77,10 +77,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._chargeSound = SFX.Get("laserCharge", 0.0f);
-            this._chargeSoundShort = SFX.Get("laserChargeShort", 0.0f);
-            this._unchargeSound = SFX.Get("laserUncharge", 0.0f);
-            this._unchargeSoundShort = SFX.Get("laserUnchargeShort", 0.0f);
+            this._chargeSound = SFX.Get("laserCharge", 0f);
+            this._chargeSoundShort = SFX.Get("laserChargeShort", 0f);
+            this._unchargeSound = SFX.Get("laserUncharge", 0f);
+            this._unchargeSoundShort = SFX.Get("laserUnchargeShort", 0f);
         }
 
         public override void Update()
@@ -89,7 +89,7 @@ namespace DuckGame
             if (_charge > 0.0)
                 this._charge -= 0.1f;
             else
-                this._charge = 0.0f;
+                this._charge = 0f;
             if (this._chargeAnim.currentAnimation == "uncharge" && this._chargeAnim.finished)
                 this._chargeAnim.SetAnimation("idle");
             if (Network.isActive && this.doBlast && !this._lastDoBlast || this._chargeAnim.currentAnimation == "charge" && this._chargeAnim.finished && this.isServerForObject)
@@ -118,9 +118,9 @@ namespace DuckGame
                 this._chargeSound.Play();
                 this._chargeAnim.SetAnimation("charge");
                 this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0.0f;
+                this._unchargeSound.Volume = 0f;
                 this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0.0f;
+                this._unchargeSoundShort.Volume = 0f;
             }
             else
             {
@@ -140,9 +140,9 @@ namespace DuckGame
                 this._chargeAnim.SetAnimation("charge");
                 this._chargeAnim.frame = 22 - frame;
                 this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0.0f;
+                this._unchargeSound.Volume = 0f;
                 this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0.0f;
+                this._unchargeSoundShort.Volume = 0f;
             }
         }
 
@@ -168,9 +168,9 @@ namespace DuckGame
                 this._chargeAnim.SetAnimation("uncharge");
                 this._chargeAnim.frame = 22 - frame;
                 this._chargeSound.Stop();
-                this._chargeSound.Volume = 0.0f;
+                this._chargeSound.Volume = 0f;
                 this._chargeSoundShort.Stop();
-                this._chargeSoundShort.Volume = 0.0f;
+                this._chargeSoundShort.Volume = 0f;
             }
             if (!(this._chargeAnim.currentAnimation == "charged"))
                 return;

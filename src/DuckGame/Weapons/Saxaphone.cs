@@ -67,7 +67,7 @@ namespace DuckGame
                         this.handPitch = this.notePitch;
                         if (notePitch != (double)this.prevNotePitch)
                         {
-                            this.prevNotePitch = 0.0f;
+                            this.prevNotePitch = 0f;
                             if (this.noteSound != null)
                             {
                                 this.noteSound.Stop();
@@ -76,7 +76,7 @@ namespace DuckGame
                         }
                     }
                     else
-                        this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0.0f : this.handPitch + 0.01f;
+                        this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : this.handPitch + 0.01f;
                 }
                 if (notePitch != (double)this.prevNotePitch)
                 {
@@ -104,9 +104,9 @@ namespace DuckGame
                 }
                 if (this._raised)
                 {
-                    this.handAngle = 0.0f;
-                    this.handOffset = new Vec2(0.0f, 0.0f);
-                    this._holdOffset = new Vec2(0.0f, 2f);
+                    this.handAngle = 0f;
+                    this.handOffset = new Vec2(0f, 0f);
+                    this._holdOffset = new Vec2(0f, 2f);
                     this.collisionOffset = new Vec2(-4f, -7f);
                     this.collisionSize = new Vec2(8f, 16f);
                     this.OnReleaseAction();

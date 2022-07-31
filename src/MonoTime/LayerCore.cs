@@ -167,7 +167,7 @@ namespace DuckGame
             if (Layer.core._lighting == null)
                 return;
             Layer.core._lighting._target = new RenderTarget2D(Resolution.current.x, Resolution.current.y);
-            Layer.core._console.camera = new Camera(0.0f, 0.0f, DevConsole.size.x, DevConsole.size.y);
+            Layer.core._console.camera = new Camera(0f, 0f, DevConsole.size.x, DevConsole.size.y);
         }
 
         public void ClearLayers()
@@ -254,7 +254,7 @@ namespace DuckGame
                 layer.effect = null;
                 layer.camera = null;
                 layer.perspective = false;
-                layer.fadeAdd = 0.0f;
+                layer.fadeAdd = 0f;
                 layer.colorAdd = Vec3.Zero;
                 layer.colorMul = Vec3.One;
                 if (layer != this._glow && layer != this._lighting)
@@ -266,11 +266,11 @@ namespace DuckGame
                 layer.Clear();
             }
             this._extraLayers.Clear();
-            this._parallax.camera = new Camera(0.0f, 0.0f, 320f, 320f * Resolution.current.aspect);
-            this._virtual.camera = new Camera(0.0f, 0.0f, 320f, 320f * Resolution.current.aspect);
+            this._parallax.camera = new Camera(0f, 0f, 320f, 320f * Resolution.current.aspect);
+            this._virtual.camera = new Camera(0f, 0f, 320f, 320f * Resolution.current.aspect);
             this._hud.camera = new Camera();
             this._hud.allowTallAspect = false;
-            this._console.camera = new Camera(0.0f, 0.0f, Resolution.current.x / 2, Resolution.current.y / 2);
+            this._console.camera = new Camera(0f, 0f, Resolution.current.x / 2, Resolution.current.y / 2);
             this._hybridList.Clear();
             this._hybridList.AddRange(_layers);
         }

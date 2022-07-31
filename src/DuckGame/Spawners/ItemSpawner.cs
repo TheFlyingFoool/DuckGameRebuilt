@@ -68,9 +68,9 @@ namespace DuckGame
         {
             this._sprite = new SpriteMap("gunSpawner", 14, 10);
             this.graphic = _sprite;
-            this.center = new Vec2(7f, 0.0f);
+            this.center = new Vec2(7f, 0f);
             this.collisionSize = new Vec2(14f, 2f);
-            this.collisionOffset = new Vec2(-7f, 0.0f);
+            this.collisionOffset = new Vec2(-7f, 0f);
             this.depth = -0.35f;
             this.contains = c;
             this.hugWalls = WallHug.Floor;
@@ -115,7 +115,7 @@ namespace DuckGame
 
         public virtual void SpawnItem()
         {
-            this._spawnWait = 0.0f;
+            this._spawnWait = 0f;
             if (Network.isActive && this.isServerForObject)
                 Send.Message(new NMItemSpawned(this));
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(this.contains);
@@ -154,7 +154,7 @@ namespace DuckGame
         {
             if (this._seatingTries >= 3 || this._ball1 == null)
                 return;
-            if (Level.CheckPoint<IPlatform>(this.position + new Vec2(0.0f, 6f)) != null)
+            if (Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 6f)) != null)
             {
                 this._seated = true;
                 this._seatingTries = 3;
@@ -203,9 +203,9 @@ namespace DuckGame
             }
             else
             {
-                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0.0f, (float)(-((double)this._hoverItem.bottom - (double)this._hoverItem.y) - 2.0 + (double)(float)this._hoverSin * 2.0)), 0.2f);
-                this._hoverItem.vSpeed = 0.0f;
-                this._hoverItem.gravMultiplier = 0.0f;
+                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0f, (float)(-((double)this._hoverItem.bottom - (double)this._hoverItem.y) - 2.0 + (double)(float)this._hoverSin * 2.0)), 0.2f);
+                this._hoverItem.vSpeed = 0f;
+                this._hoverItem.gravMultiplier = 0f;
                 this._ball1.desiredOrbitDistance = this._hoverItem.collisionSize.x / 2f;
                 this._ball2.desiredOrbitDistance = this._hoverItem.collisionSize.x / 2f;
                 this._ball1.desiredOrbitHeight = 4f;
@@ -375,7 +375,7 @@ namespace DuckGame
         {
             if (this.possible.Count > 0)
             {
-                float num = 0.0f;
+                float num = 0f;
                 foreach (TypeProbPair typeProbPair in this.possible)
                 {
                     if (typeProbPair.probability > 0f)

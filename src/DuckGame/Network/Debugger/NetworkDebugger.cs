@@ -166,13 +166,13 @@ namespace DuckGame
             switch (index)
             {
                 case 0:
-                    host.rect = new Rectangle(0.0f, 0.0f, Resolution.current.x / 2, Resolution.current.y / 2);
+                    host.rect = new Rectangle(0f, 0f, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
                 case 1:
-                    host.rect = new Rectangle(Resolution.current.x / 2, 0.0f, Resolution.current.x / 2, Resolution.current.y / 2);
+                    host.rect = new Rectangle(Resolution.current.x / 2, 0f, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
                 case 2:
-                    host.rect = new Rectangle(0.0f, Resolution.current.y / 2, Resolution.current.x / 2, Resolution.current.y / 2);
+                    host.rect = new Rectangle(0f, Resolution.current.y / 2, Resolution.current.x / 2, Resolution.current.y / 2);
                     break;
                 case 3:
                     host.rect = new Rectangle(Resolution.current.x / 2, Resolution.current.y / 2, Resolution.current.x / 2, Resolution.current.y / 2);
@@ -675,19 +675,19 @@ namespace DuckGame
             if (!NetworkDebugger._sentPulse.ContainsKey(from))
                 NetworkDebugger._sentPulse[from] = new Dictionary<string, float>();
             if (!NetworkDebugger._sentPulse[from].ContainsKey(to))
-                NetworkDebugger._sentPulse[from][to] = 0.0f;
+                NetworkDebugger._sentPulse[from][to] = 0f;
             ++NetworkDebugger._sentPulse[from][to];
         }
 
         public static float GetSent(string key, string to)
         {
             if (!NetworkDebugger._sentPulse.ContainsKey(key) || !NetworkDebugger._sentPulse[key].ContainsKey(to))
-                return 0.0f;
+                return 0f;
             if ((double)NetworkDebugger._sentPulse[key][to] > 1.0)
                 NetworkDebugger._sentPulse[key][to] = 1f;
             NetworkDebugger._sentPulse[key][to] -= 0.1f;
             if ((double)NetworkDebugger._sentPulse[key][to] < 0.0)
-                NetworkDebugger._sentPulse[key][to] = 0.0f;
+                NetworkDebugger._sentPulse[key][to] = 0f;
             return NetworkDebugger._sentPulse[key][to];
         }
 
@@ -696,19 +696,19 @@ namespace DuckGame
             if (!NetworkDebugger._receivedPulse.ContainsKey(to))
                 NetworkDebugger._receivedPulse[to] = new Dictionary<string, float>();
             if (!NetworkDebugger._receivedPulse[to].ContainsKey(from))
-                NetworkDebugger._receivedPulse[to][from] = 0.0f;
+                NetworkDebugger._receivedPulse[to][from] = 0f;
             ++NetworkDebugger._receivedPulse[to][from];
         }
 
         public static float GetReceived(string key, string from)
         {
             if (!NetworkDebugger._receivedPulse.ContainsKey(key) || !NetworkDebugger._receivedPulse[key].ContainsKey(from))
-                return 0.0f;
+                return 0f;
             if ((double)NetworkDebugger._receivedPulse[key][from] > 1.0)
                 NetworkDebugger._receivedPulse[key][from] = 1f;
             NetworkDebugger._receivedPulse[key][from] -= 0.1f;
             if ((double)NetworkDebugger._receivedPulse[key][from] < 0.0)
-                NetworkDebugger._receivedPulse[key][from] = 0.0f;
+                NetworkDebugger._receivedPulse[key][from] = 0f;
             return NetworkDebugger._receivedPulse[key][from];
         }
 
@@ -742,7 +742,7 @@ namespace DuckGame
             DuckGame.Graphics.DrawRect(p1_1, p2_1, Color.Black, (Depth)0.8f);
             if (this.logSwitchIndex == index)
                 DuckGame.Graphics.DrawRect(p1_1, p2_1, Color.White * 0.5f, (Depth)0.88f, false);
-            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(0.0f, -14f), p1_1 + new Vec2(100f, 0.0f), Color.Black, (Depth)0.8f);
+            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(0f, -14f), p1_1 + new Vec2(100f, 0f), Color.Black, (Depth)0.8f);
             Color color = Colors.Duck1;
             switch (page)
             {
@@ -870,7 +870,7 @@ namespace DuckGame
                     Vec2 vec2 = new Vec2(20f, 80f);
                     if (this.showFilters)
                     {
-                        DuckGame.Graphics.DrawRect(vec2 + new Vec2(0.0f, -42f), vec2 + new Vec2(890f, -30f), Color.Black * 0.9f, (Depth)0.8f);
+                        DuckGame.Graphics.DrawRect(vec2 + new Vec2(0f, -42f), vec2 + new Vec2(890f, -30f), Color.Black * 0.9f, (Depth)0.8f);
                         for (int index = 0; index < 9; ++index)
                         {
                             if (index == 8)
@@ -892,12 +892,12 @@ namespace DuckGame
                     if (num > 1)
                     {
                         size = new Vec2((float)(size.x / 2.0 - 4.0), Layer.Console.height - 100f);
-                        vec2Array[1] = vec2 + new Vec2(size.x + 4f, 0.0f);
+                        vec2Array[1] = vec2 + new Vec2(size.x + 4f, 0f);
                     }
                     if (num > 2)
                     {
                         size = new Vec2(size.x, (float)(size.y / 2.0 - 16.0));
-                        vec2Array[2] = vec2 + new Vec2(0.0f, size.y + 16f);
+                        vec2Array[2] = vec2 + new Vec2(0f, size.y + 16f);
                         vec2Array[3] = vec2 + new Vec2(size.x + 4f, size.y + 16f);
                     }
                     for (int index = 0; index < 4; ++index)

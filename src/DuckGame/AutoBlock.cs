@@ -620,13 +620,13 @@ namespace DuckGame
             if (DevConsole.showCollision)
             {
                 if (this.leftBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(-8f, 0.0f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(-8f, 0f), Color.Red * 0.5f, depth: ((Depth)1f));
                 if (this.rightBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(8f, 0.0f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(8f, 0f), Color.Red * 0.5f, depth: ((Depth)1f));
                 if (this.upBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(0.0f, -8f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(0f, -8f), Color.Red * 0.5f, depth: ((Depth)1f));
                 if (this.downBlock != null)
-                    Graphics.DrawLine(this.position, this.position + new Vec2(0.0f, 8f), Color.Red * 0.5f, depth: ((Depth)1f));
+                    Graphics.DrawLine(this.position, this.position + new Vec2(0f, 8f), Color.Red * 0.5f, depth: ((Depth)1f));
             }
             if (this.hasBroke)
             {
@@ -643,7 +643,7 @@ namespace DuckGame
                 }
                 if (this.brokeRight)
                 {
-                    this._brokenSprite.angleDegrees = 0.0f;
+                    this._brokenSprite.angleDegrees = 0f;
                     Graphics.Draw(this._brokenSprite, this.x + 16f, this.y);
                 }
                 if (this.brokeUp)

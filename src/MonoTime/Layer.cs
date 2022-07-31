@@ -246,7 +246,7 @@ namespace DuckGame
         {
             if (_scissor.width == 0.0)
                 return;
-            this._scissor = new Rectangle(0.0f, 0.0f, 0.0f, 0.0f);
+            this._scissor = new Rectangle(0f, 0f, 0f, 0f);
             this._state = new RasterizerState
             {
                 CullMode = CullMode.None
@@ -550,7 +550,7 @@ namespace DuckGame
                                             this._dropShadow.alpha = (float)(0.5 - 0.5 * (double)num);
                                             this._dropShadow.scale = new Vec2(1f - num, 1f - num);
                                             this._dropShadow.depth = thing.depth - 10;
-                                            source = new Vec3(position.x, thing.z, 0.0f);
+                                            source = new Vec3(position.x, thing.z, 0f);
                                             source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                             Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
                                         }
@@ -594,7 +594,7 @@ namespace DuckGame
                                             this._dropShadow.alpha = (float)(0.5 - 0.5 * (double)num);
                                             this._dropShadow.scale = new Vec2(1f - num, 1f - num);
                                             this._dropShadow.depth = thing.depth - 10;
-                                            source = new Vec3(position.x, thing.z, 0.0f);
+                                            source = new Vec3(position.x, thing.z, 0f);
                                             source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                             Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
                                         }

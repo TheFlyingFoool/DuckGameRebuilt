@@ -54,7 +54,7 @@ namespace DuckGame
           : base(xpos, ypos, wide, high)
         {
             this._controlProfile = conProfile;
-            this._splitter = new UIDivider(false, 0.0f, 4f);
+            this._splitter = new UIDivider(false, 0f, 4f);
             this._section = this._splitter.rightSection;
             UIText component1 = new UIText(title, Color.White);
             if (tiny)
@@ -67,7 +67,7 @@ namespace DuckGame
             this._controlString = conString;
             if (this._controlString != "" && this._controlString != null)
             {
-                UIDivider component2 = new UIDivider(false, 0.0f, 4f);
+                UIDivider component2 = new UIDivider(false, 0f, 4f);
                 this._controlText = new UIText(this._controlString, Color.White, heightAdd: 4f, controlProfile: this._controlProfile);
                 component2.bottomSection.Add(_controlText, true);
                 this.Add(component2, true);

@@ -56,9 +56,9 @@ namespace DuckGame
           string textVal,
           Color c,
           UIAlign al = UIAlign.Center,
-          float heightAdd = 0.0f,
+          float heightAdd = 0f,
           InputProfile controlProfile = null)
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._heightAdd = heightAdd;
             this._font = new BitmapFont("biosFontUI", 8, 7);
@@ -72,9 +72,9 @@ namespace DuckGame
           Func<string> textFunc,
           Color c,
           UIAlign al = UIAlign.Center,
-          float heightAdd = 0.0f,
+          float heightAdd = 0f,
           InputProfile controlProfile = null)
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._heightAdd = heightAdd;
             this._font = new BitmapFont("biosFontUI", 8, 7);

@@ -28,7 +28,7 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this._parallax = new ParallaxBackground("background/forest", 0.0f, 0.0f, 3);
+            this._parallax = new ParallaxBackground("background/forest", 0f, 0f, 3);
             float speed = 0.4f;
             this._parallax.AddZone(0, 0.6f, speed, true);
             this._parallax.AddZone(1, 0.6f, speed, true);

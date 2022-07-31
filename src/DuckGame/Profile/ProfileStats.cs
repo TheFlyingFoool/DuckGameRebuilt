@@ -37,7 +37,7 @@ namespace DuckGame
                 case StatInfo.ProfileScore:
                     return this.GetProfileScore();
                 default:
-                    return 0.0f;
+                    return 0f;
             }
         }
 
@@ -209,10 +209,10 @@ namespace DuckGame
         public float CalculateProfileScore(bool log = false)
         {
             List<StatContribution> statContributionList = new List<StatContribution>();
-            float num1 = 0.0f;
-            float num2 = 0.0f;
-            float num3 = 0.0f;
-            float num4 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
+            float num3 = 0f;
+            float num4 = 0f;
             if (this.timesSpawned > 0)
                 num4 = (matchesWon / this.timesSpawned * 0.4f);
             float num5 = num1 + num4;

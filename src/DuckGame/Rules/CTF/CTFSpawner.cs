@@ -67,7 +67,7 @@ namespace DuckGame
         {
             if (this._present != null)
                 return;
-            this._spawnWait = 0.0f;
+            this._spawnWait = 0f;
             this._present = new CTFPresent(this.x, this.y, (bool)this.team)
             {
                 x = this.x

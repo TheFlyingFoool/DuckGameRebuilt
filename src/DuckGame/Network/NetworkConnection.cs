@@ -84,7 +84,7 @@ namespace DuckGame
         /// be changed only at the start of the game.
         ///  </summary>
         public static int packetsEvery = 1;
-        public static float ghostLerpDivisor = 0.0f;
+        public static float ghostLerpDivisor = 0f;
 
         public int authorityPower => this.profile != null ? GameLevel.NumberOfDucks - (profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks + 1 : 1;
 

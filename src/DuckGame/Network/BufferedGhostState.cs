@@ -59,7 +59,7 @@ namespace DuckGame
                     else if (!(updateNetworkState.properties[property.index].tick > property.tick))
                     {
                         if (!pApplyPosition)
-                            property.Apply(0.0f);
+                            property.Apply(0f);
                         else
                             property.Apply(this._framesApplied >= NetworkConnection.packetsEvery ? 1f : NetworkConnection.ghostLerpDivisor);
                         updateNetworkState.properties[property.index].UpdateFrom(property);

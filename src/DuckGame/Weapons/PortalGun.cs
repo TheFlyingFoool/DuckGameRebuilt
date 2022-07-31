@@ -39,12 +39,12 @@ namespace DuckGame
             this._barrelOffsetTL = new Vec2(14f, 3f);
             this._fireSound = "laserRifle";
             this._fullAuto = false;
-            this._fireWait = 0.0f;
+            this._fireWait = 0f;
             this._kickForce = 0.5f;
-            this._holdOffset = new Vec2(0.0f, 0.0f);
+            this._holdOffset = new Vec2(0f, 0f);
             this._flare = new SpriteMap("laserFlare", 16, 16)
             {
-                center = new Vec2(0.0f, 8f)
+                center = new Vec2(0f, 8f)
             };
         }
     }

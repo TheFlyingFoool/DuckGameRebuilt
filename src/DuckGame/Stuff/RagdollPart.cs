@@ -201,7 +201,7 @@ namespace DuckGame
             this.thickness = 0.5f;
             this.weight = 0.05f;
             this.bouncy = 0.6f;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this.flammable = 0.3f;
             this.tapeable = false;
             this.SortOutDetails(xpos, ypos, p, persona, off, doll);
@@ -228,8 +228,8 @@ namespace DuckGame
         {
             this.x = xpos;
             this.y = ypos;
-            this.hSpeed = 0.0f;
-            this.vSpeed = 0.0f;
+            this.hSpeed = 0f;
+            this.vSpeed = 0f;
             this._part = this.part;
             this.offDir = (sbyte)off;
             this.airFrictionMult = 0.3f;
@@ -283,7 +283,7 @@ namespace DuckGame
                     return true;
                 }
             }
-            Feather feather = Feather.New(0.0f, 0.0f, this._persona);
+            Feather feather = Feather.New(0f, 0f, this._persona);
             feather.hSpeed = (float)(-(double)bullet.travelDirNormalized.x * (1.0 + (double)Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = hitPos;
@@ -471,7 +471,7 @@ namespace DuckGame
                         this.doll.captureDuck._prevOwner = this.owner;
                 }
             }
-            FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(this.position + new Vec2(0.0f, 4f));
+            FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(this.position + new Vec2(0f, 4f));
             if (fluidPuddle != null)
             {
                 if ((double)this.y + 4.0 - (double)fluidPuddle.top > 8.0)
@@ -524,7 +524,7 @@ namespace DuckGame
             {
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                 for (int index = 0; index < 2; ++index)
-                    Level.Add(SmallFire.New(Rando.Float(6f) - 3f, Rando.Float(2f) - 2f, 0.0f, 0.0f, stick: this));
+                    Level.Add(SmallFire.New(Rando.Float(6f) - 3f, Rando.Float(2f) - 2f, 0f, 0f, stick: this));
                 this._onFire = true;
                 this._doll.LitOnFire(litBy);
             }
@@ -533,7 +533,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.addWeight = 0.0f;
+            this.addWeight = 0f;
             this.extraGravMultiplier = 1f;
             if (this._part == 2 || this._joint == null)
                 return;
@@ -550,7 +550,7 @@ namespace DuckGame
                 this._stickSlowLerp = Lerp.Vec2Smooth(this._stickSlowLerp, tounge, 0.1f);
                 Vec2 stickLerp = this._stickLerp;
                 Vec2 vec = Maths.AngleToVec(this.angle);
-                Vec2 vec2_2 = this.offDir >= 0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0.0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0.0f, 1f);
+                Vec2 vec2_2 = this.offDir >= 0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0f, 1f);
                 vec2_2.y *= -1f;
                 Vec2 vec2_3 = this._stickSlowLerp;
                 vec2_3.y *= -1f;

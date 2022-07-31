@@ -34,7 +34,7 @@ namespace DuckGame
         }
 
         private Spark()
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
         }
 

@@ -237,7 +237,7 @@ namespace DuckGame
                 if (this._sprite.frame == 1)
                     this._timeOpen += 0.1f;
                 else
-                    this._timeOpen = 0.0f;
+                    this._timeOpen = 0f;
             }
             if (this._sprite.frame == 1 && this._prevFrame == 0)
                 this.glow = 1.2f;
@@ -368,7 +368,7 @@ namespace DuckGame
                 int num = Rando.Int(4) + 1;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (2f + Rando.Float(0.0f, 7f)), this.y + 3f + Rando.Float(0.0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0.0f, -2f)), ketchup, thickMult: 2.5f)
+                    Fluid fluid = new Fluid(this.x + duck.offDir * (2f + Rando.Float(0f, 7f)), this.y + 3f + Rando.Float(0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0f, -2f)), ketchup, thickMult: 2.5f)
                     {
                         depth = this.depth + 1
                     };
@@ -382,7 +382,7 @@ namespace DuckGame
                 int num = Rando.Int(3) + 1;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (2f + Rando.Float(0.0f, 4f)), this.y + 3f + Rando.Float(0.0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0.0f, -2f)), water, thickMult: 5f)
+                    Fluid fluid = new Fluid(this.x + duck.offDir * (2f + Rando.Float(0f, 4f)), this.y + 3f + Rando.Float(0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0f, -2f)), water, thickMult: 5f)
                     {
                         depth = this.depth + 1
                     };
@@ -396,7 +396,7 @@ namespace DuckGame
                 int num = Rando.Int(6) + 2;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (6f + Rando.Float(-2f, 4f)), this.y + Rando.Float(-2f, 4f), new Vec2(duck.offDir * Rando.Float(1.2f, 4f), Rando.Float(0.0f, -2.8f)), water, thickMult: 5f)
+                    Fluid fluid = new Fluid(this.x + duck.offDir * (6f + Rando.Float(-2f, 4f)), this.y + Rando.Float(-2f, 4f), new Vec2(duck.offDir * Rando.Float(1.2f, 4f), Rando.Float(0f, -2.8f)), water, thickMult: 5f)
                     {
                         depth = this.depth + 1
                     };
@@ -409,7 +409,7 @@ namespace DuckGame
                     return;
                 for (int index = 0; index < 4; ++index)
                 {
-                    TinyBubble tinyBubble = new TinyBubble(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(0.0f, 4f), Rando.Float(-1.5f, 1.5f), this.y - 12f, true)
+                    TinyBubble tinyBubble = new TinyBubble(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(0f, 4f), Rando.Float(-1.5f, 1.5f), this.y - 12f, true)
                     {
                         depth = this.depth + 1
                     };
@@ -438,7 +438,7 @@ namespace DuckGame
                 int num = Rando.Int(3) + 1;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (3f + Rando.Float(0.0f, 6f)), this.y + 4f + Rando.Float(0.0f, 1f), new Vec2(duck.offDir * Rando.Float(-2f, 2f), Rando.Float(-1f, -2f)), ketchup, thickMult: 2.5f)
+                    Fluid fluid = new Fluid(this.x + duck.offDir * (3f + Rando.Float(0f, 6f)), this.y + 4f + Rando.Float(0f, 1f), new Vec2(duck.offDir * Rando.Float(-2f, 2f), Rando.Float(-1f, -2f)), ketchup, thickMult: 2.5f)
                     {
                         depth = this.depth + 1
                     };
@@ -512,7 +512,7 @@ namespace DuckGame
                         this._specialSprite = new Sprite("hats/senpaiStar");
                         this._specialSprite.CenterOrigin();
                     }
-                    this._fade = Lerp.Float(this._fade, this.frame == 1 ? 1f : 0.0f, 0.1f);
+                    this._fade = Lerp.Float(this._fade, this.frame == 1 ? 1f : 0f, 0.1f);
                     if (_fade > 0.00999999977648258)
                     {
                         this._specialSprite.alpha = (float)((double)this.alpha * 0.699999988079071 * (0.5 + (double)this._wave.normalized * 0.5)) * this._fade;
@@ -545,7 +545,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Vec2 vec2_3 = this.Offset(new Vec2(0.0f, 2f));
+                        Vec2 vec2_3 = this.Offset(new Vec2(0f, 2f));
                         DuckGame.Graphics.Draw(this._specialSprite, vec2_3.x, vec2_3.y);
                         Vec2 vec2_4 = this.Offset(new Vec2(4f, 2f));
                         DuckGame.Graphics.Draw(this._specialSprite, vec2_4.x, vec2_4.y);
@@ -586,7 +586,7 @@ namespace DuckGame
             {
                 this._metadata = pMetadata;
                 this._owner = pOwner;
-                this._gravMult = 0.0f;
+                this._gravMult = 0f;
                 this.graphic = new Sprite((Tex2D)this._metadata.team.customParticles[Rando.Int(this._metadata.team.customParticles.Count - 1)]);
                 this.graphic.CenterOrigin();
                 this.offDir = pOwner.offDir;
@@ -619,8 +619,8 @@ namespace DuckGame
             private void UpdateAppearance()
             {
                 this.xscale = this.yscale = Lerp.FloatSmooth(this._particleScale.x, this._particleScale.y, 1f - this._life);
-                this.xscale = Maths.Clamp(this.xscale, 0.0f, 1f);
-                this.yscale = Maths.Clamp(this.yscale, 0.0f, 1f);
+                this.xscale = Maths.Clamp(this.xscale, 0f, 1f);
+                this.yscale = Maths.Clamp(this.yscale, 0f, 1f);
                 this.alpha = Lerp.FloatSmooth(this._particleAlpha.x, this._particleAlpha.y, 1f - this._life);
                 this.angleDegrees = Lerp.FloatSmooth(this._particleRotation.x, this._particleRotation.y, 1f - this._life) * 10f;
             }

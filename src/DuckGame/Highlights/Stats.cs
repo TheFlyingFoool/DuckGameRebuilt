@@ -45,7 +45,7 @@ namespace DuckGame
         public static void CalculateStats()
         {
             DateTime dateTime = DateTime.Now;
-            Stats._totalRoundTime = 0.0f;
+            Stats._totalRoundTime = 0f;
             Stats._numberOfRounds = 0;
             foreach (Event @event in Event.events)
             {

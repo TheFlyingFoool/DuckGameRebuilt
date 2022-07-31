@@ -42,7 +42,7 @@ namespace DuckGame
 
         public float pitch
         {
-            get => this._effect == null ? 0.0f : this._effect.Pitch;
+            get => this._effect == null ? 0f : this._effect.Pitch;
             set
             {
                 if (this._effect == null)
@@ -51,18 +51,18 @@ namespace DuckGame
             }
         }
 
-        public LoopingSound(string sound, float startVolume = 0.0f, float startPitch = 0.0f, string multiSound = null)
+        public LoopingSound(string sound, float startVolume = 0f, float startPitch = 0f, string multiSound = null)
         {
             this._effect = (double)startVolume <= 0.0 ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
             if (this._effect != null)
                 return;
-            this._effect = new InvalidSound(sound, startVolume, startPitch, 0.0f, true);
+            this._effect = new InvalidSound(sound, startVolume, startPitch, 0f, true);
         }
 
         ~LoopingSound()
         {
-            this._lerpSpeed = 0.0f;
-            this._lerpVolume = 0.0f;
+            this._lerpSpeed = 0f;
+            this._lerpVolume = 0f;
             if (this._effect == null)
                 return;
             this._effect.Kill();
@@ -80,7 +80,7 @@ namespace DuckGame
         {
             if (this._effect == null || this._effect.IsDisposed)
                 return;
-            this._effect.Volume = 0.0f;
+            this._effect.Volume = 0f;
         }
 
         public void Update()

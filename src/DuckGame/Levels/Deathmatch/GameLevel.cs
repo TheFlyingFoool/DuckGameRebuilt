@@ -86,7 +86,7 @@ namespace DuckGame
             if (this._randomLevel != null)
             {
                 GhostManager.context.ResetGhostIndex(this.networkIndex);
-                this._randomLevel.LoadParts(0.0f, 0.0f, this, this.seed);
+                this._randomLevel.LoadParts(0f, 0f, this, this.seed);
                 List<SpawnPoint> source1 = new List<SpawnPoint>();
                 foreach (SpawnPoint spawnPoint in this.things[typeof(SpawnPoint)])
                     source1.Add(spawnPoint);
@@ -265,7 +265,7 @@ namespace DuckGame
                     }
                 }
                 else
-                    this._infoSlide = Lerp.Float(this._infoSlide, 0.0f, 0.1f);
+                    this._infoSlide = Lerp.Float(this._infoSlide, 0f, 0.1f);
                 if (_infoSlide > 0.0)
                 {
                     float x = 10f;
@@ -278,7 +278,7 @@ namespace DuckGame
                     float num1 = (float)(((double)stringWidth1 + (double)x + 12.0) * (1.0 - _infoSlide));
                     Vec2 p1 = new Vec2(-num1, x - 1f);
                     Vec2 p2 = new Vec2((float)((double)x + (double)stringWidth1 + 4.0), x + 10f);
-                    Graphics.DrawRect(p1, p2 + new Vec2(-num1, 0.0f), new Color(13, 130, 211), (Depth)0.95f);
+                    Graphics.DrawRect(p1, p2 + new Vec2(-num1, 0f), new Color(13, 130, 211), (Depth)0.95f);
                     Graphics.DrawRect(p1 + new Vec2(-2f, 2f), p2 + new Vec2((float)(-(double)num1 + 2.0), 2f), Colors.BlueGray, (Depth)0.9f);
                     Graphics.DrawStringOutline(text1, p1 + new Vec2(x, 2f), Color.White, Color.Black, (Depth)1f);
                     if (this.data.workshopData != null && this.data.workshopData.author != null && this.data.workshopData.author != "")

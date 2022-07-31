@@ -108,10 +108,10 @@ namespace DuckGame
                 DuckGame.Graphics.DrawRect(p1, p1 + new Vec2(x, y), new Color(70, 70, 70), (Depth)0.5f);
                 DuckGame.Graphics.DrawRect(p1 + new Vec2(1f, 1f), p1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30), (Depth)0.6f);
                 this._lastDrawPos = p1;
-                DuckGame.Graphics.Draw(graphic.texture, new Vec2(this._thing.x, this._thing.y), new Rectangle?(), Color.White, 0.0f, this._thing.center, this._thing.scale, SpriteEffects.None, (Depth)0.7f);
+                DuckGame.Graphics.Draw(graphic.texture, new Vec2(this._thing.x, this._thing.y), new Rectangle?(), Color.White, 0f, this._thing.center, this._thing.scale, SpriteEffects.None, (Depth)0.7f);
                 if (this._root && this._file != null)
                 {
-                    Vec2 vec2_2 = new Vec2(p1 + new Vec2(x + 4f, 0.0f));
+                    Vec2 vec2_2 = new Vec2(p1 + new Vec2(x + 4f, 0f));
                     Vec2 vec2_3 = new Vec2(p1 + new Vec2(x + 97f, 12f));
                     this._file.position = vec2_2;
                     this._file.Update();

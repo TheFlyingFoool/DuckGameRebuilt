@@ -78,7 +78,7 @@ namespace DuckGame
             {
                 if (_beamTime > 1.0 || this.owner == null)
                 {
-                    this._beamTime = 0.0f;
+                    this._beamTime = 0f;
                     this._triggerHeld = false;
                     this.LoseControl();
                 }
@@ -97,7 +97,7 @@ namespace DuckGame
                     }
                     if (owner.inputProfile.Pressed("QUACK") || this._controlledDuck.dead || this._controlledDuck.HasEquipment(typeof(TinfoilHat)))
                     {
-                        this._beamTime = 0.0f;
+                        this._beamTime = 0f;
                         this._triggerHeld = false;
                         this.LoseControl();
                         return;
@@ -132,7 +132,7 @@ namespace DuckGame
                 this._beamSound.pitch = Maths.NormalizeSection(this._beamTime, 0.5f, 1f) * 0.6f;
             }
             else
-                this._beamSound.pitch = 0.0f;
+                this._beamSound.pitch = 0f;
             base.Update();
             if (this._triggerHeld && this._beamTimer.hit)
             {
@@ -150,12 +150,12 @@ namespace DuckGame
                 else
                     this._boltWait = 0;
             }
-            this._beamSound.lerpVolume = this._triggerHeld ? 0.55f : 0.0f;
+            this._beamSound.lerpVolume = this._triggerHeld ? 0.55f : 0f;
             this._beamSound.Update();
             if (_canConvert > 0.0)
                 this._canConvert -= 0.02f;
             else
-                this._canConvert = 0.0f;
+                this._canConvert = 0f;
         }
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
@@ -175,7 +175,7 @@ namespace DuckGame
             if (owner._sprite.imageIndex > 11 && owner._sprite.imageIndex < 14)
                 this._hat.angleDegrees = owner._sprite.flipH ? 90f : -90f;
             else
-                this._hat.angleDegrees = 0.0f;
+                this._hat.angleDegrees = 0f;
             Vec2 hatPoint = DuckRig.GetHatPoint(owner._sprite.imageIndex);
             Graphics.Draw(_hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
         }

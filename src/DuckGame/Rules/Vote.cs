@@ -98,7 +98,7 @@ namespace DuckGame
                 if (vote.vote == VoteType.None)
                     vote.open = false;
                 vote.slide = Lerp.FloatSmooth(vote.slide, vote.open ? 1f : -0.1f, 0.1f, 1.1f);
-                vote.wobble = Lerp.Float(vote.wobble, 0.0f, 0.05f);
+                vote.wobble = Lerp.Float(vote.wobble, 0f, 0.05f);
                 vote.wobbleInc += 0.5f;
                 if (!vote.open && vote.slide < 0.00999999977648258)
                     vote.vote = VoteType.None;
@@ -115,7 +115,7 @@ namespace DuckGame
                     float num2 = (float)(Math.Sin(vote.wobbleInc) * vote.wobble * 3.0);
                     Vec2 vec2 = Network.isActive ? vote.leftStick : vote.who.inputProfile.leftStick;
                     vote.who.persona.skipSprite.angle = (float)((double)num2 * 0.0299999993294477 + vec2.y * 0.400000005960464);
-                    float num3 = 0.0f;
+                    float num3 = 0f;
                     float num4 = 3f;
                     float num5 = 49f;
                     if (vote.vote == VoteType.Skip)

@@ -44,11 +44,11 @@ namespace DuckGame
             this._persona = person;
             this.targetPos = new Vec2(xpos, ypos);
             if (this._persona == Persona.Duck1)
-                this.position = new Vec2(0.0f, 0.0f);
+                this.position = new Vec2(0f, 0f);
             else if (this._persona == Persona.Duck2)
-                this.position = new Vec2(320f, 0.0f);
+                this.position = new Vec2(320f, 0f);
             else if (this._persona == Persona.Duck3)
-                this.position = new Vec2(0.0f, 180f);
+                this.position = new Vec2(0f, 180f);
             else if (this._persona == Persona.Duck4)
                 this.position = new Vec2(320f, 180f);
             this.prevPos.Add(this.position);
@@ -67,7 +67,7 @@ namespace DuckGame
             {
                 this.streamAlpha -= 0.03f;
                 if (streamAlpha < 0.0)
-                    this.streamAlpha = 0.0f;
+                    this.streamAlpha = 0f;
             }
             Level.current.camera.getMatrix();
             Vec2 targetPos = this.targetPos;

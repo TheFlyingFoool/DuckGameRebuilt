@@ -197,7 +197,7 @@ namespace DuckGame
             if (!this.opened)
                 return;
             base.Draw();
-            Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, this.depth - 2);
+            Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, this.depth - 2);
             float num1 = 300f;
             float num2 = 80f;
             Vec2 p1_1 = new Vec2((float)((double)this.layer.width / 2.0 - (double)num1 / 2.0), (float)((double)this.layer.height / 2.0 - (double)num2 / 2.0) + this.windowYOffsetAdd);

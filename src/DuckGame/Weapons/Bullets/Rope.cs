@@ -51,9 +51,9 @@ namespace DuckGame
 
         public override NetIndex8 authority => this._belongsTo != null ? this._belongsTo.authority : base.authority;
 
-        public float linkDirection => this.attach2 is Rope attach2 ? Maths.PointDirection(new Vec2(0.0f, 0.0f), (this.attach2Point - this.attach1Point).Rotate(Maths.DegToRad(attach2.offsetDegrees), Vec2.Zero)) : 0.0f;
+        public float linkDirection => this.attach2 is Rope attach2 ? Maths.PointDirection(new Vec2(0f, 0f), (this.attach2Point - this.attach1Point).Rotate(Maths.DegToRad(attach2.offsetDegrees), Vec2.Zero)) : 0f;
 
-        public float linkDirectionNormalized => Maths.PointDirection(new Vec2(0.0f, 0.0f), this.attach2Point - this.attach1Point);
+        public float linkDirectionNormalized => Maths.PointDirection(new Vec2(0f, 0f), this.attach2Point - this.attach1Point);
 
         public float properLength
         {
@@ -85,7 +85,7 @@ namespace DuckGame
             }
         }
 
-        public float length => this._attach1 != null && this._attach2 != null ? (this._attach1.position - this._attach2.position).length : 0.0f;
+        public float length => this._attach1 != null && this._attach2 != null ? (this._attach1.position - this._attach2.position).length : 0f;
 
         public Rope(
           float xpos,
@@ -112,7 +112,7 @@ namespace DuckGame
             {
                 this._vine = new Sprite(nameof(vine))
                 {
-                    center = new Vec2(8f, 0.0f)
+                    center = new Vec2(8f, 0f)
                 };
             }
             if (tex != null)
@@ -264,7 +264,7 @@ namespace DuckGame
                     ++num2;
                     if (num2 > 30)
                     {
-                        num3 = 0.0f;
+                        num3 = 0f;
                         break;
                     }
                     attach1Point += vec2_2;
@@ -358,7 +358,7 @@ namespace DuckGame
                     if (index == num4 - 1)
                     {
                         this._vine.yscale = 1f;
-                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0.0f, 0.0f, 16f, (int)((double)length2 % (double)num2)));
+                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0f, 0f, 16f, (int)((double)length2 % (double)num2)));
                     }
                     else
                     {

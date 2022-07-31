@@ -34,15 +34,15 @@ namespace DuckGame
         {
             if (this.water)
             {
-                Graphics.DrawTexturedLine(this.edge.texture, this.position + new Vec2(0.0f, this.size.y / 2f), this.position + new Vec2(this.size.x, this.size.y / 2f), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), this.size.y / 20f, (Depth)1f);
+                Graphics.DrawTexturedLine(this.edge.texture, this.position + new Vec2(0f, this.size.y / 2f), this.position + new Vec2(this.size.x, this.size.y / 2f), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), this.size.y / 20f, (Depth)1f);
             }
             else
             {
                 Graphics.DrawRect(this.position, this.position + this.size, new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), (Depth)1f);
-                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(0.0f, 0.0f), this.position + new Vec2(this.size.x, 0.0f), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), depth: ((Depth)1f));
-                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(0.0f, this.size.y + 1f), this.position + new Vec2(this.size.x, this.size.y + 1f), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), depth: ((Depth)1f));
-                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(0.0f, 0.0f), this.position + new Vec2(0.0f, this.size.y), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), 0.5f, (Depth)1f);
-                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(this.size.x - 1f, 0.0f), this.position + new Vec2(this.size.x - 1f, this.size.y), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), 0.5f, (Depth)1f);
+                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(0f, 0f), this.position + new Vec2(this.size.x, 0f), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), depth: ((Depth)1f));
+                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(0f, this.size.y + 1f), this.position + new Vec2(this.size.x, this.size.y + 1f), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), depth: ((Depth)1f));
+                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(0f, 0f), this.position + new Vec2(0f, this.size.y), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), 0.5f, (Depth)1f);
+                Graphics.DrawTexturedLine(this.gradientLine.texture, this.position + new Vec2(this.size.x - 1f, 0f), this.position + new Vec2(this.size.x - 1f, this.size.y), new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 0), 0.5f, (Depth)1f);
                 this.edgeVert.xscale = 0.5f;
                 this.edge.xscale = 0.5f;
                 this.edge.flipH = false;

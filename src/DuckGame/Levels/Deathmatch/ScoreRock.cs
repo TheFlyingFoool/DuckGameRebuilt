@@ -94,7 +94,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            foreach (Block block in Level.CheckLineAll<Block>(this.position, this.position + new Vec2(0.0f, 100f)))
+            foreach (Block block in Level.CheckLineAll<Block>(this.position, this.position + new Vec2(0f, 100f)))
             {
                 if (block.solid)
                 {

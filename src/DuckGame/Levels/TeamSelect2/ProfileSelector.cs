@@ -26,7 +26,7 @@ namespace DuckGame
         {
           name = "{",
           trigger = "LEFT",
-          position = new Vec2(0.0f, 0.0f),
+          position = new Vec2(0f, 0f),
           column = 0,
           condition =  x => x.allowDirectionalMapping
         },
@@ -34,7 +34,7 @@ namespace DuckGame
         {
           name = "/",
           trigger = "RIGHT",
-          position = new Vec2(35f, 0.0f),
+          position = new Vec2(35f, 0f),
           column = 0,
           condition =  x => x.allowDirectionalMapping
         },
@@ -42,7 +42,7 @@ namespace DuckGame
         {
           name = "}",
           trigger = "UP",
-          position = new Vec2(70f, 0.0f),
+          position = new Vec2(70f, 0f),
           column = 1,
           condition =  x => x.allowDirectionalMapping
         },
@@ -50,7 +50,7 @@ namespace DuckGame
         {
           name = "~",
           trigger = "DOWN",
-          position = new Vec2(105f, 0.0f),
+          position = new Vec2(105f, 0f),
           column = 1,
           condition =  x => x.allowDirectionalMapping
         },
@@ -58,21 +58,21 @@ namespace DuckGame
         {
           name = "JUMP  ",
           trigger = "JUMP",
-          position = new Vec2(0.0f, 12f),
+          position = new Vec2(0f, 12f),
           column = 0
         },
         new ControlSetting()
         {
           name = "GRAB  ",
           trigger = "GRAB",
-          position = new Vec2(0.0f, 24f),
+          position = new Vec2(0f, 24f),
           column = 0
         },
         new ControlSetting()
         {
           name = "STRAFE",
           trigger = "STRAFE",
-          position = new Vec2(0.0f, 36f),
+          position = new Vec2(0f, 36f),
           column = 0
         },
         new ControlSetting()
@@ -100,7 +100,7 @@ namespace DuckGame
         {
           name = "START ",
           trigger = "START",
-          position = new Vec2(0.0f, 48f),
+          position = new Vec2(0f, 48f),
           column = 0,
           condition =  x => x.allowStartRemap
         },
@@ -139,7 +139,7 @@ namespace DuckGame
         {
           name = "MOVE  ",
           trigger = "LSTICK",
-          position = new Vec2(0.0f, 12f),
+          position = new Vec2(0f, 12f),
           column = 0,
           condition =  x => x.numSticks > 1
         },
@@ -147,7 +147,7 @@ namespace DuckGame
         {
           name = "PITCH ",
           trigger = "LTRIGGER",
-          position = new Vec2(0.0f, 24f),
+          position = new Vec2(0f, 24f),
           column = 0,
           condition =  x => x.numTriggers > 1
         },
@@ -171,7 +171,7 @@ namespace DuckGame
         {
           name = "<PAGE 1",
           trigger = "ANY",
-          position = new Vec2(0.0f, 60f),
+          position = new Vec2(0f, 60f),
           column = 0,
           action =  x =>
           {
@@ -200,7 +200,7 @@ namespace DuckGame
         {
           name = "UI CONTROLS...",
           trigger = "ANY",
-          position = new Vec2(0.0f, 0.0f),
+          position = new Vec2(0f, 0f),
           column = 0,
           caption = true
         },
@@ -208,7 +208,7 @@ namespace DuckGame
         {
           name = "{",
           trigger = "MENULEFT",
-          position = new Vec2(0.0f, 12f),
+          position = new Vec2(0f, 12f),
           column = 0,
           condition =  x => x.allowDirectionalMapping
         },
@@ -240,14 +240,14 @@ namespace DuckGame
         {
           name = "SELECT",
           trigger = "SELECT",
-          position = new Vec2(0.0f, 24f),
+          position = new Vec2(0f, 24f),
           column = 0
         },
         new ControlSetting()
         {
           name = "MENU 1",
           trigger = "MENU1",
-          position = new Vec2(0.0f, 36f),
+          position = new Vec2(0f, 36f),
           column = 0
         },
         new ControlSetting()
@@ -268,7 +268,7 @@ namespace DuckGame
         {
           name = "<PAGE 2",
           trigger = "ANY",
-          position = new Vec2(0.0f, 48f),
+          position = new Vec2(0f, 48f),
           column = 0,
           condition =  x => !(x is Keyboard),
           action =  x =>
@@ -282,7 +282,7 @@ namespace DuckGame
         {
           name = "<PAGE 1",
           trigger = "ANY",
-          position = new Vec2(0.0f, 48f),
+          position = new Vec2(0f, 48f),
           column = 0,
           condition =  x => x is Keyboard,
           action =  x =>
@@ -433,7 +433,7 @@ namespace DuckGame
         {
             this._open = false;
             this._selector.fade = 1f;
-            this._fade = 0.0f;
+            this._fade = 0f;
             this._desiredMode = PSMode.SelectProfile;
             this._controlPage = 0;
             this._selectedSetting = null;
@@ -615,7 +615,7 @@ namespace DuckGame
                             this._box.ChangeProfile(this._starterProfile);
                         this._open = false;
                         this._selector.fade = 1f;
-                        this._fade = 0.0f;
+                        this._fade = 0f;
                         this._selector.screen.DoFlashTransition();
                         SFX.Play("consoleCancel", 0.4f);
                         return;
@@ -659,7 +659,7 @@ namespace DuckGame
                             this._selector.ConfirmProfile();
                             this._open = false;
                             this._selector.fade = 1f;
-                            this._fade = 0.0f;
+                            this._fade = 0f;
                             this._selector.screen.DoFlashTransition();
                             SFX.Play("consoleSelect", 0.4f);
                         }
@@ -714,13 +714,13 @@ namespace DuckGame
                             this._selectedSetting = this._controlSettingPages[this._controlPage].Find(x => (x.condition == null || x.condition(d)) && !x.caption);
                         Vec2 zero = Vec2.Zero;
                         if (this._inputProfile.Pressed("MENUUP"))
-                            zero += new Vec2(0.0f, -8f);
+                            zero += new Vec2(0f, -8f);
                         else if (this._inputProfile.Pressed("MENUDOWN"))
-                            zero += new Vec2(0.0f, 8f);
+                            zero += new Vec2(0f, 8f);
                         else if (this._inputProfile.Pressed("MENULEFT"))
-                            zero += new Vec2(-30f, 0.0f);
+                            zero += new Vec2(-30f, 0f);
                         else if (this._inputProfile.Pressed("MENURIGHT"))
-                            zero += new Vec2(30f, 0.0f);
+                            zero += new Vec2(30f, 0f);
                         if (zero != Vec2.Zero)
                         {
                             ControlSetting controlSetting1 = null;
@@ -833,12 +833,12 @@ namespace DuckGame
                         {
                             if (this._inputProfile.Pressed("MENULEFT"))
                             {
-                                this._moodVal = Maths.Clamp(this._moodVal - 0.25f, 0.0f, 1f);
+                                this._moodVal = Maths.Clamp(this._moodVal - 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
                             }
                             if (this._inputProfile.Pressed("MENURIGHT"))
                             {
-                                this._moodVal = Maths.Clamp(this._moodVal + 0.25f, 0.0f, 1f);
+                                this._moodVal = Maths.Clamp(this._moodVal + 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
                             }
                         }
@@ -898,7 +898,7 @@ namespace DuckGame
                                 this._mode = PSMode.SelectProfile;
                                 this._open = false;
                                 this._selector.fade = 1f;
-                                this._fade = 0.0f;
+                                this._fade = 0f;
                                 this._selector.screen.DoFlashTransition();
                             }
                             SFX.Play("consoleCancel", 0.4f);
@@ -1000,8 +1000,8 @@ namespace DuckGame
                     this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
                 else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
                 {
-                    this._slide = 0.0f;
-                    this._slideTo = 0.0f;
+                    this._slide = 0f;
+                    this._slideTo = 0f;
                     if (this._desiredSelectorPosition != -1 && this.ProfileAlreadySelected(this._profiles[this._desiredSelectorPosition]))
                     {
                         this._selectorPosition = this._desiredSelectorPosition;
@@ -1038,7 +1038,7 @@ namespace DuckGame
                     this._selector.screen.BeginDraw();
                     string text = "SAVE CHANGES?";
                     this._smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._smallFont.GetWidth(text) / 2.0), this.y + 22f)), Colors.MenuOption * (this._controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
-                    Vec2 vec2 = new Vec2((float)((double)this.x + (double)this.width / 2.0 - 66.0), this.y + 18f) + new Vec2(0.5f, 0.0f);
+                    Vec2 vec2 = new Vec2((float)((double)this.x + (double)this.width / 2.0 - 66.0), this.y + 18f) + new Vec2(0.5f, 0f);
                     this._smallFont.Draw("YES", Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._smallFont.GetWidth("YES") / 2.0), this.y + 34f)), Colors.MenuOption * (this._editControlSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
                     this._smallFont.Draw("NO", Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._smallFont.GetWidth("NO") / 2.0), (float)((double)this.y + 34.0 + 8.0))), Colors.MenuOption * (this._editControlSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
                     this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
@@ -1069,7 +1069,7 @@ namespace DuckGame
                         if (this._controlPosition == 0)
                             text = "< " + text + " >";
                         this._smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)((double)this.x + (double)this.width / 2.0 - (double)this._smallFont.GetWidth(text) / 2.0), this.y + num)), Colors.MenuOption * (this._controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
-                        Vec2 vec2 = new Vec2((float)((double)this.x + (double)this.width / 2.0 - 66.0), (float)((double)this.y + (double)num + 9.0)) + new Vec2(0.5f, 0.0f);
+                        Vec2 vec2 = new Vec2((float)((double)this.x + (double)this.width / 2.0 - 66.0), (float)((double)this.y + (double)num + 9.0)) + new Vec2(0.5f, 0f);
                         bool flag = false;
                         foreach (ControlSetting controlSetting in this._controlSettingPages[this._controlPage])
                         {
@@ -1141,10 +1141,10 @@ namespace DuckGame
                             text3 = "> " + text2 + " <";
                         float num2 = (float)((double)this.y + (double)num1 + 33.0);
                         float y = (float)((double)this.y + (double)num1 + index1 * 11 + -(double)this._slide * 11.0);
-                        float num3 = Maths.Clamp((float)((33.0 - (double)Math.Abs(y - num2)) / 33.0), 0.0f, 1f);
-                        float num4 = num3 * Maths.NormalizeSection(num3, 0.0f, 0.9f);
+                        float num3 = Maths.Clamp((float)((33.0 - (double)Math.Abs(y - num2)) / 33.0), 0f, 1f);
+                        float num4 = num3 * Maths.NormalizeSection(num3, 0f, 0.9f);
                         float num5 = 0.2f;
-                        float num6 = Maths.Clamp((double)num3 >= 0.300000011920929 ? ((double)num3 >= 0.800000011920929 ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0.0f, 0.3f) * num5, 0.0f, 1f);
+                        float num6 = Maths.Clamp((double)num3 >= 0.300000011920929 ? ((double)num3 >= 0.800000011920929 ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
                         bool flag3 = false;
                         if ((this._selector == null || !this._selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(this._profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == this._profiles[index]) != null))
                             flag3 = true;
@@ -1181,7 +1181,7 @@ namespace DuckGame
                             pos.x -= 2f;
                             for (int index = 0; index < 9; ++index)
                             {
-                                Graphics.DrawRect(pos + new Vec2(index * 8, 0.0f), pos + new Vec2(index * 8 + 7, 7f), new Color(60, 60, 60), (Depth)0.8f);
+                                Graphics.DrawRect(pos + new Vec2(index * 8, 0f), pos + new Vec2(index * 8 + 7, 7f), new Color(60, 60, 60), (Depth)0.8f);
                                 if (index == this._currentLetter)
                                 {
                                     this._spinnerArrows.frame = 0;

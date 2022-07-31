@@ -59,7 +59,7 @@ namespace DuckGame
             }
             else
             {
-                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0.0f, 0.3f, 1.1f);
+                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.3f, 1.1f);
                 if (this.down)
                 {
                     this._downWait -= 0.06f;
@@ -113,7 +113,7 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2(-53f, -4f);
             this._portraitSprite.depth = this.depth + 2;
             this._portraitFrame.depth = this.depth + 4;
-            Graphics.Draw(_portraitSprite, (float)(position.x + (double)vec2_3.x + 1.0), (float)(position.y + (double)vec2_3.y + 1.0), new Rectangle(2f, 0.0f, 12f, 10f));
+            Graphics.Draw(_portraitSprite, (float)(position.x + (double)vec2_3.x + 1.0), (float)(position.y + (double)vec2_3.y + 1.0), new Rectangle(2f, 0f, 12f, 10f));
             Graphics.Draw(this._portraitFrame, (float)(position.x + (double)vec2_3.x - 2.0), (float)(position.y + (double)vec2_3.y - 2.0));
             Graphics.DrawRect(this.position + vec2_3, this.position + vec2_3 + new Vec2(13f, 13f), Colors.DGBlue, this.depth + 1);
             this.y -= this.yOffset;

@@ -40,11 +40,11 @@ namespace DuckGame
             this._netGunGuage = new SpriteMap("netGunGuage", 8, 8);
             this._barrelSteam = new SpriteMap("steamPuff", 16, 16)
             {
-                center = new Vec2(0.0f, 14f)
+                center = new Vec2(0f, 14f)
             };
             this._barrelSteam.AddAnimation("puff", 0.4f, false, 0, 1, 2, 3, 4, 5, 6, 7);
             this._barrelSteam.SetAnimation("puff");
-            this._barrelSteam.speed = 0.0f;
+            this._barrelSteam.speed = 0f;
             this._bio = "C02 powered, shoots nets, traps ducks. Is that stubborn duck not moving? Why not trap it, and put it where it belongs.";
             this._editorName = "Net Gun";
             this.editorTooltip = "Fires entangling nets that hold Ducks in place *evil moustache twirl*";
@@ -57,7 +57,7 @@ namespace DuckGame
         {
             this._netGunGuage.frame = 4 - Math.Min(this.ammo + 1, 4);
             if ((double)this._barrelSteam.speed > 0.0 && this._barrelSteam.finished)
-                this._barrelSteam.speed = 0.0f;
+                this._barrelSteam.speed = 0f;
             base.Update();
         }
 

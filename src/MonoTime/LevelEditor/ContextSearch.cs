@@ -32,7 +32,7 @@ namespace DuckGame
                 this._text = "@searchiconwhite@ search...";
             else
                 this._text = "@searchicon@ |GRAY|search...";
-            Graphics.DrawFancyString(this._text, this.position + new Vec2(0.0f, 4f), color, this.depth + 2);
+            Graphics.DrawFancyString(this._text, this.position + new Vec2(0f, 4f), color, this.depth + 2);
         }
     }
 }

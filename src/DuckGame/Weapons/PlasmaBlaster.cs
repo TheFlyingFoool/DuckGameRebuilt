@@ -32,7 +32,7 @@ namespace DuckGame
             this.maxAccuracyLost = 0.9f;
             this._bigFlare = new SpriteMap("plasmaFlare", 32, 32);
             this._bigFlare.AddAnimation("idle", 1f, false, 0, 1, 2);
-            this._bigFlare.center = new Vec2(0.0f, 16f);
+            this._bigFlare.center = new Vec2(0f, 16f);
             this._fullAuto = true;
             this._bulletColor = Color.Orange;
             this._bio = "Originally found in a crater next to a burnt power suit. It's origin and mechanism of action are unknown, but tests indicate that it is seriously badass.";
@@ -51,7 +51,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._barrelHeat = 0.0f;
+            this._barrelHeat = 0f;
             if (_flareAlpha > 0.0 && !this._flared)
             {
                 this._flared = true;
@@ -65,7 +65,7 @@ namespace DuckGame
                 if (this._bigFlare.finished)
                 {
                     this._flared = false;
-                    this._flareAlpha = 0.0f;
+                    this._flareAlpha = 0f;
                 }
             }
             base.Draw();

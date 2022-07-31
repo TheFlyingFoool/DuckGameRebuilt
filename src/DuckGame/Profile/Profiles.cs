@@ -113,7 +113,7 @@ namespace DuckGame
 
         public static float MostTimeOnFire()
         {
-            float num = 0.0f;
+            float num = 0f;
             foreach (Profile profile in Profiles.all)
             {
                 if ((double)profile.stats.timeOnFire > (double)num)

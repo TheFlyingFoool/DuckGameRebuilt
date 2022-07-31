@@ -14,10 +14,10 @@ namespace DuckGame
     [Serializable]
     public struct Vec2 : IEquatable<Vec2>
     {
-        private static Vec2 zeroVector = new Vec2(0.0f, 0.0f);
+        private static Vec2 zeroVector = new Vec2(0f, 0f);
         private static Vec2 unitVector = new Vec2(1f, 1f);
-        private static Vec2 unitxVector = new Vec2(1f, 0.0f);
-        private static Vec2 unityVector = new Vec2(0.0f, 1f);
+        private static Vec2 unitxVector = new Vec2(1f, 0f);
+        private static Vec2 unityVector = new Vec2(0f, 1f);
         private static Vec2 maxVector = new Vec2(float.MaxValue, float.MaxValue);
         private static Vec2 minVector = new Vec2(float.MinValue, float.MinValue);
         public float x;
@@ -369,7 +369,7 @@ namespace DuckGame
 
         public static void Transform(ref Vec2 position, ref Quaternion quat, out Vec2 result)
         {
-            Quaternion result1 = new Quaternion(position.x, position.y, 0.0f, 0.0f);
+            Quaternion result1 = new Quaternion(position.x, position.y, 0f, 0f);
             Quaternion result2;
             Quaternion.Inverse(ref quat, out result2);
             Quaternion result3;

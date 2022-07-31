@@ -20,7 +20,7 @@ namespace DuckGame
             this.graphic = _sprite;
             this.center = new Vec2(8f, 8f);
             this._bounceSound = bounceSound;
-            this.depth = (Depth)(0.3f + Rando.Float(0.0f, 0.1f));
+            this.depth = (Depth)(0.3f + Rando.Float(0f, 0.1f));
         }
 
         public override void Update()

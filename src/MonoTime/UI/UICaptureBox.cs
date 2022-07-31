@@ -61,9 +61,9 @@ namespace DuckGame
                         this._captureSize.y = 720f;
                     Vec2 vec2 = this._capturePosition * num;
                     if (vec2.x < 0.0)
-                        vec2.x = 0.0f;
+                        vec2.x = 0f;
                     if (vec2.y < 0.0)
-                        vec2.y = 0.0f;
+                        vec2.y = 0f;
                     this._capturePosition = vec2 / num;
                 }
                 DuckGame.Graphics.SetRenderTarget(this._captureTarget);
@@ -72,7 +72,7 @@ namespace DuckGame
                 Viewport viewport = DuckGame.Graphics.viewport;
                 DuckGame.Graphics.viewport = new Viewport(0, 0, (int)(_captureSize.x * (double)num), (int)(_captureSize.y * (double)num));
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
-                DuckGame.Graphics.Draw(MonoMain.screenCapture, 0.0f, 0.0f);
+                DuckGame.Graphics.Draw(MonoMain.screenCapture, 0f, 0f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.viewport = viewport;
                 DuckGame.Graphics.SetRenderTarget(null);
@@ -99,7 +99,7 @@ namespace DuckGame
             DuckGame.Graphics.DrawRect(new Vec2(this._capturePosition.x - 1f, this._capturePosition.y - 1f), new Vec2((float)(_capturePosition.x + (double)(int)this._captureSize.x + 1.0), (float)(_capturePosition.y + (double)(int)this._captureSize.y + 1.0)), Color.White, (Depth)1f, false);
             if (this._captureTarget == null)
                 return;
-            DuckGame.Graphics.Draw(_captureTarget, this._capturePosition, new Rectangle?(new Rectangle(0.0f, 0.0f, (int)this._captureSize.x * 4, (int)this._captureSize.y * 4)), Color.White, 0.0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)1f);
+            DuckGame.Graphics.Draw(_captureTarget, this._capturePosition, new Rectangle?(new Rectangle(0f, 0f, (int)this._captureSize.x * 4, (int)this._captureSize.y * 4)), Color.White, 0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)1f);
         }
     }
 }

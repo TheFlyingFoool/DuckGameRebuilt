@@ -983,7 +983,7 @@ namespace DuckGame
                 Graphics.DrawString(Change.ToString(_personalIDX), this._position + new Vec2(2f, 16f), Color.White, (Depth)0.9f, scale: 0.5f);
                 foreach (Thing thing in this._objects)
                 {
-                    Graphics.DrawRect(thing.rectangle, Color.Blue, (Depth)0.0f, false);
+                    Graphics.DrawRect(thing.rectangle, Color.Blue, (Depth)0f, false);
                     Graphics.DrawString(Change.ToString(_personalIDX), thing.position, Color.Green, (Depth)0.9f, scale: 0.5f);
                 }
             }

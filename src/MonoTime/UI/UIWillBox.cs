@@ -62,7 +62,7 @@ namespace DuckGame
             }
             else
             {
-                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0.0f, 0.3f, 1.1f);
+                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.3f, 1.1f);
                 if (this.down)
                 {
                     this._downWait -= 0.06f;
@@ -103,7 +103,7 @@ namespace DuckGame
                         }
                     }
                     else
-                        Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0.0f, 0.2f);
+                        Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0f, 0.2f);
                     if (!this._wrapped && Input.Pressed("SELECT"))
                     {
                         HUD.CloseAllCorners();
@@ -139,7 +139,7 @@ namespace DuckGame
                 string text3 = "Your little man wanted you to have this.";
                 Vec2 vec2_3 = new Vec2((float)-((double)this._fancyFont.GetWidth(text3) / 2.0), 38f);
                 this._fancyFont.DrawOutline(text3, this.position + vec2_3, Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
-                this._furni.Draw(this.position + new Vec2(0.0f, 10f), this.depth + 4, this._furni.name == "PHOTO" ? 1 : (this._furni.name == "EASEL" ? 6 : 0));
+                this._furni.Draw(this.position + new Vec2(0f, 10f), this.depth + 4, this._furni.name == "PHOTO" ? 1 : (this._furni.name == "EASEL" ? 6 : 0));
             }
             this.y -= this.yOffset;
         }

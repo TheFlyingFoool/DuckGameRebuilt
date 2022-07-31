@@ -24,7 +24,7 @@ namespace DuckGame
             this.depth = -0.5f;
             this.thickness = 4f;
             this.weight = 7f;
-            this.flammable = 0.0f;
+            this.flammable = 0f;
             this.collideSounds.Add("rockHitGround2");
             this.physicsMaterial = PhysicsMaterial.Metal;
             this.buoyancy = 1f;
@@ -34,7 +34,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this.heat = 0.0f;
+            this.heat = 0f;
             base.Update();
         }
 

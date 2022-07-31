@@ -17,7 +17,7 @@ namespace DuckGame
             this.bulletSpeed = 7f;
             this.gravityMultiplier = 2f;
             this.affectedByGravity = true;
-            this.speedVariation = 0.0f;
+            this.speedVariation = 0f;
             this.rebound = true;
             this.softRebound = true;
             this.airFrictionMultiplier = 0.94f;

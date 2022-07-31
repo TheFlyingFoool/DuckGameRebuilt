@@ -179,7 +179,7 @@ namespace DuckGame
             else if (pExtension == "ogg")
             {
                 waveStream = new VorbisWaveReader(pStream);
-                float num = 0.0f;
+                float num = 0f;
                 try
                 {
                     byte[] numArray = new byte[1000];
@@ -201,9 +201,9 @@ namespace DuckGame
                 }
                 catch (Exception)
                 {
-                    num = 0.0f;
+                    num = 0f;
                 }
-                this.replaygainModifier = Math.Max(0.0f, Math.Min(1f, (float)((double)(100f * (float)Math.Pow(10.0, (double)num / 20.0)) / 100.0 * 1.89999997615814)));
+                this.replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((double)(100f * (float)Math.Pow(10.0, (double)num / 20.0)) / 100.0 * 1.89999997615814)));
             }
             if (waveStream == null)
                 return false;

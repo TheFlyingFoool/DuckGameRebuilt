@@ -70,8 +70,8 @@ namespace DuckGame
                 };
             }
             this._size = Lerp.Float(this._size, this.contract ? 1f : (this.expand ? 130f : 42f), 8f);
-            this._alphaMul = Lerp.Float(this._alphaMul, this.contract ? 0.0f : 1f, 0.1f);
-            this._dataAlpha = Lerp.Float(this._dataAlpha, _size <= 126.0 || !this.expand ? 0.0f : 1f, !this.expand ? 1f : 0.2f);
+            this._alphaMul = Lerp.Float(this._alphaMul, this.contract ? 0f : 1f, 0.1f);
+            this._dataAlpha = Lerp.Float(this._dataAlpha, _size <= 126.0 || !this.expand ? 0f : 1f, !this.expand ? 1f : 0.2f);
         }
 
         public string MakeQuestionMarks(string val)
@@ -194,8 +194,8 @@ namespace DuckGame
             if (_dataAlpha <= 0.01f)
                 return;
             float num2 = this._dataAlpha * num1;
-            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
-            DuckGame.Graphics.DrawLine(this.position + new Vec2(0.0f, 64f), this.position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
+            DuckGame.Graphics.DrawLine(this.position + new Vec2(0f, 42f), this.position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
+            DuckGame.Graphics.DrawLine(this.position + new Vec2(0f, 64f), this.position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + (double)num1 * 0.04f));
             this._font.alpha = num2;
             Color color = new Color(245, 165, 36);
             Color c2 = Colors.DGRed;

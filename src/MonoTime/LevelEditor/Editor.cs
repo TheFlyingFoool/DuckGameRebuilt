@@ -432,7 +432,7 @@ namespace DuckGame
                 {
                     if (((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Vertical) && (double)Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0)
                     {
-                        Vec2 vec2 = obj.position - new Vec2((float)((obj.position.x - (double)mirrorMode.position.x) * 2.0), 0.0f);
+                        Vec2 vec2 = obj.position - new Vec2((float)((obj.position.x - (double)mirrorMode.position.x) * 2.0), 0f);
                         Thing thing = Thing.LoadThing(obj.Serialize());
                         thing.position = vec2;
                         thing.flipHorizontal = !obj.flipHorizontal;
@@ -441,7 +441,7 @@ namespace DuckGame
                     }
                     if (((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Horizontal) && (double)Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
                     {
-                        Vec2 vec2 = obj.position - new Vec2(0.0f, (float)((obj.position.y - (double)mirrorMode.position.y) * 2.0));
+                        Vec2 vec2 = obj.position - new Vec2(0f, (float)((obj.position.y - (double)mirrorMode.position.y) * 2.0));
                         Thing thing = Thing.LoadThing(obj.Serialize());
                         thing.position = vec2;
                         this.AddObject(thing);
@@ -480,13 +480,13 @@ namespace DuckGame
             {
                 if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Vertical)
                 {
-                    Thing thing = Level.current.CollisionPoint(obj.position + new Vec2((float)(-(obj.position.x - (double)mirrorMode.position.x) * 2.0), 0.0f), obj.GetType());
+                    Thing thing = Level.current.CollisionPoint(obj.position + new Vec2((float)(-(obj.position.x - (double)mirrorMode.position.x) * 2.0), 0f), obj.GetType());
                     if (thing != null)
                         this.RemoveObject(thing);
                 }
                 if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Horizontal)
                 {
-                    Thing thing = Level.current.CollisionPoint(obj.position + new Vec2(0.0f, (float)(-(obj.position.y - (double)mirrorMode.position.y) * 2.0)), obj.GetType());
+                    Thing thing = Level.current.CollisionPoint(obj.position + new Vec2(0f, (float)(-(obj.position.y - (double)mirrorMode.position.y) * 2.0)), obj.GetType());
                     if (thing != null)
                         this.RemoveObject(thing);
                 }
@@ -662,7 +662,7 @@ namespace DuckGame
                 allowTallAspect = true
             };
             Layer.Add(this._gridLayer);
-            this._procLayer = new Layer("PROC", Layer.Background.depth + 25, new Camera(0.0f, 0.0f, Graphics.width, Graphics.height))
+            this._procLayer = new Layer("PROC", Layer.Background.depth + 25, new Camera(0f, 0f, Graphics.width, Graphics.height))
             {
                 allowTallAspect = true
             };
@@ -672,7 +672,7 @@ namespace DuckGame
             {
                 this._placementType = null;
                 this.CenterView();
-                this._tilePosition = new Vec2(0.0f, 0.0f);
+                this._tilePosition = new Vec2(0f, 0f);
             }
             this._ultimateBounds = Level.current.things.quadTree.rectangle;
             Layer.HUD.camera.InitializeToScreenAspect();
@@ -686,7 +686,7 @@ namespace DuckGame
             }
             if (this._objectMenuLayer == null)
             {
-                this._objectMenuLayer = new Layer("OBJECTMENU", Layer.HUD.depth - 25, new Camera(0.0f, 0.0f, Layer.HUD.camera.width, Layer.HUD.camera.height))
+                this._objectMenuLayer = new Layer("OBJECTMENU", Layer.HUD.depth - 25, new Camera(0f, 0f, Layer.HUD.camera.width, Layer.HUD.camera.height))
                 {
                     allowTallAspect = true
                 };
@@ -771,7 +771,7 @@ namespace DuckGame
         {
             if (this._objectMenu != null)
                 Level.Remove(_objectMenu);
-            this._objectMenu = new PlacementMenu(0.0f, 0.0f);
+            this._objectMenu = new PlacementMenu(0f, 0f);
             Level.Add(_objectMenu);
             this._objectMenu.visible = this._objectMenu.active = false;
         }
@@ -812,26 +812,26 @@ namespace DuckGame
             this._camSize = new Vec2(this.camera.width, this.camera.height);
             this._font = new BitmapFont("biosFont", 8);
             Editor._input = InputProfile.Get(InputProfile.MPPlayer1);
-            this._tilePosition = new Vec2(0.0f, 0.0f);
+            this._tilePosition = new Vec2(0f, 0f);
             this._tilePositionPrev = this._tilePosition;
-            this._objectMenu = new PlacementMenu(0.0f, 0.0f);
+            this._objectMenu = new PlacementMenu(0f, 0f);
             Level.Add(_objectMenu);
             this._objectMenu.visible = this._objectMenu.active = false;
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_chance", increment: 0.05f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/dieBlock", 16, 16), "CHANCE - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridBottomLeft));
-            Level.Add(new TileButton(0.0f, 16f, new FieldBinding(this, "_maxPerLevel", -1f, 8f, 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/numBlock", 16, 16), "MAX IN LEVEL - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridBottomLeft));
-            Level.Add(new TileButton(-16f, 0.0f, new FieldBinding(this, "_enableSingle"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/singleplayerBlock", 16, 16), "AVAILABLE IN SINGLE PLAYER - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_enableMulti"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/multiplayerBlock", 16, 16), "AVAILABLE IN MULTI PLAYER - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_chance", increment: 0.05f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/dieBlock", 16, 16), "CHANCE - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridBottomLeft));
+            Level.Add(new TileButton(0f, 16f, new FieldBinding(this, "_maxPerLevel", -1f, 8f, 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/numBlock", 16, 16), "MAX IN LEVEL - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridBottomLeft));
+            Level.Add(new TileButton(-16f, 0f, new FieldBinding(this, "_enableSingle"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/singleplayerBlock", 16, 16), "AVAILABLE IN SINGLE PLAYER - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_enableMulti"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/multiplayerBlock", 16, 16), "AVAILABLE IN MULTI PLAYER - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
             Level.Add(new TileButton(-16f, 16f, new FieldBinding(this, "_canMirror"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/canMirror", 16, 16), "TILE CAN BE MIRRORED - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
-            Level.Add(new TileButton(0.0f, 16f, new FieldBinding(this, "_isMirrored"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/isMirrored", 16, 16), "PRE MIRRORED TILE - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
-            Level.Add(new TileButton(0.0f, 32f, new FieldBinding(this, "editingOpenAirVariation"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/openAir", 16, 16), "OPEN AIR VARIATION - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_pathEast"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS EAST - @SELECT@TOGGLE", TileButtonAlign.TileGridRight, 90f));
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_pathWest"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS WEST - @SELECT@TOGGLE", TileButtonAlign.TileGridLeft, -90f));
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_pathNorth"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS NORTH - @SELECT@TOGGLE", TileButtonAlign.TileGridTop));
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_pathSouth"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS SOUTH - @SELECT@TOGGLE", TileButtonAlign.TileGridBottom, 180f));
-            Level.Add(new TileButton(16f, 0.0f, new FieldBinding(this, "_genTilePos", max: 6f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/moveBlock", 16, 16), "MOVE GEN - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
-            Level.Add(new TileButton(32f, 0.0f, new FieldBinding(this, "_editTilePos", max: 6f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/editBlock", 16, 16), "MOVE GEN - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
-            Level.Add(new TileButton(48f, 0.0f, new FieldBinding(this, "generatorComplexity", max: 9f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/dieBlockRed", 16, 16), "NUM TILES - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
-            Level.Add(new TileButton(0.0f, 0.0f, new FieldBinding(this, "_doGen"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/regenBlock", 16, 16), "REGENERATE - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopRight));
+            Level.Add(new TileButton(0f, 16f, new FieldBinding(this, "_isMirrored"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/isMirrored", 16, 16), "PRE MIRRORED TILE - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
+            Level.Add(new TileButton(0f, 32f, new FieldBinding(this, "editingOpenAirVariation"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/openAir", 16, 16), "OPEN AIR VARIATION - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_pathEast"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS EAST - @SELECT@TOGGLE", TileButtonAlign.TileGridRight, 90f));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_pathWest"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS WEST - @SELECT@TOGGLE", TileButtonAlign.TileGridLeft, -90f));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_pathNorth"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS NORTH - @SELECT@TOGGLE", TileButtonAlign.TileGridTop));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_pathSouth"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/sideArrow", 32, 16), "CONNECTS SOUTH - @SELECT@TOGGLE", TileButtonAlign.TileGridBottom, 180f));
+            Level.Add(new TileButton(16f, 0f, new FieldBinding(this, "_genTilePos", max: 6f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/moveBlock", 16, 16), "MOVE GEN - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
+            Level.Add(new TileButton(32f, 0f, new FieldBinding(this, "_editTilePos", max: 6f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/editBlock", 16, 16), "MOVE GEN - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
+            Level.Add(new TileButton(48f, 0f, new FieldBinding(this, "generatorComplexity", max: 9f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/dieBlockRed", 16, 16), "NUM TILES - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
+            Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_doGen"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/regenBlock", 16, 16), "REGENERATE - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopRight));
             this._notify = new NotifyDialogue();
             Level.Add(_notify);
             Vec2 vec2_1 = new Vec2(12f, 12f);
@@ -906,7 +906,7 @@ namespace DuckGame
                         y = -(Editor._procTilesHigh - (Editor._procTilesHigh - Editor._procYPos)) * num2 - 16
                     };
                 case TileButtonAlign.TileGridTopLeft:
-                    return new Vec2() { x = 0.0f, y = -16f };
+                    return new Vec2() { x = 0f, y = -16f };
                 case TileButtonAlign.TileGridTopRight:
                     int num3 = 192;
                     return new Vec2()
@@ -916,7 +916,7 @@ namespace DuckGame
                     };
                 case TileButtonAlign.TileGridBottomLeft:
                     int num4 = 144;
-                    return new Vec2() { x = 0.0f, y = num4 };
+                    return new Vec2() { x = 0f, y = num4 };
                 case TileButtonAlign.TileGridBottomRight:
                     int num5 = 144;
                     int num6 = 192;
@@ -1049,13 +1049,13 @@ namespace DuckGame
         {
             if (this._placementType is ItemSpawner)
                 (this._placementType as ItemSpawner)._seated = false;
-            if ((this._placementType.hugWalls & WallHug.Right) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(16f, 0.0f), this._placementType) is Thing thing1 && thing1.GetType() != this._placementType.GetType())
+            if ((this._placementType.hugWalls & WallHug.Right) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(16f, 0f), this._placementType) is Thing thing1 && thing1.GetType() != this._placementType.GetType())
                 this._tilePosition.x = thing1.left - this._placementType.collisionSize.x - this._placementType.collisionOffset.x;
-            if ((this._placementType.hugWalls & WallHug.Left) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(-16f, 0.0f), this._placementType) is Thing thing2 && thing2.GetType() != this._placementType.GetType())
+            if ((this._placementType.hugWalls & WallHug.Left) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(-16f, 0f), this._placementType) is Thing thing2 && thing2.GetType() != this._placementType.GetType())
                 this._tilePosition.x = thing2.right - this._placementType.collisionOffset.x;
-            if ((this._placementType.hugWalls & WallHug.Ceiling) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(0.0f, -16f), this._placementType) is Thing thing3 && thing3.GetType() != this._placementType.GetType())
+            if ((this._placementType.hugWalls & WallHug.Ceiling) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(0f, -16f), this._placementType) is Thing thing3 && thing3.GetType() != this._placementType.GetType())
                 this._tilePosition.y = thing3.bottom - this._placementType.collisionOffset.y;
-            if ((this._placementType.hugWalls & WallHug.Floor) == WallHug.None || !(this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(0.0f, 16f), this._placementType) is Thing thing4) || !(thing4.GetType() != this._placementType.GetType()))
+            if ((this._placementType.hugWalls & WallHug.Floor) == WallHug.None || !(this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(0f, 16f), this._placementType) is Thing thing4) || !(thing4.GetType() != this._placementType.GetType()))
                 return;
             this._tilePosition.y = thing4.top - this._placementType.collisionSize.y - this._placementType.collisionOffset.y;
             if (!(this._placementType is ItemSpawner))
@@ -1464,7 +1464,7 @@ namespace DuckGame
                                         };
                                         Level.core.currentLevel = level;
                                         RandomLevelNode.editorLoad = true;
-                                        int num4 = this._currentMapNode.LoadParts(0.0f, 0.0f, level, this._procSeed) ? 1 : 0;
+                                        int num4 = this._currentMapNode.LoadParts(0f, 0f, level, this._procSeed) ? 1 : 0;
                                         RandomLevelNode.editorLoad = false;
                                         if (num4 == 0 && num3 <= 100)
                                             ++num3;
@@ -1859,7 +1859,7 @@ namespace DuckGame
                                             }
                                         }
                                     }
-                                    float num5 = 0.0f;
+                                    float num5 = 0f;
                                     if (Editor.inputMode == EditorInput.Mouse)
                                         num5 = Mouse.scroll;
                                     else if (Editor.inputMode == EditorInput.Touch && this._twoFingerGesture && this._twoFingerZooming)
@@ -1909,7 +1909,7 @@ namespace DuckGame
                                         this.camera.height = this.camera.width / Resolution.current.aspect;
                                         Vec2 position = this.camera.position;
                                         Vec3 translation;
-                                        (Matrix.CreateTranslation(new Vec3(position.x, position.y, 0.0f)) * Matrix.CreateTranslation(new Vec3(-vec2_3.x, -vec2_3.y, 0.0f)) * Matrix.CreateScale(this.camera.width / vec2_2.x, this.camera.height / vec2_2.y, 1f) * Matrix.CreateTranslation(new Vec3(vec2_3.x, vec2_3.y, 0.0f))).Decompose(out Vec3 _, out Quaternion _, out translation);
+                                        (Matrix.CreateTranslation(new Vec3(position.x, position.y, 0f)) * Matrix.CreateTranslation(new Vec3(-vec2_3.x, -vec2_3.y, 0f)) * Matrix.CreateScale(this.camera.width / vec2_2.x, this.camera.height / vec2_2.y, 1f) * Matrix.CreateTranslation(new Vec3(vec2_3.x, vec2_3.y, 0f))).Decompose(out Vec3 _, out Quaternion _, out translation);
                                         this.camera.position = new Vec2(translation.x, translation.y);
                                     }
                                     Editor.didUIScroll = false;
@@ -2525,7 +2525,7 @@ namespace DuckGame
                     {
                         foreach (Thing thing in this._pasteBatch)
                         {
-                            thing.SetTranslation(new Vec2((float)(-(double)(thing.position.x - vec2.x) * 2.0), 0.0f));
+                            thing.SetTranslation(new Vec2((float)(-(double)(thing.position.x - vec2.x) * 2.0), 0f));
                             thing.EditorFlip(false);
                             thing.flipHorizontal = !thing.flipHorizontal;
                         }
@@ -2539,7 +2539,7 @@ namespace DuckGame
                             float dif = t.position.x - vec2.x;
                             History.Add(() =>
                            {
-                               t.SetTranslation(new Vec2((float)(-(double)dif * 2.0), 0.0f));
+                               t.SetTranslation(new Vec2((float)(-(double)dif * 2.0), 0f));
                                t.EditorFlip(false);
                                t.flipHorizontal = !t.flipHorizontal;
                                if (!(t is IDontMove))
@@ -2548,7 +2548,7 @@ namespace DuckGame
                                Level.current.things.quadTree.Add(t);
                            }, () =>
              {
-                 t.SetTranslation(new Vec2(dif * 2f, 0.0f));
+                 t.SetTranslation(new Vec2(dif * 2f, 0f));
                  t.EditorFlip(false);
                  t.flipHorizontal = !t.flipHorizontal;
                  if (!(t is IDontMove))
@@ -2632,7 +2632,7 @@ namespace DuckGame
                         this._currentDragSelectionHover.Clear();
                         this.UpdateSelection(false);
                     }
-                    Vec2 offset = new Vec2(0.0f, 0.0f);
+                    Vec2 offset = new Vec2(0f, 0f);
                     if (Keyboard.Pressed(Keys.Up))
                         offset.y -= this.cellSize;
                     if (Keyboard.Pressed(Keys.Down))
@@ -2785,7 +2785,7 @@ namespace DuckGame
                     thing.DoEditorRender();
             }
             if (layer == this._procLayer && this._procTarget != null && this._procContext != null)
-                DuckGame.Graphics.Draw(_procTarget, new Vec2(0.0f, 0.0f), new Rectangle?(), Color.White * 0.5f, 0.0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None);
+                DuckGame.Graphics.Draw(_procTarget, new Vec2(0f, 0f), new Rectangle?(), Color.White * 0.5f, 0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None);
             if (layer == this._gridLayer)
             {
                 this.backgroundColor = new Color(20, 20, 20);
@@ -2800,7 +2800,7 @@ namespace DuckGame
                     float y = (float)(-(double)this._cellSize / 2.0);
                     if (_sizeRestriction.x > 0.0)
                     {
-                        Vec2 vec2 = -new Vec2((float)(_gridW * (double)this._cellSize / 2.0), (float)((this._gridH - 1) * (double)this._cellSize / 2.0)) + new Vec2(8f, 0.0f);
+                        Vec2 vec2 = -new Vec2((float)(_gridW * (double)this._cellSize / 2.0), (float)((this._gridH - 1) * (double)this._cellSize / 2.0)) + new Vec2(8f, 0f);
                         x += (int)(vec2.x / (double)this._cellSize) * this._cellSize;
                         y += (int)(vec2.y / (double)this._cellSize) * this._cellSize;
                     }
@@ -2945,10 +2945,10 @@ namespace DuckGame
                     }
                     if (DevConsole.wagnusDebug)
                     {
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(128f, 0.0f), Color.White * 0.5f);
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(sbyte.MinValue, 0.0f), Color.White * 0.5f);
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(0.0f, 128f), Color.White * 0.5f);
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(0.0f, sbyte.MinValue), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(128f, 0f), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(sbyte.MinValue, 0f), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(0f, 128f), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(0f, sbyte.MinValue), Color.White * 0.5f);
                     }
                     if ((this._hover == null || this._cursorMode == CursorMode.DragHover || this._cursorMode == CursorMode.Drag) && Editor.inputMode == EditorInput.Gamepad)
                     {
@@ -3003,11 +3003,11 @@ namespace DuckGame
                     if (this._activeTouchButton != null || this._fileDialog.opened)
                     {
                         if (this._activeTouchButton != null)
-                            DuckGame.Graphics.DrawString(this._activeTouchButton.explanation, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(this._activeTouchButton.explanation) + (this._cancelButton.size.x + 4f), 0.0f), Color.Gray, (Depth)0.99f);
+                            DuckGame.Graphics.DrawString(this._activeTouchButton.explanation, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(this._activeTouchButton.explanation) + (this._cancelButton.size.x + 4f), 0f), Color.Gray, (Depth)0.99f);
                         else if (this._fileDialog.opened)
                         {
                             string text = "Double tap level to open!";
-                            DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (this._cancelButton.size.x + 4f), 0.0f), Color.Gray, (Depth)0.99f);
+                            DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (this._cancelButton.size.x + 4f), 0f), Color.Gray, (Depth)0.99f);
                         }
                         DuckGame.Graphics.DrawRect(this._cancelButton.position, this._cancelButton.position + this._cancelButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
                         DuckGame.Graphics.DrawRect(this._cancelButton.position, this._cancelButton.position + this._cancelButton.size, new Color(30, 30, 30), (Depth)0.98f);
@@ -3015,7 +3015,7 @@ namespace DuckGame
                     }
                     else if (!this._fileDialog.opened)
                     {
-                        float num = 0.0f;
+                        float num = 0f;
                         foreach (Editor.EditorTouchButton touchButton in this._touchButtons)
                         {
                             DuckGame.Graphics.DrawRect(touchButton.position, touchButton.position + touchButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
@@ -3026,7 +3026,7 @@ namespace DuckGame
                         if (this._placementMenu != null && this._placementMenu is EditorGroupMenu)
                         {
                             string text = "Double tap to select!";
-                            DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (num + 8f), 0.0f), Color.Gray, (Depth)0.99f);
+                            DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (num + 8f), 0f), Color.Gray, (Depth)0.99f);
                         }
                     }
                     if (this._placingTiles && this._placementMenu == null)
@@ -3131,7 +3131,7 @@ namespace DuckGame
                         this._font.Draw(text1, vec2.x, vec2.y, Color.White, (Depth)0.7f, Editor._input);
                     }
                     this._font.scale = new Vec2(0.5f, 0.5f);
-                    float num22 = 0.0f;
+                    float num22 = 0f;
                     if (Editor.placementLimit > 0)
                     {
                         num22 -= 16f;
@@ -3179,11 +3179,11 @@ namespace DuckGame
                                 }
                                 position.y -= 20f;
                             }
-                            DuckGame.Graphics.DrawRect(position + new Vec2(0.0f, 16f), new Vec2(position.x + num23, layer.height - 28f), new Color(30, 30, 30), (Depth)0.91f);
+                            DuckGame.Graphics.DrawRect(position + new Vec2(0f, 16f), new Vec2(position.x + num23, layer.height - 28f), new Color(30, 30, 30), (Depth)0.91f);
                         }
                         DuckGame.Graphics.DrawRect(new Vec2(8f, layer.height - 26f), new Vec2(300f, layer.height - 6f), new Color(30, 30, 30), (Depth)0.91f);
                     }
-                    float num24 = 0.0f;
+                    float num24 = 0f;
                     if (this._placementType != null && this._cursorMode == CursorMode.Normal && this._placementMenu == null)
                     {
                         Vec2 vec2 = new Vec2(this._placementType.width, this._placementType.height);
@@ -3201,8 +3201,8 @@ namespace DuckGame
                         if (str9 != "")
                             this._font.Draw(str9, (float)(p1.x + (double)vec2.x + 4.0), p1.y + 4f, Color.White, (Depth)0.7f);
                         else
-                            x1 = 0.0f;
-                        DuckGame.Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x1, 0.0f), Color.Black * 0.5f, (Depth)0.6f);
+                            x1 = 0f;
+                        DuckGame.Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x1, 0f), Color.Black * 0.5f, (Depth)0.6f);
                         Editor.editorDraw = true;
                         this._placementType.left = p1.x + (float)(vec2.x / 2.0 - (double)this._placementType.w / 2.0);
                         this._placementType.top = p1.y + (float)(vec2.y / 2.0 - (double)this._placementType.h / 2.0);
@@ -3232,8 +3232,8 @@ namespace DuckGame
                         if (str10 != "")
                             this._font.Draw(str10, (float)(p1.x + (double)vec2.x + 4.0), p1.y + 4f, Color.White, (Depth)0.7f);
                         else
-                            x2 = 0.0f;
-                        DuckGame.Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x2, 0.0f), Color.Black * 0.5f, (Depth)0.6f);
+                            x2 = 0f;
+                        DuckGame.Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x2, 0f), Color.Black * 0.5f, (Depth)0.6f);
                         Vec2 position = thing.position;
                         Depth depth = thing.depth;
                         Editor.editorDraw = true;
@@ -3292,8 +3292,8 @@ namespace DuckGame
                     return;
                 if (TouchScreen.GetTouches().Count == 0)
                 {
-                    Vec2 pos1 = this._objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole + new Vec2(TouchScreen._spoofFingerDistance, 0.0f));
-                    Vec2 pos2 = this._objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole - new Vec2(TouchScreen._spoofFingerDistance, 0.0f));
+                    Vec2 pos1 = this._objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole + new Vec2(TouchScreen._spoofFingerDistance, 0f));
+                    Vec2 pos2 = this._objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole - new Vec2(TouchScreen._spoofFingerDistance, 0f));
                     DuckGame.Graphics.DrawCircle(pos1, 4f, Color.White * 0.2f, 2f, (Depth)1f);
                     DuckGame.Graphics.DrawCircle(pos2, 4f, Color.White * 0.2f, 2f, (Depth)1f);
                     DuckGame.Graphics.DrawRect(pos1 + new Vec2(-0.5f, -0.5f), pos1 + new Vec2(0.5f, 0.5f), Color.White, (Depth)1f);

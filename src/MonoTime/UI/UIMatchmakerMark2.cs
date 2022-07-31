@@ -381,10 +381,10 @@ namespace DuckGame
             Graphics.Draw(this._window, this.x, this.y);
             this._scroll += 0.06f;
             if (_scroll > 9.0)
-                this._scroll = 0.0f;
+                this._scroll = 0f;
             this._dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0.0f;
+                this._dots = 0f;
             if (this._state == UIMatchmakerMark2.State.Idle || this._state == UIMatchmakerMark2.State.Failed)
             {
                 this._signalCrossLocal.SetAnimation("idle");

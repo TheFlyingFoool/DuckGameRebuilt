@@ -27,9 +27,9 @@ namespace DuckGame
         private readonly EffectParameter _matrixTransformSprite;
         private readonly EffectParameter _matrixTransformSimple;
         private Matrix _matrix;
-        private Rectangle _tempRect = new Rectangle(0.0f, 0.0f, 0.0f, 0.0f);
-        private Vec2 _texCoordTL = new Vec2(0.0f, 0.0f);
-        private Vec2 _texCoordBR = new Vec2(0.0f, 0.0f);
+        private Rectangle _tempRect = new Rectangle(0f, 0f, 0f, 0f);
+        private Vec2 _texCoordTL = new Vec2(0f, 0f);
+        private Vec2 _texCoordBR = new Vec2(0f, 0f);
         private Matrix _projMatrix;
         public Matrix fullMatrix;
         public static float edgeBias = 1E-05f;
@@ -163,7 +163,7 @@ namespace DuckGame
             graphicsDevice.RasterizerState = this._rasterizerState;
             graphicsDevice.SamplerStates[0] = this._samplerState;
             Viewport viewport = graphicsDevice.Viewport;
-            Matrix.CreateOrthographicOffCenter(0.0f, viewport.Width, viewport.Height, 0.0f, 1f, -1f, out this._projMatrix);
+            Matrix.CreateOrthographicOffCenter(0f, viewport.Width, viewport.Height, 0f, 1f, -1f, out this._projMatrix);
             if (!Program.isLinux)
             {
                 this._projMatrix.M41 += -0.5f * this._projMatrix.M11;
@@ -260,11 +260,11 @@ namespace DuckGame
           Rectangle? drawRectangle = null,
           Rectangle? sourceRectangle = null,
           Vec2? origin = null,
-          float rotation = 0.0f,
+          float rotation = 0f,
           Vec2? scale = null,
           Color? color = null,
           SpriteEffects effect = SpriteEffects.None,
-          float depth = 0.0f)
+          float depth = 0f)
         {
             if (!color.HasValue)
                 color = new Color?(Color.White);
@@ -405,8 +405,8 @@ namespace DuckGame
             }
             else
             {
-                this._tempRect.x = 0.0f;
-                this._tempRect.y = 0.0f;
+                this._tempRect.x = 0f;
+                this._tempRect.y = 0f;
                 this._tempRect.width = texture.width;
                 this._tempRect.height = texture.height;
             }
@@ -491,7 +491,7 @@ namespace DuckGame
                 this._texCoordTL.x = x;
             }
             Vec2 vec2 = frame.bottomRight.Rotate(-frame.rotation, frame.topLeft);
-            batchItem.Set(frame.topLeft.x, frame.topLeft.y, 0.0f, 0.0f, vec2.x - frame.topLeft.x, vec2.y - frame.topLeft.y, (float)Math.Sin(frame.rotation), (float)Math.Cos(frame.rotation), frame.color, this._texCoordTL, this._texCoordBR);
+            batchItem.Set(frame.topLeft.x, frame.topLeft.y, 0f, 0f, vec2.x - frame.topLeft.x, vec2.y - frame.topLeft.y, (float)Math.Sin(frame.rotation), (float)Math.Cos(frame.rotation), frame.color, this._texCoordTL, this._texCoordBR);
         }
 
         public void Flush(bool doSetup)
@@ -529,7 +529,7 @@ namespace DuckGame
             this._batcher.DrawBatch(this._sortMode);
         }
 
-        public void Draw(Tex2D texture, Vec2 position, Rectangle? sourceRectangle, Color color) => this.Draw(texture, position, sourceRectangle, color, 0.0f, Vec2.Zero, 1f, SpriteEffects.None, 0.0f);
+        public void Draw(Tex2D texture, Vec2 position, Rectangle? sourceRectangle, Color color) => this.Draw(texture, position, sourceRectangle, color, 0f, Vec2.Zero, 1f, SpriteEffects.None, 0f);
 
         public void Draw(
           Tex2D texture,
@@ -537,7 +537,7 @@ namespace DuckGame
           Rectangle? sourceRectangle,
           Color color)
         {
-            this.Draw(texture, destinationRectangle, sourceRectangle, color, 0.0f, Vec2.Zero, SpriteEffects.None, 0.0f);
+            this.Draw(texture, destinationRectangle, sourceRectangle, color, 0f, Vec2.Zero, SpriteEffects.None, 0f);
         }
 
         public void Draw(Tex2D texture, Vec2 position, Color color) => this.Draw(texture, position, new Rectangle?(), color);

@@ -40,7 +40,7 @@ namespace DuckGame
                 return;
             this.backgroundColor = new Color(0, 0, 0);
             Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/underground", 0.0f, 0.0f, 5);
+            this._parallax = new ParallaxBackground("background/underground", 0f, 0f, 5);
             float speed = 0.9f * this._speedMult;
             this._parallax.AddZone(11, 1f, speed);
             this._parallax.AddZone(12, 1f, speed);
@@ -63,7 +63,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            int num1 = (int)Vec2.Transform(new Vec2(0.0f, 10f), Level.current.camera.getMatrix()).y;
+            int num1 = (int)Vec2.Transform(new Vec2(0f, 10f), Level.current.camera.getMatrix()).y;
             if (num1 < 0)
                 num1 = 0;
             if (num1 > Resolution.current.y)
@@ -71,12 +71,12 @@ namespace DuckGame
             float num2 = Resolution.current.y / (float)Graphics.height;
             Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
             this._undergroundRocks.scissor = new Rectangle((int)wallScissor.x, num1 * num2, (int)wallScissor.y, Resolution.current.y - num1);
-            int height = (int)(Vec2.Transform(new Vec2(0.0f, -10f), Level.current.camera.getMatrix()).y * (double)num2);
+            int height = (int)(Vec2.Transform(new Vec2(0f, -10f), Level.current.camera.getMatrix()).y * (double)num2);
             if (height < 0)
                 height = 0;
             if (height > (double)Resolution.size.y)
                 height = (int)Resolution.size.y;
-            this._skyline.scissor = new Rectangle((int)wallScissor.x, 0.0f, (int)wallScissor.y, height);
+            this._skyline.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, height);
             base.Update();
         }
 

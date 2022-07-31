@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public static float kDepthSpanMax = 0.01f;
         public static float kSpanIncrement = 0.0001f;
-        private static float _currentSpan = 0.0f;
+        private static float _currentSpan = 0f;
         public float value;
         public float span;
 
-        public static void ResetSpan() => Depth._currentSpan = 0.0f;
+        public static void ResetSpan() => Depth._currentSpan = 0f;
 
         public Depth(float val)
         {

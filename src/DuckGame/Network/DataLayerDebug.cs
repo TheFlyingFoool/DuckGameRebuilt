@@ -88,7 +88,7 @@ namespace DuckGame
 
             public float CalculateLatency()
             {
-                float num = 0.0f;
+                float num = 0f;
                 if (this.CalculateLoss())
                 {
                     if (Rando.Int(3) != 0)

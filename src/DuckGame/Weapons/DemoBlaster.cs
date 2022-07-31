@@ -37,7 +37,7 @@ namespace DuckGame
             this._bio = "";
             this._editorName = "Demo Blaster";
             this.physicsMaterial = PhysicsMaterial.Metal;
-            this._stream = new FluidStream(this.x, this.y, new Vec2(1f, 0.0f), 1f);
+            this._stream = new FluidStream(this.x, this.y, new Vec2(1f, 0f), 1f);
             this.isFatal = false;
         }
 
@@ -47,7 +47,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._sound.lerpVolume = this._triggerHeld ? 1f : 0.0f;
+            this._sound.lerpVolume = this._triggerHeld ? 1f : 0f;
             base.Update();
         }
 

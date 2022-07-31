@@ -25,7 +25,7 @@ namespace DuckGame
         {
             this.layer = Layer.HUD;
             this.graphic.CenterOrigin();
-            this.center = new Vec2(this.graphic.w / 2, 0.0f);
+            this.center = new Vec2(this.graphic.w / 2, 0f);
             this._chair = new Sprite("hostChair");
             this._beverage = new SpriteMap("beverages", 16, 18);
             this._chair.CenterOrigin();
@@ -62,7 +62,7 @@ namespace DuckGame
                     if (data.duck == null)
                     {
                         InputProfile inputProfile = spectator.inputProfile;
-                        data.duck = new Duck(100f, 0.0f, spectator)
+                        data.duck = new Duck(100f, 0f, spectator)
                         {
                             enablePhysics = false
                         };
@@ -84,10 +84,10 @@ namespace DuckGame
                     else if (!flag && data.quack)
                         data.ai.Release("QUACK");
                     data.ai.virtualDevice.rightStick = spectator.netData.Get<Vec2>("spectatorTongue", Vec2.Zero);
-                    data.ai.virtualDevice.leftTrigger = spectator.netData.Get<float>("quackPitch", 0.0f);
+                    data.ai.virtualDevice.leftTrigger = spectator.netData.Get<float>("quackPitch", 0f);
                     if (spectator.team.hasHat && data.duck.hat == null)
                     {
-                        TeamHat e = new TeamHat(0.0f, 0.0f, spectator.team);
+                        TeamHat e = new TeamHat(0f, 0f, spectator.team);
                         Level.Add(e);
                         data.duck.Equip(e, false);
                     }

@@ -94,7 +94,7 @@ namespace DuckGame
                             this.currentPitch = -1;
                         this.rightPressed = false;
                     }
-                    this.notePitch = this.currentPitch < 0 || this._raised ? 0.0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
+                    this.notePitch = this.currentPitch < 0 || this._raised ? 0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
                 }
                 if (notePitch != (double)this.prevNotePitch)
                 {
@@ -129,8 +129,8 @@ namespace DuckGame
                 {
                     this.collisionOffset = new Vec2(4f, -4f);
                     this.collisionSize = new Vec2(8f, 8f);
-                    this._holdOffset = new Vec2(0.0f, 0.0f);
-                    this.handOffset = new Vec2(0.0f, 0.0f);
+                    this._holdOffset = new Vec2(0f, 0f);
+                    this.handOffset = new Vec2(0f, 0f);
                     this.OnReleaseAction();
                 }
                 else
@@ -174,7 +174,7 @@ namespace DuckGame
                 fingerPositionSprite.frame = this.currentPitch + 1;
                 fingerPositionSprite.depth = this.depth - 100;
                 fingerPositionSprite.flipH = this.offDir <= 0;
-                fingerPositionSprite.angle = 0.0f;
+                fingerPositionSprite.angle = 0f;
                 Vec2 vec2 = this.Offset(new Vec2(-8f, -2f));
                 Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
             }

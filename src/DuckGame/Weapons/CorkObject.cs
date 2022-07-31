@@ -24,10 +24,10 @@ namespace DuckGame
             this._gun = pOwner;
             this.weight = 0.1f;
             this.bouncy = 0.5f;
-            this.airFrictionMult = 0.0f;
+            this.airFrictionMult = 0f;
             this._ropeSprite = new Sprite("grappleWire")
             {
-                center = new Vec2(8f, 0.0f)
+                center = new Vec2(8f, 0f)
             };
         }
 
@@ -77,7 +77,7 @@ namespace DuckGame
             if (this._rope != null)
             {
                 if (!this.grounded)
-                    this.specialFrictionMod = 0.0f;
+                    this.specialFrictionMod = 0f;
                 else
                     this.specialFrictionMod = 1f;
                 this._rope.position = this.position;
@@ -102,10 +102,10 @@ namespace DuckGame
                     {
                         this.hSpeed = vec2_2.x - this.position.x;
                         this.vSpeed = vec2_2.y - this.position.y;
-                        this.gravMultiplier = 0.0f;
+                        this.gravMultiplier = 0f;
                         float specialFrictionMod = this.specialFrictionMod;
-                        this.specialFrictionMod = 0.0f;
-                        this.airFrictionMult = 0.0f;
+                        this.specialFrictionMod = 0f;
+                        this.airFrictionMult = 0f;
                         Vec2 lastPosition = this.lastPosition;
                         this.UpdatePhysics();
                         this.gravMultiplier = 1f;

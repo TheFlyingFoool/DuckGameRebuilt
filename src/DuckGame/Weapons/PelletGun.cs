@@ -48,7 +48,7 @@ namespace DuckGame
             this._spring = new Sprite("dandiSpring");
             this._barrelOffsetTL = new Vec2(30f, 2f);
             this._fireSound = "pelletgun";
-            this._kickForce = 0.0f;
+            this._kickForce = 0f;
             this._manualLoad = true;
             this._holdOffset = new Vec2(-2f, -1f);
             this.editorTooltip = "Careful with that thing, you'll lose an eye!";
@@ -68,7 +68,7 @@ namespace DuckGame
                 this._fireSound = "pelletgunBad";
                 if (!(this.ammoType is ATFailedPellet))
                     this._ammoType = new ATFailedPellet();
-                this.springVel += (this.Offset(new Vec2(0.0f, -8f)) - this.springPos) * 0.15f;
+                this.springVel += (this.Offset(new Vec2(0f, -8f)) - this.springPos) * 0.15f;
                 this.springVel *= 0.9f;
                 this.springPos += this.springVel;
             }
@@ -77,7 +77,7 @@ namespace DuckGame
             ++this._aimWait;
             if (this._aimWait > 0)
             {
-                this._aimAngle = Lerp.Float(this._aimAngle, this._rising ? 0.4f : 0.0f, 0.05f);
+                this._aimAngle = Lerp.Float(this._aimAngle, this._rising ? 0.4f : 0f, 0.05f);
                 this._aimWait = 0;
             }
             if (this._rising && _aimAngle > 0.345f)
@@ -162,7 +162,7 @@ namespace DuckGame
                     {
                         this._loadState = -1;
                         this.loaded = true;
-                        this._angleOffset = 0.0f;
+                        this._angleOffset = 0f;
                         if (Network.isActive)
                         {
                             if (this.isServerForObject)

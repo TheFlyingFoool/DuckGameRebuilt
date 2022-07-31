@@ -31,7 +31,7 @@ namespace DuckGame
                 this.controlString = "@WASD@ADJUST @SELECT@APPLY";
             else
                 this.controlString = "@WASD@ADJUST @SELECT@APPLY @MENU2@ALL";
-            UIDivider component1 = new UIDivider(true, 0.0f);
+            UIDivider component1 = new UIDivider(true, 0f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left

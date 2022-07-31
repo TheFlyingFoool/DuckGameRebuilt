@@ -163,7 +163,7 @@ namespace DuckGame
                 this._layerScroll -= 0.1f;
                 if (_layerScroll > -1.0)
                     return;
-                this._layerScroll = 0.0f;
+                this._layerScroll = 0f;
                 --this._topLayer;
             }
             else
@@ -173,7 +173,7 @@ namespace DuckGame
                 this._layerScroll += 0.1f;
                 if (_layerScroll < 1.0)
                     return;
-                this._layerScroll = 0.0f;
+                this._layerScroll = 0f;
                 ++this._topLayer;
             }
         }
@@ -192,7 +192,7 @@ namespace DuckGame
             if (layer < 0)
                 layer = 0;
             List<UnlockData> treeLayer = Unlocks.GetTreeLayer(layer);
-            float num3 = 0.0f;
+            float num3 = 0f;
             if (layer < this._topLayer)
                 num3 += (this._topLayer - layer) * 60f;
             Vec2 vec2_1 = new Vec2(50f, (float)(45.0 - _layerScroll * 67.0) - num3);
@@ -263,7 +263,7 @@ namespace DuckGame
                             color2 = new Color((byte)(color2.r * (double)num7), (byte)(color2.g * (double)num7), (byte)(color2.b * (double)num7));
                             float num8 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index2 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index2 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
                             p1 = new Vec2(vec2_1.x + num8, vec2_1.y + num4 * 60);
-                            Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 30f), color2 * this.alpha, 6f, -0.2f);
+                            Graphics.DrawLine(p1, p1 + new Vec2(0f, 30f), color2 * this.alpha, 6f, -0.2f);
                             Color color3 = new Color(50, 50, 50);
                             if (!unlockData2.ProfileUnlocked(Profiles.active[0]))
                             {
@@ -281,12 +281,12 @@ namespace DuckGame
                                 {
                                     float num9 = collection.Count != 1 ? (collection.Count != 2 ? index3 * (vec2_2.x / (collection.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index3 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
                                     Vec2 vec2_3 = new Vec2(vec2_1.x + num9, vec2_1.y + (num4 + 1) * 60);
-                                    float num10 = 0.0f;
+                                    float num10 = 0f;
                                     if (vec2_3.x < (double)p1.x)
                                         num10 = -3f;
                                     else if (vec2_3.x > (double)p1.x)
                                         num10 = 3f;
-                                    float num11 = 0.0f;
+                                    float num11 = 0f;
                                     if (vec2_3.x < (double)p1.x)
                                         num11 = 3f;
                                     else if (vec2_3.x > (double)p1.x)

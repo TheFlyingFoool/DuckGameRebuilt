@@ -36,7 +36,7 @@ namespace DuckGame
         }
 
         [Conditional("DEBUG")]
-        public static void DrawRect(Vec2 p1, Vec2 p2, Color col) => DuckGame.Graphics.Draw((Tex2D)Debug._blank, p1, new Rectangle?(), col, 0.0f, Vec2.Zero, new Vec2((float)-(p1.x - (double)p2.x), (float)-(p1.y - (double)p2.y)), SpriteEffects.None, (Depth)1f);
+        public static void DrawRect(Vec2 p1, Vec2 p2, Color col) => DuckGame.Graphics.Draw((Tex2D)Debug._blank, p1, new Rectangle?(), col, 0f, Vec2.Zero, new Vec2((float)-(p1.x - (double)p2.x), (float)-(p1.y - (double)p2.y)), SpriteEffects.None, (Depth)1f);
 
         [Conditional("DEBUG")]
         [Conditional("SWITCH")]

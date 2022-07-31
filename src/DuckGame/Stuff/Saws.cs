@@ -29,7 +29,7 @@ namespace DuckGame
             this.editorTooltip = "Deadly hazards, able to cut through even the strongest of boots";
             this.thickness = 3f;
             this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorOffset = new Vec2(0.0f, 6f);
+            this.editorOffset = new Vec2(0f, 6f);
             this.hugWalls = WallHug.Floor;
             this._editorImageCenter = true;
             this.editorCycleType = typeof(SawsRight);

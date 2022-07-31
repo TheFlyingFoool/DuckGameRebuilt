@@ -52,8 +52,8 @@ namespace DuckGame
             Grapple owner = this._owner as Grapple;
             this.position = owner.barrelPosition;
             this.depth = owner.depth - 1;
-            this.hSpeed = 0.0f;
-            this.vSpeed = 0.0f;
+            this.hSpeed = 0f;
+            this.vSpeed = 0f;
             this.graphic.flipH = owner.offDir < 0.0;
         }
 
@@ -92,8 +92,8 @@ namespace DuckGame
             if (this._inGun)
                 return;
             this._inGun = true;
-            this.hSpeed = 0.0f;
-            this.vSpeed = 0.0f;
+            this.hSpeed = 0f;
+            this.vSpeed = 0f;
             this._stuck = false;
         }
 

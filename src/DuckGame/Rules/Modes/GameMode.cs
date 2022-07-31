@@ -194,7 +194,7 @@ namespace DuckGame
                 Level.Remove(_pauseGroup);
             if (this._editorTestMode)
             {
-                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
                 this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
                 this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 UIDivider component = new UIDivider(true, 0.8f);
@@ -221,7 +221,7 @@ namespace DuckGame
             }
             else
             {
-                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
                 this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
                 this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 this._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -422,7 +422,7 @@ namespace DuckGame
                             pendingSpawn.localSpawnVisible = true;
                             this._pendingSpawns.RemoveAt(0);
                             Vec3 color = pendingSpawn.profile.persona.color;
-                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0.0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
+                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
                             Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             Level.Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f)
@@ -434,7 +434,7 @@ namespace DuckGame
                             {
                                 if (!Network.isActive && pendingSpawn.profile.team.name == "ZEKE")
                                 {
-                                    Ragdoll ragdoll = new Ragdoll(pendingSpawn.x, pendingSpawn.y, null, false, 0.0f, 0, Vec2.Zero);
+                                    Ragdoll ragdoll = new Ragdoll(pendingSpawn.x, pendingSpawn.y, null, false, 0f, 0, Vec2.Zero);
                                     Level.Add(ragdoll);
                                     ragdoll.RunInit();
                                     ragdoll.MakeZekeBear();
@@ -558,7 +558,7 @@ namespace DuckGame
                         {
                             this._fontFade -= 0.1f;
                             if (_fontFade < 0.0)
-                                this._fontFade = 0.0f;
+                                this._fontFade = 0f;
                         }
                     }
                     if (Network.isClient)
@@ -796,7 +796,7 @@ namespace DuckGame
         {
             this._addedPoints = true;
             Event.Log(new RoundEndEvent());
-            Highlights.highlightRatingMultiplier = 0.0f;
+            Highlights.highlightRatingMultiplier = 0f;
             if (this.AddPoints().Count > 0)
             {
                 this._roundHadWinner = true;

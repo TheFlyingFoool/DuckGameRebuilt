@@ -368,7 +368,7 @@ namespace DuckGame
                         }
                     }
                 }
-                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? -250f : 0.0f, 0.4f);
+                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? -250f : 0f, 0.4f);
                 if (this.down)
                 {
                     if (this._swapped)
@@ -390,29 +390,29 @@ namespace DuckGame
                 if (!this.down && this._swapped && Input.Pressed("SELECT"))
                 {
                     this.played = false;
-                    this._gachaWait = 0.0f;
-                    this._openWait = 0.0f;
+                    this._gachaWait = 0f;
+                    this._openWait = 0f;
                     this.finished = false;
                     this.opened = false;
-                    this._swapWait = 0.0f;
+                    this._swapWait = 0f;
                     this._swapped = false;
-                    this._starGrow = 0.0f;
-                    this._insertCoin = 0.0f;
-                    this._insertCoinInc = 0.0f;
-                    this._afterInsertWait = 0.0f;
+                    this._starGrow = 0f;
+                    this._insertCoin = 0f;
+                    this._insertCoinInc = 0f;
+                    this._afterInsertWait = 0f;
                     this._chinged = false;
-                    this.gachaY = 0.0f;
-                    this.gachaSpeed = 0.0f;
+                    this.gachaY = 0f;
+                    this.gachaSpeed = 0f;
                     this.doubleUpdating = false;
                     ++this._prizesGiven;
                     this._eggOffset = Vec2.Zero;
                     this._toyPosition = Vec2.Zero;
                     this._toyVelocity = Vec2.Zero;
                     this._lastStick = Vec2.Zero;
-                    this._toyAngle = 0.0f;
-                    this._toyAngleLerp = 0.0f;
+                    this._toyAngle = 0f;
+                    this._toyAngleLerp = 0f;
                     this._coined = false;
-                    this._initialWait = 0.0f;
+                    this._initialWait = 0f;
                     this.didOpenToyCorner = false;
                     HUD.CloseAllCorners();
                     SFX.Play("resume", 0.6f);
@@ -500,10 +500,10 @@ namespace DuckGame
             this._gachaBall.frame = this.FigureFrame(this.prizes[0]);
             Graphics.Draw(_gachaBall, (float)((double)this.x + 31.0 - _gachaWait * 42.0), (float)((double)this.y - 16.0 + 42.0));
             this._gachaBall.alpha = 1f;
-            this._gachaBall.angleDegrees = 0.0f;
+            this._gachaBall.angleDegrees = 0f;
             this._gachaBall.frame = Rando.Int(2);
             this._gachaTwister.angleDegrees = this._gachaTwisterShadow.angleDegrees = this._gachaWait * 360f;
-            Vec2 vec2_2 = new Vec2(0.0f, -4f);
+            Vec2 vec2_2 = new Vec2(0f, -4f);
             this._gachaTwister.depth = -0.1f;
             Graphics.Draw(this._gachaTwister, this.x - 14f + vec2_2.x, this.y + vec2_2.y);
             Vec2 vec2_3 = new Vec2(2f, 2f);
@@ -516,13 +516,13 @@ namespace DuckGame
             this._rainbowMaterial.offset2 += 0.02f;
             this._rainbow.alpha = 0.25f;
             this._rainbow.depth = -0.95f;
-            Graphics.Draw(this._rainbow, 0.0f, 0.0f);
+            Graphics.Draw(this._rainbow, 0f, 0f);
             Graphics.material = material1;
             Rando.generator = generator;
             this._frame.depth = -0.9f;
             if (this._swapped)
             {
-                this._contains.Draw(this.position + new Vec2(0.0f, 10f), this.depth - 20);
+                this._contains.Draw(this.position + new Vec2(0f, 10f), this.depth - 20);
                 this._whiteCircle.color = this._contains.group.color;
                 this._whiteCircle.depth = this.depth - 30;
                 Graphics.Draw(this._whiteCircle, this.position.x, this.position.y + 10f);
@@ -537,7 +537,7 @@ namespace DuckGame
             else if (gachaY > 10.0)
             {
                 Vec2 vec2_4 = new Vec2(-25f, 40f);
-                float num8 = 0.0f;
+                float num8 = 0f;
                 if (this.opened)
                     num8 = 3f;
                 this._capsule.depth = -0.84f;
@@ -548,7 +548,7 @@ namespace DuckGame
                 Graphics.material = material2;
                 this._capsule.depth = -0.83f;
                 this._capsule.frame += 3;
-                Graphics.Draw(_capsule, this.x + this._eggOffset.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y + (11.0 + (double)num8)) + vec2_4.y, new Rectangle(0.0f, 2f, _capsule.width, this._capsule.height - 2));
+                Graphics.Draw(_capsule, this.x + this._eggOffset.x + vec2_4.x, (float)((double)this.y - 38.0 + gachaY - _eggOffset.y + (11.0 + (double)num8)) + vec2_4.y, new Rectangle(0f, 2f, _capsule.width, this._capsule.height - 2));
                 this._capsule.frame -= 3;
                 if (gachaY > 30.0 && !this.opened)
                 {

@@ -35,7 +35,7 @@ namespace DuckGame
                     this._endPoint = Vec2.Zero;
                     for (int index = 0; index < 32; ++index)
                     {
-                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(0.0f, 4 + index * 16), this.position + new Vec2(0.0f, (index + 1) * 16 - 6));
+                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(0f, 4 + index * 16), this.position + new Vec2(0f, (index + 1) * 16 - 6));
                         if (thing != null)
                         {
                             this._endPoint = new Vec2(this.x, thing.top - 2f);

@@ -51,7 +51,7 @@ namespace DuckGame
                     if (this._loadState == 3)
                         this.loaded = true;
                     this._loadState = -1;
-                    this._angleOffset = 0.0f;
+                    this._angleOffset = 0f;
                     this.handOffset = Vec2.Zero;
                 }
                 if (this._loadState == 0)
@@ -88,20 +88,20 @@ namespace DuckGame
                     if (handOffset.x <= 0.0)
                     {
                         ++this._loadState;
-                        this.handOffset.x = 0.0f;
+                        this.handOffset.x = 0f;
                     }
                 }
                 else if (this._loadState == 4)
                 {
                     if (_angleOffset > 0.0399999991059303)
                     {
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.0f, 0.15f);
+                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.15f);
                     }
                     else
                     {
                         this._loadState = -1;
                         this.loaded = true;
-                        this._angleOffset = 0.0f;
+                        this._angleOffset = 0f;
                     }
                 }
             }

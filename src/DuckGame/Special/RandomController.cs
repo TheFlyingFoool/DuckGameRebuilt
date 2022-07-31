@@ -15,7 +15,7 @@ namespace DuckGame
     public class RandomController : Thing
     {
         public EditorProperty<int> max_up = new EditorProperty<int>(1, min: 1f, max: 32f, increment: 1f);
-        public EditorProperty<float> wait = new EditorProperty<float>(0.0f, max: 100f);
+        public EditorProperty<float> wait = new EditorProperty<float>(0f, max: 100f);
         private float _waitCount;
         private bool _started;
         private int _totalUp;
@@ -61,14 +61,14 @@ namespace DuckGame
             if (this._up.Count == 0)
             {
                 this.PopUpItems();
-                this._waitCount = 0.0f;
+                this._waitCount = 0f;
             }
             else
             {
                 this._waitCount += Maths.IncFrameTimer();
                 if (_waitCount < (double)this.wait.value)
                     return;
-                this._waitCount = 0.0f;
+                this._waitCount = 0f;
                 this.PopUpItems();
             }
         }
@@ -106,7 +106,7 @@ namespace DuckGame
                 if (num1 == 0)
                     num1 = 1;
                 float num2 = ChallengeRando.Float(1f);
-                float num3 = 0.0f;
+                float num3 = 0f;
                 if (sequenceItemList.Count == 0)
                     flag1 = true;
                 foreach (SequenceItem sequenceItem in sequenceItemList)

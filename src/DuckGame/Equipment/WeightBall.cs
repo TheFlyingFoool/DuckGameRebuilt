@@ -103,7 +103,7 @@ namespace DuckGame
             if ((double)num2 < 0.0001f)
                 num2 = 0.0001f;
             if ((double)num2 < (double)num1)
-                return 0.0f;
+                return 0f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(thing1.hSpeed, thing1.vSpeed);
             Vec2 vec2_4 = new Vec2(thing2.hSpeed, thing2.vSpeed);
@@ -114,11 +114,11 @@ namespace DuckGame
             if (thing1 is ChainLink && !(thing2 is ChainLink))
             {
                 num5 = 10f;
-                num6 = 0.0f;
+                num6 = 0f;
             }
             else if (thing2 is ChainLink && !(thing1 is ChainLink))
             {
-                num5 = 0.0f;
+                num5 = 0f;
                 num6 = 10f;
             }
             else if (thing1 is ChainLink && thing2 is ChainLink)
@@ -171,11 +171,11 @@ namespace DuckGame
             if (_sparkWait > 0.0)
                 this._sparkWait -= 0.1f;
             else
-                this._sparkWait = 0.0f;
+                this._sparkWait = 0f;
             if (_sparkWait != 0.0 || !this.grounded || (double)Math.Abs(this.hSpeed) <= 1.0)
                 return;
             this._sparkWait = 0.25f;
-            Level.Add(Spark.New(this.x + ((double)this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0.0f, 0.5f)));
+            Level.Add(Spark.New(this.x + ((double)this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0f, 0.5f)));
         }
     }
 }

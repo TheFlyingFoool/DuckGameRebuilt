@@ -337,7 +337,7 @@ namespace DuckGame
             this._littleFont.Draw(text, this.position + new Vec2(90f - this._littleFont.GetWidth(text), -3f), Color.White, this.depth + 10);
             if (this._showKickMenu)
             {
-                Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.85f);
+                Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.85f);
                 Vec2 p1_1 = this.position + new Vec2(-60f, 4f);
                 Vec2 p2_1 = p1_1 + new Vec2(76f, this._additionalOptions.Count * 8 + 3);
                 Graphics.DrawRect(p1_1, p2_1, Color.Black, (Depth)0.9f);
@@ -349,7 +349,7 @@ namespace DuckGame
                         Graphics.Draw(this._arrow._image, p1_1.x + 4f, p1_1.y + 6f + index1 * 8, (Depth)0.91f);
                     if (index1 == this._aoMuteIndex && this._showMuteMenu)
                     {
-                        Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.92f);
+                        Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.92f);
                         Vec2 p1_2 = p1_1 + new Vec2(8f, 26f);
                         Vec2 p2_2 = p1_2 + new Vec2(60f, this._muteOptions.Count * 8 + 4);
                         Graphics.DrawRect(p1_2, p2_2, Color.Black, (Depth)0.93f);

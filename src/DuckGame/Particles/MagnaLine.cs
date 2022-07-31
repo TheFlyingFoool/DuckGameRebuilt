@@ -26,7 +26,7 @@ namespace DuckGame
             this._length = length;
             this._startLength = length;
             this._move = 1.570796f * percent;
-            this.alpha = 0.0f;
+            this.alpha = 0f;
         }
 
         public override void Update()

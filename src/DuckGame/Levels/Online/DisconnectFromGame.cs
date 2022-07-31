@@ -52,7 +52,7 @@ namespace DuckGame
                     if (this.joinAddress != 0UL)
                         Level.current = new JoinServer(this.joinAddress);
                     else
-                        Graphics.fade = Lerp.Float(Graphics.fade, 0.0f, 0.05f);
+                        Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
                     if ((double)Graphics.fade <= 0.0)
                         Level.current = new TitleScreen();
                 }
@@ -66,7 +66,7 @@ namespace DuckGame
         {
             this._dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0.0f;
+                this._dots = 0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {

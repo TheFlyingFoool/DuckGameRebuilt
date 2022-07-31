@@ -61,7 +61,7 @@ namespace DuckGame
                                     activeProfile.duck.respawnTime += 0.016f;
                                     if (activeProfile.duck.respawnTime > 1.5)
                                     {
-                                        activeProfile.duck.respawnTime = 0.0f;
+                                        activeProfile.duck.respawnTime = 0f;
                                         activeProfile.duck.dead = false;
                                         if (activeProfile.duck.ragdoll != null)
                                             activeProfile.duck.ragdoll.Unragdoll();
@@ -148,11 +148,11 @@ namespace DuckGame
                             Profile p = activeProfile;
                             if (activeProfile.duck.converted != null)
                                 p = activeProfile.duck.converted.profile;
-                            PlusOne plusOne = new PlusOne(0.0f, 0.0f, p)
+                            PlusOne plusOne = new PlusOne(0f, 0f, p)
                             {
                                 anchor = (Anchor)activeProfile.duck
                             };
-                            plusOne.anchor.offset = new Vec2(0.0f, -16f);
+                            plusOne.anchor.offset = new Vec2(0f, -16f);
                             Level.Add(plusOne);
                         }
                     }

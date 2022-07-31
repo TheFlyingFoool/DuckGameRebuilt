@@ -50,12 +50,12 @@ namespace DuckGame
                 Profile p = this.theRealWinnerHere != null ? this.theRealWinnerHere : profile;
                 if (profile.duck != null)
                 {
-                    PlusOne plusOne = new PlusOne(0.0f, 0.0f, p, testMode: true)
+                    PlusOne plusOne = new PlusOne(0f, 0f, p, testMode: true)
                     {
                         _duck = profile.duck,
                         anchor = (Anchor)profile.duck
                     };
-                    plusOne.anchor.offset = new Vec2(0.0f, -16f);
+                    plusOne.anchor.offset = new Vec2(0f, -16f);
                     plusOne.depth = (Depth)0.95f;
                     Level.Add(plusOne);
                 }

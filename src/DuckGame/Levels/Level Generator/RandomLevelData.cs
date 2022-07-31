@@ -303,7 +303,7 @@ namespace DuckGame
                         }
                         break;
                     default:
-                        t.SetTranslation(new Vec2((float)(-(double)t.x + (192.0 - (double)t.x) - 16.0), 0.0f));
+                        t.SetTranslation(new Vec2((float)(-(double)t.x + (192.0 - (double)t.x) - 16.0), 0f));
                         goto label_14;
                 }
             }

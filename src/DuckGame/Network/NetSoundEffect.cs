@@ -234,7 +234,7 @@ namespace DuckGame
             NetSoundEffect.PlayAndSynchronize(pSound1);
         }
 
-        private static void PlayAndSynchronize(NetSoundEffect pSound, float pPitchOffset = 0.0f)
+        private static void PlayAndSynchronize(NetSoundEffect pSound, float pPitchOffset = 0f)
         {
             pSound.Play(pit: pPitchOffset);
             NetSoundEffect._soundsPlayedThisFrame.Add(pSound);

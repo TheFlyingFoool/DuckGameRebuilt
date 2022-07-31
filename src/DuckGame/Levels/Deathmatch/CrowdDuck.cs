@@ -204,7 +204,7 @@ namespace DuckGame
             this.graphic = _sprite;
             this.collisionSize = new Vec2(_sprite.width, _sprite.height);
             this.collisionOffset = new Vec2(-(this._sprite.w / 2), -(this._sprite.h / 2));
-            this.center = new Vec2(0.0f, spriteMap.h);
+            this.center = new Vec2(0f, spriteMap.h);
             this.collisionOffset = new Vec2(this.collisionOffset.x, -this._sprite.h);
             this.depth = (Depth)(0.3f - row * 0.05f);
             this.layer = Layer.Background;
@@ -302,11 +302,11 @@ namespace DuckGame
                 if (g == null)
                     return;
                 g.depth = this.depth + 2;
-                g.angle = 0.0f;
+                g.angle = 0f;
                 g.alpha = 1f;
                 g.color = Color.White;
                 bool flag = this._sprite.imageIndex == 1 || this._sprite.imageIndex == 2 || this._sprite.imageIndex == 4 || this._sprite.imageIndex == 5 || this._sprite.imageIndex == 7 || this._sprite.imageIndex == 8;
-                float num = 0.0f;
+                float num = 0f;
                 if (this._sprite.imageIndex > 2)
                 {
                     g.flipH = true;

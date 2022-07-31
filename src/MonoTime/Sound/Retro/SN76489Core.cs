@@ -26,7 +26,7 @@ namespace DuckGame
       0.0193f,
       0.0154f,
       0.0122f,
-      0.0f,
+      0f,
       -0.25f,
       -0.2442f,
       -0.194f,
@@ -42,7 +42,7 @@ namespace DuckGame
       -0.0193f,
       -0.0154f,
       -0.0122f,
-      0.0f,
+      0f,
       0.25f,
       0.2442f,
       0.194f,
@@ -58,23 +58,23 @@ namespace DuckGame
       0.0193f,
       0.0154f,
       0.0122f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f,
-      0.0f
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f,
+      0f
         };
         private uint volA;
         private uint volB;
@@ -113,10 +113,10 @@ namespace DuckGame
             this.volB = 15U;
             this.volC = 15U;
             this.volD = 15U;
-            this.outA = 0.0f;
-            this.outB = 0.0f;
-            this.outC = 0.0f;
-            this.outD = 0.0f;
+            this.outA = 0f;
+            this.outB = 0f;
+            this.outC = 0f;
+            this.outD = 0f;
             this.latchedChan = 0U;
             this.latchedVolume = false;
             this.noiseLFSR = 32768U;
@@ -228,7 +228,7 @@ namespace DuckGame
         public float render()
         {
             if (0U >= 1U)
-                return 0.0f;
+                return 0f;
             for (; ticksCount > 0.0; --this.ticksCount)
             {
                 --this.cntA;

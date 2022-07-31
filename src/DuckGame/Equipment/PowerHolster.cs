@@ -78,7 +78,7 @@ namespace DuckGame
                 else
                     this._underPart.depth = thing.depth + -7;
                 this._underPart.frame = this.trigger ? 1 : 0;
-                Vec2 vec2 = this.Offset(new Vec2(-2f, 0.0f));
+                Vec2 vec2 = this.Offset(new Vec2(-2f, 0f));
                 Graphics.Draw(_underPart, vec2.x, vec2.y);
             }
             else

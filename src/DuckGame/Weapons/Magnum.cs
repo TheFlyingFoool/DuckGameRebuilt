@@ -37,7 +37,7 @@ namespace DuckGame
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Light;
             this._holdOffset = new Vec2(1f, 2f);
-            this.handOffset = new Vec2(0.0f, 1f);
+            this.handOffset = new Vec2(0f, 1f);
             this._bio = "Standard issue .44 Magnum. Pretty great for killing things, really great for killing things that are trying to hide. Watch the kick, unless you're trying to shoot the ceiling.";
             this._editorName = nameof(Magnum);
             this.editorTooltip = "Heavy duty pistol that pierces many objects. Cool shades not included.";
@@ -46,14 +46,14 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this._angleOffset = this.owner == null ? 0.0f : (this.offDir >= 0 ? -Maths.DegToRad(this.rise * 65f) : -Maths.DegToRad((float)(-(double)this.rise * 65.0)));
+            this._angleOffset = this.owner == null ? 0f : (this.offDir >= 0 ? -Maths.DegToRad(this.rise * 65f) : -Maths.DegToRad((float)(-(double)this.rise * 65.0)));
             if (rise > 0.0)
                 this.rise -= 0.013f;
             else
-                this.rise = 0.0f;
+                this.rise = 0f;
             if (!this._raised)
                 return;
-            this._angleOffset = 0.0f;
+            this._angleOffset = 0f;
         }
 
         public override void OnPressAction()

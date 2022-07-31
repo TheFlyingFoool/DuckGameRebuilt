@@ -20,7 +20,7 @@ namespace DuckGame
         {
             this._font = new BitmapFont("biosFont", 8);
             this._logo = new Sprite("corptron");
-            Graphics.fade = 0.0f;
+            Graphics.fade = 0f;
         }
 
         public override void Update()
@@ -38,7 +38,7 @@ namespace DuckGame
             }
             else
             {
-                Graphics.fade = 0.0f;
+                Graphics.fade = 0f;
                 Level.current = new AdultSwimLogo();
             }
             this._wait -= 3f / 500f;

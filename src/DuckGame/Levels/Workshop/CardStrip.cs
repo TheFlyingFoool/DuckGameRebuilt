@@ -109,7 +109,7 @@ namespace DuckGame
                 if (_indexSlide <= -1.0)
                 {
                     ++this._levelIndex;
-                    this._indexSlide = 0.0f;
+                    this._indexSlide = 0f;
                 }
             }
             if (this._levelIndex <= this._selectedCardIndex)
@@ -119,7 +119,7 @@ namespace DuckGame
             if (_indexSlide < 1.0)
                 return;
             --this._levelIndex;
-            this._indexSlide = 0.0f;
+            this._indexSlide = 0f;
         }
 
         public override void Draw()

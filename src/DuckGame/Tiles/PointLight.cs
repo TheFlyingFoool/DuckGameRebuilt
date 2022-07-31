@@ -176,7 +176,7 @@ namespace DuckGame
                 float num3;
                 if (this._strangeFalloff)
                 {
-                    float num4 = 1f - Math.Max(length - 30f, 0.0f) / this._range;
+                    float num4 = 1f - Math.Max(length - 30f, 0f) / this._range;
                     num3 = num4 * num4;
                 }
                 else

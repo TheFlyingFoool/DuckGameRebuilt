@@ -17,7 +17,7 @@ namespace DuckGame
             this._sprite = new SpriteMap("wetEnter", 16, 16);
             this._sprite.AddAnimation("splash", 0.45f, false, 0, 1);
             this._sprite.SetAnimation("splash");
-            this.center = new Vec2(0.0f, 7f);
+            this.center = new Vec2(0f, 7f);
             this.graphic = _sprite;
             this.depth = (Depth)0.7f;
             this.alpha = 0.6f;

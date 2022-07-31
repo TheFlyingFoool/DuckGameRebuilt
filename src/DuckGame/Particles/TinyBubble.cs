@@ -18,7 +18,7 @@ namespace DuckGame
         {
             this.alpha = 0.7f;
             this._minY = minY;
-            this._gravMult = 0.0f;
+            this._gravMult = 0f;
             this.vSpeed = -Rando.Float(0.5f, 1f);
             this.hSpeed = startHSpeed;
             this.depth = (Depth)0.3f;
@@ -38,12 +38,12 @@ namespace DuckGame
             this.position.x += this._wave.value * this._waveSize;
             this.position.x += this.hSpeed;
             this.position.y += this.vSpeed;
-            this.hSpeed = Lerp.Float(this.hSpeed, 0.0f, 0.1f);
+            this.hSpeed = Lerp.Float(this.hSpeed, 0f, 0.1f);
             this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.1f);
             if ((double)this.y < _minY - 4.0)
                 this.alpha -= 0.025f;
             if ((double)this.y < _minY - 8.0)
-                this.alpha = 0.0f;
+                this.alpha = 0f;
             if ((double)this.y >= _minY)
                 return;
             this.alpha -= 0.025f;

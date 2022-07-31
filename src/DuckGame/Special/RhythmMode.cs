@@ -41,7 +41,7 @@ namespace DuckGame
             for (int index = 0; index < 5; ++index)
             {
                 float x = (float)(vec2.x + 2.0 + (index * (RhythmMode._bar.w / 4) + 1) + _pos * (_bar.w / 4.0));
-                float num = Maths.Clamp((float)(((double)x - vec2.x) / (_bar.w - 2.0)), 0.0f, 1f);
+                float num = Maths.Clamp((float)(((double)x - vec2.x) / (_bar.w - 2.0)), 0f, 1f);
                 RhythmMode._ball.alpha = (float)((Math.Sin((double)num * (2.0 * Math.PI) - Math.PI / 2.0) + 1.0) / 2.0);
                 if ((index == 1 && _pos > 0.5 || index == 2 && _pos <= 0.5) && RhythmMode.inTime)
                     RhythmMode._ball.scale = new Vec2(2f, 2f);

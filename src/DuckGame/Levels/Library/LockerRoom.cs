@@ -71,7 +71,7 @@ namespace DuckGame
             this._stats.Add(new LockerStat("ROUNDS LOST: " + Change.ToString(profile.stats.timesSpawned - profile.stats.matchesWon), Color.Red));
             this._stats.Add(new LockerStat("GAMES WON: " + Change.ToString(profile.stats.trophiesWon), Color.GreenYellow));
             this._stats.Add(new LockerStat("GAMES LOST: " + Change.ToString(profile.stats.gamesPlayed - profile.stats.trophiesWon), Color.Red));
-            float num2 = 0.0f;
+            float num2 = 0f;
             if (profile.stats.bulletsFired > 0)
                 num2 = profile.stats.bulletsThatHit / (float)profile.stats.bulletsFired;
             this._stats.Add(new LockerStat("ACCURACY: " + Change.ToString((int)Math.Round(num2 * 100f)) + "%", num2 > 0.6f ? Color.Green : Color.Red));

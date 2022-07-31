@@ -139,7 +139,7 @@ namespace DuckGame
                 UIFlagSelection._flagTexture = Content.Load<Tex2D>("flags/flags");
             int num1 = 0;
             int num2 = 0;
-            float num3 = 0.0f;
+            float num3 = 0f;
             float num4 = 10f;
             float num5 = (float)((double)this.x - (double)this.width / 2.0 + 8.0);
             float num6 = (float)((double)this.y - (double)this.height / 2.0 + 8.0);
@@ -147,7 +147,7 @@ namespace DuckGame
             {
                 int num7 = index % 16;
                 int num8 = index / 16;
-                DuckGame.Graphics.Draw(UIFlagSelection._flagTexture, new Vec2(num5 + num3, num6 + num4), new Rectangle?(new Rectangle(num7 * 61, num8 * 41, 61f, 41f)), num2 == this._flagSelection ? Color.White : Color.White * 0.7f, 0.0f, Vec2.Zero, new Vec2(0.14f, 0.14f), SpriteEffects.None, (Depth)0.9f);
+                DuckGame.Graphics.Draw(UIFlagSelection._flagTexture, new Vec2(num5 + num3, num6 + num4), new Rectangle?(new Rectangle(num7 * 61, num8 * 41, 61f, 41f)), num2 == this._flagSelection ? Color.White : Color.White * 0.7f, 0f, Vec2.Zero, new Vec2(0.14f, 0.14f), SpriteEffects.None, (Depth)0.9f);
                 num3 += 9f;
                 ++num1;
                 ++num2;
@@ -155,7 +155,7 @@ namespace DuckGame
                 {
                     num1 = 0;
                     num4 += 8f;
-                    num3 = 0.0f;
+                    num3 = 0f;
                 }
             }
             base.Draw();

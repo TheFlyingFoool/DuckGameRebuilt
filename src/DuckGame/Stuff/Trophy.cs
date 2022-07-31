@@ -33,7 +33,7 @@ namespace DuckGame
             this.flammable = 0.3f;
             this.collideSounds.Add("rockHitGround2");
             this.physicsMaterial = PhysicsMaterial.Metal;
-            this._holdOffset = new Vec2(-2f, 0.0f);
+            this._holdOffset = new Vec2(-2f, 0f);
             this.editorTooltip = "It doesn't count if you don't EARN it.";
         }
 
@@ -53,12 +53,12 @@ namespace DuckGame
             {
                 float num = 1f;
                 if (this.duck != null)
-                    this.angle = Lerp.Float(this.angle, 0.0f, 0.1f * num);
+                    this.angle = Lerp.Float(this.angle, 0f, 0.1f * num);
                 else
                     num = 20f;
-                this._holdOffset = Lerp.Vec2(this._holdOffset, new Vec2(-2f, 0.0f), num * 2f);
+                this._holdOffset = Lerp.Vec2(this._holdOffset, new Vec2(-2f, 0f), num * 2f);
                 this.handFlip = false;
-                this.handOffset = Lerp.Vec2(this.handOffset, new Vec2(0.0f, 0.0f), 1f * num);
+                this.handOffset = Lerp.Vec2(this.handOffset, new Vec2(0f, 0f), 1f * num);
                 this._canRaise = true;
             }
             if (this.owner == null && this.level.simulatePhysics)
@@ -85,7 +85,7 @@ namespace DuckGame
                     if (_throwSpin < 0.0)
                         this._throwSpin += 360f;
                     if (flag2)
-                        this._throwSpin = (double)Math.Abs(this._throwSpin - 90f) >= (double)Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0.0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
+                        this._throwSpin = (double)Math.Abs(this._throwSpin - 90f) >= (double)Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
                     else if (_throwSpin > 90.0 && _throwSpin < 270.0)
                     {
                         this._throwSpin = Lerp.Float(this._throwSpin, 180f, 14f);
@@ -96,12 +96,12 @@ namespace DuckGame
                             this._throwSpin -= 360f;
                         else if (_throwSpin < -180.0)
                             this._throwSpin += 360f;
-                        this._throwSpin = Lerp.Float(this._throwSpin, 0.0f, 14f);
+                        this._throwSpin = Lerp.Float(this._throwSpin, 0f, 14f);
                     }
                 }
             }
             else
-                this._throwSpin = 0.0f;
+                this._throwSpin = 0f;
             base.Update();
         }
     }

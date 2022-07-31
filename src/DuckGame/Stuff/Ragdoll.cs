@@ -538,7 +538,7 @@ namespace DuckGame
             if ((double)num2 < 0.0001f)
                 num2 = 0.0001f;
             if ((double)num2 < (double)num1)
-                return 0.0f;
+                return 0f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(thing1.hSpeed, thing1.vSpeed);
             Vec2 vec2_4 = new Vec2(thing2.hSpeed, thing2.vSpeed);
@@ -549,11 +549,11 @@ namespace DuckGame
             if (thing1 is ChainLink && !(thing2 is ChainLink))
             {
                 num5 = 10f;
-                num6 = 0.0f;
+                num6 = 0f;
             }
             else if (thing2 is ChainLink && !(thing1 is ChainLink))
             {
-                num5 = 0.0f;
+                num5 = 0f;
                 num6 = 10f;
             }
             else if (thing1 is ChainLink && thing2 is ChainLink)
@@ -590,10 +590,10 @@ namespace DuckGame
             if ((double)num2 < 0.0001f)
                 num2 = 0.0001f;
             if ((double)num2 < (double)num1)
-                return 0.0f;
+                return 0f;
             Vec2 vec2_2 = vec2_1 * (1f / num2);
             Vec2 vec2_3 = new Vec2(thing.hSpeed, thing.vSpeed);
-            Vec2 vec2_4 = new Vec2(0.0f, 0.0f);
+            Vec2 vec2_4 = new Vec2(0f, 0f);
             double num3 = (double)Vec2.Dot(vec2_4 - vec2_3, vec2_2);
             float num4 = num2 - num1;
             float num5 = 2.5f;
@@ -688,8 +688,8 @@ namespace DuckGame
                     Vec2 vec2_4 = vec2_1;
                     part1.position = vec2_4;
                 }
-                this._part1.vSpeed = this._part2.vSpeed = this._part3.vSpeed = 0.0f;
-                this._part1.hSpeed = this._part2.hSpeed = this._part3.hSpeed = 0.0f;
+                this._part1.vSpeed = this._part2.vSpeed = this._part3.vSpeed = 0f;
+                this._part1.hSpeed = this._part2.hSpeed = this._part3.hSpeed = 0f;
                 this.Solve(_part1, _part2, this.partSep);
                 this.Solve(_part2, _part3, this.partSep);
                 this.Solve(_part1, _part3, this.partSep * 2f);
@@ -799,7 +799,7 @@ namespace DuckGame
                         this._part3.vSpeed += NetRand.Float(-2f, 2f);
                         this._part2.hSpeed += NetRand.Float(-2f, -1.2f);
                         this._part2.vSpeed -= NetRand.Float(1f, 1.5f);
-                        this._timeSinceNudge = 0.0f;
+                        this._timeSinceNudge = 0f;
                         this.ShakeOutOfSleepingBag();
                     }
                     else if (this.captureDuck.inputProfile.Pressed("RIGHT"))
@@ -808,7 +808,7 @@ namespace DuckGame
                         this._part3.vSpeed += NetRand.Float(-2f, 2f);
                         this._part2.hSpeed += NetRand.Float(1.2f, 2f);
                         this._part2.vSpeed -= NetRand.Float(1f, 1.5f);
-                        this._timeSinceNudge = 0.0f;
+                        this._timeSinceNudge = 0f;
                         this.ShakeOutOfSleepingBag();
                     }
                     else if (this.captureDuck.inputProfile.Pressed("UP"))
@@ -816,7 +816,7 @@ namespace DuckGame
                         this._part1.vSpeed += NetRand.Float(-2f, 1f);
                         this._part3.vSpeed += NetRand.Float(-2f, 1f);
                         this._part2.vSpeed -= NetRand.Float(1.5f, 2f);
-                        this._timeSinceNudge = 0.0f;
+                        this._timeSinceNudge = 0f;
                         this.ShakeOutOfSleepingBag();
                     }
                 }
@@ -840,7 +840,7 @@ namespace DuckGame
                 this._part1.vSpeed += NetRand.Float(-2f, 1f);
                 this._part3.vSpeed += NetRand.Float(-2f, 1f);
                 this._part2.vSpeed -= NetRand.Float(1.5f, 2f);
-                this._timeSinceNudge = 0.0f;
+                this._timeSinceNudge = 0f;
                 this.ShakeOutOfSleepingBag();
             }
             else

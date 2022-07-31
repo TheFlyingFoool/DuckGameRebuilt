@@ -114,7 +114,7 @@ namespace DuckGame
                 {
                     DamageManager._hits.RemoveAt(index);
                     float num = hit.thing.graphic.width / (float)hit.thing.graphic.width;
-                    Camera camera = new Camera(0.0f, 0.0f, hit.thing.graphic.width, hit.thing.graphic.height)
+                    Camera camera = new Camera(0f, 0f, hit.thing.graphic.width, hit.thing.graphic.height)
                     {
                         position = new Vec2(hit.thing.x - hit.thing.centerx * num, hit.thing.y - hit.thing.centery * num)
                     };

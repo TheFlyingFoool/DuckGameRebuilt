@@ -46,8 +46,8 @@ namespace DuckGame
             {
                 center = new Vec2(8f, 8f)
             };
-            this.handOffset = new Vec2(0.0f, 1f);
-            this._holdOffset = new Vec2(4f, 0.0f);
+            this.handOffset = new Vec2(0f, 1f);
+            this._holdOffset = new Vec2(4f, 0f);
             this.editorTooltip = "So many shells, what convenience!";
         }
 
@@ -58,7 +58,7 @@ namespace DuckGame
             if (this._readyToShoot)
             {
                 this._loadProgress = 1f;
-                this._loadWait = 0.0f;
+                this._loadWait = 0f;
             }
             if (_loadWait > 0.0)
                 return;
@@ -66,7 +66,7 @@ namespace DuckGame
                 SFX.Play("shotgunLoad");
             if (_loadProgress == 0.5)
                 this.Reload();
-            this._loadWait = 0.0f;
+            this._loadWait = 0f;
             if (_loadProgress < 1.0)
             {
                 this._loadProgress += 0.1f;
@@ -84,14 +84,14 @@ namespace DuckGame
             if (_loadProgress >= 1.0)
             {
                 base.OnPressAction();
-                this._loadProgress = 0.0f;
+                this._loadProgress = 0f;
                 this._loadWait = 1f;
             }
             else
             {
                 if (_loadWait != 1.0)
                     return;
-                this._loadWait = 0.0f;
+                this._loadWait = 0f;
             }
         }
 

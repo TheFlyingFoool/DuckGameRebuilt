@@ -108,13 +108,13 @@ namespace DuckGame
         public void InitLinks()
         {
             this._initLinks = true;
-            Vec2 vec2_1 = new Vec2(0.0f, -1f);
+            Vec2 vec2_1 = new Vec2(0f, -1f);
             if (this.direction == 1)
-                vec2_1 = new Vec2(0.0f, 1f);
+                vec2_1 = new Vec2(0f, 1f);
             else if (this.direction == 2)
-                vec2_1 = new Vec2(-1f, 0.0f);
+                vec2_1 = new Vec2(-1f, 0f);
             else if (this.direction == 3)
-                vec2_1 = new Vec2(1f, 0.0f);
+                vec2_1 = new Vec2(1f, 0f);
             Vec2 hitPos;
             if (this.horizontal.value)
             {
@@ -125,7 +125,7 @@ namespace DuckGame
             }
             else
             {
-                Vec2 vec2_2 = this.position + new Vec2(0.0f, (float)-((int)this.teleHeight * 16.0 / 2.0 - 8.0));
+                Vec2 vec2_2 = this.position + new Vec2(0f, (float)-((int)this.teleHeight * 16.0 / 2.0 - 8.0));
                 Teleporter teleporter = Level.CheckRay<Teleporter>(vec2_2 + vec2_1 * 20f, vec2_2 + vec2_1 * 5000f, this, out hitPos);
                 if (teleporter != null)
                     this._link = teleporter;
@@ -176,7 +176,7 @@ namespace DuckGame
                 for (int index2 = 0; index2 < 2; ++index2)
                     Level.Add(SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
                 Vec2 position1 = thing1.position;
-                float num2 = 0.0f;
+                float num2 = 0f;
                 if (thing1 is RagdollPart)
                     num2 = 8f;
                 this._link._teleported.Add(thing1 as ITeleport);
@@ -335,7 +335,7 @@ namespace DuckGame
                 this._arrow.depth = this.depth + 2;
                 this._arrow.alpha = 0.5f;
                 if (this.direction == 0)
-                    this._arrow.angleDegrees = 0.0f;
+                    this._arrow.angleDegrees = 0f;
                 else if (this.direction == 1)
                     this._arrow.angleDegrees = 180f;
                 else if (this.direction == 2)
@@ -351,8 +351,8 @@ namespace DuckGame
                     Graphics.DrawRect(new Vec2(this.x - 2f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 2f, this.y + 5f), Color.Yellow * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
                 else
                     Graphics.DrawRect(new Vec2(this.x - 4f, this.y - ((int)this.teleHeight * 16 - 9)), new Vec2(this.x + 4f, this.y + 5f), purple * (float)((double)this._pulse.normalized * 0.300000011920929 + 0.200000002980232), this.depth);
-                this._top.angle = 0.0f;
-                this._bottom.angle = 0.0f;
+                this._top.angle = 0f;
+                this._bottom.angle = 0f;
                 this._top.depth = this.depth + 1;
                 this._bottom.depth = this.depth + 1;
                 Graphics.Draw(this._top, this.x, this.y - ((int)this.teleHeight * 16 - 9));
@@ -360,7 +360,7 @@ namespace DuckGame
                 this._arrow.depth = this.depth + 2;
                 this._arrow.alpha = 0.5f;
                 if (this.direction == 0)
-                    this._arrow.angleDegrees = 0.0f;
+                    this._arrow.angleDegrees = 0f;
                 else if (this.direction == 1)
                     this._arrow.angleDegrees = 180f;
                 else if (this.direction == 2)

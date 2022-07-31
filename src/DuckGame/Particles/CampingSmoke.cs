@@ -44,7 +44,7 @@ namespace DuckGame
             graphic2.CenterOrigin();
             graphicList.Add(graphic2);
             this.graphic = graphicList;
-            this.center = new Vec2(0.0f, 0.0f);
+            this.center = new Vec2(0f, 0f);
             this.depth = (Depth)1f;
             this._backgroundSmoke = new Sprite("smokeBack");
             this._shrinkSpeed = 0.01f + Rando.Float(0.005f);

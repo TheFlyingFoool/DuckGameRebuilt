@@ -22,7 +22,7 @@ namespace DuckGame
       new DuckPersona(new Vec3(125f, 125f, 125f)) { index = 1 },
       new DuckPersona(new Vec3(247f, 224f, 90f)) { index = 2 },
       new DuckPersona(new Vec3(205f, 107f, 29f)) { index = 3 },
-      new DuckPersona(new Vec3(0.0f, 133f, 74f), new Vec3(0.0f, 102f, 57f), new Vec3(0.0f, 173f, 97f))
+      new DuckPersona(new Vec3(0f, 133f, 74f), new Vec3(0f, 102f, 57f), new Vec3(0f, 173f, 97f))
       {
         index = 4
       },

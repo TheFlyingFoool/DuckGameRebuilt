@@ -16,7 +16,7 @@ namespace DuckGame
           string textVal,
           Color c,
           UIAlign al = UIAlign.Center,
-          float heightAdd = 0.0f,
+          float heightAdd = 0f,
           InputProfile controlProfile = null)
           : base(textVal, c, al, heightAdd, controlProfile)
         {

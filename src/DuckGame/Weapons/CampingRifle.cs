@@ -29,7 +29,7 @@ namespace DuckGame
             this._type = "gun";
             this._sprite = new SpriteMap("camping", 23, 15)
             {
-                speed = 0.0f
+                speed = 0f
             };
             this.graphic = _sprite;
             this.center = new Vec2(11f, 7f);
@@ -46,12 +46,12 @@ namespace DuckGame
             {
                 center = new Vec2(3f, 2f)
             };
-            this._holdOffset = new Vec2(0.0f, -2f);
+            this._holdOffset = new Vec2(0f, -2f);
             this._editorName = "Camping Gun";
             this.editorTooltip = "Designed to get campers into bed quickly.";
             this.loaded = false;
             this._loadProgress = -1;
-            this._loadAnimation = 0.0f;
+            this._loadAnimation = 0f;
             this.isFatal = false;
             this._clickSound = "campingEmpty";
             this.physicsMaterial = PhysicsMaterial.Plastic;
@@ -65,7 +65,7 @@ namespace DuckGame
                 for (int index = 0; index < 4; ++index)
                     Level.Add(SmallSmoke.New(Rando.Float(-4f, 4f), Rando.Float(-4f, 4f)));
                 this._onFire = false;
-                this.flammable = 0.0f;
+                this.flammable = 0f;
                 this.ammo = 0;
                 this.graphic = _sprite;
                 this.burntOut = true;
@@ -74,7 +74,7 @@ namespace DuckGame
             if (_loadAnimation == -1.0)
             {
                 SFX.Play("click");
-                this._loadAnimation = 0.0f;
+                this._loadAnimation = 0f;
             }
             if (_loadAnimation >= 0.0)
             {

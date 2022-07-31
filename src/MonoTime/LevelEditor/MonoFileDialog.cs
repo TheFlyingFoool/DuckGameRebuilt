@@ -124,7 +124,7 @@ namespace DuckGame
 
         private void ComputeAvailableStorageSpace()
         {
-            float percent = 0.0f;
+            float percent = 0f;
             if (!DuckFile.GetLevelSpacePercentUsed(ref percent))
                 return;
             this._percentStorageUsed = (double)percent > 100.0 ? 100f : percent;
@@ -192,7 +192,7 @@ namespace DuckGame
             Array.Sort<string>(files);
             float x = 338f;
             this._scrollBar = false;
-            this._scrollPosition = 0.0f;
+            this._scrollPosition = 0f;
             if (num2 > this._maxItems)
             {
                 x = 326f;
@@ -524,7 +524,7 @@ namespace DuckGame
                 }
                 Editor.lockInput = this;
                 base.Update();
-                this._scrollWait = Lerp.Float(this._scrollWait, 0.0f, 0.2f);
+                this._scrollWait = Lerp.Float(this._scrollWait, 0f, 0.2f);
                 if (this._dialog.result != null && this._dialog.result != "")
                 {
                     string[] files = DuckFile.GetFiles(this._currentDirectory, this._dialog.result + ".lev");
@@ -631,7 +631,7 @@ namespace DuckGame
                         if (_scrollPosition > 1.0)
                             this._scrollPosition = 1f;
                         if (_scrollPosition < 0.0)
-                            this._scrollPosition = 0.0f;
+                            this._scrollPosition = 0f;
                     }
                     bool flag3 = false;
                     int num2 = (int)Math.Round((this._items.Count - this._maxItems - 1.0) * _scrollPosition);
@@ -709,7 +709,7 @@ namespace DuckGame
                 {
                     this._scrollPosition = (float)(((double)Mouse.y - p1_2.y - 10.0) / (p2_2.y - (double)p1_2.y - 20.0));
                     if (_scrollPosition < 0.0)
-                        this._scrollPosition = 0.0f;
+                        this._scrollPosition = 0f;
                     if (_scrollPosition > 1.0)
                         this._scrollPosition = 1f;
                     this._scrollLerp = this._scrollPosition;
@@ -756,7 +756,7 @@ namespace DuckGame
             if (this._previewPair.strange)
             {
                 DuckGame.Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, this.depth + 8);
-                Vec2 p1_5 = p1_4 + new Vec2(0.0f, 122f);
+                Vec2 p1_5 = p1_4 + new Vec2(0f, 122f);
                 Vec2 p2_5 = p1_5 + new Vec2(166f, 36f);
                 DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), this.depth, false);
                 DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), this.depth - 8);
@@ -773,7 +773,7 @@ namespace DuckGame
             else
             {
                 DuckGame.Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, this.depth + 8);
-                Vec2 p1_6 = p1_4 + new Vec2(0.0f, 122f);
+                Vec2 p1_6 = p1_4 + new Vec2(0f, 122f);
                 this._fancyFont.Draw("Contains the following Local-Only objects:", p1_6.x + 4f, p1_6.y + 4f, Color.White, this.depth + 8);
                 int num3 = 22;
                 if (this._previewPair.invalid != null)

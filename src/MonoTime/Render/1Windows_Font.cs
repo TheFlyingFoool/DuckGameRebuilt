@@ -20,8 +20,8 @@ namespace DuckGame
         private static System.Drawing.Graphics _graphicsContext;
         private static Bitmap _drawingImage;
         //private static bool _dimensionsDirty = false;
-        //private static float _setWidth = 0.0f;
-        //private static float _setHeight = 0.0f;
+        //private static float _setWidth = 0f;
+        //private static float _setHeight = 0f;
         private static System.Drawing.Font _systemFont;
         private static List<string> _loadedFonts = new List<string>();
         private static string _fontPath;
@@ -244,8 +244,8 @@ namespace DuckGame
             FontGDIContext._brush = new SolidBrush(System.Drawing.Color.FromArgb(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue));
             Pen pen = new Pen(System.Drawing.Color.FromArgb(100, 0, byte.MaxValue, 0));
             rasterFontData2.fontHeight = FontGDIContext._systemFont.GetHeight();
-            float x = 0.0f;
-            float y = 0.0f;
+            float x = 0f;
+            float y = 0f;
             foreach (char character in FancyBitmapFont._characters)
             {
                 FontGDIContext.ABCFloat abcFloat2 = charAbcWidthsRange[character];
@@ -261,7 +261,7 @@ namespace DuckGame
                 if ((double)x + (double)num4 > _drawingImage.Width)
                 {
                     y += height + 2;
-                    x = 0.0f;
+                    x = 0f;
                 }
                 fontCharacterInfo.area = new Rectangle(x, y, num4 - 2f, height);
                 rasterFontData2.characters.Add(fontCharacterInfo);

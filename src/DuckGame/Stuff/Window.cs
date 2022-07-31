@@ -90,7 +90,7 @@ namespace DuckGame
         public virtual void UpdateHeight()
         {
             float num = windowHeight.value * 16f;
-            this.center = new Vec2(3f, 0.0f);
+            this.center = new Vec2(3f, 0f);
             if (this.floor)
             {
                 this.collisionSize = new Vec2(num, 6f);
@@ -101,7 +101,7 @@ namespace DuckGame
             {
                 this.collisionSize = new Vec2(6f, num);
                 this.collisionOffset = new Vec2(-3f, (float)(-(double)num + 8.0));
-                this._sprite.angle = 0.0f;
+                this._sprite.angle = 0f;
             }
             this._sprite.yscale = num;
             this._borderSprite.yscale = num;
@@ -302,7 +302,7 @@ namespace DuckGame
                 this.Shake();
                 this._localShakeTimes = this.shakeTimes;
             }
-            this._shakeVal = Lerp.Float(this._shakeVal, 0.0f, 0.05f);
+            this._shakeVal = Lerp.Float(this._shakeVal, 0f, 0.05f);
         }
 
         public override void Draw()

@@ -63,7 +63,7 @@ namespace DuckGame
             if (_swapFade > 0.0 || !this._swap)
                 return;
             this._swap = false;
-            this._swapFade = 0.0f;
+            this._swapFade = 0f;
             this._profiles.Clear();
             this._profiles.AddRange(collection);
         }
@@ -79,11 +79,11 @@ namespace DuckGame
             foreach (Profile profile in this._profiles)
             {
                 Color color = new Color(0.35f, 0.5f, 0.6f);
-                profile.persona.sprite.alpha = Maths.Clamp(this._swapFade, 0.0f, 1f);
+                profile.persona.sprite.alpha = Maths.Clamp(this._swapFade, 0f, 1f);
                 profile.persona.sprite.color = color * (float)(0.699999988079071 + (double)this._projectorSin.normalized * 0.100000001490116);
                 profile.persona.sprite.color = new Color(profile.persona.sprite.color.r, profile.persona.sprite.color.g, profile.persona.sprite.color.b);
                 profile.persona.sprite.flipH = false;
-                profile.persona.armSprite.alpha = Maths.Clamp(this._swapFade, 0.0f, 1f);
+                profile.persona.armSprite.alpha = Maths.Clamp(this._swapFade, 0f, 1f);
                 profile.persona.armSprite.color = color * (float)(0.699999988079071 + (double)this._projectorSin.normalized * 0.100000001490116);
                 profile.persona.armSprite.color = new Color(profile.persona.armSprite.color.r, profile.persona.armSprite.color.g, profile.persona.armSprite.color.b);
                 profile.persona.armSprite.flipH = false;

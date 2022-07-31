@@ -171,7 +171,7 @@ namespace DuckGame
           Profile profile = null,
           bool affectScale = false,
           bool halfscale = false,
-          float angle = 0.0f)
+          float angle = 0f)
         {
             ulong num1 = 0;
             if (profile == null)
@@ -227,7 +227,7 @@ namespace DuckGame
                 this._photoSprite.frame = UILevelBox.LittleManFrame(variation, 7, num1);
                 this._photoSprite.depth = depth + 6;
                 this._photoSprite.scale = this.sprite.scale;
-                DuckGame.Graphics.Draw(_photoSprite, pos.x - 6f * this._photoSprite.xscale, pos.y - 4f * this._photoSprite.yscale, new Rectangle(2f, 0.0f, 12f, 10f));
+                DuckGame.Graphics.Draw(_photoSprite, pos.x - 6f * this._photoSprite.xscale, pos.y - 4f * this._photoSprite.yscale, new Rectangle(2f, 0f, 12f, 10f));
                 DuckGame.Graphics.DrawRect(pos + new Vec2(-6f * this._photoSprite.xscale, -6f * this._photoSprite.yscale), pos + new Vec2(6f * this._photoSprite.xscale, 6f * this._photoSprite.yscale), Colors.DGBlue, depth - 4);
                 g.frame = 0;
             }
@@ -337,7 +337,7 @@ namespace DuckGame
           bool stickTofloor,
           bool stickToroof = false,
           bool surface = false,
-          float topoff = 0.0f,
+          float topoff = 0f,
           int maxval = -1,
           bool canGacha = true)
         {

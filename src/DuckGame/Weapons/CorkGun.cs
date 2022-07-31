@@ -35,7 +35,7 @@ namespace DuckGame
         {
             if (windingVelocity > 1.0)
                 this.windingVelocity = 1f;
-            this.windingVelocity = Lerp.FloatSmooth(this.windingVelocity, 0.0f, 0.05f);
+            this.windingVelocity = Lerp.FloatSmooth(this.windingVelocity, 0f, 0.05f);
             if (this.corkObject != null)
             {
                 double num = (double)this.corkObject.WindUp(this.windingVelocity);
@@ -43,7 +43,7 @@ namespace DuckGame
                 {
                     Level.Remove(corkObject);
                     this.ammo = 1;
-                    this.windingVelocity = 0.0f;
+                    this.windingVelocity = 0f;
                     this.corkObject = null;
                     this._firedCork = 0;
                     this.scale = new Vec2(1.5f, 1.5f);

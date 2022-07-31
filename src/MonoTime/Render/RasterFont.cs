@@ -12,7 +12,7 @@ namespace DuckGame
 {
     public class RasterFont : FancyBitmapFont
     {
-        public static readonly RasterFont None = new RasterFont(null, 0.0f);
+        public static readonly RasterFont None = new RasterFont(null, 0f);
         public RasterFont.Data data;
 
         public static float fontScaleFactor => Resolution.current.y / 72 / 10f;

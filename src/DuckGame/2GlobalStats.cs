@@ -43,7 +43,7 @@ namespace DuckGame
         public void BindName(string name)
         {
             this._name = name;
-            this._value = 0.0f;
+            this._value = 0f;
             if (!Steam.IsInitialized())
                 return;
             float stat = Steam.GetStat(this._name);

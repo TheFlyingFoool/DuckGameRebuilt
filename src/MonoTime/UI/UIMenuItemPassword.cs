@@ -36,7 +36,7 @@ namespace DuckGame
             BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0.0f);
+            UIDivider component1 = new UIDivider(true, 0f);
             if (text != "")
             {
                 UIText component2 = new UIText(text, c);

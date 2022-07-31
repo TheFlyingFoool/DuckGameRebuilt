@@ -66,8 +66,8 @@ namespace DuckGame
                 {
                     if (p.stick != null)
                     {
-                        p.position.x = 0.0f;
-                        p.position.y = 0.0f;
+                        p.position.x = 0f;
+                        p.position.y = 0f;
                     }
                     else
                     {
@@ -105,8 +105,8 @@ namespace DuckGame
                     this.stick = ghost.thing as MaterialThing;
                 this.stickOffset = new Vec2(d.ReadSByte(), d.ReadSByte());
                 this.UpdateStick();
-                this.hSpeed = 0.0f;
-                this.vSpeed = 0.0f;
+                this.hSpeed = 0f;
+                this.vSpeed = 0f;
             }
             else
                 this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
@@ -135,7 +135,7 @@ namespace DuckGame
         public int fireID => this._fireID;
 
         private SmallFire()
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
             this._bounceEfficiency = 0.2f;
             this._sprite = new SpriteMap("smallFire", 16, 16);
@@ -165,7 +165,7 @@ namespace DuckGame
             }
             this.position.x = xpos;
             this.position.y = ypos;
-            this._airFireScale = 0.0f;
+            this._airFireScale = 0f;
             this._multiplied = false;
             this._groundLife = 125;
             this.doFloat = false;
@@ -177,14 +177,14 @@ namespace DuckGame
             this.angleDegrees = Rando.Float(20f) - 10f;
             this._airFire.SetAnimation("burn");
             this._airFire.imageIndex = Rando.Int(2);
-            this._airFire.xscale = this._airFire.yscale = 0.0f;
+            this._airFire.xscale = this._airFire.yscale = 0f;
             this._spinSpeed = 0.1f + Rando.Float(0.1f);
             this._airFire.color = Color.Orange * (0.8f + Rando.Float(0.2f));
             this._gravMult = 0.7f;
             this._sticky = 0.6f;
             this._life = 100f;
             if (Network.isActive)
-                this._sticky = 0.0f;
+                this._sticky = 0f;
             this._fireID = FireManager.GetFireID();
             this.needsSynchronization = true;
             if (shortLife)

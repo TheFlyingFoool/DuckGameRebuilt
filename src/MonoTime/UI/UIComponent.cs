@@ -120,7 +120,7 @@ namespace DuckGame
         {
             this._collisionSize = new Vec2(wide, high);
             this.layer = Layer.HUD;
-            this.depth = (Depth)0.0f;
+            this.depth = (Depth)0f;
             this._autoSizeHor = (double)wide < 0.0;
             this._autoSizeVert = (double)high < 0.0;
         }

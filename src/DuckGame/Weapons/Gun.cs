@@ -98,7 +98,7 @@ namespace DuckGame
 
         public Vec2 laserOffset => this._laserOffsetTL - this.center;
 
-        public Vec2 barrelVector => this.Offset(this.barrelOffset) - this.Offset(this.barrelOffset + new Vec2(-1f, 0.0f));
+        public Vec2 barrelVector => this.Offset(this.barrelOffset) - this.Offset(this.barrelOffset + new Vec2(-1f, 0f));
 
         public override float angle
         {
@@ -143,7 +143,7 @@ namespace DuckGame
         {
             this._flare = new SpriteMap("smallFlare", 11, 10)
             {
-                center = new Vec2(0.0f, 5f)
+                center = new Vec2(0f, 5f)
             };
             this._barrelSmoke = new SpriteMap("barrelSmoke", 8, 8)
             {
@@ -154,13 +154,13 @@ namespace DuckGame
             this._barrelSmoke.AddAnimation("loop", 1f, true, 3, 4, 5, 6, 7, 8);
             this._barrelSmoke.AddAnimation("finish", 1f, false, 9, 10, 11, 12);
             this._barrelSmoke.SetAnimation("puff");
-            this._barrelSmoke.speed = 0.0f;
+            this._barrelSmoke.speed = 0f;
             this._translucent = true;
             this.physicsMaterial = PhysicsMaterial.Metal;
             this._dontCrush = true;
             this._clickPuff = new SpriteMap("clickPuff", 16, 16);
             this._clickPuff.AddAnimation("puff", 0.3f, false, 0, 1, 2, 3);
-            this._clickPuff.center = new Vec2(0.0f, 12f);
+            this._clickPuff.center = new Vec2(0f, 12f);
             this._sightHit = new Sprite("laserSightHit");
             this._sightHit.CenterOrigin();
             this.depth = -0.1f;
@@ -179,7 +179,7 @@ namespace DuckGame
             this._doPuff = true;
             this._clickPuff.frame = 0;
             this._clickPuff.SetAnimation("puff");
-            this._barrelHeat = 0.0f;
+            this._barrelHeat = 0f;
             this._barrelSmoke.SetAnimation("finish");
             SFX.Play(this._clickSound);
             for (int index = 0; index < 2; ++index)
@@ -258,7 +258,7 @@ namespace DuckGame
             if (_smokeWait > 0.0 && (double)this._barrelSmoke.speed > 0.0)
                 this._barrelSmoke.SetAnimation("finish");
             if (this._barrelSmoke.currentAnimation == "finish" && this._barrelSmoke.finished)
-                this._barrelSmoke.speed = 0.0f;
+                this._barrelSmoke.speed = 0f;
             if (this.owner != null)
             {
                 if (this.owner.hSpeed > 0.1f)
@@ -307,7 +307,7 @@ namespace DuckGame
                         if ((double)Math.Abs(this.angleDegrees - 90f) < (double)Math.Abs(this.angleDegrees + 90f))
                             this.angleDegrees = Lerp.Float(this.angleDegrees, 90f, 16f);
                         else
-                            this.angleDegrees = Lerp.Float(-90f, 0.0f, 16f);
+                            this.angleDegrees = Lerp.Float(-90f, 0f, 16f);
                     }
                     else if ((double)this.angleDegrees > 90.0 && (double)this.angleDegrees < 270.0)
                     {
@@ -319,7 +319,7 @@ namespace DuckGame
                             this.angleDegrees -= 360f;
                         else if ((double)this.angleDegrees < -180.0)
                             this.angleDegrees += 360f;
-                        this.angleDegrees = Lerp.Float(this.angleDegrees, 0.0f, 14f);
+                        this.angleDegrees = Lerp.Float(this.angleDegrees, 0f, 14f);
                     }
                 }
             }
@@ -327,7 +327,7 @@ namespace DuckGame
             if (this._owner == null)
                 this._extraOffset.y = num * (this._collisionOffset.y + this._collisionSize.y + this._collisionOffset.y);
             else
-                this._extraOffset.y = 0.0f;
+                this._extraOffset.y = 0f;
             if (this.owner == null || (double)this.owner.hSpeed > -0.1f && (double)this.owner.hSpeed < 0.1f)
             {
                 if (_smokeAngle >= 0.1f)
@@ -509,7 +509,7 @@ namespace DuckGame
                                 this.Fondle(dart);
                                 if (this.onFire || _barrelHeat > 6.0)
                                 {
-                                    Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: dart, firedFrom: this));
+                                    Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
                                     dart.burning = true;
                                     dart.onFire = true;
                                     this.Burn(this.position, this);

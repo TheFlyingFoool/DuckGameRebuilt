@@ -30,7 +30,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-6f, -4f);
             this.collisionSize = new Vec2(12f, 11f);
             this.physicsMaterial = PhysicsMaterial.Rubber;
-            this._holdOffset = new Vec2(0.0f, 2f);
+            this._holdOffset = new Vec2(0f, 2f);
             this.bouncy = 0.4f;
             this.friction = 0.05f;
             this.editorTooltip = "Need more than one banana? Have I got news for you...";
@@ -67,8 +67,8 @@ namespace DuckGame
             SFX.Play("smallSplat", pitch: Rando.Float(-0.6f, 0.6f));
             if (!(this.owner is Duck owner))
                 return;
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             if (owner.inputProfile.Down("LEFT"))
                 num1 -= 3f;
             if (owner.inputProfile.Down("RIGHT"))

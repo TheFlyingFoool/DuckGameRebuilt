@@ -55,7 +55,7 @@
 //                        this._scatterWait = 1f;
 //                    }
 //                }
-//                if ((double)Math.Abs(duck.y - this._target.y) < 16.0 && (double)Math.Abs(duck.x - this._target.x) < 150.0 && Level.CheckRay<Duck>(duck.position + new Vec2(duck.offDir * 10, 0.0f), this._target.position) == this._target)
+//                if ((double)Math.Abs(duck.y - this._target.y) < 16.0 && (double)Math.Abs(duck.x - this._target.x) < 150.0 && Level.CheckRay<Duck>(duck.position + new Vec2(duck.offDir * 10, 0f), this._target.position) == this._target)
 //                {
 //                    if (Level.CheckLine<Block>(duck.position, this._target.position) == null)
 //                    {

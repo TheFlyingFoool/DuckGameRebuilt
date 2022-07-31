@@ -33,7 +33,7 @@ namespace DuckGame
         }
 
         public WoodDebris()
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
             this._sprite = new SpriteMap("woodDebris", 8, 8);
             this.graphic = _sprite;

@@ -33,11 +33,11 @@ namespace DuckGame
                 return;
             this.backgroundColor = new Color(26, 0, 0);
             Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/industrial", 0.0f, 0.0f, 3);
+            this._parallax = new ParallaxBackground("background/industrial", 0f, 0f, 3);
             float speed = 0.4f;
-            this._parallax.AddZone(0, 0.0f, -speed, true);
-            this._parallax.AddZone(1, 0.0f, -speed, true);
-            this._parallax.AddZone(2, 0.0f, -speed, true);
+            this._parallax.AddZone(0, 0f, -speed, true);
+            this._parallax.AddZone(1, 0f, -speed, true);
+            this._parallax.AddZone(2, 0f, -speed, true);
             this._parallax.AddZone(3, 0.2f, -speed, true);
             this._parallax.AddZone(4, 0.2f, -speed, true);
             this._parallax.AddZone(5, 0.4f, -speed, true);
@@ -56,7 +56,7 @@ namespace DuckGame
             this._parallax.AddZone(26, 0.1f, speed);
             this._parallax.AddZone(27, 0.1f, speed);
             this._parallax.AddZone(28, 0.1f, speed);
-            this._parallax.AddZone(29, 0.0f, speed);
+            this._parallax.AddZone(29, 0f, speed);
             Level.Add(_parallax);
         }
 

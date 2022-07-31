@@ -65,7 +65,7 @@ namespace DuckGame
             p2 = new Vec2(p2.x, p2.y);
             float rotation = (float)Math.Atan2(p2.y - (double)p1.y, p2.x - (double)p1.x);
             float length = (p1 - p2).length;
-            this.batch.Draw(this._blank, (Vector2)p1, new Microsoft.Xna.Framework.Rectangle?(), (Microsoft.Xna.Framework.Color)col, rotation, (Vector2)new Vec2(0.0f, 0.5f), (Vector2)new Vec2(length, width), SpriteEffects.None, 1f);
+            this.batch.Draw(this._blank, (Vector2)p1, new Microsoft.Xna.Framework.Rectangle?(), (Microsoft.Xna.Framework.Color)col, rotation, (Vector2)new Vec2(0f, 0.5f), (Vector2)new Vec2(length, width), SpriteEffects.None, 1f);
         }
 
         public void InitializeDraw(GraphicsDevice device)
@@ -103,8 +103,8 @@ namespace DuckGame
                     if (num5 > 0)
                     {
                         Color typeColor = NCPacketBreakdown.GetTypeColor(dataType);
-                        Vec2 p1_2 = vec2 - new Vec2(0.0f, num4 / (float)this._currentMaxSize * this._maxHeightPerPacket);
-                        Vec2 p2 = p1_2 - new Vec2(0.0f, num5 / (float)this._currentMaxSize * this._maxHeightPerPacket);
+                        Vec2 p1_2 = vec2 - new Vec2(0f, num4 / (float)this._currentMaxSize * this._maxHeightPerPacket);
+                        Vec2 p2 = p1_2 - new Vec2(0f, num5 / (float)this._currentMaxSize * this._maxHeightPerPacket);
                         this.DrawLine(p1_2, p2, typeColor, this._widthPerPacket);
                         num4 += num5;
                         num3 += num5;
@@ -144,8 +144,8 @@ namespace DuckGame
                     if (num5 > 0)
                     {
                         Color typeColor = NCPacketBreakdown.GetTypeColor(dataType);
-                        Vec2 p1 = vec2 - new Vec2(0.0f, num4 / (float)this._currentMaxSize * this._maxHeightPerPacket);
-                        DuckGame.Graphics.DrawLine(p1, p1 - new Vec2(0.0f, num5 / (float)this._currentMaxSize * this._maxHeightPerPacket), typeColor, this._widthPerPacket, (Depth)0.9f);
+                        Vec2 p1 = vec2 - new Vec2(0f, num4 / (float)this._currentMaxSize * this._maxHeightPerPacket);
+                        DuckGame.Graphics.DrawLine(p1, p1 - new Vec2(0f, num5 / (float)this._currentMaxSize * this._maxHeightPerPacket), typeColor, this._widthPerPacket, (Depth)0.9f);
                         num4 += num5;
                         num3 += num5;
                     }
@@ -319,21 +319,21 @@ namespace DuckGame
 
             public void Draw(SpriteBatch batch, string text, float xpos, float ypos, Color c)
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 for (int index = 0; index < text.Length; ++index)
                 {
                     if (text[index] == '\n')
                     {
                         num1 += this._tileSize * 8;
-                        num2 = 0.0f;
+                        num2 = 0f;
                     }
                     else
                     {
                         int character = NetGraph.BFont._characterMap[text[index]];
                         int x = character % 16 * this._tileSize;
                         int y = character / 16 * this._tileSize;
-                        batch.Draw(this._texture, (Vector2)new Vec2(xpos + num2, ypos), new Microsoft.Xna.Framework.Rectangle?((Microsoft.Xna.Framework.Rectangle)new Rectangle(x, y, _tileSize, _tileSize)), (Microsoft.Xna.Framework.Color)c, 0.0f, (Vector2)Vec2.Zero, (Vector2)new Vec2(1f, 1f), SpriteEffects.None, 1f);
+                        batch.Draw(this._texture, (Vector2)new Vec2(xpos + num2, ypos), new Microsoft.Xna.Framework.Rectangle?((Microsoft.Xna.Framework.Rectangle)new Rectangle(x, y, _tileSize, _tileSize)), (Microsoft.Xna.Framework.Color)c, 0f, (Vector2)Vec2.Zero, (Vector2)new Vec2(1f, 1f), SpriteEffects.None, 1f);
                         num2 += _tileSize;
                     }
                 }

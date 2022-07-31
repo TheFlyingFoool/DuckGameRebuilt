@@ -193,7 +193,7 @@ namespace DuckGame
         }
 
         public Color(float r, float g, float b, float a)
-          : this((byte)((double)MathHelper.Clamp(r, 0.0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(g, 0.0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(b, 0.0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(a, 0.0f, 1f) * byte.MaxValue))
+          : this((byte)((double)MathHelper.Clamp(r, 0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(g, 0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(b, 0f, 1f) * byte.MaxValue), (byte)((double)MathHelper.Clamp(a, 0f, 1f) * byte.MaxValue))
         {
         }
 
@@ -246,9 +246,9 @@ namespace DuckGame
 
         public static explicit operator Color(uint hex) => new Color(hex);
 
-        public static Color operator *(Color c, float r) => new Color((byte)MathHelper.Clamp(c.r * r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.g * r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.b * r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.a * r, 0.0f, byte.MaxValue));
+        public static Color operator *(Color c, float r) => new Color((byte)MathHelper.Clamp(c.r * r, 0f, byte.MaxValue), (byte)MathHelper.Clamp(c.g * r, 0f, byte.MaxValue), (byte)MathHelper.Clamp(c.b * r, 0f, byte.MaxValue), (byte)MathHelper.Clamp(c.a * r, 0f, byte.MaxValue));
 
-        public static Color operator /(Color c, float r) => new Color((byte)MathHelper.Clamp(c.r / r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.g / r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.b / r, 0.0f, byte.MaxValue), (byte)MathHelper.Clamp(c.a / r, 0.0f, byte.MaxValue));
+        public static Color operator /(Color c, float r) => new Color((byte)MathHelper.Clamp(c.r / r, 0f, byte.MaxValue), (byte)MathHelper.Clamp(c.g / r, 0f, byte.MaxValue), (byte)MathHelper.Clamp(c.b / r, 0f, byte.MaxValue), (byte)MathHelper.Clamp(c.a / r, 0f, byte.MaxValue));
 
         public static bool operator ==(Color l, Color r) => l.Equals(r);
 

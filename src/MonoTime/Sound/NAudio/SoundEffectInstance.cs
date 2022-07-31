@@ -229,7 +229,7 @@ namespace DuckGame
         {
             if (this._data == null)
                 return;
-            pProgress = Maths.Clamp(pProgress, 0.0f, 1f);
+            pProgress = Maths.Clamp(pProgress, 0f, 1f);
             this._position = (int)((double)pProgress * _data.data.Length);
         }
 

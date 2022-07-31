@@ -43,7 +43,7 @@ namespace DuckGame
             Rando.generator = random;
             List<TypeProbPair> typeProbPairList = Utils.Shuffle<TypeProbPair>(contains);
             System.Type type = null;
-            float num = 0.0f;
+            float num = 0f;
             foreach (TypeProbPair typeProbPair in typeProbPairList)
             {
                 if ((double)Rando.Float(1f) > 1.0 - typeProbPair.probability)

@@ -35,7 +35,7 @@ namespace DuckGame
 
         public List<PathNodeLink> links => this._links;
 
-        public PathNode(float xpos = 0.0f, float ypos = 0.0f, Thing t = null)
+        public PathNode(float xpos = 0f, float ypos = 0f, Thing t = null)
           : base(xpos, ypos)
         {
             this._thing = t;
@@ -44,7 +44,7 @@ namespace DuckGame
             this.collisionOffset = new Vec2(-8f, -8f);
             this.collisionSize = new Vec2(16f, 16f);
             this.scale = new Vec2(0.5f, 0.5f);
-            this.editorOffset = new Vec2(0.0f, -8f);
+            this.editorOffset = new Vec2(0f, -8f);
         }
 
         public override void Update()
@@ -112,7 +112,7 @@ namespace DuckGame
             //    List<PathNode> path = AI.GetPath(this, pathNode1);
             //    if (path != null)
             //    {
-            //        float num = 0.0f;
+            //        float num = 0f;
             //        Vec2 vec2 = Vec2.Zero;
             //        foreach (PathNode pathNode2 in path)
             //        {
@@ -208,7 +208,7 @@ namespace DuckGame
                     if ((double)Math.Abs(this.y - to.y) < 8.0)
                     {
                         Vec2 p1 = (this.position + to.position) / 2f;
-                        if (Level.CheckLine<IPathNodeBlocker>(p1, p1 + new Vec2(0.0f, 18f)) == null)
+                        if (Level.CheckLine<IPathNodeBlocker>(p1, p1 + new Vec2(0f, 18f)) == null)
                             pathNodeLink.gap = true;
                     }
                     PathNodeLink link = to.GetLink(this);
@@ -226,8 +226,8 @@ namespace DuckGame
 
         public void Reset()
         {
-            this.cost = 0.0f;
-            this.heuristic = 0.0f;
+            this.cost = 0f;
+            this.heuristic = 0f;
             this._parent = null;
         }
 

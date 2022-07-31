@@ -22,7 +22,7 @@
 //            this._drmSuccess = DG.InitializeDRM();
 //            this._font = new FancyBitmapFont("smallFont");
 //            this._bigFont = new BitmapFont("biosFont", 8);
-//            Graphics.fade = 0.0f;
+//            Graphics.fade = 0f;
 //        }
 
 //        public override void Update()
@@ -40,7 +40,7 @@
 //            }
 //            else
 //            {
-//                Graphics.fade = 0.0f;
+//                Graphics.fade = 0f;
 //                Level.current = new TitleScreen();
 //            }
 //            this._wait -= 0.02f;

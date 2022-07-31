@@ -16,7 +16,7 @@ namespace DuckGame
         {
             this.UpdateSprite();
             this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-8f, 0.0f);
+            this.collisionOffset = new Vec2(-8f, 0f);
             this.collisionSize = new Vec2(16f, 8f);
             this.depth = -0.5f;
             this._editorName = "Spring DownLeft";

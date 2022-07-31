@@ -23,7 +23,7 @@ namespace DuckGame
         {
             bool flag = this.Draw(position, allowInput);
             if (this.right != null)
-                flag |= this.right.DoDraw(position + new Vec2(this.width, 0.0f), !flag);
+                flag |= this.right.DoDraw(position + new Vec2(this.width, 0f), !flag);
             return flag;
         }
 

@@ -33,10 +33,10 @@ namespace DuckGame
             this._fireWait = 2f;
             this._kickForce = 1f;
             this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(0.0f, 0.0f);
+            this._holdOffset = new Vec2(0f, 0f);
             this._flare = new SpriteMap("laserFlare", 16, 16)
             {
-                center = new Vec2(0.0f, 8f)
+                center = new Vec2(0f, 8f)
             };
             this.editorTooltip = "Quick-fire laser beam of ULTIMATE DESTRUCTION... with an adorable wittle name.";
         }
@@ -58,13 +58,13 @@ namespace DuckGame
                             Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         this.firedBullets.Clear();
                     }
-                    this._wait = 0.0f;
+                    this._wait = 0f;
                     ++this._burstNum;
                 }
                 if (this._burstNum == 3)
                 {
                     this._burstNum = 0;
-                    this._burstWait = 0.0f;
+                    this._burstWait = 0f;
                     this._bursting = false;
                     this._wait = this._fireWait;
                 }

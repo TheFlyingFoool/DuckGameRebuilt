@@ -412,7 +412,7 @@ namespace DuckGame
                             MonoMain.timeInEditor = 0;
                         }
                         if (!(Level._core.currentLevel is HighlightLevel))
-                            DuckGame.Graphics.fadeAdd = 0.0f;
+                            DuckGame.Graphics.fadeAdd = 0f;
                         Steam.StoreStats();
                     }
                     foreach (Profile profile in Profiles.active)
@@ -621,7 +621,7 @@ namespace DuckGame
                 if ((double)DuckGame.Graphics.flashAdd > 0.0)
                     DuckGame.Graphics.flashAdd -= this.flashDissipationSpeed;
                 else
-                    DuckGame.Graphics.flashAdd = 0.0f;
+                    DuckGame.Graphics.flashAdd = 0f;
                 if (this._levelStart)
                 {
                     DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.05f);
@@ -774,7 +774,7 @@ namespace DuckGame
                     Material material = DuckGame.Graphics.material;
                     DuckGame.Graphics.material = null;
                     DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-                    DuckGame.Graphics.DrawRect(new Vec2(0.0f, 0.0f), new Vec2(Resolution.current.x, Resolution.current.y), color, -1f);
+                    DuckGame.Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Resolution.current.x, Resolution.current.y), color, -1f);
                     DuckGame.Graphics.screen.End();
                     DuckGame.Graphics.material = material;
                     DuckGame.Graphics.RestoreOldViewport();
@@ -809,7 +809,7 @@ namespace DuckGame
                 return;
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             DuckGame.Graphics.DrawRect(Vec2.Zero, new Vec2(Resolution.size.x, num / 2f), Color.Black, (Depth)0.9f);
-            DuckGame.Graphics.DrawRect(new Vec2(0.0f, Resolution.size.y - num / 2f), new Vec2(Resolution.size.x, Resolution.size.y), Color.Black, (Depth)0.9f);
+            DuckGame.Graphics.DrawRect(new Vec2(0f, Resolution.size.y - num / 2f), new Vec2(Resolution.size.x, Resolution.size.y), Color.Black, (Depth)0.9f);
             DuckGame.Graphics.screen.End();
         }
 
@@ -1422,7 +1422,7 @@ namespace DuckGame
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore)
         {
-            position = new Vec2(0.0f, 0.0f);
+            position = new Vec2(0f, 0f);
             System.Type key = typeof(T);
             foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
             {
@@ -1441,7 +1441,7 @@ namespace DuckGame
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position)
         {
-            position = new Vec2(0.0f, 0.0f);
+            position = new Vec2(0f, 0f);
             System.Type key = typeof(T);
             foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
             {

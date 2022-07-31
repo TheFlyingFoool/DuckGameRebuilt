@@ -256,7 +256,7 @@ namespace DuckGame
                     }
                 }
             }
-            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0.0f, 0.4f, 1.1f);
+            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.4f, 1.1f);
             if (this.down)
             {
                 if (this._swapped)
@@ -290,10 +290,10 @@ namespace DuckGame
             this._frame.depth = -0.9f;
             Graphics.Draw(this._frame, this.x, this.y);
             this._frame.depth = -0.7f;
-            Graphics.Draw(this._frame, this.x, this.y, new Rectangle(0.0f, 0.0f, 125f, 36f));
+            Graphics.Draw(this._frame, this.x, this.y, new Rectangle(0f, 0f, 125f, 36f));
             if (this._swapped)
             {
-                this._contains.Draw(this.position + new Vec2(0.0f, 10f), -0.8f);
+                this._contains.Draw(this.position + new Vec2(0f, 10f), -0.8f);
                 if (_starGrow <= 1.0)
                 {
                     this._star.depth = (Depth)0.9f;

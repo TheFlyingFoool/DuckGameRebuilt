@@ -107,7 +107,7 @@ namespace DuckGame
             this._matchmakingStars.Add(spriteMap4);
         }
 
-        public void ChangeState(MatchmakingState s, float wait = 0.0f)
+        public void ChangeState(MatchmakingState s, float wait = 0f)
         {
             this._connectTimeout = 0;
             DevConsole.Log("|PURPLE|LOBBY    |DGYELLOW|CHANGE STATE " + s.ToString(), Color.White);
@@ -130,7 +130,7 @@ namespace DuckGame
         private void OnStateChange(MatchmakingState s)
         {
             UIMatchmakingBox._core._state = s;
-            this._stateWait = 0.0f;
+            this._stateWait = 0f;
             if (UIMatchmakingBox._core._state == MatchmakingState.Disconnect)
             {
                 if (!Network.isActive)
@@ -165,11 +165,11 @@ namespace DuckGame
             this._tryConnectLobby = null;
             this._tryHostingLobby = null;
             this.ChangeState(MatchmakingState.ConnectToMoon);
-            this._tryHostingWait = 0.0f;
-            this._tryConnectTimeout = 0.0f;
+            this._tryHostingWait = 0f;
+            this._tryConnectTimeout = 0f;
             this._quit = false;
             this._tries = 0;
-            this._tryHostingWait = 0.0f;
+            this._tryHostingWait = 0f;
             this._totalLobbiesFound = -1;
             this._failedAttempts.Clear();
             this._currentLevel = Level.current;
@@ -183,7 +183,7 @@ namespace DuckGame
         public override void Close()
         {
             this.ChangeState(MatchmakingState.None);
-            this._tryHostingWait = 0.0f;
+            this._tryHostingWait = 0f;
             if (this._quit)
             {
                 foreach (KeyValuePair<Profile, Team> teamProfileLink in this._teamProfileLinks)
@@ -192,7 +192,7 @@ namespace DuckGame
             this._quit = false;
             this._newStatusList.Clear();
             this._statusList.Clear();
-            this._tryConnectTimeout = 0.0f;
+            this._tryConnectTimeout = 0f;
             base.Close();
         }
 
@@ -325,15 +325,15 @@ namespace DuckGame
             {
                 this._scroll += 0.1f;
                 if (_scroll > 9.0)
-                    this._scroll = 0.0f;
+                    this._scroll = 0f;
                 this._dots += 0.01f;
                 if (_dots > 1.0)
-                    this._dots = 0.0f;
+                    this._dots = 0f;
             }
             if (this.open)
             {
                 foreach (BlacklistServer failedAttempt in this._failedAttempts)
-                    failedAttempt.cooldown = Lerp.Float(failedAttempt.cooldown, 0.0f, Maths.IncFrameTimer());
+                    failedAttempt.cooldown = Lerp.Float(failedAttempt.cooldown, 0f, Maths.IncFrameTimer());
                 if (this._searchingIsOver)
                 {
                     this._signalCrossLocal.SetAnimation("idle");
@@ -385,7 +385,7 @@ namespace DuckGame
                     this._stateWait -= Maths.IncFrameTimer();
                     if (_stateWait <= 0.0)
                     {
-                        this._stateWait = 0.0f;
+                        this._stateWait = 0f;
                         this.OnStateChange(this._pendingState);
                     }
                 }

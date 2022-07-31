@@ -60,7 +60,7 @@ namespace DuckGame
         {
             if (!this._valid || this._instance == null || this._instance.State != SoundState.Playing)
                 return;
-            this._instance.Volume = MathHelper.Clamp(this._volume, 0.0f, 1f) * this._replaygainModifier;
+            this._instance.Volume = MathHelper.Clamp(this._volume, 0f, 1f) * this._replaygainModifier;
         }
 
         public bool looped
@@ -178,7 +178,7 @@ namespace DuckGame
                 lock (this._streamingMutex)
                 {
                     this.Stop();
-                    float num = 0.0f;
+                    float num = 0f;
                     try
                     {
                         byte[] numArray = new byte[1000];
@@ -199,10 +199,10 @@ namespace DuckGame
                     }
                     catch (Exception)
                     {
-                        num = 0.0f;
+                        num = 0f;
                     }
                     this._activeSong = new VorbisReader(ogg, false);
-                    this._replaygainModifier = Math.Max(0.0f, Math.Min(1f, (float)((double)(100f * (float)Math.Pow(10.0, (double)num / 20.0)) / 100.0 * 1.89999997615814)));
+                    this._replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((double)(100f * (float)Math.Pow(10.0, (double)num / 20.0)) / 100.0 * 1.89999997615814)));
                     this.Thread_Decoder_LoadNewSong();
                     this.Thread_Decoder_DecodeChunk();
                 }
@@ -309,8 +309,8 @@ namespace DuckGame
                         {
                             for (int index = 0; index < this._floatBuffer.Length / 2; ++index)
                             {
-                                this._floatBuffer[index * 2] = 0.0f;
-                                this._floatBuffer[index * 2 + 1] = 0.0f;
+                                this._floatBuffer[index * 2] = 0f;
+                                this._floatBuffer[index * 2 + 1] = 0f;
                             }
                             length = this._floatBuffer.Length;
                             this.Stop();

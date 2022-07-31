@@ -38,7 +38,7 @@ namespace DuckGame
                 return;
             this.backgroundColor = new Color(216, 240, 248);
             this.level.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/kingdomSky", 0.0f, 0.0f, 3);
+            this._parallax = new ParallaxBackground("background/kingdomSky", 0f, 0f, 3);
             float speed = 0.4f * this._speedMult;
             this._parallax.AddZone(16, 0.8f, speed, this._moving);
             this._parallax.AddZone(17, 0.8f, speed, this._moving);

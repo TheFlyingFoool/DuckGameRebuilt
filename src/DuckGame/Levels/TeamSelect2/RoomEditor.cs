@@ -82,7 +82,7 @@ namespace DuckGame
             this._selector = sel;
             //this._moveArrow = new Sprite("moveArrow")
             //{
-            //    center = new Vec2(0.0f, 4f)
+            //    center = new Vec2(0f, 4f)
             //};
             this._scren = new Sprite("furni/scren");
             this._scren.CenterOrigin();
@@ -106,7 +106,7 @@ namespace DuckGame
         {
             this._open = false;
             this._selector.fade = 1f;
-            this._fade = 0.0f;
+            this._fade = 0f;
             this._desiredFurniSelection = 0;
             this._furniSelection = 0;
             this._mode = REMode.Main;
@@ -372,7 +372,7 @@ namespace DuckGame
           },
           new Furniture(false, false, "Stay outta my room!", Rarity.Special, "proximityDefenseTurret", 25, 16, "PERIMETER DEFENCE", Furniture.Default,  null, false, true, canGacha: false)
           {
-            yOffset = 0.0f,
+            yOffset = 0f,
             visible = false
           }
         };
@@ -419,7 +419,7 @@ namespace DuckGame
         {
             if (this._selector.screen.transitioning)
                 return;
-            this._takenFlash = Lerp.Float(this._takenFlash, 0.0f, 0.02f);
+            this._takenFlash = Lerp.Float(this._takenFlash, 0f, 0.02f);
             if (!this._open)
             {
                 if (_fade >= 0.00999999977648258 || !this._closing)
@@ -437,16 +437,16 @@ namespace DuckGame
                         this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
                     else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
                     {
-                        this._slide = 0.0f;
-                        this._slideTo = 0.0f;
+                        this._slide = 0f;
+                        this._slideTo = 0f;
                         this._furniSelection = this._desiredFurniSelection;
                     }
                     if (_upSlideTo != 0.0 && _upSlide != (double)this._upSlideTo)
                         this._upSlide = Lerp.Float(this._upSlide, this._upSlideTo, 0.1f);
                     else if (_upSlideTo != 0.0 && _upSlide == (double)this._upSlideTo)
                     {
-                        this._upSlide = 0.0f;
-                        this._upSlideTo = 0.0f;
+                        this._upSlide = 0f;
+                        this._upSlideTo = 0f;
                         this._furniSelection = this._desiredFurniSelection;
                     }
                     if (_desiredFurniSelection == _furniSelection && _slideTo == 0.0 && _upSlideTo == 0.0 && this._mode == REMode.Main)
@@ -502,7 +502,7 @@ namespace DuckGame
                             this._furniSelection = this._desiredFurniSelection;
                             this._open = false;
                             this._selector.fade = 1f;
-                            this._fade = 0.0f;
+                            this._fade = 0f;
                             this._selector.screen.DoFlashTransition();
                             Profiles.Save(this._selector.profile);
                             if (Network.isActive && this._box.duck != null)
@@ -805,7 +805,7 @@ namespace DuckGame
                             int index3 = this.FurniIndexAdd(_furniSelection, plus);
                             Furniture availableFurni = Profiles.experienceProfile.GetAvailableFurnis()[index3];
                             float x2 = (float)((double)this.x + ((double)this.x + 2.0 + 242.0 - (double)(this.x + 2f)) / 2.0 - 9.0);
-                            double num10 = (double)Maths.Clamp((float)((50.0 - (double)Math.Abs(x1 - x2)) / 50.0), 0.0f, 1f);
+                            double num10 = (double)Maths.Clamp((float)((50.0 - (double)Math.Abs(x1 - x2)) / 50.0), 0f, 1f);
                             DuckRig.GetHatPoint(this._profile.persona.sprite.imageIndex);
                             SpriteMap g = availableFurni.sprite;
                             if (availableFurni.icon != null)
@@ -817,7 +817,7 @@ namespace DuckGame
                             Vec2 pos1 = Vec2.Zero;
                             pos1 = new Vec2(x1, (float)((double)num9 + (double)num6 + index1 * 20 - 14.0));
                             float num11 = 1f - Math.Min((float)(((double)(pos1 - new Vec2(x2, (float)((double)this.y + 35.0 + 10.0))).length + 10.0) / 40.0), 1f);
-                            g.scale = new Vec2(Math.Min((float)(0.5 + (double)Math.Max(num11 - 0.5f, 0.0f) * 2.0), 1f));
+                            g.scale = new Vec2(Math.Min((float)(0.5 + (double)Math.Max(num11 - 0.5f, 0f) * 2.0), 1f));
                             pos1.x -= 44f;
                             pos1.y -= 6f;
                             g.depth = (Depth)(float)(0.850000023841858 + (double)g.xscale * 0.100000001490116);
@@ -862,7 +862,7 @@ namespace DuckGame
                                     Graphics.Draw(g, pos1.x, pos1.y);
                                 }
                                 else
-                                    availableFurni.Draw(pos1 + new Vec2(0.0f, 0.0f), g.depth);
+                                    availableFurni.Draw(pos1 + new Vec2(0f, 0f), g.depth);
                                 g.scale = scale;
                                 this._whiteCircle.color = availableFurni.group.color;
                                 if (index2 == 5 && index1 == 2)
@@ -936,21 +936,21 @@ namespace DuckGame
                                 if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 5)].group == availableFurni.group)
                                 {
                                     if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 6)].group == availableFurni.group && Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 1)].group == availableFurni.group)
-                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0.0f), pos1 + new Vec2(14f, 22f), this._whiteCircle.color, (Depth)0.7f);
+                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0f), pos1 + new Vec2(14f, 22f), this._whiteCircle.color, (Depth)0.7f);
                                     else
-                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0.0f), pos1 + new Vec2(8f, 22f), this._whiteCircle.color, (Depth)0.7f);
+                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0f), pos1 + new Vec2(8f, 22f), this._whiteCircle.color, (Depth)0.7f);
                                 }
                                 if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -5)].group == availableFurni.group)
                                 {
                                     if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -6)].group == availableFurni.group && Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -1)].group == availableFurni.group)
-                                        Graphics.DrawRect(pos1 + new Vec2(-14f, -22f), pos1 + new Vec2(8f, 0.0f), this._whiteCircle.color, (Depth)0.7f);
+                                        Graphics.DrawRect(pos1 + new Vec2(-14f, -22f), pos1 + new Vec2(8f, 0f), this._whiteCircle.color, (Depth)0.7f);
                                     else
-                                        Graphics.DrawRect(pos1 + new Vec2(-8f, -22f), pos1 + new Vec2(8f, 0.0f), this._whiteCircle.color, (Depth)0.7f);
+                                        Graphics.DrawRect(pos1 + new Vec2(-8f, -22f), pos1 + new Vec2(8f, 0f), this._whiteCircle.color, (Depth)0.7f);
                                 }
                                 if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 1)].group == availableFurni.group)
-                                    Graphics.DrawRect(pos1 + new Vec2(0.0f, -8f), pos1 + new Vec2(22f, 8f), this._whiteCircle.color, (Depth)0.7f);
+                                    Graphics.DrawRect(pos1 + new Vec2(0f, -8f), pos1 + new Vec2(22f, 8f), this._whiteCircle.color, (Depth)0.7f);
                                 if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -1)].group == availableFurni.group)
-                                    Graphics.DrawRect(pos1 + new Vec2(-22f, 8f), pos1 + new Vec2(0.0f, -8f), this._whiteCircle.color, (Depth)0.7f);
+                                    Graphics.DrawRect(pos1 + new Vec2(-22f, 8f), pos1 + new Vec2(0f, -8f), this._whiteCircle.color, (Depth)0.7f);
                             }
                             this._profile.persona.sprite.color = Color.White;
                             g.color = Color.White;
@@ -1011,14 +1011,14 @@ namespace DuckGame
                     Vec2 pos = vec2 + this.position;
                     Vec2 p1_1 = new Vec2(pos.x - furniture.sprite.width / 2, pos.y - furniture.sprite.height / 2) + new Vec2(-2f, -2f);
                     Vec2 p1_2 = new Vec2(pos.x + furniture.sprite.width / 2, pos.y + furniture.sprite.height / 2) + new Vec2(2f, 2f);
-                    Graphics.DrawLine(p1_1, p1_1 + new Vec2(2f, 0.0f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(p1_1, p1_1 + new Vec2(0.0f, 2f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(p1_2, p1_2 - new Vec2(2f, 0.0f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(p1_2, p1_2 - new Vec2(0.0f, 2f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(new Vec2(p1_1.x, p1_2.y), new Vec2(p1_1.x, p1_2.y) + new Vec2(2f, 0.0f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(new Vec2(p1_1.x, p1_2.y), new Vec2(p1_1.x, p1_2.y) - new Vec2(0.0f, 2f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(new Vec2(p1_2.x, p1_1.y), new Vec2(p1_2.x, p1_1.y) - new Vec2(2f, 0.0f), Color.White, depth: ((Depth)1f));
-                    Graphics.DrawLine(new Vec2(p1_2.x, p1_1.y), new Vec2(p1_2.x, p1_1.y) + new Vec2(0.0f, 2f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(p1_1, p1_1 + new Vec2(2f, 0f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(p1_1, p1_1 + new Vec2(0f, 2f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(p1_2, p1_2 - new Vec2(2f, 0f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(p1_2, p1_2 - new Vec2(0f, 2f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(new Vec2(p1_1.x, p1_2.y), new Vec2(p1_1.x, p1_2.y) + new Vec2(2f, 0f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(new Vec2(p1_1.x, p1_2.y), new Vec2(p1_1.x, p1_2.y) - new Vec2(0f, 2f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(new Vec2(p1_2.x, p1_1.y), new Vec2(p1_2.x, p1_1.y) - new Vec2(2f, 0f), Color.White, depth: ((Depth)1f));
+                    Graphics.DrawLine(new Vec2(p1_2.x, p1_1.y), new Vec2(p1_2.x, p1_1.y) + new Vec2(0f, 2f), Color.White, depth: ((Depth)1f));
                     if (furniture.sprite == null)
                         return;
                     furniture.sprite.flipH = this._hover.flip;

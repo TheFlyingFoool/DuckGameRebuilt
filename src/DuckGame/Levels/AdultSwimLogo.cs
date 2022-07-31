@@ -18,7 +18,7 @@ namespace DuckGame
         {
             this._font = new BitmapFont("biosFont", 8);
             this._logo = new Sprite("aslogo");
-            Graphics.fade = 0.0f;
+            Graphics.fade = 0f;
         }
 
         public override void Update()
@@ -36,7 +36,7 @@ namespace DuckGame
             }
             else
             {
-                Graphics.fade = 0.0f;
+                Graphics.fade = 0f;
                 Level.current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
             }
             this._wait -= 3f / 500f;

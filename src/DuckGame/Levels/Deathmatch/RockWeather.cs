@@ -15,7 +15,7 @@ namespace DuckGame
         private static Weather _weather = Weather.Sunny;
         private Color skyColor = new Color(0.5450981f, 0.8f, 0.972549f);
         private Vec3 winterColor = new Vec3(-0.1f, -0.1f, 0.2f);
-        private Vec3 summerColor = new Vec3(0.0f, 0.0f, 0.0f);
+        private Vec3 summerColor = new Vec3(0f, 0f, 0f);
         private List<WeatherParticle> _particles = new List<WeatherParticle>();
         private float _particleWait;
         private RockScoreboard _board;
@@ -27,138 +27,138 @@ namespace DuckGame
     {
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.06f),
+        add = new Vec3(0f, 0f, 0.06f),
         multiply = new Vec3(0.98f, 0.98f, 1f),
         sky = new Vec3(0.15f, 0.15f, 0.25f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
-        sunOpacity = 0.0f,
-        rainbowLight = 0.0f
+        sunGlow = 0f,
+        sunOpacity = 0f,
+        rainbowLight = 0f
       },
       new RockWeatherState()
       {
         add = new Vec3(0.1f, 0.1f, 0.06f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
-        rainbowLight = 0.0f
+        rainbowLight = 0f
       },
       new RockWeatherState()
       {
         add = new Vec3(0.1f, 0.1f, 0.06f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
-        rainbowLight = 0.0f
+        rainbowLight = 0f
       },
       new RockWeatherState()
       {
         add = new Vec3(0.1f, 0.1f, 0.06f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
-        rainbowLight = 0.0f
+        rainbowLight = 0f
       },
       new RockWeatherState()
       {
         add = new Vec3(0.1f, 0.1f, 0.06f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
-        rainbowLight = 0.0f
+        rainbowLight = 0f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f),
+        add = new Vec3(0.08f, 0.05f, 0f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.9803922f, 0.7450981f, 0.5490196f),
-        sunPos = new Vec2(0.0f, 1f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        sunPos = new Vec2(0f, 1f),
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f),
+        add = new Vec3(0f, 0f, 0f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.3f, 1.8f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f),
+        add = new Vec3(0f, 0f, 0f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.2f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f),
+        add = new Vec3(0f, 0f, 0f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.2f,
         rainbowLight2 = 0.3f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f),
+        add = new Vec3(0f, 0f, 0f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f),
+        add = new Vec3(0.08f, 0.05f, 0f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.7843137f, 0.4705882f, 0.7450981f),
-        sunPos = new Vec2(0.6f, 0.0f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        sunPos = new Vec2(0.6f, 0f),
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.35f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f),
+        add = new Vec3(0.08f, 0.05f, 0f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.9803922f, 0.6666667f, 0.4313726f),
         sunPos = new Vec2(0.7f, -0.5f),
-        lightOpacity = 0.0f,
+        lightOpacity = 0f,
         sunGlow = 0.3f,
         sunOpacity = 1f,
         rainbowLight = 0.15f,
@@ -166,47 +166,47 @@ namespace DuckGame
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f),
+        add = new Vec3(0f, 0f, 0f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
         sunPos = new Vec2(0.8f, -1f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
-        rainbowLight = 0.0f
+        rainbowLight = 0f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.06f),
+        add = new Vec3(0f, 0f, 0.06f),
         multiply = new Vec3(0.98f, 0.98f, 1f),
         sky = new Vec3(0.15f, 0.15f, 0.25f),
         sunPos = new Vec2(0.9f, -1.2f),
         lightOpacity = 1f,
         sunGlow = -0.2f,
-        sunOpacity = 0.0f,
-        rainbowLight = 0.0f
+        sunOpacity = 0f,
+        rainbowLight = 0f
       }
     };
         private List<RockWeatherState> timeOfDayColorMultMapWinter = new List<RockWeatherState>()
     {
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.98f, 0.98f, 1f),
         sky = new Vec3(0.15f, 0.15f, 0.25f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
-        sunOpacity = 0.0f
+        sunGlow = 0f,
+        sunOpacity = 0f
       },
       new RockWeatherState()
       {
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
@@ -214,9 +214,9 @@ namespace DuckGame
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
@@ -224,9 +224,9 @@ namespace DuckGame
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
@@ -234,90 +234,90 @@ namespace DuckGame
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0.08f, 0.05f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.9803922f, 0.7450981f, 0.5490196f),
-        sunPos = new Vec2(0.0f, 1f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        sunPos = new Vec2(0f, 1f),
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.3f, 1.8f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.2f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.2f,
         rainbowLight2 = 0.3f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.5450981f, 0.8f, 0.972549f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0.08f, 0.05f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.7843137f, 0.4705882f, 0.7450981f),
-        sunPos = new Vec2(0.6f, 0.0f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        sunPos = new Vec2(0.6f, 0f),
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 1f,
         rainbowLight = 0.35f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0.08f, 0.05f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.9803922f, 0.6666667f, 0.4313726f),
         sunPos = new Vec2(0.7f, -0.5f),
-        lightOpacity = 0.0f,
+        lightOpacity = 0f,
         sunGlow = 0.3f,
         sunOpacity = 1f,
         rainbowLight = 0.15f,
@@ -325,45 +325,45 @@ namespace DuckGame
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
         sunPos = new Vec2(0.8f, -1f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.98f, 0.98f, 1f),
         sky = new Vec3(0.15f, 0.15f, 0.25f),
         sunPos = new Vec2(0.9f, -1.2f),
         lightOpacity = 1f,
         sunGlow = -0.2f,
-        sunOpacity = 0.0f
+        sunOpacity = 0f
       }
     };
         private List<RockWeatherState> timeOfDayColorMultMapRaining = new List<RockWeatherState>()
     {
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.91f, 0.99f, 0.94f),
         sky = new Vec3(0.15f, 0.15f, 0.25f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
-        sunOpacity = 0.0f
+        sunGlow = 0f,
+        sunOpacity = 0f
       },
       new RockWeatherState()
       {
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.91f, 0.99f, 0.94f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
@@ -371,9 +371,9 @@ namespace DuckGame
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.91f, 0.99f, 0.94f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
@@ -381,9 +381,9 @@ namespace DuckGame
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.91f, 0.99f, 0.94f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
@@ -391,90 +391,90 @@ namespace DuckGame
         add = new Vec3(0.1f, 0.1f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.9f, 0.9f, 1f),
         sky = new Vec3(0.1f, 0.1f, 0.2f),
-        sunPos = new Vec2(0.0f, 0.6f),
+        sunPos = new Vec2(0f, 0.6f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 1f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f) + new Vec3(-0.15f, -0.1f, 0.1f),
+        add = new Vec3(0.08f, 0.05f, 0f) + new Vec3(-0.15f, -0.1f, 0.1f),
         multiply = new Vec3(1f, 0.85f, 0.7f),
         sky = new Vec3(0.8627451f, 0.6666667f, 0.5490196f),
-        sunPos = new Vec2(0.0f, 1f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        sunPos = new Vec2(0f, 1f),
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 0.5f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.15f, -0.1f, 0.1f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.15f, -0.1f, 0.1f),
         multiply = new Vec3(0.89f, 1.05f, 1f),
         sky = new Vec3(0.3647059f, 0.5647059f, 0.6078432f),
         sunPos = new Vec2(0.3f, 1.8f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 0.4f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.19f, -0.09f, 0.1f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.19f, -0.09f, 0.1f),
         multiply = new Vec3(0.89f, 1.05f, 1f),
         sky = new Vec3(0.3647059f, 0.5647059f, 0.6078432f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 0.4f,
         rainbowLight = 0.2f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.2f, -0.1f, 0.07f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.2f, -0.1f, 0.07f),
         multiply = new Vec3(0.89f, 1.05f, 1f),
         sky = new Vec3(0.3647059f, 0.5647059f, 0.6078432f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 0.4f,
         rainbowLight = 0.2f,
         rainbowLight2 = 0.3f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.22f, -0.12f, 0.0f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.22f, -0.12f, 0f),
         multiply = new Vec3(0.86f, 1.05f, 1f),
         sky = new Vec3(0.3254902f, 0.4470588f, 0.5137255f),
         sunPos = new Vec2(0.5f, 0.9f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 0.4f,
         rainbowLight = 0.25f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0.08f, 0.05f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 0.8f, 0.8f),
         sky = new Vec3(0.5882353f, 0.3921569f, 0.627451f),
-        sunPos = new Vec2(0.6f, 0.0f),
-        lightOpacity = 0.0f,
-        sunGlow = 0.0f,
+        sunPos = new Vec2(0.6f, 0f),
+        lightOpacity = 0f,
+        sunGlow = 0f,
         sunOpacity = 0.4f,
         rainbowLight = 0.35f,
         rainbowLight2 = 0.35f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.08f, 0.05f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0.08f, 0.05f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 0.8f, 0.7f),
         sky = new Vec3(0.7058824f, 0.5490196f, 0.7058824f),
         sunPos = new Vec2(0.7f, -0.5f),
-        lightOpacity = 0.0f,
+        lightOpacity = 0f,
         sunGlow = 0.3f,
         sunOpacity = 0.4f,
         rainbowLight = 0.15f,
@@ -482,41 +482,41 @@ namespace DuckGame
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.0f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(1f, 1f, 1f),
         sky = new Vec3(0.1f, 0.15f, 0.2f),
         sunPos = new Vec2(0.8f, -1f),
         lightOpacity = 1f,
-        sunGlow = 0.0f,
+        sunGlow = 0f,
         sunOpacity = 0.3f
       },
       new RockWeatherState()
       {
-        add = new Vec3(0.0f, 0.0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
+        add = new Vec3(0f, 0f, 0.06f) + new Vec3(-0.1f, -0.1f, 0.2f),
         multiply = new Vec3(0.91f, 0.99f, 0.94f),
         sky = new Vec3(0.15f, 0.15f, 0.25f),
         sunPos = new Vec2(0.9f, -1.2f),
         lightOpacity = 1f,
         sunGlow = -0.2f,
-        sunOpacity = 0.0f
+        sunOpacity = 0f
       }
     };
         public static Weather _prevWeather;
-        public static float _prevWeatherLerp = 0.0f;
+        public static float _prevWeatherLerp = 0f;
         public static float lightOpacity;
         public static float sunGlow;
         public static float sunOpacity = 1f;
         public static Vec2 sunPos;
         private RockWeatherState _lastAppliedState;
-        private static float snowChance = 0.0f;
-        private static float rainChance = 0.0f;
-        private static float sunshowers = 0.0f;
+        private static float snowChance = 0f;
+        private static float rainChance = 0f;
+        private static float sunshowers = 0f;
         private float wait;
         public float rainbowLight;
         public float rainbowLight2;
-        public static float rainbowFade = 0.0f;
-        public static float rainbowTime = 0.0f;
-        public static float _timeRaining = 0.0f;
+        public static float rainbowFade = 0f;
+        public static float rainbowTime = 0f;
+        public static float _timeRaining = 0f;
         public static bool alwaysRainbow = false;
         public static bool neverRainbow = false;
 
@@ -526,7 +526,7 @@ namespace DuckGame
         {
             RockWeatherState rockWeatherState1 = null;
             RockWeatherState rockWeatherState2 = null;
-            float num1 = 0.0f;
+            float num1 = 0f;
             int index = 0;
             switch (RockWeather._weather)
             {
@@ -646,7 +646,7 @@ namespace DuckGame
                 RockWeather._timeRaining += Maths.IncFrameTimer();
             if (_timeOfDay <= 1.0)
                 return;
-            RockWeather._timeOfDay = 0.0f;
+            RockWeather._timeOfDay = 0f;
         }
 
         public static void Reset()
@@ -698,7 +698,7 @@ namespace DuckGame
                 if (localTime.Month > 8)
                     RockWeather.rainChance = 1f / 1000f;
                 if (localTime.Month > 10)
-                    RockWeather.rainChance = 0.0f;
+                    RockWeather.rainChance = 0f;
             }
             if (localTime.Month == 12 && (double)Rando.Float(1f) > 0.850000023841858)
                 RockWeather._weather = Weather.Snowing;
@@ -723,26 +723,26 @@ namespace DuckGame
             {
                 RockWeather._weather = Weather.Sunny;
                 RockWeather.alwaysRainbow = true;
-                RockWeather.rainChance = 0.0f;
-                RockWeather.snowChance = 0.0f;
+                RockWeather.rainChance = 0f;
+                RockWeather.snowChance = 0f;
             }
             if (localTime.Month == 10 && localTime.Day == 24)
             {
                 RockWeather._weather = Weather.Sunny;
                 RockWeather.alwaysRainbow = true;
-                RockWeather.rainChance = 0.0f;
-                RockWeather.snowChance = 0.0f;
+                RockWeather.rainChance = 0f;
+                RockWeather.snowChance = 0f;
             }
             if (localTime.Year == 2030)
             {
                 RockWeather._weather = Weather.Snowing;
                 RockWeather.snowChance = 1f;
-                RockWeather.rainChance = 0.0f;
+                RockWeather.rainChance = 0f;
             }
             if (localTime.Year == 2031 && localTime.Month <= 3)
             {
                 RockWeather._weather = Weather.Raining;
-                RockWeather.snowChance = 0.0f;
+                RockWeather.snowChance = 0f;
                 RockWeather.rainChance = 1f;
             }
             if (localTime.Year == 2031 && localTime.Month == 4)
@@ -752,7 +752,7 @@ namespace DuckGame
             }
             if (localTime.Year != 2031 || localTime.Month <= 4)
                 return;
-            RockWeather.snowChance = 0.0f;
+            RockWeather.snowChance = 0f;
             if (RockWeather._weather != Weather.Snowing)
                 return;
             RockWeather._weather = Weather.Raining;
@@ -761,7 +761,7 @@ namespace DuckGame
         public void SetWeather(Weather w)
         {
             RockWeather._weather = w;
-            RockWeather._weatherTime = 0.0f;
+            RockWeather._weatherTime = 0f;
         }
 
         public override void Update()
@@ -771,46 +771,46 @@ namespace DuckGame
                 RockWeather.rainbowFade = 1f;
                 RockWeather.rainbowTime = 1f;
             }
-            RockWeather.rainbowFade = Lerp.Float(RockWeather.rainbowFade, rainbowTime > 0.0 ? 1f : 0.0f, 1f / 1000f);
+            RockWeather.rainbowFade = Lerp.Float(RockWeather.rainbowFade, rainbowTime > 0.0 ? 1f : 0f, 1f / 1000f);
             RockWeather.rainbowTime -= Maths.IncFrameTimer();
             if (RockWeather._weather != Weather.Sunny)
                 RockWeather.rainbowTime -= Maths.IncFrameTimer() * 8f;
             if (rainbowTime < 0.0)
-                RockWeather.rainbowTime = 0.0f;
+                RockWeather.rainbowTime = 0f;
             if (RockWeather.neverRainbow)
-                RockWeather.rainbowFade = 0.0f;
+                RockWeather.rainbowFade = 0f;
             RockWeatherState weatherState = this.GetWeatherState(RockWeather._timeOfDay);
             this.rainbowLight = weatherState.rainbowLight * RockWeather.rainbowFade;
             this.rainbowLight2 = weatherState.rainbowLight2 * RockWeather.rainbowFade;
             this.ApplyWeatherState(weatherState);
-            RockWeather._prevWeatherLerp = Lerp.Float(RockWeather._prevWeatherLerp, 0.0f, 0.05f);
+            RockWeather._prevWeatherLerp = Lerp.Float(RockWeather._prevWeatherLerp, 0f, 0.05f);
             if (Network.isServer)
             {
                 this.wait += 3f / 1000f;
                 if (wait > 1.0)
                 {
-                    this.wait = 0.0f;
+                    this.wait = 0f;
                     if (_weatherTime > 0.100000001490116)
                     {
                         if (snowChance > 0.0 && RockWeather._weather != Weather.Snowing && (double)Rando.Float(1f) > 1.0 - snowChance)
                         {
                             RockWeather._prevWeatherLerp = 1f;
-                            RockWeather.sunshowers = 0.0f;
+                            RockWeather.sunshowers = 0f;
                             RockWeather._prevWeather = RockWeather._weather;
                             RockWeather._weather = Weather.Snowing;
                             if (Network.isActive)
                                 Send.Message(new NMChangeWeather((byte)RockWeather._weather));
-                            RockWeather._weatherTime = 0.0f;
+                            RockWeather._weatherTime = 0f;
                         }
                         if (rainChance > 0.0 && RockWeather._weather != Weather.Raining && (double)Rando.Float(1f) > 1.0 - rainChance)
                         {
                             RockWeather._prevWeatherLerp = 1f;
-                            RockWeather.sunshowers = 0.0f;
+                            RockWeather.sunshowers = 0f;
                             RockWeather._prevWeather = RockWeather._weather;
                             RockWeather._weather = Weather.Raining;
                             if (Network.isActive)
                                 Send.Message(new NMChangeWeather((byte)RockWeather._weather));
-                            RockWeather._weatherTime = 0.0f;
+                            RockWeather._weatherTime = 0f;
                         }
                         if (RockWeather._weather != Weather.Sunny && (double)Rando.Float(1f) > 0.980000019073486)
                         {
@@ -822,19 +822,19 @@ namespace DuckGame
                                 if ((double)Rando.Float(1f) > 0.400000005960464)
                                     RockWeather.sunshowers = Rando.Float(0.1f, 60f);
                             }
-                            RockWeather._timeRaining = 0.0f;
+                            RockWeather._timeRaining = 0f;
                             RockWeather._prevWeather = RockWeather._weather;
                             RockWeather._weather = Weather.Sunny;
                             if (Network.isActive)
                                 Send.Message(new NMChangeWeather((byte)RockWeather._weather));
-                            RockWeather._weatherTime = 0.0f;
+                            RockWeather._weatherTime = 0f;
                         }
                     }
                 }
             }
             RockWeather.sunshowers -= Maths.IncFrameTimer();
             if (sunshowers <= 0.0)
-                RockWeather.sunshowers = 0.0f;
+                RockWeather.sunshowers = 0f;
             switch (RockWeather._weather)
             {
                 case Weather.Snowing:
@@ -843,7 +843,7 @@ namespace DuckGame
                         ++this._particleWait;
                         SnowParticle snowParticle = new SnowParticle(new Vec2(Rando.Float(-100f, 400f), Rando.Float(-500f, -550f)))
                         {
-                            z = Rando.Float(0.0f, 200f)
+                            z = Rando.Float(0f, 200f)
                         };
                         this._particles.Add(snowParticle);
                     }
@@ -855,7 +855,7 @@ namespace DuckGame
                         ++this._particleWait;
                         RainParticle rainParticle = new RainParticle(new Vec2(Rando.Float(-100f, 900f), Rando.Float(-500f, -550f)))
                         {
-                            z = Rando.Float(0.0f, 200f)
+                            z = Rando.Float(0f, 200f)
                         };
                         this._particles.Add(rainParticle);
                     }

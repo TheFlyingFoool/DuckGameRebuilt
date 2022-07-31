@@ -44,14 +44,14 @@ namespace DuckGame
             if (this.horizontal)
             {
                 if (this.isLeft)
-                    this.layer.scissor = new Rectangle(0.0f, num2, Graphics.width, Graphics.height - num2);
+                    this.layer.scissor = new Rectangle(0f, num2, Graphics.width, Graphics.height - num2);
                 else
-                    this.layer.scissor = new Rectangle(0.0f, 0.0f, Graphics.width, num2);
+                    this.layer.scissor = new Rectangle(0f, 0f, Graphics.width, num2);
             }
             else if (this.isLeft)
-                this.layer.scissor = new Rectangle(num1, 0.0f, Graphics.width - num1, Graphics.height);
+                this.layer.scissor = new Rectangle(num1, 0f, Graphics.width - num1, Graphics.height);
             else
-                this.layer.scissor = new Rectangle(0.0f, 0.0f, num1, Graphics.height);
+                this.layer.scissor = new Rectangle(0f, 0f, num1, Graphics.height);
         }
 
         public void Draw() => Graphics.DrawLine(this.point1, this.point2, Color.Orange, 2f, (Depth)1f);

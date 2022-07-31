@@ -30,14 +30,14 @@ namespace DuckGame
             this.UpdatePower();
             this.editorCycleType = typeof(SpringUpRight);
             this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-8f, 0.0f);
+            this.collisionOffset = new Vec2(-8f, 0f);
             this.collisionSize = new Vec2(16f, 8f);
             this.depth = -0.5f;
             this._editorName = nameof(Spring);
             this.editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
             this.thickness = 0.1f;
             this.physicsMaterial = PhysicsMaterial.Metal;
-            this._impactThreshold = 0.0f;
+            this._impactThreshold = 0f;
             this._mult = mult;
         }
 

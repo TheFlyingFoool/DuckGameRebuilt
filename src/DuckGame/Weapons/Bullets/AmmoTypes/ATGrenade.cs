@@ -14,8 +14,8 @@ namespace DuckGame
             this.accuracy = 1f;
             this.penetration = 0.35f;
             this.bulletSpeed = 9f;
-            this.rangeVariation = 0.0f;
-            this.speedVariation = 0.0f;
+            this.rangeVariation = 0f;
+            this.speedVariation = 0f;
             this.range = 2000f;
             this.rebound = true;
             this.affectedByGravity = true;

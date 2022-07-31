@@ -54,7 +54,7 @@ namespace DuckGame
 
         protected virtual PadState GetState(int index) => new PadState();
 
-        public override void Rumble(float leftIntensity = 0.0f, float rightIntensity = 0.0f)
+        public override void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
             if (!this.isConnected)
                 return;

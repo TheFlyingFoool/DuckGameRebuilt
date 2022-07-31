@@ -17,7 +17,7 @@ namespace DuckGame
         public EditorProperty<bool> eightPlayerOnly = new EditorProperty<bool>(false);
         private SpriteMap _eight;
 
-        public FreeSpawn(float xpos = 0.0f, float ypos = 0.0f)
+        public FreeSpawn(float xpos = 0f, float ypos = 0f)
           : base(xpos, ypos)
         {
             SpriteMap spriteMap = new SpriteMap("duckSpawn", 32, 32)

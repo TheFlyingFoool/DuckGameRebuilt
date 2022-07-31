@@ -438,7 +438,7 @@ namespace DuckGame
                 float stringWidth = Graphics.GetStringWidth(tag, scale: 0.5f);
                 float num6 = 4f;
                 if (num5 == 0)
-                    num6 = 0.0f;
+                    num6 = 0f;
                 else
                     ++num4;
                 Graphics.DrawTexturedLine(this._workshopTagMiddle.texture, vec2 + new Vec2(4f, 4f), vec2 + new Vec2(4f + stringWidth + num6, 4f), Color.White, depth: (this.depth + 10));

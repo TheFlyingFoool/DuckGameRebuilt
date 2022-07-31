@@ -38,7 +38,7 @@ namespace DuckGame
                 this._cards.Clear();
                 foreach (string challenge in this._activeChallengeGroup.challenges)
                 {
-                    ChallengeCard challengeCard = new ChallengeCard(0.0f, 0.0f, Challenges.GetChallenge(challenge));
+                    ChallengeCard challengeCard = new ChallengeCard(0f, 0f, Challenges.GetChallenge(challenge));
                     if (Level.current is ArcadeLevel && (Level.current as ArcadeLevel).customMachine != null)
                         challengeCard.testing = true;
                     this._cards.Add(challengeCard);
@@ -57,7 +57,7 @@ namespace DuckGame
 
         public void FinishChallenge()
         {
-            this._afterChallengeWait = 0.0f;
+            this._afterChallengeWait = 0f;
             this._lastPlayed = null;
             this._afterChallenge = false;
         }
@@ -279,7 +279,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        this._afterChallengeWait = 0.0f;
+                        this._afterChallengeWait = 0f;
                         this._lastPlayed = null;
                         this._afterChallenge = false;
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");

@@ -146,7 +146,7 @@ namespace DuckGame
                     if (_talkMove > 1.0)
                     {
                         this.SetCasterFrame(0);
-                        this._talkMove = 0.0f;
+                        this._talkMove = 0f;
                     }
                     if (_waitAfterLine <= 0.0)
                     {
@@ -173,7 +173,7 @@ namespace DuckGame
                             this.SetCasterFrame(Rando.Int(1) + 1);
                         else
                             this.SetCasterFrame(0);
-                        this._talkMove = 0.0f;
+                        this._talkMove = 0f;
                     }
                     this._waitLetter = 1f;
                     char ch1;
@@ -304,7 +304,7 @@ namespace DuckGame
                     if (_talkMove <= 1.0)
                         return;
                     this.SetCasterFrame(0);
-                    this._talkMove = 0.0f;
+                    this._talkMove = 0f;
                 }
             }
         }

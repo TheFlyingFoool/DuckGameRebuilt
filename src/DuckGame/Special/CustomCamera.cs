@@ -26,7 +26,7 @@ namespace DuckGame
         public override void Initialize()
         {
             if (!(Level.current is Editor))
-                this.alpha = 0.0f;
+                this.alpha = 0f;
             base.Initialize();
         }
 

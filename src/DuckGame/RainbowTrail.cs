@@ -115,15 +115,15 @@ namespace DuckGame
         public override void Draw()
         {
             float num1 = 22f;
-            float num2 = 0.0f;
+            float num2 = 0f;
             float num3 = 13f;
             Vec2 vec2_1 = Vec2.Zero;
             Vec2 vec2_2 = Vec2.Zero;
             bool flag1 = false;
             bool flag2 = false;
-            Vec2 t1 = new Vec2(0.0f, 0.0f);
-            Vec2 t2 = new Vec2(1f, 0.0f);
-            Vec2 t3 = new Vec2(0.0f, 1f);
+            Vec2 t1 = new Vec2(0f, 0f);
+            Vec2 t2 = new Vec2(1f, 0f);
+            Vec2 t3 = new Vec2(0f, 1f);
             Vec2 t4 = new Vec2(1f, 1f);
             if (this._capeTexture == null)
                 return;

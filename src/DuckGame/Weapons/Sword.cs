@@ -111,7 +111,7 @@ namespace DuckGame
             this._swordSwing = new SpriteMap("swordSwipe", 32, 32);
             this._swordSwing.AddAnimation("swing", 0.6f, false, 0, 1, 1, 2);
             this._swordSwing.currentAnimation = "swing";
-            this._swordSwing.speed = 0.0f;
+            this._swordSwing.speed = 0f;
             this._swordSwing.center = new Vec2(9f, 25f);
             this.holsterAngle = 180f;
             this.tapedIndexPreference = 0;
@@ -134,10 +134,10 @@ namespace DuckGame
                 this.tape._holdOffset = (this.tapedCompatriot as Gun)._holdOffset;
                 this.tape.handOffset = (this.tapedCompatriot as Gun).handOffset;
             }
-            this.collisionOffset = new Vec2(-4f, 0.0f);
+            this.collisionOffset = new Vec2(-4f, 0f);
             this.collisionSize = new Vec2(4f, 4f);
             this.center = this.centerHeld;
-            this.thickness = 0.0f;
+            this.thickness = 0f;
         }
 
         public override bool CanTapeTo(Thing pThing)
@@ -200,7 +200,7 @@ namespace DuckGame
             if (this.duck != null)
                 RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
             this._swung = false;
-            this._swordSwing.speed = 0.0f;
+            this._swordSwing.speed = 0f;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
@@ -253,7 +253,7 @@ namespace DuckGame
         {
             if (pHeld)
             {
-                this.collisionOffset = new Vec2(-4f, 0.0f);
+                this.collisionOffset = new Vec2(-4f, 0f);
                 this.collisionSize = new Vec2(4f, 4f);
                 if (!this._crouchStance || this._jabStance)
                     return;
@@ -296,8 +296,8 @@ namespace DuckGame
             }
             else
             {
-                this._hold = 0.0f;
-                this._holdOffset = new Vec2(0.0f + this._addOffsetX, 4f + this._addOffsetY) + this.additionalHoldOffset;
+                this._hold = 0f;
+                this._holdOffset = new Vec2(0f + this._addOffsetX, 4f + this._addOffsetY) + this.additionalHoldOffset;
                 this.handOffset = new Vec2(3f + this._addOffsetX, this._addOffsetY);
             }
         }
@@ -378,7 +378,7 @@ namespace DuckGame
                 base.Update();
                 this._timeSinceSwing += Maths.IncFrameTimer();
                 if (this._swordSwing.finished)
-                    this._swordSwing.speed = 0.0f;
+                    this._swordSwing.speed = 0f;
                 if (this._hitWait > 0)
                     --this._hitWait;
                 ++this._framesExisting;
@@ -402,8 +402,8 @@ namespace DuckGame
                     if (this._framesSinceThrown == 1)
                     {
                         this._throwSpin = Maths.RadToDeg(this.angle) - 90f;
-                        this._hold = 0.0f;
-                        this._swing = 0.0f;
+                        this._hold = 0f;
+                        this._swing = 0f;
                     }
                     if (this._wasLifted)
                     {
@@ -412,10 +412,10 @@ namespace DuckGame
                         this.center = this.centerUnheld;
                         if (this.duck != null || this.owner is Holster)
                         {
-                            this._hold = 0.0f;
-                            this._swing = 0.0f;
-                            this.angleDegrees = 0.0f;
-                            this._throwSpin = 0.0f;
+                            this._hold = 0f;
+                            this._swing = 0f;
+                            this.angleDegrees = 0f;
+                            this._throwSpin = 0f;
                             return;
                         }
                     }
@@ -430,7 +430,7 @@ namespace DuckGame
                             if ((double)this.vSpeed > 4.0 && !(this is OldEnergyScimi))
                                 this._volatile = true;
                         }
-                        if (!flag2 && !this._grounded && (Level.CheckPoint<IPlatform>(this.position + new Vec2(0.0f, 8f)) == null || (double)this.vSpeed < 0.0))
+                        if (!flag2 && !this._grounded && (Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 8f)) == null || (double)this.vSpeed < 0.0))
                         {
                             this.PerformAirSpin();
                             flag1 = true;
@@ -442,7 +442,7 @@ namespace DuckGame
                     {
                         this._throwSpin %= 360f;
                         if (flag2)
-                            this._throwSpin = (double)Math.Abs(this._throwSpin - 90f) >= (double)Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0.0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
+                            this._throwSpin = (double)Math.Abs(this._throwSpin - 90f) >= (double)Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
                         else if (_throwSpin > 90.0 && _throwSpin < 270.0)
                         {
                             this._throwSpin = Lerp.Float(this._throwSpin, 180f, 14f);
@@ -453,7 +453,7 @@ namespace DuckGame
                                 this._throwSpin -= 360f;
                             else if (_throwSpin < -180.0)
                                 this._throwSpin += 360f;
-                            this._throwSpin = Lerp.Float(this._throwSpin, 0.0f, 14f);
+                            this._throwSpin = Lerp.Float(this._throwSpin, 0f, 14f);
                         }
                     }
                     if (this._volatile && this._hitWait == 0)
@@ -564,7 +564,7 @@ namespace DuckGame
                     this._pullBack = false;
                     this._swung = false;
                     this._shing = false;
-                    this._swing = 0.0f;
+                    this._swing = 0f;
                     this._swingPress = false;
                     this._slamStance = false;
                     this._unslam = 0;
@@ -641,15 +641,15 @@ namespace DuckGame
                                 this._swing = MathHelper.Lerp(this._swing, -0.22f, amount);
                                 this._addOffsetX = MathHelper.Lerp(this._addOffsetX, 1f, 0.2f);
                                 if (_addOffsetX > 0.0)
-                                    this._addOffsetX = 0.0f;
+                                    this._addOffsetX = 0f;
                                 this._addOffsetY = MathHelper.Lerp(this._addOffsetY, 1f, 0.2f);
                                 if (_addOffsetY > 0.0)
-                                    this._addOffsetY = 0.0f;
+                                    this._addOffsetY = 0f;
                             }
                         }
                         if ((_swing < 0.0 || this._jabStance) && _swing < 0.0 && this._enforceJabSwing)
                         {
-                            this._swing = 0.0f;
+                            this._swing = 0f;
                             this._shing = false;
                             this._swung = false;
                         }
@@ -677,7 +677,7 @@ namespace DuckGame
                 else
                 {
                     this.RestoreCollisionSize();
-                    this.thickness = 0.0f;
+                    this.thickness = 0f;
                 }
                 if ((!(this is OldEnergyScimi) && this._swung || this._swinging) && !this._shing)
                 {
@@ -723,7 +723,7 @@ namespace DuckGame
                             Vec2 vec2_2 = quadLaserBullet.travel;
                             float length = vec2_2.length;
                             float num = 1.5f;
-                            vec2_2 = this.offDir <= 0 ? new Vec2(-length * num, 0.0f) : new Vec2(length * num, 0.0f);
+                            vec2_2 = this.offDir <= 0 ? new Vec2(-length * num, 0f) : new Vec2(length * num, 0f);
                             quadLaserBullet.travel = vec2_2;
                             this.QuadLaserHit(quadLaserBullet);
                         }
@@ -774,11 +774,11 @@ namespace DuckGame
                                     this.duck.vSpeed -= 4f;
                                     if (this.isServerForObject)
                                     {
-                                        EnergyScimitarBlast energyScimitarBlast1 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0.0f, -16f), new Vec2(0.0f, -2000f));
+                                        EnergyScimitarBlast energyScimitarBlast1 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0f, -16f), new Vec2(0f, -2000f));
                                         Level.Add(energyScimitarBlast1);
                                         if (Network.isActive)
                                             Send.Message(new NMEnergyScimitarBlast(energyScimitarBlast1.position, energyScimitarBlast1._target));
-                                        EnergyScimitarBlast energyScimitarBlast2 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0.0f, 16f), new Vec2(0.0f, 2000f));
+                                        EnergyScimitarBlast energyScimitarBlast2 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0f, 16f), new Vec2(0f, 2000f));
                                         Level.Add(energyScimitarBlast2);
                                         if (Network.isActive)
                                             Send.Message(new NMEnergyScimitarBlast(energyScimitarBlast2.position, energyScimitarBlast2._target));
@@ -956,11 +956,11 @@ namespace DuckGame
             {
                 if (this._jabStance && !this._allowJabMotion)
                     return;
-                this._afterSwingCounter = 0.0f;
+                this._afterSwingCounter = 0f;
                 this._pullBack = true;
                 this._swung = true;
                 this._shing = false;
-                this._timeSinceSwing = 0.0f;
+                this._timeSinceSwing = 0f;
                 this.OnSwing();
                 if (this._swingSound != null)
                     SFX.Play(this._swingSound, Rando.Float(0.8f, 1f), Rando.Float(-0.1f, 0.1f));

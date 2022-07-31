@@ -88,13 +88,13 @@ namespace DuckGame
         {
             this._life = 1f;
             this._grounded = false;
-            this._spinAngle = 0.0f;
+            this._spinAngle = 0f;
             this._foreverGrounded = false;
             this.alpha = 1f;
             this._airFriction = 0.03f;
-            this.vSpeed = 0.0f;
-            this.hSpeed = 0.0f;
-            this._framesAlive = 0.0f;
+            this.vSpeed = 0f;
+            this.hSpeed = 0f;
+            this._framesAlive = 0f;
             this._waitForNoCollide = false;
             this.globalIndex = Thing.GetGlobalIndex();
             this.gotMessage = false;
@@ -152,11 +152,11 @@ namespace DuckGame
                     if ((double)this.hSpeed < 0.0)
                         this.hSpeed += this._airFriction;
                     if ((double)this.hSpeed < _airFriction && (double)this.hSpeed > -(double)this._airFriction)
-                        this.hSpeed = 0.0f;
+                        this.hSpeed = 0f;
                     if ((double)this.vSpeed < 4.0)
                         this.vSpeed += 0.1f * this._gravMult;
                     if (float.IsNaN(this.hSpeed))
-                        this.hSpeed = 0.0f;
+                        this.hSpeed = 0f;
                     this._spinAngle -= 10 * Math.Sign(this.hSpeed);
                     Thing thing = Level.CheckPoint<Block>(this.x + this.hSpeed, this.y + this.vSpeed);
                     if (thing != null && _framesAlive < 2.0)
@@ -176,7 +176,7 @@ namespace DuckGame
                             this._hit = true;
                             if ((double)Math.Abs(this.vSpeed) < 0.5)
                             {
-                                this.vSpeed = 0.0f;
+                                this.vSpeed = 0f;
                                 this._grounded = true;
                             }
                         }
@@ -191,8 +191,8 @@ namespace DuckGame
                             this._hit = true;
                             if (_sticky > 0.0 && (double)Rando.Float(1f) < _sticky)
                             {
-                                this.hSpeed = 0.0f;
-                                this.vSpeed = 0.0f;
+                                this.hSpeed = 0f;
+                                this.vSpeed = 0f;
                                 this._foreverGrounded = true;
                                 this._stickDir = 1f;
                             }
@@ -203,8 +203,8 @@ namespace DuckGame
                             this._hit = true;
                             if (_sticky > 0.0 && (double)Rando.Float(1f) < _sticky)
                             {
-                                this.hSpeed = 0.0f;
-                                this.vSpeed = 0.0f;
+                                this.hSpeed = 0f;
+                                this.vSpeed = 0f;
                                 this._foreverGrounded = true;
                                 this._stickDir = -1f;
                             }

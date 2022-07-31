@@ -82,10 +82,10 @@ namespace DuckGame
                             this.tamping = false;
                             if (_rotAngle >= 0.0)
                             {
-                                this._rotAngle = 0.0f;
+                                this._rotAngle = 0f;
                                 this._rotating = false;
                                 this._tamped = true;
-                                this._offsetY = 0.0f;
+                                this._offsetY = 0f;
                                 owner.immobilized = false;
                             }
                         }
@@ -117,10 +117,10 @@ namespace DuckGame
                             this.tamping = false;
                             if (_rotAngle <= 0.0)
                             {
-                                this._rotAngle = 0.0f;
+                                this._rotAngle = 0f;
                                 this._rotating = false;
                                 this._tamped = true;
-                                this._offsetY = 0.0f;
+                                this._offsetY = 0f;
                                 owner.immobilized = false;
                             }
                         }
@@ -138,9 +138,9 @@ namespace DuckGame
                     return;
                 this._prevDuckOwner.immobilized = false;
                 this.tamping = false;
-                this._rotAngle = 0.0f;
+                this._rotAngle = 0f;
                 this._rotating = false;
-                this._offsetY = 0.0f;
+                this._offsetY = 0f;
                 this._prevDuckOwner = null;
             }
         }

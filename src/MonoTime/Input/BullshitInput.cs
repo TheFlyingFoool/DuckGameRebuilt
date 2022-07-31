@@ -102,7 +102,7 @@
 //            }
 //        }
 
-//        public override float leftTrigger => 0.0f;
+//        public override float leftTrigger => 0f;
 
 //        private class CountdownPair
 //        {

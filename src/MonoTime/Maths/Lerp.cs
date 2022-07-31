@@ -61,7 +61,7 @@ namespace DuckGame
 
         public static Vec2 Vec2Smooth(Vec2 current, Vec2 to, float amount) => current + amount * (to - current);
 
-        public static Vec2 Vec2Smooth(Vec2 current, Vec2 to, float amount, float thresh = 0.0f)
+        public static Vec2 Vec2Smooth(Vec2 current, Vec2 to, float amount, float thresh = 0f)
         {
             Vec2 vec2 = current + amount * (to - current);
             return (double)(vec2 - to).length < (double)thresh ? to : vec2;

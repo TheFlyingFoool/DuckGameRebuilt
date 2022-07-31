@@ -49,8 +49,8 @@ namespace DuckGame
             this.collisionSize = new Vec2(10f, 9f);
             this._mineFlash = new Sprite("mineFlash");
             this._mineFlash.CenterOrigin();
-            this._mineFlash.alpha = 0.0f;
-            this.bouncy = 0.0f;
+            this._mineFlash.alpha = 0f;
+            this.bouncy = 0f;
             this.friction = 0.2f;
             this.editorTooltip = "Once placed in position, explodes if any curious Ducks walk by.";
         }
@@ -59,7 +59,7 @@ namespace DuckGame
         {
             if (this._armed)
                 return;
-            this._holdingWeight = 0.0f;
+            this._holdingWeight = 0f;
             this._armed = true;
             if (!this.isServerForObject)
                 return;
@@ -125,7 +125,7 @@ namespace DuckGame
             if (this._sprite.imageIndex == 2)
                 this._mineFlash.alpha = Lerp.Float(this._mineFlash.alpha, 0.4f, 0.08f);
             else
-                this._mineFlash.alpha = Lerp.Float(this._mineFlash.alpha, 0.0f, 0.08f);
+                this._mineFlash.alpha = Lerp.Float(this._mineFlash.alpha, 0f, 0.08f);
             if (this._armed)
                 this._sprite.speed = 2f;
             if (this._thrown && this.owner == null)
@@ -184,7 +184,7 @@ namespace DuckGame
                                 {
                                     duck = key;
                                     if (!this._ducksOnMine.ContainsKey(key))
-                                        this._ducksOnMine[key] = 0.0f;
+                                        this._ducksOnMine[key] = 0f;
                                     this._ducksOnMine[key] += Maths.IncFrameTimer();
                                     duckList1.Add(key);
                                     break;
@@ -230,7 +230,7 @@ namespace DuckGame
                 this._timer = 1f;
                 this.BlowUp();
             }
-            this.addWeight = 0.0f;
+            this.addWeight = 0f;
         }
 
         public void BlowUp()

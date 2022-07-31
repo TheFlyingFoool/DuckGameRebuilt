@@ -54,7 +54,7 @@ namespace DuckGame
                 this._pauseGroup = null;
             }
             this._confirm.value = false;
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0.0f, 0.0f);
+            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             this._confirmMenu = new UIMenu("UNLOCK FEATURE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@CANCEL  @SELECT@BUY");
             this._confirmMenu.Add(new UIText(unlock.GetNameForDisplay(), Color.Green), true);
             this._confirmMenu.Add(new UIText(" ", Color.White), true);

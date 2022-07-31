@@ -49,7 +49,7 @@ namespace DuckGame
         public void LightOnFire()
         {
             this.onFire = true;
-            Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
+            Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

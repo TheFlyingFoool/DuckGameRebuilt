@@ -86,7 +86,7 @@ namespace DuckGame
             this.thickness = 2f;
             this._lock = new Sprite("lock");
             this._lock.CenterOrigin();
-            this._impactThreshold = 0.0f;
+            this._impactThreshold = 0f;
             this._key = new SpriteMap("keyInDoor", 16, 16)
             {
                 center = new Vec2(2f, 8f)
@@ -133,7 +133,7 @@ namespace DuckGame
         {
             if (this._lockDoor || this._destroyed || !this.isServerForObject)
                 return false;
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             Level.Remove(this);
             if (this.sequence != null && this.sequence.isValid)
             {
@@ -311,7 +311,7 @@ namespace DuckGame
             {
                 if (mine.Value < 0f && _open > mine.Value || mine.Value >= 0f && _open < mine.Value)
                 {
-                    mine.Key.addWeight = 0.0f;
+                    mine.Key.addWeight = 0f;
                     this._removeMines.Add(mine.Key);
                 }
                 else
@@ -324,10 +324,10 @@ namespace DuckGame
             if (_open < 0.9f && _open > -0.9f)
             {
                 bool flag2 = false;
-                Thing thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(18f, 0.0f), this._bottomRight + new Vec2(18f, 0.0f), d => !(d is TargetDuck));
+                Thing thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
                 if (thing == null)
                 {
-                    thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(32f, 0.0f), this._bottomRight + new Vec2(32f, 0.0f), d => !(d is TargetDuck) && (double)Math.Abs(d.hSpeed) > 4.0);
+                    thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(32f, 0f), this._bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && (double)Math.Abs(d.hSpeed) > 4.0);
                     flag2 = true;
                 }
                 if (thing != null)
@@ -336,7 +336,7 @@ namespace DuckGame
                     if ((double)thing.x < (double)this.x)
                     {
                         this._coll.Clear();
-                        Level.CheckRectAll<PhysicsObject>(this._topRight, this._bottomRight + new Vec2(10f, 0.0f), this._coll);
+                        Level.CheckRectAll<PhysicsObject>(this._topRight, this._bottomRight + new Vec2(10f, 0f), this._coll);
                         bool flag3 = true;
                         this._jam = 1f;
                         foreach (PhysicsObject t2 in this._coll)
@@ -446,7 +446,7 @@ namespace DuckGame
                     this._didJiggle = false;
             }
             this._coll.Clear();
-            Level.CheckRectAll<PhysicsObject>(this._topLeft - new Vec2(18f, 0.0f), this._bottomRight + new Vec2(18f, 0.0f), this._coll);
+            Level.CheckRectAll<PhysicsObject>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f), this._coll);
             foreach (PhysicsObject t4 in this._coll)
             {
                 if (!(t4 is TeamHat) && (t4 is Duck || !this._jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)

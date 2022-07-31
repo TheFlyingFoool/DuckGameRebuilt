@@ -19,7 +19,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             this.layer = Layer.Foreground;
-            this.depth = (Depth)0.0f;
+            this.depth = (Depth)0f;
             this._font = new BitmapFont("biosFont", 8);
             this._collisionSize = new Vec2(184f, 102f);
             List<Team> teamList = new List<Team>();

@@ -20,7 +20,7 @@ namespace DuckGame
             this.ammo = 9;
             this._ammoType = new AT9mm();
             this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(0.0f, -1f);
+            this.barrelInsertOffset = new Vec2(0f, -1f);
             this._type = "gun";
             this._sprite = new SpriteMap("pistol", 18, 10);
             this._sprite.AddAnimation("idle", 1f, true, new int[1]);
@@ -34,7 +34,7 @@ namespace DuckGame
             this._fireSound = "pistolFire";
             this._kickForce = 3f;
             this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(0.0f, 0.0f);
+            this._holdOffset = new Vec2(0f, 0f);
             this.loseAccuracy = 0.1f;
             this.maxAccuracyLost = 0.6f;
             this._bio = "Old faithful, the 9MM pistol.";
@@ -57,7 +57,7 @@ namespace DuckGame
                 this._sprite.SetAnimation("fire");
                 for (int index = 0; index < 3; ++index)
                 {
-                    Vec2 vec2 = this.Offset(new Vec2(-9f, 0.0f));
+                    Vec2 vec2 = this.Offset(new Vec2(-9f, 0f));
                     Vec2 hitAngle = this.barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);
                     Level.Add(Spark.New(vec2.x, vec2.y, hitAngle, 0.1f));
                 }

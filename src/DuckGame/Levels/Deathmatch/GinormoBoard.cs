@@ -76,7 +76,7 @@ namespace DuckGame
             this._mode = mode;
             GinormoBoard.boardLayer = new Layer("BOARD", -85, targetLayer: true, targetSize: new Vec2(GinormoScreen.GetSize(this._smallMode).x, GinormoScreen.GetSize(this._smallMode).y))
             {
-                camera = new Camera(0.0f, 0.0f, GinormoScreen.GetSize(this._smallMode).x, GinormoScreen.GetSize(this._smallMode).y),
+                camera = new Camera(0f, 0f, GinormoScreen.GetSize(this._smallMode).x, GinormoScreen.GetSize(this._smallMode).y),
                 targetOnly = true,
                 targetClearColor = new Color(0.05f, 0.05f, 0.05f)
             };
@@ -96,7 +96,7 @@ namespace DuckGame
         {
             if (this._activated)
                 return;
-            this._screen = new GinormoScreen(0.0f, 0.0f, this._mode);
+            this._screen = new GinormoScreen(0f, 0f, this._mode);
             Level.Add(_screen);
             this._activated = true;
         }

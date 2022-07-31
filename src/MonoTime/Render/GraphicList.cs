@@ -17,8 +17,8 @@ namespace DuckGame
         {
             get
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 foreach (Sprite sprite in this._objects)
                 {
                     if ((double)sprite.x - (double)sprite.centerx < (double)num1)
@@ -36,8 +36,8 @@ namespace DuckGame
         {
             get
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 foreach (Sprite sprite in this._objects)
                 {
                     if ((double)sprite.y - (double)sprite.centery < (double)num1)

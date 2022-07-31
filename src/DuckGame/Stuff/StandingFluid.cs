@@ -61,7 +61,7 @@ namespace DuckGame
                 {
                     FluidPuddle fluidPuddle = new FluidPuddle(this.x, b.top, b);
                     Level.Add(fluidPuddle);
-                    float num = 0.0f;
+                    float num = 0f;
                     while ((double)fluidPuddle.CalculateDepth() < (int)this.deep * 8)
                     {
                         FluidData fluidType = this.GetFluidType();
@@ -94,7 +94,7 @@ namespace DuckGame
                     Vec2 hitPos1;
                     Vec2 hitPos2;
                     Vec2 hitPos3;
-                    if (Level.CheckRay<Block>(this.position, this.position - new Vec2(1000f, 0.0f), out hitPos1) != null && Level.CheckRay<Block>(this.position, this.position + new Vec2(1000f, 0.0f), out hitPos2) != null && Level.CheckRay<Block>(this.position, this.position + new Vec2(0.0f, 64f), out hitPos3) != null)
+                    if (Level.CheckRay<Block>(this.position, this.position - new Vec2(1000f, 0f), out hitPos1) != null && Level.CheckRay<Block>(this.position, this.position + new Vec2(1000f, 0f), out hitPos2) != null && Level.CheckRay<Block>(this.position, this.position + new Vec2(0f, 64f), out hitPos3) != null)
                     {
                         this._floor = hitPos3.y;
                         this._leftSide = hitPos1;

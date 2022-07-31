@@ -63,7 +63,7 @@ namespace DuckGame
                     float num3 = 1f;
                     if (index < 10)
                         num3 = 0.7f;
-                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-9f, 9f), this.y + 7f + Rando.Float(-16f, 0.0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
+                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-9f, 9f), this.y + 7f + Rando.Float(-16f, 0f), new Vec2((float)((double)num2 * (double)num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * ((double)num1 * (double)num3)), (float)(0.200000002980232 * ((double)num1 * (double)num3))), (float)(-(double)Rando.Float(0.8f, 1.5f) * ((double)num1 * (double)num3 * 0.150000005960464))), index < 6));
                 }
             }
             base.OnSoftImpact(with, from);

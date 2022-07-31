@@ -73,7 +73,7 @@ namespace DuckGame
                 if ((double)this.alpha <= 0.0)
                 {
                     Level.Remove(this);
-                    this.alpha = 0.0f;
+                    this.alpha = 0f;
                 }
             }
             if (!this._pin && this.owner == null)
@@ -91,7 +91,7 @@ namespace DuckGame
                     else
                         SFX.Play("smallSplat", pitch: Rando.Float(-0.2f, 0.2f));
                 }
-                this.angleDegrees = 0.0f;
+                this.angleDegrees = 0f;
                 this.canPickUp = false;
                 foreach (Duck duck in Level.CheckLineAll<Duck>(new Vec2(this.x - 5f, this.y + 2f), new Vec2(this.x + 5f, this.y + 2f)))
                 {
@@ -167,8 +167,8 @@ namespace DuckGame
             }
             else
             {
-                this.handAngle = 0.0f;
-                this.handOffset = new Vec2(0.0f, 0.0f);
+                this.handAngle = 0f;
+                this.handOffset = new Vec2(0f, 0f);
                 this._holdOffset = new Vec2(-1f, 2f);
             }
         }
@@ -194,7 +194,7 @@ namespace DuckGame
             }
             else
                 SFX.Play("smallSplat", pitch: Rando.Float(-0.6f, 0.6f));
-            this.bouncy = 0.0f;
+            this.bouncy = 0f;
             this.friction = 0.3f;
         }
 

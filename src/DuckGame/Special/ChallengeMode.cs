@@ -17,7 +17,7 @@ namespace DuckGame
     {
         public EditorProperty<bool> random = new EditorProperty<bool>(false);
         public EditorProperty<string> music = new EditorProperty<string>("");
-        public EditorProperty<string> Next = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
+        public EditorProperty<string> Next = new EditorProperty<string>("", increment: 0f, isLevel: true);
         private List<ChallengeTrophy> _eligibleTrophies = new List<ChallengeTrophy>();
         private List<ChallengeTrophy> _wonTrophies = new List<ChallengeTrophy>();
         private int _startGoodies;

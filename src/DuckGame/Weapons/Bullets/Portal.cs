@@ -65,7 +65,7 @@ namespace DuckGame
             door.collision.Clear();
             if (door.horizontal)
                 return;
-            AutoBlock autoBlock1 = Level.CheckLine<AutoBlock>(door.point2 + new Vec2(-8f, 0.0f), door.point2 + new Vec2(8f, 0.0f));
+            AutoBlock autoBlock1 = Level.CheckLine<AutoBlock>(door.point2 + new Vec2(-8f, 0f), door.point2 + new Vec2(8f, 0f));
             if (autoBlock1 != null)
             {
                 Vec2 topLeft = autoBlock1.topLeft;
@@ -76,7 +76,7 @@ namespace DuckGame
                     hi = 8f;
                 door.collision.Add(new Block(topLeft.x, topLeft.y, autoBlock1.width, hi));
             }
-            AutoBlock autoBlock2 = Level.CheckLine<AutoBlock>(door.point1 + new Vec2(-8f, 0.0f), door.point1 + new Vec2(8f, 0.0f));
+            AutoBlock autoBlock2 = Level.CheckLine<AutoBlock>(door.point1 + new Vec2(-8f, 0f), door.point1 + new Vec2(8f, 0f));
             if (autoBlock2 != null)
             {
                 Vec2 bottomLeft = autoBlock1.bottomLeft;
@@ -95,7 +95,7 @@ namespace DuckGame
                 };
                 Layer.Add(door.layer);
             }
-            door.isLeft = Level.CheckPoint<AutoBlock>(door.center + new Vec2(-8f, 0.0f)) != null;
+            door.isLeft = Level.CheckPoint<AutoBlock>(door.center + new Vec2(-8f, 0f)) != null;
             door.rect = new Rectangle((int)door.point1.x - 8, (int)door.point1.y, 16f, (int)door.point2.y - (int)door.point1.y);
         }
 
@@ -116,7 +116,7 @@ namespace DuckGame
             IEnumerable<ITeleport> teleports = null;
             foreach (PortalDoor door in this._doors)
             {
-                IEnumerable<ITeleport> second = door.horizontal ? Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(0.0f, -8f), door.point2 + new Vec2(0.0f, 8f)) : Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(-8f, 0.0f), door.point2 + new Vec2(8f, 0.0f));
+                IEnumerable<ITeleport> second = door.horizontal ? Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(0f, -8f), door.point2 + new Vec2(0f, 8f)) : Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(-8f, 0f), door.point2 + new Vec2(8f, 0f));
                 teleports = teleports != null ? teleports.Concat<ITeleport>(second) : second;
             }
             List<PortalDrawTransformer> portalDrawTransformerList = new List<PortalDrawTransformer>();

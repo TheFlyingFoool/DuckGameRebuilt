@@ -34,8 +34,8 @@ namespace DuckGame
             this._bouncy = 0.8f;
             this.friction = 0.03f;
             this._impactThreshold = 0.1f;
-            this._holdOffset = new Vec2(6f, 0.0f);
-            this.handOffset = new Vec2(0.0f, -0.0f);
+            this._holdOffset = new Vec2(6f, 0f);
+            this.handOffset = new Vec2(0f, -0f);
             this.editorTooltip = "Perfect for playing the world's greatest sport! Also basketball.";
         }
 

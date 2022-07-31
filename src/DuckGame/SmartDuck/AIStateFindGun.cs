@@ -35,7 +35,7 @@
 //                    if (!(AI.Nearest(duck.position, list2) is ItemBox itemBox))
 //                        return new AIStateWait(Rando.Float(0.8f, 1f));
 //                    this._target = itemBox;
-//                    ai.SetTarget(itemBox.position + new Vec2(0.0f, 32f));
+//                    ai.SetTarget(itemBox.position + new Vec2(0f, 32f));
 //                }
 //            }
 //            else if (this._target is ItemBox)

@@ -28,13 +28,13 @@ namespace DuckGame
             this._barrelOffsetTL = new Vec2(24f, 6f);
             this._fireSound = "pistolFire";
             this._kickForce = 3f;
-            this._holdOffset = new Vec2(-1f, 0.0f);
+            this._holdOffset = new Vec2(-1f, 0f);
             this.loseAccuracy = 0.1f;
             this.maxAccuracyLost = 0.6f;
             this._bio = "";
             this._editorName = "Water Blaster";
             this.physicsMaterial = PhysicsMaterial.Metal;
-            this._stream = new FluidStream(this.x, this.y, new Vec2(1f, 0.0f), 2f);
+            this._stream = new FluidStream(this.x, this.y, new Vec2(1f, 0f), 2f);
             this.isFatal = false;
         }
 

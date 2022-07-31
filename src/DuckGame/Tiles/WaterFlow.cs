@@ -136,16 +136,16 @@ namespace DuckGame
             if (!this.flipHorizontal)
             {
                 if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle(this.graphic.w - 4, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle(this.graphic.w - 4, 0f, 4f, graphic.h));
                 if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0f, 0f, 4f, graphic.h));
             }
             else
             {
                 if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle(this.graphic.w - 4, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle(this.graphic.w - 4, 0f, 4f, graphic.h));
                 if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0.0f, 0.0f, 4f, graphic.h));
+                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0f, 0f, 4f, graphic.h));
             }
             foreach (WaterFlow waterFlow in this._extraWater)
             {

@@ -20,8 +20,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._level.LoadParts(0.0f, 0.0f, this);
-            OfficeBackground officeBackground = new OfficeBackground(0.0f, 0.0f)
+            this._level.LoadParts(0f, 0f, this);
+            OfficeBackground officeBackground = new OfficeBackground(0f, 0f)
             {
                 visible = false
             };

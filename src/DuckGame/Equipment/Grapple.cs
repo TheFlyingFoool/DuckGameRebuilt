@@ -44,7 +44,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
-            this._offset = new Vec2(0.0f, 7f);
+            this._offset = new Vec2(0f, 7f);
             this._equippedDepth = 12;
             this._barrelOffsetTL = new Vec2(10f, 4f);
             this._jumpMod = true;
@@ -72,7 +72,7 @@ namespace DuckGame
             this._sightHit.CenterOrigin();
             this._ropeSprite = new Sprite("grappleWire")
             {
-                center = new Vec2(8f, 0.0f)
+                center = new Vec2(8f, 0f)
             };
         }
 
@@ -104,7 +104,7 @@ namespace DuckGame
             {
                 if (r == null)
                 {
-                    this._rope = new Rope(0.0f, 0.0f, r, null, tex: this._ropeSprite, belongsTo: this);
+                    this._rope = new Rope(0f, 0f, r, null, tex: this._ropeSprite, belongsTo: this);
                     r = this._rope;
                 }
                 r.attach1 = r;
@@ -282,7 +282,7 @@ namespace DuckGame
             {
                 if (!this.duck.grounded)
                 {
-                    this.duck.frictionMult = 0.0f;
+                    this.duck.frictionMult = 0f;
                 }
                 else
                 {
@@ -300,7 +300,7 @@ namespace DuckGame
             }
             else if (!this.grounded)
             {
-                this.frictionMult = 0.0f;
+                this.frictionMult = 0f;
             }
             else
             {

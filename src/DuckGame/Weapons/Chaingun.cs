@@ -36,7 +36,7 @@ namespace DuckGame
             this._ammoType.range = 170f;
             this._ammoType.accuracy = 0.5f;
             this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(0.0f, 0.0f);
+            this.barrelInsertOffset = new Vec2(0f, 0f);
             this._type = "gun";
             this._sprite = new SpriteMap("chaingun", 42, 28);
             this.graphic = _sprite;
@@ -53,7 +53,7 @@ namespace DuckGame
             this.weight = 8f;
             this._spinUp = SFX.Get("chaingunSpinUp");
             this._spinDown = SFX.Get("chaingunSpinDown");
-            this._holdOffset = new Vec2(0.0f, 2f);
+            this._holdOffset = new Vec2(0f, 2f);
             this.editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
         }
 
@@ -93,7 +93,7 @@ namespace DuckGame
             if (!this._spinning)
             {
                 this._spinning = true;
-                this._spinDown.Volume = 0.0f;
+                this._spinDown.Volume = 0f;
                 this._spinDown.Stop();
                 this._spinUp.Volume = 1f;
                 this._spinUp.Play();

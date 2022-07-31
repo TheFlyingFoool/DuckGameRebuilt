@@ -273,7 +273,7 @@ namespace DuckGame
                 return;
             Vec2 cursorPos = this._cursorPos;
             cursorPos.x += 1f * this._font.scale.x;
-            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0.0f, 8f * this._font.scale.y), Color.White, 0.5f, this.depth);
+            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0f, 8f * this._font.scale.y), Color.White, 0.5f, this.depth);
         }
     }
 }

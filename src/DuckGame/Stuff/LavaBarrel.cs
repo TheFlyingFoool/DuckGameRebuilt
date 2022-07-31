@@ -19,12 +19,12 @@ namespace DuckGame
             this._melting = new Sprite("blueBarrelMelting");
             this._editorName = "Barrel (Lava)";
             this.editorTooltip = "Your standard lava barrel - for carrying delicious, refreshing lava. Choose lava!";
-            this.flammable = 0.0f;
+            this.flammable = 0f;
             this._fluid = Fluid.Lava;
             this._toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
             {
                 frame = 1,
-                center = new Vec2(0.0f, -6f)
+                center = new Vec2(0f, -6f)
             };
         }
     }

@@ -13,8 +13,8 @@ namespace DuckGame
     public class CameraFixed : CustomCamera
     {
         public EditorProperty<int> Size = new EditorProperty<int>(320, min: 60f, max: 1920f, increment: 1f);
-        public EditorProperty<float> MoveX = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
-        public EditorProperty<float> MoveY = new EditorProperty<float>(0.0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> MoveX = new EditorProperty<float>(0f, min: -10f, max: 10f, increment: 0.25f);
+        public EditorProperty<float> MoveY = new EditorProperty<float>(0f, min: -10f, max: 10f, increment: 0.25f);
         public EditorProperty<float> MoveDelay = new EditorProperty<float>(1f, max: 120f, increment: 0.25f);
         //private bool moving;
         //private int inc;

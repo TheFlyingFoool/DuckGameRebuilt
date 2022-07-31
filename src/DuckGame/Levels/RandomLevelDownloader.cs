@@ -21,7 +21,7 @@ namespace DuckGame
         private static int _numFetch = 0;
         public static List<WorkshopItem> _downloadingItems = new List<WorkshopItem>();
         private static object _currentWorkshopLevelQuery = null;
-        private static float _fetchDelay = 0.0f;
+        private static float _fetchDelay = 0f;
         private static int _totalMaps;
         private static WorkshopQueryFilterOrder _orderMode = WorkshopQueryFilterOrder.RankedByVote;
 
@@ -38,7 +38,7 @@ namespace DuckGame
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
-            RandomLevelDownloader._fetchDelay = 0.0f;
+            RandomLevelDownloader._fetchDelay = 0f;
             if (RandomLevelDownloader._currentWorkshopLevelQuery == null || RandomLevelDownloader._currentWorkshopLevelQuery != sender)
             {
                 RandomLevelDownloader._numFetch = 0;
@@ -173,7 +173,7 @@ namespace DuckGame
 
         public static void Update()
         {
-            RandomLevelDownloader._fetchDelay = Lerp.Float(RandomLevelDownloader._fetchDelay, 0.0f, Maths.IncFrameTimer());
+            RandomLevelDownloader._fetchDelay = Lerp.Float(RandomLevelDownloader._fetchDelay, 0f, Maths.IncFrameTimer());
             if (!Steam.IsInitialized() || !Network.isServer || TeamSelect2.GetSettingInt("workshopmaps") <= 0)
                 return;
             if (RandomLevelDownloader._downloadingItems.Count > 0)

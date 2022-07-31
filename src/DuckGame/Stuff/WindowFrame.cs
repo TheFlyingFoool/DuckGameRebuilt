@@ -30,13 +30,13 @@ namespace DuckGame
             this.graphic.depth = this.depth;
             if (this.floor)
             {
-                Graphics.Draw(this.graphic, this.x + 14f, this.y + 5f, new Rectangle(0.0f, this.graphic.height - 2, graphic.width, 2f));
-                Graphics.Draw(this.graphic, this.x + 14f - this.high, this.y + 5f, new Rectangle(0.0f, 0.0f, graphic.width, 3f));
+                Graphics.Draw(this.graphic, this.x + 14f, this.y + 5f, new Rectangle(0f, this.graphic.height - 2, graphic.width, 2f));
+                Graphics.Draw(this.graphic, this.x + 14f - this.high, this.y + 5f, new Rectangle(0f, 0f, graphic.width, 3f));
             }
             else
             {
-                Graphics.Draw(this.graphic, this.x - 5f, this.y + 6f, new Rectangle(0.0f, this.graphic.height - 2, graphic.width, 2f));
-                Graphics.Draw(this.graphic, this.x - 5f, this.y + 6f - this.high, new Rectangle(0.0f, 0.0f, graphic.width, 3f));
+                Graphics.Draw(this.graphic, this.x - 5f, this.y + 6f, new Rectangle(0f, this.graphic.height - 2, graphic.width, 2f));
+                Graphics.Draw(this.graphic, this.x - 5f, this.y + 6f - this.high, new Rectangle(0f, 0f, graphic.width, 3f));
             }
         }
     }

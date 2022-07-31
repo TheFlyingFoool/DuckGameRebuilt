@@ -44,7 +44,7 @@ namespace DuckGame
           SpriteMap image,
           string hover,
           TileButtonAlign align = TileButtonAlign.None,
-          float angleDeg = 0.0f)
+          float angleDeg = 0f)
           : base(xpos, ypos)
         {
             this._sprite = image;

@@ -15,7 +15,7 @@ namespace DuckGame
     public class Chancy
     {
         public static Chancy context = new Chancy();
-        public static float alpha = 0.0f;
+        public static float alpha = 0f;
         public static bool atCounter = true;
         public static Vec2 standingPosition = Vec2.Zero;
         public static bool lookingAtList = false;
@@ -42,23 +42,23 @@ namespace DuckGame
         private static List<TextLine> _lineProgress = new List<TextLine>();
         private static float _waitLetter = 1f;
         private static float _waitAfterLine = 1f;
-        private static float _talkMove = 0.0f;
-        private static float _listLerp = 0.0f;
-        private static float _challengeLerp = 0.0f;
-        private static float _chancyLerp = 0.0f;
+        private static float _talkMove = 0f;
+        private static float _listLerp = 0f;
+        private static float _challengeLerp = 0f;
+        private static float _chancyLerp = 0f;
         private static ChallengeSaveData _save;
         private static ChallengeSaveData _realSave;
         private static SpriteMap _previewPhoto;
         private static ChallengeData _challengeData;
         private static RenderTarget2D _bestTextTarget;
         private static Random _random;
-        private static float _stampAngle = 0.0f;
-        private static float _paperAngle = 0.0f;
-        private static float _tapeAngle = 0.0f;
+        private static float _stampAngle = 0f;
+        private static float _paperAngle = 0f;
+        private static float _tapeAngle = 0f;
         private static int _challengeSelection;
         public static int _giveTickets = 0;
         public static bool afterChallenge = false;
-        public static float afterChallengeWait = 0.0f;
+        public static float afterChallengeWait = 0f;
         private static List<ChallengeData> _chancyChallenges = new List<ChallengeData>();
 
         public static int frame
@@ -83,8 +83,8 @@ namespace DuckGame
         public static void Clear()
         {
             Chancy._lines.Clear();
-            Chancy._waitLetter = 0.0f;
-            Chancy._waitAfterLine = 0.0f;
+            Chancy._waitLetter = 0f;
+            Chancy._waitAfterLine = 0f;
             Chancy._currentLine = "";
             Chancy._mood = DealerMood.Normal;
         }
@@ -132,7 +132,7 @@ namespace DuckGame
             Vec2 p1_1 = duckPos;
             bool flag1 = false;
             Vec2 position;
-            if (Level.CheckLine<Block>(duckPos, duckPos + new Vec2(36f, 0.0f), out position) != null)
+            if (Level.CheckLine<Block>(duckPos, duckPos + new Vec2(36f, 0f), out position) != null)
             {
                 position.x -= 8f;
                 if ((double)(position - duckPos).length > 16.0)
@@ -143,18 +143,18 @@ namespace DuckGame
             }
             else
             {
-                p1_1 = duckPos + new Vec2(36f, 0.0f);
+                p1_1 = duckPos + new Vec2(36f, 0f);
                 flag1 = true;
             }
             if (flag1)
             {
-                if (Level.CheckLine<Block>(p1_1, p1_1 + new Vec2(0.0f, 20f), out position) == null)
+                if (Level.CheckLine<Block>(p1_1, p1_1 + new Vec2(0f, 20f), out position) == null)
                 {
                     flag1 = false;
                 }
                 else
                 {
-                    Chancy.standingPosition = position - new Vec2(0.0f, 25f);
+                    Chancy.standingPosition = position - new Vec2(0f, 25f);
                     Chancy.body.flipH = true;
                 }
             }
@@ -162,7 +162,7 @@ namespace DuckGame
                 return;
             Vec2 p1_2;
             //bool flag2;
-            if (Level.CheckLine<Block>(duckPos, duckPos + new Vec2(-36f, 0.0f), out position) != null)
+            if (Level.CheckLine<Block>(duckPos, duckPos + new Vec2(-36f, 0f), out position) != null)
             {
                 position.x += 8f;
                 p1_2 = position;
@@ -170,11 +170,11 @@ namespace DuckGame
             }
             else
             {
-                p1_2 = duckPos + new Vec2(-36f, 0.0f);
+                p1_2 = duckPos + new Vec2(-36f, 0f);
                 //flag2 = true;
             }
-            Level.CheckLine<Block>(p1_2, p1_2 + new Vec2(0.0f, 20f), out position);
-            Chancy.standingPosition = position - new Vec2(0.0f, 25f);
+            Level.CheckLine<Block>(p1_2, p1_2 + new Vec2(0f, 20f), out position);
+            Chancy.standingPosition = position - new Vec2(0f, 25f);
             Chancy.body.flipH = false;
         }
 
@@ -399,7 +399,7 @@ namespace DuckGame
             }
             if (!UnlockScreen.open && !Chancy.lookingAtChallenge)
                 return;
-            Chancy.alpha = UnlockScreen.open || Chancy.lookingAtChallenge ? Lerp.Float(Chancy.alpha, 1f, 0.05f) : Lerp.Float(Chancy.alpha, 0.0f, 0.05f);
+            Chancy.alpha = UnlockScreen.open || Chancy.lookingAtChallenge ? Lerp.Float(Chancy.alpha, 1f, 0.05f) : Lerp.Float(Chancy.alpha, 0f, 0.05f);
             if (Chancy.afterChallenge)
             {
                 if (afterChallengeWait > 0.0)
@@ -422,7 +422,7 @@ namespace DuckGame
                 else
                 {
                     Chancy.ResetChallengeDialogue();
-                    Chancy.afterChallengeWait = 0.0f;
+                    Chancy.afterChallengeWait = 0f;
                     Chancy.afterChallenge = false;
                     foreach (ArcadeHUD arcadeHud in Level.current.things[typeof(ArcadeHUD)])
                     {
@@ -443,7 +443,7 @@ namespace DuckGame
                 DuckGame.Graphics.Clear(Color.Transparent);
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
                 string challengeBestString = Chancy.GetChallengeBestString(Chancy._save, Chancy.activeChallenge);
-                Chancy._font.Draw(challengeBestString, new Vec2((int)Math.Round(_bestTextTarget.width / 2.0 - (double)Chancy._font.GetWidth(challengeBestString) / 2.0), 0.0f), Color.Black * 0.7f);
+                Chancy._font.Draw(challengeBestString, new Vec2((int)Math.Round(_bestTextTarget.width / 2.0 - (double)Chancy._font.GetWidth(challengeBestString) / 2.0), 0f), Color.Black * 0.7f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
             }
@@ -455,7 +455,7 @@ namespace DuckGame
                 if (_talkMove > 1.0)
                 {
                     Chancy.frame = 0;
-                    Chancy._talkMove = 0.0f;
+                    Chancy._talkMove = 0f;
                 }
                 if (_waitAfterLine <= 0.0)
                 {
@@ -475,7 +475,7 @@ namespace DuckGame
                 if (_talkMove > 1.0)
                 {
                     Chancy.frame = Chancy._currentLine[0] == ' ' || Chancy.frame != 0 ? 0 : Rando.Int(1);
-                    Chancy._talkMove = 0.0f;
+                    Chancy._talkMove = 0f;
                 }
                 Chancy._waitLetter = 1f;
                 char ch1;
@@ -636,7 +636,7 @@ namespace DuckGame
                 if (_talkMove <= 1.0)
                     return;
                 Chancy.frame = 0;
-                Chancy._talkMove = 0.0f;
+                Chancy._talkMove = 0f;
             }
         }
 
@@ -704,7 +704,7 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp)));
             Vec2 vec2_4 = new Vec2(280f, 20f);
             Vec2 vec2_5 = new Vec2(20f, 132f) + vec2_3;
-            DuckGame.Graphics.DrawRect(vec2_5 + new Vec2(-2f, 0.0f), vec2_5 + vec2_4 + new Vec2(2f, 0.0f), Color.Black);
+            DuckGame.Graphics.DrawRect(vec2_5 + new Vec2(-2f, 0f), vec2_5 + vec2_4 + new Vec2(2f, 0f), Color.Black);
             int num1 = 0;
             for (int index1 = Chancy._lineProgress.Count - 1; index1 >= 0; --index1)
             {
@@ -732,7 +732,7 @@ namespace DuckGame
                 {
                     Chancy._previewPhoto.depth = (Depth)0.89f;
                     Chancy._previewPhoto.angleDegrees = 12f;
-                    DuckGame.Graphics.Draw(_previewPhoto, vec2_1.x + 146f, vec2_1.y + 0.0f);
+                    DuckGame.Graphics.Draw(_previewPhoto, vec2_1.x + 146f, vec2_1.y + 0f);
                 }
                 if (Chancy._save != null)
                 {
@@ -800,15 +800,15 @@ namespace DuckGame
         {
             if (Chancy.atCounter)
                 return;
-            Chancy.body.depth = (Depth)0.0f;
+            Chancy.body.depth = (Depth)0f;
             DuckGame.Graphics.Draw(Chancy.body, Chancy.standingPosition.x, Chancy.standingPosition.y);
             if (Chancy.hover)
                 Chancy.hoverSprite.alpha = Lerp.Float(Chancy.hoverSprite.alpha, 1f, 0.05f);
             else
-                Chancy.hoverSprite.alpha = Lerp.Float(Chancy.hoverSprite.alpha, 0.0f, 0.05f);
+                Chancy.hoverSprite.alpha = Lerp.Float(Chancy.hoverSprite.alpha, 0f, 0.05f);
             if (Chancy.hoverSprite.alpha <= 0.01f)
                 return;
-            Chancy.hoverSprite.depth = (Depth)0.0f;
+            Chancy.hoverSprite.depth = (Depth)0f;
             Chancy.hoverSprite.flipH = Chancy.body.flipH;
             if (Chancy.hoverSprite.flipH)
                 DuckGame.Graphics.Draw(Chancy.hoverSprite, Chancy.standingPosition.x + 1f, Chancy.standingPosition.y - 1f);

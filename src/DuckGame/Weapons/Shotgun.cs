@@ -47,7 +47,7 @@ namespace DuckGame
             if (_loadAnimation == -1.0)
             {
                 SFX.Play("shotgunLoad");
-                this._loadAnimation = 0.0f;
+                this._loadAnimation = 0f;
             }
             if (_loadAnimation >= 0.0)
             {

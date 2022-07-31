@@ -22,7 +22,7 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            UIDivider component1 = new UIDivider(true, 0.0f);
+            UIDivider component1 = new UIDivider(true, 0f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left

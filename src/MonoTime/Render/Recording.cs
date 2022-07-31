@@ -53,7 +53,7 @@ namespace DuckGame
             this._frame = 0;
             this._startFrame = 0;
             this._rolledOver = false;
-            this._highlightScore = 0.0f;
+            this._highlightScore = 0f;
             this._endFrame = 0;
         }
 
@@ -77,7 +77,7 @@ namespace DuckGame
         public float GetFrameTotal()
         {
             FrameAnalytics analytics = this.GetAnalytics(Recording._analytics);
-            return 0.0f + analytics.deaths + analytics.coolness + analytics.bonus + analytics.actions + analytics.totalVelocity;
+            return 0f + analytics.deaths + analytics.coolness + analytics.bonus + analytics.actions + analytics.totalVelocity;
         }
 
         public void Rewind() => this._frame = this._startFrame;
@@ -168,7 +168,7 @@ namespace DuckGame
             fr = fr != -1 ? this.GetFrame(fr) : this._frame;
             int kNumFrames = Recording.kNumFrames;
             int index1 = fr;
-            float num1 = 0.0f;
+            float num1 = 0f;
             bool flag = false;
             for (int index2 = 0; index2 < kNumFrames; ++index2)
             {
@@ -187,7 +187,7 @@ namespace DuckGame
             if (!flag)
                 num1 = 99f;
             f.timeBeforeKill = num1;
-            float num2 = (float)((1.0 - (double)Maths.Clamp(f.timeBeforeKill, 0.0f, 3f) / 3.0) * 1.0 + 1.0);
+            float num2 = (float)((1.0 - (double)Maths.Clamp(f.timeBeforeKill, 0f, 3f) / 3.0) * 1.0 + 1.0);
             f.actions = _frames[fr].actions * (num2 * 0.03f);
             f.deaths = _frames[fr].deaths * num2;
             f.bonus = _frames[fr].bonus * (num2 * 0.08f);

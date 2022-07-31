@@ -82,10 +82,10 @@ namespace DuckGame
         public void LogPing(float pingVal)
         {
             if ((double)pingVal < 0.0)
-                pingVal = 0.0f;
+                pingVal = 0f;
             this._previousPings[this._currentPing % 32] = pingVal;
             ++this._currentPing;
-            float num = 0.0f;
+            float num = 0f;
             for (int index = 0; index < 32; ++index)
                 num += this._previousPings[index];
             this._ping = num / 32f;

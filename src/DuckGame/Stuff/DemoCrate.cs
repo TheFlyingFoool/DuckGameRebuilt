@@ -36,7 +36,7 @@ namespace DuckGame
             this.thickness = 2f;
             this.weight = 10f;
             this.buoyancy = 1f;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this.flammable = 0.3f;
             this._placementCost += 15;
         }
@@ -91,7 +91,7 @@ namespace DuckGame
                 return false;
             if (this.removeFromLevel)
                 return true;
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             Level.Remove(this);
             Vec2 vec2 = Vec2.Zero;
             if (type is DTShot)

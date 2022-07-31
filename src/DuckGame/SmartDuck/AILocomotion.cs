@@ -75,21 +75,21 @@
 //            this._path.followObject = duck;
 //            if (_jumpFrames == 1.0)
 //            {
-//                this._jumpFrames = 0.0f;
+//                this._jumpFrames = 0f;
 //                this._ai.Release("JUMP");
 //            }
 //            else if (_jumpFrames > 0.0)
 //                --this._jumpFrames;
 //            if (_slideFrames == 1.0)
 //            {
-//                this._slideFrames = 0.0f;
+//                this._slideFrames = 0f;
 //                this._ai.Release("DOWN");
 //            }
 //            else if (_slideFrames > 0.0)
 //                --this._slideFrames;
 //            if (_quackFrames == 1.0)
 //            {
-//                this._quackFrames = 0.0f;
+//                this._quackFrames = 0f;
 //                this._ai.Release("QUACK");
 //            }
 //            else if (_quackFrames > 0.0)
@@ -144,27 +144,27 @@
 //                return;
 //            float num1 = 1f;
 //            if (_path.target.position.y == (double)this.target.y)
-//                num1 = 0.0f;
+//                num1 = 0f;
 //            if (vec2.x < ((double)duck.hSpeed * 3.0 - 2.0) * (double)num1)
 //            {
-//                if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(-32f, 0.0f)) != null)
+//                if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(-32f, 0f)) != null)
 //                    this.Slide(30);
 //                this.RunLeft();
 //            }
 //            else if (vec2.x > ((double)duck.hSpeed * 3.0 + 2.0) * (double)num1)
 //            {
-//                if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(32f, 0.0f)) != null)
+//                if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(32f, 0f)) != null)
 //                    this.Slide(30);
 //                this.RunRight();
 //            }
 //            if (this._path.peek.gap && duck.grounded)
 //            {
-//                this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.x), 0.0f, 48f) / 48.0 * 16.0));
+//                this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.x), 0f, 48f) / 48.0 * 16.0));
 //                this._tryJump = 5;
 //            }
 //            if (vec2.y <= -4.0 && duck.grounded)
 //            {
-//                this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.y), 0.0f, 48f) / 48.0 * 16.0));
+//                this.Jump((int)((double)Maths.Clamp(Math.Abs(vec2.y), 0f, 48f) / 48.0 * 16.0));
 //                this._tryJump = 5;
 //            }
 //            if (flag)
@@ -172,7 +172,7 @@
 //            float num2 = 8f;
 //            if ((double)Math.Abs(this._path.peek.owner.y - target.y) < 8.0)
 //                num2 = 200f;
-//            if ((double)Math.Abs(vec2.x) >= 4.0 || (double)Math.Abs(vec2.y) >= (double)num2 || !PathNode.LineIsClear(duck.position - new Vec2(0.0f, 8f), target) || _path.peek.link.position.y < (double)duck.y - 8.0 && !duck.grounded || !duck.grounded)
+//            if ((double)Math.Abs(vec2.x) >= 4.0 || (double)Math.Abs(vec2.y) >= (double)num2 || !PathNode.LineIsClear(duck.position - new Vec2(0f, 8f), target) || _path.peek.link.position.y < (double)duck.y - 8.0 && !duck.grounded || !duck.grounded)
 //                return;
 //            this._path.AtTarget();
 //            this._ai.canRefresh = true;

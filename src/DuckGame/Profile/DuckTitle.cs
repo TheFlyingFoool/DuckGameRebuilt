@@ -92,8 +92,8 @@ namespace DuckGame
 
         public float ScoreTowardsTitle(Profile p)
         {
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             foreach (KeyValuePair<PropertyInfo, float> keyValuePair in this._requirementsFloat)
             {
                 num1 += keyValuePair.Value;

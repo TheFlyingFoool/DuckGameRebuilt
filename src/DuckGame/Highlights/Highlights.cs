@@ -52,7 +52,7 @@ namespace DuckGame
             Recorder.currentRecording = null;
             if (currentRecording == null)
                 return;
-            float num = 0.0f;
+            float num = 0f;
             float lastMatchLength = Stats.lastMatchLength;
             currentRecording.Rewind();
             while (!currentRecording.StepForward())

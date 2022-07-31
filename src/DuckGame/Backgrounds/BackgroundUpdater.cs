@@ -14,7 +14,7 @@ namespace DuckGame
         protected bool _update = true;
         protected bool _yParallax = true;
         protected float _yOffset;
-        public Rectangle scissor = new Rectangle(0.0f, 0.0f, 0.0f, 0.0f);
+        public Rectangle scissor = new Rectangle(0f, 0f, 0f, 0f);
         public bool overrideBaseScissorCall;
         public float _extraYOffset;
         public Color backgroundColor;
@@ -74,7 +74,7 @@ namespace DuckGame
             {
                 Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
                 if (wallScissor != Vec2.Zero)
-                    this.scissor = new Rectangle((int)wallScissor.x, 0.0f, (int)wallScissor.y, Resolution.current.y);
+                    this.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, Resolution.current.y);
             }
             if (!this._update)
                 return;

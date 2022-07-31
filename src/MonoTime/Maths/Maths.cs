@@ -71,9 +71,9 @@ namespace DuckGame
 
         public static float Ratio(int val1, int val2) => val2 == 0.0 ? val1 : val1 / (float)val2;
 
-        public static float NormalizeSection(float value, float sectionMin, float sectionMax) => Maths.Clamp(Maths.Clamp(value - sectionMin, 0.0f, sectionMax) / (sectionMax - sectionMin), 0.0f, 1f);
+        public static float NormalizeSection(float value, float sectionMin, float sectionMax) => Maths.Clamp(Maths.Clamp(value - sectionMin, 0f, sectionMax) / (sectionMax - sectionMin), 0f, 1f);
 
-        public static float CountDown(float value, float amount, float min = 0.0f)
+        public static float CountDown(float value, float amount, float min = 0f)
         {
             if ((double)value > (double)min)
                 value -= amount;

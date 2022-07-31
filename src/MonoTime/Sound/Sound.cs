@@ -57,13 +57,13 @@ namespace DuckGame
 
         public virtual float Volume
         {
-            get => Math.Min(1f, Math.Max(0.0f, this._volume));
+            get => Math.Min(1f, Math.Max(0f, this._volume));
             set
             {
                 this._volume = value;
                 if (this._instance == null)
                     this._instance = SFX.GetInstance(this._name, this._volume * SFX.volume);
-                this._instance.Volume = Math.Min(1f, Math.Max(0.0f, value * SFX.volume));
+                this._instance.Volume = Math.Min(1f, Math.Max(0f, value * SFX.volume));
             }
         }
 
@@ -73,7 +73,7 @@ namespace DuckGame
                 return;
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.LogSound(this.name, this._volume, this.Pitch, this.Pan);
-            this._instance.Volume = Math.Min(1f, Math.Max(0.0f, this._volume * SFX.volume));
+            this._instance.Volume = Math.Min(1f, Math.Max(0f, this._volume * SFX.volume));
             this._instance.Play();
             this._pooled = true;
         }
@@ -93,7 +93,7 @@ namespace DuckGame
         {
             if (this.State != SoundState.Stopped && !this._instance.IsDisposed)
             {
-                this._instance.Volume = 0.0f;
+                this._instance.Volume = 0f;
                 this._instance.Stop();
             }
             this._pooled = false;
@@ -103,7 +103,7 @@ namespace DuckGame
         {
             if (this._killed)
                 return;
-            this._instance.Volume = 0.0f;
+            this._instance.Volume = 0f;
             this._instance.Pause();
             this._pooled = false;
             SFX.UnpoolSound(this);

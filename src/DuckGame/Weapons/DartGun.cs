@@ -47,7 +47,7 @@ namespace DuckGame
 
         public override void Initialize() => base.Initialize();
 
-        public override void UpdateFirePosition(SmallFire f) => f.position = this.Offset(new Vec2(10f, 0.0f));
+        public override void UpdateFirePosition(SmallFire f) => f.position = this.Offset(new Vec2(10f, 0f));
 
         public override void UpdateOnFire()
         {
@@ -56,7 +56,7 @@ namespace DuckGame
             this._burnWait -= 0.01f;
             if (_burnWait < 0.0)
             {
-                Level.Add(SmallFire.New(10f, 0.0f, 0.0f, 0.0f, stick: this, canMultiply: false, firedFrom: this));
+                Level.Add(SmallFire.New(10f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                 this._burnWait = 1f;
             }
             if (burnt >= 1.0)
@@ -69,10 +69,10 @@ namespace DuckGame
             if (!this.burntOut && burnt >= 1.0)
             {
                 this._sprite.frame = 1;
-                Vec2 vec2 = this.Offset(new Vec2(10f, 0.0f));
+                Vec2 vec2 = this.Offset(new Vec2(10f, 0f));
                 Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                 this._onFire = false;
-                this.flammable = 0.0f;
+                this.flammable = 0f;
                 this.burntOut = true;
             }
             base.Update();
@@ -101,13 +101,13 @@ namespace DuckGame
                     this.kick = 1f;
                     if (this.receivingPress || !this.isServerForObject)
                         return;
-                    Vec2 vec2 = this.Offset(this.barrelOffset + new Vec2(-8f, 0.0f));
+                    Vec2 vec2 = this.Offset(this.barrelOffset + new Vec2(-8f, 0f));
                     float radians = this.barrelAngle + Rando.Float(-0.05f, 0.05f);
                     Dart dart = new Dart(vec2.x, vec2.y, this.owner as Duck, -radians);
                     this.Fondle(dart);
                     if (this.onFire)
                     {
-                        Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: dart, firedFrom: this));
+                        Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
                         dart.burning = true;
                         dart.onFire = true;
                     }

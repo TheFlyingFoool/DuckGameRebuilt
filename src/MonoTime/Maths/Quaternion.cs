@@ -17,7 +17,7 @@ namespace DuckGame
         public float y;
         public float z;
         public float w;
-        private static Quaternion identity = new Quaternion(0.0f, 0.0f, 0.0f, 1f);
+        private static Quaternion identity = new Quaternion(0f, 0f, 0f, 1f);
 
         public Quaternion(float x, float y, float z, float w)
         {

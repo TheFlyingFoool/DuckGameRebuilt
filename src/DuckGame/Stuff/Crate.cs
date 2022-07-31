@@ -36,7 +36,7 @@ namespace DuckGame
             this.thickness = 2f;
             this.weight = 5f;
             this.buoyancy = 1f;
-            this._holdOffset = new Vec2(2f, 0.0f);
+            this._holdOffset = new Vec2(2f, 0f);
             this.flammable = 0.3f;
             this.collideSounds.Add("crateHit");
             this.editorTooltip = "It's made of wood. That's...pretty much it.";
@@ -44,7 +44,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             Level.Remove(this);
             SFX.Play("crateDestroy");
             Vec2 vec2 = Vec2.Zero;

@@ -51,7 +51,7 @@ namespace DuckGame
             this._smallFont = new BitmapFont("smallBiosFont", 7, 6);
             this._mode = mode;
             this._faceTarget = !this._smallMode ? new RenderTarget2D(104, 24) : new RenderTarget2D(104, 12);
-            this._targetSprite = new Sprite(this._faceTarget, 0.0f, 0.0f);
+            this._targetSprite = new Sprite(this._faceTarget, 0f, 0f);
             this._gradient = new Sprite("rockThrow/headGradient2");
             if (this._smallMode)
             {
@@ -97,10 +97,10 @@ namespace DuckGame
             }
             if (this._smallMode)
                 this._gradient.yscale = 0.5f;
-            DuckGame.Graphics.Draw(this._gradient, 0.0f, 0.0f);
+            DuckGame.Graphics.Draw(this._gradient, 0f, 0f);
             this._edgeOverlay.depth = (Depth)0.9f;
             this._edgeOverlay.alpha = 0.5f;
-            DuckGame.Graphics.Draw(this._edgeOverlay, 0.0f, 0.0f);
+            DuckGame.Graphics.Draw(this._edgeOverlay, 0f, 0f);
             int num = 0;
             foreach (Profile activeProfile in this._team.activeProfiles)
             {
@@ -139,8 +139,8 @@ namespace DuckGame
         {
             this._font.scale = new Vec2(1f, 1f);
             string str = this._team.currentDisplayName;
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             if (str.Length > 16)
                 str = str.Substring(0, 16);
             string text1 = "@ICONGRADIENT@" + str;

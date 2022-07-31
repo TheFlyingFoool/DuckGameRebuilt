@@ -16,7 +16,7 @@ namespace DuckGame
         private ActionTimer _explodeTimer = (ActionTimer)Rando.Float(0.01f, 0.012f);
         private bool didRemove;
 
-        public Firecracker(float xpos, float ypos, float ang = 0.0f)
+        public Firecracker(float xpos, float ypos, float ang = 0f)
           : base(xpos, ypos)
         {
             this.graphic = new Sprite("fireCracker");

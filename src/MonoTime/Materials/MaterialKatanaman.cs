@@ -28,7 +28,7 @@ namespace DuckGame
             this.SetValue("xpos", this._hat.position.x - 32f);
             this.SetValue("ypos", this._hat.position.y - 32f);
             if (this._hat.graphic != null)
-                this.SetValue("flipSub", this._hat.graphic.flipH ? 1f : 0.0f);
+                this.SetValue("flipSub", this._hat.graphic.flipH ? 1f : 0f);
             float num1 = 150f;
             float num2 = num1 / 64f;
             Vec2 vec2_1 = new Vec2(15f, 11f) * num2;

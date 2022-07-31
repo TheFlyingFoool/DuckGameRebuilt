@@ -40,12 +40,12 @@ namespace DuckGame
             this._smallDome = new Sprite("domeSmall");
             this._smallDome.CenterOrigin();
             this._smallPillar = new Sprite("domePillar");
-            this._smallPillar.center = new Vec2(this._smallPillar.w / 2, 0.0f);
+            this._smallPillar.center = new Vec2(this._smallPillar.w / 2, 0f);
             this._domeBleachers = new SpriteMap("domeBleachers", 25, 20)
             {
                 center = new Vec2(13f, 13f)
             };
-            this._virtualBackground = new VirtualBackground(0.0f, 0.0f, null);
+            this._virtualBackground = new VirtualBackground(0f, 0f, null);
             Level.Add(_virtualBackground);
             this._cornerWedge = new Sprite("rockThrow/cornerWedge");
             this._intermissionText = new Sprite("rockThrow/intermission");
@@ -54,12 +54,12 @@ namespace DuckGame
                 allowTallAspect = true
             };
             Layer.Add(this._subHUD);
-            Layer.Foreground.camera = new Camera(0.0f, 0.0f, 320f, 320f / Resolution.current.aspect);
+            Layer.Foreground.camera = new Camera(0f, 0f, 320f, 320f / Resolution.current.aspect);
         }
 
         public override void Update()
         {
-            Music.volume = Lerp.Float(Music.volume, 0.0f, 0.008f);
+            Music.volume = Lerp.Float(Music.volume, 0f, 0.008f);
             if ((double)Music.volume <= 0.0)
                 Music.Stop();
             this._panWait -= 0.04f;
@@ -69,7 +69,7 @@ namespace DuckGame
             if (_yScrollVel > 0.00999999977648258)
                 this._yScrollVel = 0.01f;
             if (_yScrollVel < 0.0)
-                this._yScrollVel = 0.0f;
+                this._yScrollVel = 0f;
             this._yScroll -= this._yScrollVel;
             this._virtualBackground.layer.fade = Lerp.Float(this._virtualBackground.layer.fade, 0.5f, 0.01f);
             if (_yScroll >= 0.400000005960464)
@@ -80,10 +80,10 @@ namespace DuckGame
             this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 1f, 0.1f, 1.1f);
             this._subHUD.fade -= 0.02f;
             if ((double)this._subHUD.fade < 0.0)
-                this._subHUD.fade = 0.0f;
+                this._subHUD.fade = 0f;
             this._virtualBackground.layer.fade -= 0.02f;
             if ((double)this._virtualBackground.layer.fade < 0.0)
-                this._virtualBackground.layer.fade = 0.0f;
+                this._virtualBackground.layer.fade = 0f;
             if (!Network.isServer || (double)this._subHUD.fade > 0.0 || _intermissionSlide < 0.990000009536743 || !this.ready)
                 return;
             Music.volume = 1f;

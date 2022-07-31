@@ -17,10 +17,10 @@ namespace DuckGame
         public EditorProperty<bool> lit = new EditorProperty<bool>(true);
         public EditorProperty<int> style = new EditorProperty<int>(0, max: 16f, increment: 1f);
         public EditorProperty<int> requirement = new EditorProperty<int>(0, max: 100f, increment: 1f);
-        public EditorProperty<float> respect = new EditorProperty<float>(0.0f, increment: 0.05f);
-        public EditorProperty<string> challenge01 = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
-        public EditorProperty<string> challenge02 = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
-        public EditorProperty<string> challenge03 = new EditorProperty<string>("", increment: 0.0f, isLevel: true);
+        public EditorProperty<float> respect = new EditorProperty<float>(0f, increment: 0.05f);
+        public EditorProperty<string> challenge01 = new EditorProperty<string>("", increment: 0f, isLevel: true);
+        public EditorProperty<string> challenge02 = new EditorProperty<string>("", increment: 0f, isLevel: true);
+        public EditorProperty<string> challenge03 = new EditorProperty<string>("", increment: 0f, isLevel: true);
         protected bool _underlayStyle = true;
         protected SpriteMap _sprite;
         private Sprite _customMachineOverlay;
@@ -191,7 +191,7 @@ namespace DuckGame
                 if (Thing._alphaTestEffect == null)
                     Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
                 RenderTarget2D t = new RenderTarget2D(48, 48, true);
-                Camera camera = new Camera(0.0f, 0.0f, 48f, 48f);
+                Camera camera = new Camera(0f, 0f, 48f, 48f);
                 DuckGame.Graphics.SetRenderTarget(t);
                 DepthStencilState depthStencilState = new DepthStencilState()
                 {
@@ -204,7 +204,7 @@ namespace DuckGame
                 DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)Thing._alphaTestEffect, camera.getMatrix());
                 DuckGame.Graphics.Draw(this._machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
-                DuckGame.Graphics.Draw(this._customMachineOverlayMask, 0.0f, 0.0f, (Depth)0.9f);
+                DuckGame.Graphics.Draw(this._customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
                 Texture2D tex = new Texture2D(DuckGame.Graphics.device, t.width, t.height);
@@ -278,7 +278,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        this._hoverFade = Lerp.Float(this._hoverFade, 0.0f, 0.1f);
+                        this._hoverFade = Lerp.Float(this._hoverFade, 0f, 0.1f);
                         this.hover = false;
                     }
                 }

@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._hit = Maths.LerpTowards(this._hit, 0.0f, 0.1f);
+            this._hit = Maths.LerpTowards(this._hit, 0f, 0.1f);
             if (Level.CheckPoint<Duck>(this.x, this.y + 10f) == null || _hit >= 0.00999999977648258)
                 return;
             this._hit = 1f;

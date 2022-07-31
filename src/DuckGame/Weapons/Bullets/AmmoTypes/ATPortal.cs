@@ -26,7 +26,7 @@ namespace DuckGame
         public override Bullet FireBullet(
           Vec2 position,
           Thing owner = null,
-          float angle = 0.0f,
+          float angle = 0f,
           Thing firedFrom = null)
         {
             angle *= -1f;

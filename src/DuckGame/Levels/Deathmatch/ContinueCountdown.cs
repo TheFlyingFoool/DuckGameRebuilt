@@ -24,7 +24,7 @@ namespace DuckGame
                 this.timer -= Maths.IncFrameTimer();
             if (timer >= 0.0)
                 return;
-            this.timer = 0.0f;
+            this.timer = 0f;
         }
     }
 }

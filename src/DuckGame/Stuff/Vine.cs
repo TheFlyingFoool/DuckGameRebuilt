@@ -59,7 +59,7 @@ namespace DuckGame
                     collection.Reverse();
                     points.AddRange(collection);
                 }
-                float num1 = 0.0f;
+                float num1 = 0f;
                 foreach (VineSection vineSection in points)
                     num1 += vineSection.length;
                 int num2 = 0;
@@ -80,7 +80,7 @@ namespace DuckGame
             this.center = new Vec2(8f, 8f);
             this._vinePartSprite = new Sprite("vine")
             {
-                center = new Vec2(8f, 0.0f)
+                center = new Vec2(8f, 0f)
             };
             this.collisionOffset = new Vec2(-5f, -4f);
             this.collisionSize = new Vec2(11f, 7f);
@@ -109,7 +109,7 @@ namespace DuckGame
             Vec2 position = this.position;
             this.position.y += (int)this.length * 16 - 8;
             this._harpoon.noisy = false;
-            this._harpoon.Fire(position + new Vec2(0.0f, -8f), new Vec2(0.0f, -1f));
+            this._harpoon.Fire(position + new Vec2(0f, -8f), new Vec2(0f, -1f));
             this._rope = new Rope(this.x, this.y, null, _harpoon, duck, true, this._vinePartSprite);
             if (initLength != 0.0)
                 this._rope.properLength = this.initLength;
@@ -229,7 +229,7 @@ namespace DuckGame
             {
                 if (!this.duck.grounded)
                 {
-                    this.duck.frictionMult = 0.0f;
+                    this.duck.frictionMult = 0f;
                 }
                 else
                 {
@@ -239,7 +239,7 @@ namespace DuckGame
             }
             else if (!this.grounded)
             {
-                this.frictionMult = 0.0f;
+                this.frictionMult = 0f;
             }
             else
             {

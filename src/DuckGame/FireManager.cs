@@ -39,7 +39,7 @@ namespace DuckGame
                     if (litBy.stick != null && (litBy.stick is DartGun || litBy.stick is Chaindart))
                         thing = litBy.stick.owner;
                     litBy.doFloat = false;
-                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(litBy.position + new Vec2(0.0f, -4f), 6f))
+                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(litBy.position + new Vec2(0f, -4f), 6f))
                     {
                         if (materialThing != thing)
                         {
@@ -65,7 +65,7 @@ namespace DuckGame
                                     Level.Remove(litBy);
                                 }
                                 else if ((double)Rando.Float(1000f) < materialThing.flammable * 1000.0 && (litBy.whoWait == null || duck != litBy.whoWait))
-                                    materialThing.Burn(litBy.position + new Vec2(0.0f, 4f), litBy);
+                                    materialThing.Burn(litBy.position + new Vec2(0f, 4f), litBy);
                             }
                         }
                     }
@@ -77,12 +77,12 @@ namespace DuckGame
                     litBy1.onFire = false;
                 else if (litBy1.onFire && (double)litBy1.fireID == _curUpdateID && (double)litBy1.alpha > 0.5)
                 {
-                    foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(litBy1.topLeft + new Vec2(0.0f, -4f), litBy1.topRight + new Vec2(0.0f, 2f)))
+                    foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(litBy1.topLeft + new Vec2(0f, -4f), litBy1.topRight + new Vec2(0f, 2f)))
                     {
                         if (materialThing != litBy1 && materialThing.isServerForObject)
                         {
                             if ((!(materialThing is Duck duck) || duck.slideBuildup <= 0.0) && (double)Rando.Float(1000f) < materialThing.flammable * 1000.0)
-                                materialThing.Burn(litBy1.position + new Vec2(0.0f, 4f), litBy1);
+                                materialThing.Burn(litBy1.position + new Vec2(0f, 4f), litBy1);
                             materialThing.DoHeatUp(0.05f, litBy1.position);
                         }
                     }
@@ -104,12 +104,12 @@ namespace DuckGame
             {
                 if (extinguisherSmoke.smokeID == FireManager._curUpdateID)
                 {
-                    foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(extinguisherSmoke.position + new Vec2(0.0f, -8f), 12f))
+                    foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(extinguisherSmoke.position + new Vec2(0f, -8f), 12f))
                     {
                         if (extinguisherSmoke.scale.x > 1.0)
                             smallFire.SuckLife(10f);
                     }
-                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(extinguisherSmoke.position + new Vec2(0.0f, -8f), 4f))
+                    foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(extinguisherSmoke.position + new Vec2(0f, -8f), 4f))
                     {
                         if (extinguisherSmoke.scale.x > 1.0)
                             materialThing.spreadExtinguisherSmoke = 1f;

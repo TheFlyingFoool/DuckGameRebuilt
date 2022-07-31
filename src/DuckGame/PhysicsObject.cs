@@ -16,7 +16,7 @@ namespace DuckGame
     {
         public StateBinding _positionBinding = new InterpolatedVec2Binding(nameof(netPosition), 10000);
         public StateBinding _velocityBinding = new CompressedVec2Binding(GhostPriority.High, nameof(netVelocity), 20, true);
-        public StateBinding _angleBinding = new CompressedFloatBinding(GhostPriority.High, "_angle", 0.0f, isRot: true, doLerp: true);
+        public StateBinding _angleBinding = new CompressedFloatBinding(GhostPriority.High, "_angle", 0f, isRot: true, doLerp: true);
         public StateBinding _offDirBinding = new StateBinding(GhostPriority.High, "_offDir");
         public StateBinding _ownerBinding = new StateBinding(GhostPriority.High, nameof(netOwner));
         public StateBinding _physicsStateBinding = new PhysicsFlagBinding(GhostPriority.High);
@@ -202,7 +202,7 @@ namespace DuckGame
 
         public MaterialThing wallCollideRight => this._wallCollideRight;
 
-        public override float impactPowerV => base.impactPowerV - ((double)this.vSpeed > 0.0 ? this.currentGravity * this.weightMultiplierInvTotal : 0.0f);
+        public override float impactPowerV => base.impactPowerV - ((double)this.vSpeed > 0.0 ? this.currentGravity * this.weightMultiplierInvTotal : 0f);
 
         public override float hSpeed
         {
@@ -227,7 +227,7 @@ namespace DuckGame
         public virtual float holdWeightMultiplierSmall => this.holdObject != null ? this.holdObject.weightMultiplierSmall : 1f;
 
         public PhysicsObject()
-          : this(0.0f, 0.0f)
+          : this(0f, 0f)
         {
         }
 
@@ -257,7 +257,7 @@ namespace DuckGame
                 if (this._sleeping && !value)
                 {
                     this._sleeping = value;
-                    foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -4f), this.topRight + new Vec2(0.0f, -4f)))
+                    foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0f, -4f), this.topRight + new Vec2(0f, -4f)))
                         physicsObject.sleeping = false;
                 }
                 this._sleeping = value;
@@ -266,8 +266,8 @@ namespace DuckGame
 
         public static int SortCollisionXHspeedPositive(MaterialThing t1, MaterialThing t2)
         {
-            float num1 = t1.x + (t1 is Block ? -10000f : 0.0f);
-            float num2 = t2.x + (t2 is Block ? -10000f : 0.0f);
+            float num1 = t1.x + (t1 is Block ? -10000f : 0f);
+            float num2 = t2.x + (t2 is Block ? -10000f : 0f);
             if ((double)num1 > (double)num2)
                 return 1;
             return (double)num1 < (double)num2 ? -1 : 0;
@@ -284,8 +284,8 @@ namespace DuckGame
 
         public static int SortCollisionYVspeedPositive(MaterialThing t1, MaterialThing t2)
         {
-            float num1 = t1.y + (t1 is Block ? 10000f : 0.0f);
-            float num2 = t2.y + (t2 is Block ? 10000f : 0.0f);
+            float num1 = t1.y + (t1 is Block ? 10000f : 0f);
+            float num2 = t2.y + (t2 is Block ? 10000f : 0f);
             if ((double)num1 > (double)num2)
                 return 1;
             return (double)num1 < (double)num2 ? -1 : 0;
@@ -355,7 +355,7 @@ namespace DuckGame
                 if (this.owner is Duck)
                     this.gravMultiplier = 1f;
                 if ((double)this.hSpeed > -(double)num1 && (double)this.hSpeed < (double)num1)
-                    this.hSpeed = 0.0f;
+                    this.hSpeed = 0f;
                 if (this.duck)
                 {
                     if ((double)this.hSpeed > 0.0)
@@ -397,10 +397,10 @@ namespace DuckGame
                     this.hSpeed = this.hMax;
                 if ((double)this.hSpeed < -(double)this.hMax)
                     this.hSpeed = -this.hMax;
-                Vec2 p1_1 = this.topLeft + new Vec2(0.0f, 0.5f);
-                Vec2 p2_1 = this.bottomRight + new Vec2(0.0f, -0.5f);
+                Vec2 p1_1 = this.topLeft + new Vec2(0f, 0.5f);
+                Vec2 p2_1 = this.bottomRight + new Vec2(0f, -0.5f);
                 this.lastHSpeed = this.hSpeed;
-                float num2 = 0.0f;
+                float num2 = 0f;
                 bool flag1 = false;
                 if ((double)this.hSpeed != 0.0)
                 {
@@ -421,7 +421,7 @@ namespace DuckGame
                     if (Network.isActive && !this.isServerForObject && (double)Math.Abs(this.hSpeed) > 0.5)
                     {
                         this._hitDucks.Clear();
-                        Level.CheckRectAll<Duck>(p1_1 + new Vec2(this.hSpeed * 2f, 0.0f), p2_1 + new Vec2(this.hSpeed * 2f, 0.0f), this._hitDucks);
+                        Level.CheckRectAll<Duck>(p1_1 + new Vec2(this.hSpeed * 2f, 0f), p2_1 + new Vec2(this.hSpeed * 2f, 0f), this._hitDucks);
                         foreach (Duck hitDuck in this._hitDucks)
                         {
                             if ((double)this.hSpeed > 0.0)
@@ -508,8 +508,8 @@ namespace DuckGame
                     Math.Floor((double)this.vSpeed);
                 else
                     Math.Ceiling((double)this.vSpeed);
-                Vec2 p1_2 = this.topLeft + new Vec2(0.5f, 0.0f);
-                Vec2 p2_2 = this.bottomRight + new Vec2(-0.5f, 0.0f);
+                Vec2 p1_2 = this.topLeft + new Vec2(0.5f, 0f);
+                Vec2 p2_2 = this.bottomRight + new Vec2(-0.5f, 0f);
                 float num5 = -9999f;
                 bool flag4 = false;
                 float vSpeed = this.vSpeed;

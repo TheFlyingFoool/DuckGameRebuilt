@@ -71,7 +71,7 @@ namespace DuckGame
                     this._sampleCool.Add(0);
                 this._cool.Add(-50);
                 this._lastFrame.Add(0);
-                this._upScale.Add(0.0f);
+                this._upScale.Add(0f);
             }
         }
 

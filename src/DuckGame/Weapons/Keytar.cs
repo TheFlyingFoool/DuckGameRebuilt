@@ -117,7 +117,7 @@ namespace DuckGame
 
         public float bender
         {
-            get => Maths.Clamp(this._bender + this._benderOffset, 0.0f, 1f);
+            get => Maths.Clamp(this._bender + this._benderOffset, 0f, 1f);
             set => this._bender = value;
         }
 
@@ -207,7 +207,7 @@ namespace DuckGame
                         this.notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : this.handPitch + 0.01f;
                 }
                 else
-                    this._benderOffset = 0.0f;
+                    this._benderOffset = 0f;
                 if (this.noteSound != null && this._ruined && Rando.Int(30) == 0)
                     this.noteSound.Volume *= 0.75f;
                 this.duckMoving = owner._sprite.currentAnimation == "run";
@@ -238,8 +238,8 @@ namespace DuckGame
                                 if (Rando.Int(7) == 0)
                                     val -= 0.25f;
                                 if (flag)
-                                    val = Rando.Int(3) == 0 ? 0.2f : 0.0f;
-                                vol = Maths.Clamp(val, 0.0f, 1f);
+                                    val = Rando.Int(3) == 0 ? 0.2f : 0f;
+                                vol = Maths.Clamp(val, 0f, 1f);
                             }
                             if (this.noteSound != null)
                                 this._prevSounds.Add(this.noteSound);
@@ -295,7 +295,7 @@ namespace DuckGame
                     --index;
                 }
                 else
-                    this._prevSounds[index].Volume = Lerp.Float(this._prevSounds[index].Volume, 0.0f, 0.15f);
+                    this._prevSounds[index].Volume = Lerp.Float(this._prevSounds[index].Volume, 0f, 0.15f);
             }
             if (preset != _prevPreset)
                 SFX.Play("click");

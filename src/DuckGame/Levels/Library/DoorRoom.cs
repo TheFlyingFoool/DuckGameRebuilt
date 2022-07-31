@@ -69,23 +69,23 @@ namespace DuckGame
                 Global.data.winsAsHair.value = 100;
             if (this._desiredTransition != this._transition)
             {
-                this._fade = Lerp.Float(this._fade, 0.0f, 0.06f);
+                this._fade = Lerp.Float(this._fade, 0f, 0.06f);
                 if (_fade <= 0.0)
                 {
                     this._transition = this._desiredTransition;
                     if (this._transition == DoorTransition.Profile)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new LockerRoom(this._profile);
                     }
                     else if (this._transition == DoorTransition.Exit)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new TitleScreen();
                     }
                     else if (this._transition == DoorTransition.Album)
                     {
-                        Graphics.fade = 0.0f;
+                        Graphics.fade = 0f;
                         Level.current = new Album();
                     }
                 }
@@ -119,8 +119,8 @@ namespace DuckGame
                     this._slide = Lerp.Float(this._slide, this._slideTo, 0.05f);
                 else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
                 {
-                    this._slide = 0.0f;
-                    this._slideTo = 0.0f;
+                    this._slide = 0f;
+                    this._slideTo = 0f;
                     SFX.Play("textLetter", 0.7f);
                     this._selectorPosition = this._desiredSelectorPosition;
                     if (this._profiles.Count > 0)
@@ -164,7 +164,7 @@ namespace DuckGame
         {
             if (layer == Layer.Background)
             {
-                Vec2 vec2_1 = new Vec2(0.0f, 0.0f);
+                Vec2 vec2_1 = new Vec2(0f, 0f);
                 float num1 = -260f;
                 float num2 = 140f;
                 for (int index1 = 0; index1 < 7; ++index1)
@@ -175,8 +175,8 @@ namespace DuckGame
                         str = this._profiles[index2].name;
                     float num3 = (float)(vec2_1.x + (double)num1 + 3.0 * (double)num2);
                     float x = (float)(vec2_1.x + (double)num1 + index1 * (double)num2 + -(double)this._slide * (double)num2);
-                    double num4 = (double)Maths.Clamp((float)((100.0 - (double)Math.Abs(x - num3)) / 100.0), 0.0f, 1f);
-                    float num5 = (float)num4 * Maths.NormalizeSection((float)num4, 0.0f, 0.9f);
+                    double num4 = (double)Maths.Clamp((float)((100.0 - (double)Math.Abs(x - num3)) / 100.0), 0f, 1f);
+                    float num5 = (float)num4 * Maths.NormalizeSection((float)num4, 0f, 0.9f);
                     this._door.color = Color.White * num5 * this._fade;
                     this._door.depth = (Depth)(num5 * 0.8f);
                     if ((double)num5 < 1.0)
@@ -188,8 +188,8 @@ namespace DuckGame
                         Graphics.Draw(this._door, x, 90f);
                     string text = str;
                     float num6 = (float)(((double)num5 + 1.0) * 0.5);
-                    float num7 = 0.0f;
-                    float num8 = 0.0f;
+                    float num7 = 0f;
+                    float num8 = 0f;
                     Vec2 vec2_2 = new Vec2(1f, 1f);
                     if (text.Length > 9)
                     {

@@ -45,7 +45,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0.0f, 0.3f, 1.1f);
+            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.3f, 1.1f);
             if (this.down)
             {
                 if (this._unlocks.Count == 0)
@@ -97,7 +97,7 @@ namespace DuckGame
                     }
                 }
                 else
-                    Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0.0f, 0.2f);
+                    Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0f, 0.2f);
                 if (!this._wrapped && Input.Pressed("SELECT"))
                 {
                     HUD.CloseAllCorners();

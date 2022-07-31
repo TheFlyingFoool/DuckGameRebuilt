@@ -28,7 +28,7 @@ namespace DuckGame
             this._fireSound = "shotgun";
             this._kickForce = 2f;
             this._fireRumble = RumbleIntensity.Light;
-            this._holdOffset = new Vec2(3f, 0.0f);
+            this._holdOffset = new Vec2(3f, 0f);
             this.editorTooltip = "Old-timey rifle, takes approximately 150 years to reload.";
         }
 

@@ -317,7 +317,7 @@ namespace DuckGame
                 if (this._box.duck != null)
                 {
                     Hat equipment = this._box.duck.GetEquipment(typeof(Hat)) as Hat;
-                    Hat hat = new TeamHat(0.0f, 0.0f, team, this._box.duck.profile);
+                    Hat hat = new TeamHat(0f, 0f, team, this._box.duck.profile);
                     Level.Add(hat);
                     this._box.duck.Equip(hat, false);
                     this._box.duck.Fondle(hat);
@@ -455,7 +455,7 @@ namespace DuckGame
                 else
                 {
                     this._gettingXP = false;
-                    this._gettingXPCompletion = 0.0f;
+                    this._gettingXPCompletion = 0f;
                 }
             }
             if (Network.isActive && (this.connection == null || this.connection.status == ConnectionStatus.Disconnected || this.profile == null || this.profile.connection == null || this.profile.connection.status == ConnectionStatus.Disconnected))
@@ -464,8 +464,8 @@ namespace DuckGame
                 this._gettingXP = false;
                 this._open = false;
             }
-            this._fade = Lerp.Float(this._fade, !this._open || this._profileSelector.open || this._roomEditor.open ? 0.0f : 1f, 0.1f);
-            this._blackFade = Lerp.Float(this._blackFade, this._open ? 1f : 0.0f, 0.1f);
+            this._fade = Lerp.Float(this._fade, !this._open || this._profileSelector.open || this._roomEditor.open ? 0f : 1f, 0.1f);
+            this._blackFade = Lerp.Float(this._blackFade, this._open ? 1f : 0f, 0.1f);
             this._screen.Update();
             if (this._screen.transitioning)
                 this._experienceProfileCheck = null;
@@ -555,8 +555,8 @@ namespace DuckGame
                         this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
                     else if (_slideTo != 0.0 && _slide == (double)this._slideTo)
                     {
-                        this._slide = 0.0f;
-                        this._slideTo = 0.0f;
+                        this._slide = 0f;
+                        this._slideTo = 0f;
                         this._teamSelection = this._desiredTeamSelection;
                         if (this.isServerForObject)
                         {
@@ -569,8 +569,8 @@ namespace DuckGame
                         this._upSlide = Lerp.Float(this._upSlide, this._upSlideTo, 0.1f);
                     else if (_upSlideTo != 0.0 && _upSlide == (double)this._upSlideTo)
                     {
-                        this._upSlide = 0.0f;
-                        this._upSlideTo = 0.0f;
+                        this._upSlide = 0f;
+                        this._upSlideTo = 0f;
                         this._teamSelection = this._desiredTeamSelection;
                         if (this.isServerForObject)
                         {
@@ -731,7 +731,7 @@ namespace DuckGame
                                         num7 = Maths.NormalizeSection(num5, 0.9f, 1f) * 0.7f + num7;
                                         break;
                                     case 3:
-                                        float num9 = Math.Max(0.0f, this._upSlide);
+                                        float num9 = Math.Max(0f, this._upSlide);
                                         num3 += (num5 * 4f * (1f - num9) + -num5 * 4f * num9);
                                         if (_upSlide < 0f)
                                         {
@@ -897,7 +897,7 @@ namespace DuckGame
                             {
                                 this._profileSelector.Open(this._profile);
                                 SFX.Play("consoleSelect", 0.4f);
-                                this._fade = 0.0f;
+                                this._fade = 0f;
                                 this._screen.DoFlashTransition();
                             }
                             else if (this._mainSelection == 0)
@@ -918,7 +918,7 @@ namespace DuckGame
                                 this._editingRoom = true;
                                 this._roomEditor.Open(this._profile);
                                 SFX.Play("consoleSelect", 0.4f);
-                                this._fade = 0.0f;
+                                this._fade = 0f;
                                 this._screen.DoFlashTransition();
                             }
                         }
@@ -926,7 +926,7 @@ namespace DuckGame
                         {
                             this._profileSelector.EditProfile(this._profile);
                             SFX.Play("consoleSelect", 0.4f);
-                            this._fade = 0.0f;
+                            this._fade = 0f;
                             this._screen.DoFlashTransition();
                         }
                         else if (this.inputProfile.Pressed("CANCEL"))
@@ -998,7 +998,7 @@ namespace DuckGame
                 {
                     for (int index = 0; index < 8; ++index)
                     {
-                        this._blind.yscale = Math.Max(0.0f, Math.Min((float)(_blindLerp * 3.0 - index * 0.05f), 1f));
+                        this._blind.yscale = Math.Max(0f, Math.Min((float)(_blindLerp * 3.0 - index * 0.05f), 1f));
                         this._blind.depth = (Depth)(float)(0.91f + index * 0.008f);
                         this._blind.flipH = false;
                         DuckGame.Graphics.Draw(this._blind, (this.x - 3f + index * (9f * _blindLerp)), this.y + 1f);

@@ -17,7 +17,7 @@ namespace DuckGame
         public Thing _containedThing;
         public EditorProperty<bool> infinite = new EditorProperty<bool>(false);
         private System.Type _contains;
-        public EditorProperty<float> mountAngle = new EditorProperty<float>(0.0f, min: -360f, max: 360f, increment: 5f);
+        public EditorProperty<float> mountAngle = new EditorProperty<float>(0f, min: -360f, max: 360f, increment: 5f);
         public bool newFlipType = true;
 
         public System.Type contains

@@ -444,8 +444,8 @@ namespace DuckGame
                         input = Profiles.GetLastProfileWithInput().inputProfile;
                 }
             }
-            float num = 0.0f;
-            float width = 0.0f;
+            float num = 0f;
+            float width = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 bool flag2 = false;
@@ -477,7 +477,7 @@ namespace DuckGame
                 {
                     if ((double)num > (double)width)
                         width = num;
-                    num = 0.0f;
+                    num = 0f;
                 }
                 if (!flag2)
                     num += _tileSize * this.scale.x;
@@ -489,10 +489,10 @@ namespace DuckGame
 
         public void DrawOutline(string text, Vec2 pos, Color c, Color outline, Depth deep = default(Depth))
         {
-            this.Draw(text, pos + new Vec2(-1f * this.scale.x, 0.0f), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(1f * this.scale.x, 0.0f), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(0.0f, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(0.0f, 1f * this.scale.y), outline, deep + 2, colorSymbols: true);
+            this.Draw(text, pos + new Vec2(-1f * this.scale.x, 0f), outline, deep + 2, colorSymbols: true);
+            this.Draw(text, pos + new Vec2(1f * this.scale.x, 0f), outline, deep + 2, colorSymbols: true);
+            this.Draw(text, pos + new Vec2(0f, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
+            this.Draw(text, pos + new Vec2(0f, 1f * this.scale.y), outline, deep + 2, colorSymbols: true);
             this.Draw(text, pos + new Vec2(-1f * this.scale.x, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
             this.Draw(text, pos + new Vec2(1f * this.scale.x, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
             this.Draw(text, pos + new Vec2(-1f * this.scale.x, 1f * this.scale.y), outline, deep + 2, colorSymbols: true);
@@ -536,8 +536,8 @@ namespace DuckGame
                         input = Profiles.GetLastProfileWithInput().inputProfile;
                 }
             }
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 bool flag = false;
@@ -619,7 +619,7 @@ namespace DuckGame
                         if ((double)num2 + source.Count<char>() * (_tileSize * (double)this.scale.x) > maxWidth)
                         {
                             num1 += _texture.height * this.scale.y;
-                            num2 = 0.0f;
+                            num2 = 0f;
                             if (this.singleLine)
                                 break;
                         }
@@ -627,7 +627,7 @@ namespace DuckGame
                     if (text[this._letterIndex] == '\n')
                     {
                         num1 += _texture.height * this.scale.y;
-                        num2 = 0.0f;
+                        num2 = 0f;
                     }
                     else
                     {

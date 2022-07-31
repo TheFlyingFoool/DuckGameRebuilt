@@ -19,7 +19,7 @@ namespace DuckGame
       Note.a
     };
         private static int _currentNote = 0;
-        private static float _noteWait = 0.0f;
+        private static float _noteWait = 0f;
 
         public static int GetNextNote(int note, List<Note> scale)
         {

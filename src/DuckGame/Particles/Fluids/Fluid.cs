@@ -11,11 +11,11 @@ namespace DuckGame
 {
     public class Fluid : PhysicsParticle
     {
-        public static FluidData Lava = new FluidData(0.0f, new Color((int)byte.MaxValue, 89, 5).ToVector4(), 0.0f, "lava", 1f, 0.8f);
-        public static FluidData Gas = new FluidData(0.0f, new Color(246, 198, 55).ToVector4(), 1f, "gas");
-        public static FluidData Water = new FluidData(0.0f, new Color(0, 150, 249).ToVector4(), 0.0f, "water");
-        public static FluidData Ketchup = new FluidData(0.0f, Color.Red.ToVector4() * 0.8f, 0.4f, "water");
-        public static FluidData Poo = new FluidData(0.0f, Color.SaddleBrown.ToVector4() * 0.8f, 0.5f, "water");
+        public static FluidData Lava = new FluidData(0f, new Color((int)byte.MaxValue, 89, 5).ToVector4(), 0f, "lava", 1f, 0.8f);
+        public static FluidData Gas = new FluidData(0f, new Color(246, 198, 55).ToVector4(), 1f, "gas");
+        public static FluidData Water = new FluidData(0f, new Color(0, 150, 249).ToVector4(), 0f, "water");
+        public static FluidData Ketchup = new FluidData(0f, Color.Red.ToVector4() * 0.8f, 0.4f, "water");
+        public static FluidData Poo = new FluidData(0f, Color.SaddleBrown.ToVector4() * 0.8f, 0.5f, "water");
         private Fluid _stream;
         private Fluid _child;
         private bool _firstHit;
@@ -90,7 +90,7 @@ namespace DuckGame
                 if (fluidPuddle1 == null)
                 {
                     Vec2 position;
-                    Block b = Level.CheckLine<AutoBlock>(this.position + new Vec2(0.0f, -8f), this.position + new Vec2(0.0f, 16f), out position);
+                    Block b = Level.CheckLine<AutoBlock>(this.position + new Vec2(0f, -8f), this.position + new Vec2(0f, 16f), out position);
                     if (b != null && position.y == (double)b.top)
                     {
                         fluidPuddle1 = new FluidPuddle(position.x, position.y, b);

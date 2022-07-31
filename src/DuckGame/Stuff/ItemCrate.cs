@@ -169,7 +169,7 @@ namespace DuckGame
             if (this.contains == null)
                 this.buoyancy = 1f;
             else
-                this.buoyancy = 0.0f;
+                this.buoyancy = 0f;
             base.Update();
         }
 
@@ -178,7 +178,7 @@ namespace DuckGame
             if (this.randomSpawn && !this.revealRandom.value)
             {
                 this._sprite.frame = 4;
-                Vec2 vec2 = this.Offset(new Vec2(0.0f, -8f));
+                Vec2 vec2 = this.Offset(new Vec2(0f, -8f));
                 this._randomMark.angle = this.angle;
                 this._randomMark.flipH = this.offDir <= 0;
                 DuckGame.Graphics.Draw(this._randomMark, vec2.x, vec2.y, this.depth + 10);
@@ -187,7 +187,7 @@ namespace DuckGame
             {
                 this._sprite.frame = 4;
                 this._containedSprite.CenterOrigin();
-                Vec2 vec2 = this.Offset(new Vec2(0.0f, -8f));
+                Vec2 vec2 = this.Offset(new Vec2(0f, -8f));
                 this._containedSprite.angle = this.angle;
                 this._containedSprite.flipH = this.offDir <= 0;
                 DuckGame.Graphics.Draw(this._containedSprite, vec2.x, vec2.y, this.depth + 10);
@@ -234,7 +234,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0.0f;
+            this._hitPoints = 0f;
             for (int index = 0; index < 10; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(this.x - 10f + Rando.Float(20f), this.y - 10f + Rando.Float(20f));
@@ -258,7 +258,7 @@ namespace DuckGame
                 {
                     if (this._onFire)
                         physicsObject.heat = 0.8f;
-                    physicsObject.position = this.position + new Vec2((float)(index * 2.66666674613953 - 4.0), 0.0f);
+                    physicsObject.position = this.position + new Vec2((float)(index * 2.66666674613953 - 4.0), 0f);
                     switch (index)
                     {
                         case 0:

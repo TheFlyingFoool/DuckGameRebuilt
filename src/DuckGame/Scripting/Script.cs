@@ -168,7 +168,7 @@ namespace DuckGame
 
         public static string highlightRating()
         {
-            float num = 0.0f;
+            float num = 0f;
             List<Recording> highlights = Highlights.GetHighlights();
             foreach (Recording recording in highlights)
                 num += recording.highlightScore;
@@ -183,7 +183,7 @@ namespace DuckGame
                 if (result != null)
                     return Change.ToSingle(result);
             }
-            return 0.0f;
+            return 0f;
         }
 
         public static float floatVALUE2()
@@ -194,7 +194,7 @@ namespace DuckGame
                 if (result != null)
                     return Change.ToSingle(result);
             }
-            return 0.0f;
+            return 0f;
         }
 
         public static int numInPlace(int p) => Script.positions == null || p < 0 || p >= Script.positions.Count ? 0 : Script.positions[Script.positions.Count - 1 - p].Count;

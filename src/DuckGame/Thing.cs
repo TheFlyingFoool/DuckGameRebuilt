@@ -262,7 +262,7 @@ namespace DuckGame
             return true;
         }
 
-        public void PlaySFX(string sound, float vol = 1f, float pitch = 0.0f, float pan = 0.0f, bool looped = false)
+        public void PlaySFX(string sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             if (!this.isServerForObject)
                 return;
@@ -1090,9 +1090,9 @@ namespace DuckGame
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
             if (this.graphic == null)
-                return new Sprite(target, 0.0f, 0.0f);
+                return new Sprite(target, 0f, 0f);
             float num2 = num1 / (collisionSize.x > 0.0 & pUseCollisionSize ? this.collisionSize.x : graphic.width);
-            Camera camera = new Camera(0.0f, 0.0f, wide, high)
+            Camera camera = new Camera(0f, 0f, wide, high)
             {
                 position = new Vec2(this.x - this.centerx * num2, this.y - this.centery * num2)
             };
@@ -1147,8 +1147,8 @@ namespace DuckGame
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
             if (this.graphic == null)
-                return new Sprite(target, 0.0f, 0.0f);
-            Camera camera = new Camera(0.0f, 0.0f, wide, high)
+                return new Sprite(target, 0f, 0f);
+            Camera camera = new Camera(0f, 0f, wide, high)
             {
                 position = new Vec2(this.x - wide / 2, this.y - high / 2)
             };
@@ -1213,16 +1213,16 @@ namespace DuckGame
 
         public virtual void ReturnItemToWorld(Thing t)
         {
-            Block block1 = Level.CheckLine<Block>(this.position, this.position + new Vec2(16f, 0.0f));
+            Block block1 = Level.CheckLine<Block>(this.position, this.position + new Vec2(16f, 0f));
             if (block1 != null && block1.solid && (double)t.right > (double)block1.left)
                 t.right = block1.left;
-            Block block2 = Level.CheckLine<Block>(this.position, this.position - new Vec2(16f, 0.0f));
+            Block block2 = Level.CheckLine<Block>(this.position, this.position - new Vec2(16f, 0f));
             if (block2 != null && block2.solid && (double)t.left < (double)block2.right)
                 t.left = block2.right;
-            Block block3 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0.0f, -16f));
+            Block block3 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, -16f));
             if (block3 != null && block3.solid && (double)t.top < (double)block3.bottom)
                 t.top = block3.bottom;
-            Block block4 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0.0f, 16f));
+            Block block4 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, 16f));
             if (block4 == null || !block4.solid || (double)t.bottom <= (double)block4.top)
                 return;
             t.bottom = block4.top;
@@ -1367,7 +1367,7 @@ namespace DuckGame
             }
         }
 
-        public Thing(float xval = 0.0f, float yval = 0.0f, Sprite sprite = null)
+        public Thing(float xval = 0f, float yval = 0f, Sprite sprite = null)
         {
             this.x = xval;
             this.y = yval;
@@ -1384,13 +1384,13 @@ namespace DuckGame
             Vec2 vec2 = pos * this.scale;
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            return vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f));
+            return vec2.Rotate(this.angle, new Vec2(0f, 0f));
         }
 
         public virtual Vec2 ReverseOffsetLocal(Vec2 pos)
         {
             Vec2 vec2 = pos * this.scale;
-            vec2 = vec2.Rotate(-this.angle, new Vec2(0.0f, 0.0f));
+            vec2 = vec2.Rotate(-this.angle, new Vec2(0f, 0f));
             return vec2;
         }
 
@@ -1404,18 +1404,18 @@ namespace DuckGame
 
         public virtual float OffsetX(float pos)
         {
-            Vec2 vec2 = new Vec2(pos, 0.0f);
+            Vec2 vec2 = new Vec2(pos, 0f);
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            return (this.position + vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f))).x;
+            return (this.position + vec2.Rotate(this.angle, new Vec2(0f, 0f))).x;
         }
 
         public virtual float OffsetY(float pos)
         {
-            Vec2 vec2 = new Vec2(0.0f, pos);
+            Vec2 vec2 = new Vec2(0f, pos);
             if (this.offDir < 0)
                 vec2.x *= -1f;
-            return (this.position + vec2.Rotate(this.angle, new Vec2(0.0f, 0.0f))).y;
+            return (this.position + vec2.Rotate(this.angle, new Vec2(0f, 0f))).y;
         }
 
         public virtual void ResetProperties()

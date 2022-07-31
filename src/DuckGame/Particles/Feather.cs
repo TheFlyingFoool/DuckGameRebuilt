@@ -77,7 +77,7 @@ namespace DuckGame
             if ((double)this.hSpeed < 0f)
                 this.hSpeed += 0.1f;
             if ((double)this.hSpeed < 0.1f && (double)this.hSpeed > -0.1f)
-                this.hSpeed = 0.0f;
+                this.hSpeed = 0f;
             if ((double)this.vSpeed < 1f)
                 this.vSpeed += 0.06f;
             if ((double)this.vSpeed < 0f)

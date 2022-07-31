@@ -63,7 +63,7 @@ namespace DuckGame
         {
             Graphics.DrawRect(position, position + new Vec2(this.width, this.height), new Color(25, 38, 41) * alpha, (Depth)0.9f);
             if (selected)
-                Graphics.DrawRect(position + new Vec2(-1f, 0.0f), position + new Vec2(this.width + 1f, this.height), Color.White * alpha, (Depth)0.97f, false);
+                Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(this.width + 1f, this.height), Color.White * alpha, (Depth)0.97f, false);
             if (this._specialText != null)
             {
                 LevelInfo._font.scale = new Vec2(0.5f, 0.5f);

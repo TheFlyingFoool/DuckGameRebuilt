@@ -42,7 +42,7 @@ namespace DuckGame
             this.flammable = 0.3f;
             this._bottom = new Sprite("waterCoolerBottom");
             this._bottom.CenterOrigin();
-            this.editorOffset = new Vec2(0.0f, -8f);
+            this.editorOffset = new Vec2(0f, -8f);
             this._fluid = Fluid.Water;
         }
 
@@ -68,7 +68,7 @@ namespace DuckGame
                 }
                 if (!flag)
                 {
-                    FluidStream fluidStream = new FluidStream(0.0f, 0.0f, (-bullet.travelDirNormalized).Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off);
+                    FluidStream fluidStream = new FluidStream(0f, 0f, (-bullet.travelDirNormalized).Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off);
                     this._holes.Add(fluidStream);
                     fluidStream.streamSpeedMultiplier = 2f;
                 }
@@ -97,14 +97,14 @@ namespace DuckGame
             }
             if (flag)
                 return;
-            this._holes.Add(new FluidStream(0.0f, 0.0f, bullet.travelDirNormalized.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off));
+            this._holes.Add(new FluidStream(0f, 0f, bullet.travelDirNormalized.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off));
         }
 
         public override void Update()
         {
             base.Update();
             this._shakeInc += 0.8f;
-            this._shakeMult = Lerp.Float(this._shakeMult, 0.0f, 0.05f);
+            this._shakeMult = Lerp.Float(this._shakeMult, 0f, 0.05f);
             if (this._alternate == 0)
             {
                 foreach (FluidStream hole in this._holes)

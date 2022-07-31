@@ -30,7 +30,7 @@ namespace DuckGame
                 else
                 {
                     this.center = new Vec2(8f, 7f);
-                    this.collisionOffset = new Vec2(0.0f, -8f);
+                    this.collisionOffset = new Vec2(0f, -8f);
                     this.collisionSize = new Vec2(8f, 16f);
                     this.angleDegrees = -90f;
                     this.hugWalls = WallHug.Right;

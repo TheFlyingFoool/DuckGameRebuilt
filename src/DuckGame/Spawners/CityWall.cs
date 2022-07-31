@@ -53,7 +53,7 @@ namespace DuckGame
             }
             else
             {
-                Graphics.DrawLine(this.position, this.position + new Vec2(this.flipHorizontal ? 16f : -16f, 0.0f), Color.Red);
+                Graphics.DrawLine(this.position, this.position + new Vec2(this.flipHorizontal ? 16f : -16f, 0f), Color.Red);
                 base.Draw();
             }
         }

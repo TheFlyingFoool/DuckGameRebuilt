@@ -29,10 +29,10 @@ namespace DuckGame
             this.collisionSize = new Vec2(8f, 6f);
             this.collisionOffset = new Vec2(-4f, -3f);
             for (int index = 0; index < 17; ++index)
-                this._trail.Add(new Vec2(0.0f, 0.0f));
+                this._trail.Add(new Vec2(0f, 0f));
             this._prevPosition = new Vec2(this.position);
             this.bouncy = 1f;
-            this.friction = 0.0f;
+            this.friction = 0f;
             this._dontCrush = true;
         }
 

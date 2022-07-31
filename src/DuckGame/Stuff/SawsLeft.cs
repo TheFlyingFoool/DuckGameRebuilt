@@ -29,7 +29,7 @@ namespace DuckGame
             this.physicsMaterial = PhysicsMaterial.Metal;
             this.editorCycleType = typeof(Saws);
             this.angle = -1.570796f;
-            this.editorOffset = new Vec2(6f, 0.0f);
+            this.editorOffset = new Vec2(6f, 0f);
             this.hugWalls = WallHug.Right;
             this._editorImageCenter = true;
             this.impactThreshold = 0.01f;

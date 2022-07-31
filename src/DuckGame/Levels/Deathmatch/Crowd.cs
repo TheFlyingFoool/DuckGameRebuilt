@@ -247,7 +247,7 @@ namespace DuckGame
 
         public static void UpdateFans()
         {
-            float num1 = 0.0f;
+            float num1 = 0f;
             float num2 = 999f;
             float num3 = -999f;
             List<float> floatList = new List<float>();

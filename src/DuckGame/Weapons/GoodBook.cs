@@ -217,9 +217,9 @@ namespace DuckGame
         {
             base.Update();
             this._sprite.frame = this._owner == null || this._raised ? 0 : 1;
-            this._raiseArm = Lerp.Float(this._raiseArm, 0.0f, 0.05f);
-            this._preachWait = Lerp.Float(this._preachWait, 0.0f, 0.06f);
-            this._ringPulse = Lerp.Float(this._ringPulse, 0.0f, 0.05f);
+            this._raiseArm = Lerp.Float(this._raiseArm, 0f, 0.05f);
+            this._preachWait = Lerp.Float(this._preachWait, 0f, 0.06f);
+            this._ringPulse = Lerp.Float(this._ringPulse, 0f, 0.05f);
             if (Network.isActive)
             {
                 if (this.isServerForObject)
@@ -368,7 +368,7 @@ namespace DuckGame
                     }
                 }
             }
-            this._haloAlpha = Lerp.Float(this._haloAlpha, !this._triggerHeld || this.duck == null || !this.duck.grounded ? 0.0f : 1f, 0.05f);
+            this._haloAlpha = Lerp.Float(this._haloAlpha, !this._triggerHeld || this.duck == null || !this.duck.grounded ? 0f : 1f, 0.05f);
             for (int index = 0; index < 8; ++index)
                 this.prevControlling[index] = this.controlling[index];
         }

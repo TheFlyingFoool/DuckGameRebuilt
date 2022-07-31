@@ -79,12 +79,12 @@ namespace DuckGame
             get
             {
                 if (this.Up() != null)
-                    return new Vec2(0.0f, 1f);
+                    return new Vec2(0f, 1f);
                 if (this.Down() != null)
-                    return new Vec2(0.0f, -1f);
+                    return new Vec2(0f, -1f);
                 if (this.Left() != null)
-                    return new Vec2(1f, 0.0f);
-                return this.Right() != null ? new Vec2(-1f, 0.0f) : this.position;
+                    return new Vec2(1f, 0f);
+                return this.Right() != null ? new Vec2(-1f, 0f) : this.position;
             }
         }
 
@@ -147,11 +147,11 @@ namespace DuckGame
                 (d as Duck).CancelFlapping();
             }
             bool flag = false;
-            d.hSpeed = 0.0f;
+            d.hSpeed = 0f;
             d.clip.Clear();
             if (this.Down() != null)
             {
-                d.position = this.position - new Vec2(0.0f, 10f);
+                d.position = this.position - new Vec2(0f, 10f);
                 if (d is Duck)
                 {
                     (d as Duck).jumping = true;
@@ -163,7 +163,7 @@ namespace DuckGame
                 for (int index = 0; index < 6; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f));
-                    smallSmoke.velocity = new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0.0f, -0.5f));
+                    smallSmoke.velocity = new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0f, -0.5f));
                     Level.Add(smallSmoke);
                 }
                 if (Network.isActive && this.framesSincePipeout > 2)
@@ -171,10 +171,10 @@ namespace DuckGame
                     Send.Message(new NMPipeOut(new Vec2(this.x, this.y), 0));
                     this.framesSincePipeout = 0;
                 }
-                if (d is Duck && Level.CheckLine<Block>(this.position - new Vec2(0.0f, 16f), this.position - new Vec2(0.0f, 32f)) != null)
+                if (d is Duck && Level.CheckLine<Block>(this.position - new Vec2(0f, 16f), this.position - new Vec2(0f, 32f)) != null)
                 {
                     Duck duck = d as Duck;
-                    duck.position = this.position - new Vec2(0.0f, 16f);
+                    duck.position = this.position - new Vec2(0f, 16f);
                     duck.GoRagdoll();
                     flag = true;
                 }
@@ -182,7 +182,7 @@ namespace DuckGame
             else if (this.Left() != null || this.Right() != null)
             {
                 d.position = this.position + new Vec2(this.Left() != null ? 12f : -12f, -2f);
-                d.vSpeed = -0.0f;
+                d.vSpeed = -0f;
                 if (this.Left() != null)
                     d.hSpeed = 6f;
                 else
@@ -216,7 +216,7 @@ namespace DuckGame
             }
             else
             {
-                d.position = this.position + new Vec2(0.0f, 4f);
+                d.position = this.position + new Vec2(0f, 4f);
                 d.vSpeed = 5f;
                 for (int index = 0; index < 6; ++index)
                 {
@@ -229,10 +229,10 @@ namespace DuckGame
                     Send.Message(new NMPipeOut(new Vec2(this.x, this.y + 12f), 2));
                     this.framesSincePipeout = 0;
                 }
-                if (d is Duck && (Level.CheckLine<Block>(this.position + new Vec2(0.0f, 16f), this.position + new Vec2(0.0f, 32f)) != null || Level.CheckLine<IPlatform>(this.position + new Vec2(0.0f, 16f), this.position + new Vec2(0.0f, 32f)) != null))
+                if (d is Duck && (Level.CheckLine<Block>(this.position + new Vec2(0f, 16f), this.position + new Vec2(0f, 32f)) != null || Level.CheckLine<IPlatform>(this.position + new Vec2(0f, 16f), this.position + new Vec2(0f, 32f)) != null))
                 {
                     Duck duck = d as Duck;
-                    duck.position = this.position + new Vec2(0.0f, 16f);
+                    duck.position = this.position + new Vec2(0f, 16f);
                     duck.GoRagdoll();
                     flag = true;
                 }
@@ -273,7 +273,7 @@ namespace DuckGame
             if (this._colliding != null)
                 return;
             this._colliding = new List<MaterialThing>();
-            foreach (IPlatform platform in this._pipeUp != null || this._pipeDown != null ? Level.CheckRectAll<IPlatform>(this.topLeft + new Vec2(0.0f, -16f), this.bottomRight + new Vec2(0.0f, 16f)).ToList<IPlatform>() : (IEnumerable<IPlatform>)Level.CheckLineAll<IPlatform>(this.topLeft + new Vec2(-16f, 0.0f), this.bottomRight + new Vec2(16f, 0.0f)).ToList<IPlatform>())
+            foreach (IPlatform platform in this._pipeUp != null || this._pipeDown != null ? Level.CheckRectAll<IPlatform>(this.topLeft + new Vec2(0f, -16f), this.bottomRight + new Vec2(0f, 16f)).ToList<IPlatform>() : (IEnumerable<IPlatform>)Level.CheckLineAll<IPlatform>(this.topLeft + new Vec2(-16f, 0f), this.bottomRight + new Vec2(16f, 0f)).ToList<IPlatform>())
             {
                 if (platform is MaterialThing && !(platform is PhysicsObject))
                     this._colliding.Add(platform as MaterialThing);
@@ -576,7 +576,7 @@ namespace DuckGame
           bool pDoingRagthing = false)
         {
             o.updatePhysics = true;
-            o.overfollow = 0.0f;
+            o.overfollow = 0f;
             if (bundle != null)
                 o.position = bundle.cameraPosition;
             o.cameraPositionOverride = Vec2.Zero;
@@ -783,7 +783,7 @@ namespace DuckGame
                     this._sprite.frame = 22;
                     this._sprite.angleDegrees = -90f;
                     Graphics.Draw(_sprite, this.x, this.y - 16f, this.depth + 5);
-                    this._sprite.angleDegrees = 0.0f;
+                    this._sprite.angleDegrees = 0f;
                     this._sprite.frame = frame;
                 }
                 if (this.Down() != null && this.Down().IsBackground())
@@ -793,7 +793,7 @@ namespace DuckGame
                     this._sprite.angleDegrees = 90f;
                     this._sprite.flipV = true;
                     Graphics.Draw(_sprite, this.x, this.y + 16f, this.depth + 5);
-                    this._sprite.angleDegrees = 0.0f;
+                    this._sprite.angleDegrees = 0f;
                     this._sprite.flipV = false;
                     this._sprite.frame = frame;
                 }
@@ -821,7 +821,7 @@ namespace DuckGame
             if (this.connections.Count == 1 && (!(bool)this.trapdoor || bullet.ammo.penetration >= (double)this.thickness) && ((hitPos.x - 8.0 < (double)this.left && this.Right() != null && bullet.travelDirNormalized.x > 0.300000011920929 || hitPos.x + 8.0 > (double)this.right && this.Left() != null && bullet.travelDirNormalized.x < -0.300000011920929) && hitPos.y > (double)this.top && hitPos.y < (double)this.bottom || (hitPos.y - 8.0 < (double)this.top && this.Down() != null && bullet.travelDirNormalized.y > 0.300000011920929 || hitPos.y + 8.0 > (double)this.bottom && this.Up() != null && bullet.travelDirNormalized.y < -0.300000011920929) && hitPos.x > (double)this.left && hitPos.x < (double)this.right) && this.oppositeEnd != null)
             {
                 float rng = bullet._totalLength - (bullet._actualStart - hitPos).length;
-                float num = 0.0f;
+                float num = 0f;
                 if ((double)rng > 0.0)
                 {
                     bool flag1 = false;
@@ -840,7 +840,7 @@ namespace DuckGame
                     if (!flag1)
                     {
                         if (this.oppositeEnd.Left() != null)
-                            bullet.DoRebound(this.oppositeEnd.endOffset, 0.0f + num, rng);
+                            bullet.DoRebound(this.oppositeEnd.endOffset, 0f + num, rng);
                         if (this.oppositeEnd.Right() != null)
                             bullet.DoRebound(this.oppositeEnd.endOffset, 180f + num, rng);
                         if (this.oppositeEnd.Up() != null)
@@ -1129,7 +1129,7 @@ namespace DuckGame
             if (this.IsBackground())
             {
                 this.solid = false;
-                this.thickness = 0.0f;
+                this.thickness = 0f;
                 this.physicsMaterial = PhysicsMaterial.Default;
             }
             else
@@ -1381,7 +1381,7 @@ namespace DuckGame
                     this._particles.Add(pipeParticle);
                 }
                 pipeParticle.position = this.position + this.endNormal * 20f + Maths.AngleToVec(this.partRot) * (10f + Rando.Float(24f)) * vec2_2;
-                pipeParticle.alpha = 0.0f;
+                pipeParticle.alpha = 0f;
                 pipeParticle.velocity = Vec2.Zero;
                 this.partWait = 5;
                 this.partRot += 1.72152f;
@@ -1409,7 +1409,7 @@ namespace DuckGame
                 return;
             int frame = this._sprite.frame;
             this._flapLerp = Lerp.FloatSmooth(this._flapLerp, this._flap, 0.25f);
-            this._flap = Lerp.Float(this._flap, 0.0f, 0.15f);
+            this._flap = Lerp.Float(this._flap, 0f, 0.15f);
             if (this._drawBlockOverlay)
             {
                 this._sprite.frame += 8;
@@ -1422,11 +1422,11 @@ namespace DuckGame
                 float num = this._drawBlockOverlay ? 10f : 9f;
                 if (this.Left() != null)
                 {
-                    this._sprite.center = new Vec2(2f, 0.0f);
+                    this._sprite.center = new Vec2(2f, 0f);
                     this._sprite.angleDegrees = (float)(0.0 - _flapLerp * 90.0);
                     Graphics.Draw(_sprite, this.position.x + num, this.position.y - 9f, (Depth)0.5f);
                     this._sprite.center = new Vec2(9f, 9f);
-                    this._sprite.angleDegrees = 0.0f;
+                    this._sprite.angleDegrees = 0f;
                     this._sprite.frame = 21;
                     Graphics.Draw(_sprite, this.position.x + (num - 1f), this.position.y - 9f, (Depth)0.4f);
                 }
@@ -1437,14 +1437,14 @@ namespace DuckGame
                     this._sprite.flipV = true;
                     Graphics.Draw(_sprite, this.position.x - num, this.position.y - 9f, (Depth)0.5f);
                     this._sprite.center = new Vec2(9f, 9f);
-                    this._sprite.angleDegrees = 0.0f;
+                    this._sprite.angleDegrees = 0f;
                     this._sprite.frame = 21;
                     this._sprite.flipH = true;
                     Graphics.Draw(_sprite, this.position.x - (num - 1f), this.position.y - 9f, (Depth)0.4f);
                 }
                 else if (this.Up() != null)
                 {
-                    this._sprite.center = new Vec2(2f, 0.0f);
+                    this._sprite.center = new Vec2(2f, 0f);
                     this._sprite.angleDegrees = (float)(90.0 - _flapLerp * 90.0);
                     Graphics.Draw(_sprite, this.position.x + 9f, this.position.y + num, (Depth)0.5f);
                     this._sprite.center = new Vec2(9f, 9f);

@@ -61,7 +61,7 @@ namespace DuckGame
             if (!this.slideLocked)
             {
                 this._sprite = this._sensorSprite;
-                Duck duck = Level.CheckRect<Duck>(this._topLeft - new Vec2(18f, 0.0f), this._bottomRight + new Vec2(18f, 0.0f));
+                Duck duck = Level.CheckRect<Duck>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f));
                 if (duck != null)
                 {
                     if (!this.filterDefault || !Profiles.IsDefault(duck.profile))
@@ -73,14 +73,14 @@ namespace DuckGame
                     }
                 }
                 else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) == null)
-                    this._desiredOpen = 0.0f;
+                    this._desiredOpen = 0f;
             }
             else
             {
                 if (this._noSensorSprite == null)
                     this._noSensorSprite = new SpriteMap("verticalDoorNoSensor", 16, 32);
                 this._sprite = this._noSensorSprite;
-                this._desiredOpen = this.slideLockOpened ? 1f : 0.0f;
+                this._desiredOpen = this.slideLockOpened ? 1f : 0f;
                 if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) != null && this._opened)
                     this._desiredOpen = 1f;
             }

@@ -12,7 +12,7 @@ namespace DuckGame
         private OldEnergyScimi _parent;
 
         public EnergyBlocker(OldEnergyScimi pParent)
-          : base(0.0f, 0.0f)
+          : base(0f, 0f)
         {
             this.thickness = 100f;
             this._editorCanModify = false;

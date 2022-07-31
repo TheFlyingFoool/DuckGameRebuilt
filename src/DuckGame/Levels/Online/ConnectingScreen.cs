@@ -24,7 +24,7 @@ namespace DuckGame
         {
             this._dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0.0f;
+                this._dots = 0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {

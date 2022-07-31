@@ -16,10 +16,10 @@ namespace DuckGame
     {
         private static Vec4 zeroVector = new Vec4();
         private static Vec4 unitVector = new Vec4(1f, 1f, 1f, 1f);
-        private static Vec4 unitXVector = new Vec4(1f, 0.0f, 0.0f, 0.0f);
-        private static Vec4 unitYVector = new Vec4(0.0f, 1f, 0.0f, 0.0f);
-        private static Vec4 unitZVector = new Vec4(0.0f, 0.0f, 1f, 0.0f);
-        private static Vec4 unitWVector = new Vec4(0.0f, 0.0f, 0.0f, 1f);
+        private static Vec4 unitXVector = new Vec4(1f, 0f, 0f, 0f);
+        private static Vec4 unitYVector = new Vec4(0f, 1f, 0f, 0f);
+        private static Vec4 unitZVector = new Vec4(0f, 0f, 1f, 0f);
+        private static Vec4 unitWVector = new Vec4(0f, 0f, 0f, 1f);
         public float x;
         public float y;
         public float z;

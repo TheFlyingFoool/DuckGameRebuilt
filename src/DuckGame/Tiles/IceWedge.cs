@@ -53,7 +53,7 @@ namespace DuckGame
                 this.hugWalls |= WallHug.Right;
             else
                 this.hugWalls |= WallHug.Left;
-            this.angleDegrees = 0.0f;
+            this.angleDegrees = 0f;
             if (this.flipVertical)
             {
                 if (this.flipHorizontal)
@@ -80,7 +80,7 @@ namespace DuckGame
             }
             else
             {
-                this.angleDegrees = 0.0f;
+                this.angleDegrees = 0f;
                 this.center = new Vec2(8f, 14f);
                 this.collisionSize = new Vec2(14f, 8f);
                 this.collisionOffset = new Vec2(-7f, -6f);

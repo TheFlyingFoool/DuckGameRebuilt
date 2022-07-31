@@ -48,7 +48,7 @@ namespace DuckGame
           : base(nameval, depthval)
         {
             this._fx = (Effect)Content.Load<MTEffect>("Shaders/fieldFadeAdd");
-            this._view = Matrix.CreateLookAt(new Vec3(0.0f, 0.0f, -5f), new Vec3(0.0f, 0.0f, 0.0f), Vec3.Up);
+            this._view = Matrix.CreateLookAt(new Vec3(0f, 0f, -5f), new Vec3(0f, 0f, 0f), Vec3.Up);
             this._proj = Matrix.CreatePerspectiveFieldOfView(0.7853982f, 1.777778f, 0.01f, 100000f);
         }
 
@@ -68,7 +68,7 @@ namespace DuckGame
             if (_darken > 0.0)
                 this._darken -= 0.15f;
             else
-                this._darken = 0.0f;
+                this._darken = 0f;
             if (this._fx != null)
             {
                 this._fx.Parameters["fade"]?.SetValue((Vector3)vec3_1);

@@ -104,7 +104,7 @@ namespace DuckGame
                 foreach (Profile profile in active)
                 {
                     if (profile != null && profile.inputProfile != null && profile.inputProfile.lastActiveDevice != null)
-                        profile.inputProfile.lastActiveDevice.rumbleIntensity = 0.0f;
+                        profile.inputProfile.lastActiveDevice.rumbleIntensity = 0f;
                 }
                 for (int index = RumbleManager.ListRumbleEvents.Count - 1; index >= 0; --index)
                 {

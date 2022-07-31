@@ -26,7 +26,7 @@ namespace DuckGame
             this.snowWait = Rando.Float(4f);
             this.editorTooltip = "Let it snow!";
             this.solid = false;
-            this._collisionSize = new Vec2(0.0f, 0.0f);
+            this._collisionSize = new Vec2(0f, 0f);
             this.maxPlaceable = 32;
         }
 
@@ -54,7 +54,7 @@ namespace DuckGame
             if (snowWait <= 0.0)
             {
                 this.snowWait = Rando.Float(2f, 4f);
-                Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), new Vec2(0.0f, 0.0f)));
+                Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), new Vec2(0f, 0f)));
             }
             base.Update();
         }

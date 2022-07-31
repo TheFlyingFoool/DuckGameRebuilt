@@ -167,12 +167,12 @@
 
 //        public void DrawGroup(List<TourneyGroup> gr, Vec2 drawPos)
 //        {
-//            Vec2 vec2 = new Vec2(0.0f, 0.0f);
+//            Vec2 vec2 = new Vec2(0f, 0f);
 //            List<TourneyGroup> tourneyGroupList1 = gr;
 //            List<TourneyGroup> tourneyGroupList2 = new List<TourneyGroup>();
 //            Vec2 zero = Vec2.Zero;
 //            float num1 = 8f;
-//            float num2 = 0.0f;
+//            float num2 = 0f;
 //            while (tourneyGroupList1.Count > 0)
 //            {
 //                int num3 = 0;
@@ -186,12 +186,12 @@
 //                        string text = tourneyGroup.assigned[tourneyGroup.players.IndexOf(player)] ? player.name : "???";
 //                        if (tourneyGroup.depth > 0)
 //                        {
-//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0.0f, 4f), drawPos + vec2 + new Vec2((float)((9 - (text.Length - 1)) * 8), 4f), Color.White);
-//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0.0f, 4f), player.prevTreeDraw, Color.White);
+//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0f, 4f), drawPos + vec2 + new Vec2((float)((9 - (text.Length - 1)) * 8), 4f), Color.White);
+//                            Graphics.DrawLine(drawPos + vec2 + new Vec2(0f, 4f), player.prevTreeDraw, Color.White);
 //                        }
 //                        player.prevTreeDraw = drawPos + vec2 + new Vec2(96f, 4f);
 //                        Graphics.DrawLine(drawPos + vec2 + new Vec2(90f, 4f), drawPos + vec2 + new Vec2(96f, 4f), Color.White);
-//                        Graphics.DrawString(text, drawPos + vec2 + new Vec2((float)(88 - text.Length * 8), 0.0f), Color.White, (Depth)1f);
+//                        Graphics.DrawString(text, drawPos + vec2 + new Vec2((float)(88 - text.Length * 8), 0f), Color.White, (Depth)1f);
 //                        vec2.y += num1 + 8f;
 //                        ++num3;
 //                    }

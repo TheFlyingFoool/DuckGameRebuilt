@@ -22,9 +22,9 @@ namespace DuckGame
         public static int GetCompressedVec2(Vec2 val, int range = 2147483647)
         {
             if (Math.Abs(val.x) < 1E-07f)
-                val.x = 0.0f;
+                val.x = 0f;
             if (Math.Abs(val.y) < 1E-07f)
-                val.y = 0.0f;
+                val.y = 0f;
             if (range != int.MaxValue)
             {
                 float num = short.MaxValue / range;

@@ -179,7 +179,7 @@ namespace DuckGame
                 return;
             this.burning = true;
             this.onFire = true;
-            Level.Add(SmallFire.New(0.0f, 0.0f, 0.0f, 0.0f, stick: this, firedFrom: this));
+            Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
             SFX.Play("ignite", Rando.Float(0.9f, 1f), Rando.Float(-0.2f, 0.2f));
         }
 
@@ -195,12 +195,12 @@ namespace DuckGame
             }
             if (this._stuck)
             {
-                this.vSpeed = 0.0f;
-                this.hSpeed = 0.0f;
+                this.vSpeed = 0f;
+                this.hSpeed = 0f;
                 this.grounded = true;
                 this._sprite.frame = 1;
                 this._stickTime -= 0.005f;
-                this.gravMultiplier = 0.0f;
+                this.gravMultiplier = 0f;
             }
             if (_stickTime > 0.0 || this.destroyed)
                 return;

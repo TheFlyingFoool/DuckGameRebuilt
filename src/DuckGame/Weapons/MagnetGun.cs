@@ -78,10 +78,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._beamSound = SFX.Get("magnetBeam", 0.0f, looped: true);
+            this._beamSound = SFX.Get("magnetBeam", 0f, looped: true);
             int num = 10;
             for (int index = 0; index < num; ++index)
-                this._lines.Add(new MagnaLine(0.0f, 0.0f, this, this._ammoType.range, index / (float)num));
+                this._lines.Add(new MagnaLine(0f, 0f, this, this._ammoType.range, index / (float)num));
             base.Initialize();
         }
 
@@ -191,7 +191,7 @@ namespace DuckGame
                             holdable1.owner.realObject.hSpeed += normalized2.x * num;
                             holdable1.owner.realObject.vSpeed += (float)(normalized2.y * (double)num * 4.0);
                             if ((holdable1.owner.realObject as PhysicsObject).grounded && (double)holdable1.owner.realObject.vSpeed > 0.0)
-                                holdable1.owner.realObject.vSpeed = 0.0f;
+                                holdable1.owner.realObject.vSpeed = 0f;
                         }
                         else
                         {
@@ -199,7 +199,7 @@ namespace DuckGame
                             holdable1.hSpeed += normalized2.x * num;
                             holdable1.vSpeed += (float)(normalized2.y * (double)num * 4.0);
                             if (holdable1.grounded && (double)holdable1.vSpeed > 0.0)
-                                holdable1.vSpeed = 0.0f;
+                                holdable1.vSpeed = 0f;
                         }
                         this._hasRay = true;
                         this._rayHit = holdable1.position;
@@ -369,7 +369,7 @@ namespace DuckGame
                         this._raised = false;
                         this._keepRaised = false;
                     }
-                    this.owner.hSpeed = this.owner.vSpeed = 0.0f;
+                    this.owner.hSpeed = this.owner.vSpeed = 0f;
                     this.duck.moveLock = true;
                 }
                 else if (this._stuck == null && this.duck != null)
@@ -386,7 +386,7 @@ namespace DuckGame
             {
                 if (this._grabbed is Duck)
                 {
-                    this._grabbed.position = this.Offset(this.barrelOffset + new Vec2(0.0f, -6f)) + this.barrelVector * this._grabbed.halfWidth;
+                    this._grabbed.position = this.Offset(this.barrelOffset + new Vec2(0f, -6f)) + this.barrelVector * this._grabbed.halfWidth;
                     (this._grabbed as Duck).UpdateSkeleton();
                     (this._grabbed as Duck).gripped = true;
                 }
@@ -402,7 +402,7 @@ namespace DuckGame
 
         private void ReleaseGrab(Thing pThing)
         {
-            pThing.angle = 0.0f;
+            pThing.angle = 0f;
             if (pThing is Holdable t)
             {
                 t.owner = null;

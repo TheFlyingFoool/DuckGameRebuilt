@@ -17,7 +17,7 @@ namespace DuckGame
             this.graphic = new Sprite("drumset/crashCymbal");
             this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
             this._stand = new Sprite("drumset/crashStand");
-            this._stand.center = new Vec2(this._stand.w / 2, 0.0f);
+            this._stand.center = new Vec2(this._stand.w / 2, 0f);
             this._sound = "crash";
         }
 

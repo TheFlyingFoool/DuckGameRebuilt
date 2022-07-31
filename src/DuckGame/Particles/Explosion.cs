@@ -43,7 +43,7 @@ namespace DuckGame
             this.vSpeed = Rando.Float(-0.2f, -0.4f);
             if (doWait)
                 return;
-            this._wait = 0.0f;
+            this._wait = 0f;
         }
 
         public override void Initialize()
@@ -60,7 +60,7 @@ namespace DuckGame
                 for (int index = 0; index < num1; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-5f, 5f), this.y + Rando.Float(-5f, 5f));
-                    smallSmoke.vSpeed = Rando.Float(0.0f, -0.5f);
+                    smallSmoke.vSpeed = Rando.Float(0f, -0.5f);
                     double num2;
                     float num3 = (float)(num2 = (double)Rando.Float(0.2f, 0.7f));
                     smallSmoke.yscale = (float)num2;

@@ -26,8 +26,8 @@ namespace DuckGame
             this._fireSound = "magnum";
             this._kickForce = -3.5f;
             this._fireRumble = RumbleIntensity.Kick;
-            this.handOffset = new Vec2(6f, 0.0f);
-            this._holdOffset = new Vec2(6f, 0.0f);
+            this.handOffset = new Vec2(6f, 0f);
+            this._holdOffset = new Vec2(6f, 0f);
             this.loseAccuracy = 0.1f;
             this.maxAccuracyLost = 0.6f;
             this.editorTooltip = "There's something odd about this gun but I can't quite put my finger on it.";
@@ -37,14 +37,14 @@ namespace DuckGame
         {
             if (this._raised)
             {
-                this.handOffset = new Vec2(0.0f, 0.0f);
-                this._holdOffset = new Vec2(0.0f, 0.0f);
+                this.handOffset = new Vec2(0f, 0f);
+                this._holdOffset = new Vec2(0f, 0f);
                 this.collisionOffset = new Vec2(-8f, -5f);
                 this.collisionSize = new Vec2(16f, 10f);
             }
             else
             {
-                this.handOffset = new Vec2(7f, 0.0f);
+                this.handOffset = new Vec2(7f, 0f);
                 this._holdOffset = new Vec2(4f, -1f);
                 this.collisionOffset = new Vec2(-8f, -5f);
                 this.collisionSize = new Vec2(8f, 10f);

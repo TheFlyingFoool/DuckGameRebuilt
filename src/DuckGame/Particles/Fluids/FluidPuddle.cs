@@ -43,7 +43,7 @@ namespace DuckGame
             this._block = b;
             this.depth = (Depth)0.3f;
             this.flammable = 0.9f;
-            this.alpha = 0.0f;
+            this.alpha = 0f;
             List<BlockCorner> groupCorners = b.GetGroupCorners();
             this._coll = new List<PhysicsObject>();
             this._leftCorner = null;
@@ -123,7 +123,7 @@ namespace DuckGame
             if (dat.amount > 0.0)
                 this._framesSinceFeed = 0;
             this.data.Mix(dat);
-            this.data.amount = Maths.Clamp(this.data.amount, 0.0f, this.MaxFluidFill());
+            this.data.amount = Maths.Clamp(this.data.amount, 0f, this.MaxFluidFill());
             this._wide = this.FeedAmountToDistance(this.data.amount);
             float num1 = this._wide + 4f;
             this._collisionOffset.x = (float)-((double)num1 / 2.0);
@@ -205,7 +205,7 @@ namespace DuckGame
                 float feedAmount = this.DistanceToFeedAmount(this._leftCorner.corner.x - this.left);
                 this.x += ((_leftCorner.corner.x - this.left) / 2f);
                 if (this._leftStream == null)
-                    this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0.0f), 1f);
+                    this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0f), 1f);
                 this._leftStream.position.y = this.y - this._collisionOffset.y;
                 this._leftStream.position.x = this._leftCorner.corner.x - 2f;
                 this._leftStream.Feed(this.data.Take(feedAmount));
@@ -229,7 +229,7 @@ namespace DuckGame
         {
             if (collisionSize.y <= 10f)
                 return;
-            foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0.0f, -8f), this.topRight + new Vec2(0.0f, -8f)))
+            foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0f, -8f), this.topRight + new Vec2(0f, -8f)))
             {
                 physicsObject.position.y = this.top;
                 physicsObject.DoFloat();

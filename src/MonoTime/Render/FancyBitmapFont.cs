@@ -521,8 +521,8 @@ namespace DuckGame
 
         public string FormatWithNewlines(string pText, float maxWidth, bool thinButtons = false)
         {
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             char[] charArray = pText.ToCharArray();
             for (this._letterIndex = 0; this._letterIndex < charArray.Length; ++this._letterIndex)
             {
@@ -555,7 +555,7 @@ namespace DuckGame
                 {
                     if ((double)num1 > (double)num2)
                         num2 = num1;
-                    num1 = 0.0f;
+                    num1 = 0f;
                 }
                 if (!flag)
                 {
@@ -587,8 +587,8 @@ namespace DuckGame
 
         public float GetWidth(string text, bool thinButtons = false)
         {
-            float num1 = 0.0f;
-            float width1 = 0.0f;
+            float num1 = 0f;
+            float width1 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 bool flag = false;
@@ -632,7 +632,7 @@ namespace DuckGame
                 {
                     if ((double)num1 > (double)width1)
                         width1 = num1;
-                    num1 = 0.0f;
+                    num1 = 0f;
                     flag = true;
                 }
                 if (!flag)
@@ -674,10 +674,10 @@ namespace DuckGame
           int maxRows = 2147483647,
           bool thinButtons = false)
         {
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             int num3 = 0;
-            float num4 = 0.0f;
+            float num4 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 if ((double)num1 >= (double)xPosition && (double)yPosition < (double)num2 + _charHeight * (double)this.scale.y || num3 >= maxRows)
@@ -707,7 +707,7 @@ namespace DuckGame
                 {
                     if ((double)num1 > (double)num4)
                         num4 = num1;
-                    num1 = 0.0f;
+                    num1 = 0f;
                     ++num3;
                     num2 += _charHeight * this.scale.y;
                     flag1 = true;
@@ -722,7 +722,7 @@ namespace DuckGame
                         if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
                         {
                             int index1 = this._letterIndex + 1;
-                            float num5 = 0.0f;
+                            float num5 = 0f;
                             for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
@@ -741,7 +741,7 @@ namespace DuckGame
                             {
                                 ++num3;
                                 num2 += _charHeight * this.scale.y;
-                                num1 = 0.0f;
+                                num1 = 0f;
                                 flag2 = true;
                                 if (num3 >= maxRows)
                                     return this._letterIndex;
@@ -758,7 +758,7 @@ namespace DuckGame
                                 {
                                     ++num3;
                                     num2 += _charHeight * this.scale.y;
-                                    num1 = 0.0f;
+                                    num1 = 0f;
                                     if (num3 >= maxRows)
                                         return this._letterIndex;
                                 }
@@ -770,7 +770,7 @@ namespace DuckGame
                                 {
                                     ++num3;
                                     num2 += _charHeight * this.scale.y;
-                                    num1 = 0.0f;
+                                    num1 = 0f;
                                     if (num3 >= maxRows)
                                         return this._letterIndex;
                                 }
@@ -810,9 +810,9 @@ namespace DuckGame
 
         public Vec2 GetCharacterPosition(string text, int index, bool thinButtons = false)
         {
-            float x = 0.0f;
-            float y = 0.0f;
-            float num1 = 0.0f;
+            float x = 0f;
+            float y = 0f;
+            float num1 = 0f;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
                 if (this._letterIndex >= index)
@@ -842,7 +842,7 @@ namespace DuckGame
                 {
                     if ((double)x > (double)num1)
                         num1 = x;
-                    x = 0.0f;
+                    x = 0f;
                     y += _charHeight * this.scale.y;
                     flag1 = true;
                 }
@@ -854,7 +854,7 @@ namespace DuckGame
                         if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
                         {
                             int index1 = this._letterIndex + 1;
-                            float num2 = 0.0f;
+                            float num2 = 0f;
                             for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
@@ -872,7 +872,7 @@ namespace DuckGame
                             if ((double)x + (double)num2 > maxWidth)
                             {
                                 y += _charHeight * this.scale.y;
-                                x = 0.0f;
+                                x = 0f;
                                 flag2 = true;
                             }
                         }
@@ -883,7 +883,7 @@ namespace DuckGame
                             if ((double)x + width.width * (double)this.scale.x > maxWidth)
                             {
                                 y += _charHeight * this.scale.y;
-                                x = 0.0f;
+                                x = 0f;
                             }
                         }
                     }
@@ -923,10 +923,10 @@ namespace DuckGame
           float outlineThickness = 1f)
         {
             this._drawingOutline = true;
-            this.Draw(text, pos + new Vec2(-outlineThickness, 0.0f), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(outlineThickness, 0.0f), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(0.0f, -outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(0.0f, outlineThickness), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(-outlineThickness, 0f), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(outlineThickness, 0f), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(0f, -outlineThickness), outline, deep + 2, true);
+            this.Draw(text, pos + new Vec2(0f, outlineThickness), outline, deep + 2, true);
             this.Draw(text, pos + new Vec2(-outlineThickness, -outlineThickness), outline, deep + 2, true);
             this.Draw(text, pos + new Vec2(outlineThickness, -outlineThickness), outline, deep + 2, true);
             this.Draw(text, pos + new Vec2(-outlineThickness, outlineThickness), outline, deep + 2, true);
@@ -949,8 +949,8 @@ namespace DuckGame
             if (string.IsNullOrWhiteSpace(text))
                 return;
             Color color1 = new Color(byte.MaxValue - c.r, byte.MaxValue - c.g, byte.MaxValue - c.b);
-            float num1 = 0.0f;
-            float num2 = 0.0f;
+            float num1 = 0f;
+            float num2 = 0f;
             int num3 = 0;
             for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
             {
@@ -1047,7 +1047,7 @@ namespace DuckGame
                                 if ((double)num2 + (double)width1 > maxWidth)
                                 {
                                     num1 += _charHeight * this.scale.y;
-                                    num2 = 0.0f;
+                                    num2 = 0f;
                                     ++num3;
                                     flag2 = true;
                                     if (this.singleLine)
@@ -1062,7 +1062,7 @@ namespace DuckGame
                             if ((double)num2 + width.width * (double)this.scale.x > maxWidth)
                             {
                                 num1 += _charHeight * this.scale.y;
-                                num2 = 0.0f;
+                                num2 = 0f;
                                 ++num3;
                                 if (this.singleLine)
                                     break;
@@ -1076,7 +1076,7 @@ namespace DuckGame
                         if (text[this._letterIndex] == '\n')
                         {
                             num1 += (_charHeight + this.lineGap) * this.scale.y;
-                            num2 = 0.0f;
+                            num2 = 0f;
                             ++num3;
                         }
                         else

@@ -30,7 +30,7 @@ namespace DuckGame
 
         public static bool processing => Cloud._operations.Count > 0;
 
-        public static float progress => Cloud._totalOperations != 0 && Cloud._operations.Count != 0 ? Math.Max((float)(1.0 - _operations.Count / (double)Cloud._totalOperations), 0.0f) : 1f;
+        public static float progress => Cloud._totalOperations != 0 && Cloud._operations.Count != 0 ? Math.Max((float)(1.0 - _operations.Count / (double)Cloud._totalOperations), 0f) : 1f;
 
         public static void Initialize()
         {
@@ -270,7 +270,7 @@ namespace DuckGame
             {
                 if (pOpenOnClose != null)
                     this._openOnClose = pOpenOnClose.rootMenu;
-                this._box = new UIBox(0.0f, 0.0f, high: 26f, isVisible: false);
+                this._box = new UIBox(0f, 0f, high: 26f, isVisible: false);
                 this.Add(_box, true);
             }
 
@@ -293,7 +293,7 @@ namespace DuckGame
                 {
                     string text = "" + "Working... (" + ((int)((double)Cloud.progress * 100.0)).ToString() + "%)";
                     Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y, this._box.width - 16f, 10f), Color.LightGray, (Depth)0.8f);
-                    Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y, Lerp.FloatSmooth(0.0f, this._box.width - 16f, Cloud.progress), 10f), Color.White, (Depth)0.8f);
+                    Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y, Lerp.FloatSmooth(0f, this._box.width - 16f, Cloud.progress), 10f), Color.White, (Depth)0.8f);
                     Graphics.DrawString(text, new Vec2(this._box.x - Graphics.GetStringWidth(text) / 2f, this._box.y - 10f), Color.White, (Depth)0.8f);
                     if (!Cloud.processing)
                         this.Close();

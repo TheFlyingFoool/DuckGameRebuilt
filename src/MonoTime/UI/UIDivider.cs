@@ -26,7 +26,7 @@ namespace DuckGame
         public UIBox bottomSection => this._rightBox;
 
         public UIDivider(bool vert, float splitVal, float sep = 1f)
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._vertical = vert;
             this._splitPercent = splitVal;
@@ -39,7 +39,7 @@ namespace DuckGame
         }
 
         public UIDivider(bool vert, int splitVal, float sep = 1f)
-          : base(0.0f, 0.0f, 0.0f, 0.0f)
+          : base(0f, 0f, 0f, 0f)
         {
             this._vertical = vert;
             this._leftBox = new UIBox(isVisible: false);
@@ -125,9 +125,9 @@ namespace DuckGame
                 if (_collisionSize.y < (double)num4)
                     this._collisionSize.y = num4;
                 this._leftBox.anchor.offset.x = (float)(-(double)this.halfWidth + (double)num2 / 2.0);
-                this._leftBox.anchor.offset.y = 0.0f;
+                this._leftBox.anchor.offset.y = 0f;
                 this._rightBox.anchor.offset.x = this.halfWidth - num3 / 2f;
-                this._rightBox.anchor.offset.y = 0.0f;
+                this._rightBox.anchor.offset.y = 0f;
             }
             else
             {
@@ -148,9 +148,9 @@ namespace DuckGame
                 float num7 = Math.Max(this._leftBox.collisionSize.x, this._rightBox.collisionSize.x);
                 if (_collisionSize.x < (double)num7)
                     this._collisionSize.x = num7;
-                this._leftBox.anchor.offset.x = 0.0f;
+                this._leftBox.anchor.offset.x = 0f;
                 this._leftBox.anchor.offset.y = (float)(-(double)this.halfHeight + (double)num6 / 2.0);
-                this._rightBox.anchor.offset.x = 0.0f;
+                this._rightBox.anchor.offset.x = 0f;
                 this._rightBox.anchor.offset.y = this.halfHeight - y / 2f;
             }
         }

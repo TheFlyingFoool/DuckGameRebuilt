@@ -38,7 +38,7 @@ namespace DuckGame
         }
 
         public UIBox(bool vert = true, bool isVisible = true)
-          : base(0.0f, 0.0f, -1f, -1f)
+          : base(0f, 0f, -1f, -1f)
         {
             this._sections = new SpriteMap("uiBox", 10, 10);
             this._vertical = vert;
@@ -106,8 +106,8 @@ namespace DuckGame
         {
             if (this._vertical)
             {
-                float num1 = 0.0f;
-                float num2 = 0.0f;
+                float num1 = 0f;
+                float num2 = 0f;
                 foreach (UIComponent component in this._components)
                 {
                     if (component.condition == null || component.condition())
@@ -128,7 +128,7 @@ namespace DuckGame
                 {
                     if (component.condition == null || component.condition())
                     {
-                        component.anchor.offset.x = 0.0f;
+                        component.anchor.offset.x = 0f;
                         if ((component.align & UIAlign.Left) > UIAlign.Center)
                             component.anchor.offset.x = (float)(-(double)this.collisionSize.x / 2.0 + borderSize.x + component.collisionSize.x / 2.0);
                         else if ((component.align & UIAlign.Right) > UIAlign.Center)
@@ -140,8 +140,8 @@ namespace DuckGame
             }
             else
             {
-                float num6 = 0.0f;
-                float num7 = 0.0f;
+                float num6 = 0f;
+                float num7 = 0f;
                 foreach (UIComponent component in this._components)
                 {
                     if (component.condition == null || component.condition())
@@ -163,7 +163,7 @@ namespace DuckGame
                     if (component.condition == null || component.condition())
                     {
                         component.anchor.offset.x = (float)((double)num10 * scale.x + (double)component.width / 2.0);
-                        component.anchor.offset.y = 0.0f;
+                        component.anchor.offset.y = 0f;
                         num10 += component.collisionSize.x + this._seperation;
                     }
                 }

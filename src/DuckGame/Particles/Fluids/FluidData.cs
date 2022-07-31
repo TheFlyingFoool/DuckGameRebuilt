@@ -17,7 +17,7 @@ namespace DuckGame
         public float transparent;
         public float douseFire;
 
-        public FluidData(float am, Vec4 col, float flam, string spr = "", float h = 0.0f, float trans = 0.7f)
+        public FluidData(float am, Vec4 col, float flam, string spr = "", float h = 0f, float trans = 0.7f)
         {
             this.amount = am;
             this.color = col;

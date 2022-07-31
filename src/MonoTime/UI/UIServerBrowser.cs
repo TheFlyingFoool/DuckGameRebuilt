@@ -196,7 +196,7 @@ namespace DuckGame
             };
             this._cursor = new SpriteMap("cursors", 16, 16);
             this._maxLobbiesToShow = 8;
-            this._box = new UIBox(0.0f, 0.0f, high: this._maxLobbiesToShow * 36, isVisible: false);
+            this._box = new UIBox(0f, 0f, high: this._maxLobbiesToShow * 36, isVisible: false);
             this.Add(_box, true);
             this._fancyFont = new FancyBitmapFont("smallFont")
             {
@@ -212,7 +212,7 @@ namespace DuckGame
             this._yesNoMenu.Add(new UIMenuItem("YES"), true);
             this._yesNoMenu.Add(new UIMenuItem("NO"), true);
             this._yesNoMenu.Close();
-            //this._updateTextBox = new Textbox(0.0f, 0.0f, 0.0f, 0.0f)
+            //this._updateTextBox = new Textbox(0f, 0f, 0f, 0f)
             //{
             //    depth = (Depth)0.9f,
             //    maxLength = 5000
@@ -582,7 +582,7 @@ namespace DuckGame
                     this._scrollItemOffset += this._hoverIndex - (this._scrollItemOffset + this._maxLobbiesToShow) + 1;
                 else if (this._hoverIndex >= 0 && this._hoverIndex < this._scrollItemOffset)
                     this._scrollItemOffset -= this._scrollItemOffset - this._hoverIndex;
-                this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0.0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(this._lobbies.Count - this._maxLobbiesToShow));
+                this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(this._lobbies.Count - this._maxLobbiesToShow));
                 if (!Editor.hoverTextBox && !UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                 {
                     new UIMenuActionOpenMenu(this, _openOnClose).Activate();
@@ -652,7 +652,7 @@ namespace DuckGame
                     float y = this._splitter.topSection.y - 5f;
                     this._refreshingDots += 0.01f;
                     if (_refreshingDots > 1.0)
-                        this._refreshingDots = 0.0f;
+                        this._refreshingDots = 0f;
                     string str = "(REFRESHING";
                     for (int index = 0; index < 3; ++index)
                     {
@@ -779,17 +779,17 @@ namespace DuckGame
                                             if (this._noImage.texture.width > this._noImage.texture.height)
                                             {
                                                 this._noImage.scale = new Vec2(32f / _noImage.texture.height);
-                                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(this._noImage.texture.width / 2 - this._noImage.texture.height / 2, 0.0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
+                                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(this._noImage.texture.width / 2 - this._noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
                                             }
                                             else
-                                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0.0f, 0.0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
+                                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
                                         }
                                         else
                                             DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
                                         zero.x += 16f;
                                         if (zero.x >= 32.0)
                                         {
-                                            zero.x = 0.0f;
+                                            zero.x = 0f;
                                             zero.y += 16f;
                                         }
                                     }
@@ -851,7 +851,7 @@ namespace DuckGame
                                 DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)((double)x1 + (double)this._box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
                             }
                             this._fancyFont.maxWidth = 1000;
-                            float num = 0.0f;
+                            float num = 0f;
                             if (lobby.hasPassword)
                             {
                                 DuckGame.Graphics.Draw(this._lockedServer, (float)((double)x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);

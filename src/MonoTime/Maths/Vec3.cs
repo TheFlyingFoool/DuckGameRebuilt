@@ -14,17 +14,17 @@ namespace DuckGame
     [Serializable]
     public struct Vec3 : IEquatable<Vec3>
     {
-        private static Vec3 zero = new Vec3(0.0f, 0.0f, 0.0f);
+        private static Vec3 zero = new Vec3(0f, 0f, 0f);
         private static Vec3 one = new Vec3(1f, 1f, 1f);
-        private static Vec3 unitX = new Vec3(1f, 0.0f, 0.0f);
-        private static Vec3 unitY = new Vec3(0.0f, 1f, 0.0f);
-        private static Vec3 unitZ = new Vec3(0.0f, 0.0f, 1f);
-        private static Vec3 up = new Vec3(0.0f, 1f, 0.0f);
-        private static Vec3 down = new Vec3(0.0f, -1f, 0.0f);
-        private static Vec3 right = new Vec3(1f, 0.0f, 0.0f);
-        private static Vec3 left = new Vec3(-1f, 0.0f, 0.0f);
-        private static Vec3 forward = new Vec3(0.0f, 0.0f, -1f);
-        private static Vec3 backward = new Vec3(0.0f, 0.0f, 1f);
+        private static Vec3 unitX = new Vec3(1f, 0f, 0f);
+        private static Vec3 unitY = new Vec3(0f, 1f, 0f);
+        private static Vec3 unitZ = new Vec3(0f, 0f, 1f);
+        private static Vec3 up = new Vec3(0f, 1f, 0f);
+        private static Vec3 down = new Vec3(0f, -1f, 0f);
+        private static Vec3 right = new Vec3(1f, 0f, 0f);
+        private static Vec3 left = new Vec3(-1f, 0f, 0f);
+        private static Vec3 forward = new Vec3(0f, 0f, -1f);
+        private static Vec3 backward = new Vec3(0f, 0f, 1f);
         public float x;
         public float y;
         public float z;

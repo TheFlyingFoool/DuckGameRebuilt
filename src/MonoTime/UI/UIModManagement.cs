@@ -223,7 +223,7 @@ namespace DuckGame
             this._mods.Insert(0, new UIModManagement.UI_ModSettings());
             this._mods.Add(null);
             this._maxModsToShow = 8;
-            this._box = new UIBox(0.0f, 0.0f, high: this._maxModsToShow * 36, isVisible: false);
+            this._box = new UIBox(0f, 0f, high: this._maxModsToShow * 36, isVisible: false);
             this.Add(_box, true);
             this._fancyFont = new FancyBitmapFont("smallFont")
             {
@@ -243,7 +243,7 @@ namespace DuckGame
             this._yesNoMenu.Add(this._yesNoYes = new UIMenuItem("YES"), true);
             this._yesNoMenu.Add(this._yesNoNo = new UIMenuItem("NO"), true);
             this._yesNoMenu.Close();
-            this._updateTextBox = new Textbox(0.0f, 0.0f, 0.0f, 0.0f)
+            this._updateTextBox = new Textbox(0f, 0f, 0f, 0f)
             {
                 depth = (Depth)0.9f,
                 maxLength = 5000
@@ -589,7 +589,7 @@ namespace DuckGame
                             this._scrollItemOffset += this._hoverIndex - (this._scrollItemOffset + this._maxModsToShow) + 1;
                         else if (this._hoverIndex >= 0 && this._hoverIndex < this._scrollItemOffset)
                             this._scrollItemOffset -= this._scrollItemOffset - this._hoverIndex;
-                        this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0.0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(this._mods.Count - this._maxModsToShow));
+                        this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(this._mods.Count - this._maxModsToShow));
                         if (!Editor.hoverTextBox && !UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                         {
                             if (this.modsChanged)
@@ -796,7 +796,7 @@ namespace DuckGame
                                 float amount = uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
                                 str = str + " (" + ((int)((double)amount * 100.0)).ToString() + "%)";
                                 Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, this._box.width - 16f, 16f), Color.LightGray, (Depth)0.8f);
-                                Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, Lerp.FloatSmooth(0.0f, this._box.width - 16f, amount), 16f), Color.Green, (Depth)0.8f);
+                                Graphics.DrawRect(new Rectangle((float)((double)this._box.x - (double)this._box.halfWidth + 8.0), this._box.y - 8f, Lerp.FloatSmooth(0f, this._box.width - 16f, amount), 16f), Color.Green, (Depth)0.8f);
                             }
                             text = str + "...";
                         }
