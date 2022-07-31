@@ -4051,7 +4051,7 @@ namespace DuckGame
 
         public virtual void UpdateHoldPosition(bool updateLerp = true)
         {
-            if (this._sprite == null || (double)this.y < -8000.0)
+            if (this._sprite == null || this.y < -8000f)
                 return;
             this.armOffY = 6f;
             this.armOffX = -3f * offDir;
@@ -4067,7 +4067,7 @@ namespace DuckGame
                 this.holdObject._sleeping = false;
                 if (this.holdObject.owner != this)
                     return;
-                if (!this.onFire && holdObject.heat > 0.5 && this.holdObject.physicsMaterial == PhysicsMaterial.Metal)
+                if (!this.onFire && holdObject.heat > 0.5f && this.holdObject.physicsMaterial == PhysicsMaterial.Metal)
                 {
                     if (this._sizzle == null)
                         this._sizzle = SFX.Play("sizzle", 0.6f, looped: true);
@@ -4087,7 +4087,7 @@ namespace DuckGame
                         this._sizzle.Stop();
                         this.Scream();
                         this.ThrowItem();
-                        this._handHeat = 0.0f;
+                        this._handHeat = 0f;
                     }
                 }
                 else
@@ -4190,13 +4190,13 @@ namespace DuckGame
             if (this.holdObject.canRaise && (this._hovering && this.holdObject.hoverRaise || this.holdObstructed || this.holdObject.keepRaised))
             {
                 if (updateLerp)
-                    this.holdAngleOff = Maths.LerpTowards(this.holdAngleOff, (float)-(1.57079637050629 * offDir) * this.holdObject.angleMul, instant ? 1f : this.holdObject.raiseSpeed * 2f);
+                    this.holdAngleOff = Maths.LerpTowards(this.holdAngleOff, (float)-(1.5707964f * offDir) * this.holdObject.angleMul, instant ? 1f : this.holdObject.raiseSpeed * 2f);
                 this.holdObject.raised = true;
             }
             else
             {
                 if (updateLerp)
-                    this.holdAngleOff = Maths.LerpTowards(this.holdAngleOff, 0.0f, instant ? 1f : (float)(holdObject.raiseSpeed * 2.0 * 2.0));
+                    this.holdAngleOff = Maths.LerpTowards(this.holdAngleOff, 0f, instant ? 1f : (float)(holdObject.raiseSpeed * 2f * 2f));
                 if (!this.holdObject.raised)
                     return;
                 this.holdObject.raised = false;
