@@ -247,47 +247,47 @@ namespace DuckGame
                     scale = new Vec2(2f, 2f)
                 };
             }
-            if (_core.alpha <= 0.01f)
+            if (_core.alpha <= 0.00999999977648258)
                 return;
             DevConsole.InitializeFont();
             if (DevConsole._tray == null)
                 return;
             DevConsole._tray.alpha = DevConsole._core.alpha;
-            DevConsole._tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280f * 2f) / 2f) * 2f) * (DevConsole.consoleScale + 1) / 2f;
+            DevConsole._tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280.0 * 2.0) / 2.0) * 2f) * (DevConsole.consoleScale + 1) / 2f;
             DevConsole._tray.depth = (Depth)0.75f;
-            int num1 = (int)(Layer.core._console.camera.height * dimensions.y / (16f * _tray.scale.y)) - 2;
-            int num2 = (int)(Layer.core._console.camera.width * dimensions.x / (16f * _tray.scale.x)) - 2;
-            Graphics.Draw(DevConsole._tray, 0f, 0f, new Rectangle(0f, 0f, 18f, 18f));
-            Graphics.Draw(DevConsole._tray, 0f, (float)(18.0 * _tray.scale.y + num1 * (16f * _tray.scale.y)), new Rectangle(0f, DevConsole._tray.height - 18, 18f, 18f));
-            Graphics.Draw(DevConsole._tray, (float)(18f * _tray.scale.x + (num2 - 6) * (16f * _tray.scale.x)), (float)(18f * _tray.scale.y + num1 * (16f * _tray.scale.y)), new Rectangle(DevConsole._tray.width - 114, DevConsole._tray.height - 18, 114f, 18f));
+            int num1 = (int)((double)Layer.core._console.camera.height * dimensions.y / (16.0 * _tray.scale.y)) - 2;
+            int num2 = (int)((double)Layer.core._console.camera.width * dimensions.x / (16.0 * _tray.scale.x)) - 2;
+            Graphics.Draw(DevConsole._tray, 0.0f, 0.0f, new Rectangle(0.0f, 0.0f, 18f, 18f));
+            Graphics.Draw(DevConsole._tray, 0.0f, (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)), new Rectangle(0.0f, DevConsole._tray.height - 18, 18f, 18f));
+            Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)), (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)), new Rectangle(DevConsole._tray.width - 114, DevConsole._tray.height - 18, 114f, 18f));
             for (int index = 0; index < num2; ++index)
             {
-                Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + 16f * _tray.scale.x * index), 0f, new Rectangle(16f, 0f, 16f, 18f));
+                Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), 0.0f, new Rectangle(16f, 0.0f, 16f, 18f));
                 if (index < num2 - 6)
-                    Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + 16f * _tray.scale.x * index), (18f * _tray.scale.y + num1 * (16f * _tray.scale.y)), new Rectangle(16f, DevConsole._tray.height - 18, 16f, 18f));
+                    Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)), new Rectangle(16f, DevConsole._tray.height - 18, 16f, 18f));
             }
-            Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + num2 * (16f * _tray.scale.x)), 0f, new Rectangle(DevConsole._tray.width - 18, 0f, 18f, 18f));
+            Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), 0.0f, new Rectangle(DevConsole._tray.width - 18, 0.0f, 18f, 18f));
             for (int index = 0; index < num1; ++index)
             {
-                Graphics.Draw(DevConsole._tray, 0f, (18f * _tray.scale.y + 16f * _tray.scale.y * index), new Rectangle(0f, 18f, 18f, 16f));
-                Graphics.Draw(DevConsole._tray, (18f * _tray.scale.x + num2 * (16f * _tray.scale.x)), (18f * _tray.scale.y + 16f * _tray.scale.y * index), new Rectangle(DevConsole._tray.width - 18, 18f, 18f, 16f));
+                Graphics.Draw(DevConsole._tray, 0.0f, (float)(18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index), new Rectangle(0.0f, 18f, 18f, 16f));
+                Graphics.Draw(DevConsole._tray, (float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), (float)(18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index), new Rectangle(DevConsole._tray.width - 18, 18f, 18f, 16f));
             }
-            Graphics.DrawRect(Vec2.Zero, new Vec2((18f * _tray.scale.x + num2 * (1f * _tray.scale.x) + _tray.scale.y * 4f), (num1 + 2) * (16f * DevConsole._tray.scale.y)), Color.Black * 0.8f * DevConsole._core.alpha, (Depth)0.7f);
+            Graphics.DrawRect(Vec2.Zero, new Vec2((float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x) + _tray.scale.y * 4.0), (num1 + 2) * (16f * DevConsole._tray.scale.y)), Color.Black * 0.8f * DevConsole._core.alpha, (Depth)0.7f);
             DevConsole._core.fancyFont.scale = new Vec2(DevConsole._tray.scale.x / 2f);
             DevConsole._core.fancyFont.depth = (Depth)0.98f;
             DevConsole._core.fancyFont.alpha = DevConsole._core.alpha;
-            float num3 = ((num1 + 1) * 16 * DevConsole._tray.scale.y + 5f * _tray.scale.y);
+            float num3 = (float)((num1 + 1) * 16 * (double)DevConsole._tray.scale.y + 5.0 * _tray.scale.y);
             float num4 = (num2 + 2) * (16f * DevConsole._tray.scale.x);
             string version = DG.version;
-            DevConsole._core.fancyFont.Draw(version, new Vec2((float)(82f * _tray.scale.x + (num2 - 6) * (16f * _tray.scale.x)), num3 + 7f * DevConsole._tray.scale.y), new Color(62, 114, 122), (Depth)0.98f);
+            DevConsole._core.fancyFont.Draw(version, new Vec2((float)(82.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)), num3 + 7f * DevConsole._tray.scale.y), new Color(62, 114, 122), (Depth)0.98f);
             DevConsole._core.cursorPosition = Math.Min(Math.Max(DevConsole._core.cursorPosition, 0), DevConsole._core.typing.Length);
             if (DevConsole._raster != null)
             {
                 DevConsole._raster.scale = new Vec2(0.5f);
                 DevConsole._raster.alpha = DevConsole._core.alpha;
-                DevConsole._raster.Draw(DevConsole._core.typing, 4f * DevConsole._tray.scale.x, (num3 + _tray.scale.y * 8f - _raster.characterHeight * DevConsole._raster.scale.y / 2f), Color.White, (Depth)0.9f);
-                Vec2 p1 = new Vec2((DevConsole._raster.GetWidth(DevConsole._core.typing.Substring(0, DevConsole._core.cursorPosition)) + 4f * _tray.scale.x + 1f), num3 + 6f * DevConsole._tray.scale.y);
-                Graphics.DrawLine(p1, p1 + new Vec2(0f, 4f * DevConsole._tray.scale.x), Color.White, depth: ((Depth)1f));
+                DevConsole._raster.Draw(DevConsole._core.typing, 4f * DevConsole._tray.scale.x, (float)((double)num3 + _tray.scale.y * 8.0 - _raster.characterHeight * (double)DevConsole._raster.scale.y / 2.0), Color.White, (Depth)0.9f);
+                Vec2 p1 = new Vec2((float)((double)DevConsole._raster.GetWidth(DevConsole._core.typing.Substring(0, DevConsole._core.cursorPosition)) + 4.0 * _tray.scale.x + 1.0), num3 + 6f * DevConsole._tray.scale.y);
+                Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * DevConsole._tray.scale.x), Color.White, depth: ((Depth)1f));
             }
             else
             {
@@ -295,21 +295,21 @@ namespace DuckGame
                 DevConsole._core.font.alpha = DevConsole._core.alpha;
                 DevConsole._core.font.Draw(DevConsole._core.typing, 4f * DevConsole._tray.scale.x, num3 + 6f * DevConsole._tray.scale.y, Color.White, (Depth)0.9f);
                 Vec2 p1 = new Vec2(DevConsole._core.font.GetWidth(DevConsole._core.typing.Substring(0, DevConsole._core.cursorPosition)) + 4f * DevConsole._tray.scale.x, num3 + 6f * DevConsole._tray.scale.y);
-                Graphics.DrawLine(p1, p1 + new Vec2(0f, 4f * DevConsole._tray.scale.x), Color.White, 2f, (Depth)1f);
+                Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * DevConsole._tray.scale.x), Color.White, 2f, (Depth)1f);
             }
             int index1 = DevConsole._core.lines.Count - 1 - DevConsole._core.viewOffset;
-            float num5 = 0f;
+            float num5 = 0.0f;
             DevConsole._core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4.0), 1.0));
             float num6 = DevConsole._core.font.scale.x / 2f;
             float num7 = 18f * num6;
-            float num8 = (20f * (_core.font.scale.x * 2f));
+            float num8 = (float)(20.0 * (_core.font.scale.x * 2.0));
             if (DevConsole._raster != null)
             {
                 num7 = (DevConsole._raster.characterHeight - 2) * DevConsole._raster.scale.y;
                 num5 = num7;
                 num8 = DevConsole._raster.GetWidth("0000  ");
             }
-            for (int index2 = 0; index2 < (num3 - 2f * _tray.scale.y) / num7 - 1f && index1 >= 0; ++index2)
+            for (int index2 = 0; index2 < ((double)num3 - 2.0 * _tray.scale.y) / (double)num7 - 1.0 && index1 >= 0; ++index2)
             {
                 DCLine dcLine = DevConsole._core.lines.ElementAt<DCLine>(index1);
                 string text = index1.ToString();
@@ -317,20 +317,20 @@ namespace DuckGame
                     text = "0" + text;
                 if (DevConsole._raster != null)
                 {
-                    DevConsole._raster.maxWidth = (int)(num4 - 35f * _tray.scale.x);
+                    DevConsole._raster.maxWidth = (int)((double)num4 - 35.0 * _tray.scale.x);
                     DevConsole._raster.singleLine = true;
                     DevConsole._raster.enforceWidthByWord = false;
-                    DevConsole._raster.Draw(text, 4f * DevConsole._tray.scale.x, (num3 - num5 + 2f), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
-                    DevConsole._raster.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (num3 - num5 + 2f), dcLine.color, (Depth)0.9f);
+                    DevConsole._raster.Draw(text, 4f * DevConsole._tray.scale.x, (float)((double)num3 - (double)num5 + 2.0), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
+                    DevConsole._raster.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (float)((double)num3 - (double)num5 + 2.0), dcLine.color, (Depth)0.9f);
                     num5 += num7;
                 }
                 else
                 {
-                    DevConsole._core.font.maxWidth = (int)(num4 - 35f * _tray.scale.x);
+                    DevConsole._core.font.maxWidth = (int)((double)num4 - 35.0 * _tray.scale.x);
                     DevConsole._core.font.singleLine = true;
                     DevConsole._core.font.enforceWidthByWord = false;
-                    DevConsole._core.font.Draw(text, 4f * DevConsole._tray.scale.x, (num3 - 18f * num6 - num5 + 2f), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
-                    DevConsole._core.font.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (num3 - 18f * num6 - num5 + 2f), dcLine.color * 0.8f, (Depth)0.9f);
+                    DevConsole._core.font.Draw(text, 4f * DevConsole._tray.scale.x, (float)((double)num3 - 18.0 * (double)num6 - (double)num5 + 2.0), index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, (Depth)0.9f);
+                    DevConsole._core.font.Draw(dcLine.SectionString() + dcLine.line, 4f * DevConsole._tray.scale.x + num8, (float)((double)num3 - 18.0 * (double)num6 - (double)num5 + 2.0), dcLine.color * 0.8f, (Depth)0.9f);
                     num5 += 18f * num6;
                 }
                 --index1;
@@ -1546,29 +1546,29 @@ namespace DuckGame
          new CMD.Thing<Holdable>("object"),
          new CMD.String("specialCode", true)
             }, cmd =>
-     {
-         Duck duck = cmd.Arg<Duck>("player");
-         Holdable holdable = cmd.Arg<Holdable>("object");
-         string str = cmd.Arg<string>("specialCode");
-         Level.Add(holdable);
-         if (str == "i" && holdable is Gun)
-             (holdable as Gun).infinite.value = true;
-         if (str == "h" || str == "hp" || str == "ph")
-         {
-             if (!(duck.GetEquipment(typeof(Holster)) is Holster e2))
-             {
-                 e2 = str == "hp" || str == "ph" ? new PowerHolster(0f, 0f) : new Holster(0f, 0f);
-                 Level.Add(e2);
-                 duck.Equip(e2);
-             }
-             e2.SetContainedObject(holdable);
-         }
-         else if (str == "e" && holdable is Equipment)
-             duck.Equip(holdable as Equipment);
-         else
-             duck.GiveHoldable(holdable);
-         SFX.Play("hitBox");
-     })
+            {
+                Duck duck = cmd.Arg<Duck>("player");
+                Holdable holdable = cmd.Arg<Holdable>("object");
+                string str = cmd.Arg<string>("specialCode");
+                Level.Add(holdable);
+                if (str == "i" && holdable is Gun)
+                    (holdable as Gun).infinite.value = true;
+                if (str == "h" || str == "hp" || str == "ph")
+                {
+                    if (!(duck.GetEquipment(typeof(Holster)) is Holster e2))
+                    {
+                        e2 = str == "hp" || str == "ph" ? new PowerHolster(0.0f, 0.0f) : new Holster(0.0f, 0.0f);
+                        Level.Add(e2);
+                        duck.Equip(e2);
+                    }
+                    e2.SetContainedObject(holdable);
+                }
+                else if (str == "e" && holdable is Equipment)
+                    duck.Equip(holdable as Equipment);
+                else
+                    duck.GiveHoldable(holdable);
+                SFX.Play("hitBox");
+            })
             {
                 description = "Gives a player an item by name.",
                 cheat = true,
@@ -1579,14 +1579,14 @@ namespace DuckGame
          new CMD.Thing<Duck>("duckName"),
          new CMD.Thing<TeamHat>("hat")
             }, cmd =>
-     {
-         Duck duck = cmd.Arg<Duck>("duckName");
-         TeamHat teamHat = cmd.Arg<TeamHat>("hat");
-         Level.Add(teamHat);
-         TeamHat h = teamHat;
-         duck.GiveHoldable(h);
-         SFX.Play("hitBox");
-     })
+            {
+                Duck duck = cmd.Arg<Duck>("duckName");
+                TeamHat teamHat = cmd.Arg<TeamHat>("hat");
+                Level.Add(teamHat);
+                TeamHat h = teamHat;
+                duck.GiveHoldable(h);
+                SFX.Play("hitBox");
+            })
             {
                 cheat = true
             });
@@ -1599,18 +1599,18 @@ namespace DuckGame
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("modhash", () =>
-           {
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = ModLoader._modString,
-                   color = Color.Red
-               });
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = ModLoader.modHash,
-                   color = Color.Red
-               });
-           }));
+            {
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = ModLoader._modString,
+                    color = Color.Red
+                });
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = ModLoader.modHash,
+                    color = Color.Red
+                });
+            }));
             DevConsole.AddCommand(new CMD("wagnus", () => DevConsole.wagnusDebug = !DevConsole.wagnusDebug)
             {
                 description = "Toggles guides in editor for Wagnus teleport ranges."
@@ -1646,14 +1646,14 @@ namespace DuckGame
                 cheat = false
             });
             DevConsole.AddCommand(new CMD("mem", () =>
-           {
-               long num = GC.GetTotalMemory(true) / 1000L;
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "GC Has " + num.ToString() + " KB Allocated (" + (num / 1000L).ToString() + " MB)",
-                   color = Color.White
-               });
-           }));
+            {
+                long num = GC.GetTotalMemory(true) / 1000L;
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "GC Has " + num.ToString() + " KB Allocated (" + (num / 1000L).ToString() + " MB)",
+                    color = Color.White
+                });
+            }));
             CMD.Argument[] pArguments = new CMD.Argument[1];
             CMD.String @string = new CMD.String("description")
             {
@@ -1665,12 +1665,12 @@ namespace DuckGame
                 hidden = true
             });
             DevConsole.AddCommand(new CMD("requestlogs", () =>
-           {
-               Send.Message(new NMRequestLogs());
-               foreach (NetworkConnection connection in Network.connections)
-                   DevConsole.core.requestingLogs.Add(connection);
-               DevConsole.SaveNetLog();
-           })
+            {
+                Send.Message(new NMRequestLogs());
+                foreach (NetworkConnection connection in Network.connections)
+                    DevConsole.core.requestingLogs.Add(connection);
+                DevConsole.SaveNetLog();
+            })
             {
                 hidden = true
             });
@@ -1678,32 +1678,32 @@ namespace DuckGame
             {
          new CMD.Integer("number")
             }, cmd =>
-     {
-         try
-         {
-             Profile profile = DuckNetwork.profiles[cmd.Arg<int>("number")];
-             if (!DevConsole.core.transferRequestsPending.Contains(profile.connection))
-                 return;
-             DevConsole.core.transferRequestsPending.Remove(profile.connection);
-             DevConsole.SendNetLog(profile.connection);
-         }
-         catch (Exception)
-         {
-         }
-     })
+            {
+                try
+                {
+                    Profile profile = DuckNetwork.profiles[cmd.Arg<int>("number")];
+                    if (!DevConsole.core.transferRequestsPending.Contains(profile.connection))
+                        return;
+                    DevConsole.core.transferRequestsPending.Remove(profile.connection);
+                    DevConsole.SendNetLog(profile.connection);
+                }
+                catch (Exception)
+                {
+                }
+            })
             {
                 hidden = true
             });
             DevConsole.AddCommand(new CMD("eight", () =>
-           {
-               int index = 0;
-               foreach (Profile defaultProfile in Profiles.defaultProfiles)
-               {
-                   defaultProfile.team = null;
-                   defaultProfile.team = Teams.all[index];
-                   ++index;
-               }
-           })
+            {
+                int index = 0;
+                foreach (Profile defaultProfile in Profiles.defaultProfiles)
+                {
+                    defaultProfile.team = null;
+                    defaultProfile.team = Teams.all[index];
+                    ++index;
+                }
+            })
             {
                 cheat = true
             });
@@ -1711,20 +1711,20 @@ namespace DuckGame
             {
          new CMD.Font("font",  () => Options.Data.chatFontSize)
             }, cmd =>
-     {
-         Options.Data.chatFont = cmd.Arg<string>("font");
-         Options.Save();
-         DuckNetwork.UpdateFont();
-     })));
+            {
+                Options.Data.chatFont = cmd.Arg<string>("font");
+                Options.Save();
+                DuckNetwork.UpdateFont();
+            })));
             DevConsole.AddCommand(new CMD("chat", new CMD("font", new CMD("size", new CMD.Argument[1]
             {
          new CMD.Integer("size")
             }, cmd =>
-     {
-         Options.Data.chatFontSize = cmd.Arg<int>("size");
-         Options.Save();
-         DuckNetwork.UpdateFont();
-     }))));
+            {
+                Options.Data.chatFontSize = cmd.Arg<int>("size");
+                Options.Save();
+                DuckNetwork.UpdateFont();
+            }))));
             DevConsole.AddCommand(new CMD("fancymode", () => DevConsole.fancyMode = !DevConsole.fancyMode)
             {
                 hidden = true,
@@ -1746,14 +1746,14 @@ namespace DuckGame
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("rhythmmode", () =>
-           {
-               if (!DevConsole._core.rhythmMode)
-                   Music.Stop();
-               DevConsole._core.rhythmMode = !DevConsole._core.rhythmMode;
-               if (!DevConsole._core.rhythmMode)
-                   return;
-               Music.Play(Music.RandomTrack("InGame"));
-           })
+            {
+                if (!DevConsole._core.rhythmMode)
+                    Music.Stop();
+                DevConsole._core.rhythmMode = !DevConsole._core.rhythmMode;
+                if (!DevConsole._core.rhythmMode)
+                    return;
+                Music.Play(Music.RandomTrack("InGame"));
+            })
             {
                 hidden = true,
                 cheat = true
@@ -1767,132 +1767,132 @@ namespace DuckGame
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("clearmainprofile", () =>
-           {
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Your main account has been R U I N E D !",
-                   color = Color.Red
-               });
-               ulong steamId = Profiles.experienceProfile.steamID;
-               string varName = steamId.ToString();
-               steamId = Profiles.experienceProfile.steamID;
-               string varID = steamId.ToString();
-               Profile p = new Profile(varName, varID: varID)
-               {
-                   steamID = Profiles.experienceProfile.steamID
-               };
-               Profiles.Remove(Profiles.experienceProfile);
-               Profiles.Add(p);
-           })
+            {
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Your main account has been R U I N E D !",
+                    color = Color.Red
+                });
+                ulong steamId = Profiles.experienceProfile.steamID;
+                string varName = steamId.ToString();
+                steamId = Profiles.experienceProfile.steamID;
+                string varID = steamId.ToString();
+                Profile p = new Profile(varName, varID: varID)
+                {
+                    steamID = Profiles.experienceProfile.steamID
+                };
+                Profiles.Remove(Profiles.experienceProfile);
+                Profiles.Add(p);
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("xpskip", () =>
-           {
-               if (Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0)
-                   DevConsole._core.lines.Enqueue(new DCLine()
-                   {
-                       line = "Limit one Voodoo Vincent per customer, sorry!",
-                       color = Color.Red
-                   });
-               else if (MonoMain.pauseMenu != null)
-               {
-                   DevConsole._core.lines.Enqueue(new DCLine()
-                   {
-                       line = "Please close any open menus.",
-                       color = Color.Red
-                   });
-               }
-               else
-               {
-                   HUD.CloseAllCorners();
-                   (MonoMain.pauseMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f)).Open();
-                   DevConsole._core.open = !DevConsole._core.open;
-               }
-           })
+            {
+                if (Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0)
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = "Limit one Voodoo Vincent per customer, sorry!",
+                        color = Color.Red
+                    });
+                else if (MonoMain.pauseMenu != null)
+                {
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = "Please close any open menus.",
+                        color = Color.Red
+                    });
+                }
+                else
+                {
+                    HUD.CloseAllCorners();
+                    (MonoMain.pauseMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f)).Open();
+                    DevConsole._core.open = !DevConsole._core.open;
+                }
+            })
             {
                 hidden = true,
                 cheat = false
             });
             DevConsole.AddCommand(new CMD("johnnygrey", () =>
-           {
-               Global.data.typedJohnny = true;
-               Global.Save();
-               if (!Unlockables.HasPendingUnlocks())
-                   return;
-               DevConsole._core.open = false;
-               MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-           })
+            {
+                Global.data.typedJohnny = true;
+                Global.Save();
+                if (!Unlockables.HasPendingUnlocks())
+                    return;
+                DevConsole._core.open = false;
+                MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+            })
             {
                 hidden = true
             });
             DevConsole.AddCommand(new CMD("constantsync", () =>
-           {
-               DevConsole._core.constantSync = !DevConsole._core.constantSync;
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Constant sync has been " + (Options.Data.powerUser ? "enabled" : "disabled") + "!",
-                   color = DevConsole.core.constantSync ? Colors.DGGreen : Colors.DGRed
-               });
-           })
+            {
+                DevConsole._core.constantSync = !DevConsole._core.constantSync;
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Constant sync has been " + (Options.Data.powerUser ? "enabled" : "disabled") + "!",
+                    color = DevConsole.core.constantSync ? Colors.DGGreen : Colors.DGRed
+                });
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("poweruser", () =>
-           {
-               Options.Data.powerUser = !Options.Data.powerUser;
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Power User mode has been " + (Options.Data.powerUser ? "enabled" : "disabled") + "!",
-                   color = Options.Data.powerUser ? Colors.DGGreen : Colors.DGRed
-               });
-               Editor.InitializePlaceableGroup();
-               Main.editor.UpdateObjectMenu();
-               Options.Save();
-           })
+            {
+                Options.Data.powerUser = !Options.Data.powerUser;
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Power User mode has been " + (Options.Data.powerUser ? "enabled" : "disabled") + "!",
+                    color = Options.Data.powerUser ? Colors.DGGreen : Colors.DGRed
+                });
+                Editor.InitializePlaceableGroup();
+                Main.editor.UpdateObjectMenu();
+                Options.Save();
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("oldangles", () =>
-           {
-               Options.Data.oldAngleCode = !Options.Data.oldAngleCode;
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Oldschool Angles have been " + (Options.Data.oldAngleCode ? "enabled" : "disabled") + "!",
-                   color = Options.Data.oldAngleCode ? Colors.DGGreen : Colors.DGRed
-               });
-               Options.Save();
-               if (!Network.isActive || DuckNetwork.localProfile == null)
-                   return;
-               Send.Message(new NMOldAngles(DuckNetwork.localProfile, Options.Data.oldAngleCode));
-           })
+            {
+                Options.Data.oldAngleCode = !Options.Data.oldAngleCode;
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Oldschool Angles have been " + (Options.Data.oldAngleCode ? "enabled" : "disabled") + "!",
+                    color = Options.Data.oldAngleCode ? Colors.DGGreen : Colors.DGRed
+                });
+                Options.Save();
+                if (!Network.isActive || DuckNetwork.localProfile == null)
+                    return;
+                Send.Message(new NMOldAngles(DuckNetwork.localProfile, Options.Data.oldAngleCode));
+            })
             {
                 hidden = true
             });
             DevConsole.AddCommand(new CMD("debugtypelist", () =>
-           {
-               foreach (KeyValuePair<string, System.Type> keyValuePair in ModLoader._typesByName)
-                   DevConsole._core.lines.Enqueue(new DCLine()
-                   {
-                       line = keyValuePair.Key,
-                       color = Colors.DGPurple
-                   });
-           })
+            {
+                foreach (KeyValuePair<string, System.Type> keyValuePair in ModLoader._typesByName)
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = keyValuePair.Key,
+                        color = Colors.DGPurple
+                    });
+            })
             {
                 hidden = true
             });
             DevConsole.AddCommand(new CMD("debugtypelistraw", () =>
-           {
-               foreach (KeyValuePair<string, System.Type> keyValuePair in ModLoader._typesByNameUnprocessed)
-                   DevConsole._core.lines.Enqueue(new DCLine()
-                   {
-                       line = keyValuePair.Key,
-                       color = Colors.DGPurple
-                   });
-           })
+            {
+                foreach (KeyValuePair<string, System.Type> keyValuePair in ModLoader._typesByNameUnprocessed)
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = keyValuePair.Key,
+                        color = Colors.DGPurple
+                    });
+            })
             {
                 hidden = true
             });
@@ -1900,31 +1900,31 @@ namespace DuckGame
             {
          new CMD.String("song")
             }, cmd =>
-     {
-         string str = cmd.Arg<string>("song");
-         Music.Play(str);
-         if (!Network.isActive)
-             return;
-         Send.Message(new NMSwitchMusic(str));
-     })
+            {
+                string str = cmd.Arg<string>("song");
+                Music.Play(str);
+                if (!Network.isActive)
+                    return;
+                Send.Message(new NMSwitchMusic(str));
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("downpour", cmd =>
-           {
-               float num1 = (Level.current.bottomRight.x - Level.current.topLeft.x + 128f);
-               int num2 = 10;
-               for (int index1 = 0; index1 < 10; ++index1)
-               {
-                   for (int index2 = 0; index2 < num2; ++index2)
-                   {
-                       PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
-                       randomItem.position = Level.current.topLeft + new Vec2((num1 / num2 * index2 + Rando.Float(sbyte.MinValue, 128f) - 64f), Level.current.topLeft.y - 2000f - 512 * index1 + Rando.Float(-256f, 256f));
-                       Level.Add(randomItem);
-                   }
-               }
-           })
+            {
+                float num1 = (float)(Level.current.bottomRight.x - (double)Level.current.topLeft.x + 128.0);
+                int num2 = 10;
+                for (int index1 = 0; index1 < 10; ++index1)
+                {
+                    for (int index2 = 0; index2 < num2; ++index2)
+                    {
+                        PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
+                        randomItem.position = Level.current.topLeft + new Vec2((float)((double)num1 / num2 * index2 + (double)Rando.Float(sbyte.MinValue, 128f) - 64.0), Level.current.topLeft.y - 2000f - 512 * index1 + Rando.Float(-256f, 256f));
+                        Level.Add(randomItem);
+                    }
+                }
+            })
             {
                 hidden = true,
                 cheat = true
@@ -1933,46 +1933,46 @@ namespace DuckGame
             {
          new CMD.String("workshopID", true)
             }, cmd =>
-     {
-         string str = cmd.Arg<string>("workshopID");
-         if (str == null)
-         {
-             Editor.thingTypesHash = (uint)Rando.Int(99999999);
-             DevConsole._core.lines.Enqueue(new DCLine()
-             {
-                 line = "Ruined local datahash! Good luck playing online now!",
-                 color = Colors.DGRed
-             });
-         }
-         else
-         {
-             bool flag = false;
-             try
-             {
-                 Mod modFromWorkshopId = ModLoader.GetModFromWorkshopID(Convert.ToUInt64(str));
-                 if (modFromWorkshopId != null)
-                 {
-                     modFromWorkshopId.System_RuinDatahash();
-                     flag = true;
-                     DevConsole._core.lines.Enqueue(new DCLine()
-                     {
-                         line = "Ruined datahash for " + modFromWorkshopId.configuration.displayName + "! Good luck playing online now!",
-                         color = Colors.DGRed
-                     });
-                 }
-             }
-             catch (Exception)
-             {
-             }
-             if (flag)
-                 return;
-             DevConsole._core.lines.Enqueue(new DCLine()
-             {
-                 line = "Could not find mod with ID (" + str + ")",
-                 color = Colors.DGRed
-             });
-         }
-     })
+            {
+                string str = cmd.Arg<string>("workshopID");
+                if (str == null)
+                {
+                    Editor.thingTypesHash = (uint)Rando.Int(99999999);
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = "Ruined local datahash! Good luck playing online now!",
+                        color = Colors.DGRed
+                    });
+                }
+                else
+                {
+                    bool flag = false;
+                    try
+                    {
+                        Mod modFromWorkshopId = ModLoader.GetModFromWorkshopID(Convert.ToUInt64(str));
+                        if (modFromWorkshopId != null)
+                        {
+                            modFromWorkshopId.System_RuinDatahash();
+                            flag = true;
+                            DevConsole._core.lines.Enqueue(new DCLine()
+                            {
+                                line = "Ruined datahash for " + modFromWorkshopId.configuration.displayName + "! Good luck playing online now!",
+                                color = Colors.DGRed
+                            });
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (flag)
+                        return;
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = "Could not find mod with ID (" + str + ")",
+                        color = Colors.DGRed
+                    });
+                }
+            })
             {
                 hidden = true,
                 cheat = true
@@ -1980,117 +1980,117 @@ namespace DuckGame
             if (!Steam.IsInitialized())
                 return;
             DevConsole.AddCommand(new CMD("zipcloud", () =>
-           {
-               string pFile = DuckFile.saveDirectory + "cloud_zip.zip";
-               Cloud.ZipUpCloudData(pFile);
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Zipped up to: " + pFile,
-                   color = Colors.DGBlue
-               });
-           })
+            {
+                string pFile = DuckFile.saveDirectory + "cloud_zip.zip";
+                Cloud.ZipUpCloudData(pFile);
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Zipped up to: " + pFile,
+                    color = Colors.DGBlue
+                });
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("sendsave", () =>
-           {
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Please type a message to the developer then and press enter..",
-                   color = Color.White
-               });
-               DevConsole._doDataSubmission = true;
-           })
+            {
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Please type a message to the developer then and press enter..",
+                    color = Color.White
+                });
+                DevConsole._doDataSubmission = true;
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("clearsave", () =>
-           {
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "ARE YOU SURE? ALL SAVE DATA WILL BE DELETED",
-                   color = Color.Red
-               });
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "LOCALLY, AND FROM THE CLOUD.",
-                   color = Color.Red
-               });
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "ENTER 'corptron' IF YOU WANT TO CONTINUE..",
-                   color = Color.Red
-               });
-           })
+            {
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "ARE YOU SURE? ALL SAVE DATA WILL BE DELETED",
+                    color = Color.Red
+                });
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "LOCALLY, AND FROM THE CLOUD.",
+                    color = Color.Red
+                });
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "ENTER 'corptron' IF YOU WANT TO CONTINUE..",
+                    color = Color.Red
+                });
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("copy", () =>
-           {
-               string currentPart = "";
-               for (int index = Math.Max(DevConsole.core.lines.Count - 750, 0); index < DevConsole.core.lines.Count; ++index)
-                   currentPart += DevConsole.core.lines.ElementAt<DCLine>(index).ToShortString();
-               Thread thread = new Thread(() => Clipboard.SetText(currentPart));
-               thread.SetApartmentState(ApartmentState.STA);
-               thread.Start();
-               thread.Join();
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Log was copied to clipboard!",
-                   color = Color.White
-               });
-           })
+            {
+                string currentPart = "";
+                for (int index = Math.Max(DevConsole.core.lines.Count - 750, 0); index < DevConsole.core.lines.Count; ++index)
+                    currentPart += DevConsole.core.lines.ElementAt<DCLine>(index).ToShortString();
+                Thread thread = new Thread(() => Clipboard.SetText(currentPart));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Log was copied to clipboard!",
+                    color = Color.White
+                });
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("savedir", () =>
-           {
-               Process.Start(DuckFile.saveDirectory);
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "Save directory was opened.",
-                   color = Color.White
-               });
-           })
+            {
+                Process.Start(DuckFile.saveDirectory);
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "Save directory was opened.",
+                    color = Color.White
+                });
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("userdir", () =>
-           {
-               Process.Start(DuckFile.userDirectory);
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "User directory was opened.",
-                   color = Color.White
-               });
-           })
+            {
+                Process.Start(DuckFile.userDirectory);
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "User directory was opened.",
+                    color = Color.White
+                });
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("recover", () =>
-           {
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "ARE YOU SURE? ALL NEW SAVE DATA",
-                   color = Color.Red
-               });
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "WILL BE OVERWRITTEN BY PRE 1.5 DATA",
-                   color = Color.Red
-               });
-               DevConsole._core.lines.Enqueue(new DCLine()
-               {
-                   line = "ENTER 'corptron' IF YOU WANT TO CONTINUE..",
-                   color = Color.Red
-               });
-           })
+            {
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "ARE YOU SURE? ALL NEW SAVE DATA",
+                    color = Color.Red
+                });
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "WILL BE OVERWRITTEN BY PRE 1.5 DATA",
+                    color = Color.Red
+                });
+                DevConsole._core.lines.Enqueue(new DCLine()
+                {
+                    line = "ENTER 'corptron' IF YOU WANT TO CONTINUE..",
+                    color = Color.Red
+                });
+            })
             {
                 hidden = true,
                 cheat = true
@@ -2106,36 +2106,36 @@ namespace DuckGame
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("corptron", () =>
-           {
-               if (DevConsole.lastCommand != null && DevConsole.lastCommand.keyword == "clearsave")
-               {
-                   Cloud.DeleteAllCloudData(false);
-                   DuckFile.DeleteAllSaveData();
-                   DevConsole._core.lines.Enqueue(new DCLine()
-                   {
-                       line = "All save data has been deleted.",
-                       color = Color.Red
-                   });
-               }
-               if (DevConsole.lastCommand == null || !(DevConsole.lastCommand.keyword == "recover"))
-                   return;
-               DuckFile.DeleteFolder(DuckFile.userDirectory);
-               while (Cloud.processing)
-                   Cloud.Update();
-               Program.crashed = true;
-               Process.Start(Application.ExecutablePath, Program.commandLine + " -recoversave");
-               Application.Exit();
-           })
+            {
+                if (DevConsole.lastCommand != null && DevConsole.lastCommand.keyword == "clearsave")
+                {
+                    Cloud.DeleteAllCloudData(false);
+                    DuckFile.DeleteAllSaveData();
+                    DevConsole._core.lines.Enqueue(new DCLine()
+                    {
+                        line = "All save data has been deleted.",
+                        color = Color.Red
+                    });
+                }
+                if (DevConsole.lastCommand == null || !(DevConsole.lastCommand.keyword == "recover"))
+                    return;
+                DuckFile.DeleteFolder(DuckFile.userDirectory);
+                while (Cloud.processing)
+                    Cloud.Update();
+                Program.crashed = true;
+                Process.Start(Application.ExecutablePath, Program.commandLine + " -recoversave");
+                Application.Exit();
+            })
             {
                 hidden = true,
                 cheat = true
             });
             DevConsole.AddCommand(new CMD("savetool", () =>
-           {
-               if (!System.IO.File.Exists("SaveTool.dll"))
-                   return;
-               MonoMain.showingSaveTool = true;
-           })
+            {
+                if (!System.IO.File.Exists("SaveTool.dll"))
+                    return;
+                MonoMain.showingSaveTool = true;
+            })
             {
                 hidden = true,
                 cheat = true
@@ -2201,7 +2201,7 @@ namespace DuckGame
                 DevConsole._core.lastCommandIndex = -1;
                 DevConsole._core.viewOffset = 0;
             }
-            DevConsole._core.alpha = Maths.LerpTowards(DevConsole._core.alpha, DevConsole._core.open ? 1f : 0f, 0.1f);
+            DevConsole._core.alpha = Maths.LerpTowards(DevConsole._core.alpha, DevConsole._core.open ? 1f : 0.0f, 0.1f);
             if (DevConsole._pendingCommandQueue.Count > 0)
             {
                 DevConsole.QueuedCommand queuedCommand = DevConsole._pendingCommandQueue.Peek();
